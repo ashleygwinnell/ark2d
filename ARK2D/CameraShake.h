@@ -1,0 +1,89 @@
+/*
+ * CameraShake.h
+ *
+ *  Created on: 18 Aug 2010
+ *      Author: Ashley
+ */
+
+#ifndef CAMERASHAKE_H_
+#define CAMERASHAKE_H_
+
+#include "Timeline.h"
+
+class GameContainer;
+class Game;
+class Timeline;
+class Event;
+class StaticEvent;
+class GameTimer;
+class Graphics;
+
+class CameraShake {
+	public:
+		CameraShake(Game* game);
+
+		void start();
+		void start(float magnitude);
+
+		void setXOffset(float x);
+		void setYOffset(float y);
+
+		float getXOffset();
+		float getYOffset();
+
+		void update(GameContainer* container, GameTimer* timer);
+
+		void preRender(GameContainer* container, Graphics* g);
+		void render(GameContainer* container, Graphics* g);
+		void postRender(GameContainer* container, Graphics* g);
+
+		virtual ~CameraShake();
+
+	private:
+		Game* m_game;
+		float m_offset_x;
+		float m_offset_y;
+		Timeline* m_timeline;
+};
+
+class CameraShakeMagnitude1 : public TweenedEvent {
+	public:
+		CameraShake* m_cameraShake;
+		CameraShakeMagnitude1(CameraShake* shake, float start_val, float end_val, int millis):
+								TweenedEvent(start_val, end_val, millis),
+								m_cameraShake(shake) {
+			m_easing = Easing::CUBIC_IN_OUT;
+		}
+		void invoke(Timeline* t, float current_val) {
+			if (m_cameraShake->getXOffset() >= 0) {
+				m_cameraShake->setXOffset(current_val * -1);
+			} else {
+				m_cameraShake->setXOffset(current_val);
+			}
+
+
+		}
+		~CameraShakeMagnitude1() {
+
+		}
+};
+
+class CameraShakeMagnitude2 : public TweenedEvent {
+	public:
+		CameraShake * m_cameraShake;
+		CameraShakeMagnitude2(CameraShake* shake, float start_val, float end_val, int millis):
+								TweenedEvent(start_val, end_val, millis),
+								m_cameraShake(shake) {
+			m_easing = Easing::CUBIC_IN_OUT;
+		}
+		void invoke(Timeline* t, float current_val) {
+			m_cameraShake->setXOffset(current_val);
+		}
+		~CameraShakeMagnitude2() {
+
+		}
+};
+
+
+
+#endif /* CAMERASHAKE_H_ */

@@ -1,0 +1,53 @@
+/*
+ * ARK2D.cpp
+ *
+ *  Created on: 30 Mar 2011
+ *      Author: Ashley
+ */
+
+#include "ARK2D.h"
+//#include "GameContainer.h"
+//#include "Input.h"
+//#include "Game.h"
+
+GameContainer* ARK2D::s_container = 0;
+Game* ARK2D::s_game = 0;
+Graphics* ARK2D::s_graphics = 0;
+Input* ARK2D::s_input = 0;
+
+GameContainer* ARK2D::getContainer() {
+	return s_container;
+}
+
+Game* ARK2D::getGame() {
+	return s_game;
+}
+
+Graphics* ARK2D::getGraphics() {
+	return s_graphics;
+}
+
+Input* ARK2D::getInput() {
+	return s_input;
+}
+
+bool ARK2D::is64BitArchitecture() {
+
+	#ifdef ARK2D_WINDOWS
+
+		bool ret = false;
+
+		typedef bool (WINAPI *LPFN_ISWOW64PROCESS) (HANDLE, bool*);
+		LPFN_ISWOW64PROCESS fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(GetModuleHandleA("kernel32"), "IsWow64Process");
+
+		if (fnIsWow64Process != NULL) {
+			if (!fnIsWow64Process(GetCurrentProcess(), &ret)) {
+				return false;
+			}
+		}
+		return ret;
+
+	#endif
+
+	return false;
+}
