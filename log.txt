@@ -6,7 +6,6 @@
 
 20:27 25/02/2010
 - Added in an average time delta system for smoother deltas.
-- created Giga2DTest project to use Giga2D with a DLL on Windows.
 
 00:19 21/04/2010
 - Added Game Timer object.
@@ -48,10 +47,8 @@
 00:07 31/05/2010
 - Fix weird window/glViewport issue with glPushMatrix and glPopMatrix.
 - Added State for the menu.
-- Added Fonts more relevant to game: LOVE ME, TOO!
 - Font now contains a pointer to "default font".
 - GameContainer.getGraphics() now returns a pointer instead of a const reference.
-- Added LMTPlayer class.
 - Added Event class and DefaultEvent class to work with events on the UIButton.
 - Added method Font : drawStringCentered(str, lx, rx, y);
 
@@ -68,33 +65,19 @@
 
 00:46 16/06/2010
 - Finished off LINEAR interpolation in Timelines.
-- Added LMTExplosion Object and LMTExplosionPoint Object.
 - Added MathUtil::toRadians(double angle_degrees);
 
 15:48 17/06/2010
 - Added Graphics::setDrawColor(int r, int g, int b, int a).
-- Added Fade out to LMTExplosionPoint.
 
 22:00 18/06/2010
-- Attempted to add Memory Management to LMTExplosions. 
-- Added boundary so Player may not go offscreen.
-- Fixed circular dependency issues with LMT, LMTPlayer, LMTBullet, Timeline, etc. -- by separating implementation from headers!
 - Added wrap_oal.dll to the release folder which makes sound work without an OpenAL installation.
 - Replaced a bunch of const references for pointers -- for ease of development!
-- Added working Bullets, hurrah!
 
 20:30 19/06/2010
-- Replaced std::vector<Bullet> with LIST as bullets should be removed when they go offscreen!
 - Added ARK.h to include all Engine material.
 
-13:57 20/06/2010
-- Added LMTPattern class.
-- Added variables for Player Health and Health Total
-- Added a broken Player Health Bar.
-- Added check to return to menu when player health is below 0.
-
 18:19 20/06/2010
-- Added LMT::collides(LMTObject* one, LMTObject* two) RECT collision.
 - Reorganised file structure - put all ARK2D files into directory.
 
 20:37 05/07/2010
@@ -104,27 +87,17 @@
 - Added Image.getFlippedCopy(bool h, bool v);
 - Added GigaRectangle.getBounds();
 - Added GigaRectangle.s_collides(); static method.
-- Created GOT files.
 
 20:45 11/07/2010
 - Trying to work out GZIP/deflate compression on TilED Maps.
 - Added Game States to engine.
 
-21:49 18/07/2010
-- Added Game States to LMT.
-- Added final level names.
-
 23:12 27/07/2010
 - Added Sound::getVolume() and Sound::setVolume(float f);
 
-22:51 28/07/2010
-- Fixed issues with Player Collisions in LMT. It was not using LMT->collides(LMTObject* one, LMTObject* two);
-- Added LMTPattern_Spin2 which is actually simpler than Spin1.
-- Added LMTBullet.setSpeed(float f) and LMTBullet.getSpeed();
-
 17:36 31/07/2010
 - Added Graphics::setLineWidth(unsigned int i);
-- Added Gtaphics::getLineWidth();
+- Added Graphics::getLineWidth();
 
 23:11 31/07/2010
 - Added SpriteSheetDescription class and SpriteSheetDescriptionItem class.
@@ -139,55 +112,24 @@
 
 21:57 17/08/2010
 - Added Transition easing.
-- Added initFromState() to LMTGameState - this makes it easier to manage behaviour when entering from different states. 
 - Added Timeline.removeKeyedTimelineEvent();
 
-19:27 20/08/2010
-- Added Bullet sprites, WASD Sprites, Mouse Sprite. 
-- Added Smaller enemy Sprites.
-
-23:26 31/08/2010
-- Added LMTPattern::get()
-- Added Cursor Sprites.
-- Split LMTEnemy into LMTEnemyBoss and LMTEnemySmall.
-
-00:09 06/09/2010
-- Split LMTBullet into LMTBullet and LMTBulletLarge.
-- Wrote LMTComponents.h which has ExplodeComponent.
-- Increased speed of Backdrop.
-- Added multiple bullet types
-- Refactored LMTPattern::get() into LMTUtil::getPattern() - now includes LMTUtil::getBoss() and LMTUtil::getBullet();
-- Added shooting towards mouse cursor.
-- Updated LMTLevelSelectState to use new Menu System.
-- Added a bunch of Images to LMT class to improve performance - previous one copy per bullet, etc.
-- Added LMT::isOffscreen() function.
-
 13:17 12/09/2010
-- Updated whole game to use LMTObjectManager which contains a pool of dead and alive bullets.
-- Added LMTLevel.
-- Refactored a bunch of things to use "level" instead of "stage".
-- Updated game ot use LMTObjectManager::getEnemy().
-- Took out LMTEnemySmall.
 - Added Path and PathPoint and PathLoader to ARK2D Engine.
-- Added Enemy 3.
-- Refactored LMTBullet and LMTBulletLarge back into LMTBullet with attribute collidable.
 
 22:33 21/09/2010
 - I did so much, and it's not documented. FML.
 - Path & PathLoader fixes.
 - Path Movement in tutorial enemy.
 - Added Sound::setPanning(float f)
-- Set LMTPlayer to set panning of it's shoot sound -- okay, it doesn't work. D:
 
 17:14 25/09/2010
 - Added Timeline->clear();
-- Big update to LMTGameState and LMTLevel.
 
 17:15 17/10/2010
 - Yay for out-dated log.
 - Graphics::drawStringWrapAround implemented.
 - More refactorings.
-- Added LMT Achievements state.
 - Added Timeline::count()
 - Added Timeline::countRunning();
 - Added Path caching, kinda.
@@ -207,97 +149,28 @@
 23:53 15/12/2010
 - Sometime between now and the last log update. I templatised the Vector2D class.
 
-21:35 06/01/2011
-- Creating waves 24 - BAH!
-
 23:36 17/01/2011
 - Installed and set up Mercurial.
 - Split projects into ARK2D and LOVE ME TOO.
 
-23:40 31/01/2011
-- Added enemies that split in to two on death.
-
-23:39 01/02/2011
-- Added Shooting enemies and homing bullet shooting enemies, and stuff.
-
 23:40 02/02/2011
-- Added Reflector enemies.
 - Added GigaRectangle::s_collidesSide() to return SIDE_TOP, SIDE_LEFT, SIDE_RIGHT, SIDE_BOTTOM or SIDE_NONE.
 
 23:53 03/02/2011
 - Sorted out the window clipping mouse on open issue
 
-15:11 07/02/2011
-- Reflectors not reflecting enough bullets!
-- Bosses 1 - 7.
-
-00:59 12/02/2011
-- Finished Boss 7
-- Added Boss 8
-
-
-LMT TODO:
-- Boss 7 "chase" angle is jagged.
-- Boss occasionally shoots a really fast bullet.
-- Boss 8:
-	- Perhaps fire more enemies at the player.
-	- Guidance/feedback: 
-		Show a "come closer" message. 
-- Bosses 9 - 15.
-- Achievements
-- Write basic enemy descriptions for "enemy index" (like the pokedex...).
-
-SHORT TERM TODO:
-- Check Path structure.
+20:19 07/06/2011
+- Added Graphics::drawRoundedRect();
+- So much stuff.
+- Started using Github.
+- Created "Examples & Tests" folder for projects using ARK2D. e.g. demos, examples and default source code projects.
+- Created "Default Game" and "Default Game (State Based)" examples.
 
 TODO:
 - Alter Transitions so that enter() is called before render() - this should mostly deprecate the use of manual initFromState()s.
 - Add Math / Triangulation classes.
-- Add Graphics::drawRoundedRect();
 - Draw Mouse image at screen refresh rate instead of per-update-render-cycle for smooth mouse rendering.
 - Functionality for Gamepad Analog sticks and Triggers.
 - Functionality for when a Gamepad is plugged in after the game is started.
-- Wave 22 / 23
-
 - Standardise MathUtil::angle to start from right and go clockwise.
-	-- Means Image rotation standard should be 270 or -90.
-
-
-
-
-
-
-
-
-
-// Stage 1:  Preparation
-// Stage 2:  Arrival (Social Gathering)
-// Stage 3:  Accomplishment Introduction
-// Stage 4:  Mutual Attraction
-// Stage 5:  Good Conversation
-// Stage 6:  Light Escalation
-// Stage 7:  Compliance Testing
-// Stage 8:  Mutual Comfort
-// Stage 9:  Heavy Escalation
-// Stage 10: Bounce
-// Stage 11: Arrival (Home)
-// Stage 12: Resistance
-// Stage 13: Freeze Out
-// Stage 14: Mathematics...
-// Stage 15: Incompatibility
-// Stage 16: Regret
-// Stage 17: Distance
-// Stage 18: Doubt
-// Stage 19: Departure
-// Stage 20: Report
-
-
-Achievements
-
-- SNIPER: 		Complete any stage with 100% accuracy.
-- ULTIMATE SNIPER:	Complete all stages with 100% accuracy.
-- TRIGGER HAPPY: 	Fire a total of 1000 bullets during your gaming session.
-- PUSH OVER:		Be pushed out of the game arena 10 times.
-- LOVED:		Complete the game.
-- PLAYAAAH:		Complete the game in less than 10 minutes.
-
+-- Means Image rotation standard should be 270 or -90.
