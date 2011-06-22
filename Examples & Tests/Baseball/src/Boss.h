@@ -24,7 +24,9 @@ class Boss : public GameObject {
 
 		DefaultGame* m_game;
 		Image* m_image;
+		Image* m_imageRight;
 		Animation* m_animation;
+		Animation* m_animationRight;
 		float m_timer;
 
 		float m_spitTimer;

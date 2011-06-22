@@ -41,10 +41,13 @@ void DefaultGame::initStates(GameContainer* container) {
 	musicHappy = new Sound("data/game/sound/soundtrack-happy.ogg");
 	musicSad = new Sound("data/game/sound/soundtrack-dark.ogg");
 
-	back = new Image("data/game/back.png");
+	sheet = new Image("data/game/sheet.png");
+	sheet_desc = new SpriteSheetDescription("data/game/sheet.json");
 
-	baseballImage1 = new Image("data/game/baseball1.png");
-	baseballImage2 = new Image("data/game/baseball2.png");
+	back = sheet->getSubImage(sheet_desc->getItemByName("back.png")); //new Image("data/game/back.png");
+
+	baseballImage1 = sheet->getSubImage(sheet_desc->getItemByName("baseball1.png")); //new Image("data/game/baseball1.png");
+	baseballImage2 = sheet->getSubImage(sheet_desc->getItemByName("baseball2.png")); //new Image("data/game/baseball2.png");
 
 	addState(state_blank);
 	addState(state_menu);

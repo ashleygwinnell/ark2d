@@ -43,7 +43,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.release.360179043" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.release"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release.341017134" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.release">
 								<option id="gnu.cpp.link.option.flags.1349284219" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-mwindows -enable-auto-import" valueType="string"/>
-								<option id="gnu.cpp.link.option.paths.509645656" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths"/>
+								<option id="gnu.cpp.link.option.paths.509645656" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths"/>
 								<option id="gnu.cpp.link.option.userobjs.1737620419" name="Other objects" superClass="gnu.cpp.link.option.userobjs" valueType="userObjs">
 									<listOptionValue builtIn="false" value="../../ARK2D/Release/libARK2D.dll"/>
 								</option>

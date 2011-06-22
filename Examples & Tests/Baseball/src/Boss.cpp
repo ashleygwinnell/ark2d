@@ -15,12 +15,18 @@ Boss::Boss(): GameObject()  {
 
 	m_spitTimer = 0;
 
-	m_image = new Image("data/game/boss1.png");
+	m_image = m_game->sheet->getSubImage(m_game->sheet_desc->getItemByName("boss1.png")); //new Image("data/game/boss1.png");
+	m_imageRight = m_image->getFlippedCopy(true, false);
 
 	m_animation = new Animation();
 	m_animation->setFrameTime(500);
-	m_animation->addImage(new Image("data/game/boss2.png"));
-	m_animation->addImage(new Image("data/game/boss3.png"));
+	m_animation->addImage(m_game->sheet->getSubImage(m_game->sheet_desc->getItemByName("boss2.png"))); //new Image("data/game/boss2.png"));
+	m_animation->addImage(m_game->sheet->getSubImage(m_game->sheet_desc->getItemByName("boss3.png"))); //new Image("data/game/boss3.png"));
+
+	m_animationRight = new Animation();
+	m_animationRight->setFrameTime(500);
+	m_animationRight->addImage(m_animation->getFrame(0)->getFlippedCopy(true, false));
+	m_animationRight->addImage(m_animation->getFrame(1)->getFlippedCopy(true, false));
 
 	//m_animation->addImage(m_game->sheet->getSubImage(m_game->desc->getItemByName("couldron1.png"))->getScaledCopy(4, 4));
 	//m_animation->addImage(m_game->sheet->getSubImage(m_game->desc->getItemByName("couldron2.png"))->getScaledCopy(4, 4));
@@ -170,14 +176,42 @@ void Boss::render(GameContainer* container, Graphics* g) {
 
 	DefaultGame* m_game = DefaultGame::getGame();
 
-	if (m_spitTimer <= 0) {
-		m_image->setCenterOfRotation(m_image->getWidth()/2, m_image->getHeight()/2);
-		m_image->setRotation(MathUtil::angle(350, 350,
-				m_game->state_ingame->player->getBounds()->getCenterX(),
-				m_game->state_ingame->player->getBounds()->getCenterY()));
-		m_image->drawCentered(int(container->getWidth()/2), int(container->getHeight()/2));
+	Image* img = NULL;
+	if (m_game->state_ingame->player->getBounds()->getCenterX() <= 350) {
+		img = m_image;
 	} else {
-		m_animation->getCurrentFrame()->drawCentered(int(container->getWidth()/2), int(container->getHeight()/2));
+		img = m_imageRight;
+	}
+
+
+
+	if (m_spitTimer <= 0) {
+		float a = MathUtil::angle(350, 350,
+							m_game->state_ingame->player->getBounds()->getCenterX(),
+							m_game->state_ingame->player->getBounds()->getCenterY());
+		img->setCenterOfRotation(img->getWidth()/2, img->getHeight()/2);
+		if (img == m_image) {
+			img->setRotation(a + 180);
+		} else if (img == m_imageRight) {
+			img->setRotation(a);
+		}
+
+		img->drawCentered(int(container->getWidth()/2), int(container->getHeight()/2));
+	} else {
+		Image* curFr = NULL;
+		if (img == m_image) {
+			curFr = m_animation->getCurrentFrame();
+		} else {
+			curFr = m_animationRight->getCurrentFrame();
+		}
+		curFr->setCenterOfRotation(curFr->getWidth()/2, curFr->getHeight()/2);
+		float newa = m_game->state_ingame->baseballs.get(m_game->state_ingame->baseballs.size()-1)->m_degrees;
+		if (img == m_image) {
+			curFr->setRotation(newa + 180);
+		} else if (img == m_imageRight) {
+			curFr->setRotation(newa);
+		}
+		curFr->drawCentered(int(container->getWidth()/2), int(container->getHeight()/2));
 	}
 }
 

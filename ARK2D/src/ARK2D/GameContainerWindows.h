@@ -46,6 +46,7 @@ class GameContainer;
 		LONGLONG last_time;    // Previous timer value
 
 		vector<GameContainerDisplayMode> m_availableDisplayModes;
+		GameContainerDisplayMode* findDisplayMode(unsigned int w, unsigned int h, unsigned int bpp);
 
 		LRESULT CALLBACK WndProc(HWND hWindow, UINT msg, WPARAM wParam, LPARAM lParam);
 

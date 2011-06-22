@@ -24,7 +24,7 @@ class PNGImage {
 		void* getImageData();
 		~PNGImage();
 	private:
-		std::string filename;
+		std::string m_filename;
 		//FILE *fp; // file handle.
 		png_byte header[8]; // header for testing if it is a png
 		png_structp png_ptr; // png read struct

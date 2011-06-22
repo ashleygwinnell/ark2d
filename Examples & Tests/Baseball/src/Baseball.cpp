@@ -70,7 +70,10 @@ void Baseball::update(GameContainer* container, GameTimer* timer) {
 	}
 }
 void Baseball::render(GameContainer* container, Graphics* g) {
-	m_animation->draw(int(m_bounds->getCenterX()), int(m_bounds->getCenterY()));
+	Image* curFrame = m_animation->getCurrentFrame();
+	curFrame->setCenterOfRotation(int(curFrame->getWidth()/2), int(curFrame->getHeight()/2));
+	curFrame->setRotation(m_degrees + 180);
+	curFrame->drawCentered(int(m_bounds->getCenterX()), int(m_bounds->getCenterY()));
 
 	//g->pushMatrix();
 	//g->translate(int(m_bounds->getCenterX()), int(m_bounds->getCenterY()));

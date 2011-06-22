@@ -46,6 +46,8 @@ class DefaultGame : public StateBasedGame {
 		Sound* musicHappy;
 		Sound* musicSad;
 
+		Image* sheet;
+		SpriteSheetDescription* sheet_desc;
 		Image* back;
 		Image* baseballImage1;
 		Image* baseballImage2;

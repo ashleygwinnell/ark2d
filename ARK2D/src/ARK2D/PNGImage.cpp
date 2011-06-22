@@ -27,8 +27,8 @@
 
 using namespace std;
 
-PNGImage::PNGImage(const string filename) {
-	this->filename = filename;
+PNGImage::PNGImage(const string filename): m_filename(filename) {
+
 }
 int PNGImage::getWidth() {
 	return this->width;
@@ -56,7 +56,7 @@ int PNGImage::load() {
 	char header[8];    // 8 is the maximum size that can be checked
 
 	        /* open file and test for it being a png */
-	        FILE* fp = fopen(filename.c_str(), "rb");
+	        FILE* fp = fopen(m_filename.c_str(), "rb");
 	        if (!fp) {
 	        	ErrorDialog::createAndShow("[read_png_file] File %s could not be opened for reading");
 	        	return 1;
@@ -106,7 +106,7 @@ int PNGImage::load() {
 	        color_type = png_get_color_type(png_ptr, info_ptr);
 	        bit_depth = png_get_bit_depth(png_ptr, info_ptr);
 
-	        int number_of_passes = png_set_interlace_handling(png_ptr);
+	       // int number_of_passes = png_set_interlace_handling(png_ptr);
 	        png_read_update_info(png_ptr, info_ptr);
 
 
@@ -117,7 +117,7 @@ int PNGImage::load() {
 	        }
 
 	        row_pointers = (png_bytep*) malloc(sizeof(png_bytep) * height);
-	        for (int y=0; y<height; y++) {
+	        for (unsigned int y=0; y<height; y++) {
 	        	row_pointers[y] = (png_byte*) malloc(png_get_rowbytes(png_ptr,info_ptr));
 	        }
 
@@ -164,7 +164,7 @@ int PNGImage::load() {
 	        return 0;
 /*
 	//open file as binary
-	fp = fopen(filename.c_str(), "rb");
+	fp = fopen(m_filename.c_str(), "rb");
 	if (!fp) {
 		return 1;
 	}

@@ -132,6 +132,7 @@ void ParticleSystem::render(float x, float y) {
 
 	Graphics* g = ARK2D::getGraphics();
 
+	g->pushMatrix();
 	g->translate(x, y);
 	if (blendingMode == BLEND_ADDITIVE) {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
@@ -189,6 +190,7 @@ void ParticleSystem::render(float x, float y) {
 
 	g->setDrawColor(Color::white);
 	g->translate(x * -1, y * -1);
+	g->popMatrix();
 }
 
 

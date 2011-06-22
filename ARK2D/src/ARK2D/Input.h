@@ -32,7 +32,8 @@ class Input {
 			static const int MOUSE_BUTTON_MIDDLE = 0x04;
 			static const int KEY_ENTER = 0x0D;
 			static const int KEY_TAB = 0x09;
-			static const int KEY_BACKSPACE = 0x10;
+			static const int KEY_BACKSPACE = 0x08;
+			static const int KEY_SHIFT = 0x10;
 			static const int KEY_CONTROL = 0x11;
 			static const int KEY_ALT = 0x12;
 			static const int KEY_CAPSLOCK = 0x14;

@@ -19,6 +19,7 @@ class Animation {
 
 		void addImage(Image* image);
 		Image* getCurrentFrame();
+		Image* getFrame(unsigned int i);
 
 		void update(GameTimer* timer);
 

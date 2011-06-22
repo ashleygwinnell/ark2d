@@ -166,6 +166,13 @@
 - Created "Examples & Tests" folder for projects using ARK2D. e.g. demos, examples and default source code projects.
 - Created "Default Game" and "Default Game (State Based)" examples.
 
+17:23 11/06/2011
+- Fixed fullscreen mode.
+- Added Hot Cross Bunions (with Arcade edition)
+
+23:02 22/06/2011
+- Animation::getFrame();
+
 TODO:
 - Alter Transitions so that enter() is called before render() - this should mostly deprecate the use of manual initFromState()s.
 - Add Math / Triangulation classes.

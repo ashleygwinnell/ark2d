@@ -14,7 +14,7 @@ Player::Player(): GameObject()  {
 
 	m_centerPoint = new Vector2<int>(0, 0);
 
-	m_image = new Image("data/game/player.png");
+	m_image = m_game->sheet->getSubImage(m_game->sheet_desc->getItemByName("player.png")); //new Image("data/game/player.png");
 
 	//m_animation = new Animation();
 	//m_animation->setFrameTime(500);

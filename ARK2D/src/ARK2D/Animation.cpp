@@ -24,6 +24,9 @@ void Animation::addImage(Image* image) {
 Image* Animation::getCurrentFrame() {
 	return m_frames[m_currentFrameIndex];
 }
+Image* Animation::getFrame(unsigned int i) {
+	return m_frames[i];
+}
 
 void Animation::setFrameTime(unsigned int ft) {
 	m_frameTime = ft;

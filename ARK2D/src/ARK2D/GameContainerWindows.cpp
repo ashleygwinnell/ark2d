@@ -147,6 +147,18 @@
 		#endif
 	}
 
+	GameContainerDisplayMode* GameContainerPlatform::findDisplayMode(unsigned int w, unsigned int h, unsigned int bpp) {
+		for(unsigned int i = 0; i < m_availableDisplayModes.size(); i++) {
+			if (m_availableDisplayModes.at(i).width == w
+				&& m_availableDisplayModes.at(i).height == h
+				&& m_availableDisplayModes.at(i).bpp == bpp
+			) {
+				return &m_availableDisplayModes.at(i);
+			}
+		}
+		return NULL;
+	}
+
 	void GameContainer::setFullscreen(bool fullscreen) {
 
 		if (fullscreen) {
@@ -158,12 +170,14 @@
 				EnumDisplaySettings(0, 0, &newSettings);
 
 				// Find a display mode closest to the width and height
-				GameContainerDisplayMode dm = m_platformSpecific.m_availableDisplayModes.at(0);
+				GameContainerDisplayMode* dm = &m_platformSpecific.m_availableDisplayModes.at(0);
+				//GameContainerDisplayMode* dm = m_platformSpecific.m_availableDisplayModes.at(0);
+
 
 				//  set desired screen size/res
-				newSettings.dmPelsWidth  = dm.width; //m_width;
-				newSettings.dmPelsHeight = dm.height; //m_height;
-				newSettings.dmBitsPerPel = dm.bpp; //m_bpp;
+				newSettings.dmPelsWidth  = dm->width; //m_width;
+				newSettings.dmPelsHeight = dm->height; //m_height;
+				newSettings.dmBitsPerPel = dm->bpp; //m_bpp;
 
 				//specify which aspects of the screen settings we wish to change
 				newSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
@@ -196,8 +210,11 @@
 					SetWindowPos(m_platformSpecific.m_hWindow, 0, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 					InvalidateRect(m_platformSpecific.m_hWindow, 0, true);
 
-					MoveWindow(m_platformSpecific.m_hWindow,0 , 0, dm.width, dm.height, TRUE);
-					glViewport(0, 0, m_width, m_height);
+					MoveWindow(m_platformSpecific.m_hWindow,0 , 0, dm->width, dm->height, TRUE);
+					//glViewport(0, 0, m_width, m_height);
+					glViewport(0, 0, dm->width, dm->height);
+
+					std::cout << "setting fullscreen: " << m_width << " : " << m_height << std::endl;
 
 					//return;
 				}
