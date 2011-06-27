@@ -173,6 +173,12 @@
 23:02 22/06/2011
 - Animation::getFrame();
 
+21:47 23/06/2011
+- Started writing a simple Python build system.
+
+00:31 28/06/2011
+- Modified simple Python build system to only compile source files that have changed since the last compilation.
+
 TODO:
 - Alter Transitions so that enter() is called before render() - this should mostly deprecate the use of manual initFromState()s.
 - Add Math / Triangulation classes.
