@@ -179,6 +179,9 @@
 00:31 28/06/2011
 - Modified simple Python build system to only compile source files that have changed since the last compilation.
 
+00:26 29/06/2011
+- Modified simple Python build system to compile games - see Default Game project.
+
 TODO:
 - Alter Transitions so that enter() is called before render() - this should mostly deprecate the use of manual initFromState()s.
 - Add Math / Triangulation classes.
