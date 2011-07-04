@@ -50,6 +50,9 @@ GLuint Image::load(const Color& mask) {
 		// Create the actual texture object.
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->getWidth(), this->getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, tga->getImageData());
 
+		// don't forget to unbind the texture now.
+		glBindTexture(GL_TEXTURE_2D, NULL);
+
 		// Free TGA memory.
 		delete(tga);
 
@@ -127,6 +130,9 @@ GLuint Image::load(const Color& mask) {
 		//	}
 		//}
 
+		// don't forget to unbind the texture now.
+		glBindTexture(GL_TEXTURE_2D, NULL);
+
 
 		// Free BMP memory.
 		delete(bmp);
@@ -163,7 +169,7 @@ GLuint Image::load(const Color& mask) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, png->getWidth(), png->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
-
+		glBindTexture(GL_TEXTURE_2D, NULL);
 		texture = Object;
 
 		delete png;

@@ -29,7 +29,7 @@ class ARK2DBuildSystem:
 		self.static_libraries = [];
 		
 	def dllInit(self):
-		self.mkdirs.expand([
+		self.mkdirs.extend([
 			self.build_folder,
 			self.build_folder + "\\src",
 			self.build_folder + "\\src\\ARK2D",

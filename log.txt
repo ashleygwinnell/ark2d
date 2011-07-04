@@ -182,6 +182,11 @@
 00:26 29/06/2011
 - Modified simple Python build system to compile games - see Default Game project.
 
+23:38 04/07/2011
+- Fixed a bug where ordinary polygons or most things in the Graphics class would not work unless drawing a string or image to the screen.
+	- On loading an image as a texture, it was not unbinding the texture.
+- Fixed dll build script issue.
+
 TODO:
 - Alter Transitions so that enter() is called before render() - this should mostly deprecate the use of manual initFromState()s.
 - Add Math / Triangulation classes.
