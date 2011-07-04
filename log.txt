@@ -188,10 +188,12 @@
 - Fixed dll build script issue.
 
 TODO:
+- Paths, properly. With an editor!
 - Alter Transitions so that enter() is called before render() - this should mostly deprecate the use of manual initFromState()s.
 - Add Math / Triangulation classes.
 - Draw Mouse image at screen refresh rate instead of per-update-render-cycle for smooth mouse rendering.
 - Functionality for Gamepad Analog sticks and Triggers.
 - Functionality for when a Gamepad is plugged in after the game is started.
+- Functionality for mapping Gamepad keys directly to keyboard keys for quick testing and somewhat cleaner code.
 - Standardise MathUtil::angle to start from right and go clockwise.
 -- Means Image rotation standard should be 270 or -90.
