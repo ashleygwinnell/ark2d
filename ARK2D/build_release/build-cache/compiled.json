@@ -2,8 +2,17 @@
     "src\\ARK2D\\ARK2D.cpp": {
         "date_modified": 1307472739.6732
     }, 
+    "src\\ARK2D\\ARK2D_Path\\Path.cpp": {
+        "date_modified": 1309896423.814
+    }, 
+    "src\\ARK2D\\ARK2D_Path\\PathGroup.cpp": {
+        "date_modified": 1309896987.88
+    }, 
     "src\\ARK2D\\ARK2D_Path\\PathLoader.cpp": {
         "date_modified": 1302378290.2234
+    }, 
+    "src\\ARK2D\\ARK2D_Path\\SubPath.cpp": {
+        "date_modified": 1309895180.082
     }, 
     "src\\ARK2D\\ARK2D_State\\EmptyTransition.cpp": {
         "date_modified": 1302378271.7384
@@ -67,6 +76,9 @@
     }, 
     "src\\ARK2D\\Color.cpp": {
         "date_modified": 1307472739.7592
+    }, 
+    "src\\ARK2D\\Easing.cpp": {
+        "date_modified": 1309897333.646
     }, 
     "src\\ARK2D\\ErrorDialog.cpp": {
         "date_modified": 1302378292.6444

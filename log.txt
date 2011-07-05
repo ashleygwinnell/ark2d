@@ -187,6 +187,13 @@
 	- On loading an image as a texture, it was not unbinding the texture.
 - Fixed dll build script issue.
 
+21:28 05/07/2011
+- Moved Easing in to it's won cpp and h file.
+- Added Path, PathGroup and SubPath to ARK2D. PathLoader was removed as it was deprecated anyway.
+- Moved PI constant from Timeline to MathUtil. 
+- Added "virtual" keyword to Image destructor.
+- Modified Eclipse project to use the build_release folder.
+
 TODO:
 - Paths, properly. With an editor!
 - Alter Transitions so that enter() is called before render() - this should mostly deprecate the use of manual initFromState()s.

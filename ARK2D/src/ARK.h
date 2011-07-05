@@ -27,9 +27,6 @@
 
 #include "ARK2D/Constants.h"
 
-
-#include "ARK2D/ARK2D_path/PathLoader.h"
-
 #include "ARK2D/ARK2D_state/StateBasedGame.h"
 #include "ARK2D/ARK2D_state/GameState.h"
 #include "ARK2D/ARK2D_state/LoadingState.h"
@@ -87,3 +84,7 @@
 #include "ARK2D/FileUtil.h"
 #include "ARK2D/LocalHighscores.h"
 
+// paths
+#include "ARK2D/ARK2D_path/SubPath.h"
+#include "ARK2D/ARK2D_path/Path.h"
+#include "ARK2D/ARK2D_path/PathGroup.h"

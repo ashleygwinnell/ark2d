@@ -86,7 +86,7 @@ class Image {
 		//void setCornerColor(unsigned int corner, Color c) const;
 		//void copyAreaToImage(const Image& image, unsigned int dest_x, unsigned int dest_y,
 		//						unsigned int x, unsigned int y, unsigned int width, unsigned int height);
-		~Image();
+		virtual ~Image();
 };
 
 #endif /* IMAGE_H_ */

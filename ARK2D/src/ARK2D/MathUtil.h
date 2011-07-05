@@ -18,7 +18,9 @@
 #include "Vector2.h"
 #include "Cast.h"
 
-#define PI 3.14159265
+#ifndef PI
+	#define PI 3.14159265
+#endif
 
 class MathUtil {
 	public:
