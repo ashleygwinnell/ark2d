@@ -224,13 +224,28 @@ char* StringUtil::file_get_contents(const char* fileName) {
 
 }
 
-void StringUtil::toUpper(string &str) {
+void StringUtil::toUpper(string& str) {
 	//transform(str.begin(), str.end(), str.begin(), toupper);
+
+	//int leng=str.length();
+	//for(int i=0; i<leng; i++) {
+	//	if (97<=str[i]&&str[i]<=122) {//a-z
+	//		str[i]-=32;
+	//	}
+	//}
 }
 
-void StringUtil::toLower(string &str) {
+void StringUtil::toLower(string& str) {
 	//transform(str.begin(), str.end(), str.begin(), tolower);
+
+	///int leng=str.length();
+	//for(int i=0; i<leng; i++) {
+	//	if (65<=str[i]&&str[i]<=90) { //A-Z
+	//		str[i]+=32;
+	//	}
+	//}
 }
+
 
 void StringUtil::trimLeft(string& str, const char* chars2remove) {
 	if (!str.empty()) {

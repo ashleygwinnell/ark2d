@@ -101,7 +101,6 @@ class GigaRectangle {
 		bool isPartlyOffscreen() {
 			return s_isPartlyOffscreen(this);
 		}
-
 		static bool s_collides(GigaRectangle* rect1, GigaRectangle* rect2) {
 			return s_collides(
 				rect1->getX(), rect1->getY(), rect1->getWidth(), rect1->getHeight(),
@@ -120,6 +119,11 @@ class GigaRectangle {
 				return true;
 			}
 			return false;
+		}
+		static bool s_contains(T x1, T y1, T w1, T h1, T x2, T y2) {
+			return s_collides(
+				x1, y1, w1, h1, x2, y2, 1, 1
+			);
 		}
 
 		static unsigned int s_collidesSide(T x1, T y1, T w1, T h1, T x2, T y2, T w2, T h2) {

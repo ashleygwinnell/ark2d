@@ -44,13 +44,15 @@
 			case WM_DESTROY:
 				return 0;
 			case WM_KEYDOWN:
-				//std::cout << LOWORD(wParam) << std::endl;
+			{
 				m_container->m_input.pressKey(wParam);
 				break;
+			}
 			case WM_KEYUP:
-				// std::cout << "key released" << std::endl;
+			{
 				m_container->m_input.releaseKey(wParam);
 				break;
+			}
 			case WM_ACTIVATEAPP:
 				break;
 			case WM_MOUSEMOVE:

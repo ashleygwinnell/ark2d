@@ -8,6 +8,11 @@
 #ifndef GAMECONTAINERWINDOWS_H_
 #define GAMECONTAINERWINDOWS_H_
 
+	#define MAPVK_VK_TO_VSC 0
+	#define MAPVK_VSC_TO_VK 1
+	#define MAPVK_VK_TO_CHAR 2
+	#define MAPVK_VSC_TO_VK_EX 3
+
 class GameContainer;
 
 	#include "ARK2D_GL.h"

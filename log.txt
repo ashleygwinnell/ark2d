@@ -194,7 +194,23 @@
 - Added "virtual" keyword to Image destructor.
 - Modified Eclipse project to use the build_release folder.
 
+20:53 08/07/2011
+- Working on TextField and basic UI components.
+- Added bool GigaRectangle::s_contains(x, y, w, h, x2, y2);
+- Input::getKeyChar(int key) gets caps and shifted keys and stuff - whew. No Unicode support or anything, though.
+
+SHORT-TERM TODO:
+- TextField work 
+ - insert/remove characters from cursor/caret position (including delete key, not just backspace).
+ - use mouse to select cursor/caret position.
+
+
+
 TODO:
+- TextField work:
+ - use mouse to select text.
+ - use keyboard to select text.
+  - using shift and left and control-shift left.
 - Paths, properly. With an editor!
 - Alter Transitions so that enter() is called before render() - this should mostly deprecate the use of manual initFromState()s.
 - Add Math / Triangulation classes.

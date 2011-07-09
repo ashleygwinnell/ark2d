@@ -37,8 +37,8 @@ class StringUtil {
 		static bool file_exists(const char * filename);
 		static char* file_get_contents(const char* fileName);
 
-		static void toUpper(string &str);
-		static void toLower(string &str);
+		static void toUpper(string& str);
+		static void toLower(string& str);
 
 		static void trimLeft(string& str, const char* chars2remove);
 		static void trimRight(string& str, const char* chars2remove);

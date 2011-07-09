@@ -5,7 +5,7 @@
  *      Author: Ashley
  */
 
-#ifdef _WIN32
+#ifdef __WIN32
 	#include <windows.h>
 #endif
 
@@ -54,6 +54,8 @@ const int Input::KEY_W;
 const int Input::KEY_X;
 const int Input::KEY_Y;
 const int Input::KEY_Z;
+
+const char* Input::s_keyboardState = new char[256];
 
 Input::Input():
 	keyDownBuffer(), m_container(NULL),
@@ -176,13 +178,75 @@ const string Input::getKeyName(unsigned int key) {
 	return string("unknown");
 }
 const string Input::getKeyChar(unsigned int key) {
-	map<int, string>::iterator it = keyChars.find(key);
+	/*map<int, string>::iterator it = keyChars.find(key);
 	if (it != keyChars.end()) {
 		return keyChars[key];
 	}
-	return string("");
-}
+	return string("");*/
 
+	#ifdef __WIN32
+
+		if (key == (unsigned int) MOUSE_BUTTON_LEFT // left mouse
+			|| key == (unsigned int) MOUSE_BUTTON_RIGHT // right mouse
+			|| key == (unsigned int) MOUSE_BUTTON_MIDDLE // middle mouse
+			|| key == (unsigned int) KEY_BACKSPACE // backspace
+			|| key == (unsigned int) KEY_DELETE // backspace
+			|| key == (unsigned int) KEY_SHIFT // shift
+			|| key == (unsigned int) KEY_CONTROL // ctrl
+			|| key == (unsigned int) KEY_CAPSLOCK // caps
+			|| key == (unsigned int) KEY_LWIN // lwin
+			|| key == (unsigned int) KEY_RWIN // rwin
+			|| key == (unsigned int) KEY_INSERT // insert
+			|| key == (unsigned int) KEY_HOME // home
+			|| key == (unsigned int) KEY_END // end
+			|| key == (unsigned int) KEY_ALT // alt
+			|| key == (unsigned int) KEY_PAGEUP // pg up
+			|| key == (unsigned int) KEY_NUMLOCK // numlock
+			|| key == (unsigned int) KEY_PAGEDOWN // pg down
+			|| key == (unsigned int) KEY_SELECT // select key (right click menu)
+			|| (key >= (unsigned int) KEY_F1 && key <= (unsigned int) KEY_F12) // Function keys
+			|| (key >= (unsigned int) KEY_LEFT && key <= (unsigned int) KEY_DOWN) // arrows: l, u, r, d
+			|| key == (unsigned int) KEY_ESCAPE
+			|| isKeyDown((unsigned int) KEY_CONTROL)
+			) {
+			return string("");
+		}
+
+		unsigned char* out = new unsigned char[5];
+		GetKeyboardState((BYTE*) s_keyboardState);
+		ToAscii(key, MapVirtualKey(key, MAPVK_VK_TO_VSC), (BYTE*) s_keyboardState, (WORD*) out, 0);
+
+
+		//std::cout << out << " - " << (unsigned int)(out[0]) << " - " << key << std::endl;
+		string returnString = "";
+
+		if (int(out[0]) == 0// other
+				|| int(out[0]) <= 26 ) { // uh...
+
+		} else if (int(out[0]) == KEY_TAB) {
+			returnString.append("\t");
+		} else if (int(out[0]) == KEY_ENTER) {
+			returnString.append("\n");
+		} else if (int(s_keyboardState[VK_CONTROL]) == -127) {
+
+		} else {
+			returnString.append((char*)out);
+		}
+
+		delete out;
+		return returnString;
+
+	#endif
+}
+bool Input::isKeyAlphanumeric(unsigned int key) {
+	return (key >= 48 && key <= 90);
+}
+bool Input::isCapsLockOn() {
+	#ifdef __WIN32
+		return ((GetKeyState(KEY_CAPSLOCK) & 0x0001)!=0);
+	#endif
+	return false;
+}
 
 void Input::clearKeyPressedRecord() {
 	pressedEvents.clear();

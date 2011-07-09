@@ -17,6 +17,8 @@
 
 #include "Image.h"
 #include "Color.h"
+#include "OutputWrapper.h"
+#include "StringUtil.h"
 
 using std::string;
 using std::istream;

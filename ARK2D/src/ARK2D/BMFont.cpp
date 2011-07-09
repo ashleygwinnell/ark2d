@@ -26,6 +26,7 @@ BMFont::BMFont(const string& f, const string& i):
 //	m_FontFile = f;
 //	m_ImageFile = i;
 //	Image* newimage = new Image(i);
+
 	m_Image = (*new Image(i));
 	Parse();
 }
@@ -35,6 +36,8 @@ BMFont::BMFont(const string& f, const string& i, const Color& mask):
 	m_ImageFile(i)//,
 	//m_Image(i, mask)
 {
+	OutputWrapper::print(StringUtil::append("Loading Font: ", f));
+
 	m_Image = (*new Image(i, mask));
 	Parse();
 }

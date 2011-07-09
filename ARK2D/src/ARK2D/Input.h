@@ -41,6 +41,8 @@ class Input {
 			static const int KEY_SPACE = 0x20;
 			static const int KEY_PAGEUP = 0x21;
 			static const int KEY_PAGEDOWN = 0x22;
+			static const int KEY_END = 0x23;
+			static const int KEY_HOME = 0x24;
 			static const int KEY_LEFT = 0x25;
 			static const int KEY_UP = 0x26;
 			static const int KEY_RIGHT = 0x27;
@@ -89,6 +91,7 @@ class Input {
 
 			static const int KEY_LWIN = 0x5B;
 			static const int KEY_RWIN = 0x5C;
+			static const int KEY_SELECT = 0x5D;
 			static const int KEY_SLEEP = 0x5F;
 
 			static const int KEY_NUMPAD_0 = 0x60;
@@ -129,6 +132,8 @@ class Input {
 			static const int KEY_RCONTROL = 0xA3;
 			static const int KEY_LMENU = 0xA4;
 			static const int KEY_RMENU = 0xA5;
+
+			static const char* s_keyboardState;
 		//#endif
 
 		//#ifdef _OSX
@@ -301,6 +306,8 @@ class Input {
 
 		const string getKeyName(unsigned int key);
 		const string getKeyChar(unsigned int key);
+		bool isKeyAlphanumeric(unsigned int key);
+		bool isCapsLockOn();
 
 		void clearKeyPressedRecord();
 
