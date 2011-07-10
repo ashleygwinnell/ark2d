@@ -39,3 +39,6 @@ void Game::keyPressed(unsigned int key) {
 void Game::keyReleased(unsigned int key) {
 
 }
+void Game::mouseMoved(int x, int y, int oldx, int oldy) {
+
+}

@@ -199,16 +199,23 @@
 - Added bool GigaRectangle::s_contains(x, y, w, h, x2, y2);
 - Input::getKeyChar(int key) gets caps and shifted keys and stuff - whew. No Unicode support or anything, though.
 
-SHORT-TERM TODO:
-- TextField work 
+23:41 09/07/2011
+- TextField work:
  - insert/remove characters from cursor/caret position (including delete key, not just backspace).
- - use mouse to select cursor/caret position.
-
-
+ - using keyboard to select text: holding shift and using arrow keys.
+ - text alignment y
+- BMFont::getLineHeight() function.
+- Button class started.
+ - Game::mouseMoved(int x, int y, int oldx, int oldy) added.
+- Not compatible with previous dlls.
+- Added Color::cyan.
+- Fixed font loading bug where it would attempt to load Character IDs above ASCII range (array index out of bounds, essentially)
+- Added Default font (PF Tempesta Condensed) which now loads from data/fonts/default.fnt. Update your games, bitches!
 
 TODO:
 - TextField work:
  - use mouse to select text.
+ - use mouse to select cursor/caret position.
  - use keyboard to select text.
   - using shift and left and control-shift left.
 - Paths, properly. With an editor!

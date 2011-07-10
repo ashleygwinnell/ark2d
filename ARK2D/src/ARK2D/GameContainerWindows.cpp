@@ -57,6 +57,9 @@
 				break;
 			case WM_MOUSEMOVE:
 				POINTS mouseXY = MAKEPOINTS(lParam);
+
+				ARK2D::getGame()->mouseMoved(mouseXY.x, mouseXY.y, m_container->m_input.mouse_x, m_container->m_input.mouse_y);
+
 				m_container->m_input.mouse_x = mouseXY.x;
 				m_container->m_input.mouse_y = mouseXY.y;
 				break;
@@ -716,7 +719,7 @@
 		OutputWrapper::println("done.");
 
 		// Load default Font - relies on Image so must be done after OpenGL is initted.
-		BMFont* fnt = new BMFont("data/calibri.fnt", "data/calibri.bmp", Color::magenta);
+		BMFont* fnt = new BMFont("data/fonts/default.fnt", "data/fonts/default.png");
 		m_graphics.m_DefaultFont = fnt;
 		m_graphics.m_Font = fnt;
 

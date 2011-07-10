@@ -69,6 +69,7 @@ class BMFont {
 		void drawStringCenteredAt(const string& Str, int x, int y) const;
 		unsigned int getStringWidth(const string& Str) const;
 		unsigned int getStringHeight(const string& Str) const;
+		unsigned int getLineHeight() const;
 		Image* getImage() const;
 	private:
 		bool Parse();

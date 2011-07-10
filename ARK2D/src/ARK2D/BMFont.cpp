@@ -67,6 +67,10 @@ bool BMFont::Parse() // istream& Stream, Charset& CharsetDesc
 			stringstream LineStream;
 			std::getline( Stream, Line );
 
+			bool skippingLine = false;
+			//std::cout << Line << std::endl;
+
+			if (Line.length() == 0) { break; }
 			//if (Line == -1) {
 			//	return false;
 			//}
@@ -113,10 +117,20 @@ bool BMFont::Parse() // istream& Stream, Charset& CharsetDesc
 					Key = Read.substr( 0, i );
 					Value = Read.substr( i + 1 );
 
+					if (skippingLine) {
+						continue;
+					}
+
 					//assign the correct value
 					Converter << Value;
 					if( Key == "id" )
 						Converter >> CharID;
+						if (CharID > 255) {
+							// no non-ascii (only 255 or below) plz
+							//std::cout << "bad char: " << CharID << ". skipping..." << std::endl;
+							skippingLine = true;
+							continue;
+						}
 					else if( Key == "x" )
 						Converter >> m_Charset.Chars[CharID].x;
 					else if( Key == "y" )
@@ -225,6 +239,9 @@ unsigned int BMFont::getStringHeight(const string& Str) const {
 		}
 	}
 	return max;
+}
+unsigned int BMFont::getLineHeight() const {
+	return m_Charset.LineHeight;
 }
 
 

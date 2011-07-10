@@ -177,6 +177,10 @@ void StateBasedGame::keyReleased(unsigned int key) {
 	Game::keyReleased(key);
 	m_current_state->keyReleased(key);
 }
+void StateBasedGame::mouseMoved(int x, int y, int oldx, int oldy) {
+	Game::mouseMoved(x, y, oldx, oldy);
+	m_current_state->mouseMoved(x, y, oldx, oldy);
+}
 
 StateBasedGame::~StateBasedGame() {
 

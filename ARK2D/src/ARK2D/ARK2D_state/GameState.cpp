@@ -26,7 +26,9 @@ void GameState::keyPressed(unsigned int key) {
 void GameState::keyReleased(unsigned int key) {
 
 }
+void GameState::mouseMoved(int x, int y, int oldx, int oldy) {
 
+}
 GameState::~GameState() {
 	// hmm
 }
