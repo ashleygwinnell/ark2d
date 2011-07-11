@@ -11,8 +11,22 @@
 PathGroup::PathGroup(): paths(), calcVector(), current(0), timer(0.0f) {
 	calcVector.set(0, 0);
 }
+
 void PathGroup::addPath(Path* p) {
 	paths.push_back(p);
+}
+vector<Path*> PathGroup::getPaths() {
+	return paths;
+}
+Path* PathGroup::getPath(unsigned int index) {
+	return paths.at(index);
+}
+
+void PathGroup::setName(string n) {
+	name = n;
+}
+void PathGroup::setDescription(string d) {
+	description = d;
 }
 
 void PathGroup::setTimer(float t) {
@@ -144,14 +158,18 @@ void PathGroup::render() {
 	for(unsigned int i = 0; i < paths.size(); i++) {
 		for(unsigned int j = 0; j < paths.at(i)->subpaths.at(0)->points.size(); j++) {
 			Vector2<float>* p = paths.at(i)->subpaths.at(0)->points.at(j);
-			renderPoint(p->getX(), p->getY());
+			renderPoint(p->getX(), p->getY(), (j == 0 || j == paths.at(i)->subpaths.at(0)->points.size()-1));
 		}
 	}
 }
-void PathGroup::renderPoint(float x, float y) {
+void PathGroup::renderPoint(float x, float y, bool linkPoint) {
 	Graphics* g = ARK2D::getGraphics();
 	g->setDrawColor(Color::white);
-	g->fillCircle(int(x), int(y), 5, 10);
+	if (linkPoint) {
+		g->fillCircle(int(x), int(y), 10, 10);
+	} else {
+		g->fillCircle(int(x), int(y), 5, 10);
+	}
 }
 void PathGroup::renderLine(float x, float y, float x2, float y2) {
 	Graphics* g = ARK2D::getGraphics();

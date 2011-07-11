@@ -212,6 +212,26 @@
 - Fixed font loading bug where it would attempt to load Character IDs above ASCII range (array index out of bounds, essentially)
 - Added Default font (PF Tempesta Condensed) which now loads from data/fonts/default.fnt. Update your games, bitches!
 
+11:08 10/07/2011
+- Added Graphics::scissor(x,y,w,h);
+- Added Graphics::setScissorTestEnabled(bool b);
+- Added Panel class.
+- Added Event to Button class. (using void* pointer)
+- Added PathIO class to load a path from a file.
+- Path editor work!
+- Made window show in center of screen properly.
+- Added Graphics::viewport(x,y,w,h);
+- GameContainer::setResizable(bool b) fix.
+ - It did not update m_width and m_height.
+
+SHORT-TERM TODO:
+- Add major/join points.
+- Remove major/join points.
+- Set Easing on subpaths.
+- Load and Save buttons.
+- Pan tool for Editor's main panel.
+
+
 TODO:
 - TextField work:
  - use mouse to select text.

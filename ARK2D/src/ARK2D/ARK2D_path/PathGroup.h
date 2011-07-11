@@ -25,11 +25,17 @@ class PathGroup {
 		Vector2<float> calcVector;
 		unsigned int current;
 		float timer;
+		string name;
+		string description;
 
 	public:
 		PathGroup();
 		void addPath(Path* p);
+		vector<Path*> getPaths();
+		Path* getPath(unsigned int index);
 
+		void setName(string n);
+		void setDescription(string d);
 		void setTimer(float t);
 		float getTimer();
 		void incrementTimer(float t);
@@ -44,7 +50,7 @@ class PathGroup {
 		unsigned int getIndex();
 
 		virtual void render();
-		virtual void renderPoint(float x, float y);
+		virtual void renderPoint(float x, float y, bool linkPoint);
 		virtual void renderLine(float x, float y, float x2, float y2);
 		virtual ~PathGroup();
 };

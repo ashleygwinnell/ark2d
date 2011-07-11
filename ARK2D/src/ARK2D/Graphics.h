@@ -46,6 +46,15 @@ class Graphics
 
 		void scale(float x, float y) const;
 
+		void setScissorTestEnabled(bool b) const;
+		void scissor(int x, int y, int w, int h) const;
+
+		void viewport(int x, int y, int w, int h) const;
+
+		void ortho2d(int x, int y, int w, int h) const;
+		void ortho2d(int x, int y, int w, int h, double near, double far) const;
+
+
 		void pushMatrix() const;
 		void popMatrix() const;
 

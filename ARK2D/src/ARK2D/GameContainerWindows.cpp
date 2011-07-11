@@ -35,7 +35,15 @@
 				}
 				return 0;
 			case WM_SIZE:
-				glViewport(0, 0, LOWORD(lParam), HIWORD(lParam));
+				m_container->m_width =  LOWORD(lParam);
+				m_container->m_height = HIWORD(lParam);
+				if (m_container->m_scaleToWindow) {
+					glViewport(0, 0, LOWORD(lParam), HIWORD(lParam));
+				} else {
+					m_container->disable2D();
+					m_container->enable2D();
+					glViewport(0, 0, LOWORD(lParam), HIWORD(lParam));
+				}
 				m_container->m_game.resize(m_container, LOWORD(lParam), HIWORD(lParam));
 				return 0;
 			case WM_CLOSE:
@@ -116,6 +124,8 @@
 		m_height(height),
 		m_bpp(bpp),
 		m_fullscreen(fullscreen),
+		m_resizable(false),
+		m_scaleToWindow(true),
 		m_clearColor(Color::black),
 		m_platformSpecific()
 	{
@@ -564,6 +574,9 @@
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
+		//glEnable(GL_SCISSOR_TEST);
+		//glScissor(0, 0, m_container->m_width, m_container->m_height);
+
 		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
 
@@ -639,7 +652,11 @@
 
 
 		int s_x = (m_platformSpecific.m_screenResolutionRect.right/2) - (m_platformSpecific.m_windowRect.right/2);
-		int s_y = (m_platformSpecific.m_screenResolutionRect.bottom/2) - (m_platformSpecific.m_windowRect.bottom/2) - 10;
+		//int s_y = (m_platformSpecific.m_screenResolutionRect.bottom/2) - (m_platformSpecific.m_windowRect.bottom/2);
+		int s_y = (GetSystemMetrics(SM_CYFULLSCREEN)/2) - (m_platformSpecific.m_windowRect.bottom/2);
+
+		s_y -= (GetSystemMetrics(SM_CYBORDER)/2);
+		//sy -= GetSystemMetrics(SM_CYSMCAPTION);
 
 		/*RECT clientSize;
 		DWORD exstyle, windowflags;
@@ -672,10 +689,17 @@
 			NULL
 		);*/
 
+		int windowFlags;
+		if (m_resizable) {
+			windowFlags = WS_OVERLAPPEDWINDOW;
+		} else {
+			windowFlags = (WS_BORDER | WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_CLIPCHILDREN | WS_CLIPSIBLINGS);
+		}
+
 		//m_platformSpecific.m_hWindow = CreateWindow("GameContainer", // lp Class Name
 		m_platformSpecific.m_hWindow = CreateWindow("GameContainerWindows", // lp Class Name
 									m_game.getTitle(), // lp Window Name
-									(WS_BORDER | WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_CLIPCHILDREN | WS_CLIPSIBLINGS), // DW Style
+									windowFlags, // DW Style
 									s_x, // x
 									s_y, // y
 									m_width, //m_windowRect.right - m_windowRect.left, // width
@@ -895,7 +919,15 @@
 		SwapBuffers(m_platformSpecific.m_hDeviceContext);
 	}
 
-
+	void GameContainer::setResizable(bool b){
+		m_resizable = b;
+	}
+	bool GameContainer::isResizable() {
+		return m_resizable;
+	}
+	void GameContainer::setScaleToWindow(bool b) {
+		m_scaleToWindow = b;
+	}
 
 	// Disable OpenGL
 	void GameContainerPlatform::disableOpenGL(HWND hWnd, HDC hDC, HGLRC hRC)

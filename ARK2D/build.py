@@ -105,6 +105,7 @@ class ARK2DBuildSystem:
 			'src\\ARK2D\\ARK2D_Path\\PathGroup.cpp',
 			'src\\ARK2D\\ARK2D_Path\\Path.cpp',
 			'src\\ARK2D\\ARK2D_Path\\SubPath.cpp',
+			'src\\ARK2D\\ARK2D_Path\\PathIO.cpp',
 			'src\\ARK2D\\ARK2D_State\\EmptyTransition.cpp',
 			'src\\ARK2D\\ARK2D_State\\FadeTransition.cpp',
 			'src\\ARK2D\\ARK2D_State\\GameState.cpp',

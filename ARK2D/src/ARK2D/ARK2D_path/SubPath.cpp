@@ -7,5 +7,10 @@
 
 #include "SubPath.h"
 
-SubPath::SubPath(): points() { }
-SubPath::~SubPath() { }
+SubPath::SubPath(): points() {
+
+}
+
+SubPath::~SubPath() {
+
+}

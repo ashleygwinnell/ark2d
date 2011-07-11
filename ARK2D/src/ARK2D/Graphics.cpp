@@ -9,6 +9,8 @@
 #include "Color.h"
 
 #include "ARK2D_GL.h"
+#include "ARK2D.h"
+#include "GameContainer.h"
 
 Graphics::Graphics():
 	m_DrawColor(255, 0, 255),
@@ -36,6 +38,29 @@ void Graphics::rotate(int angle) const {
 }
 void Graphics::scale(float x, float y) const {
 	glScalef(x, y, 0);
+}
+void Graphics::setScissorTestEnabled(bool b) const {
+	if (b) {
+		glEnable(GL_SCISSOR_TEST);
+	} else {
+		glDisable(GL_SCISSOR_TEST);
+	}
+}
+void Graphics::scissor(int x, int y, int w, int h) const {
+	//glScissor(x, y - (signed int) ARK2D::getContainer()->getHeight(), w, h * -1);
+	glScissor(x, ARK2D::getContainer()->getHeight() - (y + h), w, h);
+}
+void Graphics::viewport(int x, int y, int w, int h) const {
+	glViewport(x, y, w, h);
+}
+void Graphics::ortho2d(int x, int y, int w, int h) const {
+	ortho2d(x, y, w, h, -1, 1);
+}
+void Graphics::ortho2d(int x, int y, int w, int h, double near, double far) const {
+	//glOrtho((double) x, double(x + w), double(y + h), (double) y, near, far);
+	//glOrtho(0, w, h, 0, -1, 1);
+	ARK2D::getContainer()->disable2D();
+	ARK2D::getContainer()->enable2D();
 }
 
 void Graphics::drawString(const std::string str, int x, int y) const {

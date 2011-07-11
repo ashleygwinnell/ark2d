@@ -44,6 +44,7 @@ using namespace std;
 
 class GameContainer {
 	friend class GameContainerPlatform;
+	friend class Graphics;
 
 	public:
 
@@ -58,6 +59,7 @@ class GameContainer {
 
 		bool isResizable();
 		void setResizable(bool fs);
+		void setScaleToWindow(bool b);
 		unsigned int getFPS();
 		void setIcon(const std::string& path);
 		void start();
@@ -111,6 +113,7 @@ class GameContainer {
 		int m_bpp;
 		bool m_fullscreen;
 		bool m_resizable;
+		bool m_scaleToWindow;
 		bool m_verbose;
 		int m_fps;
 
