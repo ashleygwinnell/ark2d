@@ -224,21 +224,27 @@
 - GameContainer::setResizable(bool b) fix.
  - It did not update m_width and m_height.
 
+21:14 11/07/2011
+- Fixed PathIO::createFromFile() bug. It should have returned NULL if the file did not exist.
+- Added OpenFileDialog class - will need to refactor for saving file.
+- Added body of function PathIO::getAsJson(PathGroup* g).
+- Added functionality for Loading and saving files.
+- Fixed Bug in PathGroup where timer would increment over duration.
+- Added string Easing::getByInt(int);
+
 SHORT-TERM TODO:
 - Add major/join points.
 - Remove major/join points.
 - Set Easing on subpaths.
-- Load and Save buttons.
 - Pan tool for Editor's main panel.
-
+- Visibility modifiers for Button class.
 
 TODO:
 - TextField work:
  - use mouse to select text.
  - use mouse to select cursor/caret position.
  - use keyboard to select text.
-  - using shift and left and control-shift left.
-- Paths, properly. With an editor!
+  - using control-shift left.
 - Alter Transitions so that enter() is called before render() - this should mostly deprecate the use of manual initFromState()s.
 - Add Math / Triangulation classes.
 - Draw Mouse image at screen refresh rate instead of per-update-render-cycle for smooth mouse rendering.

@@ -50,6 +50,50 @@ unsigned int Easing::getByString(string str) {
 	return LINEAR;
 }
 
+string Easing::getByInt(unsigned int i) {
+	if (i == LINEAR) {
+		return "LINEAR";
+	} else if (i == QUADRATIC_IN) {
+		return "QUADRATIC_IN";
+	} else if (i == QUADRATIC_OUT) {
+		return "QUADRATIC_OUT";
+	} else if (i == QUADRATIC_IN_OUT) {
+		return "QUADRATIC_IN_OUT";
+	} else if (i == CUBIC_IN) {
+		return "CUBIC_IN";
+	} else if (i == CUBIC_OUT) {
+		return "CUBIC_OUT";
+	} else if (i == CUBIC_IN_OUT) {
+		return "CUBIC_IN_OUT";
+	} else if (i == QUARTIC_IN) {
+		return "QUARTIC_IN";
+	} else if (i == QUARTIC_OUT) {
+		return "QUARTIC_OUT";
+	} else if (i == QUARTIC_IN_OUT) {
+		return "QUARTIC_IN_OUT";
+	} else if (i == SINE_IN) {
+		return "SINE_IN";
+	} else if (i == SINE_OUT) {
+		return "SINE_OUT";
+	} else if (i == SINE_IN_OUT) {
+		return "SINE_IN_OUT";
+	} else if (i == EXPONENTIAL_IN) {
+		return "EXPONENTIAL_IN";
+	} else if (i == EXPONENTIAL_OUT) {
+		return "EXPONENTIAL_OUT";
+	} else if (i == EXPONENTIAL_IN_OUT) {
+		return "EXPONENTIAL_IN_OUT";
+	} else if (i == CIRCLE_IN) {
+		return "CIRCLE_IN";
+	} else if (i == CIRCLE_OUT) {
+		return "CIRCLE_OUT";
+	} else if (i == CIRCLE_IN_OUT) {
+		return "CIRCLE_IN_OUT";
+	}
+	return LINEAR;
+}
+
+
 double Easing::ease(unsigned int easing, double time, double start, double change, double duration)
 {
 	if (time >= duration) {

@@ -36,6 +36,7 @@ class Path {
 		void addPoint(float x, float y);
 		void addPoint(float x, float y, int index);
 		void removePoint(int index);
+		Vector2<float>* getPoint(unsigned int i);
 		vector<Vector2<float>*> getPoints();
 
 		virtual ~Path();

@@ -56,6 +56,9 @@ void Path::removePoint(int index) {
 		addPoint(points.at(i)->getX(), points.at(i)->getY());
 	}
 }
+Vector2<float>* Path::getPoint(unsigned int i) {
+	return subpaths.at(0)->points.at(i);
+}
 vector<Vector2<float>*> Path::getPoints() {
 	return subpaths.at(0)->points;
 }

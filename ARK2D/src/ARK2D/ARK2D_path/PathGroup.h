@@ -36,6 +36,10 @@ class PathGroup {
 
 		void setName(string n);
 		void setDescription(string d);
+
+		string getName();
+		string getDescription();
+
 		void setTimer(float t);
 		float getTimer();
 		void incrementTimer(float t);

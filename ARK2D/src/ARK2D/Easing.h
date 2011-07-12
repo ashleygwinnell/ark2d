@@ -43,6 +43,7 @@ class Easing {
 		static const unsigned int NONE = 19;
 
 		static unsigned int getByString(string str);
+		static string getByInt(unsigned int str);
 
 		static double ease(unsigned int easing, double time, double start, double change, double duration);
 

@@ -29,6 +29,13 @@ void PathGroup::setDescription(string d) {
 	description = d;
 }
 
+string PathGroup::getName() {
+	return name;
+}
+string PathGroup::getDescription() {
+	return description;
+}
+
 void PathGroup::setTimer(float t) {
 	timer = t;
 }
@@ -41,6 +48,11 @@ void PathGroup::incrementTimer(float t) {
 
 void PathGroup::update(GameTimer* gt) {
 	timer += gt->getDelta();
+
+	float d = getDuration();
+	if (timer >= d) {
+		timer = d;
+	}
 
 	updateCurrent();
 }
