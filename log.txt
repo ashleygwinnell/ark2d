@@ -232,6 +232,9 @@
 - Fixed Bug in PathGroup where timer would increment over duration.
 - Added string Easing::getByInt(int);
 
+20:50 15/07/2011
+- Flips to ARK2D Path Editor.
+
 SHORT-TERM TODO:
 - Add major/join points.
 - Remove major/join points.

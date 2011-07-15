@@ -35,8 +35,6 @@ class ComboBoxItem : public AbstractUIComponent {
 
 		void setItemChangedEvent(void* event);
 
-		int getWidth();
-		int getHeight();
 		void render();
 		void renderBackground();
 		void renderOverlay();

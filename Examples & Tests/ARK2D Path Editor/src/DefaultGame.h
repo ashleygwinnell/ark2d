@@ -55,6 +55,9 @@ class DefaultGame : public Game {
 		Button* savePathButton;
 		Button* saveAsPathButton;
 
+		Button* flipHorizontallyButton;
+		Button* flipVerticallyButton;
+
 		bool m_playing;
 		bool m_unsavedChanges;
 		unsigned int m_toolSelected; // 0 for select, 1 for major point, 2 for minor point.
@@ -80,6 +83,8 @@ class DefaultGame : public Game {
 		void unselectPoint();
 
 		void setTitle(string s);
+		void flip(bool hf, bool vf);
+		void flipSingular(bool hf, bool vf);
 
 		inline int gpmx() { return gamePanel->getX() + gamePanelPanX; }
 		inline int gpmy() { return gamePanel->getY() + gamePanelPanY; }
@@ -100,6 +105,10 @@ class DefaultGame : public Game {
 		static void loadPressed();
 		static void savePressed();
 		static void saveAsPressed();
+
+		static void flipHPressed();
+		static void flipVPressed();
+
 		virtual ~DefaultGame();
 };
 

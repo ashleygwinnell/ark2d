@@ -34,12 +34,7 @@ class Panel : public AbstractUIComponent {
 		void setTranslating(bool b) {
 			m_translate = b;
 		}
-		unsigned int getWidth() {
-			return m_width;
-		}
-		unsigned int getHeight() {
-			return m_height;
-		}
+
 		void preRender() {
 			//GameContainer* c = ARK2D::getContainer();
 			Graphics* g = ARK2D::getGraphics();

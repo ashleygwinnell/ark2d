@@ -38,12 +38,7 @@ void ComboBoxItem::keyPressed(unsigned int key) {
 		}
 	}
 }
-int ComboBoxItem::getWidth() {
-	return m_width;
-}
-int ComboBoxItem::getHeight() {
-	return m_height;
-}
+
 void ComboBoxItem::render() {
 	renderBackground();
 	renderOverlay();

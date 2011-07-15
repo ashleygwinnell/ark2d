@@ -130,6 +130,18 @@ void DefaultGame::init(GameContainer* container) {
 	saveAsPathButton->setSize(50, 50);
 	saveAsPathButton->setEvent((void*) DefaultGame::saveAsPressed);
 
+
+	flipHorizontallyButton = new Button();
+	flipHorizontallyButton->setText("Flip H");
+	flipHorizontallyButton->setSize(50, 50);
+	flipHorizontallyButton->setEvent((void*) DefaultGame::flipHPressed);
+
+	flipVerticallyButton = new Button();
+	flipVerticallyButton->setText("Flip V");
+	flipVerticallyButton->setSize(50, 50);
+	flipVerticallyButton->setEvent((void*) DefaultGame::flipVPressed);
+
+
 	gamePanelMoving = false;
 	gamePanelPanX = 50;
 	gamePanelPanY = 50;
@@ -225,6 +237,82 @@ void DefaultGame::init(GameContainer* container) {
 	ARK2D::getContainer()->getTimer()->flush();
 }
 
+void DefaultGame::flip(bool hf, bool vf) {
+	int gw = gameAreaWidthField->getText().getAsInt();
+	int gcx = gw/2;
+
+	int gh = gameAreaHeightField->getText().getAsInt();
+	int gcy = gh/2;
+
+	if (pathGroup != NULL) {
+		for(unsigned int i = 0; i < pathGroup->getNumPaths(); i++) {
+			Path* p = pathGroup->getPath(i);
+			for(unsigned int j = 0; j < p->getSize(); j++) {
+				Vector2<float>* v = p->getPoint(j);
+
+				if (hf) {
+					int xd = gcx - int(v->getX());
+					v->setX(gcx + xd);
+				}
+				if (vf) {
+					int yd = gcy - int(v->getY());
+					v->setY(gcy + yd);
+				}
+
+			}
+		}
+	}
+}
+void DefaultGame::flipSingular(bool hf, bool vf) {
+	int gw = gameAreaWidthField->getText().getAsInt();
+	int gcx = gw/2;
+
+	int gh = gameAreaHeightField->getText().getAsInt();
+	int gcy = gh/2;
+
+	if (pathGroup != NULL && pointSelected != NULL) {
+		Path* p = pathGroup->getPath(pointSelectedIndexInGroup);
+		Vector2<float>* v = p->getPoint(pointSelectedIndexInPath);
+		//Vector2<float>* v = pointSelected;
+
+		int newvx = 0;
+		int newvy = 0;
+		if (hf) {
+			int xd = gcx - int(v->getX());
+			//v->setX(gcx + xd);
+			newvx = gcx + xd;
+			newvy = int(v->getY());
+		}
+		if (vf) {
+			int yd = gcy - int(v->getY());
+			//v->setY(gcy + yd);
+			newvx = int(v->getX());
+			newvy = gcy + yd;
+		}
+
+		p->removePoint(pointSelectedIndexInPath);
+		p->addPoint(newvx, newvy, pointSelectedIndexInPath);
+
+
+		// TODO: store pointSelectedIndexInGroup and pointSelectedIndexInPath;
+		// TODO: write selectPoint(indexInGroup, indexInPath) function.
+
+		/*if (pointSelectedJoin != NULL) {
+			v = pointSelectedJoin;
+			pointSelected
+			if (hf) {
+				int xd = gcx - int(v->getX());
+				v->setX(gcx + xd);
+			}
+			if (vf) {
+				int yd = gcy - int(v->getY());
+				v->setY(gcy + yd);
+			}
+		}*/
+
+	}
+}
+
 void DefaultGame::update(GameContainer* container, GameTimer* timer) {
 	/*Input* i = ARK2D::getInput();
 
@@ -285,6 +373,7 @@ void DefaultGame::update(GameContainer* container, GameTimer* timer) {
 
 void DefaultGame::render(GameContainer* container, Graphics* g) {
 
+	g->setDrawColor(Color::white);
 	gamePanel->preRender();
 
 		g->pushMatrix();
@@ -394,6 +483,12 @@ void DefaultGame::render(GameContainer* container, Graphics* g) {
 		}
 
 	} else {
+
+
+		gameAreaHeightField->setY(detailsPanel->getY() + detailsPanel->getHeight() - 10 - 100);
+
+
+		gameAreaWidthField->setY(gameAreaHeightField->getY() - 80);
 		g->drawString("Guide Width: ", detailsPanel->getX() + 10, gameAreaWidthField->getY() - 35);
 		gameAreaWidthField->setX(detailsPanel->getX() + 10);
 		gameAreaWidthField->render();
@@ -403,6 +498,15 @@ void DefaultGame::render(GameContainer* container, Graphics* g) {
 		gameAreaHeightField->render();
 	}
 
+
+	// flip scene
+	flipHorizontallyButton->setX(detailsPanel->getX() + 10);
+	flipHorizontallyButton->setY(detailsPanel->getY() + detailsPanel->getHeight() - 10 - 50);
+	flipHorizontallyButton->render();
+
+	flipVerticallyButton->setX(detailsPanel->getX() + 70);
+	flipVerticallyButton->setY(detailsPanel->getY() + detailsPanel->getHeight() - 10 - 50);
+	flipVerticallyButton->render();
 
 
 
@@ -448,6 +552,10 @@ void DefaultGame::keyPressed(unsigned int key) {
 	pointXTextField->keyPressed(key);
 	pointYTextField->keyPressed(key);
 	easingComboBox->keyPressed(key);
+
+	flipHorizontallyButton->keyPressed(key);
+	flipVerticallyButton->keyPressed(key);
+
 	gameAreaWidthField->keyPressed(key);
 	gameAreaHeightField->keyPressed(key);
 
@@ -470,7 +578,7 @@ void DefaultGame::keyPressed(unsigned int key) {
 		// Checking selecting points.
 		Input* in = ARK2D::getInput();
 
-		if (key == Input::MOUSE_BUTTON_RIGHT) {
+		if (key == (unsigned int) Input::MOUSE_BUTTON_RIGHT) {
 			gamePanelMoving = true;
 		}
 
@@ -586,6 +694,9 @@ void DefaultGame::keyReleased(unsigned int key) {
 	selectButton->keyReleased(key);
 	majorPointButton->keyReleased(key);
 	minorPointButton->keyReleased(key);
+
+	flipHorizontallyButton->keyReleased(key);
+	flipVerticallyButton->keyReleased(key);
 
 	//easingComboBox->keyReleased(key);
 
@@ -711,6 +822,9 @@ void DefaultGame::mouseMoved(int x, int y, int oldx, int oldy) {
 	selectButton->mouseMoved(x, y, oldx, oldy);
 	majorPointButton->mouseMoved(x, y, oldx, oldy);
 	minorPointButton->mouseMoved(x, y, oldx, oldy);
+
+	flipHorizontallyButton->mouseMoved(x, y, oldx, oldy);
+	flipVerticallyButton->mouseMoved(x, y, oldx, oldy);
 
 	playButton->mouseMoved(x, y, oldx, oldy);
 	pauseButton->mouseMoved(x, y, oldx, oldy);
@@ -1012,7 +1126,27 @@ void DefaultGame::saveAsPressed() {
 		game->m_currentFile = f;
 		game->m_unsavedChanges = false;
 	}
+}
 
+void DefaultGame::flipHPressed() {
+	std::cout << "h flip pressed" << std::endl;
+
+	DefaultGame* game = DefaultGame::getInstance();
+	if (game->pointSelected == NULL) {
+		game->flip(true, false);
+	} //else {
+		//game->flipSingular(true, false);
+	//}
+}
+void DefaultGame::flipVPressed() {
+	std::cout << "v flip pressed" << std::endl;
+
+	DefaultGame* game = DefaultGame::getInstance();
+	if (game->pointSelected == NULL) {
+		game->flip(false, true);
+	} //else {
+	//	game->flipSingular(false, true);
+	//}
 }
 
 DefaultGame::~DefaultGame() {
