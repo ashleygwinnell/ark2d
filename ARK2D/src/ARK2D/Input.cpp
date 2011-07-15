@@ -212,7 +212,8 @@ const string Input::getKeyChar(unsigned int key) {
 			return string("");
 		}
 
-		unsigned char* out = new unsigned char[5];
+		unsigned char* out = new unsigned char[2];
+		out[1] = '\0';
 		GetKeyboardState((BYTE*) s_keyboardState);
 		ToAscii(key, MapVirtualKey(key, MAPVK_VK_TO_VSC), (BYTE*) s_keyboardState, (WORD*) out, 0);
 

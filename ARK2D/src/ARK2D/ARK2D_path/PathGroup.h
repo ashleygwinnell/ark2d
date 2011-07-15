@@ -31,7 +31,11 @@ class PathGroup {
 	public:
 		PathGroup();
 		void addPath(Path* p);
+		void addPath(Path* p, unsigned int index);
+		void removePath(unsigned int index);
 		vector<Path*> getPaths();
+		unsigned int getNumPaths();
+		void clear();
 		Path* getPath(unsigned int index);
 
 		void setName(string n);

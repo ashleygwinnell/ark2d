@@ -43,6 +43,9 @@ void Path::addPoint(float x, float y, int index) {
 		addPoint(points.at(i)->getX(), points.at(i)->getY());
 	}
 }
+/**
+ * This DOES shift the indexes down.
+ */
 void Path::removePoint(int index) {
 	vector<Vector2<float>*> points = subpaths.at(0)->points;
 	for(unsigned int i = 0; i < subpaths.size(); i++) {
@@ -62,7 +65,13 @@ Vector2<float>* Path::getPoint(unsigned int i) {
 vector<Vector2<float>*> Path::getPoints() {
 	return subpaths.at(0)->points;
 }
+unsigned int Path::getSize() {
+	return subpaths.at(0)->points.size();
+}
 
 Path::~Path() {
-
+	//for(unsigned int i = 0; i < subpaths.size(); i++) {
+	//	delete subpaths.at(i);
+	//}
+	//subpaths.clear();
 }

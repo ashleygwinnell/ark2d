@@ -15,8 +15,20 @@ PathGroup::PathGroup(): paths(), calcVector(), current(0), timer(0.0f) {
 void PathGroup::addPath(Path* p) {
 	paths.push_back(p);
 }
+void PathGroup::addPath(Path* p, unsigned int index) {
+	paths.insert(paths.begin() + index, p);
+}
+void PathGroup::removePath(unsigned int index) {
+	paths.erase(paths.begin() + index);
+}
+void PathGroup::clear() {
+	paths.clear();
+}
 vector<Path*> PathGroup::getPaths() {
 	return paths;
+}
+unsigned int PathGroup::getNumPaths() {
+	return paths.size();
 }
 Path* PathGroup::getPath(unsigned int index) {
 	return paths.at(index);
@@ -190,5 +202,9 @@ void PathGroup::renderLine(float x, float y, float x2, float y2) {
 }
 
 PathGroup::~PathGroup() {
-
+	//for(unsigned int i = 0; i < paths.size(); i++) {
+	//	delete paths.at(i);
+	//}
+	//paths.clear();
 }
+

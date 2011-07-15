@@ -38,6 +38,7 @@ class Path {
 		void removePoint(int index);
 		Vector2<float>* getPoint(unsigned int i);
 		vector<Vector2<float>*> getPoints();
+		unsigned int getSize();
 
 		virtual ~Path();
 };

@@ -1,0 +1,41 @@
+/*
+ * ComboBoxItem.h
+ *
+ *  Created on: 14 Jul 2011
+ *      Author: Ashley
+ */
+
+#ifndef COMBOBOXITEM_H_
+#define COMBOBOXITEM_H_
+
+#include "../ARK.h"
+#include "AbstractUIComponent.h"
+
+class ComboBox;
+
+class ComboBoxItem : public AbstractUIComponent {
+	friend class ComboBox;
+	private:
+		ComboBox* parent;
+		string m_text;
+		string m_value;
+	public:
+
+		ComboBoxItem();
+		void setText(string t);
+		const string& getText();
+
+		void setValue(string t);
+		const string& getValue();
+
+		void setItemChangedEvent(void* event);
+
+		int getWidth();
+		int getHeight();
+		void render();
+		void renderBackground();
+		void renderOverlay();
+		void keyPressed(unsigned int key);
+};
+
+#endif /* COMBOBOXITEM_H_ */

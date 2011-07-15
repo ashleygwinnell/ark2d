@@ -1,0 +1,38 @@
+{
+	"name": "woop path",
+	"description": "some long ass description!",
+	"paths": [ 
+		{
+			"duration": 2,
+			"easing": "LINEAR",
+			"points": [
+				{
+					"x":50,
+					"y":50
+				},
+				{
+					"x":223,
+					"y":245
+				},
+				{
+					"x":500,
+					"y":400
+				}
+			]
+		},
+		{
+			"duration": 1,
+			"easing": "LINEAR",
+			"points": [
+				{
+					"x":500,
+					"y":400
+				},
+				{
+					"x":604,
+					"y":175
+				}
+			]
+		}
+	]
+}

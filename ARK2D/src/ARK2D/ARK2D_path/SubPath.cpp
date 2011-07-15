@@ -12,5 +12,8 @@ SubPath::SubPath(): points() {
 }
 
 SubPath::~SubPath() {
-
+	//for(unsigned int i = 0; i < points.size(); i++) {
+	//	delete points.at(i);
+	//}
+	//points.clear();
 }
