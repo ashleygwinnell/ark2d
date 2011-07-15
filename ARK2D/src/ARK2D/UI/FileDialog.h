@@ -8,7 +8,9 @@
 #ifndef FILEDIALOG_H_
 #define FILEDIALOG_H_
 
-#include "../ARK.h"
+#include "../ARK2d.h"
+#include <string>
+using namespace std;
 
 class FileDialogPlatformData {
 	public:

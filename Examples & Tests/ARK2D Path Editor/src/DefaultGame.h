@@ -10,13 +10,6 @@
 
 #include "ARK.h"
 
-#include "UI/TextField.h"
-#include "UI/Button.h"
-#include "UI/Panel.h"
-#include "UI/ComboBox.h"
-#include "UI/ComboBoxItem.h"
-#include "UI/FileDialog.h"
-
 /**
  * TODO:
  *  - editor software

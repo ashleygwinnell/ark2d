@@ -8,8 +8,13 @@
 #ifndef COMBOBOXITEM_H_
 #define COMBOBOXITEM_H_
 
-#include "../ARK.h"
+#include "../ARK2D.h"
 #include "AbstractUIComponent.h"
+
+#include "../Graphics.h"
+#include "../Color.h"
+#include "../Input.h"
+#include "../GigaRectangle.h"
 
 class ComboBox;
 

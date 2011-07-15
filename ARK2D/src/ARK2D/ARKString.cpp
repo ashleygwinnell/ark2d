@@ -1,17 +1,8 @@
 /*
  * ARKString.cpp
  *
- *  Created on: 23 Sep 2010
+ *  Created on: 14 Jul 2011
  *      Author: Ashley
  */
 
 #include "ARKString.h"
-
-ARKString::ARKString() {
-	// TODO Auto-generated constructor stub
-
-}
-
-ARKString::~ARKString() {
-	// TODO Auto-generated destructor stub
-}

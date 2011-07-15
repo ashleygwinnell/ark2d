@@ -8,13 +8,13 @@
 #ifndef ARK2D_JSON_H_
 #define ARK2D_JSON_H_
 
-#include "libJSON/JSON_Defs.h"
-#include "libJSON/JSONNode.h"
-#include "libJSON/JSONChildren.h"
-#include "libJSON/JSON_Worker.h"
-#include "libJSON/JSON_Strings.h"
-#include "libJSON/JSON_StringConv.h"
-#include "libJSON/jsonmain.h"
-#include "libJSON/Debug.h"
+#include "vendor/libJSON/JSON_Defs.h"
+#include "vendor/libJSON/JSONNode.h"
+#include "vendor/libJSON/JSONChildren.h"
+#include "vendor/libJSON/JSON_Worker.h"
+#include "vendor/libJSON/JSON_Strings.h"
+#include "vendor/libJSON/JSON_StringConv.h"
+#include "vendor/libJSON/jsonmain.h"
+#include "vendor/libJSON/Debug.h"
 
 #endif /* ARK2D_JSON_H_ */

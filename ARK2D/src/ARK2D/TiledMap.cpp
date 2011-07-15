@@ -18,7 +18,7 @@
 #include "StringUtil.h"
 #include "Cast.h"
 #include "Image.h"
-#include "zlib123/zlib.h"
+#include "vendor/zlib123/zlib.h"
 
 #include "GameContainer.h"
 #include "Graphics.h"

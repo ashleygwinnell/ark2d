@@ -8,13 +8,16 @@
 #ifndef BUTTON_H_
 #define BUTTON_H_
 
-#include "../ARK.h"
-#include "../MyString.h"
+#include "../ARKString.h"
 #include "AbstractUIComponent.h"
+
+#include "../Input.h"
+#include "../GigaRectangle.h"
+#include "../Graphics.h"
 
 class Button : public AbstractUIComponent {
 	private:
-		MyString m_text;
+		ARKString m_text;
 		unsigned int m_state; // 0 for mouse-off, 1 for mouse-over, 2 for mouse-down.
 		void* m_event;
 	public:
@@ -75,7 +78,7 @@ class Button : public AbstractUIComponent {
 		void setText(string s) {
 			m_text += s;
 		}
-		const MyString& getText() {
+		const ARKString& getText() {
 			return m_text;
 		}
 		void setState(unsigned int i) {

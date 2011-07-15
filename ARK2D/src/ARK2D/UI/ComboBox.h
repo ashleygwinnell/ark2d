@@ -11,7 +11,7 @@
 #include <vector>
 using namespace std;
 
-#include "../ARK.h"
+#include "../ARK2D.h"
 #include "AbstractUIComponent.h"
 
 class ComboBoxItem;

@@ -76,9 +76,9 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src_testgame|src_ark2d" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src_testgame"/>
+						<entry excluding="src_ark2d|src_testgame" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src_ark2d"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src_testgame"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -507,6 +507,7 @@
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/ARK2D"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/ARK2D/Release"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/ARK2D/build_release"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="ARK2D"/>
 					</externalSetting>
 				</externalSettings>
@@ -574,8 +575,8 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src_testgame|src_ark2d" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src_ark2d"/>
+						<entry excluding="src_ark2d|src_testgame" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src_testgame"/>
 					</sourceEntries>
 				</configuration>

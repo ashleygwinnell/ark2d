@@ -1,0 +1,20 @@
+{
+	"name": "",
+	"description": "",
+	"paths": [ 
+		{
+			"duration": 1,
+			"easing": "LINEAR",
+			"points": [
+				{
+					"x":-22,
+					"y":98
+				},
+				{
+					"x":537,
+					"y":97
+				}
+			]
+		}
+	]
+}

@@ -27,6 +27,6 @@
 //typedef float ALfloat;
 //typedef bool ALboolean;
 
-#include "vorbis/vorbisfile.h"
+#include "vendor/vorbis/vorbisfile.h"
 
 #endif /* ARK2D_AL_H_ */

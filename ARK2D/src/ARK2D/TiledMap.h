@@ -10,7 +10,7 @@
 
 #include <string>
 #include <vector>
-#include "tinyxml/tinyxml.h"
+#include "vendor/tinyxml/tinyxml.h"
 #include "ToString.h"
 #include "Image.h"
 #include "Color.h"

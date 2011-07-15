@@ -7,8 +7,8 @@ if __name__ == "__main__":
 	a = dict();
 	a['ark2d_dir'] = "C:\\xampp\\htdocs\\C++\\ARK2D\\ARK2D";
 	
-	a['game_name'] = "PathTest";
-	a['game_dir'] = "C:\\xampp\\htdocs\\C++\\ARK2D\\Examples & Tests\\PathTest";
+	a['game_name'] = "ARK2D Path Editor";
+	a['game_dir'] = "C:\\xampp\\htdocs\\C++\\ARK2D\\Examples & Tests\\ARK2D Path Editor";
 	a['game_src_files'] = ["src\\main.cpp", "src\\DefaultGame.cpp"];
 	
 	b = json.dumps(a, separators=(',',':')).replace(" ", "%20");

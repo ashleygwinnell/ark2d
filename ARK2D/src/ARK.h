@@ -67,6 +67,14 @@
 
 #include "ARK2D/ARK2D_JSON.h"
 
+// UI
+#include "ARK2D/UI/TextField.h"
+#include "ARK2D/UI/Button.h"
+#include "ARK2D/UI/Panel.h"
+#include "ARK2D/UI/ComboBox.h"
+#include "ARK2D/UI/ComboBoxItem.h"
+#include "ARK2D/UI/FileDialog.h"
+
 // particle engine
 #include "ARK2D/particles/Particle.h"
 #include "ARK2D/particles/ParticleEmitter.h"

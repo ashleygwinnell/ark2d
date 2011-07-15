@@ -8,7 +8,6 @@
 #ifndef ABSTRACTUICOMPONENT_H_
 #define ABSTRACTUICOMPONENT_H_
 
-#include "../ARK.h"
 #include "UIComponent.h"
 
 class AbstractUIComponent : public UIComponent {

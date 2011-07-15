@@ -8,8 +8,14 @@
 #ifndef PANEL_H_
 #define PANEL_H_
 
-#include "../ARK.h"
+#include <vector>
+using namespace std;
+
+#include "../ARK2D.h"
 #include "AbstractUIComponent.h"
+
+#include "../Graphics.h"
+#include "../GameContainer.h"
 
 class Panel : public AbstractUIComponent {
 	public:

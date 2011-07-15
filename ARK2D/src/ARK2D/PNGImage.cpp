@@ -7,7 +7,7 @@
 
 #include <string>
 //#include <png.h>
-#include "lpng151/png.h"
+#include "vendor/lpng151/png.h"
 #include <iostream>
 #include <cstdio>
 

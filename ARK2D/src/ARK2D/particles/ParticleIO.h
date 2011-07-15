@@ -17,7 +17,7 @@ class ConfigurableEmitter;
 class Value;
 #include "Range.h"
 
-#include "../tinyxml/tinyxml.h"
+#include "../vendor/tinyxml/tinyxml.h"
 
 class ParticleIO {
 	public:

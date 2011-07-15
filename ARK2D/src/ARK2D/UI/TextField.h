@@ -8,15 +8,21 @@
 #ifndef TEXTFIELD_H_
 #define TEXTFIELD_H_
 
-#include "../MyString.h"
+#include "../ARKString.h"
 #include "AbstractUIComponent.h"
+#include "../Vector4.h"
+
+#include "../Input.h"
+#include "../GigaRectangle.h"
+#include "../Graphics.h"
+#include "../Color.h"
 
 /**
  * Unlike HTML, padding does not (currently) affect height.
  */
 class TextField : public AbstractUIComponent {
 	public:
-		MyString m_text;
+		ARKString m_text;
 		int m_cursorPosition;
 
 		int m_selectedDir; // -1 for left, 0 for none and +1 for right.
@@ -53,7 +59,7 @@ class TextField : public AbstractUIComponent {
 			clearSelection();
 			m_cursorPosition = m_text.length();
 		}
-		const MyString& getText() {
+		const ARKString& getText() {
 			return m_text;
 		}
 		void setPadding(int l, int t, int r, int b) {

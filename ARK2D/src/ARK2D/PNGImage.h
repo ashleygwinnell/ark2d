@@ -10,7 +10,7 @@
 
 #include "ARK2D_GL.h"
 
-#include "lpng151/png.h"
+#include "vendor/lpng151/png.h"
 //#include <png.h>
 #include <string>
 #include <iostream>
