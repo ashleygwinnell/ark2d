@@ -285,3 +285,13 @@ void Graphics::pushMatrix() const {
 void Graphics::popMatrix() const {
 	glPopMatrix();
 }
+
+void Graphics::loadMatrix(Matrix44<float>* m) const {
+	glLoadMatrixf(&m->m_x.m_x);
+}
+void Graphics::loadMatrix(const Matrix44<float>& m) const {
+	glLoadMatrixf(&m.m_x.m_x);
+}
+void Graphics::resetMatrix() const {
+	glLoadIdentity();
+}

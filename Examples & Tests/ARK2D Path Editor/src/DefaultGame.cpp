@@ -258,7 +258,6 @@ void DefaultGame::flip(bool hf, bool vf) {
 					int yd = gcy - int(v->getY());
 					v->setY(gcy + yd);
 				}
-
 			}
 		}
 	}
@@ -1062,6 +1061,7 @@ void DefaultGame::newPressed() {
 	game->pathGroup->addPath(defaultPath);
 
 	game->setTitle("");
+	game->m_currentFile = "";
 	//game->m_playing = false;
 }
 void DefaultGame::loadPressed() {

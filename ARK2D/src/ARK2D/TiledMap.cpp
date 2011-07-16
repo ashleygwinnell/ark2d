@@ -509,6 +509,8 @@ TiledMapLayer* TiledMap::getLayerByName(const char* name) {
 			return const_cast<TiledMapLayer*>(&layer);
 		}
 	}
+	ErrorDialog::createAndShow(StringUtil::append("There is no Layer by  name: ", name));
+	exit(0);
 	return NULL;
 }
 

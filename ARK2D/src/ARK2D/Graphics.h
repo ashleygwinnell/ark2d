@@ -12,6 +12,7 @@
 #include "BMFont.h"
 #include "Color.h"
 #include "StringUtil.h"
+#include "Matrix44.h"
 
 #include "ARK2D_GL.h"
 
@@ -80,6 +81,11 @@ class Graphics
 
 		void setLineWidth(unsigned int i);
 		unsigned int getLineWidth();
+
+		void loadMatrix(Matrix44<float>* m) const;
+		void loadMatrix(const Matrix44<float>& m) const;
+		void resetMatrix() const;
+
 	private:
 		BMFont* m_DefaultFont;
 		BMFont* m_Font;
