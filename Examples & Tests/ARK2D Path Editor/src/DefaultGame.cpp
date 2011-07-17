@@ -141,6 +141,11 @@ void DefaultGame::init(GameContainer* container) {
 	flipVerticallyButton->setSize(50, 50);
 	flipVerticallyButton->setEvent((void*) DefaultGame::flipVPressed);
 
+	rotate90Button = new Button();
+	rotate90Button->setText("Rotate");
+	rotate90Button->setSize(50, 50);
+	rotate90Button->setEvent((void*) DefaultGame::rotate90Pressed);
+
 
 	gamePanelMoving = false;
 	gamePanelPanX = 50;
@@ -309,6 +314,27 @@ void DefaultGame::flipSingular(bool hf, bool vf) {
 			}
 		}*/
 
+	}
+}
+
+
+void DefaultGame::rotate(int degrees) {
+	int gw = gameAreaWidthField->getText().getAsInt();
+	int gcx = gw/2;
+
+	int gh = gameAreaHeightField->getText().getAsInt();
+	int gcy = gh/2;
+
+	Vector2<float>* gc = new Vector2<float>(gcx, gcy);
+
+	if (pathGroup != NULL) {
+		for(unsigned int i = 0; i < pathGroup->getNumPaths(); i++) {
+			Path* p = pathGroup->getPath(i);
+			for(unsigned int j = 0; j < p->getSize(); j++) {
+				Vector2<float>* v = p->getPoint(j);
+				MathUtil::rotatePointAroundPoint(v, gc, degrees);
+			}
+		}
 	}
 }
 
@@ -507,6 +533,9 @@ void DefaultGame::render(GameContainer* container, Graphics* g) {
 	flipVerticallyButton->setY(detailsPanel->getY() + detailsPanel->getHeight() - 10 - 50);
 	flipVerticallyButton->render();
 
+	rotate90Button->setX(detailsPanel->getX() + 130);
+	rotate90Button->setY(detailsPanel->getY() + detailsPanel->getHeight() - 10 - 50);
+	rotate90Button->render();
 
 
 
@@ -554,6 +583,7 @@ void DefaultGame::keyPressed(unsigned int key) {
 
 	flipHorizontallyButton->keyPressed(key);
 	flipVerticallyButton->keyPressed(key);
+	rotate90Button->keyPressed(key);
 
 	gameAreaWidthField->keyPressed(key);
 	gameAreaHeightField->keyPressed(key);
@@ -696,6 +726,7 @@ void DefaultGame::keyReleased(unsigned int key) {
 
 	flipHorizontallyButton->keyReleased(key);
 	flipVerticallyButton->keyReleased(key);
+	rotate90Button->keyReleased(key);
 
 	//easingComboBox->keyReleased(key);
 
@@ -786,10 +817,10 @@ void DefaultGame::keyReleased(unsigned int key) {
 						}
 
 						//std::cout << pointSelectedIndexInGroup << std::endl;
-						for(unsigned int i = 0; i < newPath->getSize(); i++) {
-							Vector2<float>* v = newPath->getPoint(i);
+						//for(unsigned int i = 0; i < newPath->getSize(); i++) {
+							//Vector2<float>* v = newPath->getPoint(i);
 						//	std::cout << v->getX() << " : " << v->getY() << std::endl;
-						}
+						//}
 
 						if (pathGroup->getNumPaths() == 2) {
 							pathGroup->clear();
@@ -824,6 +855,7 @@ void DefaultGame::mouseMoved(int x, int y, int oldx, int oldy) {
 
 	flipHorizontallyButton->mouseMoved(x, y, oldx, oldy);
 	flipVerticallyButton->mouseMoved(x, y, oldx, oldy);
+	rotate90Button->mouseMoved(x, y, oldx, oldy);
 
 	playButton->mouseMoved(x, y, oldx, oldy);
 	pauseButton->mouseMoved(x, y, oldx, oldy);
@@ -1147,6 +1179,15 @@ void DefaultGame::flipVPressed() {
 	} //else {
 	//	game->flipSingular(false, true);
 	//}
+}
+
+void DefaultGame::rotate90Pressed() {
+	std::cout << "rotate 90 pressed" << std::endl;
+
+	DefaultGame* game = DefaultGame::getInstance();
+	if (game->pointSelected == NULL) {
+		game->rotate(90);
+	}
 }
 
 DefaultGame::~DefaultGame() {

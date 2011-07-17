@@ -57,6 +57,7 @@ class DefaultGame : public Game {
 
 		Button* flipHorizontallyButton;
 		Button* flipVerticallyButton;
+		Button* rotate90Button;
 
 		bool m_playing;
 		bool m_unsavedChanges;
@@ -85,6 +86,7 @@ class DefaultGame : public Game {
 		void setTitle(string s);
 		void flip(bool hf, bool vf);
 		void flipSingular(bool hf, bool vf);
+		void rotate(int degrees);
 
 		inline int gpmx() { return gamePanel->getX() + gamePanelPanX; }
 		inline int gpmy() { return gamePanel->getY() + gamePanelPanY; }
@@ -108,6 +110,7 @@ class DefaultGame : public Game {
 
 		static void flipHPressed();
 		static void flipVPressed();
+		static void rotate90Pressed();
 
 		virtual ~DefaultGame();
 };

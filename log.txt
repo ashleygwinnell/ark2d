@@ -235,12 +235,8 @@
 20:50 15/07/2011
 - Flips to ARK2D Path Editor.
 
-SHORT-TERM TODO:
-- Add major/join points.
-- Remove major/join points.
-- Set Easing on subpaths.
-- Pan tool for Editor's main panel.
-- Visibility modifiers for Button class.
+14:16 17/07/2011
+- Rotate 90 degrees to ARK2D Path Editor.
 
 TODO:
 - TextField work:
