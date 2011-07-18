@@ -58,6 +58,7 @@ class PathGroup {
 		unsigned int getIndex();
 
 		virtual void render();
+		virtual void renderCurve();
 		virtual void renderPoint(float x, float y, bool linkPoint);
 		virtual void renderLine(float x, float y, float x2, float y2);
 		virtual ~PathGroup();

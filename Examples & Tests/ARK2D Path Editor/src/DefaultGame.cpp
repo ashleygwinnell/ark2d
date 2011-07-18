@@ -417,12 +417,21 @@ void DefaultGame::render(GameContainer* container, Graphics* g) {
 		);
 
 
-		if (pathGroup != NULL){
+		if (pathGroup != NULL)
+		{
+			// render lines
+			g->setDrawColor(Color::white);
 			pathGroup->render();
 
+			// render point
 			Vector2<float>* lastPoint = pathGroup->getLocation();
 			g->setDrawColor(Color::red);
 			g->fillCircle(int(lastPoint->getX()), int(lastPoint->getY()), 7, 10);
+
+			// render curve.
+			//pathGroup->renderCurve();
+
+
 		}
 
 		g->popMatrix();

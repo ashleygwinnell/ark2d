@@ -164,6 +164,18 @@ Vector2<float>* PathGroup::getLocation() {
 void PathGroup::render() {
 	Graphics* g = ARK2D::getGraphics();
 	g->setDrawColor(Color::white);
+
+	// render points.
+	for(unsigned int i = 0; i < paths.size(); i++) {
+		for(unsigned int j = 0; j < paths.at(i)->subpaths.at(0)->points.size(); j++) {
+			Vector2<float>* p = paths.at(i)->subpaths.at(0)->points.at(j);
+			renderPoint(p->getX(), p->getY(), (j == 0 || j == paths.at(i)->subpaths.at(0)->points.size()-1));
+		}
+	}
+
+	// render curve.
+	renderCurve();
+
 	// render straight lines.
 	for(unsigned int i = 0; i < paths.size(); i++) {
 		SubPath* mainPath = paths.at(i)->subpaths.at(0);
@@ -178,13 +190,32 @@ void PathGroup::render() {
 			}
 		}
 	}
-	// render points.
-	for(unsigned int i = 0; i < paths.size(); i++) {
-		for(unsigned int j = 0; j < paths.at(i)->subpaths.at(0)->points.size(); j++) {
-			Vector2<float>* p = paths.at(i)->subpaths.at(0)->points.at(j);
-			renderPoint(p->getX(), p->getY(), (j == 0 || j == paths.at(i)->subpaths.at(0)->points.size()-1));
-		}
+
+
+
+}
+void PathGroup::renderCurve() {
+	Graphics* g = ARK2D::getGraphics();
+
+	float ptimer = getTimer();
+	g->setDrawColor(Color::red);
+	setTimer(0.0f);
+	float px = paths.at(0)->subpaths.at(0)->points.at(0)->getX();
+	float py = paths.at(0)->subpaths.at(0)->points.at(0)->getY();
+	float du = getDuration();
+	for(float i = 0.05f; i <= du; i += 0.05f)
+	{
+		setTimer(i);
+		updateCurrent();
+
+		Vector2<float>* f = getLocation();
+		g->drawLine(int(px), int(py), int(f->getX()), int(f->getY()));
+
+		px = f->getX();
+		py = f->getY();
 	}
+	setTimer(ptimer);
+	updateCurrent();
 }
 void PathGroup::renderPoint(float x, float y, bool linkPoint) {
 	Graphics* g = ARK2D::getGraphics();

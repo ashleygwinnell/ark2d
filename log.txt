@@ -238,6 +238,10 @@
 14:16 17/07/2011
 - Rotate 90 degrees to ARK2D Path Editor.
 
+15:49 18/07/2011
+- Drawing the curve for the path editor.
+- New .dll.
+
 TODO:
 - TextField work:
  - use mouse to select text.
