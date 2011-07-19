@@ -168,46 +168,152 @@ void DefaultGame::init(GameContainer* container) {
 	durationTextField->setFocussed(false);
 
 	pointXTextField = new TextField();
-	pointXTextField->setLocation(10, 150);
+	pointXTextField->setLocation(10, 140);
 	pointXTextField->setSize(150, 40);
 	pointXTextField->setPadding(5);
 	pointXTextField->setFocussed(false);
 
 	pointYTextField = new TextField();
-	pointYTextField->setLocation(10, 250);
+	pointYTextField->setLocation(10, 230);
 	pointYTextField->setSize(150, 40);
 	pointYTextField->setPadding(5);
 	pointYTextField->setFocussed(false);
 
 	easingComboBox = new ComboBox();
 	easingComboBox->setItemChangedEvent((void*) DefaultGame::easingChangedEvent);
-	easingComboBox->setLocation(10, 350);
+	easingComboBox->setLocation(10, 320);
 	easingComboBox->setSize(150, 40);
 	easingComboBox->setFocussed(false);
 
+		int itemh = 27;
+
 		ComboBoxItem* ea_linear = new ComboBoxItem();
-		ea_linear->setSize(150, 30);
+		ea_linear->setSize(150, itemh);
 		ea_linear->setText("Linear");
 		ea_linear->setValue("LINEAR");
 		easingComboBox->addItem(ea_linear);
 
+
 		ComboBoxItem* ea_quad_in = new ComboBoxItem();
-		ea_quad_in->setSize(150, 30);
+		ea_quad_in->setSize(150, itemh);
 		ea_quad_in->setText("Quadratic In");
 		ea_quad_in->setValue("QUADRATIC_IN");
 		easingComboBox->addItem(ea_quad_in);
 
 		ComboBoxItem* ea_quad_out = new ComboBoxItem();
-		ea_quad_out->setSize(150, 30);
+		ea_quad_out->setSize(150, itemh);
 		ea_quad_out->setText("Quadratic Out");
 		ea_quad_out->setValue("QUADRATIC_OUT");
 		easingComboBox->addItem(ea_quad_out);
 
 		ComboBoxItem* ea_quad_in_out = new ComboBoxItem();
-		ea_quad_in_out->setSize(150, 30);
+		ea_quad_in_out->setSize(150, itemh);
 		ea_quad_in_out->setText("Quadratic In-Out");
 		ea_quad_in_out->setValue("QUADRATIC_IN_OUT");
 		easingComboBox->addItem(ea_quad_in_out);
+
+
+		/*ComboBoxItem* ea_cubic_in = new ComboBoxItem();
+		ea_cubic_in->setSize(150, itemh);
+		ea_cubic_in->setText("Cubic In");
+		ea_cubic_in->setValue("CUBIC_IN");
+		easingComboBox->addItem(ea_cubic_in);
+
+		ComboBoxItem* ea_cubic_out = new ComboBoxItem();
+		ea_cubic_out->setSize(150, itemh);
+		ea_cubic_out->setText("Cubic Out");
+		ea_cubic_out->setValue("CUBIC_OUT");
+		easingComboBox->addItem(ea_cubic_out);
+
+		ComboBoxItem* ea_cubic_in_out = new ComboBoxItem();
+		ea_cubic_in_out->setSize(150, itemh);
+		ea_cubic_in_out->setText("Cubic In-Out");
+		ea_cubic_in_out->setValue("CUBIC_IN_OUT");
+		easingComboBox->addItem(ea_cubic_in_out);*/
+
+
+		ComboBoxItem* ea_quartic_in = new ComboBoxItem();
+		ea_quartic_in->setSize(150, itemh);
+		ea_quartic_in->setText("Quartic In");
+		ea_quartic_in->setValue("QUARTIC_IN");
+		easingComboBox->addItem(ea_quartic_in);
+
+		ComboBoxItem* ea_quartic_out = new ComboBoxItem();
+		ea_quartic_out->setSize(150, itemh);
+		ea_quartic_out->setText("Quartic Out");
+		ea_quartic_out->setValue("QUARTIC_OUT");
+		easingComboBox->addItem(ea_quartic_out);
+
+		ComboBoxItem* ea_quartic_in_out = new ComboBoxItem();
+		ea_quartic_in_out->setSize(150, itemh);
+		ea_quartic_in_out->setText("Quartic In-Out");
+		ea_quartic_in_out->setValue("QUARTIC_IN_OUT");
+		easingComboBox->addItem(ea_quartic_in_out);
+
+
+		ComboBoxItem* ea_sine_in = new ComboBoxItem();
+		ea_sine_in->setSize(150, itemh);
+		ea_sine_in->setText("Sine In");
+		ea_sine_in->setValue("SINE_IN");
+		easingComboBox->addItem(ea_sine_in);
+
+		ComboBoxItem* ea_sine_out = new ComboBoxItem();
+		ea_sine_out->setSize(150, itemh);
+		ea_sine_out->setText("Sine Out");
+		ea_sine_out->setValue("SINE_OUT");
+		easingComboBox->addItem(ea_sine_out);
+
+		ComboBoxItem* ea_sine_in_out = new ComboBoxItem();
+		ea_sine_in_out->setSize(150, itemh);
+		ea_sine_in_out->setText("Sine In-Out");
+		ea_sine_in_out->setValue("SINE_IN_OUT");
+		easingComboBox->addItem(ea_sine_in_out);
+
+
+		ComboBoxItem* ea_expo_in = new ComboBoxItem();
+		ea_expo_in->setSize(150, itemh);
+		ea_expo_in->setText("Exponential In");
+		ea_expo_in->setValue("EXPONENTIAL_IN");
+		easingComboBox->addItem(ea_expo_in);
+
+		ComboBoxItem* ea_expo_out = new ComboBoxItem();
+		ea_expo_out->setSize(150, itemh);
+		ea_expo_out->setText("Exponential Out");
+		ea_expo_out->setValue("EXPONENTIAL_OUT");
+		easingComboBox->addItem(ea_expo_out);
+
+		ComboBoxItem* ea_expo_in_out = new ComboBoxItem();
+		ea_expo_in_out->setSize(150, itemh);
+		ea_expo_in_out->setText("Exponential In-Out");
+		ea_expo_in_out->setValue("EXPONENTIAL_IN_OUT");
+		easingComboBox->addItem(ea_expo_in_out);
+
+/*
+		ComboBoxItem* ea_circle_in = new ComboBoxItem();
+		ea_circle_in->setSize(150, itemh);
+		ea_circle_in->setText("Circle In");
+		ea_circle_in->setValue("CIRCLE_IN");
+		easingComboBox->addItem(ea_circle_in);
+
+		ComboBoxItem* ea_circle_out = new ComboBoxItem();
+		ea_circle_out->setSize(150, itemh);
+		ea_circle_out->setText("Circle Out");
+		ea_circle_out->setValue("CIRCLE_OUT");
+		easingComboBox->addItem(ea_circle_out);
+
+		ComboBoxItem* ea_circle_in_out = new ComboBoxItem();
+		ea_circle_in_out->setSize(150, itemh);
+		ea_circle_in_out->setText("Circle In-Out");
+		ea_circle_in_out->setValue("CIRCLE_IN_OUT");
+		easingComboBox->addItem(ea_circle_in_out);
+*/
+
+		ComboBoxItem* ea_none = new ComboBoxItem();
+		ea_none->setSize(150, itemh);
+		ea_none->setText("None");
+		ea_none->setValue("NONE");
+		easingComboBox->addItem(ea_none);
+
 
 	gameAreaWidthField = new TextField();
 	gameAreaWidthField->setText(480);
@@ -530,21 +636,23 @@ void DefaultGame::render(GameContainer* container, Graphics* g) {
 		g->drawString("Guide Height: ", detailsPanel->getX() + 10, gameAreaHeightField->getY() - 35);
 		gameAreaHeightField->setX(detailsPanel->getX() + 10);
 		gameAreaHeightField->render();
+
+		// flip scene
+			flipHorizontallyButton->setX(detailsPanel->getX() + 10);
+			flipHorizontallyButton->setY(detailsPanel->getY() + detailsPanel->getHeight() - 10 - 50);
+			flipHorizontallyButton->render();
+
+			flipVerticallyButton->setX(detailsPanel->getX() + 70);
+			flipVerticallyButton->setY(detailsPanel->getY() + detailsPanel->getHeight() - 10 - 50);
+			flipVerticallyButton->render();
+
+			rotate90Button->setX(detailsPanel->getX() + 130);
+			rotate90Button->setY(detailsPanel->getY() + detailsPanel->getHeight() - 10 - 50);
+			rotate90Button->render();
 	}
 
 
-	// flip scene
-	flipHorizontallyButton->setX(detailsPanel->getX() + 10);
-	flipHorizontallyButton->setY(detailsPanel->getY() + detailsPanel->getHeight() - 10 - 50);
-	flipHorizontallyButton->render();
 
-	flipVerticallyButton->setX(detailsPanel->getX() + 70);
-	flipVerticallyButton->setY(detailsPanel->getY() + detailsPanel->getHeight() - 10 - 50);
-	flipVerticallyButton->render();
-
-	rotate90Button->setX(detailsPanel->getX() + 130);
-	rotate90Button->setY(detailsPanel->getY() + detailsPanel->getHeight() - 10 - 50);
-	rotate90Button->render();
 
 
 
@@ -590,12 +698,15 @@ void DefaultGame::keyPressed(unsigned int key) {
 	pointYTextField->keyPressed(key);
 	easingComboBox->keyPressed(key);
 
-	flipHorizontallyButton->keyPressed(key);
-	flipVerticallyButton->keyPressed(key);
-	rotate90Button->keyPressed(key);
+	if (pointSelectedIndexInGroup == -1) {
 
-	gameAreaWidthField->keyPressed(key);
-	gameAreaHeightField->keyPressed(key);
+		flipHorizontallyButton->keyPressed(key);
+		flipVerticallyButton->keyPressed(key);
+		rotate90Button->keyPressed(key);
+
+		gameAreaWidthField->keyPressed(key);
+		gameAreaHeightField->keyPressed(key);
+	}
 
 	selectButton->keyPressed(key);
 	majorPointButton->keyPressed(key);
@@ -733,9 +844,13 @@ void DefaultGame::keyReleased(unsigned int key) {
 	majorPointButton->keyReleased(key);
 	minorPointButton->keyReleased(key);
 
-	flipHorizontallyButton->keyReleased(key);
-	flipVerticallyButton->keyReleased(key);
-	rotate90Button->keyReleased(key);
+	if (pointSelectedIndexInGroup == -1) {
+
+		flipHorizontallyButton->keyReleased(key);
+		flipVerticallyButton->keyReleased(key);
+		rotate90Button->keyReleased(key);
+
+	}
 
 	//easingComboBox->keyReleased(key);
 
@@ -862,9 +977,11 @@ void DefaultGame::mouseMoved(int x, int y, int oldx, int oldy) {
 	majorPointButton->mouseMoved(x, y, oldx, oldy);
 	minorPointButton->mouseMoved(x, y, oldx, oldy);
 
-	flipHorizontallyButton->mouseMoved(x, y, oldx, oldy);
-	flipVerticallyButton->mouseMoved(x, y, oldx, oldy);
-	rotate90Button->mouseMoved(x, y, oldx, oldy);
+	if (pointSelectedIndexInGroup == -1) {
+		flipHorizontallyButton->mouseMoved(x, y, oldx, oldy);
+		flipVerticallyButton->mouseMoved(x, y, oldx, oldy);
+		rotate90Button->mouseMoved(x, y, oldx, oldy);
+	}
 
 	playButton->mouseMoved(x, y, oldx, oldy);
 	pauseButton->mouseMoved(x, y, oldx, oldy);
