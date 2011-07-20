@@ -242,6 +242,16 @@
 - Drawing the curve for the path editor.
 - New .dll.
 
+22:59 19/07/2011
+- Moved Vector4<int> padding from TextField to AbstractUIComponent.
+- Added Vector4<int> margin to AbstractUIComponent.
+- Added Clipping to AbstractUIComponents.
+- Added ScrollPanel?
+- Added int AbstractUIComponent::getOnScreenX() and getOnScreenY();
+- Modified Button callback to support non-static functions.
+- Other misc changes.
+- New .dll - will break older builds.
+
 TODO:
 - TextField work:
  - use mouse to select text.

@@ -10,7 +10,6 @@
 
 #include "../ARKString.h"
 #include "AbstractUIComponent.h"
-#include "../Vector4.h"
 
 #include "../Input.h"
 #include "../GigaRectangle.h"
@@ -29,7 +28,7 @@ class TextField : public AbstractUIComponent {
 		int m_selectedFrom;
 		int m_selectedTo;
 
-		Vector4<int> m_padding;
+
 		//int m_textAlignX; // -1 for left, 1 for right - not implemented
 		int m_textAlignY; // -1 for top, 0 for middle, +1 for bottom.
 
@@ -40,7 +39,6 @@ class TextField : public AbstractUIComponent {
 			m_selectedDir(0),
 			m_selectedFrom(-1),
 			m_selectedTo(-1),
-			m_padding(0, 0, 0, 0), // left, top, right, bottom.
 			m_textAlignY(0)
 			{
 
@@ -62,31 +60,9 @@ class TextField : public AbstractUIComponent {
 		const ARKString& getText() {
 			return m_text;
 		}
-		void setPadding(int l, int t, int r, int b) {
-			m_padding.set(l, t, r, b);
-		}
-		void setPadding(int all) {
-			m_padding.set(all, all, all, all);
-		}
-		int getPaddingLeft() {
-			return m_padding.getX();
-		}
-		int getPaddingTop() {
-			return m_padding.getY();
-		}
-		int getPaddingRight() {
-			return m_padding.getZ();
-		}
-		int getPaddingBottom() {
-			return m_padding.getW();
-		}
-		int getPaddingX() {
-			return m_padding.getX() + m_padding.getZ();
-		}
-		int getPaddingY() {
-			return m_padding.getY() + m_padding.getW();
-		}
 		void render() {
+
+			//AbstractUIComponent::preRender();
 
 			Graphics* g = ARK2D::getGraphics();
 			renderBackground();
@@ -130,6 +106,8 @@ class TextField : public AbstractUIComponent {
 			}
 
 			renderOverlay();
+
+			//AbstractUIComponent::postRender();
 		}
 		void renderBackground() {
 			Graphics* g = ARK2D::getGraphics();

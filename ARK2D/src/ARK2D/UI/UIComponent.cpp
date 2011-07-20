@@ -6,3 +6,6 @@
  */
 
 #include "UIComponent.h"
+#include <stddef.h>
+
+UIComponent* UIComponent::s_currentFocus = NULL;

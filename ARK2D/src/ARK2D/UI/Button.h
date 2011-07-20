@@ -20,6 +20,7 @@ class Button : public AbstractUIComponent {
 		ARKString m_text;
 		unsigned int m_state; // 0 for mouse-off, 1 for mouse-over, 2 for mouse-down.
 		void* m_event;
+		void* m_eventObj;
 	public:
 		static const unsigned int STATE_OFF = 0;
 		static const unsigned int STATE_OVER = 1;
@@ -29,20 +30,27 @@ class Button : public AbstractUIComponent {
 			AbstractUIComponent(),
 			m_text(""),
 			m_state(0),
-			m_event(NULL)
+			m_event(NULL),
+			m_eventObj(NULL)
 		{
 
 		}
 		void setEvent(void* e) {
 			m_event = e;
 		}
+		void setEventObj(void* o) {
+			m_eventObj = o;
+		}
 		void* getEvent() {
 			return m_event;
+		}
+		void* getEventObj() {
+			return m_eventObj;
 		}
 		void keyPressed(unsigned int key) {
 			Input* i = ARK2D::getInput();
 			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT
-				&& GigaRectangle<int>::s_contains(m_x, m_y, (signed int) (m_width), (signed int) (m_height), (signed int) (i->getMouseX()), (signed int) (i->getMouseY()))) {
+				&& GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), (signed int) (m_width), (signed int) (m_height), (signed int) (i->getMouseX()), (signed int) (i->getMouseY()))) {
 					m_state = STATE_DOWN;
 					setFocussed(true);
 			}
@@ -51,12 +59,17 @@ class Button : public AbstractUIComponent {
 		void keyReleased(unsigned int key) {
 			Input* i = ARK2D::getInput();
 			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT) {
-				if (GigaRectangle<int>::s_contains(m_x, m_y, (signed int) (m_width), (signed int)(m_height), (signed int) (i->getMouseX()), (signed int) (i->getMouseY()))) {
+				if (GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), (signed int) (m_width), (signed int)(m_height), (signed int) (i->getMouseX()), (signed int) (i->getMouseY()))) {
 					if (m_state == STATE_DOWN) {
 						m_state = STATE_OVER;
 						if (m_event != NULL) {
-							void (*pt)() = (void(*)()) m_event;
-							pt();
+							if (m_eventObj == NULL) {
+								void (*pt)() = (void(*)()) m_event;
+								pt();
+							} else {
+								void (*pt)(void*) = (void(*)(void*)) m_event;
+								pt(m_eventObj);
+							}
 						}
 					}
 				} else {
@@ -69,7 +82,7 @@ class Button : public AbstractUIComponent {
 
 		void mouseMoved(int x, int y, int oldx, int oldy) {
 			if (m_state == STATE_DOWN) { return; }
-			if (GigaRectangle<int>::s_contains(m_x, m_y, m_width, m_height, x, y)) {
+			if (GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), m_width, m_height, x, y)) {
 				m_state = STATE_OVER;
 			} else {
 				m_state = STATE_OFF;
@@ -87,7 +100,10 @@ class Button : public AbstractUIComponent {
 		unsigned int getState() {
 			return m_state;
 		}
-		void render() {
+		virtual void render() {
+
+			//AbstractUIComponent::preRender();
+
 			Graphics* g = ARK2D::getGraphics();
 			renderBackground();
 
@@ -100,18 +116,20 @@ class Button : public AbstractUIComponent {
 			renderText(renderTextX, renderTextY);
 
 			renderOverlay();
+
+			//AbstractUIComponent::postRender();
 		}
-		void renderBackground() {
+		virtual void renderBackground() {
 			Graphics* g = ARK2D::getGraphics();
 			g->setDrawColor(Color::black_50a);
 			g->fillRect(m_x, m_y, m_width, m_height);
 		}
-		void renderText(int x, int y) {
+		virtual void renderText(int x, int y) {
 			Graphics* g = ARK2D::getGraphics();
 			g->setDrawColor(Color::white);
 			g->drawString(m_text.get(), x, y);
 		}
-		void renderOverlay() {
+		virtual void renderOverlay() {
 			Graphics* g = ARK2D::getGraphics();
 			g->setDrawColor(Color::white);
 			if (m_state == STATE_OVER || m_state == STATE_DOWN) {
