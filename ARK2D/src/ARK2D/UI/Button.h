@@ -18,6 +18,7 @@
 class Button : public AbstractUIComponent {
 	private:
 		ARKString m_text;
+		Image* m_image;
 		unsigned int m_state; // 0 for mouse-off, 1 for mouse-over, 2 for mouse-down.
 		void* m_event;
 		void* m_eventObj;
@@ -29,6 +30,7 @@ class Button : public AbstractUIComponent {
 		Button():
 			AbstractUIComponent(),
 			m_text(""),
+			m_image(NULL),
 			m_state(0),
 			m_event(NULL),
 			m_eventObj(NULL)
@@ -46,6 +48,9 @@ class Button : public AbstractUIComponent {
 		}
 		void* getEventObj() {
 			return m_eventObj;
+		}
+		void setImage(Image* i) {
+			m_image = i;
 		}
 		void keyPressed(unsigned int key) {
 			Input* i = ARK2D::getInput();
@@ -115,6 +120,12 @@ class Button : public AbstractUIComponent {
 			}
 			renderText(renderTextX, renderTextY);
 
+			if (m_image != NULL) {
+				int rx = int(m_x + (m_width/2)) - int(m_image->getWidth()/2);
+				int ry = int(m_y + (m_height/2)) - int(m_image->getHeight()/2);
+				renderImage(rx, ry);
+			}
+
 			renderOverlay();
 
 			//AbstractUIComponent::postRender();
@@ -128,6 +139,9 @@ class Button : public AbstractUIComponent {
 			Graphics* g = ARK2D::getGraphics();
 			g->setDrawColor(Color::white);
 			g->drawString(m_text.get(), x, y);
+		}
+		virtual void renderImage(int x, int y) {
+			m_image->draw(x, y);
 		}
 		virtual void renderOverlay() {
 			Graphics* g = ARK2D::getGraphics();

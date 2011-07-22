@@ -252,6 +252,11 @@
 - Other misc changes.
 - New .dll - will break older builds.
 
+21:19 21/07/2011
+- Added Image to Button class with setImage() method.
+- Panel border bool - todo replace with function pointer or border class.
+- New .dll.
+
 TODO:
 - TextField work:
  - use mouse to select text.
