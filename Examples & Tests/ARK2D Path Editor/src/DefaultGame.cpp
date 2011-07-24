@@ -13,6 +13,7 @@ DefaultGame::DefaultGame(const char* title):
 	Game(title),
 	pathGroup(NULL),
 	m_currentFile(""),
+	m_buttonsPanel(NULL),
 	gamePanel(NULL),
 	detailsPanel(NULL)
 {
@@ -60,76 +61,106 @@ void DefaultGame::init(GameContainer* container) {
 	pathGroup->addPath(path);
 	pathGroup->addPath(path2);*/
 
+	m_buttonsPanel = new ScrollPanel();
+	m_buttonsPanel->setLocation(10, 10);
+	m_buttonsPanel->m_showBorder = false;
+	m_buttonsPanel->setMargin(0);
+	m_buttonsPanel->setSize(52, 700);
+	m_buttonsPanel->setPadding(1, 0, 0, 0);
+
 	selectButton = new Button();
-	selectButton->setLocation(10, 10);
 	selectButton->setSize(50, 50);
+	selectButton->setMargin(0, 0, 0, 10);
 	selectButton->setText("Select");
 	selectButton->setEvent((void*) DefaultGame::toolSelectPressed);
+	m_buttonsPanel->add(selectButton);
 
 	majorPointButton = new Button();
-	majorPointButton->setLocation(10, 70);
 	majorPointButton->setSize(50, 50);
-	majorPointButton->setText("Major Point");
+	majorPointButton->setMargin(0, 0, 0, 10);
+	majorPointButton->setText("Major");
 	majorPointButton->setEvent((void*) DefaultGame::toolMajorPointPressed);
+	m_buttonsPanel->add(majorPointButton);
 
 	minorPointButton = new Button();
-	minorPointButton->setLocation(10, 130);
 	minorPointButton->setSize(50, 50);
-	minorPointButton->setText("Minor Point");
+	minorPointButton->setMargin(0, 0, 0, 10);
+	minorPointButton->setText("Minor");
 	minorPointButton->setEvent((void*) DefaultGame::toolMinorPointPressed);
+	m_buttonsPanel->add(minorPointButton);
+
+	Label* spacer1 = new Label(" ");
+	spacer1->setSize(50, 10);
+	m_buttonsPanel->add(spacer1);
 
 	playButton = new Button();
-	//playButton->setLocation(10, container->getHeight() - (9*(10 + 50)));
 	playButton->setText("Play");
 	playButton->setSize(50, 50);
+	playButton->setMargin(0, 0, 0, 10);
 	playButton->setEvent((void*) DefaultGame::playPressed);
+	m_buttonsPanel->add(playButton);
 
 	pauseButton = new Button();
-	//pauseButton->setLocation(10, container->getHeight() - (8*(10 + 50)));
 	pauseButton->setText("Pause");
 	pauseButton->setSize(50, 50);
+	pauseButton->setMargin(0, 0, 0, 10);
 	pauseButton->setEvent((void*) DefaultGame::pausePressed);
+	m_buttonsPanel->add(pauseButton);
 
 	stopButton = new Button();
-	//stopButton->setLocation(10, container->getHeight() - (7*(10 + 50)));
 	stopButton->setText("Stop");
 	stopButton->setSize(50, 50);
+	stopButton->setMargin(0, 0, 0, 10);
 	stopButton->setEvent((void*) DefaultGame::stopPressed);
+	m_buttonsPanel->add(stopButton);
 
 	forwardButton = new Button();
-	//forwardButton->setLocation(10, container->getHeight() - (6*(10 + 50)));
 	forwardButton->setText(">>");
 	forwardButton->setSize(50, 50);
+	forwardButton->setMargin(0, 0, 0, 10);
+	m_buttonsPanel->add(forwardButton);
 
 	rewindButton = new Button();
-	//rewindButton->setLocation(10, container->getHeight() - (5*(10 + 50)));
 	rewindButton->setText("<<");
 	rewindButton->setSize(50, 50);
+	rewindButton->setMargin(0, 0, 0, 10);
+	m_buttonsPanel->add(rewindButton);
+
+	Label* spacer2 = new Label(" ");
+	spacer2->setSize(50, 10);
+	m_buttonsPanel->add(spacer2);
 
 	newButton = new Button();
-	//newButton->setLocation(10, container->getHeight() - (4*(10 + 50)));
 	newButton->setText("New");
 	newButton->setSize(50, 50);
+	newButton->setMargin(0, 0, 0, 10);
 	newButton->setEvent((void*) DefaultGame::newPressed);
+	m_buttonsPanel->add(newButton);
 
 	loadPathButton = new Button();
-	//loadPathButton->setLocation(10, container->getHeight() - (3*(10 + 50)));
 	loadPathButton->setText("Load");
 	loadPathButton->setSize(50, 50);
+	loadPathButton->setMargin(0, 0, 0, 10);
 	loadPathButton->setEvent((void*) DefaultGame::loadPressed);
+	m_buttonsPanel->add(loadPathButton);
 
 	savePathButton = new Button();
-	//savePathButton->setLocation(10, container->getHeight() - (2*(10 + 50)));
 	savePathButton->setText("Save");
 	savePathButton->setSize(50, 50);
+	savePathButton->setMargin(0, 0, 0, 10);
 	savePathButton->setEvent((void*) DefaultGame::savePressed);
+	m_buttonsPanel->add(savePathButton);
 
 	saveAsPathButton = new Button();
-	//saveAsPathButton->setLocation(10, container->getHeight() - (1*(10 + 50)));
-	saveAsPathButton->setText("Save As");
+	saveAsPathButton->setText("Sve As");
 	saveAsPathButton->setSize(50, 50);
+	saveAsPathButton->setMargin(0, 0, 0, 10);
 	saveAsPathButton->setEvent((void*) DefaultGame::saveAsPressed);
+	m_buttonsPanel->add(saveAsPathButton);
 
+	Label* spacer3 = new Label(" ");
+	spacer3->setSize(50, 10);
+	m_buttonsPanel->add(spacer3);
 
 	flipHorizontallyButton = new Button();
 	flipHorizontallyButton->setText("Flip H");
@@ -314,6 +345,13 @@ void DefaultGame::init(GameContainer* container) {
 		ea_none->setValue("NONE");
 		easingComboBox->addItem(ea_none);
 
+
+	snapField = new TextField();
+	snapField->setText(10);
+	snapField->setLocation(10, 500);
+	snapField->setSize(150, 40);
+	snapField->setPadding(5);
+	snapField->setFocussed(false);
 
 	gameAreaWidthField = new TextField();
 	gameAreaWidthField->setText(480);
@@ -505,6 +543,11 @@ void DefaultGame::update(GameContainer* container, GameTimer* timer) {
 void DefaultGame::render(GameContainer* container, Graphics* g) {
 
 	g->setDrawColor(Color::white);
+	m_buttonsPanel->render();
+
+
+
+	g->setDrawColor(Color::white);
 	gamePanel->preRender();
 
 		g->pushMatrix();
@@ -558,22 +601,6 @@ void DefaultGame::render(GameContainer* container, Graphics* g) {
 	//curStr = StringUtil::append(curStr, Cast::toString<float>(pathGroup->getIndex()));
 	//g->drawString(curStr, 75, 450);
 
-
-
-	selectButton->render();
-	majorPointButton->render();
-	minorPointButton->render();
-
-	playButton->render();
-	pauseButton->render();
-	stopButton->render();
-	forwardButton->render();
-	rewindButton->render();
-	newButton->render();
-	loadPathButton->render();
-	savePathButton->render();
-	saveAsPathButton->render();
-
 	if (pointSelected != NULL) {
 		g->setDrawColor(Color::white);
 		g->drawCircle(
@@ -616,6 +643,10 @@ void DefaultGame::render(GameContainer* container, Graphics* g) {
 			string py = pointYTextField->getText().get();
 			int pyi = Cast::fromString<int>(py);
 
+			// snapping
+			int snap = snapField->getText().getAsInt();
+			MathUtil::snap(snap, pxi, pyi);
+
 			pointSelected->set(pxi, pyi);
 			if (pointSelectedJoin != NULL) {
 				pointSelectedJoin->set(pxi, pyi);
@@ -627,11 +658,15 @@ void DefaultGame::render(GameContainer* container, Graphics* g) {
 
 		gameAreaHeightField->setY(detailsPanel->getY() + detailsPanel->getHeight() - 10 - 100);
 
-
 		gameAreaWidthField->setY(gameAreaHeightField->getY() - 80);
 		g->drawString("Guide Width: ", detailsPanel->getX() + 10, gameAreaWidthField->getY() - 35);
 		gameAreaWidthField->setX(detailsPanel->getX() + 10);
 		gameAreaWidthField->render();
+
+		snapField->setY(gameAreaWidthField->getY() - 80);
+		g->drawString("Snap To: ", detailsPanel->getX() + 10, snapField->getY() - 35);
+		snapField->setX(detailsPanel->getX() + 10);
+		snapField->render();
 
 		g->drawString("Guide Height: ", detailsPanel->getX() + 10, gameAreaHeightField->getY() - 35);
 		gameAreaHeightField->setX(detailsPanel->getX() + 10);
@@ -663,19 +698,12 @@ void DefaultGame::resize(GameContainer* container, int width, int height) {
 	//g->ortho2d(0, 0, width, height);
 
 	if (gamePanel != NULL) {
+		m_buttonsPanel->setHeight(height - 20);
+
 		gamePanel->setSize(width - 40 - 50 - detailsPanel->getWidth(), height - 20);
 		detailsPanel->setLocation(width - 10 - detailsPanel->getWidth(), 10);
 		detailsPanel->setSize(detailsPanel->getWidth(), height - 20);
 
-		playButton->setLocation(10, container->getHeight() - (9*(10 + 50)));
-		pauseButton->setLocation(10, container->getHeight() - (8*(10 + 50)));
-		stopButton->setLocation(10, container->getHeight() - (7*(10 + 50)));
-		forwardButton->setLocation(10, container->getHeight() - (6*(10 + 50)));
-		rewindButton->setLocation(10, container->getHeight() - (5*(10 + 50)));
-		newButton->setLocation(10, container->getHeight() - (4*(10 + 50)));
-		loadPathButton->setLocation(10, container->getHeight() - (3*(10 + 50)));
-		savePathButton->setLocation(10, container->getHeight() - (2*(10 + 50)));
-		saveAsPathButton->setLocation(10, container->getHeight() - (1*(10 + 50)));
 	}
 
 
@@ -704,23 +732,12 @@ void DefaultGame::keyPressed(unsigned int key) {
 		flipVerticallyButton->keyPressed(key);
 		rotate90Button->keyPressed(key);
 
+		snapField->keyPressed(key);
 		gameAreaWidthField->keyPressed(key);
 		gameAreaHeightField->keyPressed(key);
 	}
 
-	selectButton->keyPressed(key);
-	majorPointButton->keyPressed(key);
-	minorPointButton->keyPressed(key);
-
-	playButton->keyPressed(key);
-	pauseButton->keyPressed(key);
-	stopButton->keyPressed(key);
-	forwardButton->keyPressed(key);
-	rewindButton->keyPressed(key);
-	newButton->keyPressed(key);
-	loadPathButton->keyPressed(key);
-	savePathButton->keyPressed(key);
-	saveAsPathButton->keyPressed(key);
+	m_buttonsPanel->keyPressed(key);
 
 	if (pathGroup != NULL){
 
@@ -840,9 +857,7 @@ void DefaultGame::keyPressed(unsigned int key) {
 }
 void DefaultGame::keyReleased(unsigned int key) {
 
-	selectButton->keyReleased(key);
-	majorPointButton->keyReleased(key);
-	minorPointButton->keyReleased(key);
+	m_buttonsPanel->keyReleased(key);
 
 	if (pointSelectedIndexInGroup == -1) {
 
@@ -853,16 +868,6 @@ void DefaultGame::keyReleased(unsigned int key) {
 	}
 
 	//easingComboBox->keyReleased(key);
-
-	playButton->keyReleased(key);
-	pauseButton->keyReleased(key);
-	stopButton->keyReleased(key);
-	forwardButton->keyReleased(key);
-	rewindButton->keyReleased(key);
-	newButton->keyReleased(key);
-	loadPathButton->keyReleased(key);
-	savePathButton->keyReleased(key);
-	saveAsPathButton->keyReleased(key);
 
 	if (pathGroup != NULL) {
 
@@ -905,6 +910,7 @@ void DefaultGame::keyReleased(unsigned int key) {
 			if (!durationTextField->isFocussed()
 				&& !pointXTextField->isFocussed()
 				&& !pointYTextField->isFocussed()
+				&& !snapField->isFocussed()
 				&& !gameAreaWidthField->isFocussed()
 				&& !gameAreaHeightField->isFocussed()
 			) {
@@ -973,9 +979,8 @@ void DefaultGame::unselectPoint() {
 	pointSelectedIndexInPath = -1;
 }
 void DefaultGame::mouseMoved(int x, int y, int oldx, int oldy) {
-	selectButton->mouseMoved(x, y, oldx, oldy);
-	majorPointButton->mouseMoved(x, y, oldx, oldy);
-	minorPointButton->mouseMoved(x, y, oldx, oldy);
+	m_buttonsPanel->mouseMoved(x, y, oldx, oldy);
+
 
 	if (pointSelectedIndexInGroup == -1) {
 		flipHorizontallyButton->mouseMoved(x, y, oldx, oldy);
@@ -983,15 +988,6 @@ void DefaultGame::mouseMoved(int x, int y, int oldx, int oldy) {
 		rotate90Button->mouseMoved(x, y, oldx, oldy);
 	}
 
-	playButton->mouseMoved(x, y, oldx, oldy);
-	pauseButton->mouseMoved(x, y, oldx, oldy);
-	stopButton->mouseMoved(x, y, oldx, oldy);
-	forwardButton->mouseMoved(x, y, oldx, oldy);
-	rewindButton->mouseMoved(x, y, oldx, oldy);
-	newButton->mouseMoved(x, y, oldx, oldy);
-	loadPathButton->mouseMoved(x, y, oldx, oldy);
-	savePathButton->mouseMoved(x, y, oldx, oldy);
-	saveAsPathButton->mouseMoved(x, y, oldx, oldy);
 
 	if (gamePanelMoving == true) {
 		gamePanelPanX += (x - oldx);
@@ -1001,12 +997,20 @@ void DefaultGame::mouseMoved(int x, int y, int oldx, int oldy) {
 	if (pointSelectedMoving && pointSelected != NULL) {
 		//pointSelected->set(x - gamePanel->getX(), y - gamePanel->getY());
 		m_unsavedChanges = true;
-		pointXTextField->setText(Cast::toString<int>(x - gpmx()));
-		pointYTextField->setText(Cast::toString<int>(y - gpmy()));
-		pointSelected->set(x - gpmx(), y - gpmy());
+
+		int nx = x - gpmx();
+		int ny = y - gpmy();
+
+		int snap = snapField->getText().getAsInt();
+		MathUtil::snap(snap, nx, ny);
+
+		pointXTextField->setText(Cast::toString<int>(nx));
+		pointYTextField->setText(Cast::toString<int>(ny));
+
+		pointSelected->set(nx, ny);
 		if (pointSelectedJoin != NULL) {
 			//pointSelectedJoin->set(x - gamePanel->getX(), y - gamePanel->getY());
-			pointSelectedJoin->set(x - gpmx(), y - gpmy());
+			pointSelectedJoin->set(nx, ny);
 		}
 	}
 

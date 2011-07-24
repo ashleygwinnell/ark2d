@@ -44,6 +44,8 @@ class StringUtil {
 		static void trimRight(string& str, const char* chars2remove);
 		static void trim(string& str, const char* chars2remove);
 
+		static string& str_replace(const string& search, const string& replace, string& subject);
+
 		static vector<string> split(string s, const char* delimiter);
 		static string getExtension(string s);
 };

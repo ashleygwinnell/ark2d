@@ -5,11 +5,12 @@
 // Tilesets
 TiledMapTileset::TiledMapTileset():
 	m_name(),
+	m_image(NULL),
+	m_mask(Color::magenta),
 	m_firstgid(),
 	m_lastgid(),
 	m_tilewidth(),
 	m_tileheight(),
-	m_image(),
 	m_spacing(0),
 	m_margin(0),
 	m_total_tiles_across(1),

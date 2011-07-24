@@ -78,6 +78,8 @@
 #include "ARK2D/UI/Panel.h"
 #include "ARK2D/UI/ComboBox.h"
 #include "ARK2D/UI/ComboBoxItem.h"
+#include "ARK2D/UI/ScrollPanel.h"
+#include "ARK2D/UI/Checkbox.h"
 #include "ARK2D/UI/FileDialog.h"
 
 // Particle Engine

@@ -17,6 +17,24 @@ void MathUtil::seedRandom() {
 	OutputWrapper::println(" ...done.");
 }
 
+void MathUtil::snap(int& snap, int& x, int& y) {
+	int snapd2 = (snap/2);
+	int xr = (x % snap);
+	int yr = (y % snap);
+	if (xr < snapd2) {
+		x -= xr;
+	} else if (xr >= snapd2) {
+		x -= xr;
+		x += snap;
+	}
+	if (yr < snapd2) {
+		y -= yr;
+	} else if (yr >= snapd2) {
+		y -= yr;
+		y += snap;
+	}
+}
+
 double MathUtil::distance(float x1, float y1, float x2, float y2) {
 	float diffx = x1 - x2;
 	float diffy = y1 - y2;

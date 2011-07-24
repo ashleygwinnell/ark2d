@@ -35,6 +35,9 @@ class MathUtil {
 		static double toRadians(double angle);
 		static double getPercentage(int top, int denominator);
 		static const char* getPercentage_CSTR(int top, int denominator);
+		static void snap(int& snap, int& x, int& y);
+
+
 
 		template <class T>
 		static Vector2<T>* findCenter() {
@@ -93,7 +96,6 @@ class MathUtil {
 			double y = double(sin(angleRadians));
 			return new Vector2<T>(x, y);
 		}
-
 };
 
 #endif /* MATHUTIL_H_ */

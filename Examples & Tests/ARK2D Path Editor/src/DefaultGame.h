@@ -33,7 +33,11 @@ class DefaultGame : public Game {
 		TextField* gameAreaWidthField;
 		TextField* gameAreaHeightField;
 
+		TextField* snapField;
+
 		string m_currentFile;
+
+		ScrollPanel* m_buttonsPanel;
 
 		bool gamePanelMoving;
 		int gamePanelPanX;
