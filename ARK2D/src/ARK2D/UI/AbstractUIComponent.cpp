@@ -129,7 +129,7 @@ void AbstractUIComponent::mouseMoved(int x, int y, int oldx, int oldy) { }
 
 bool AbstractUIComponent::isMouseInBounds() {
 	Input* i = ARK2D::getInput();
-	return GigaRectangle<int>::s_contains(m_x, m_y, m_width, m_height, i->getMouseX(), i->getMouseY());
+	return GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), m_width, m_height, i->getMouseX(), i->getMouseY());
 }
 
 AbstractUIComponent::~AbstractUIComponent() {

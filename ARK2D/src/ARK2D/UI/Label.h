@@ -24,6 +24,7 @@ class Label : public AbstractUIComponent {
 		Label(string text);
 		void setText(string text);
 		void render();
+		void renderBounds();
 		virtual ~Label();
 };
 

@@ -222,7 +222,7 @@ class ARK2DBuildSystem:
 	def gamePostInit(self):
 	
 		if (sys.platform == "win32"):
-			self.build_artifact = self.build_folder + "\\" + self.game_name.replace(" ", "%20") + ".exe";
+			self.build_artifact = self.build_folder + "\\" + self.game_name.replace(" ", "_") + ".exe";
 			
 			
 	def createCacheFile(self, path):
@@ -289,7 +289,7 @@ class ARK2DBuildSystem:
 			print("---");
 			
 			linkingStr = "";
-			linkingStr += "g++ " + self.mingw_link + " " + self.linkingFlags + " -o" + self.build_artifact;
+			linkingStr += "g++ " + self.mingw_link + " " + self.linkingFlags + " -o" + self.build_artifact + "";
 			for h in self.src_files:
 				findex = h.rfind('.');
 				newf = h[0:findex] + ".o";
@@ -316,7 +316,7 @@ if __name__ == "__main__":
 	
 	try:
 		#print(sys.argv[1]);
-		j = json.loads(sys.argv[1].replace("%20", " "));
+		j = json.loads(sys.argv[1].replace("-", " "));
 		
 		a = ARK2DBuildSystem();
 		a.gamePreInit();

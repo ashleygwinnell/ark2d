@@ -1,0 +1,2 @@
+build_release\\HOT_CROSS_BUNIONS.exe
+pause

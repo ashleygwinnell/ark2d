@@ -26,6 +26,10 @@ void Label::render() {
 	Graphics* g = ARK2D::getGraphics();
 	g->drawString(m_text, m_x, m_y);
 }
+void Label::renderBounds() {
+	Graphics* g = ARK2D::getGraphics();
+	g->drawRect(m_x, m_y, m_width, m_height);
+}
 
 Label::~Label() {
 
