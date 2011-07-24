@@ -18,7 +18,7 @@
 #include "GameTimer.h"
 //#include "GigaRectangle.h"
 #include "Graphics.h"
-#include "BMFont.h"
+#include "Font/BMFont.h"
 #include "ErrorDialog.h"
 #include "OutputWrapper.h"
 

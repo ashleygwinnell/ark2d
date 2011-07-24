@@ -269,9 +269,9 @@
 - Added AbstractUIComponent::isVisible();
 
 17:11 24/07/2011
+- Released LMT Wave Editor and ARK2D Wave Editor.
 - Added MathUtil::snap(int snap, int x, int y);
-- Tidied stuff up. 
-
+- Added libfreetype support with FTFont class.
 
 TODO:
 - TextField work:

@@ -12,7 +12,6 @@ class DefaultGame;
 
 class BlankState : public GameState {
 	public:
-
 		BlankState();
 		void enter(GameContainer* container, StateBasedGame* game, GameState* from);
 		void leave(GameContainer* container, StateBasedGame* game, GameState* to);

@@ -5,7 +5,7 @@
  */
 
 #include "Graphics.h"
-#include "BMFont.h"
+#include "Font/BMFont.h"
 #include "Color.h"
 
 #include "ARK2D_GL.h"

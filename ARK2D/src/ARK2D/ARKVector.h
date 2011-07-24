@@ -41,14 +41,19 @@ class ARKVector {
 		unsigned int size() {
 			return vec.size();
 		}
+		void remove(unsigned int i) {
+			vec.erase(vec.begin() + i);
+		}
 		void remove(T o) {
 			typename vector<T>::iterator it = vec.begin();
 			while (it != vec.end()) {
 				T obj = (*it);
 				if (obj == o) {
 					it = vec.erase(it);
+					break;
+				} else {
+					++it;
 				}
-				++it;
 			}
 		}
 		void removeAll() {

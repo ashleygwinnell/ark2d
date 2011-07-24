@@ -37,6 +37,7 @@ class ARK2DBuildSystem:
 			self.build_folder + "\\src\\ARK2D\\ARK2D_State",
 			self.build_folder + "\\src\\ARK2D\\ARK2D_Util",
 			self.build_folder + "\\src\\ARK2D\\particles",
+			self.build_folder + "\\src\\ARK2D\\Font",
 			self.build_folder + "\\src\\ARK2D\\Tiled",
 			self.build_folder + "\\src\\ARK2D\\UI",
 			self.build_folder + "\\src\\ARK2D\\vendor\\libJSON",
@@ -59,7 +60,6 @@ class ARK2DBuildSystem:
 			'src\\ARK2D\\ARKMutex.cpp',
 			'src\\ARK2D\\ARKString.cpp',
 			'src\\ARK2D\\ARKThread.cpp',
-			'src\\ARK2D\\BMFont.cpp',
 			'src\\ARK2D\\BMPImage.cpp',
 			'src\\ARK2D\\CameraShake.cpp',
 			'src\\ARK2D\\Circle.cpp',
@@ -95,6 +95,8 @@ class ARK2DBuildSystem:
 			'src\\ARK2D\\TargaImage.cpp',
 			'src\\ARK2D\\Texture.cpp',
 			'src\\ARK2D\\Timeline.cpp',
+			'src\\ARK2D\\Font\\FTFont.cpp',
+			'src\\ARK2D\\Font\\BMFont.cpp',
 			'src\\ARK2D\\Tiled\\TiledMap.cpp',
 			'src\\ARK2D\\Tiled\\TiledMapLayer.cpp',
 			'src\\ARK2D\\Tiled\\TiledMapObject.cpp',
@@ -198,13 +200,15 @@ class ARK2DBuildSystem:
 			'lib\\glew32.dll', 
 			'lib\\OpenAL32.dll', 
 			'lib\\alut.dll', 
-			'lib\\winmm.dll'
+			'lib\\winmm.dll',
+			'lib\\freetype6.dll'
 		]);
 		self.static_libraries.extend([
 			'glu32', 
 			'winmm', 
 			'opengl32', 
-			'mingw32'
+			'mingw32',
+			'freetype'
 		]);
 		
 		if (sys.platform == "win32"):

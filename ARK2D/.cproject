@@ -554,6 +554,7 @@
 								</option>
 								<option id="gnu.cpp.link.option.libs.1318569696" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="glu32"/>
+									<listOptionValue builtIn="false" value="freetype"/>
 									<listOptionValue builtIn="false" value="winmm"/>
 									<listOptionValue builtIn="false" value="opengl32"/>
 									<listOptionValue builtIn="false" value="mingw32"/>
@@ -561,6 +562,7 @@
 								<option id="gnu.cpp.link.option.flags.627657792" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-mwindows" valueType="string"/>
 								<option id="gnu.cpp.link.option.userobjs.747582269" name="Other objects" superClass="gnu.cpp.link.option.userobjs" valueType="userObjs">
 									<listOptionValue builtIn="false" value="lib/kernel32.dll"/>
+									<listOptionValue builtIn="false" value="lib/freetype6.dll"/>
 									<listOptionValue builtIn="false" value="lib/glew32.dll"/>
 									<listOptionValue builtIn="false" value="lib/OpenAL32.dll"/>
 									<listOptionValue builtIn="false" value="lib/alut.dll"/>

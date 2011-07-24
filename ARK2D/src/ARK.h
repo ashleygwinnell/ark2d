@@ -46,7 +46,10 @@
 #include "ARK2D/Image.h"
 #include "ARK2D/Animation.h"
 #include "ARK2D/Sound.h"
-#include "ARK2D/BMFont.h"
+
+// Fonts
+#include "ARK2D/Font/BMFont.h"
+#include "ARK2D/Font/FTFont.h"
 
 // Tiled
 #include "ARK2D/Tiled/TiledMap.h"

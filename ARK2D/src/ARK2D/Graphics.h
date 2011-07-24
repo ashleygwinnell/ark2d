@@ -9,7 +9,7 @@
 #define GRAPHICS_H_
 
 #include <string>
-#include "BMFont.h"
+#include "Font/BMFont.h"
 #include "Color.h"
 #include "StringUtil.h"
 #include "Matrix44.h"

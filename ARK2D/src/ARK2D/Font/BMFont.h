@@ -13,12 +13,12 @@
 #include <stdlib.h>
 #include <iostream>
 
-#include "ARK2D_GL.h"
+#include "../ARK2D_GL.h"
 
-#include "Image.h"
-#include "Color.h"
-#include "OutputWrapper.h"
-#include "StringUtil.h"
+#include "../Image.h"
+#include "../Color.h"
+#include "../OutputWrapper.h"
+#include "../StringUtil.h"
 
 using std::string;
 using std::istream;
