@@ -40,9 +40,11 @@ void Panel::postRender() {
 	renderBorder();
 }
 void Panel::render() {
-	preRender();
-	renderChildren();
-	postRender();
+	if (m_visible) {
+		preRender();
+		renderChildren();
+		postRender();
+	}
 }
 void Panel::renderChildren() {
 	for(unsigned int i = 0; i < m_children.size(); i++) {
@@ -57,6 +59,8 @@ void Panel::renderBorder() {
 	}
 }
 void Panel::keyPressed(unsigned int key) {
+	if (!m_visible) { return; }
+
 	if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT
 			|| key == (unsigned int) Input::MOUSE_BUTTON_RIGHT) {
 		Input* i = ARK2D::getInput();
@@ -73,6 +77,8 @@ void Panel::keyPressed(unsigned int key) {
 	}
 }
 void Panel::keyReleased(unsigned int key) {
+	if (!m_visible) { return; }
+
 	if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT
 			|| key == (unsigned int) Input::MOUSE_BUTTON_RIGHT) {
 		Input* i = ARK2D::getInput();
@@ -89,10 +95,16 @@ void Panel::keyReleased(unsigned int key) {
 	}
 }
 void Panel::mouseMoved(int x, int y, int oldx, int oldy) {
+	if (!m_visible) { return; }
+
 	bool s = GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), m_width, m_height, x, y);
 	if (s) {
 		for(unsigned int i = 0; i < m_children.size(); i++) {
 			m_children.at(i)->mouseMoved(x, y, oldx, oldy);
 		}
 	}
+}
+
+Panel::~Panel() {
+
 }

@@ -8,10 +8,17 @@
 #include "PathGroup.h"
 #include "SubPath.h"
 
-PathGroup::PathGroup(): paths(), calcVector(), current(0), timer(0.0f) {
+PathGroup::PathGroup(): paths(), currentLocation(), calcVector(), current(0), timer(0.0f), relative(false) {
 	calcVector.set(0, 0);
+	currentLocation.set(0, 0);
 }
 
+void PathGroup::setRelative(bool b) {
+	relative = b;
+}
+bool PathGroup::isRelative() {
+	return relative;
+}
 void PathGroup::addPath(Path* p) {
 	paths.push_back(p);
 }
@@ -159,6 +166,12 @@ Vector2<float>* PathGroup::getLocation() {
 	Path* path = paths.at(current);
 	SubPath* lastPath = path->subpaths.at(path->subpaths.size()-1);
 	Vector2<float>* lastPoint = lastPath->points.at(lastPath->points.size()-1);
+
+	if (relative) {
+		currentLocation.setX(lastPoint->getX() - paths.at(0)->getPoint(0)->getX());
+		currentLocation.setY(lastPoint->getY() - paths.at(0)->getPoint(0)->getY());
+		return &currentLocation;
+	}
 	return lastPoint;
 }
 void PathGroup::render() {
@@ -200,8 +213,9 @@ void PathGroup::renderCurve() {
 	float ptimer = getTimer();
 	g->setDrawColor(Color::red);
 	setTimer(0.0f);
-	float px = paths.at(0)->subpaths.at(0)->points.at(0)->getX();
-	float py = paths.at(0)->subpaths.at(0)->points.at(0)->getY();
+	updateCurrent();
+	float px = getLocation()->getX(); //paths.at(0)->subpaths.at(0)->points.at(0)->getX();
+	float py = getLocation()->getY();//paths.at(0)->subpaths.at(0)->points.at(0)->getY();
 	float du = getDuration();
 	for(float i = 0.05f; i <= du; i += 0.05f)
 	{

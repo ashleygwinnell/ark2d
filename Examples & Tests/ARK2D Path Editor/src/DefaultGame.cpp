@@ -919,7 +919,7 @@ void DefaultGame::keyReleased(unsigned int key) {
 					} else {
 
 						if ((pointSelectedIndexInGroup == 0 && pointSelectedIndexInPath == 0)
-							|| (pointSelectedIndexInGroup == pathGroup->getNumPaths() - 1 && pointSelectedIndexInPath == pathGroup->getPath(pointSelectedIndexInGroup)->getSize() - 1)) {
+							|| (pointSelectedIndexInGroup == (int) pathGroup->getNumPaths() - 1 && pointSelectedIndexInPath == (int) pathGroup->getPath(pointSelectedIndexInGroup)->getSize() - 1)) {
 							std::cout << "first and last point cannot be deleted" << std::endl;
 							return;
 						}

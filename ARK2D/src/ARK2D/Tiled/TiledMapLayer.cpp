@@ -11,6 +11,7 @@ TiledMapLayer::TiledMapLayer():
 	m_width(0),
 	m_height(0),
 	m_visible(true),
+	m_properties(),
 	m_data()
 {
 

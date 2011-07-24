@@ -25,6 +25,7 @@ class AbstractUIComponent : public UIComponent {
 		Vector4<int> m_padding; // left, top, right, bottom.
 		Vector4<int> m_margin; // left, top, right, bottom.
 		bool m_clipping;
+		bool m_visible;
 
 		AbstractUIComponent();
 		virtual int getX();
@@ -65,6 +66,9 @@ class AbstractUIComponent : public UIComponent {
 
 		int getOnScreenX();
 		int getOnScreenY();
+
+		void setVisible(bool b);
+		bool isVisible();
 
 		virtual void render() = 0;
 		virtual void preRender();

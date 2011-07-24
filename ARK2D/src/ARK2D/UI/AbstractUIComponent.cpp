@@ -14,7 +14,8 @@ AbstractUIComponent::AbstractUIComponent():
 	m_width(1), m_height(1),
 	m_padding(0,0,0,0),
 	m_margin(0,0,0,0),
-	m_clipping(true)
+	m_clipping(true),
+	m_visible(true)
 	{
 
 }
@@ -86,6 +87,14 @@ int AbstractUIComponent::getOnScreenX() {
 	}
 	return thisx;
 }
+
+void AbstractUIComponent::setVisible(bool b) {
+	m_visible = b;
+}
+bool AbstractUIComponent::isVisible() {
+	return m_visible;
+}
+
 int AbstractUIComponent::getOnScreenY() {
 	if (!hasParent()) { return getY(); }
 

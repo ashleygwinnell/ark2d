@@ -48,7 +48,9 @@
 #include "ARK2D/Sound.h"
 #include "ARK2D/BMFont.h"
 
-#include "ARK2D/TiledMap.h"
+// Tiled
+#include "ARK2D/Tiled/TiledMap.h"
+
 #include "ARK2D/Input.h"
 #include "ARK2D/MathUtil.h"
 #include "ARK2D/UISimpleButton.h"
@@ -67,7 +69,10 @@
 
 #include "ARK2D/ARK2D_JSON.h"
 
+
+
 // UI
+#include "ARK2D/UI/Label.h"
 #include "ARK2D/UI/TextField.h"
 #include "ARK2D/UI/Button.h"
 #include "ARK2D/UI/Panel.h"
@@ -75,7 +80,7 @@
 #include "ARK2D/UI/ComboBoxItem.h"
 #include "ARK2D/UI/FileDialog.h"
 
-// particle engine
+// Particle Engine
 #include "ARK2D/particles/Particle.h"
 #include "ARK2D/particles/ParticleEmitter.h"
 #include "ARK2D/particles/ParticleIO.h"
@@ -84,15 +89,15 @@
 #include "ARK2D/particles/Range.h"
 #include "ARK2D/particles/ConfigurableEmitter.h"
 
-// containers
+// Containers
 #include "ARK2D/ARKGameObject.h"
 #include "ARK2D/ARKVector.h"
 
-// utils
+// Utils
 #include "ARK2D/FileUtil.h"
 #include "ARK2D/LocalHighscores.h"
 
-// paths
+// Paths
 #include "ARK2D/ARK2D_path/SubPath.h"
 #include "ARK2D/ARK2D_path/Path.h"
 #include "ARK2D/ARK2D_path/PathGroup.h"

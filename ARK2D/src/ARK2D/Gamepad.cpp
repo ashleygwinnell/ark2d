@@ -17,9 +17,9 @@ Gamepad::Gamepad():
 	productId(0),
 	vendorId(0),
 	name(""),
+	dpadPosition(DPAD_NONE),
 	numButtons(0),
-	buttonStates(),
-	dpadPosition(DPAD_NONE) {
+	buttonStates() {
 
 }
 int Gamepad::getDPadPosition() {

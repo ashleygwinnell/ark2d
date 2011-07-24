@@ -57,6 +57,13 @@ class TextField : public AbstractUIComponent {
 			clearSelection();
 			m_cursorPosition = m_text.length();
 		}
+		void setText(float f) {
+			m_text.clear();
+			m_text += f;
+
+			clearSelection();
+			m_cursorPosition = m_text.length();
+		}
 		const ARKString& getText() {
 			return m_text;
 		}
@@ -148,7 +155,8 @@ class TextField : public AbstractUIComponent {
 			std::cout << k << std::endl;
 
 			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT) {
-				if (GigaRectangle<int>::s_contains(m_x, m_y, m_width, m_height, i->getMouseX(), i->getMouseY())) {
+				//if (GigaRectangle<int>::s_contains(m_x, m_y, m_width, m_height, i->getMouseX(), i->getMouseY())) {
+				if (GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), m_width, m_height, i->getMouseX(), i->getMouseY())) {
 					if (UIComponent::s_currentFocus != NULL) {
 						UIComponent::s_currentFocus->setFocussed(false);
 					}

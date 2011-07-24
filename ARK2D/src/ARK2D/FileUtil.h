@@ -18,6 +18,8 @@ using namespace std;
 class FileUtil {
 	public:
 		static bool file_put_contents(string filename, string contents);
+		static string getCurrentDirectory();
+		static string getSeparator();
 };
 
 #endif /* FILEUTIL_H_ */

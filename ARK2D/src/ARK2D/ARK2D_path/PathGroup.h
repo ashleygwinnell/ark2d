@@ -22,14 +22,19 @@ using namespace std;
 class PathGroup {
 	private:
 		vector<Path*> paths;
+		Vector2<float> currentLocation;
 		Vector2<float> calcVector;
 		unsigned int current;
 		float timer;
+		bool relative;
+
 		string name;
 		string description;
 
 	public:
 		PathGroup();
+		void setRelative(bool b);
+		bool isRelative();
 		void addPath(Path* p);
 		void addPath(Path* p, unsigned int index);
 		void removePath(unsigned int index);

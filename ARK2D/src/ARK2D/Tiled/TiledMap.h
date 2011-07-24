@@ -10,10 +10,10 @@
 
 #include <string>
 #include <vector>
-#include "vendor/tinyxml/tinyxml.h"
-#include "ToString.h"
-#include "Image.h"
-#include "Color.h"
+#include "../vendor/tinyxml/tinyxml.h"
+#include "../ToString.h"
+#include "../Image.h"
+#include "../Color.h"
 
 #include "TiledMapTileset.h"
 #include "TiledMapProperty.h"

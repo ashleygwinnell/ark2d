@@ -32,8 +32,8 @@ class ARKString {
 		void operator+=(signed int i) {
 			m_string = StringUtil::append(m_string, i);
 		}
-		void operator+=(float i) {
-
+		void operator+=(float f) {
+			m_string = Cast::toString<float>(f);
 		}
 		void insert(const ARKString& str, int at) {
 			insert(str.get(), at);
@@ -64,6 +64,9 @@ class ARKString {
 		}
 		int getAsInt() const {
 			return Cast::fromString<int>(m_string);
+		}
+		float getAsFloat() const {
+			return Cast::fromString<float>(m_string);
 		}
 		int length() const {
 			return m_string.length();

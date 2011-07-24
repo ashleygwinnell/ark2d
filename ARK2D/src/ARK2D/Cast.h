@@ -42,6 +42,9 @@ class Cast {
 			 stream << t;
 			 return stream.str();
 		}
+		static string toString(bool b) {
+			return (b)?"true":"false";
+		}
 
 		template<class T>
 		static T fromString(const string& s)

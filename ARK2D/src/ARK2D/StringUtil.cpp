@@ -180,10 +180,12 @@ string StringUtil::decodeBase64(string const& encoded_string) {
 }
 
 bool StringUtil::file_exists(const char * filename) {
-	if (FILE * file = fopen(filename, "r")) {
+	FILE* file = fopen(filename, "r");
+	if (file != NULL) {
 		fclose(file);
 		return true;
 	}
+	fclose(file);
 	return false;
 }
 

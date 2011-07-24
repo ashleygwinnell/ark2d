@@ -24,6 +24,12 @@ PathGroup* PathIO::createFromJSON(string json) {
 		pathGroup->setName(root->GetNode("name")->NodeAsString());
 		pathGroup->setDescription(root->GetNode("description")->NodeAsString());
 
+		if (root->GetNode("relative") == NULL) {
+			pathGroup->setRelative(false);
+		} else {
+			pathGroup->setRelative(root->GetNode("relative")->NodeAsBool());
+		}
+
 		JSONNode* paths = root->GetNode("paths");
 		for(unsigned int i = 0; i < paths->NodeSize(); i++)
 		{
@@ -57,6 +63,7 @@ string PathIO::getAsJSON(PathGroup* g) {
 	s += "{" + nl;
 	s += "	\"name\": \"" + g->getName() + "\"," + nl;
 	s += "	\"description\": \"" + g->getDescription() + "\"," + nl;
+	s += "	\"relative\": " + string((g->isRelative()==true)?"true":"false") + "," + nl;
 	s += "	\"paths\": [ "+ nl;
 	for(unsigned int i = 0; i < g->getPaths().size(); i++) {
 		s += "		{"+ nl;

@@ -257,12 +257,26 @@
 - Panel border bool - todo replace with function pointer or border class.
 - New .dll.
 
+12:17 22/07/2011
+- Moved Tiled classes in to a Tiled folder.
+
+13:09 23/07/2011
+- Panel::setVisible();
+- PathGroup::setRelative(bool b);
+ - sets the location to be relative to the first point in the path when "get location".
+- Added FileUtil::getCurrentDirectory();
+- Added FileUtil::getSeparator();
+- Added AbstractUIComponent::isVisible();
+
+
 TODO:
 - TextField work:
  - use mouse to select text.
  - use mouse to select cursor/caret position.
  - use keyboard to select text.
   - using control-shift left.
+- Change all "int" to int32_t and unsigned int to uint32_t.
+- Cast::toString<bool> should return "true" and "false" instead of 0 and 1.
 - Alter Transitions so that enter() is called before render() - this should mostly deprecate the use of manual initFromState()s.
 - Add Math / Triangulation classes.
 - Draw Mouse image at screen refresh rate instead of per-update-render-cycle for smooth mouse rendering.
