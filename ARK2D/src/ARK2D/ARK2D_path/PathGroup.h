@@ -23,6 +23,7 @@ class PathGroup {
 	private:
 		vector<Path*> paths;
 		Vector2<float> currentLocation;
+		Vector2<float> centerLocation;
 		Vector2<float> calcVector;
 		unsigned int current;
 		float timer;
@@ -30,6 +31,10 @@ class PathGroup {
 
 		string name;
 		string description;
+
+		bool m_isFlippedH;
+		bool m_isFlippedV;
+		float m_rotatedAngle;
 
 	public:
 		PathGroup();
@@ -61,6 +66,16 @@ class PathGroup {
 		/*float getStartTime(unsigned int index);*/
 		Vector2<float>* getLocation();
 		unsigned int getIndex();
+
+		Vector2<float>* getCenter();
+		void updateCenter();
+
+		void flip(bool hf, bool vf);
+		void flip(bool hf, bool vf, int cx, int cy);
+		void rotate(float degrees);
+		void rotate(float degrees, int cx, int cy);
+		//void setRotation(float f);
+		//void setFlip(bool hf, bool vf);
 
 		virtual void render();
 		virtual void renderCurve();

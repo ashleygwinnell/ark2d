@@ -8,9 +8,16 @@
 #include "PathGroup.h"
 #include "SubPath.h"
 
-PathGroup::PathGroup(): paths(), currentLocation(), calcVector(), current(0), timer(0.0f), relative(false) {
+PathGroup::PathGroup():
+	paths(), currentLocation(), centerLocation(), calcVector(), current(0), timer(0.0f),
+	relative(false),
+	m_isFlippedH(false),
+	m_isFlippedV(false),
+	m_rotatedAngle(false)
+{
 	calcVector.set(0, 0);
 	currentLocation.set(0, 0);
+	centerLocation.set(0, 0);
 }
 
 void PathGroup::setRelative(bool b) {
@@ -162,6 +169,8 @@ unsigned int PathGroup::getIndex() {
 	}
 	return f;
 }*/
+
+
 Vector2<float>* PathGroup::getLocation() {
 	Path* path = paths.at(current);
 	SubPath* lastPath = path->subpaths.at(path->subpaths.size()-1);
@@ -174,6 +183,58 @@ Vector2<float>* PathGroup::getLocation() {
 	}
 	return lastPoint;
 }
+Vector2<float>* PathGroup::getCenter() {
+	return &centerLocation;
+}
+
+
+void PathGroup::flip(bool hf, bool vf)
+{
+	updateCenter();
+	flip(hf, vf, int(centerLocation.getX()), int(centerLocation.getY()));
+}
+void PathGroup::flip(bool hf, bool vf, int cx, int cy) {
+	for(unsigned int i = 0; i < getNumPaths(); i++) {
+		Path* p = getPath(i);
+		for(unsigned int j = 0; j < p->getSize(); j++) {
+			Vector2<float>* v = p->getPoint(j);
+
+			if (hf) {
+				int xd = cx - int(v->getX());
+				v->setX(cx + xd);
+			}
+			if (vf) {
+				int yd = cy - int(v->getY());
+				v->setY(cy + yd);
+			}
+		}
+	}
+
+	if (hf) { m_isFlippedH = !m_isFlippedH; }
+	if (vf) { m_isFlippedV = !m_isFlippedV; }
+}
+//void PathGroup::setFlip(bool hf, bool vf) {}
+
+
+void PathGroup::rotate(float degrees) {
+	updateCenter();
+	rotate(degrees, int(centerLocation.getX()), int(centerLocation.getY()));
+}
+void PathGroup::rotate(float degrees, int cx, int cy) {
+
+	Vector2<float> gc(cx, cy);
+	for(unsigned int i = 0; i < getNumPaths(); i++) {
+		Path* p = getPath(i);
+		for(unsigned int j = 0; j < p->getSize(); j++) {
+			Vector2<float>* v = p->getPoint(j);
+			MathUtil::rotatePointAroundPoint(v, &gc, degrees);
+		}
+	}
+}
+//void PathGroup::setRotation(float f) { }
+
+
+
 void PathGroup::render() {
 	Graphics* g = ARK2D::getGraphics();
 	g->setDrawColor(Color::white);
@@ -207,6 +268,19 @@ void PathGroup::render() {
 
 
 }
+
+void PathGroup::updateCenter() {
+	if (paths.size() == 0 || (paths.size() == 1 && paths.at(0)->getSize() < 2)) {
+		centerLocation.set(0, 0);
+	}
+	Vector2<float>* first = paths.at(0)->getPoint(0);
+	Vector2<float>* last = paths.at(paths.size()-1)->getPoint(paths.at(paths.size()-1)->getSize()-1);
+	centerLocation.set(
+		int(first->getX() + last->getX())/2,
+		int(first->getY() + last->getY())/2
+	);
+}
+
 void PathGroup::renderCurve() {
 	Graphics* g = ARK2D::getGraphics();
 

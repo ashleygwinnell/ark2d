@@ -387,6 +387,7 @@ void DefaultGame::init(GameContainer* container) {
 }
 
 void DefaultGame::flip(bool hf, bool vf) {
+
 	int gw = gameAreaWidthField->getText().getAsInt();
 	int gcx = gw/2;
 
@@ -394,72 +395,11 @@ void DefaultGame::flip(bool hf, bool vf) {
 	int gcy = gh/2;
 
 	if (pathGroup != NULL) {
-		for(unsigned int i = 0; i < pathGroup->getNumPaths(); i++) {
-			Path* p = pathGroup->getPath(i);
-			for(unsigned int j = 0; j < p->getSize(); j++) {
-				Vector2<float>* v = p->getPoint(j);
-
-				if (hf) {
-					int xd = gcx - int(v->getX());
-					v->setX(gcx + xd);
-				}
-				if (vf) {
-					int yd = gcy - int(v->getY());
-					v->setY(gcy + yd);
-				}
-			}
-		}
+		pathGroup->flip(hf, vf, gcx, gcy);
 	}
+
 }
-void DefaultGame::flipSingular(bool hf, bool vf) {
-	int gw = gameAreaWidthField->getText().getAsInt();
-	int gcx = gw/2;
 
-	int gh = gameAreaHeightField->getText().getAsInt();
-	int gcy = gh/2;
-
-	if (pathGroup != NULL && pointSelected != NULL) {
-		Path* p = pathGroup->getPath(pointSelectedIndexInGroup);
-		Vector2<float>* v = p->getPoint(pointSelectedIndexInPath);
-		//Vector2<float>* v = pointSelected;
-
-		int newvx = 0;
-		int newvy = 0;
-		if (hf) {
-			int xd = gcx - int(v->getX());
-			//v->setX(gcx + xd);
-			newvx = gcx + xd;
-			newvy = int(v->getY());
-		}
-		if (vf) {
-			int yd = gcy - int(v->getY());
-			//v->setY(gcy + yd);
-			newvx = int(v->getX());
-			newvy = gcy + yd;
-		}
-
-		p->removePoint(pointSelectedIndexInPath);
-		p->addPoint(newvx, newvy, pointSelectedIndexInPath);
-
-
-		// TODO: store pointSelectedIndexInGroup and pointSelectedIndexInPath;
-		// TODO: write selectPoint(indexInGroup, indexInPath) function.
-
-		/*if (pointSelectedJoin != NULL) {
-			v = pointSelectedJoin;
-			pointSelected
-			if (hf) {
-				int xd = gcx - int(v->getX());
-				v->setX(gcx + xd);
-			}
-			if (vf) {
-				int yd = gcy - int(v->getY());
-				v->setY(gcy + yd);
-			}
-		}*/
-
-	}
-}
 
 
 void DefaultGame::rotate(int degrees) {
@@ -469,16 +409,8 @@ void DefaultGame::rotate(int degrees) {
 	int gh = gameAreaHeightField->getText().getAsInt();
 	int gcy = gh/2;
 
-	Vector2<float>* gc = new Vector2<float>(gcx, gcy);
-
 	if (pathGroup != NULL) {
-		for(unsigned int i = 0; i < pathGroup->getNumPaths(); i++) {
-			Path* p = pathGroup->getPath(i);
-			for(unsigned int j = 0; j < p->getSize(); j++) {
-				Vector2<float>* v = p->getPoint(j);
-				MathUtil::rotatePointAroundPoint(v, gc, degrees);
-			}
-		}
+		pathGroup->rotate(degrees, gcx, gcy);
 	}
 }
 

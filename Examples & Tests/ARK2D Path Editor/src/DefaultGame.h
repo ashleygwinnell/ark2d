@@ -89,7 +89,6 @@ class DefaultGame : public Game {
 
 		void setTitle(string s);
 		void flip(bool hf, bool vf);
-		void flipSingular(bool hf, bool vf);
 		void rotate(int degrees);
 
 		inline int gpmx() { return gamePanel->getX() + gamePanelPanX; }

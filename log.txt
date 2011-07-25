@@ -273,6 +273,12 @@
 - Added MathUtil::snap(int snap, int x, int y);
 - Added libfreetype support with FTFont class.
 
+23:58 25/07/2011
+- Added PathGroup::flip(bool hf, bool vf)
+- Added PathGroup::flip(bool hf, bool vf, int cx, int cy);
+- Added PathGroup::rotate(float degrees)
+- Added PathGroup::rotate(float degrees, int cx, int cy);
+
 TODO:
 - TextField work:
  - use mouse to select text.
