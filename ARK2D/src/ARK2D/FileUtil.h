@@ -20,6 +20,7 @@ class FileUtil {
 		static bool file_put_contents(string filename, string contents);
 		static string getCurrentDirectory();
 		static string getSeparator();
+		static string getOSDirectory();
 };
 
 #endif /* FILEUTIL_H_ */

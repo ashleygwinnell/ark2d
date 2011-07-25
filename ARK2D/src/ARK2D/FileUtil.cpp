@@ -8,8 +8,11 @@
 #include "FileUtil.h"
 
 #include <stdio.h>
+#include "ARK2D.h"
+
 #ifdef ARK2D_WINDOWS
 	#include <direct.h>
+	#include <windows.h>
 	#define GetCurrentDirectoryMacro _getcwd
 	#define DIRECTORY_SEPARATOR "\\"
 #else
@@ -40,4 +43,24 @@ string FileUtil::getCurrentDirectory() {
 }
 string FileUtil::getSeparator() {
 	return DIRECTORY_SEPARATOR;
+}
+
+string FileUtil::getOSDirectory() {
+	#if defined(ARK2D_WINDOWS)
+		char dir[MAX_PATH];
+		dir[MAX_PATH-1] = '\0';
+		GetWindowsDirectory((LPSTR) &dir, MAX_PATH);
+
+		// never add a backslash.
+		// if windows is installed to C:\ then it returns C:
+		string ret(dir);
+		if (ret.substr(ret.size()-1, 1) == DIRECTORY_SEPARATOR) {
+			ret = ret.substr(0, ret.size()-1);
+		}
+		return ret;
+
+	#elif defined(ARK2D_UBUNTU_LINUX)
+
+	#endif
+	return "whoops?";
 }

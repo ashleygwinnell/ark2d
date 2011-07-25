@@ -278,6 +278,7 @@
 - Added PathGroup::flip(bool hf, bool vf, int cx, int cy);
 - Added PathGroup::rotate(float degrees)
 - Added PathGroup::rotate(float degrees, int cx, int cy);
+- Added FileUtil::getOSDirectory();
 
 TODO:
 - TextField work:
