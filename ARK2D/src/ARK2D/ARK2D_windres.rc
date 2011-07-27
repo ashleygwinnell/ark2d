@@ -1,0 +1,7 @@
+#include "ARK2D_windres.h"
+
+ARK2D_ICON 			ICON 	"data\\icon.ico"
+
+ARK2D_FONT_PNG 	TYPE_PNG 	"data\\fonts\\default.png"
+ARK2D_FONT_FNT 	TYPE_FNT 	"data\\fonts\\default.fnt"
+ARK2D_PARTICLE 	TYPE_PNG 	"data\\particle.png"

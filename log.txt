@@ -280,7 +280,15 @@
 - Added PathGroup::rotate(float degrees, int cx, int cy);
 - Added FileUtil::getOSDirectory();
 
+00:27 28/07/2011
+- Added ARK2D_windres.rc and changed build system to support it.
+- Added GameContainerPlatform::getARK2DResource(resource, resource_type) to fetch resource from dll file (TODO: other os equivilent)
+
 TODO:
+- Add "clean" target to build system.
+- Load Image from data.
+- Load FTFont from data.
+- Load BMFont from data.
 - TextField work:
  - use mouse to select text.
  - use mouse to select cursor/caret position.

@@ -23,6 +23,8 @@ class ARK2DBuildSystem:
 		self.build_folder = "build_release";
 		self.build_artifact = self.build_folder + "\\libARK2D.dll";
 		
+		self.windresources = [];
+		
 		self.mkdirs = [];
 		self.src_files = [];
 		self.dll_files = [];
@@ -49,7 +51,7 @@ class ARK2DBuildSystem:
 			self.build_folder + "\\src\\ARK2D\\vendor\\zlib123",
 			self.build_folder + "\\build-cache" # cache folder
 		]);
-
+		
 		self.src_files.extend([
 			'src\\main.cpp',
 			'src\\ARK2D\\glew.c',
@@ -212,7 +214,11 @@ class ARK2DBuildSystem:
 		]);
 		
 		if (sys.platform == "win32"):
-			self.linkingFlags = " -mwindows -shared ";
+			self.linkingFlags = " -mwindows -shared ";		
+
+			self.src_files.extend([
+				'src\\ARK2D\\ARK2D_windres.rc'
+			]);				
 		
 		
 	def gamePreInit(self):
@@ -271,19 +277,25 @@ class ARK2DBuildSystem:
 				
 				if h_ext == 'c':
 					compileStr += "gcc";
-				else:
+				elif h_ext == 'cpp':
 					compileStr += "g++";
+				elif h_ext == 'rc':
+					compileStr += "windres ";
 					
 				if (not h in fjson or fjson[h]['date_modified'] < os.stat(h).st_mtime):
-					compileStr += " -O3 -Wall -c -fmessage-length=0 -o";
-					compileStr += self.build_folder + "\\" + newf + " " + h + " ";
+					
+					if (h_ext == 'c' or h_ext == 'cpp'):
+						compileStr += " -O3 -Wall -c -fmessage-length=0 -o";
+						compileStr += self.build_folder + "\\" + newf + " " + h + " ";
+					elif h_ext == 'rc':
+						compileStr += h + " " + self.build_folder + "\\" + newf + " ";
 				
 					fjson[h] = {"date_modified": os.stat(h).st_mtime };
 				
 					print(compileStr);
 					subprocess.call([compileStr], shell=True);	
 					fchanged = True;
-		
+						
 		
 			# update compile cache thing
 			if (fchanged == True):

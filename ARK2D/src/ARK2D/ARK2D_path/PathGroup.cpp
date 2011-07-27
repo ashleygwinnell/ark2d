@@ -213,7 +213,20 @@ void PathGroup::flip(bool hf, bool vf, int cx, int cy) {
 	if (hf) { m_isFlippedH = !m_isFlippedH; }
 	if (vf) { m_isFlippedV = !m_isFlippedV; }
 }
-//void PathGroup::setFlip(bool hf, bool vf) {}
+void PathGroup::setFlip(bool hf, bool vf) {
+	if ((m_isFlippedH && !hf) || (!m_isFlippedH && hf) ) {
+		flip(true, false);
+	}
+	if ((m_isFlippedV && !vf) || (!m_isFlippedV && vf) ) {
+		flip(false, true);
+	}
+}
+bool PathGroup::isFlippedH() {
+	return m_isFlippedH;
+}
+bool PathGroup::isFlippedV() {
+	return m_isFlippedV;
+}
 
 
 void PathGroup::rotate(float degrees) {
@@ -230,9 +243,16 @@ void PathGroup::rotate(float degrees, int cx, int cy) {
 			MathUtil::rotatePointAroundPoint(v, &gc, degrees);
 		}
 	}
+	m_rotatedAngle += degrees;
 }
-//void PathGroup::setRotation(float f) { }
+void PathGroup::setRotation(float f) {
+	rotate(m_rotatedAngle * -1);
+	rotate(f);
+}
 
+float PathGroup::getRotation() {
+	return m_rotatedAngle;
+}
 
 
 void PathGroup::render() {

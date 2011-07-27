@@ -586,7 +586,45 @@
 	}
 
 
+	void* GameContainerPlatform::getARK2DResource(int resourceId, int resourceType) {
+		// Load the DLL and default resources
+		HINSTANCE dllModule = LoadLibrary("libARK2D.dll");
+		if (dllModule == NULL) {
+			std::cout << "bad 1: " << GetLastError() << std::endl;
+		}
+
+		HRSRC resourceSrc = FindResource(dllModule, MAKEINTRESOURCE(resourceId), MAKEINTRESOURCE(resourceType));
+		if (resourceSrc == NULL) {
+			std::cout << "bad 2: " << GetLastError() << std::endl;
+		}
+		HGLOBAL resourceData = LoadResource(dllModule, resourceSrc);
+		if (resourceData == NULL) {
+			std::cout << "bad 3: " << GetLastError() << std::endl;
+		}
+		LPVOID resourcePointer = LockResource(resourceData);
+		if (resourcePointer == NULL) {
+			std::cout << "bad 4: " << GetLastError() << std::endl;
+		}
+
+		DWORD resourceSize = SizeofResource(dllModule, resourceSrc);
+		char* newPointer = (char*) malloc(resourceSize+1);
+		memcpy(newPointer, resourcePointer, resourceSize);
+		void* newPointerEnd = newPointer+(resourceSize-1);
+		newPointerEnd = '\0';
+
+		FreeResource(resourceData);
+
+		FreeLibrary(dllModule);
+
+		return newPointer;
+	}
+
 	void GameContainer::start() {
+
+		char* fff = (char*) GameContainerPlatform::getARK2DResource(ARK2D_FONT_FNT, TYPE_FNT);
+		std::cout << fff << std::endl;
+
+
 
 
 		// Display modes!

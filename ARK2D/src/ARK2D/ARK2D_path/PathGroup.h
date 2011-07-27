@@ -72,10 +72,15 @@ class PathGroup {
 
 		void flip(bool hf, bool vf);
 		void flip(bool hf, bool vf, int cx, int cy);
+		void setFlip(bool hf, bool vf);
+		bool isFlippedH();
+		bool isFlippedV();
+
 		void rotate(float degrees);
 		void rotate(float degrees, int cx, int cy);
-		//void setRotation(float f);
-		//void setFlip(bool hf, bool vf);
+		void setRotation(float f);
+		float getRotation();
+
 
 		virtual void render();
 		virtual void renderCurve();

@@ -15,6 +15,7 @@
 
 class GameContainer;
 
+	#include "ARK2D_windres.h"
 	#include "ARK2D_GL.h"
 
 	#include <windows.h>
@@ -60,6 +61,8 @@ class GameContainer;
 
 		void enableOpenGL(HWND hWnd, HDC* hDC, HGLRC* hRC);
 		void disableOpenGL(HWND hWnd, HDC hDC, HGLRC hRC);
+
+		static void* getARK2DResource(int resourceId, int resourceType);
 
 	};
 

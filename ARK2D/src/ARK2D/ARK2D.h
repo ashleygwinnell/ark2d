@@ -39,6 +39,7 @@ class ARK2D {
 		static Game* s_game;
 		static Graphics* s_graphics;
 		static Input* s_input;
+
 };
 
 #endif /* ARK2D_H_ */
