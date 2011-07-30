@@ -20,14 +20,29 @@
 #include "SpriteSheetDescriptionItem.h"
 
 #include "ARK2D_GL.h"
+#include "GameContainer.h"
 
 // Currently bound Image texture;
 unsigned int Image::s_current_texture_id = 0;
 
 GLuint Image::load(const Color& mask) {
 
-	unsigned int pos = this->filename.find_last_of('.');
-	if (this->filename.substr(pos) == ".tga") {
+	unsigned int thisDataType = 0;
+	if (m_data != NULL) {
+		thisDataType = m_resourceType;
+	} else {
+		string ext = StringUtil::getExtension(this->filename);
+		if (ext == "tga") {
+			thisDataType = ARK2D_RESOURCE_TYPE_TGA;
+		} else if (ext == "bmp") {
+			thisDataType = ARK2D_RESOURCE_TYPE_BMP;
+		} else if (ext == "png") {
+			thisDataType = ARK2D_RESOURCE_TYPE_PNG;
+		}
+	}
+
+
+	if (thisDataType == ARK2D_RESOURCE_TYPE_TGA) {
 		//std::cout << "Loading TGA!" << std::endl;
 		TargaImage* tga = loadTGA();
 		this->setWidth(tga->getWidth());
@@ -51,14 +66,14 @@ GLuint Image::load(const Color& mask) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->getWidth(), this->getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, tga->getImageData());
 
 		// don't forget to unbind the texture now.
-		glBindTexture(GL_TEXTURE_2D, NULL);
+		glBindTexture(GL_TEXTURE_2D, 0);
 
 		// Free TGA memory.
 		delete(tga);
 
 		// and finally return
 		return Object;
-	} else if (this->filename.substr(pos) == ".bmp") {
+	} else if (thisDataType == ARK2D_RESOURCE_TYPE_BMP) {
 		//std::cout << "Loading BMP!" << std::endl;
 		BMPImage* bmp = loadBMP();
 		m_Width = bmp->Width;
@@ -131,7 +146,7 @@ GLuint Image::load(const Color& mask) {
 		//}
 
 		// don't forget to unbind the texture now.
-		glBindTexture(GL_TEXTURE_2D, NULL);
+		glBindTexture(GL_TEXTURE_2D, 0);
 
 
 		// Free BMP memory.
@@ -139,7 +154,7 @@ GLuint Image::load(const Color& mask) {
 
 		// and return!
 		return Object;
-	} else if (this->filename.substr(pos) == ".png") {
+	} else if (thisDataType == ARK2D_RESOURCE_TYPE_PNG) {
 		//std::cout << "Loading PNG!" << std::endl;
 		PNGImage* png = loadPNG();
 
@@ -169,7 +184,7 @@ GLuint Image::load(const Color& mask) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, png->getWidth(), png->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
-		glBindTexture(GL_TEXTURE_2D, NULL);
+		glBindTexture(GL_TEXTURE_2D, 0);
 		texture = Object;
 
 		delete png;
@@ -223,7 +238,12 @@ TargaImage* Image::loadTGA() {
 
 PNGImage* Image::loadPNG() {
 	PNGImage* png = new PNGImage(this->filename);
-	int suc = png->load();
+	int suc = 0;
+	if (m_data == NULL) {
+		suc = png->load();
+	} else {
+		suc = png->load(m_data);
+	}
 	if (suc != 0) {
 		//std::cout << suc << std::endl;
 		string errmsg = StringUtil::append("Error loading png image: ", suc);
@@ -234,6 +254,9 @@ PNGImage* Image::loadPNG() {
 }
 
 Image::Image():
+	m_data(NULL),
+	m_resourceType(0),
+	filename(""),
 	texture_width(1),
 	texture_height(1),
 	texture_offset_x(0),
@@ -249,7 +272,50 @@ Image::Image():
 
 }
 
+Image::Image(unsigned int resource, unsigned int resourceType):
+	m_data(NULL),
+	m_resourceType(resourceType),
+	filename(""),
+	texture_width(1),
+	texture_height(1),
+	texture_offset_x(0),
+	texture_offset_y(0),
+	m_CenterX(0),
+	m_CenterY(0),
+	m_tl_corner_color(),
+	m_tr_corner_color(),
+	m_alpha(1.0f),
+	m_color(NULL),
+	m_Rotation(0)
+{
+	std::cout << "Loading Image from resource. " << std::endl;
+	m_data = GameContainerPlatform::getARK2DResource(resource, resourceType);
+	this->texture = this->load();
+}
+
+Image::Image(void* data, unsigned int resourceType):
+	m_data(data),
+	m_resourceType(resourceType),
+	filename(""),
+	texture_width(1),
+	texture_height(1),
+	texture_offset_x(0),
+	texture_offset_y(0),
+	m_CenterX(0),
+	m_CenterY(0),
+	m_tl_corner_color(),
+	m_tr_corner_color(),
+	m_alpha(1.0f),
+	m_color(NULL),
+	m_Rotation(0)
+{
+	std::cout << "Loading Image from data. " << std::endl;
+	this->texture = this->load();
+}
+
 Image::Image(const std::string& fname) :
+	m_data(NULL),
+	m_resourceType(0),
 	filename(fname),
 	texture_width(1),
 	texture_height(1),
@@ -268,6 +334,8 @@ Image::Image(const std::string& fname) :
 }
 
 Image::Image(const std::string& fname, const Color& mask) :
+	m_data(NULL),
+	m_resourceType(0),
 	filename(fname),
 	texture_width(1),
 	texture_height(1),

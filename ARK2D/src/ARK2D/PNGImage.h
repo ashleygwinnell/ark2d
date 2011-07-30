@@ -15,10 +15,18 @@
 #include <string>
 #include <iostream>
 
+class PNGImagestream {
+	public:
+		void* m_data;
+		unsigned int m_pos;
+};
+
 class PNGImage {
 	public:
 		PNGImage(const std::string filename);
 		int load();
+		int load(void* data);
+		static void readFunction(png_structp pngPtr, png_bytep data, png_size_t length);
 		int getWidth();
 		int getHeight();
 		void* getImageData();

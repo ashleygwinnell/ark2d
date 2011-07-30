@@ -54,13 +54,15 @@ struct FontVertex {
 
 class BMFont {
 	private:
+		char* m_data;
 		string m_FontFile;
 		string m_ImageFile;
 		Charset m_Charset;
-		Image m_Image;
+		Image* m_Image;
 
 	public:
 		BMFont();
+		BMFont(unsigned int fntResource, unsigned int imgResource, unsigned int imgResourceType);
 		BMFont(const string& f, const string& i);
 		BMFont(const string& f, const string& i, const Color& mask);
 		~BMFont();

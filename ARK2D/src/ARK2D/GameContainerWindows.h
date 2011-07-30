@@ -17,6 +17,7 @@ class GameContainer;
 
 	#include "ARK2D_windres.h"
 	#include "ARK2D_GL.h"
+	#include "Image.h"
 
 	#include <windows.h>
 	#include <string>

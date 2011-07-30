@@ -287,11 +287,14 @@
 02:06 30/07/2011
 - Added icons to Path Editor and Wave Editors.
 
+19:39 30/07/2011
+- Added load Image (PNG only) from data.
+- Added load BMFont from data.
+- No longer need to include fonts with DLL. :D
+
 TODO:
 - Add "clean" target to build system.
-- Load Image from data.
 - Load FTFont from data.
-- Load BMFont from data.
 - TextField work:
  - use mouse to select text.
  - use mouse to select cursor/caret position.

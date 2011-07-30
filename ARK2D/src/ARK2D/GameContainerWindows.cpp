@@ -10,6 +10,9 @@
 #include "GameContainer.h"
 #include "GigaRectangle.h"
 
+#include "ARK2D_windres.h"
+#include "Image.h"
+
 
 	LRESULT CALLBACK GameContainerPlatform::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
@@ -23,14 +26,28 @@
 					if (hLIcon) {
 						SendMessage(hWnd, WM_SETICON, ICON_BIG, (LPARAM) hLIcon);
 					} else {
-						ErrorDialog::createAndShow("Could not load large icon!");
+						HINSTANCE dllModule = LoadLibrary("libARK2D.dll");
+						if (dllModule == NULL) {
+							ErrorDialog::createAndShow("Could not load large icon!");
+						} else {
+							hLIcon = (HICON) LoadImage(dllModule, MAKEINTRESOURCE(ARK2D_ICON), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR);
+							SendMessage(hWnd, WM_SETICON, ICON_BIG, (LPARAM) hLIcon);
+						}
+						FreeLibrary(dllModule);
 					}
 
 					HICON hSIcon = (HICON) LoadImage(NULL, m_iconpath.c_str(), IMAGE_ICON, 16, 16, LR_LOADFROMFILE);
 					if (hSIcon) {
 						SendMessage(hWnd, WM_SETICON, ICON_SMALL, (LPARAM) hSIcon);
 					} else {
-						ErrorDialog::createAndShow("Could not load small icon!");
+						HINSTANCE dllModule = LoadLibrary("libARK2D.dll");
+						if (dllModule == NULL) {
+							ErrorDialog::createAndShow("Could not load small icon!");
+						} else {
+							hSIcon = (HICON) LoadImage(dllModule, MAKEINTRESOURCE(ARK2D_ICON), IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR);
+							SendMessage(hWnd, WM_SETICON, ICON_SMALL, (LPARAM) hSIcon);
+						}
+						FreeLibrary(dllModule);
 					}
 				}
 				return 0;
@@ -609,8 +626,11 @@
 		DWORD resourceSize = SizeofResource(dllModule, resourceSrc);
 		char* newPointer = (char*) malloc(resourceSize+1);
 		memcpy(newPointer, resourcePointer, resourceSize);
-		void* newPointerEnd = newPointer+(resourceSize-1);
-		newPointerEnd = '\0';
+
+		if (resourceType == ARK2D_RESOURCE_TYPE_TXT || resourceType == ARK2D_RESOURCE_TYPE_FNT) {
+			char* newPointerEnd = newPointer+(resourceSize-1);
+			newPointerEnd = '\0';
+		}
 
 		FreeResource(resourceData);
 
@@ -621,9 +641,12 @@
 
 	void GameContainer::start() {
 
-		char* fff = (char*) GameContainerPlatform::getARK2DResource(ARK2D_FONT_FNT, TYPE_FNT);
-		std::cout << fff << std::endl;
+		//char* fff = (char*) GameContainerPlatform::getARK2DResource(ARK2D_FONT_FNT, TYPE_FNT);
+		//std::cout << fff << std::endl;
 
+		//char* fff = (char*) GameContainerPlatform::getARK2DResource(ARK2D_TEST, ARK2D_RESOURCE_TYPE_TXT);
+		//string s = string(fff)+ "123";
+		//ErrorDialog::createAndShow(s);
 
 
 
@@ -781,7 +804,9 @@
 		OutputWrapper::println("done.");
 
 		// Load default Font - relies on Image so must be done after OpenGL is initted.
-		BMFont* fnt = new BMFont("data/fonts/default.fnt", "data/fonts/default.png");
+		//BMFont* fnt = new BMFont("data/fonts/default.fnt", "data/fonts/default.png");
+		//Image* fntImg = new Image((unsigned int) ARK2D_FONT_PNG, ARK2D_RESOURCE_TYPE_PNG);
+		BMFont* fnt = new BMFont(ARK2D_FONT_FNT, ARK2D_FONT_PNG, ARK2D_RESOURCE_TYPE_PNG);
 		m_graphics.m_DefaultFont = fnt;
 		m_graphics.m_Font = fnt;
 

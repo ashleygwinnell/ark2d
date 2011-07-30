@@ -10,53 +10,71 @@
 #include <fstream>
 #include "BMFont.h"
 #include "../Image.h"
+#include "../GameContainer.h"
 
 using namespace std;
 
-BMFont::BMFont() {
+BMFont::BMFont(): m_data(NULL) {
 
 }
 
+BMFont::BMFont(unsigned int fntResource, unsigned int imgResource, unsigned int imgResourceType):
+	m_data(NULL),
+	m_FontFile(""),
+	m_ImageFile("")
+{
+	std::cout << "Loading BMFont... ";
+		m_data = (char*) GameContainerPlatform::getARK2DResource(fntResource, ARK2D_RESOURCE_TYPE_FNT);
+		m_Image = new Image(imgResource, imgResourceType);
+		Parse();
+	std::cout << "done." << std::endl;
+}
+
 BMFont::BMFont(const string& f, const string& i):
+	m_data(NULL),
 	m_FontFile(f),
 	m_ImageFile(i)
 	//m_Image(i)
 {
-
-//	m_FontFile = f;
-//	m_ImageFile = i;
-//	Image* newimage = new Image(i);
-
-	m_Image = (*new Image(i));
-	Parse();
+	std::cout << "Loading BMFont... ";
+		m_Image = new Image(i);
+		Parse();
+	std::cout << "done." << std::endl;
 }
 
 BMFont::BMFont(const string& f, const string& i, const Color& mask):
+	m_data(NULL),
 	m_FontFile(f),
 	m_ImageFile(i)//,
 	//m_Image(i, mask)
 {
-	OutputWrapper::print(StringUtil::append("Loading Font: ", f));
+	OutputWrapper::print(StringUtil::append("Loading BMFont: ", f));
 
-	m_Image = (*new Image(i, mask));
+	m_Image = new Image(i, mask);
 	Parse();
 }
 
 BMFont::~BMFont() {
-
+	delete m_data;
 }
 
 Image* BMFont::getImage() const {
-	return const_cast<Image*>( &m_Image );
+	return m_Image;
 }
 
 // Yarp!
 bool BMFont::Parse() // istream& Stream, Charset& CharsetDesc
 {
 	try {
-		filebuf fb;
-		fb.open(m_FontFile.c_str(), ios::in);
-		istream Stream(&fb);
+		streambuf* fb;
+		if (m_data == NULL) {
+			fb = new filebuf;
+			((filebuf*) fb)->open(m_FontFile.c_str(), ios::in);
+		} else {
+			fb = new stringbuf;
+			((stringbuf*)fb)->str(m_data);
+		}
+		istream Stream(fb);
 
 		string Line;
 		string Read, Key, Value;
@@ -150,7 +168,11 @@ bool BMFont::Parse() // istream& Stream, Charset& CharsetDesc
 				}
 			}
 		}
-		fb.close();
+		if (m_data == NULL) {
+			((filebuf*)fb)->close();
+		} else {
+		//	((stringbuf*)fb)->close();
+		}
 
 	} catch(...) {
 		ErrorDialog::createAndShow("error loading font");
@@ -185,8 +207,8 @@ void BMFont::drawString(const string& Str, int drawx, int drawy) const {
 		OffsetX = m_Charset.Chars[(int) Str[i]].XOffset;
 		OffsetY = m_Charset.Chars[(int) Str[i]].YOffset;
 
-		Image* img = m_Image.getSubImage(CharX, CharY, Width, Height);
-		img->setAlpha(m_Image.getAlpha());
+		Image* img = m_Image->getSubImage(CharX, CharY, Width, Height);
+		img->setAlpha(m_Image->getAlpha());
 		img->draw(drawx + OffsetX, drawy + OffsetY);
 		delete img;
 		//TotalX += Width;

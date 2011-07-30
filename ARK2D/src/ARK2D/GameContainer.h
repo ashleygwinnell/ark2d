@@ -19,6 +19,7 @@
 //#include "GigaRectangle.h"
 #include "Graphics.h"
 #include "Font/BMFont.h"
+#include "Image.h"
 #include "ErrorDialog.h"
 #include "OutputWrapper.h"
 

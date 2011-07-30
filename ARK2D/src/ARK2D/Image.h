@@ -9,6 +9,8 @@
 #define IMAGE_H_
 
 #include "ARK2D_GL.h"
+#include "ARK2D_windres.h"
+
 
 #include <string>
 #include "TargaImage.h"
@@ -21,6 +23,9 @@ class Image {
 	private:
 
 		static unsigned int s_current_texture_id;
+
+		void* m_data; // only used by one constructor.
+		unsigned int m_resourceType; // ARK2D_RESOURCE_TYPE_PNG only supported.
 
 		std::string filename;
 		unsigned int m_Width;
@@ -52,6 +57,8 @@ class Image {
 
 	public:
 		Image();
+		Image(unsigned int resource, unsigned int resourceType);
+		Image(void* data, unsigned int resourceType);
 		Image(const std::string& fname);
 		Image(const std::string& fname, const Color& mask);
 		unsigned int getWidth() const;
