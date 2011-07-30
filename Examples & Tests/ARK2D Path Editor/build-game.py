@@ -9,7 +9,11 @@ if __name__ == "__main__":
 	
 	a['game_name'] = "ARK2D Path Editor";
 	a['game_dir'] = "C:\\xampp\\htdocs\\C++\\ARK2D\\Examples & Tests\\ARK2D Path Editor";
-	a['game_src_files'] = ["src\\main.cpp", "src\\DefaultGame.cpp"];
+	a['game_src_files'] = [
+		"src\\main.cpp", 
+		"src\\DefaultGame.cpp",
+		"src\\Resources.rc"
+	];
 	
 	b = json.dumps(a, separators=(',',':')).replace(" ", "_");
 	
