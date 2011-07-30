@@ -56,10 +56,10 @@ class DefaultGame : public StateBasedGame {
 		int LIVES;
 
 		DefaultGame(const char* title);
-		void initStates(GameContainer* container);
-		void update(GameContainer* container, GameTimer* timer);
-		void render(GameContainer* container, Graphics* g);
-		void resize(GameContainer* container, int width, int height);
+		virtual void initStates(GameContainer* container);
+		virtual void update(GameContainer* container, GameTimer* timer);
+		virtual void render(GameContainer* container, Graphics* g);
+		virtual void resize(GameContainer* container, int width, int height);
 		virtual ~DefaultGame();
 
 		static DefaultGame* getGame();

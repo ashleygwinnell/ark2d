@@ -33,7 +33,7 @@ void DefaultGame::update(GameContainer* container, GameTimer* timer) {
 	StateBasedGame::update(container, timer);
 
 	Input* i = ARK2D::getInput();
-	if (i->isKeyPressed(Input::KEY_NUMPAD_ADD)) {
+	if (i->isKeyPressed(Input::KEY_NUMPAD_ADD) || i->isKeyPressed(Input::KEY_RIGHT)) {
 		unsigned int newStateId = getCurrentStateID() + 1;
 		if (newStateId == StatesList::END) {
 			newStateId = 0;

@@ -13,10 +13,10 @@
 class DefaultGame : public Game {
 	public:
 		DefaultGame(const char* title);
-		void init(GameContainer* container);
-		void update(GameContainer* container, GameTimer* timer);
-		void render(GameContainer* container, Graphics* g);
-		void resize(GameContainer* container, int width, int height);
+		virtual void init(GameContainer* container);
+		virtual void update(GameContainer* container, GameTimer* timer);
+		virtual void render(GameContainer* container, Graphics* g);
+		virtual void resize(GameContainer* container, int width, int height);
 		virtual ~DefaultGame();
 };
 
