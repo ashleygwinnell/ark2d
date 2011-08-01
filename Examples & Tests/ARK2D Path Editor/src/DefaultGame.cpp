@@ -618,7 +618,12 @@ void DefaultGame::render(GameContainer* container, Graphics* g) {
 			rotate90Button->render();
 	}
 
-
+	if (gamePanel->isVisible()) {
+		string tim = "Timer: " + Cast::toString<float>(pathGroup->getTimer()) + " / " + Cast::toString<float>(pathGroup->getDuration());
+		int tx = gamePanel->getX() + 10;
+		int ty = gamePanel->getY() + 10;
+		g->drawString(tim, tx, ty);
+	}
 
 
 

@@ -44,6 +44,9 @@ void InGameState::keyPressed(unsigned int key) {
 void InGameState::keyReleased(unsigned int key) {
 
 }
+void InGameState::mouseMoved(int x, int y, int oldx, int oldy) {
+
+}
 
 InGameState::~InGameState() {
 

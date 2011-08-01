@@ -44,6 +44,9 @@ void InstructionsState::keyPressed(unsigned int key) {
 void InstructionsState::keyReleased(unsigned int key) {
 
 }
+void InstructionsState::mouseMoved(int x, int y, int oldx, int oldy) {
+
+}
 
 InstructionsState::~InstructionsState() {
 

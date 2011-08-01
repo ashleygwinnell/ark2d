@@ -44,6 +44,9 @@ void MenuState::keyPressed(unsigned int key) {
 void MenuState::keyReleased(unsigned int key) {
 
 }
+void MenuState::mouseMoved(int x, int y, int oldx, int oldy) {
+
+}
 
 MenuState::~MenuState() {
 

@@ -53,6 +53,7 @@ class StateBasedGame : public Game {
 		GameContainer* getContainer();
 
 		bool isTransitioning();
+		bool isInitialised();
 
 		virtual void initStates(GameContainer* container) = 0;
 		virtual void resize(GameContainer* container, int width, int height) = 0;
@@ -73,6 +74,8 @@ class StateBasedGame : public Game {
 
 		Transition* m_enterTransition;
 		Transition* m_leaveTransition;
+
+		bool m_initialised;
 
 	protected:
 		bool isDuringTransition();

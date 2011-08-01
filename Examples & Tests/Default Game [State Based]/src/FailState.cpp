@@ -44,6 +44,9 @@ void FailState::keyPressed(unsigned int key) {
 void FailState::keyReleased(unsigned int key) {
 
 }
+void FailState::mouseMoved(int x, int y, int oldx, int oldy) {
+
+}
 
 FailState::~FailState() {
 

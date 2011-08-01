@@ -12,7 +12,16 @@
 #include "Transition.h"
 #include "EmptyTransition.h"
 
-StateBasedGame::StateBasedGame(const char* title): Game(title), m_loading_state(NULL) {
+StateBasedGame::StateBasedGame(const char* title):
+	Game(title),
+	m_states(),
+	m_from_state(NULL),
+	m_current_state(NULL),
+	m_container(NULL),
+	m_loading_state(NULL),
+	m_enterTransition(NULL),
+	m_leaveTransition(NULL),
+	m_initialised(false) {
 
 }
 
@@ -79,6 +88,8 @@ void StateBasedGame::init(GameContainer* container) {
 	for (unsigned int i = 0; i < m_states.size(); i++) {
 		m_states.at(i)->init(container, this);
 	}
+
+	m_initialised = true;
 }
 
 void StateBasedGame::preUpdate(GameContainer* container, GameTimer* timer) {
@@ -163,6 +174,9 @@ void StateBasedGame::render(GameContainer* container, Graphics* g) {
 
 bool StateBasedGame::isTransitioning() {
 	return (m_enterTransition != NULL || m_leaveTransition != NULL);
+}
+bool StateBasedGame::isInitialised() {
+	return m_initialised;
 }
 
 GameContainer* StateBasedGame::getContainer() {

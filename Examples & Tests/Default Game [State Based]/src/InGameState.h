@@ -24,6 +24,7 @@ class InGameState : public GameState {
 
 		virtual void keyPressed(unsigned int key);
 		virtual void keyReleased(unsigned int key);
+		virtual void mouseMoved(int x, int y, int oldx, int oldy);
 
 		~InGameState();
 };

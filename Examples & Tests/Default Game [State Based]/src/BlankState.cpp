@@ -44,6 +44,9 @@ void BlankState::keyPressed(unsigned int key) {
 void BlankState::keyReleased(unsigned int key) {
 
 }
+void BlankState::mouseMoved(int x, int y, int oldx, int oldy) {
+
+}
 
 BlankState::~BlankState() {
 

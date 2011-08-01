@@ -44,6 +44,9 @@ void WinState::keyPressed(unsigned int key) {
 void WinState::keyReleased(unsigned int key) {
 
 }
+void WinState::mouseMoved(int x, int y, int oldx, int oldy) {
+
+}
 
 WinState::~WinState() {
 

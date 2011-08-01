@@ -292,6 +292,13 @@
 - Added load BMFont from data.
 - No longer need to include fonts with DLL. :D
 
+19:03 31/07/2011
+- Added basics of level editor in to wave editor.
+
+22:59 01/08/2011
+- More work on level editor.
+- Fix bug where StateBasedGame would not work if enterState() was not explicitly called in initStates().
+
 TODO:
 - Add "clean" target to build system.
 - Load FTFont from data.
