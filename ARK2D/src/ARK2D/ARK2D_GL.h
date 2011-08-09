@@ -5,6 +5,8 @@
  *      Author: ashley
  */
 
+#include "ARK2D.h"
+
 #if defined(ARK2D_WINDOWS) || defined(_WIN32)
 	#include <GL/GLew.h>
 	#include <GL/GL.h>
@@ -29,9 +31,16 @@
 	//#include <GL/freeglut_ext.h>
 #endif
 
-#if ( (defined(__MACH__)) && (defined(__APPLE__)) )
+#if defined(ARK2D_MACINTOSH)
 	#include <stdlib.h>
+	#include <OpenGL/OpenGL.h>
 	#include <OpenGL/gl.h>
+	//#include <OpenGL/gl3.h>
+	//#include <OpenGL/gl3ext.h>
+	//#include <OpenGL/gluMacro.h>
+	#include <OpenGL/gltypes.h>
+	#include <OpenGL/glu.h>
+	//#include <OpenGL/CGLContext.h>
 	// #include <GLUT/glut.h>
 	#include <OpenGL/glext.h>
 #endif
@@ -40,7 +49,7 @@
 #define ARK2D_GL_H_
 
 typedef unsigned int GLuint;
-//typedef int GLenum;
+typedef unsigned int GLenum;
 typedef void GLvoid;
 
 #endif /* ARK2D_GL_H_ */

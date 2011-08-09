@@ -10,46 +10,6 @@
 
 #include <iostream>
 
-#if defined(__linux__) || defined (ARK2D_UBUNTU_LINUX)
-typedef char 			ARK2D_BYTE;
-typedef unsigned short  ARK2D_WORD;
-typedef unsigned int    ARK2D_DWORD;
-typedef unsigned long   ARK2D_LONG;
-
-struct ARK2D_BITMAPFILEHEADER {
-	ARK2D_WORD bfType;
-	ARK2D_DWORD bfSize;
-	ARK2D_WORD bfReserved1;
-	ARK2D_WORD bfReserved2;
-	ARK2D_DWORD bfOffBits;
-};
-
-struct ARK2D_BITMAPINFOHEADER {
-	ARK2D_DWORD biSize;
-	ARK2D_LONG  biWidth;
-	ARK2D_LONG  biHeight;
-	ARK2D_WORD  biPlanes;
-	ARK2D_WORD  biBitCount;
-	ARK2D_DWORD biCompression;
-	ARK2D_DWORD biSizeImage;
-	ARK2D_LONG  biXPelsPerMeter;
-	ARK2D_LONG  biYPelsPerMeter;
-	ARK2D_DWORD biClrUsed;
-	ARK2D_DWORD biClrImportant;
-};
-struct ARK2D_RGBQUAD {
-	ARK2D_BYTE rgbBlue;
-	ARK2D_BYTE rgbGreen;
-	ARK2D_BYTE rgbRed;
-	ARK2D_BYTE rgbReserved;
-};
-struct ARK2D_BITMAPINFO {
-	ARK2D_BITMAPINFOHEADER bmiHeader;
-	ARK2D_RGBQUAD          bmiColors[1];
-};
-
-#endif
-
 #if defined(_WIN32) || defined(ARK2D_WINDOWS)
 	#include <windows.h>
 
@@ -57,6 +17,43 @@ struct ARK2D_BITMAPINFO {
 	typedef BITMAPINFOHEADER ARK2D_BITMAPINFOHEADER;
 	typedef RGBQUAD ARK2D_RGBQUAD;
 	typedef BITMAPINFO ARK2D_BITMAPINFO;
+#else
+	typedef char 			ARK2D_BYTE;
+	typedef unsigned short  ARK2D_WORD;
+	typedef unsigned int    ARK2D_DWORD;
+	typedef unsigned long   ARK2D_LONG;
+
+	struct ARK2D_BITMAPFILEHEADER {
+		ARK2D_WORD bfType;
+		ARK2D_DWORD bfSize;
+		ARK2D_WORD bfReserved1;
+		ARK2D_WORD bfReserved2;
+		ARK2D_DWORD bfOffBits;
+	};
+
+	struct ARK2D_BITMAPINFOHEADER {
+		ARK2D_DWORD biSize;
+		ARK2D_LONG  biWidth;
+		ARK2D_LONG  biHeight;
+		ARK2D_WORD  biPlanes;
+		ARK2D_WORD  biBitCount;
+		ARK2D_DWORD biCompression;
+		ARK2D_DWORD biSizeImage;
+		ARK2D_LONG  biXPelsPerMeter;
+		ARK2D_LONG  biYPelsPerMeter;
+		ARK2D_DWORD biClrUsed;
+		ARK2D_DWORD biClrImportant;
+	};
+	struct ARK2D_RGBQUAD {
+		ARK2D_BYTE rgbBlue;
+		ARK2D_BYTE rgbGreen;
+		ARK2D_BYTE rgbRed;
+		ARK2D_BYTE rgbReserved;
+	};
+	struct ARK2D_BITMAPINFO {
+		ARK2D_BITMAPINFOHEADER bmiHeader;
+		ARK2D_RGBQUAD          bmiColors[1];
+	};
 #endif
 
 

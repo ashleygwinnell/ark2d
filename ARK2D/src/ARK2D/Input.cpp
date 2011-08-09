@@ -238,6 +238,8 @@ const string Input::getKeyChar(unsigned int key) {
 		return returnString;
 
 	#endif
+
+	return "";
 }
 bool Input::isKeyAlphanumeric(unsigned int key) {
 	return (key >= 48 && key <= 90);
@@ -262,6 +264,7 @@ int Input::getGlobalMouseX() {
 	#elif defined(ARK2D_UBUNTU_LINUX) || defined(__linux__)
 		return 0;
 	#endif
+	return 0;
 }
 int Input::getGlobalMouseY() {
 	#if defined(ARK2D_WINDOWS) || defined(_WIN32)
@@ -271,6 +274,7 @@ int Input::getGlobalMouseY() {
 	#elif defined(ARK2D_UBUNTU_LINUX) || defined(__linux__)
 		return 0;
 	#endif
+	return 0;
 }
 
 int Input::getMouseX() const {
@@ -279,6 +283,7 @@ int Input::getMouseX() const {
 	#elif defined(ARK2D_UBUNTU_LINUX) || defined(__linux__)
 		return 0;
 	#endif
+	return 0;
 }
 int Input::getMouseY() const {
 	#if defined(ARK2D_WINDOWS) || defined(_WIN32)
@@ -286,6 +291,7 @@ int Input::getMouseY() const {
 	#elif defined(ARK2D_UBUNTU_LINUX) || defined(__linux__)
 		return 0;
 	#endif
+	return 0;
 }
 void Input::setGameContainer(const GameContainer* c) {
 	m_container = c;

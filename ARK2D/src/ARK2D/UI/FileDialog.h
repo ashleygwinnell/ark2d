@@ -8,16 +8,18 @@
 #ifndef FILEDIALOG_H_
 #define FILEDIALOG_H_
 
-#include "../ARK2d.h"
+#include "../ARK2D.h"
 #include <string>
 using namespace std;
 
 class FileDialogPlatformData {
 	public:
-		#ifdef __WIN32
+		#ifdef ARK2D_WINDOWS
 			OPENFILENAME opf;
 			string title;
 			char buffer[256];
+		#elif defined(ARK2D_MACINTOSH)
+
 		#endif
 };
 
@@ -25,26 +27,30 @@ class FileDialog {
 	private:
 		static void init(FileDialogPlatformData* fdpd)
 		{
-			fdpd->opf.hwndOwner = 0;
-			fdpd->opf.lpstrFilter = "All files\0*.*\0\0";
-			fdpd->opf.lpstrCustomFilter = 0;
-			fdpd->opf.nMaxCustFilter = 0L;
-			fdpd->opf.nFilterIndex = 1L;
-			fdpd->opf.lpstrFile = (LPSTR) &fdpd->buffer[0];
-			fdpd->opf.lpstrFile[0] = '\0';
-			fdpd->opf.nMaxFile = 256;
-			fdpd->opf.lpstrFileTitle = 0;
-			fdpd->opf.nMaxFileTitle=50;
-			fdpd->opf.lpstrInitialDir = 0;
-			//fdpd->opf.lpstrInitialDir = path;
-			fdpd->opf.lpstrTitle = fdpd->title.c_str();
-			fdpd->opf.nFileOffset = 0;
-			fdpd->opf.nFileExtension = 2;
-			fdpd->opf.lpstrDefExt = "*.*";
-			fdpd->opf.lpfnHook = NULL;
-			fdpd->opf.lCustData = 0;
-			fdpd->opf.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT;
-			fdpd->opf.lStructSize = sizeof(OPENFILENAME);
+			#ifdef ARK2D_WINDOWS
+				fdpd->opf.hwndOwner = 0;
+				fdpd->opf.lpstrFilter = "All files\0*.*\0\0";
+				fdpd->opf.lpstrCustomFilter = 0;
+				fdpd->opf.nMaxCustFilter = 0L;
+				fdpd->opf.nFilterIndex = 1L;
+				fdpd->opf.lpstrFile = (LPSTR) &fdpd->buffer[0];
+				fdpd->opf.lpstrFile[0] = '\0';
+				fdpd->opf.nMaxFile = 256;
+				fdpd->opf.lpstrFileTitle = 0;
+				fdpd->opf.nMaxFileTitle=50;
+				fdpd->opf.lpstrInitialDir = 0;
+				//fdpd->opf.lpstrInitialDir = path;
+				fdpd->opf.lpstrTitle = fdpd->title.c_str();
+				fdpd->opf.nFileOffset = 0;
+				fdpd->opf.nFileExtension = 2;
+				fdpd->opf.lpstrDefExt = "*.*";
+				fdpd->opf.lpfnHook = NULL;
+				fdpd->opf.lCustData = 0;
+				fdpd->opf.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT;
+				fdpd->opf.lStructSize = sizeof(OPENFILENAME);
+			#elif defined(ARK2D_MACINTOSH)
+
+			#endif
 		}
 
 	public:
@@ -63,6 +69,7 @@ class FileDialog {
 				}
 				return returnString;
 			#endif
+			return "";
 		}
 
 		static string saveFileDialog() {
@@ -80,6 +87,7 @@ class FileDialog {
 				}
 				return returnString;
 			#endif
+			return "";
 		}
 };
 

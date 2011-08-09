@@ -8,14 +8,24 @@
 #ifndef FTFONT_H_
 #define FTFONT_H_
 
-// FreeType Headers
-#include <ft2build.h>
-#include <freetype/freetype.h>
-#include <freetype/ftglyph.h>
-#include <freetype/ftoutln.h>
-#include <freetype/fttrigon.h>
-
 #include "../ARK2D.h"
+
+// FreeType Headers
+#ifdef ARK2D_WINDOWS
+	#include <ft2build.h>
+	#include <freetype/freetype.h>
+	#include <freetype/ftglyph.h>
+	#include <freetype/ftoutln.h>
+	#include <freetype/fttrigon.h>
+#elif defined (ARK2D_MACINTOSH)
+	//#include <X11/freetype2/freetype/freetype.h>
+	#include <ft2build.h>
+	#include <freetype/freetype.h>
+	#include <freetype/ftglyph.h>
+	#include <freetype/ftoutln.h>
+	#include <freetype/fttrigon.h>
+#endif
+
 #include "../ARK2D_GL.h"
 #include "../ErrorDialog.h"
 

@@ -11,7 +11,9 @@
 #include <iostream>
 #include <stdlib.h>
 
-#include <windows.h>
+#if defined(ARK2D_WINDOWS)
+	#include <windows.h>
+#endif
 
 #include "ARKThread.h"
 
@@ -24,7 +26,9 @@ class ARKMutex {
 		virtual ~ARKMutex();
 
 	private:
-		HANDLE m_handle;
+		#if defined(ARK2D_WINDOWS)
+			HANDLE m_handle;
+		#endif
 		ARKThread* m_threadHoldingLock; // null if master thread.
 };
 

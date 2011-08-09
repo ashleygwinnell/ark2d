@@ -17,6 +17,10 @@
 	#define ARK2D_UBUNTU_LINUX
 #endif
 
+#if ( (defined(__MACH__)) || (defined(__APPLE__)) )
+	#define ARK2D_MACINTOSH
+#endif
+
 class GameContainer;
 //#include "GameContainer.h"
 class Game;

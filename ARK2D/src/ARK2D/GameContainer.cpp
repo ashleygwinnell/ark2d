@@ -17,6 +17,10 @@
 	#include "GameContainerLinux.h"
 #endif
 
+#if defined(ARK2D_MACINTOSH)
+	#include "GameContainerMac.h"
+#endif
+
 bool GameContainer::isVerbose() {
 	return m_verbose;
 }
@@ -71,8 +75,10 @@ void GameContainer::disable2D() {
 }
 
 void GameContainer::enableOpenAL() {
-	alutInit(0, NULL);
-	alGetError();
+	#ifdef ARK2D_WINDOWS
+		alutInit(0, NULL);
+		alGetError();
+	#endif
 }
 void GameContainer::disableOpenAL() {
 

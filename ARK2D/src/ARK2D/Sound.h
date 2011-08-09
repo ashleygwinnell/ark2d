@@ -18,10 +18,10 @@
 #include <iostream>
 #include <vector>
 
-#include "Sound.h"
 #include "ErrorDialog.h"
 #include "SoundStore.h"
 
+#include "ARK2D.h"
 #include "ARK2D_AL.h"
 
 class Sound {

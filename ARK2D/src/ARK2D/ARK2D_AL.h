@@ -12,20 +12,29 @@
 	#include <AL/ALut.h>
 #endif
 
-//#ifdef ARK2D_UBUNTU_LINUX
+#ifdef ARK2D_UBUNTU_LINUX
 	#include <AL/al.h>
 	#include <AL/alc.h>
 	#include <AL/alext.h>
 	#include <AL/alut.h>
 	//#include <AL/efx.h>
-//#endif
+#endif
+
+#ifdef ARK2D_MACINTOSH
+	#include <OpenAL/al.h>
+	#include <OpenAL/alc.h>
+	#include <OpenAL/MacOSX_OALExtensions.h>
+
+	//typedef unsigned int ALuint;
+	//typedef float ALfloat;
+	//typedef bool ALboolean;
+	//typedef int ALenum; //unsigned?
+	//typedef int ALsidei; //unsigned?
+
+#endif
 
 #ifndef ARK2D_AL_H_
 #define ARK2D_AL_H_
-
-//typedef unsigned int ALuint;
-//typedef float ALfloat;
-//typedef bool ALboolean;
 
 #include "vendor/vorbis/vorbisfile.h"
 

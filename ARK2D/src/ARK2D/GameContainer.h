@@ -41,6 +41,10 @@ class GigaRectangle;
 	#include "GameContainerLinux.h"
 #endif
 
+#ifdef ARK2D_MACINTOSH
+	#include "GameContainerMac.h"
+#endif
+
 using namespace std;
 
 class GameContainer {

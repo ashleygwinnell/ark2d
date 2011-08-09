@@ -10,7 +10,9 @@
 
 #include "Event.h"
 
-#include <windows.h>
+#if defined (ARK2D_WINDOWS)
+	#include <windows.h>
+#endif
 
 class ARKThread {
 	public:
@@ -24,16 +26,23 @@ class ARKThread {
 		void setPriority(int i);
 		virtual ~ARKThread();
 
-	private:
-		void* m_functionPointer;
+	#if defined (ARK2D_WINDOWS)
+		private:
+			void* m_functionPointer;
 
-		// win32
-		DWORD m_id;
-		HANDLE m_handle;
+			// win32
+			DWORD m_id;
+			HANDLE m_handle;
 
-	public:
-		HDC m_deviceContext;
-		HGLRC m_renderingContext;
+		public:
+			HDC m_deviceContext;
+			HGLRC m_renderingContext;
+	#else
+
+		private:
+			void* m_functionPointer;
+
+	#endif
 };
 
 

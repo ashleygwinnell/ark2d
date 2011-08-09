@@ -15,11 +15,12 @@
 #endif
 
 GameTimer::GameTimer():
+	m_FrameCount( 0 ),
 	m_CurrentTicks( 0 ),
 	m_LastTicks( 0 ),
+	m_FrameTimes(),
 	m_TimeDelta( 0.0f ),
 	m_FrameRate( 0 ),
-	m_FrameCount( 0 ),
 	m_FrameSecondsElapsed( 0.0f ) {
 
 }

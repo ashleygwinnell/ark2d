@@ -58,7 +58,7 @@ bool Sound::load(bool loop) {
 	ALenum bufferGenError = alGetError();
 	if (bufferGenError != AL_NO_ERROR) {
 		ErrorDialog::createAndShow("Error creating OpenAL Buffers.");
-		return alutGetErrorString(bufferGenError);
+		return false; //alutGetErrorString(bufferGenError);
 	}
 
 	// Load Sound contents!
@@ -76,7 +76,7 @@ bool Sound::load(bool loop) {
 	ALenum sourceGenError = alGetError();
 	if (sourceGenError != AL_NO_ERROR) {
 		ErrorDialog::createAndShow("Error creating OpenAL Sources.");
-		return alutGetErrorString(sourceGenError);
+		return false; //alutGetErrorString(sourceGenError);
 	}
 
 	// Source Location details
@@ -91,7 +91,7 @@ bool Sound::load(bool loop) {
 	ALenum s = alGetError();
 	if (s != AL_NO_ERROR) {
 		ErrorDialog::createAndShow("Miscellaneous error in load() OpenAL.");
-		return alutGetErrorString(s);
+		return false; //alutGetErrorString(s);
 	}
 	return true;
 }
@@ -155,45 +155,48 @@ bool Sound::loadOGG(bool loop) {
 	return true;
 }
 bool Sound::loadWAV(bool loop) {
-	// Variables to load into.
-	ALenum format;
-	ALvoid* data;
-	ALsizei size;
-	ALsizei freq;
-	ALboolean al_loop = (ALboolean) loop;
+	#if ( defined(ARK2D_WINDOWS) || defined(ARK2D_UBUNTU_LINUX) )
+		// Variables to load into.
+		ALenum format;
+		ALvoid* data;
+		ALsizei size;
+		ALsizei freq;
+		ALboolean al_loop = (ALboolean) loop;
 
-	// Load the wav into memory from disk.
-	#ifdef _WIN32
-		ALbyte* name = const_cast<char*>(m_FileName.c_str());
-		alutLoadWAVFile(name, &format, &data, &size, &freq, &al_loop);
+		// Load the wav into memory from disk.
+		#ifdef _WIN32
+			ALbyte* name = const_cast<char*>(m_FileName.c_str());
+			alutLoadWAVFile(name, &format, &data, &size, &freq, &al_loop);
+		#endif
+		#ifdef __linux__
+			ALbyte* name = (ALbyte*) m_FileName.c_str();
+			alutLoadWAVFile(name, &format, &data, &size, &freq, &al_loop);
+		#endif
+		ALenum loadwaverr = alGetError();
+		if (loadwaverr != AL_NO_ERROR) {
+			ErrorDialog::createAndShow("Error loading wav file from disk.");
+			return false;//alutGetErrorString(loadwaverr);
+		}
+
+		// Load the wav into the buffer
+		alBufferData(Buffer, format, data, size, freq);
+		ALenum bufferwaverr = alGetError();
+		if (bufferwaverr != AL_NO_ERROR) {
+			ErrorDialog::createAndShow("Error copying wav file into buffer.");
+			return false;//alutGetErrorString(bufferwaverr);
+		}
+
+		// Remove the wav from memory.
+		alutUnloadWAV(format, data, size, freq);
+		ALenum remove_wav_err = alGetError();
+		if (remove_wav_err != AL_NO_ERROR) {
+			ErrorDialog::createAndShow("Error removing wav file from memory.");
+			return false;//alutGetErrorString(remove_wav_err);
+		}
+
+		return true;
 	#endif
-	#ifdef __linux__
-		ALbyte* name = (ALbyte*) m_FileName.c_str();
-		alutLoadWAVFile(name, &format, &data, &size, &freq, &al_loop);
-	#endif
-	ALenum loadwaverr = alGetError();
-	if (loadwaverr != AL_NO_ERROR) {
-		ErrorDialog::createAndShow("Error loading wav file from disk.");
-		return alutGetErrorString(loadwaverr);
-	}
-
-	// Load the wav into the buffer
-	alBufferData(Buffer, format, data, size, freq);
-	ALenum bufferwaverr = alGetError();
-	if (bufferwaverr != AL_NO_ERROR) {
-		ErrorDialog::createAndShow("Error copying wav file into buffer.");
-		return alutGetErrorString(bufferwaverr);
-	}
-
-	// Remove the wav from memory.
-	alutUnloadWAV(format, data, size, freq);
-	ALenum remove_wav_err = alGetError();
-	if (remove_wav_err != AL_NO_ERROR) {
-		ErrorDialog::createAndShow("Error removing wav file from memory.");
-		return alutGetErrorString(remove_wav_err);
-	}
-
-	return true;
+	return false;
 }
 
 void Sound::play() {
