@@ -54,6 +54,16 @@ unsigned int GameContainer::getHeight() const {
 	return m_height;
 }
 
+void GameContainer::setTitle(const std::string title) {
+	this->m_strTitle = title;
+	#if (defined(ARK2D_WINDOWS) || defined(_WIN32))
+		SetWindowTextA(m_platformSpecific.m_hWindow, title.c_str());
+	#elif (defined(ARK2D_MACINTOSH) || defined(__APPLE__))
+
+	#elif (defined(ARK2D_UBUNTU_LINUX))
+
+	#endif
+}
 
 void GameContainer::enable2D() {
 	glMatrixMode(GL_PROJECTION) ;
@@ -105,6 +115,16 @@ void GameContainer::setClearColor(const Color& color) {
 
 GameTimer* GameContainer::getTimer() {
 	return &m_timer;
+}
+
+void GameContainer::setResizable(bool b){
+	m_resizable = b;
+}
+bool GameContainer::isResizable() {
+	return m_resizable;
+}
+void GameContainer::setScaleToWindow(bool b) {
+	m_scaleToWindow = b;
 }
 
 GameContainer::~GameContainer() {

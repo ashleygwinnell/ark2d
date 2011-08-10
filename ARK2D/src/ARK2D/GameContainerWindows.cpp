@@ -175,12 +175,7 @@
 			m_platformSpecific.m_screenResolutionRect.bottom = (long) fsy;   	// Set Bottom Value To Requested Height
 		}
 
-		void GameContainer::setTitle(const std::string title) {
-			this->m_strTitle = title;
-			#ifdef _WIN32
-				SetWindowTextA(m_platformSpecific.m_hWindow, title.c_str());
-			#endif
-		}
+
 
 		GameContainerDisplayMode* GameContainerPlatform::findDisplayMode(unsigned int w, unsigned int h, unsigned int bpp) {
 			for(unsigned int i = 0; i < m_availableDisplayModes.size(); i++) {
@@ -985,15 +980,7 @@
 			SwapBuffers(m_platformSpecific.m_hDeviceContext);
 		}
 
-		void GameContainer::setResizable(bool b){
-			m_resizable = b;
-		}
-		bool GameContainer::isResizable() {
-			return m_resizable;
-		}
-		void GameContainer::setScaleToWindow(bool b) {
-			m_scaleToWindow = b;
-		}
+
 
 		// Disable OpenGL
 		void GameContainerPlatform::disableOpenGL(HWND hWnd, HDC hDC, HGLRC hRC)

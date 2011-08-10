@@ -10,6 +10,8 @@
 
 int main(int argc, char** argv) {
 
+	std::cout << "woo" << std::endl;
+
 	DefaultGame game("ARK2D State Based Game");
 	GameContainer container(game, 640, 480, 32, false);
 	container.setClearColor(Color::darker_grey);
