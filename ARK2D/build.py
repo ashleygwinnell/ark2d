@@ -496,7 +496,7 @@ class ARK2DBuildSystem:
 				infoplistcontents += "		<key>CFBundleIdentifier</key>" + cr;
 				infoplistcontents += "		<string>com.ark2d." + self.game_short_name + "</string>" + cr;
 				infoplistcontents += "		<key>CFBundleIconFile</key>" + cr;
-				infoplistcontents += "		<string>" + self.game_short_name + "</string>" + cr;
+				infoplistcontents += "		<string>" + self.game_name + "</string>" + cr;
 				infoplistcontents += "	</dict>" + cr;
 				infoplistcontents += "</plist>" + cr;
 				

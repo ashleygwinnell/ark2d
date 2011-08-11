@@ -299,6 +299,10 @@
 - More work on level editor.
 - Fix bug where StateBasedGame would not work if enterState() was not explicitly called in initStates().
 
+22:34 11/08/201
+- Big updates to Mac OS X (.app) build.
+- Can now compile and run the Default Game (State Based) on Mac OS X. Huzzah!
+
 TODO:
 - Add "clean" target to build system.
 - Load FTFont from data.
