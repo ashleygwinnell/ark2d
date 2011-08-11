@@ -15,10 +15,28 @@
 		#include <string>
 		using namespace std;
 
+		#import <objc/Object.h>
+		#import <Cocoa/Cocoa.h>
+		#import <OpenGL/CGLRenderers.h>
+		#import <AppKit/AppKit.h>
+
 		class GameContainerPlatform {
 			public:
 				static void* getARK2DResource(int resourceId, int resourceType);
+
+				NSWindow* m_window;
 		};
+
+
+		@interface GameContainerPlatformListener
+		{
+
+		}
+		- (void)doFunction;
+		@end
+
+
+
 
 	#endif
 

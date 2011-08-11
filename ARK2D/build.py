@@ -40,6 +40,7 @@ class ARK2DBuildSystem:
 			self.mingw_link = "-L" + self.mingw_dir + self.ds + "lib"
 			self.gccCompiler = "gcc";
 			self.gppCompiler = "g++";
+			self.objcCompiler = "g++";
 			self.build_artifact = self.build_folder + self.ds + self.arch + self.ds + "libARK2D.dll";
 			
 		elif(sys.platform == "darwin"):
@@ -48,6 +49,7 @@ class ARK2DBuildSystem:
 			self.mingw_link = ""; #-L" + self.mingw_dir + self.ds + "lib"
 			self.gccCompiler = "i686-apple-darwin11-llvm-gcc-4.2";
 			self.gppCompiler = "i686-apple-darwin11-llvm-g++-4.2";
+			self.objcCompiler = "i686-apple-darwin11-llvm-g++-4.2";
 			#self.gccCompiler = "llvm-gcc-4.2";
 			#self.gppCompiler = "llvm-g++-4.2";
 			#self.gccCompiler = "gcc";
@@ -110,8 +112,7 @@ class ARK2DBuildSystem:
 			'src' + self.ds + 'ARK2D' + self.ds + 'Game.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'GameContainer.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'GameContainerLinux.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'GameContainerWindows.cpp', 
-			'src' + self.ds + 'ARK2D' + self.ds + 'GameContainerMac.cpp',
+			'src' + self.ds + 'ARK2D' + self.ds + 'GameContainerWindows.cpp',  
 			'src' + self.ds + 'ARK2D' + self.ds + 'Gamepad.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'GameTimer.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'GigaRectangle.cpp',
@@ -267,6 +268,7 @@ class ARK2DBuildSystem:
 			
 			self.src_files.extend([
 				#'src' + self.ds + 'ARK2D' + self.ds + 'src-AL' + self.ds + 'glew.c',
+				'src' + self.ds + 'ARK2D' + self.ds + 'GameContainerMac.mm' #may not have objc compiler on win32
 			]);
 			
 			self.dll_files.extend([
@@ -367,16 +369,20 @@ class ARK2DBuildSystem:
 				compileStr += self.gccCompiler;
 			elif h_ext == 'cpp':
 				compileStr += self.gppCompiler;
+			elif h_ext == 'mm':
+				compileStr += self.objcCompiler;
 			elif h_ext == 'rc':
 				compileStr += "windres ";
 				
 			if (not h in fjson or fjson[h]['date_modified'] < os.stat(h).st_mtime):
 				
-				if (h_ext == 'c' or h_ext == 'cpp'):
+				if (h_ext == 'c' or h_ext == 'cpp' or h_ext == 'mm'):
 					compileStr += " -O3 -Wall -c -fmessage-length=0 ";
 					if (sys.platform == "darwin"): #compiling on mac
 						compileStr += "-I /usr/X11/include "; 
-						compileStr += " -march=i386 ";
+						if not "vendor" in newf:
+							compileStr += " -x objective-c++ ";
+						# compileStr += " -march=i386 ";
 						#-march=i386 "; # i386
 						#-arch i386
 					compileStr += " -o";
@@ -430,7 +436,8 @@ class ARK2DBuildSystem:
 			
 			if (self.building_library):
 				linkingStr = "";
-				linkingStr += self.gppCompiler + " -framework OpenGL -framework OpenAL -install_name @executable_path/../Frameworks/libARK2D.dylib" + self.linkingFlags + " -march=i386 -dynamiclib -o " + self.build_artifact;
+				linkingStr += self.gppCompiler + " -framework OpenGL -framework OpenAL -framework Foundation -framework Cocoa -lobjc -install_name @executable_path/../Frameworks/libARK2D.dylib " + self.linkingFlags + "  -dynamiclib -o " + self.build_artifact;
+				#linkingStr += " -march=i386 ";
 			
 				for h in self.src_files:
 					findex = h.rfind('.');
