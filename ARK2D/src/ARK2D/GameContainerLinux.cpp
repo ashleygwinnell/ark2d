@@ -102,4 +102,8 @@
 
 	}
 
+	void GameContainerPlatform::setTitle(std::string title) {
+
+	}
+
 #endif

@@ -36,15 +36,17 @@ class ARK2DBuildSystem:
 		
 		if (sys.platform == "win32"):
 			self.ds = "\\";
+			self.platform = "win32";
 			self.mingw_dir = "C:\\MinGW";
 			self.mingw_link = "-L" + self.mingw_dir + self.ds + "lib"
 			self.gccCompiler = "gcc";
 			self.gppCompiler = "g++";
 			self.objcCompiler = "g++";
-			self.build_artifact = self.build_folder + self.ds + self.arch + self.ds + "libARK2D.dll";
+			self.build_artifact = self.build_folder + self.ds + self.platform + self.ds + "libARK2D.dll";
 			
 		elif(sys.platform == "darwin"):
 			self.ds = "/";
+			self.platform = "macosx";
 			self.mingw_dir = ""; #/usr";
 			self.mingw_link = ""; #-L" + self.mingw_dir + self.ds + "lib"
 			self.gccCompiler = "i686-apple-darwin11-llvm-gcc-4.2";
@@ -54,7 +56,7 @@ class ARK2DBuildSystem:
 			#self.gppCompiler = "llvm-g++-4.2";
 			#self.gccCompiler = "gcc";
 			#self.gppCompiler = "g++";
-			self.build_artifact = self.build_folder + self.ds + self.arch + self.ds + "libARK2D.dylib";
+			self.build_artifact = self.build_folder + self.ds + self.platform + self.ds + "libARK2D.dylib";
 		
 		self.windresources = [];
 		
@@ -71,25 +73,24 @@ class ARK2DBuildSystem:
 	
 		self.mkdirs.extend([
 			self.build_folder,
-			self.build_folder + self.ds + "build-cache", # cache folder
-			self.build_folder + self.ds + self.arch,
-			self.build_folder + self.ds + self.arch + self.ds + "src",
-			self.build_folder + self.ds + self.arch + self.ds + "src" + self.ds + "ARK2D", 
-			self.build_folder + self.ds + self.arch + self.ds + "src" + self.ds + "ARK2D" + self.ds + "ARK2D_Path",
-			self.build_folder + self.ds + self.arch + self.ds + "src" + self.ds + "ARK2D" + self.ds + "ARK2D_State",
-			self.build_folder + self.ds + self.arch + self.ds + "src" + self.ds + "ARK2D" + self.ds + "ARK2D_Util",
-			self.build_folder + self.ds + self.arch + self.ds + "src" + self.ds + "ARK2D" + self.ds + "particles",
-			self.build_folder + self.ds + self.arch + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Font",
-			self.build_folder + self.ds + self.arch + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Tiled",
-			self.build_folder + self.ds + self.arch + self.ds + "src" + self.ds + "ARK2D" + self.ds + "UI",
-			self.build_folder + self.ds + self.arch + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor",
-			self.build_folder + self.ds + self.arch + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "libJSON",
-			self.build_folder + self.ds + self.arch + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "libJSON",
-			self.build_folder + self.ds + self.arch + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "lpng151",
-			self.build_folder + self.ds + self.arch + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "ogg",
-			self.build_folder + self.ds + self.arch + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "tinyxml",
-			self.build_folder + self.ds + self.arch + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "vorbis",
-			self.build_folder + self.ds + self.arch + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "zlib123"
+			self.build_folder + self.ds + self.platform,
+			self.build_folder + self.ds + self.platform + self.ds + "build-cache", # cache folder
+			self.build_folder + self.ds + self.platform + self.ds + "src",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D", 
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "ARK2D_Path",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "ARK2D_State",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "ARK2D_Util",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "particles",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Font",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Tiled",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "UI",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "libJSON",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "lpng151",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "ogg",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "tinyxml",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "vorbis",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "zlib123"
 		]);
 		
 		self.src_files.extend([
@@ -268,7 +269,9 @@ class ARK2DBuildSystem:
 			
 			self.src_files.extend([
 				#'src' + self.ds + 'ARK2D' + self.ds + 'src-AL' + self.ds + 'glew.c',
-				'src' + self.ds + 'ARK2D' + self.ds + 'GameContainerMac.mm' #may not have objc compiler on win32
+				'src' + self.ds + 'ARK2D' + self.ds + 'GameContainerMac.mm', #may not have objc compiler on win32
+				'src' + self.ds + 'ARK2D' + self.ds + 'GameContainerMacAppDelegate.mm',
+				'src' + self.ds + 'ARK2D' + self.ds + 'GameContainerMacWindowListener.mm',
 			]);
 			
 			self.dll_files.extend([
@@ -287,7 +290,7 @@ class ARK2DBuildSystem:
 				#'freetype2'
 			]);
 			
-			self.build_artifact = self.build_folder + self.ds + self.arch + self.ds + "libARK2D.dylib";
+			self.build_artifact = self.build_folder + self.ds + self.platform + self.ds + "libARK2D.dylib";
 			
 			self.linkingFlags = "";
 			
@@ -305,9 +308,9 @@ class ARK2DBuildSystem:
 		
 		self.mkdirs.extend([
 			self.build_folder,
-			self.build_folder + self.ds + self.arch,
-			self.build_folder + self.ds + self.arch + self.ds + "src",
-			self.build_folder + self.ds + "build-cache" # cache folder
+			self.build_folder + self.ds + self.platform,
+			self.build_folder + self.ds + self.platform + self.ds + "src",
+			self.build_folder + self.ds + self.platform + self.ds + "build-cache" # cache folder
 			
 		]);
 		
@@ -343,7 +346,7 @@ class ARK2DBuildSystem:
 		if (self.building_game):
 			cachefilename += self.game_dir + self.ds;
 			
-		cachefilename += self.build_folder + self.ds + "build-cache" + self.ds + "compiled.json";
+		cachefilename += self.build_folder + self.ds + self.platform + self.ds + "build-cache" + self.ds  + "compiled.json";
 		self.createCacheFile(cachefilename);
 		f = open(cachefilename, "r")
 		fcontents = f.read();
@@ -386,9 +389,9 @@ class ARK2DBuildSystem:
 						#-march=i386 "; # i386
 						#-arch i386
 					compileStr += " -o";
-					compileStr += self.build_folder + self.ds + self.arch + self.ds + newf + " " + h + " ";
+					compileStr += self.build_folder + self.ds + self.platform + self.ds + newf + " " + h + " ";
 				elif h_ext == 'rc':
-					compileStr += h + " " + self.build_folder + self.ds + self.arch + self.ds + newf + " ";
+					compileStr += h + " " + self.build_folder + self.ds + self.platform + self.ds + newf + " ";
 			
 				fjson[h] = {"date_modified": os.stat(h).st_mtime };
 			
@@ -400,7 +403,7 @@ class ARK2DBuildSystem:
 	
 		# update compile cache thing
 		if (fchanged == True):
-			f = open(self.build_folder + self.ds + "build-cache" + self.ds + "compiled.json", "w")
+			f = open(self.build_folder + self.ds + self.platform + self.ds + "build-cache" + self.ds + "compiled.json", "w")
 			f.write(json.dumps(fjson, sort_keys=True, indent=4));
 			f.close();
 	
@@ -420,7 +423,7 @@ class ARK2DBuildSystem:
 				findex = h.rfind('.');
 				newf = h[0:findex] + ".o";
 				#print(newf);
-				linkingStr += " " + self.build_folder + self.ds + self.arch + self.ds + newf;
+				linkingStr += " " + self.build_folder + self.ds + self.platform + self.ds + newf;
 			
 			for f in self.dll_files:
 				linkingStr += " " + f;
@@ -442,7 +445,7 @@ class ARK2DBuildSystem:
 				for h in self.src_files:
 					findex = h.rfind('.');
 					newf = h[0:findex] + ".o";
-					linkingStr += " " + self.build_folder + self.ds + self.arch + self.ds + newf;
+					linkingStr += " " + self.build_folder + self.ds + self.platform + self.ds + newf;
 				
 				for f in self.dll_files:
 					linkingStr += " " + f;
@@ -468,11 +471,17 @@ class ARK2DBuildSystem:
 				subprocess.call(['mkdir ' + resources_folder], shell=True);
 				subprocess.call(['mkdir ' + frameworks_folder], shell=True);
 				
-				dylibsrc = self.ark2d_dir + self.ds + self.build_folder + self.ds + self.arch + self.ds + 'libARK2D.dylib'
+				dylibsrc = self.ark2d_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + 'libARK2D.dylib'
 				subprocess.call(['cp ' + dylibsrc + ' ' + frameworks_folder + self.ds + 'libARK2D.dylib'], shell=True);
 				
 				#copy icns in to .app folder
 				subprocess.call(['cp ' + self.mac_game_icns + ' ' + resources_folder + self.ds + gn +'.icns'], shell=True);
+				
+				#copy ark2d resources in to 
+				print("copying ark2d resources in to project:");
+				cpyark2dres = 'cp -r ' + self.ark2d_dir + self.ds + 'data ' + resources_folder + self.ds + 'ark2d';
+				print(cpyark2dres);
+				subprocess.call([cpyark2dres], shell=True);
 				
 				cr = "\r";
 				infoplistcontents  = "";
@@ -502,7 +511,7 @@ class ARK2DBuildSystem:
 				for h in self.src_files:
 					findex = h.rfind('.');
 					newf = h[0:findex] + ".o";
-					linkingStr += " " + self.build_folder + self.ds + self.arch + self.ds + newf;
+					linkingStr += " " + self.build_folder + self.ds + self.platform + self.ds + newf;
 				
 				for f in self.dll_files:
 					linkingStr += " " + f;
@@ -568,11 +577,11 @@ if __name__ == "__main__":
 		a.mingw_link = "";
 		
 		if(sys.platform=="win32"):
-			a.dll_files.append(a.ark2d_dir + a.ds + a.build_folder + a.ds + 'libARK2D.dll');
+			a.dll_files.append(a.ark2d_dir + a.ds + a.build_folder + a.ds + a.platform + a.ds + 'libARK2D.dll');
 			a.linkingFlags += " -mwindows "; 
 			a.linkingFlags += " -enable-auto-import ";
 		elif(sys.platform=="darwin"):
-			a.dll_files.append(a.ark2d_dir + a.ds + a.build_folder + a.ds + a.arch + a.ds + 'libARK2D.dylib');
+			a.dll_files.append(a.ark2d_dir + a.ds + a.build_folder + a.ds + a.platform + a.ds + 'libARK2D.dylib');
 			a.mac_game_icns = j['mac_game_icns'];
 		
 		a.gamePostInit();

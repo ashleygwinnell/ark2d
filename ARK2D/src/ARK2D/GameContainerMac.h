@@ -15,28 +15,32 @@
 		#include <string>
 		using namespace std;
 
-		#import <objc/Object.h>
 		#import <Cocoa/Cocoa.h>
-		#import <OpenGL/CGLRenderers.h>
-		#import <AppKit/AppKit.h>
+		#import "GameContainerMacAppDelegate.h"
+		#import "GameContainerMacWindowListener.h"
+		#include <string>
+		#include <stdlib.h>
 
 		class GameContainerPlatform {
+			friend class GameContainer;
 			public:
+				GameContainer* m_container;
+				NSWindow* m_window;
+				string m_resourcePath;
+
 				static void* getARK2DResource(int resourceId, int resourceType);
 
-				NSWindow* m_window;
+			private:
+				NSOpenGLContext* createGLContext();
+				void makeContextCurrent(NSWindow* window, NSOpenGLContext* context);
+				void deleteGLContext(NSOpenGLContext* context);
+
+				void doEvents();
+				void handleKeyEvent(NSEvent* event);
+
+				void setTitle(std::string title);
+				string getResourcePath() const;
 		};
-
-
-		@interface GameContainerPlatformListener
-		{
-
-		}
-		- (void)doFunction;
-		@end
-
-
-
 
 	#endif
 

@@ -8,6 +8,7 @@
 #define GAME_H_
 
 #include <string>
+using namespace std;
 
 class GameContainer;
 class Graphics;
@@ -17,8 +18,8 @@ class Timeline;
 class Game {
 	public:
 
-		Game(const char* title);
-		const char* getTitle();
+		Game(string title);
+		string getTitle();
 		Timeline* getTimeline();
 		virtual void init(GameContainer* container) = 0;
 		virtual void update(GameContainer* container, GameTimer* timer) = 0;
@@ -31,7 +32,7 @@ class Game {
 
 	protected:
 		GameContainer* m_container;
-		const char* m_title;
+		string m_title;
 		Timeline* m_timeline;
 };
 

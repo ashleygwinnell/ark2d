@@ -54,6 +54,7 @@ struct FontVertex {
 
 class BMFont {
 	private:
+		bool m_loaded;
 		char* m_data;
 		string m_FontFile;
 		string m_ImageFile;

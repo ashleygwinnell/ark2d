@@ -9,8 +9,9 @@
 #include "DefaultGame.h"
 
 int main(int argc, char** argv) {
-
-	std::cout << "woo" << std::endl;
+    
+    OutputWrapper::setEnabled(true);
+   std::cout << "cwd: " << FileUtil::getCurrentDirectory() << std::endl;
 
 	DefaultGame game("ARK2D State Based Game");
 	GameContainer container(game, 640, 480, 32, false);

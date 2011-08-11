@@ -39,7 +39,7 @@ class DefaultGame : public StateBasedGame {
 		WinState* state_win;
 		FailState* state_fail;
 
-		DefaultGame(const char* title);
+		DefaultGame(string title);
 		virtual void initStates(GameContainer* container);
 		virtual void update(GameContainer* container, GameTimer* timer);
 		virtual void render(GameContainer* container, Graphics* g);

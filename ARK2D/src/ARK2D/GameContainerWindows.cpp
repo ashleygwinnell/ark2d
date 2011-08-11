@@ -990,4 +990,12 @@
 			ReleaseDC( hWnd, hDC );
 		}
 
+		void GameContainerPlatform::setTitle(std::string title) {
+			SetWindowTextA(m_hWindow, title.c_str());
+		}
+
+		string GameContainerPlatform::getResourcePath() const {
+			return "data/";
+		}
+
 #endif

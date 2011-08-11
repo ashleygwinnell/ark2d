@@ -12,7 +12,7 @@
 #include "Transition.h"
 #include "EmptyTransition.h"
 
-StateBasedGame::StateBasedGame(const char* title):
+StateBasedGame::StateBasedGame(string title):
 	Game(title),
 	m_states(),
 	m_from_state(NULL),
@@ -25,7 +25,7 @@ StateBasedGame::StateBasedGame(const char* title):
 
 }
 
-const char* StateBasedGame::getTitle() {
+string StateBasedGame::getTitle() {
 	return Game::getTitle();
 }
 void StateBasedGame::addState(GameState* state) {

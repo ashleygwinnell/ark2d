@@ -7,7 +7,7 @@
 
 #include "DefaultGame.h"
 
-DefaultGame::DefaultGame(const char* title): StateBasedGame(title) {
+DefaultGame::DefaultGame(string title): StateBasedGame(title) {
 
 }
 
@@ -30,6 +30,7 @@ void DefaultGame::initStates(GameContainer* container) {
 }
 
 void DefaultGame::update(GameContainer* container, GameTimer* timer) {
+	std::cout << "update" << std::endl;
 	StateBasedGame::update(container, timer);
 
 	Input* i = ARK2D::getInput();
@@ -43,7 +44,9 @@ void DefaultGame::update(GameContainer* container, GameTimer* timer) {
 }
 
 void DefaultGame::render(GameContainer* container, Graphics* g) {
+	std::cout << "render" << std::endl;
 	StateBasedGame::render(container, g);
+	std::cout << "done render" << std::endl;
 }
 
 void DefaultGame::resize(GameContainer* container, int width, int height) {

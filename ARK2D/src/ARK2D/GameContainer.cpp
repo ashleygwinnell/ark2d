@@ -56,13 +56,7 @@ unsigned int GameContainer::getHeight() const {
 
 void GameContainer::setTitle(const std::string title) {
 	this->m_strTitle = title;
-	#if (defined(ARK2D_WINDOWS) || defined(_WIN32))
-		SetWindowTextA(m_platformSpecific.m_hWindow, title.c_str());
-	#elif (defined(ARK2D_MACINTOSH) || defined(__APPLE__))
-
-	#elif (defined(ARK2D_UBUNTU_LINUX))
-
-	#endif
+	m_platformSpecific.setTitle(title);
 }
 
 void GameContainer::enable2D() {
@@ -125,6 +119,10 @@ bool GameContainer::isResizable() {
 }
 void GameContainer::setScaleToWindow(bool b) {
 	m_scaleToWindow = b;
+}
+
+string GameContainer::getResourcePath() const {
+	return m_platformSpecific.getResourcePath();
 }
 
 GameContainer::~GameContainer() {

@@ -9,12 +9,12 @@
 #include "Timeline.h"
 //class GameContainer;
 
-Game::Game(const char* title) {
+Game::Game(string title) {
 	this->m_title = title;
 	m_timeline = new Timeline();
 }
 
-const char* Game::getTitle() {
+string Game::getTitle() {
 	return m_title;
 }
 Timeline* Game::getTimeline() {

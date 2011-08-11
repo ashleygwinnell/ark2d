@@ -82,6 +82,9 @@ class GameContainer {
 		unsigned int getWidth() const;
 		unsigned int getHeight() const;
 		vector<Gamepad*> getGamepads() const;
+
+		string getResourcePath() const;
+
 		void close() const;
 		~GameContainer();
 

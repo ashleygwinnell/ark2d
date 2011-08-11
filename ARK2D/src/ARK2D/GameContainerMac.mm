@@ -10,35 +10,6 @@
 
 #ifdef ARK2D_MACINTOSH
 
-
-	@implementation GameContainerPlatformListener
-	- (void) doFunction
-	{
-		std::cout << "WINNING!" << std::endl;
-	}
-	@end
-	
-	
-	@interface NSApplication(NSAppleMenu)
-	- (void)setAppleMenu:(NSMenu *)menu;
-	@end
-
-	@interface ARK2DAppDelegate : NSObject
-	- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender;
-	@end
-
-	@implementation ARK2DAppDelegate : NSObject
-	- (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
-	{
-		// SDL_SendQuit();
-	   // WindowData* data = CocoaPlatform::instance->windowData;
-	   // if (data->created) {
-	   //     Cocoa_DestroyWindow(data);
-	   // }
-		// return NSTerminateCancel;
-	    return NSTerminateNow;
-	}
-	@end
 	
 	void* GameContainerPlatform::getARK2DResource(int resourceId, int resourceType) {
 		return new string("");
@@ -59,55 +30,94 @@
 		m_clearColor(Color::black),
 		m_platformSpecific()
 		{
+			m_platformSpecific.m_container = this;
+		
+			m_input.setGameContainer(this);
 
+			ARK2D::s_container = this;
+			ARK2D::s_game = &m_game;
+			ARK2D::s_graphics = &m_graphics;
+			ARK2D::s_input = &m_input;
+		
+		
 			ProcessSerialNumber psn;
-			NSAutoreleasePool* pool;
-
 			if (!GetCurrentProcess(&psn)) {
 				TransformProcessType(&psn, kProcessTransformToForegroundApplication);
 				SetFrontProcess(&psn);
-			}
+			} 
+			
+			
+			// Get location of current app bundle and make sure there's a resources path.
+			m_platformSpecific.m_resourcePath = [[[NSBundle mainBundle] resourcePath] fileSystemRepresentation];
+			m_platformSpecific.m_resourcePath += "/";
+			std::cout << "Resource path: " << m_platformSpecific.m_resourcePath << std::endl;
+			
+			NSAutoreleasePool* pool;
 			pool = [[NSAutoreleasePool alloc] init];
 			if (NSApp == nil) {
 				[NSApplication sharedApplication];
 				[NSApp finishLaunching];
 			}
 			if ([NSApp delegate] == nil) {
-				[NSApp setDelegate:[[ARK2DAppDelegate alloc] init]];
+				[NSApp setDelegate:[[GameContainerMacAppDelegate alloc] init]];
 			}
 			
-			//NSAutoreleasePool* pool;
-			NSWindow* nswindow;
+			NSWindow* window = m_platformSpecific.m_window;
 			NSRect rect;
 			unsigned int style;
-	
 			
 			rect.origin.x = 0;
 			rect.origin.y = 0;
 			rect.size.width = width;
 			rect.size.height = height;
-			rect.origin.y = CGDisplayPixelsHigh(kCGDirectMainDisplay) - rect.origin.y - rect.size.height;
-	
-			style = (NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask);
-	
-			//  Create window
-			nswindow = [[NSWindow alloc] initWithContentRect:rect styleMask:style backing:NSBackingStoreBuffered defer:FALSE];
-			[nswindow makeKeyAndOrderFront:nil];
-	 
-			//  Set content view
-			NSView* contentView = [[NSView alloc] initWithFrame:rect];
-			[nswindow setContentView: contentView];
-			[contentView release];
-	
-			[nswindow setTitle:[NSString stringWithCString:"HelloWorld\0" encoding:NSUTF8StringEncoding]];
-			[nswindow makeKeyAndOrderFront:nil];
+			rect.origin.x = (CGDisplayPixelsWide(kCGDirectMainDisplay)/2) - (rect.size.width/2);
+			rect.origin.y = (CGDisplayPixelsHigh(kCGDirectMainDisplay)/2)- (rect.size.height/2) + 25;
 			
-			//todo: gl context
+			style = (NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask);
+			
+			//  Create window
+			window = [[NSWindow alloc] initWithContentRect:rect styleMask:style backing:NSBackingStoreBuffered defer:FALSE];
+			[window setTitle:[NSString stringWithCString:m_game.getTitle().c_str() encoding:NSUTF8StringEncoding]];
+			[window makeKeyAndOrderFront:nil];
+			[window orderFrontRegardless];
+			[window makeKeyWindow];
+		 
+			[window setAcceptsMouseMovedEvents:YES];
+			[window setReleasedWhenClosed:YES];
+
+			GameContainerMacWindowListener* listener = [GameContainerMacWindowListener alloc];
+			[listener init:window];
+			[window setDelegate:listener];
+			[window setRestorable:NO];
+			
+			NSOpenGLContext* context = m_platformSpecific.createGLContext();
+			m_platformSpecific.makeContextCurrent(window, context);
+			
+			//enable gl
+			glEnable(GL_TEXTURE_2D);
+			glViewport(0, 0, width, height);
+			
+			glClear( GL_COLOR_BUFFER_BIT );
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+			
+			// enable 2d
+			glMatrixMode(GL_PROJECTION) ;
+			glPushMatrix();
+			glLoadIdentity();
+			
+			glOrtho(0, width, height, 0, -1, 1);
+			
+			glMatrixMode(GL_MODELVIEW);
+			glPushMatrix();
+			glLoadIdentity();
 			
 			[pool release];
 			
-			//return nswindow;
-		 
+			m_bRunning = true;
+
 	}
 
 	void GameContainer::setFullscreen(bool fullscreen) {
@@ -135,16 +145,180 @@
 	}
 
 	void GameContainer::start() {
-		std::cout << "fill me too!" << std::endl;
+		
+		// seed the random
+		MathUtil::seedRandom();
+		
+		// Set window title
+		//setTitle(m_game.getTitle());
+		
+		// populate the gamepads.
+		OutputWrapper::print("Initialising Gamepads... ");
+		initGamepads();
+		OutputWrapper::println("done.");
+		
+		// initialise OpenGL -- this is done already
+		glClearColor(m_clearColor.getRed()/255.0f, m_clearColor.getGreen()/255.0f, m_clearColor.getBlue()/255.0f, m_clearColor.getAlpha()/255.0f);
+		
+		// load default font.
+		BMFont* fnt = new BMFont(getResourcePath() + "ark2d/fonts/default.fnt", getResourcePath() + "ark2d/fonts/default.png");
+		m_graphics.m_DefaultFont = fnt;
+		m_graphics.m_Font = fnt;
+		
+		// initialise OpenAL
+		
+		// initialise game.
+		OutputWrapper::print("Initialising ");
+		OutputWrapper::print(m_game.getTitle());
+		OutputWrapper::println("...");
+		m_game.init(this);
+
+		OutputWrapper::print("Initialised ");
+		OutputWrapper::print(m_game.getTitle());
+		OutputWrapper::println("...");
+		
+		while(m_bRunning) {
+			m_timer.tick();
+			m_platformSpecific.doEvents();
+			
+			processGamepadInput();
+		   
+		//	int delta = (int) (m_timer.getDelta() * 1000);
+			m_game.update(this, &m_timer);
+			m_input.clearKeyPressedRecord();
+			for (unsigned int i = 0; i < m_gamepads.size(); i++) {
+				m_gamepads.at(i)->clearButtonPressedRecord();
+			}
+			
+			
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			m_game.render(this, &m_graphics);
+			
+			swapBuffers();
+			
+			//sleep(delta/2);
+		}
+		
 	}
 
 	void GameContainer::close() const {
-
+		
+	}
+	
+	NSOpenGLContext* GameContainerPlatform::createGLContext() 
+	{
+	    NSOpenGLPixelFormatAttribute attr[] =
+	    {
+			NSOpenGLPFADoubleBuffer,
+			NSOpenGLPFAAccelerated,
+			NSOpenGLPFAColorSize, 32,
+			NSOpenGLPFADepthSize, 16,
+	        NSOpenGLPFAScreenMask,
+	        CGDisplayIDToOpenGLDisplayMask(CGMainDisplayID()),
+			0 };
+		NSOpenGLPixelFormat* format = [[NSOpenGLPixelFormat alloc] initWithAttributes:attr];
+		NSOpenGLContext* glContext = [[NSOpenGLContext alloc] initWithFormat: format shareContext: nil];
+		//[glContext makeCurrentContext];
+	    return glContext;
+	}
+	
+	void GameContainerPlatform::makeContextCurrent(NSWindow* window, NSOpenGLContext* context) 
+	{
+	    if (context) {
+			[context setView:[window contentView]];
+			[context update];
+			[context makeCurrentContext];
+		} else {
+	        [NSOpenGLContext clearCurrentContext];
+	    }
 	}
 
-
+	void GameContainerPlatform::deleteGLContext(NSOpenGLContext* context) 
+	{
+	    [context clearDrawable];
+		[context release];
+	}
+	
 	void GameContainer::swapBuffers() {
-
+		NSOpenGLContext* context = [NSOpenGLContext currentContext];
+		if (context != nil) {
+			[context flushBuffer];
+		}
+	}
+	
+	
+	
+	
+	
+	void GameContainerPlatform::handleKeyEvent(NSEvent* event) {
+		unsigned short scancode = [event keyCode];
+		unsigned int key;
+		
+		if (scancode < 128) {
+			key = 0; //darwin_scancode_table[scancode];
+		}
+		else {
+			//Debug::Log("Unknown scancode");
+		}
+		
+		switch ([event type]) {
+			case NSKeyDown:
+				// if (![event isARepeat]) {
+				//     /* See if we need to rebuild the keyboard layout */
+				//     UpdateKeymap(data);
+				// }
+				
+				//CocoaPlatform::platform->SetLocalKey(key, true);
+				break;
+			case NSKeyUp:
+			   // CocoaPlatform::platform->SetLocalKey(key, false);
+				break;
+				// case NSFlagsChanged:
+				//     HandleModifiers(_this, scancode, [event modifierFlags]);
+				//     break;
+			default: /* just to avoid compiler warnings */
+				break;
+		}
+	}
+	
+	void GameContainerPlatform::doEvents() {
+		NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+		    
+		/* TODO Update activity every 30 seconds to prevent screensaver */
+		for ( ; ; ) {
+			NSEvent *event = [NSApp nextEventMatchingMask:NSAnyEventMask untilDate:[NSDate distantPast] inMode:NSDefaultRunLoopMode dequeue:YES ];
+			if ( event == nil ) {
+				break;
+			}
+			
+			switch ([event type]) {
+				/*case NSKeyDown: 
+				case NSKeyUp:
+					//			case NSFlagsChanged:
+					// XXX handle key event
+					handleKeyEvent(event);
+					
+					//Fall through to pass event to NSApp; er, nevermind... 
+					
+					// Add to support system-wide keyboard shortcuts like CMD+Space
+					if (([event modifierFlags] & NSCommandKeyMask) || [event type] == NSFlagsChanged)
+						[NSApp sendEvent: event];
+					break;*/
+				default:
+					[NSApp sendEvent:event];
+					break;
+			}
+		}
+		[pool release];
+	}
+	
+	
+	void GameContainerPlatform::setTitle(std::string title) {
+		[m_window setTitle:[NSString stringWithCString:title.c_str() encoding:NSUTF8StringEncoding]];
+	}
+	
+	string GameContainerPlatform::getResourcePath() const {
+		return m_resourcePath;
 	}
 
 #endif

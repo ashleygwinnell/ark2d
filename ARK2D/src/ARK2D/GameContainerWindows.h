@@ -62,6 +62,8 @@
 
 				void getWindowFlags(DWORD* windowflags_return, DWORD* exstyle_return, bool undecorated, bool child_window);
 
+				void setTitle(std::string title);
+				string getResourcePath() const;
 
 				void enableOpenGL(HWND hWnd, HDC* hDC, HGLRC* hRC);
 				void disableOpenGL(HWND hWnd, HDC hDC, HGLRC hRC);

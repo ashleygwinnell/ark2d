@@ -43,6 +43,7 @@
 	//#include <OpenGL/CGLContext.h>
 	// #include <GLUT/glut.h>
 	#include <OpenGL/glext.h>
+
 #endif
 
 #ifndef ARK2D_GL_H_

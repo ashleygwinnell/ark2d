@@ -14,17 +14,18 @@
 #include "../GameTimer.h"
 
 #include <vector>
+#include <string>
 
 class GameState;
 class LoadingState;
 class Transition;
 
-using std::vector;
+using namespace std;
 
 class StateBasedGame : public Game {
 	public:
-		StateBasedGame(const char* title);
-		const char* getTitle();
+		StateBasedGame(string title);
+		string getTitle();
 
 		void addState(GameState* state);
 		void enterState(unsigned int id);

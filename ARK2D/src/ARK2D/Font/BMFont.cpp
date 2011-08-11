@@ -14,11 +14,15 @@
 
 using namespace std;
 
-BMFont::BMFont(): m_data(NULL) {
+BMFont::BMFont():
+	m_loaded(false),
+	m_data(NULL)
+	{
 
 }
 
 BMFont::BMFont(unsigned int fntResource, unsigned int imgResource, unsigned int imgResourceType):
+	m_loaded(false),
 	m_data(NULL),
 	m_FontFile(""),
 	m_ImageFile("")
@@ -31,18 +35,21 @@ BMFont::BMFont(unsigned int fntResource, unsigned int imgResource, unsigned int 
 }
 
 BMFont::BMFont(const string& f, const string& i):
+	m_loaded(false),
 	m_data(NULL),
 	m_FontFile(f),
 	m_ImageFile(i)
 	//m_Image(i)
 {
-	std::cout << "Loading BMFont... ";
+	std::cout << "Loading BMFont: ";
+	std::cout << f << "\r\n";
 		m_Image = new Image(i);
 		Parse();
 	std::cout << "done." << std::endl;
 }
 
 BMFont::BMFont(const string& f, const string& i, const Color& mask):
+	m_loaded(false),
 	m_data(NULL),
 	m_FontFile(f),
 	m_ImageFile(i)//,
@@ -174,6 +181,8 @@ bool BMFont::Parse() // istream& Stream, Charset& CharsetDesc
 		//	((stringbuf*)fb)->close();
 		}
 
+		m_loaded = true;
+
 	} catch(...) {
 		ErrorDialog::createAndShow("error loading font");
 		return false;
@@ -192,6 +201,7 @@ void BMFont::drawStringCenteredAt(const string& Str, int x, int y) const {
 
 // remember that u and v are width and height, respectively.
 void BMFont::drawString(const string& Str, int drawx, int drawy) const {
+	if (m_loaded == false) { return; }
 
 	short CharX, CharY, Width, Height, OffsetX, OffsetY;
 	//m_Image.getSubImage(10, 10, 10, 10).draw(drawx, drawy);
@@ -245,6 +255,8 @@ void BMFont::drawString(const string& Str, int drawx, int drawy) const {
 }
 
 unsigned int BMFont::getStringWidth(const string& Str) const {
+	if (m_loaded == false) { return 0; }
+
 	unsigned int total = 0;
 	for (unsigned int i = 0; i < Str.size(); i++ ) {
 		//total += m_Charset.Chars[(int) Str[i]].Width;
@@ -254,6 +266,8 @@ unsigned int BMFont::getStringWidth(const string& Str) const {
 	return total;
 }
 unsigned int BMFont::getStringHeight(const string& Str) const {
+	if (m_loaded == false) { return 0; }
+
 	unsigned int max = 0;
 	for (unsigned int i = 0; i < Str.size(); i++ ) {
 		if ((m_Charset.Chars[(int) Str[i]].Height + m_Charset.Chars[(int) Str[i]].YOffset) > max) {
@@ -263,6 +277,8 @@ unsigned int BMFont::getStringHeight(const string& Str) const {
 	return max;
 }
 unsigned int BMFont::getLineHeight() const {
+	if (m_loaded == false) { return 0; }
+
 	return m_Charset.LineHeight;
 }
 
