@@ -106,4 +106,12 @@
 
 	}
 
+
+	int GameContainer::getGlobalMouseX() const {
+		return 0;
+	}
+	int GameContainer::getGlobalMouseY() const {
+		return 0;
+	}
+
 #endif

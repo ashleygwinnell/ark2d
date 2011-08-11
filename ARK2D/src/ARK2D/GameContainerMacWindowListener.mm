@@ -8,8 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 #import "GameContainerMacWindowListener.h"
-#include "ARK2D.h"
+#include "ARK2D.h" 
 #include "Input.h"
+#include "Game.h"
 
 static int darwin_scancode_table[] = {
 	/*   0 */   Input::KEY_A,
@@ -201,9 +202,22 @@ static int darwin_scancode_table[] = {
 
 -(void)mouseDown:(NSEvent *)theEvent {
     printf("mouse down\r\n");
+    ARK2D::getInput()->pressKey(Input::MOUSE_BUTTON_LEFT);
 }
 -(void)mouseUp:(NSEvent *)theEvent {
     printf("mouse up\r\n");
+    ARK2D::getInput()->releaseKey(Input::MOUSE_BUTTON_LEFT);
+}
+-(void)mouseMoved:(NSEvent *)theEvent {
+	NSPoint v = [theEvent locationInWindow];
+	//v.y += 1;
+	
+	//NSPoint v = [NSView convertPoint:[NSEvent mouseLocation] fromView:nil];
+	Input* i = ARK2D::getInput();
+	ARK2D::getGame()->mouseMoved((int) v.x, (int) v.y, i->mouse_x, i->mouse_y);
+
+	i->mouse_x = (int) v.x;
+	i->mouse_y = (int) v.y;
 }
 
 

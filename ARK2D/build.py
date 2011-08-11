@@ -30,6 +30,7 @@ class ARK2DBuildSystem:
 		self.game_dir = "";
 		self.game_name = "";
 		self.game_short_name = "";
+		self.mac_game_icns = "";
 		
 		self.build_folder = "build_release";
 		self.arch = platform.machine();
@@ -343,8 +344,8 @@ class ARK2DBuildSystem:
 		
 		# compile cache thing
 		cachefilename = "";
-		if (self.building_game):
-			cachefilename += self.game_dir + self.ds;
+		#if (self.building_game):
+			#cachefilename += self.game_dir + self.ds;
 			
 		cachefilename += self.build_folder + self.ds + self.platform + self.ds + "build-cache" + self.ds  + "compiled.json";
 		self.createCacheFile(cachefilename);
@@ -474,14 +475,19 @@ class ARK2DBuildSystem:
 				dylibsrc = self.ark2d_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + 'libARK2D.dylib'
 				subprocess.call(['cp ' + dylibsrc + ' ' + frameworks_folder + self.ds + 'libARK2D.dylib'], shell=True);
 				
-				#copy icns in to .app folder
-				subprocess.call(['cp ' + self.mac_game_icns + ' ' + resources_folder + self.ds + gn +'.icns'], shell=True);
 				
 				#copy ark2d resources in to 
 				print("copying ark2d resources in to project:");
 				cpyark2dres = 'cp -r ' + self.ark2d_dir + self.ds + 'data ' + resources_folder + self.ds + 'ark2d';
 				print(cpyark2dres);
 				subprocess.call([cpyark2dres], shell=True);
+				
+				
+				#copy icns in to .app folder
+				if (self.mac_game_icns != ''):
+					subprocess.call(['cp ' + self.mac_game_icns + ' ' + resources_folder + self.ds + gn +'.icns'], shell=True);
+				else:
+					subprocess.call(['cp ' + resources_folder + self.ds + 'ark2d' + self.ds + 'icon.icns ' + resources_folder + self.ds + gn +'.icns'], shell=True);
 				
 				cr = "\r";
 				infoplistcontents  = "";
@@ -571,7 +577,7 @@ if __name__ == "__main__":
 		a.mkdirs.extend(j['game_mkdirs']);
 		a.build_artifact = "";
 		
-		a.clean();
+		#a.clean();
 		a.gamePreInit();
 		
 		a.mingw_link = "";
@@ -582,7 +588,10 @@ if __name__ == "__main__":
 			a.linkingFlags += " -enable-auto-import ";
 		elif(sys.platform=="darwin"):
 			a.dll_files.append(a.ark2d_dir + a.ds + a.build_folder + a.ds + a.platform + a.ds + 'libARK2D.dylib');
-			a.mac_game_icns = j['mac_game_icns'];
+			
+			if ('mac_game_icns' in j):
+				a.mac_game_icns = j['mac_game_icns'];
+				
 		
 		a.gamePostInit();
 		a.start();

@@ -257,41 +257,17 @@ void Input::clearKeyPressedRecord() {
 }
 
 int Input::getGlobalMouseX() {
-	#if defined(ARK2D_WINDOWS) || defined(_WIN32)
-		DWORD mousepos = GetMessagePos();
-		POINTS mouseXY = MAKEPOINTS(mousepos);
-		return mouseXY.x;
-	#elif defined(ARK2D_UBUNTU_LINUX) || defined(__linux__)
-		return 0;
-	#endif
-	return 0;
+	return m_container->getGlobalMouseX();
 }
 int Input::getGlobalMouseY() {
-	#if defined(ARK2D_WINDOWS) || defined(_WIN32)
-		DWORD mousepos = GetMessagePos();
-		POINTS mouseXY = MAKEPOINTS(mousepos);
-		return mouseXY.y;
-	#elif defined(ARK2D_UBUNTU_LINUX) || defined(__linux__)
-		return 0;
-	#endif
-	return 0;
+	return m_container->getGlobalMouseY();
 }
 
 int Input::getMouseX() const {
-	#if defined(ARK2D_WINDOWS) || defined(_WIN32)
-		return mouse_x;
-	#elif defined(ARK2D_UBUNTU_LINUX) || defined(__linux__)
-		return 0;
-	#endif
-	return 0;
+	return mouse_x;
 }
 int Input::getMouseY() const {
-	#if defined(ARK2D_WINDOWS) || defined(_WIN32)
-		return mouse_y;
-	#elif defined(ARK2D_UBUNTU_LINUX) || defined(__linux__)
-		return 0;
-	#endif
-	return 0;
+	return mouse_y;
 }
 void Input::setGameContainer(const GameContainer* c) {
 	m_container = c;

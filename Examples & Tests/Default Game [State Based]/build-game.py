@@ -20,9 +20,10 @@ if __name__ == "__main__":
 	elif (sys.platform == "darwin"):
 		a['ark2d_dir'] = "/Users/ashleygwinnell/Projects/C++/ark2d/ARK2D";
 		a['game_dir'] = "/Users/ashleygwinnell/Projects/C++/ark2d/Examples & Tests/Default Game [State Based]";
-		a['mac_game_icns'] = "Game.icns"
 		comm = "/usr/local/bin/python3.1 ../../ARK2D/build.py ";
 		ds = "/";
+		#a['mac_game_icns'] = "Game.icns"
+		
 	
 	a['game_src_files'] = [
 		"src" + ds + "main.cpp", 

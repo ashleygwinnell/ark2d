@@ -980,7 +980,16 @@
 			SwapBuffers(m_platformSpecific.m_hDeviceContext);
 		}
 
-
+		int GameContainer::getGlobalMouseX() const {
+			DWORD mousepos = GetMessagePos();
+			POINTS mouseXY = MAKEPOINTS(mousepos);
+			return mouseXY.x;
+		}
+		int GameContainer::getGlobalMouseY() const {
+			DWORD mousepos = GetMessagePos();
+			POINTS mouseXY = MAKEPOINTS(mousepos);
+			return mouseXY.y;
+		}
 
 		// Disable OpenGL
 		void GameContainerPlatform::disableOpenGL(HWND hWnd, HDC hDC, HGLRC hRC)

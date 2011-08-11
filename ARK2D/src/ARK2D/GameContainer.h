@@ -50,6 +50,7 @@ using namespace std;
 class GameContainer {
 	friend class GameContainerPlatform;
 	friend class Graphics;
+	friend class Input;
 
 	public:
 
@@ -104,6 +105,8 @@ class GameContainer {
 
 		void resizeWindowToFitViewport();
 
+		int getGlobalMouseX() const;
+		int getGlobalMouseY() const;
 
 		GigaRectangle<int>* m_window_rectangle;
 

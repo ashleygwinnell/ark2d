@@ -30,7 +30,6 @@ void DefaultGame::initStates(GameContainer* container) {
 }
 
 void DefaultGame::update(GameContainer* container, GameTimer* timer) {
-	std::cout << "update" << std::endl;
 	StateBasedGame::update(container, timer);
 
 	Input* i = ARK2D::getInput();
@@ -44,9 +43,11 @@ void DefaultGame::update(GameContainer* container, GameTimer* timer) {
 }
 
 void DefaultGame::render(GameContainer* container, Graphics* g) {
-	std::cout << "render" << std::endl;
 	StateBasedGame::render(container, g);
-	std::cout << "done render" << std::endl;
+
+	Input i = container->getInput();
+	g->drawString(StringUtil::append("mouse x: ", i.getMouseX()), 10, 50);
+	g->drawString(StringUtil::append("mouse y: ", i.getMouseY()), 10, 90);
 }
 
 void DefaultGame::resize(GameContainer* container, int width, int height) {

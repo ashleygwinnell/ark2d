@@ -183,7 +183,7 @@
 			
 			processGamepadInput();
 		   
-		//	int delta = (int) (m_timer.getDelta() * 1000);
+			int delta = (int) (m_timer.getDelta() * 1000);
 			m_game.update(this, &m_timer);
 			m_input.clearKeyPressedRecord();
 			for (unsigned int i = 0; i < m_gamepads.size(); i++) {
@@ -197,6 +197,7 @@
 			swapBuffers();
 			
 			//sleep(delta/2);
+			usleep(delta/2);
 		}
 		
 	}
@@ -319,6 +320,15 @@
 	
 	string GameContainerPlatform::getResourcePath() const {
 		return m_resourcePath;
+	}
+	
+	int GameContainer::getGlobalMouseX() const {
+		NSPoint mouseLoc = [NSEvent mouseLocation];
+		return mouseLoc.x;
+	}
+	int GameContainer::getGlobalMouseY() const {
+		NSPoint mouseLoc = [NSEvent mouseLocation];
+		return mouseLoc.y;
 	}
 
 #endif
