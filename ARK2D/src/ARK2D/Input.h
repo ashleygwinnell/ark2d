@@ -126,6 +126,17 @@ class Input {
 			static const int KEY_NUMLOCK = 0x90;
 			static const int KEY_SCROLLLOCK = 0x91;
 
+			static const int KEY_SEMICOLON = 0xBA; // 186;
+			static const int KEY_EQUALS = 0xBB; // 187;
+			static const int KEY_COMMA = 0xBC; // 188;
+			static const int KEY_HYPHEN = 0xBD; // 189;
+			static const int KEY_PERIOD = 0xBE; // 190;
+			static const int KEY_FORWARD_SLASH = 0xBF; // 191;
+			static const int KEY_BACK_SLASH = 0xDC; // 220;
+			static const int KEY_OPEN_BRACKET = 0xDB; // 219;
+			static const int KEY_CLOSE_BRACKET = 0xDD; // 221;
+			static const int KEY_APOSTROPHE = 0xDE; // 222;
+
 			static const int KEY_LSHIFT = 0xA0;
 			static const int KEY_RSHIFT = 0xA1;
 			static const int KEY_LCONTROL = 0xA2;

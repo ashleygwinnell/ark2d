@@ -11,6 +11,11 @@
 #include "ARK2D.h" 
 #include "Input.h"
 #include "Game.h"
+#include "GameContainer.h"
+
+// see url:
+// http://classicteck.com/rbarticles/mackeyboard.php
+// there is a nice image and table
 
 static int darwin_scancode_table[] = {
 	/*   0 */   Input::KEY_A,
@@ -37,7 +42,7 @@ static int darwin_scancode_table[] = {
 	/*  21 */   Input::KEY_4,
 	/*  22 */   Input::KEY_6,
 	/*  23 */   Input::KEY_5,
-	/*  24 */   0, // Input::KEY_EQUALS,
+	/*  24 */   Input::KEY_EQUALS,
 	/*  25 */   Input::KEY_9,
 	/*  26 */   Input::KEY_7,
 	/*  27 */   0, // Input::KEY_MINUS,
@@ -52,19 +57,19 @@ static int darwin_scancode_table[] = {
 	/*  36 */   Input::KEY_ENTER, // Input::KEY_RETURN,
 	/*  37 */   Input::KEY_L,
 	/*  38 */   Input::KEY_J,
-	/*  39 */   0, // Input::KEY_UNDEFINED, // KEY_APOSTROPHE,
+	/*  39 */   Input::KEY_APOSTROPHE, // 0, // Input::KEY_UNDEFINED,
 	/*  40 */   Input::KEY_K,
-	/*  41 */   0, //Input::KEY_SEMICOLON,
-	/*  42 */   0, //Input::KEY_BACKSLASH,
-	/*  43 */   0, //Input::KEY_COMMA,
-	/*  44 */   0, // Input::KEY_SLASH,
+	/*  41 */   Input::KEY_SEMICOLON,
+	/*  42 */   Input::KEY_BACK_SLASH,
+	/*  43 */   Input::KEY_COMMA,
+	/*  44 */   Input::KEY_FORWARD_SLASH,
 	/*  45 */   Input::KEY_N,
 	/*  46 */   Input::KEY_M,
-	/*  47 */   0, // Input::KEY_PERIOD,
+	/*  47 */   Input::KEY_PERIOD,
 	/*  48 */   Input::KEY_TAB,
 	/*  49 */   Input::KEY_SPACE,
 	/*  50 */   0, // KEY_UNDEFINED, // KEY_GRAVE, /* KEY_GRAVE on ANSI and JIS keyboards, KEY_NONUSBACKSLASH on ISO (see comment about virtual key code 10 above) */
-	/*  51 */   0, // KEY_UNDEFINED, // KEY_BACKSPACE,
+	/*  51 */   Input::KEY_BACKSPACE, // KEY_UNDEFINED, // KEY_BACKSPACE,
 	/*  52 */   0, // KEY_UNDEFINED, // KEY_KP_ENTER, /* keyboard enter on portables */
 	/*  53 */   Input::KEY_ESCAPE,
 	/*  54 */   0, // KEY_UNDEFINED, // KEY_RGUI,
@@ -122,7 +127,7 @@ static int darwin_scancode_table[] = {
 	/* 106 */   0, // KEY_UNDEFINED, // KEY_F16,
 	/* 107 */   0, // KEY_UNDEFINED, // KEY_SCROLLLOCK, /* F14/scroll lock, see comment about F13/print screen above */
 	/* 108 */   0, // KEY_UNDEFINED, // KEY_UNKNOWN, /* unknown (unused?) */
-	/* 109 */   0, // KEY_UNDEFINED, // KEY_F10,
+	/* 109 */   Input::KEY_F10, // KEY_UNDEFINED, // KEY_F10,
 	/* 110 */   0, // KEY_UNDEFINED, // KEY_APPLICATION, /* windows contextual menu key, fn-enter on portables */
 	/* 111 */   Input::KEY_F12,
 	/* 112 */   0, // KEY_UNDEFINED, // KEY_UNKNOWN, /* unknown (unused?) */
@@ -181,19 +186,16 @@ static int darwin_scancode_table[] = {
 }
 
 -(void)keyDown:(NSEvent *)theEvent {
-    printf("key pressed\r\n");
-    
-    unsigned short scancode = [theEvent keyCode];
+  	unsigned short scancode = [theEvent keyCode];
+    std::cout << "key pressed: " << scancode << std::endl;
     if (scancode < 128) {
     	unsigned int key = darwin_scancode_table[scancode];
     	ARK2D::getInput()->pressKey(key);
     }
 }
 -(void)keyUp:(NSEvent *)theEvent {
-    printf("key released\r\n");
-    //ARK2D::getInput()->releaseKey(0);
-    
     unsigned short scancode = [theEvent keyCode];
+    std::cout << "key released: " << scancode << std::endl;
     if (scancode < 128) {
     	unsigned int key = darwin_scancode_table[scancode];
     	ARK2D::getInput()->releaseKey(key);
@@ -201,23 +203,34 @@ static int darwin_scancode_table[] = {
 }
 
 -(void)mouseDown:(NSEvent *)theEvent {
-    printf("mouse down\r\n");
+  	std::cout << "left mouse down" << std::endl;
     ARK2D::getInput()->pressKey(Input::MOUSE_BUTTON_LEFT);
 }
 -(void)mouseUp:(NSEvent *)theEvent {
-    printf("mouse up\r\n");
+    std::cout << "left mouse up" << std::endl;
     ARK2D::getInput()->releaseKey(Input::MOUSE_BUTTON_LEFT);
 }
 -(void)mouseMoved:(NSEvent *)theEvent {
 	NSPoint v = [theEvent locationInWindow];
-	//v.y += 1;
-	
 	//NSPoint v = [NSView convertPoint:[NSEvent mouseLocation] fromView:nil];
+	
+	int ch = ARK2D::getContainer()->getHeight();
+	if (v.y > ch/2) { 
+		int diff = v.y - (ch/2);
+		v.y -= 2 * diff;
+	} else {
+		int diff = (ch/2) - v.y;
+		v.y += 2 * diff;
+	}
+	
 	Input* i = ARK2D::getInput();
 	ARK2D::getGame()->mouseMoved((int) v.x, (int) v.y, i->mouse_x, i->mouse_y);
 
 	i->mouse_x = (int) v.x;
 	i->mouse_y = (int) v.y;
+}
+-(void)mouseDragged:(NSEvent* )theEvent {
+	[self mouseMoved:theEvent];
 }
 
 

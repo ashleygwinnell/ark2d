@@ -8,6 +8,9 @@
 #include "GameTimer.h"
 #include <math.h>
 
+
+#include "ARK2D.h"
+
 #ifdef _WIN32
 	#include <windows.h>
 	#include <mmsystem.h>
@@ -45,6 +48,17 @@ GameTimer::~GameTimer() {
 	#endif
 */
 
+long GameTimer::millis() {
+	#ifdef __WIN32
+		return clock();
+	#elif defined(ARK2D_MACINTOSH)
+		timeval now;
+		gettimeofday(&now, NULL);
+		return (now.tv_sec + now.tv_usec);
+	#endif
+	return 0;
+}
+
 //----------------------------------------------------------------
 // Name: Tick()
 // Desc: Signifies a new frame in the game.
@@ -52,7 +66,7 @@ GameTimer::~GameTimer() {
 void GameTimer::tick() {
 
 	// Get the number of ticks passed since program launch.
-	m_CurrentTicks = clock();
+	m_CurrentTicks = millis(); //clock();
 
 	// Calculate elapsed time in seconds (usually ends up being a fraction of a second).
 	float secondsElapsed = (m_CurrentTicks - m_LastTicks) / static_cast<float>(CLOCKS_PER_SEC);
@@ -105,8 +119,8 @@ float GameTimer::getDelta() const {
 }
 
 void GameTimer::flush() {
-	m_LastTicks = clock();
-	m_CurrentTicks = clock();
+	m_LastTicks = millis(); // clock();
+	m_CurrentTicks = millis(); //clock();
 	m_TimeDelta = 0.017f;
 
 	m_FrameRate = 0;

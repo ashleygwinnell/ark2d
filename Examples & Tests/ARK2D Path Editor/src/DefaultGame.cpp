@@ -918,6 +918,7 @@ void DefaultGame::unselectPoint() {
 void DefaultGame::mouseMoved(int x, int y, int oldx, int oldy) {
 	m_buttonsPanel->mouseMoved(x, y, oldx, oldy);
 
+	std::cout << x << ":" << y <<":" << oldx << ":" << oldy << std::endl;
 
 	if (pointSelectedIndexInGroup == -1) {
 		flipHorizontallyButton->mouseMoved(x, y, oldx, oldy);
@@ -1172,6 +1173,7 @@ void DefaultGame::loadPressed() {
 	}
 
 	string f = FileDialog::openFileDialog();
+	std::cout << "file selected: " << f << std::endl;
 	if (f.length() > 0) {
 
 		if (StringUtil::getExtension(f) != "path") {
@@ -1212,6 +1214,7 @@ void DefaultGame::saveAsPressed() {
 
 	DefaultGame* game = DefaultGame::getInstance();
 	string f = FileDialog::saveFileDialog();
+	std::cout << "file selected: " << f << std::endl;
 	if (f.length() > 0) {
 		if (StringUtil::getExtension(f) != "path") {
 			ErrorDialog::createAndShow("Can only save .path files.");

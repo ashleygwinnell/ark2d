@@ -12,6 +12,12 @@
 #include <string>
 using namespace std;
 
+#ifdef __WIN32
+
+#elif defined(ARK2D_MACINTOSH)
+#import <Cocoa/Cocoa.h>
+#endif
+
 class FileDialogPlatformData {
 	public:
 		#ifdef ARK2D_WINDOWS
@@ -25,70 +31,14 @@ class FileDialogPlatformData {
 
 class FileDialog {
 	private:
-		static void init(FileDialogPlatformData* fdpd)
-		{
-			#ifdef ARK2D_WINDOWS
-				fdpd->opf.hwndOwner = 0;
-				fdpd->opf.lpstrFilter = "All files\0*.*\0\0";
-				fdpd->opf.lpstrCustomFilter = 0;
-				fdpd->opf.nMaxCustFilter = 0L;
-				fdpd->opf.nFilterIndex = 1L;
-				fdpd->opf.lpstrFile = (LPSTR) &fdpd->buffer[0];
-				fdpd->opf.lpstrFile[0] = '\0';
-				fdpd->opf.nMaxFile = 256;
-				fdpd->opf.lpstrFileTitle = 0;
-				fdpd->opf.nMaxFileTitle=50;
-				fdpd->opf.lpstrInitialDir = 0;
-				//fdpd->opf.lpstrInitialDir = path;
-				fdpd->opf.lpstrTitle = fdpd->title.c_str();
-				fdpd->opf.nFileOffset = 0;
-				fdpd->opf.nFileExtension = 2;
-				fdpd->opf.lpstrDefExt = "*.*";
-				fdpd->opf.lpfnHook = NULL;
-				fdpd->opf.lCustData = 0;
-				fdpd->opf.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT;
-				fdpd->opf.lStructSize = sizeof(OPENFILENAME);
-			#elif defined(ARK2D_MACINTOSH)
-
-			#endif
-		}
+		static void init(FileDialogPlatformData* fdpd);
 
 	public:
-		static string openFileDialog() {
-			return openFileDialog("Open File");
-		}
-		static string openFileDialog(string title) {
-			#ifdef __WIN32
-				FileDialogPlatformData* fdpd = new FileDialogPlatformData();
-				fdpd->title = title;
-				FileDialog::init(fdpd);
+		static string openFileDialog();
+		static string openFileDialog(string title);
 
-				string returnString;
-				if (GetOpenFileName(&fdpd->opf)) {
-					returnString.append(fdpd->opf.lpstrFile);
-				}
-				return returnString;
-			#endif
-			return "";
-		}
-
-		static string saveFileDialog() {
-			return saveFileDialog("Save File");
-		}
-		static string saveFileDialog(string title) {
-			#ifdef __WIN32
-				FileDialogPlatformData* fdpd = new FileDialogPlatformData();
-				fdpd->title = title;
-				FileDialog::init(fdpd);
-
-				string returnString;
-				if (GetSaveFileName(&fdpd->opf)) {
-					returnString.append(fdpd->opf.lpstrFile);
-				}
-				return returnString;
-			#endif
-			return "";
-		}
+		static string saveFileDialog();
+		static string saveFileDialog(string title);
 };
 
 #endif /* FILEDIALOG_H_ */

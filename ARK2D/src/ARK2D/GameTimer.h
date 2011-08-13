@@ -9,6 +9,7 @@
 #define GAMETIMER_H_
 
 #include <time.h>
+#include <sys/time.h>
 #include <list>
 
 #ifdef _WIN32
@@ -38,6 +39,8 @@ class GameTimer {
 		float m_TimeDelta;
 		unsigned int m_FrameRate;
 		float m_FrameSecondsElapsed;
+
+		long millis();
 };
 
 #endif /* GAMETIMER_H_ */

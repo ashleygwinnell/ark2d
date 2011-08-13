@@ -299,9 +299,15 @@
 - More work on level editor.
 - Fix bug where StateBasedGame would not work if enterState() was not explicitly called in initStates().
 
-22:34 11/08/201
+22:34 11/08/2011
 - Big updates to Mac OS X (.app) build.
 - Can now compile and run the Default Game (State Based) on Mac OS X. Huzzah!
+
+12:42 12/08/2011
+- Mac OS X mouse was inverted.
+- Mouse dragged events weren't working.
+- FileDialog open, save, error added for Mac OS X.
+- Mac OS X: Keyboard working. However it does not ask the OS for the character based on keyboard state, it's using the VK lookup table.
 
 TODO:
 - Add "clean" target to build system.

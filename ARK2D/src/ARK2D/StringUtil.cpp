@@ -223,9 +223,7 @@ char* StringUtil::file_get_contents(const char* fileName) {
     	std::fstream f(fileName, std::ios::in);
     	if (!f.is_open()) {
     		//std::cout << "File does not exist." << std::endl;
-    		string str = "Could not open file [";
-    		str += fileName;
-    		str += "] as it does not exist.";
+    		string str = "Could not open file ["; str += fileName; str += "] as it does not exist.";
     		//ErrorDialog::createAndShow(str);
     		std::cout << str << std::endl;
     		return NULL;
@@ -235,6 +233,12 @@ char* StringUtil::file_get_contents(const char* fileName) {
     		char* text;
 
     		FILE* file = fopen(fileName, "rt");
+    		if (file == NULL) {
+    			string str = "Could not open file ["; str += fileName; str += "] as it does not exist.";
+    			std::cout << str << std::endl;
+    			return NULL;
+    		}
+
     		fseek(file, 0, SEEK_END);
 			int count = ftell(file);
 			rewind(file);

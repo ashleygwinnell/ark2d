@@ -18,6 +18,9 @@
 const int Input::MOUSE_BUTTON_LEFT;
 const int Input::MOUSE_BUTTON_RIGHT;
 const int Input::KEY_SPACE;
+const int Input::KEY_PERIOD;
+const int Input::KEY_COMMA;
+const int Input::KEY_EQUALS;
 const int Input::KEY_0;
 const int Input::KEY_1;
 const int Input::KEY_2;
@@ -67,6 +70,15 @@ Input::Input():
 
 	keyNames[Input::KEY_SPACE] = "space bar";
 	keyChars[Input::KEY_SPACE] = " ";
+
+	keyNames[Input::KEY_PERIOD] = "period/fullstop";
+	keyChars[Input::KEY_PERIOD] = ".";
+
+	keyNames[Input::KEY_COMMA] = "comma";
+	keyChars[Input::KEY_COMMA] = ",";
+
+	keyNames[Input::KEY_EQUALS] = "equals";
+	keyChars[Input::KEY_EQUALS] = "=";
 
 	keyNames[Input::KEY_0] = keyChars[Input::KEY_0] = "0";
 	keyNames[Input::KEY_1] = keyChars[Input::KEY_1] = "1";
@@ -236,6 +248,72 @@ const string Input::getKeyChar(unsigned int key) {
 
 		delete out;
 		return returnString;
+
+	#elif defined(ARK2D_MACINTOSH)
+
+		map<int, string>::iterator it = keyChars.find(key);
+		if (it != keyChars.end()) {
+			return keyChars[key];
+		}
+		return string("");
+
+		// TODO: get this from the OS.
+
+		//NSString*test = [NSString stringWithCharacters:ch length:unistrlen];
+
+		/*TISInputSourceRef isref = TISCopyCurrentKeyboardInputSource();
+		CFDataRef uchr = uchr = (CFDataRef)TISGetInputSourceProperty( _isref,  kTISPropertyUnicodeKeyLayoutData );
+		UCKeyboardLayout* keyLayoutPtr = (UCKeyboardLayout *)CFDataGetBytePtr( _uchr );
+
+		int deadKeyState = 0;
+		int actualLength;
+
+		OSStatus status = UCKeyTranslate(
+			keyLayoutPtr,
+			key,
+			kUCKeyActionDown,
+			0,//modifierKeyState,
+			LMGetKbdType(),
+			0,
+			&deadKeyState,
+			1, // sizeof(str)/sizeof(unichar),
+			&actualLength,
+			uchr
+		);*/
+
+		//return (string) uchr;
+
+		/*unsigned long state;
+
+		unichar str[10];
+		UInt32 deadKeyState = 0;
+		UniCharCount actualLength;
+
+		char restype[] = "uchr";
+		ResType* rt = (ResType*)restype;
+
+		SInt16 currentKeyScript = GetScriptManagerVariable(smKeyScript);
+		SInt16 lastKeyLayoutID = GetScriptVariable(currentKeyScript, smScriptKeys);
+
+		Handle hh = GetResource(*rt, lastKeyLayoutID);
+
+		if (hh) {
+
+			OSStatus status = UCKeyTranslate(
+				keyLayoutPtr,
+				key,
+				kUCKeyActionDown,
+				0,//modifierKeyState,
+				LMGetKbdType(),
+				0,
+				&deadKeyState,
+				1, // sizeof(str)/sizeof(unichar),
+				&actualLength,
+				str
+			);
+
+		}
+		return string(str[0]);*/
 
 	#endif
 
