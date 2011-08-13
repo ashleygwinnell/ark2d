@@ -309,6 +309,12 @@
 - FileDialog open, save, error added for Mac OS X.
 - Mac OS X: Keyboard working. However it does not ask the OS for the character based on keyboard state, it's using the VK lookup table.
 
+16:10 13/08/2011
+- Hot Cross Bunions for Mac OS X.
+- LocalHighscores class fix to put data inside the .app.
+- Spritesheet class to accept String constructor.
+- Misc fixes.
+
 TODO:
 - Add "clean" target to build system.
 - Load FTFont from data.

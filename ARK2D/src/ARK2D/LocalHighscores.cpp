@@ -7,10 +7,14 @@
 
 #include "LocalHighscores.h"
 
-LocalHighscores::LocalHighscores():
-	filename("local_highscores.dat"),
-	items() {
+#include "ARK2D.h"
+#include "GameContainer.h"
 
+LocalHighscores::LocalHighscores():
+	filename(""),
+	items()
+	{
+	filename = ARK2D::getContainer()->getResourcePath() + "local_highscores.dat";
 }
 
 vector<LocalHighscoreItem*> LocalHighscores::data() {

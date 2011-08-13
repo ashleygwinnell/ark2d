@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
 
 	container->setClearColor(Color::darker_grey);
 	container->setCursorVisible(true);
-	container->setIcon("data/icon.ico");
+	container->setIcon(container->getResourcePath() + "data/icon.ico");
 	container->start();
 
 	return 0;

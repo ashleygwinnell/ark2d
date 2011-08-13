@@ -30,7 +30,8 @@ class ARK2DBuildSystem:
 		self.game_dir = "";
 		self.game_name = "";
 		self.game_short_name = "";
-		self.mac_game_icns = "";
+		self.game_resources_dir = "";
+		#self.mac_game_icns = "";
 		
 		self.build_folder = "build_release";
 		self.arch = platform.machine();
@@ -476,18 +477,27 @@ class ARK2DBuildSystem:
 				subprocess.call(['cp ' + dylibsrc + ' ' + frameworks_folder + self.ds + 'libARK2D.dylib'], shell=True);
 				
 				
-				#copy ark2d resources in to 
+				#copy ark2d resources in to .app
 				print("copying ark2d resources in to project:");
 				cpyark2dres = 'cp -r ' + self.ark2d_dir + self.ds + 'data ' + resources_folder + self.ds + 'ark2d';
 				print(cpyark2dres);
 				subprocess.call([cpyark2dres], shell=True);
 				
+				#copy game resources in to .app
+				if (self.game_resources_dir != ''):
+					print("copying game resources in to project:");
+					gme_rs_dir = self.game_resources_dir.replace(' ', '\ ').replace('&', '\&');
+					cpy_game_res = 'cp -r ' + gme_rs_dir + ' ' + resources_folder;
+					print(cpy_game_res);
+					subprocess.call([cpy_game_res], shell=True);
+				
 				
 				#copy icns in to .app folder
-				if (self.mac_game_icns != ''):
-					subprocess.call(['cp ' + self.mac_game_icns + ' ' + resources_folder + self.ds + gn +'.icns'], shell=True);
-				else:
-					subprocess.call(['cp ' + resources_folder + self.ds + 'ark2d' + self.ds + 'icon.icns ' + resources_folder + self.ds + gn +'.icns'], shell=True);
+				#if (self.mac_game_icns != ''):
+				#	subprocess.call(['cp ' + self.mac_game_icns + ' ' + resources_folder + self.ds + gn +'.icns'], shell=True);
+				#else:
+				#	subprocess.call(['cp ' + resources_folder + self.ds + 'ark2d' + self.ds + 'icon.icns ' + resources_folder + self.ds + gn +'.icns'], shell=True);
+				#
 				
 				cr = "\r";
 				infoplistcontents  = "";
@@ -591,6 +601,10 @@ if __name__ == "__main__":
 			
 			if ('mac_game_icns' in j):
 				a.mac_game_icns = j['mac_game_icns'];
+				
+		
+		if ('game_resources_dir' in j):
+			a.game_resources_dir = j['game_resources_dir'];
 				
 		
 		a.gamePostInit();

@@ -24,11 +24,12 @@ using namespace std;
 class SpriteSheetDescription {
 	public:
 		SpriteSheetDescription(const char* path);
+		SpriteSheetDescription(string path);
 		const SpriteSheetDescriptionItem& getItemByName(const char* name);
 		~SpriteSheetDescription();
 
 	private:
-		const char* m_path;
+		string m_path;
 		map<string, SpriteSheetDescriptionItem> m_items;
 		void load();
 };

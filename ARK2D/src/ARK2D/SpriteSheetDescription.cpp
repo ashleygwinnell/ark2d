@@ -17,9 +17,13 @@ SpriteSheetDescription::SpriteSheetDescription(const char* path): m_path(path) {
 	//std::cout << "... done!" << std::endl;
 }
 
+SpriteSheetDescription::SpriteSheetDescription(string path): m_path(path) {
+	load();
+}
+
 void SpriteSheetDescription::load() {
 	if (StringUtil::getExtension(m_path).compare("json") == 0) {
-		char* c = StringUtil::file_get_contents(m_path);
+		char* c = StringUtil::file_get_contents(m_path.c_str());
 		if (c == NULL) {
 			ErrorDialog::createAndShow("Could not open spritesheet description.");
 			exit(0);
@@ -48,7 +52,7 @@ void SpriteSheetDescription::load() {
 	} else if (StringUtil::getExtension(m_path).compare("txt") == 0) {
 
 		filebuf FileBuffer;
-		FileBuffer.open(m_path, ios::in);
+		FileBuffer.open(m_path.c_str(), ios::in);
 		istream Stream(&FileBuffer);
 
 		string Line;

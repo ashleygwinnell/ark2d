@@ -84,6 +84,7 @@ class GameContainer {
 		unsigned int getHeight() const;
 		vector<Gamepad*> getGamepads() const;
 
+		// always ends in the trailing slash.
 		string getResourcePath() const;
 
 		void close() const;

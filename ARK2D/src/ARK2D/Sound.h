@@ -72,6 +72,9 @@ class Sound {
 		bool loadWAV(bool loop);
 		bool loadOGG(bool loop);
 
+	private:
+		string getALErrorString(ALenum err);
+
 };
 
 #endif /* SOUND_H_ */

@@ -62,20 +62,34 @@ bool Sound::load(bool loop) {
 	}
 
 	// Load Sound contents!
+	bool b = false;
 	unsigned int pos = m_FileName.find_last_of('.');
 	if (m_FileName.substr(pos) == ".wav") {
-		loadWAV(loop);
+		b = loadWAV(loop);
 	} else if (m_FileName.substr(pos) == ".ogg") {
-		loadOGG(loop);
+		b = loadOGG(loop);
+	} else {
+		ErrorDialog::createAndShow("Can only load WAV and OGG.");
+		return false;
+	}
+
+	if (b == false) {
+		//ErrorDialog::createAndShow("Can only load WAV and OGG.");
+		return false;
 	}
 
 	// By now, the file is loaded and copied into the Buffer.
 	// So, bind the Buffer with a Source.
+	// (clear error first)
+	alGetError();
 	alGenSources(1, &Source);
 
 	ALenum sourceGenError = alGetError();
 	if (sourceGenError != AL_NO_ERROR) {
-		ErrorDialog::createAndShow("Error creating OpenAL Sources.");
+		string errStr = "Error creating OpenAL Sources for file:\r\n ";
+		errStr += m_FileName + "\r\n";
+		errStr += getALErrorString(sourceGenError);
+		ErrorDialog::createAndShow(errStr);
 		return false; //alutGetErrorString(sourceGenError);
 	}
 
@@ -104,7 +118,7 @@ bool Sound::loadOGG(bool loop) {
 	long bytes;
 	int endian = 0; // 0 for Little-Endian, 1 for Big-Endian
 	char array[BUFFER_SIZE]; // Local fixed size array
-	FILE *f;
+	FILE* f;
 	vorbis_info* oggInfo;
 	OggVorbis_File oggFile;
 	std::vector<char> bufferData;
@@ -141,6 +155,7 @@ bool Sound::loadOGG(bool loop) {
 	while (bytes > 0);
 
 	// Load the wav into the buffer
+	alGetError();
 	alBufferData(Buffer, format, &bufferData[0],  static_cast <ALsizei>( bufferData.size() ), frequency);
 	ALenum bufferwaverr = alGetError();
 	if (bufferwaverr != AL_NO_ERROR) {
@@ -225,6 +240,36 @@ void Sound::setPanning(float pan) {
 	//SourcePos[0] = pan;
 	//alSourcefv(Source, AL_POSITION, SourcePos);
 	std::cerr << "OpenAL is broken -- seek alternative." << std::endl;
+}
+
+string Sound::getALErrorString(ALenum err) {
+	switch(err)
+	{
+		case AL_NO_ERROR:
+			return string("AL_NO_ERROR");
+		break;
+
+		case AL_INVALID_NAME:
+			return string("AL_INVALID_NAME");
+		break;
+
+		case AL_INVALID_ENUM:
+			return string("AL_INVALID_ENUM");
+		break;
+
+		case AL_INVALID_VALUE:
+			return string("AL_INVALID_VALUE");
+		break;
+
+		case AL_INVALID_OPERATION:
+			return string("AL_INVALID_OPERATION");
+		break;
+
+		case AL_OUT_OF_MEMORY:
+			return string("AL_OUT_OF_MEMORY");
+		break;
+	};
+	return "AL_UNKNOWN_ERROR";
 }
 
 Sound::~Sound() {

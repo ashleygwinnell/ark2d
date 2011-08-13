@@ -25,11 +25,11 @@ DefaultGame::DefaultGame(const char* title):
 }
 
 void DefaultGame::initStates(GameContainer* container) {
-	sheet = new Image("data/game/sheet.png");
-	desc = new SpriteSheetDescription("data/game/sheet.json");
+	sheet = new Image(container->getResourcePath() + "data/game/sheet.png");
+	desc = new SpriteSheetDescription(container->getResourcePath() + "data/game/sheet.json");
 
-	font = new BMFont("data/game/04b-09.fnt", "data/game/04b-09.png", Color::magenta);
-	font_small = new BMFont("data/game/04b-09-small.fnt", "data/game/04b-09-small.png", Color::magenta);
+	font = new BMFont(container->getResourcePath() + "data/game/04b-09.fnt", container->getResourcePath() + "data/game/04b-09.png", Color::magenta);
+	font_small = new BMFont(container->getResourcePath() + "data/game/04b-09-small.fnt", container->getResourcePath()  + "data/game/04b-09-small.png", Color::magenta);
 
 	arrow_up = sheet->getSubImage(desc->getItemByName("arrow.png"))->getScaledCopy(4, 4);
 	arrow_down = arrow_up->getFlippedCopy(false, true);
@@ -37,12 +37,12 @@ void DefaultGame::initStates(GameContainer* container) {
 	witch = sheet->getSubImage(desc->getItemByName("witch.png"))->getScaledCopy(4, 4);
 	witch_fat = sheet->getSubImage(desc->getItemByName("witch-fat.png"))->getScaledCopy(4, 4);
 
-	music = new Sound("data/game/hotcrossbunions-ogg.ogg");
+	music = new Sound(container->getResourcePath() + "data/game/hotcrossbunions-ogg.ogg");
 
-	snd_enter = new Sound("data/game/enter.wav");
-	snd_good = new Sound("data/game/good.wav");
-	snd_bad = new Sound("data/game/bad.wav");
-	snd_keypress = new Sound("data/game/keypress.wav");
+	snd_enter = new Sound(container->getResourcePath() + "data/game/enter.wav");
+	snd_good = new Sound(container->getResourcePath() + "data/game/good.wav");
+	snd_bad = new Sound(container->getResourcePath() + "data/game/bad.wav");
+	snd_keypress = new Sound(container->getResourcePath() + "data/game/keypress.wav");
 
 	local_highscores = new LocalHighscores();
 	local_highscores->load();
