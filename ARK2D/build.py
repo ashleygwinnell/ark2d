@@ -5,6 +5,7 @@ import json
 import platform;
 import base64
 import binascii
+import shutil
 
 #
 # Windows requires MinGW with includes:
@@ -246,12 +247,12 @@ class ARK2DBuildSystem:
 			]);
 			
 			self.dll_files.extend([
-				'lib' + self.ds + 'kernel32.dll', 
-				'lib' + self.ds + 'glew32.dll', 
-				'lib' + self.ds + 'OpenAL32.dll', 
-				'lib' + self.ds + 'alut.dll', 
-				'lib' + self.ds + 'winmm.dll',
-				'lib' + self.ds + 'freetype6.dll'
+				'lib\\win\\kernel32.dll', 
+				'lib\\win\\glew32.dll', 
+				'lib\\win\\OpenAL32.dll', 
+				'lib\\win\\alut.dll', 
+				'lib\\win\\winmm.dll',
+				'lib\\win\\freetype6.dll'
 			]);
 			self.static_libraries.extend([
 				'glu32', 
@@ -319,7 +320,7 @@ class ARK2DBuildSystem:
 	def gamePostInit(self):
 	
 		if (sys.platform == "win32"):
-			self.build_artifact = self.build_folder + self.ds + self.game_name.replace(" ", "_") + ".exe";
+			self.build_artifact = self.build_folder + self.ds + self.platform + self.ds + self.game_name.replace(" ", "_") + ".exe";
 		elif(sys.platform == "darwin"):
 			self.build_artifact = self.build_folder + self.ds + self.game_name.replace(" ", "_");
 			
@@ -437,6 +438,27 @@ class ARK2DBuildSystem:
 			
 			subprocess.call([linkingStr], shell=True);	
 			
+			#copy game resources in to .build
+			if(self.building_game):
+			
+				#copying dll in to project.
+				try:
+					dll = self.ark2d_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + 'libARK2D.dll'
+					shutil.copy(dll, self.game_dir.replace('\\\\','\\') + '\\' + self.build_folder + '\\' + self.platform);
+				except:
+					pass;
+			
+				if (self.game_resources_dir != ''):
+					print("copying game resources in to project:");
+					#cpy_game_res = 'copy "' + self.game_resources_dir.replace('\\\\','\\') + '" "' + self.game_dir.replace('\\\\','\\') + '\\' + self.build_folder + '\\' + self.platform + '\\"';
+					#print(cpy_game_res);
+					#subprocess.call([cpy_game_res], shell=True);
+					try:
+						shutil.copytree(self.game_resources_dir.replace('\\\\','\\'), self.game_dir.replace('\\\\','\\') + '\\' + self.build_folder + '\\' + self.platform + '\\data');
+					except:
+						pass;
+				
+			
 		elif(sys.platform=="darwin"):
 			
 			if (self.building_library):
@@ -445,7 +467,7 @@ class ARK2DBuildSystem:
 				#linkingStr += " -march=i386 ";
 			
 				for h in self.src_files:
-					findex = h.rfind('.');
+					findex = h. rfind('.');
 					newf = h[0:findex] + ".o";
 					linkingStr += " " + self.build_folder + self.ds + self.platform + self.ds + newf;
 				
@@ -473,6 +495,7 @@ class ARK2DBuildSystem:
 				subprocess.call(['mkdir ' + resources_folder], shell=True);
 				subprocess.call(['mkdir ' + frameworks_folder], shell=True);
 				
+				#copying dylib in to project.
 				dylibsrc = self.ark2d_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + 'libARK2D.dylib'
 				subprocess.call(['cp ' + dylibsrc + ' ' + frameworks_folder + self.ds + 'libARK2D.dylib'], shell=True);
 				
@@ -572,11 +595,14 @@ if __name__ == "__main__":
 	
 	try:
 		#print(sys.argv[1]);
-		j = sys.argv[1];
-		j = str(base64.b64decode(j.encode('latin-1')));
-		j = str(j[2:len(j)-1]);
-		#print(j);
-		j = json.loads(j);#.replace("-", " "));
+		b = sys.argv[1];
+		b = str(b[2:len(b)-1]);
+		b = str(base64.b64decode(b.encode('latin-1')));
+		b = str(b[2:len(b)-1]);
+		#j = j.encode('latin-1');
+		#j = str(j[2:len(j)-1]);
+		#print(b);
+		j = json.loads(b); #.replace("-", " "));
 			
 		a = ARK2DBuildSystem();
 		a.ark2d_dir = j["ark2d_dir"]

@@ -16,6 +16,7 @@
 #endif
 
 #include "ARKThread.h"
+#include "ARK2D.h"
 
 class ARKMutex {
 	public:

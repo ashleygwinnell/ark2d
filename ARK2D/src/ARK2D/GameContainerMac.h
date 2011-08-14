@@ -38,6 +38,9 @@
 				void doEvents();
 				void handleKeyEvent(NSEvent* event);
 
+				bool initOpenAL();
+				bool deinitOpenAL();
+
 				void setTitle(std::string title);
 				string getResourcePath() const;
 		};

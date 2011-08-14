@@ -8,17 +8,13 @@
 #ifndef ARK2D_H_
 #define ARK2D_H_
 
-#ifdef _WIN32
+#if defined(__linux__)
+	#define ARK2D_UBUNTU_LINUX
+#elif ( (defined(__MACH__)) || (defined(__APPLE__)) )
+	#define ARK2D_MACINTOSH
+#else
 	#define ARK2D_WINDOWS
 	#include <windows.h>
-#endif
-
-#ifdef __linux__
-	#define ARK2D_UBUNTU_LINUX
-#endif
-
-#if ( (defined(__MACH__)) || (defined(__APPLE__)) )
-	#define ARK2D_MACINTOSH
 #endif
 
 class GameContainer;
