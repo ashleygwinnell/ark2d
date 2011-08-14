@@ -7,7 +7,6 @@
 
 
 #include "ARKMutex.h"
-#include "ARK2D.h"
 #include "ErrorDialog.h"
 #include "StringUtil.h"
 

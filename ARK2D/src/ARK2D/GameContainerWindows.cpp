@@ -8,8 +8,9 @@
 
 #include "GameContainerWindows.h"
 #include "GameContainer.h"
+#include "ARK2D.h"
 
-#ifdef ARK2D_WINDOWS
+#if defined(ARK2D_WINDOWS)
 
 	#include "GigaRectangle.h"
 
@@ -757,7 +758,7 @@
 
 			//m_platformSpecific.m_hWindow = CreateWindow("GameContainer", // lp Class Name
 			m_platformSpecific.m_hWindow = CreateWindow("GameContainerWindows", // lp Class Name
-										m_game.getTitle(), // lp Window Name
+										m_game.getTitle().c_str(), // lp Window Name
 										windowFlags, // DW Style
 										s_x, // x
 										s_y, // y
@@ -999,12 +1000,21 @@
 			ReleaseDC( hWnd, hDC );
 		}
 
+		bool GameContainerPlatform::initOpenAL() {
+			alutInit(0, NULL);
+			alGetError();
+			return true;
+		}
+		bool GameContainerPlatform::deinitOpenAL() {
+			return true;
+		}
+
 		void GameContainerPlatform::setTitle(std::string title) {
 			SetWindowTextA(m_hWindow, title.c_str());
 		}
 
 		string GameContainerPlatform::getResourcePath() const {
-			return "data/";
+			return "./";
 		}
 
 #endif

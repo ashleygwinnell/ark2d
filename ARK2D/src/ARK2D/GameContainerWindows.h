@@ -9,6 +9,8 @@
 #ifndef GAMECONTAINERWINDOWS_H_
 #define GAMECONTAINERWINDOWS_H_
 
+#include "ARK2D.h"
+
 	#ifdef ARK2D_WINDOWS
 
 		#define MAPVK_VK_TO_VSC 0
@@ -67,6 +69,9 @@
 
 				void enableOpenGL(HWND hWnd, HDC* hDC, HGLRC* hRC);
 				void disableOpenGL(HWND hWnd, HDC hDC, HGLRC hRC);
+
+				bool initOpenAL();
+				bool deinitOpenAL();
 
 				static void* getARK2DResource(int resourceId, int resourceType);
 

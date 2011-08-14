@@ -36,6 +36,9 @@
 		void enableOpenGL();//HWND hWnd, HDC* hDC, HGLRC* hRC);
 		void disableOpenGL();//HWND hWnd, HDC hDC, HGLRC hRC);
 
+		bool initOpenAL();
+		bool deinitOpenAL();
+
 		void setTitle(std::string title);
 
 	};

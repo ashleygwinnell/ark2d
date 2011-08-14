@@ -7,6 +7,10 @@
 #include "Sound.h"
 #include "OutputWrapper.h"
 
+ALfloat Sound::ListenerPos[3] = {0.0, 0.0, 0.0};
+ALfloat Sound::ListenerVel[3] = { 0.0, 0.0, 0.0 };
+ALfloat Sound::ListenerOri[6] = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
+
 Sound::Sound(const std::string& fname):
 	m_FileName(fname)
 {
@@ -28,97 +32,25 @@ Sound::Sound(const std::string& fname):
 }
 
 void Sound::setSourcePosition(float x, float y, float z) {
-	this->SourcePos[0] = x; this->SourcePos[1] = y; this->SourcePos[2] = z;
+	SourcePos[0] = x; SourcePos[1] = y; SourcePos[2] = z;
 }
 void Sound::setSourceVelocity(float x, float y, float z) {
-	this->SourceVel[0] = x; this->SourceVel[1] = y; this->SourceVel[2] = z;
+	SourceVel[0] = x; SourceVel[1] = y; SourceVel[2] = z;
 }
 
 void Sound::setListenerPosition(float x, float y, float z) {
-	this->ListenerPos[0] = x; this->ListenerPos[1] = y; this->ListenerPos[2] = z;
+	ListenerPos[0] = x; ListenerPos[1] = y; ListenerPos[2] = z;
 }
 void Sound::setListenerVelocity(float x, float y, float z) {
-	this->ListenerVel[0] = x; this->ListenerVel[1] = y; this->ListenerVel[2] = z;
+	ListenerVel[0] = x; ListenerVel[1] = y; ListenerVel[2] = z;
 }
 void Sound::setListenerOrientation(float at_x, float at_y, float at_z, float up_x, float up_y, float up_z) {
-	this->ListenerOri[0] = at_x; this->ListenerOri[1] = at_y; this->ListenerOri[2] = at_z;
-	this->ListenerOri[3] = up_x; this->ListenerOri[4] = up_y; this->ListenerOri[5] = up_z;
+	ListenerOri[0] = at_x; ListenerOri[1] = at_y; ListenerOri[2] = at_z;
+	ListenerOri[3] = up_x; ListenerOri[4] = up_y; ListenerOri[5] = up_z;
 }
 
 
-bool Sound::initOpenAL() {
 
-	// clear errors before beginning.
-	alGetError();
-
-	if (alcGetCurrentContext() != NULL) {
-		ErrorDialog::createAndShow("OpenAL is already initialised. Exiting program.");
-		exit(0);
-	}
-
-	// Load OpenAL.
-	ALCdevice* dev = NULL;
-
-	dev = alcOpenDevice(NULL);
-	if(dev == NULL) {
-		ErrorDialog::createAndShow("Could not open Audio Device.");
-		exit(0);
-	} else if (alcGetError(dev) != ALC_NO_ERROR) {
-		ErrorDialog::createAndShow("Could not open Audio Device.");
-		exit(0);
-	}
-
-	// TODO: check the context attributes, maybe something is useful:
-	// http://www.openal.org/openal_webstf/specs/oal11spec_html/oal11spec6.html
-	// 6.2.1. Context Attributes
-	// my bet is on ALC_STEREO_SOURCES
-	ALCcontext* ctx = NULL;
-	ctx = alcCreateContext(dev, NULL);
-	if(ctx == NULL) {
-		ErrorDialog::createAndShow("Could not create Audio Context.");
-		return false;
-	} else if (alcGetError(dev) != ALC_NO_ERROR) {
-		ErrorDialog::createAndShow("Could not create Audio Context.");
-		return false;
-	}
-
-	ALboolean b = alcMakeContextCurrent(ctx);
-	if (b != ALC_TRUE) {
-		ErrorDialog::createAndShow("Could not make Audio Context current.");
-		exit(0);
-	}
-
-	if (alcGetError(dev) != ALC_NO_ERROR) {
-		ErrorDialog::createAndShow("Problem with Audio Device.");
-		exit(0);
-	}
-
-	//alcProcessContext(ctx);
-
-	ALfloat f1[] = { 0.0, 0.0, 0.0 };
-	ALfloat f2[] = { 0.0, 0.0, 0.0 };
-	ALfloat f3[] = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
-
-	alListenerfv(AL_POSITION,    f1);
-	alListenerfv(AL_VELOCITY,    f2);
-	alListenerfv(AL_ORIENTATION, f3);
-		//alListenerfv(AL_GAIN, 1.0f)
-
-	if (alGetError() != AL_NO_ERROR) {
-		ErrorDialog::createAndShow("Could not set OpenAL Listener");
-		exit(0);
-	}
-
-	std::cout << "Initialised OpenAL" << std::endl;
-	return true;
-}
-
-bool Sound::deinitOpenAL() {
-	//alcMakeContextCurrent(NULL);
-	//alcDestroyContext(ctx);
-	//alcCloseDevice(dev);
-	return true;
-}
 
 // returns true on success.
 bool Sound::load(bool loop) {
@@ -295,6 +227,7 @@ bool Sound::loadWAV(bool loop) {
 		}
 
 		return true;
+<<<<<<< HEAD
 	#endif
 
 	// References
@@ -309,165 +242,183 @@ bool Sound::loadWAV(bool loop) {
 	vector <char> data;
 	ALenum format;
 	ALsizei freq;
+=======
+	#elif defined(ARK2D_MACINTOSH)
 
-	FILE* f = NULL;
-	char* array = NULL;
+		// References
+		// -  http://ccrma.stanford.edu/courses/422/projects/WaveFormat/
+		// -  http://www.borg.com/~jglatt/tech/wave.htm
+		// -  Alut source code: static BufferData *loadWavFile (InputStream *stream)
+		//    http://www.openal.org/repos/openal/tags/freealut_1_1_0/alut/alut/src/alutLoader.c
+		// -  http://crownandcutlass.svn.sourceforge.net/viewvc/crownandcutlass/trunk/Protocce/src/soundutil.cpp?revision=914&view=markup
 
-	alGetError(); // clear error.
+		const unsigned int BUFFER_SIZE = 32768;     // 32 KB buffers
+		long bytes;
+		vector <char> data;
+		ALenum format;
+		ALsizei freq;
 
-	f = fopen(m_FileName.c_str(), "rb");
-	if (f == NULL) {
-		string errStr = "Could not load wav file. It does not exist. "; errStr += m_FileName;
-		ErrorDialog::createAndShow(errStr); return false;
-	}
+		FILE* f = NULL;
+		char* array = NULL;
+>>>>>>> 4161ae97d02e265665c5655d5c444cffb68e121d
 
-	// buffers
-	char magic[5];
-	magic[4] = '\0';
-	unsigned char buffer32[4];
-	unsigned char buffer16[2];
+		alGetError(); // clear error.
 
-	// check magic
-	if (fread(magic, 4,1,f) != 1) {
-		string errStr = "Could not read wav file: "; errStr += m_FileName;
-		ErrorDialog::createAndShow(errStr); return false;
-	}
-	if (string(magic) != "RIFF") {
-		string errStr = "Could not read wav file. This is not a wav file (no RIFF magic): "; errStr += m_FileName;
-		ErrorDialog::createAndShow(errStr); return false;
-	}
-
-    // skip 4 bytes (file size)
-	fseek(f, 4, SEEK_CUR);
-
-	// check file format
-	if (fread(magic, 4,1,f) != 1) {
-		string errStr = "Could not load wav file: "; errStr += m_FileName;
-		ErrorDialog::createAndShow(errStr); return false;
-	}
-	if (string(magic) != "WAVE") {
-		string errStr = "Could not read wav file. This is not a wav file (no WAVE format): "; errStr += m_FileName;
-		ErrorDialog::createAndShow(errStr); return false;
-	}
-
-	// check 'fmt ' sub chunk (1)
-	if (fread(magic, 4,1,f) != 1) {
-		string errStr = "Could not load wav file: "; errStr += m_FileName;
-		ErrorDialog::createAndShow(errStr); return false;
-	}
-	if (string(magic) != "fmt ") {
-		string errStr = "Could not read wav file. This is not a wav file (no 'fmt ' subchunk): "; errStr += m_FileName;
-		ErrorDialog::createAndShow(errStr); return false;
-	}
-
-	// read (1)s size
-	if (fread(buffer32, 4, 1, f) != 1) {
-		string errStr = "Could not load wav file: "; errStr += m_FileName;
-		ErrorDialog::createAndShow(errStr); return false;
-	}
-	unsigned long subChunk1Size = wav_readByte32(buffer32);
-	if (subChunk1Size >= 16) {
-		string errStr = "Could not read wav file. This is not a wav file ('fmt ' chunk too small, truncated file?): "; errStr += m_FileName;
-		ErrorDialog::createAndShow(errStr); return false;
-	}
-
-	// check PCM audio format.
-	if (fread(buffer16, 2, 1, f) != 1) {
-		string errStr = "Could not load wav file: "; errStr += m_FileName;
-		ErrorDialog::createAndShow(errStr); return false;
-	}
-	unsigned short audioFormat = wav_readByte16(buffer16);
-	if (audioFormat == 1) {
-		string errStr = "Could not read wav file. This is not a wav file (audio format is not PCM): "; errStr += m_FileName;
-		ErrorDialog::createAndShow(errStr); return false;
-	}
-
-	// read number of channels
-	if (fread(buffer16, 2, 1, f) != 1) {
-		string errStr = "Could not load wav file. Could not read number of channels.\r\n "; errStr += m_FileName;
-		ErrorDialog::createAndShow(errStr); return false;
-	}
-	unsigned short channels = wav_readByte16(buffer16);
-
-	 // read frequency (sample rate)
-	if (fread(buffer32, 4, 1, f) != 1) {
-		string errStr = "Could not load wav file. Could not read frequency/sample rate. \r\n"; errStr += m_FileName;
-		ErrorDialog::createAndShow(errStr); return false;
-	}
-	unsigned long frequency = wav_readByte32(buffer32);
-
-	// skip 6 bytes (Byte rate (4), Block align (2))
-	fseek(f,6,SEEK_CUR);
-
-	// read bits per sample.
-	if (fread(buffer16, 2, 1, f) != 1) {
-		string errStr = "Could not load wav file. Could not read bits per sample. \r\n"; errStr += m_FileName;
-		ErrorDialog::createAndShow(errStr); return false;
-	}
-	unsigned short bps = wav_readByte16(buffer16);
-
-	if (channels == 1) {
-		format = (bps == 8)? AL_FORMAT_MONO8 : AL_FORMAT_MONO16;
-	} else {
-		format = (bps == 8)? AL_FORMAT_STEREO8 : AL_FORMAT_STEREO16;
-	}
-
-	// check 'data' sub chunk (2)
-	if (fread(magic, 4, 1, f) != 1) {
-		string errStr = "Could not load wav file. Could not read 'data' subchunk 2. \r\n"; errStr += m_FileName;
-		ErrorDialog::createAndShow(errStr); return false;
-	}
-	if (string(magic) != "data") {
-		string errStr = "Could not read wav file. This is not a wav file (no data subchunk): "; errStr += m_FileName;
-		ErrorDialog::createAndShow(errStr); return false;
-	}
-
-	// read subchunk 2 (data) size.
-	if (fread(buffer32, 4, 1, f) != 1) {
-		string errStr = "Could not load wav file. Could not read subchunk 2 size. \r\n"; errStr += m_FileName;
-		ErrorDialog::createAndShow(errStr); return false;
-	}
-	unsigned long subChunk2Size = wav_readByte32(buffer32);
-
-	// the frequency of the sampling rate.
-	freq = frequency;
-	if (sizeof(freq) != sizeof(frequency)) {
-		string errStr = "Could not load wav file. 'frequency' and 'freq' are different sizes. \r\n"; errStr += m_FileName;
-		ErrorDialog::createAndShow(errStr); return false;
-	}
-
-	// read raw data.
-	array = new char[BUFFER_SIZE];
-	while (data.size() != subChunk2Size) {
-		//read a buffer's worth of data.
-		bytes = fread(array, 1, BUFFER_SIZE, f);
-
-		if (bytes <= 0) { break; }
-
-		if (data.size() +bytes >subChunk2Size) {
-			bytes = subChunk2Size - data.size();
+		f = fopen(m_FileName.c_str(), "rb");
+		if (f == NULL) {
+			string errStr = "Could not load wav file. It does not exist. "; errStr += m_FileName;
+			ErrorDialog::createAndShow(errStr); return false;
 		}
 
-		// append to end of buffer.
-		data.insert(data.end(), array, array + bytes);
-	}
+		// buffers
+		char magic[5];
+		magic[4] = '\0';
+		unsigned char buffer32[4];
+		unsigned char buffer16[2];
 
-	delete[] array;
-	array = NULL;
+		// check magic
+		if (fread(magic, 4,1,f) != 1) {
+			string errStr = "Could not read wav file: "; errStr += m_FileName;
+			ErrorDialog::createAndShow(errStr); return false;
+		}
+		if (string(magic) != "RIFF") {
+			string errStr = "Could not read wav file. This is not a wav file (no RIFF magic): "; errStr += m_FileName;
+			ErrorDialog::createAndShow(errStr); return false;
+		}
 
-	fclose(f);
-	f = NULL;
+		// skip 4 bytes (file size)
+		fseek(f, 4, SEEK_CUR);
 
-	// Load the wav into the buffer
-	alGetError();
-	alBufferData(Buffer, format, &data[0],  data.size(), frequency);
-	ALenum bufferwaverr = alGetError();
-	if (bufferwaverr != AL_NO_ERROR) {
-		ErrorDialog::createAndShow("Error copying WAV file into buffer.");
+		// check file format
+		if (fread(magic, 4,1,f) != 1) {
+			string errStr = "Could not load wav file: "; errStr += m_FileName;
+			ErrorDialog::createAndShow(errStr); return false;
+		}
+		if (string(magic) != "WAVE") {
+			string errStr = "Could not read wav file. This is not a wav file (no WAVE format): "; errStr += m_FileName;
+			ErrorDialog::createAndShow(errStr); return false;
+		}
+
+		// check 'fmt ' sub chunk (1)
+		if (fread(magic, 4,1,f) != 1) {
+			string errStr = "Could not load wav file: "; errStr += m_FileName;
+			ErrorDialog::createAndShow(errStr); return false;
+		}
+		if (string(magic) != "fmt ") {
+			string errStr = "Could not read wav file. This is not a wav file (no 'fmt ' subchunk): "; errStr += m_FileName;
+			ErrorDialog::createAndShow(errStr); return false;
+		}
+
+		// read (1)s size
+		if (fread(buffer32, 4, 1, f) != 1) {
+			string errStr = "Could not load wav file: "; errStr += m_FileName;
+			ErrorDialog::createAndShow(errStr); return false;
+		}
+		unsigned long subChunk1Size = wav_readByte32(buffer32);
+		if (subChunk1Size >= 16) {
+			string errStr = "Could not read wav file. This is not a wav file ('fmt ' chunk too small, truncated file?): "; errStr += m_FileName;
+			ErrorDialog::createAndShow(errStr); return false;
+		}
+
+		// check PCM audio format.
+		if (fread(buffer16, 2, 1, f) != 1) {
+			string errStr = "Could not load wav file: "; errStr += m_FileName;
+			ErrorDialog::createAndShow(errStr); return false;
+		}
+		unsigned short audioFormat = wav_readByte16(buffer16);
+		if (audioFormat == 1) {
+			string errStr = "Could not read wav file. This is not a wav file (audio format is not PCM): "; errStr += m_FileName;
+			ErrorDialog::createAndShow(errStr); return false;
+		}
+
+		// read number of channels
+		if (fread(buffer16, 2, 1, f) != 1) {
+			string errStr = "Could not load wav file. Could not read number of channels.\r\n "; errStr += m_FileName;
+			ErrorDialog::createAndShow(errStr); return false;
+		}
+		unsigned short channels = wav_readByte16(buffer16);
+
+		 // read frequency (sample rate)
+		if (fread(buffer32, 4, 1, f) != 1) {
+			string errStr = "Could not load wav file. Could not read frequency/sample rate. \r\n"; errStr += m_FileName;
+			ErrorDialog::createAndShow(errStr); return false;
+		}
+		unsigned long frequency = wav_readByte32(buffer32);
+
+		// skip 6 bytes (Byte rate (4), Block align (2))
+		fseek(f,6,SEEK_CUR);
+
+		// read bits per sample.
+		if (fread(buffer16, 2, 1, f) != 1) {
+			string errStr = "Could not load wav file. Could not read bits per sample. \r\n"; errStr += m_FileName;
+			ErrorDialog::createAndShow(errStr); return false;
+		}
+		unsigned short bps = wav_readByte16(buffer16);
+
+		if (channels == 1) {
+			format = (bps == 8)? AL_FORMAT_MONO8 : AL_FORMAT_MONO16;
+		} else {
+			format = (bps == 8)? AL_FORMAT_STEREO8 : AL_FORMAT_STEREO16;
+		}
+
+		// check 'data' sub chunk (2)
+		if (fread(magic, 4, 1, f) != 1) {
+			string errStr = "Could not load wav file. Could not read 'data' subchunk 2. \r\n"; errStr += m_FileName;
+			ErrorDialog::createAndShow(errStr); return false;
+		}
+		if (string(magic) != "data") {
+			string errStr = "Could not read wav file. This is not a wav file (no data subchunk): "; errStr += m_FileName;
+			ErrorDialog::createAndShow(errStr); return false;
+		}
+
+		// read subchunk 2 (data) size.
+		if (fread(buffer32, 4, 1, f) != 1) {
+			string errStr = "Could not load wav file. Could not read subchunk 2 size. \r\n"; errStr += m_FileName;
+			ErrorDialog::createAndShow(errStr); return false;
+		}
+		unsigned long subChunk2Size = wav_readByte32(buffer32);
+
+		// the frequency of the sampling rate.
+		freq = frequency;
+		if (sizeof(freq) != sizeof(frequency)) {
+			string errStr = "Could not load wav file. 'frequency' and 'freq' are different sizes. \r\n"; errStr += m_FileName;
+			ErrorDialog::createAndShow(errStr); return false;
+		}
+
+		// read raw data.
+		array = new char[BUFFER_SIZE];
+		while (data.size() != subChunk2Size) {
+			//read a buffer's worth of data.
+			bytes = fread(array, 1, BUFFER_SIZE, f);
+
+			if (bytes <= 0) { break; }
+
+			if (data.size() +bytes >subChunk2Size) {
+				bytes = subChunk2Size - data.size();
+			}
+
+			// append to end of buffer.
+			data.insert(data.end(), array, array + bytes);
+		}
+
+		delete[] array;
+		array = NULL;
+
+		fclose(f);
+		f = NULL;
+
+		// Load the wav into the buffer
+		alGetError();
+		alBufferData(Buffer, format, &data[0],  data.size(), frequency);
+		ALenum bufferwaverr = alGetError();
+		if (bufferwaverr != AL_NO_ERROR) {
+			ErrorDialog::createAndShow("Error copying WAV file into buffer.");
+			return false;
+		}
+
 		return false;
-	}
 
-	return false;
+	#endif
 }
 
 

@@ -7,9 +7,10 @@
 
 #include "GigaRectangle.h"
 #include "GameContainer.h"
+#include "ARK2D.h"
 
 
-#if defined(_WIN32) || defined(ARK2D_WINDOWS)
+#if defined(ARK2D_WINDOWS)
 	#include "GameContainerWindows.h"
 #endif
 
@@ -79,20 +80,10 @@ void GameContainer::disable2D() {
 }
 
 void GameContainer::enableOpenAL() {
-	#if defined(ARK2D_WINDOWS)
-		alutInit(0, NULL);
-		alGetError();
-	#elif defined(ARK2D_MACINTOSH)
-		Sound::initOpenAL();
-	#endif
+	m_platformSpecific.initOpenAL();
 }
 void GameContainer::disableOpenAL() {
-	#if defined(ARK2D_WINDOWS)
-		//alutInit(0, NULL);
-		//alGetError();
-	#elif defined(ARK2D_MACINTOSH)
-		Sound::deinitOpenAL();
-	#endif
+	m_platformSpecific.deinitOpenAL();
 }
 
 void GameContainer::resize(int w, int h) {

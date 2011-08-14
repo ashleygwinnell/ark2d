@@ -1,2 +1,2 @@
-build_release\\HOT_CROSS_BUNIONS.exe
+build_release\\win32\\HOT_CROSS_BUNIONS.exe
 pause

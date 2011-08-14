@@ -29,6 +29,9 @@
 #include "ARK2D_AL.h"
 
 class Sound {
+	friend class GameContainer;
+	friend class GameContainerPlatform;
+
 	public:
 		Sound(const std::string& filename);
 		void play();
@@ -39,7 +42,7 @@ class Sound {
 		float getVolume();
 		void setPanning(float pan);
 		~Sound();
-	private:
+	protected:
 		// Buffers hold sound data.
 		ALuint Buffer;
 
@@ -53,13 +56,13 @@ class Sound {
 		ALfloat SourceVel[3]; // = { 0.0, 0.0, 0.0 };
 
 		// Position of the Listener.
-		ALfloat ListenerPos[3]; // = { 0.0, 0.0, 0.0 };
+		static ALfloat ListenerPos[3]; // = { 0.0, 0.0, 0.0 };
 
 		// Velocity of the Listener.
-		ALfloat ListenerVel[3]; // = { 0.0, 0.0, 0.0 };
+		static ALfloat ListenerVel[3]; // = { 0.0, 0.0, 0.0 };
 
 		// Orientation of the Listener. (first 3 elements are "at", second 3 are "up"):; Also note that these should be units of '1'.
-		ALfloat ListenerOri[6]; // = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
+		static ALfloat ListenerOri[6]; // = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
 
 		// Volume, no need to store internally to be honest, but keep it simples, yarp!
 		ALfloat m_volume;
@@ -69,22 +72,19 @@ class Sound {
 
 		void setSourcePosition(float x, float y, float z);
 		void setSourceVelocity(float x, float y, float z);
-		void setListenerPosition(float x, float y, float z);
-		void setListenerVelocity(float x, float y, float z);
-		void setListenerOrientation(float at_x, float at_y, float at_z, float up_x, float up_y, float up_z);
+		static void setListenerPosition(float x, float y, float z);
+		static void setListenerVelocity(float x, float y, float z);
+		static void setListenerOrientation(float at_x, float at_y, float at_z, float up_x, float up_y, float up_z);
 		bool load(bool loop);
 		bool loadWAV(bool loop);
 		bool loadOGG(bool loop);
 
-	private:
+	protected:
 		string getALErrorString(ALenum err);
 
 		static unsigned short wav_readByte16(const unsigned char buffer[2]);
 		static unsigned short wav_readByte32(const unsigned char buffer[4]);
 
-	public:
-		static bool initOpenAL();
-		static bool deinitOpenAL();
 
 };
 
