@@ -227,22 +227,7 @@ bool Sound::loadWAV(bool loop) {
 		}
 
 		return true;
-<<<<<<< HEAD
-	#endif
 
-	// References
-	// -  http://ccrma.stanford.edu/courses/422/projects/WaveFormat/
-	// -  http://www.borg.com/~jglatt/tech/wave.htm
-	// -  Alut source code: static BufferData *loadWavFile (InputStream *stream)
-	//    http://www.openal.org/repos/openal/tags/freealut_1_1_0/alut/alut/src/alutLoader.c
-	// -  http://crownandcutlass.svn.sourceforge.net/viewvc/crownandcutlass/trunk/Protocce/src/soundutil.cpp?revision=914&view=markup
-	//    http://crownandcutlass.svn.sourceforge.net/viewvc/crownandcutlass/trunk/Protocce/include/soundutil.h?revision=878&view=markup
-	const unsigned int BUFFER_SIZE = 32768;     // 32 KB buffers
-	long bytes;
-	vector <char> data;
-	ALenum format;
-	ALsizei freq;
-=======
 	#elif defined(ARK2D_MACINTOSH)
 
 		// References
@@ -260,7 +245,6 @@ bool Sound::loadWAV(bool loop) {
 
 		FILE* f = NULL;
 		char* array = NULL;
->>>>>>> 4161ae97d02e265665c5655d5c444cffb68e121d
 
 		alGetError(); // clear error.
 

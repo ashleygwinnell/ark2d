@@ -596,9 +596,14 @@ if __name__ == "__main__":
 	try:
 		#print(sys.argv[1]);
 		b = sys.argv[1];
-		b = str(b[2:len(b)-1]);
+		if (b[0] == 'b'):
+			b = str(b[2:len(b)-1]);
+		
 		b = str(base64.b64decode(b.encode('latin-1')));
-		b = str(b[2:len(b)-1]);
+		
+		if (b[0] == 'b'):
+			b = str(b[2:len(b)-1]);
+			
 		#j = j.encode('latin-1');
 		#j = str(j[2:len(j)-1]);
 		#print(b);
