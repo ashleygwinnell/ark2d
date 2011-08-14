@@ -48,6 +48,9 @@ void Sound::setListenerOrientation(float at_x, float at_y, float at_z, float up_
 
 bool Sound::initOpenAL() {
 
+	// clear errors before beginning.
+	alGetError();
+
 	if (alcGetCurrentContext() != NULL) {
 		ErrorDialog::createAndShow("OpenAL is already initialised. Exiting program.");
 		exit(0);
@@ -300,7 +303,7 @@ bool Sound::loadWAV(bool loop) {
 	// -  Alut source code: static BufferData *loadWavFile (InputStream *stream)
 	//    http://www.openal.org/repos/openal/tags/freealut_1_1_0/alut/alut/src/alutLoader.c
 	// -  http://crownandcutlass.svn.sourceforge.net/viewvc/crownandcutlass/trunk/Protocce/src/soundutil.cpp?revision=914&view=markup
-
+	//    http://crownandcutlass.svn.sourceforge.net/viewvc/crownandcutlass/trunk/Protocce/include/soundutil.h?revision=878&view=markup
 	const unsigned int BUFFER_SIZE = 32768;     // 32 KB buffers
 	long bytes;
 	vector <char> data;

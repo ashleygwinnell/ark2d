@@ -30,6 +30,8 @@
 		m_clearColor(Color::black),
 		m_platformSpecific()
 		{
+			NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+			
 			m_platformSpecific.m_container = this;
 		
 			m_input.setGameContainer(this);
@@ -52,8 +54,6 @@
 			m_platformSpecific.m_resourcePath += "/";
 			std::cout << "Resource path: " << m_platformSpecific.m_resourcePath << std::endl;
 			
-			NSAutoreleasePool* pool;
-			pool = [[NSAutoreleasePool alloc] init];
 			if (NSApp == nil) {
 				[NSApplication sharedApplication];
 				[NSApp finishLaunching];
@@ -211,6 +211,8 @@
 	
 	NSOpenGLContext* GameContainerPlatform::createGLContext() 
 	{
+	    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+	    
 	    NSOpenGLPixelFormatAttribute attr[] =
 	    {
 			NSOpenGLPFADoubleBuffer,
@@ -223,7 +225,10 @@
 		NSOpenGLPixelFormat* format = [[NSOpenGLPixelFormat alloc] initWithAttributes:attr];
 		NSOpenGLContext* glContext = [[NSOpenGLContext alloc] initWithFormat: format shareContext: nil];
 		//[glContext makeCurrentContext];
-	    return glContext;
+	    
+	    [pool release];
+	    
+	    return glContext;  
 	}
 	
 	void GameContainerPlatform::makeContextCurrent(NSWindow* window, NSOpenGLContext* context) 
@@ -255,6 +260,8 @@
 	
 	
 	void GameContainerPlatform::handleKeyEvent(NSEvent* event) {
+		NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+		
 		unsigned short scancode = [event keyCode];
 		unsigned int key;
 		
@@ -283,6 +290,8 @@
 			default: /* just to avoid compiler warnings */
 				break;
 		}
+		
+		[pool release];
 	}
 	
 	void GameContainerPlatform::doEvents() {
