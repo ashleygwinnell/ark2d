@@ -37,12 +37,14 @@ void DefaultGame::initStates(GameContainer* container) {
 	witch = sheet->getSubImage(desc->getItemByName("witch.png"))->getScaledCopy(4, 4);
 	witch_fat = sheet->getSubImage(desc->getItemByName("witch-fat.png"))->getScaledCopy(4, 4);
 
-	music = new Sound(container->getResourcePath() + "data/game/hotcrossbunions-ogg.ogg");
+
 
 	snd_enter = new Sound(container->getResourcePath() + "data/game/enter.wav");
 	snd_good = new Sound(container->getResourcePath() + "data/game/good.wav");
 	snd_bad = new Sound(container->getResourcePath() + "data/game/bad.wav");
 	snd_keypress = new Sound(container->getResourcePath() + "data/game/keypress.wav");
+
+	music = new Sound(container->getResourcePath() + "data/game/hotcrossbunions-ogg.ogg");
 
 	local_highscores = new LocalHighscores();
 	local_highscores->load();

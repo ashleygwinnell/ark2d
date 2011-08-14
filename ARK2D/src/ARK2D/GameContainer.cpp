@@ -79,13 +79,20 @@ void GameContainer::disable2D() {
 }
 
 void GameContainer::enableOpenAL() {
-	#ifdef ARK2D_WINDOWS
+	#if defined(ARK2D_WINDOWS)
 		alutInit(0, NULL);
 		alGetError();
+	#elif defined(ARK2D_MACINTOSH)
+		Sound::initOpenAL();
 	#endif
 }
 void GameContainer::disableOpenAL() {
-
+	#if defined(ARK2D_WINDOWS)
+		//alutInit(0, NULL);
+		//alGetError();
+	#elif defined(ARK2D_MACINTOSH)
+		Sound::deinitOpenAL();
+	#endif
 }
 
 void GameContainer::resize(int w, int h) {

@@ -165,7 +165,8 @@
 		m_graphics.m_DefaultFont = fnt;
 		m_graphics.m_Font = fnt;
 		
-		// initialise OpenAL
+		// initialise 
+		enableOpenAL();
 		
 		// initialise game.
 		OutputWrapper::print("Initialising ");
@@ -181,7 +182,7 @@
 			m_timer.tick();
 			m_platformSpecific.doEvents();
 			
-			processGamepadInput();
+			processGamepadInput(); 
 		   
 			int delta = (int) (m_timer.getDelta() * 1000);
 			m_game.update(this, &m_timer);
@@ -199,6 +200,8 @@
 			//sleep(delta/2);
 			usleep(delta/2);
 		}
+		
+		disableOpenAL();
 		
 	}
 

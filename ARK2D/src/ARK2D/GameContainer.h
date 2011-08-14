@@ -23,6 +23,8 @@
 #include "ErrorDialog.h"
 #include "OutputWrapper.h"
 
+#include "Sound.h"
+
 #include <vector>
 #include <ctime>
 #include <stdio.h>

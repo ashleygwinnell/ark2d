@@ -493,11 +493,11 @@ class ARK2DBuildSystem:
 				
 				
 				#copy icns in to .app folder
-				#if (self.mac_game_icns != ''):
-				#	subprocess.call(['cp ' + self.mac_game_icns + ' ' + resources_folder + self.ds + gn +'.icns'], shell=True);
-				#else:
-				#	subprocess.call(['cp ' + resources_folder + self.ds + 'ark2d' + self.ds + 'icon.icns ' + resources_folder + self.ds + gn +'.icns'], shell=True);
-				#
+				if (self.mac_game_icns != ''):
+					subprocess.call(['cp ' + self.mac_game_icns.replace(' ', '\ ').replace('&', '\&') + ' ' + resources_folder + self.ds + gn +'.icns'], shell=True);
+				else:
+					subprocess.call(['cp ' + resources_folder + self.ds + 'ark2d' + self.ds + 'icon.icns ' + resources_folder + self.ds + gn +'.icns'], shell=True);
+				
 				
 				cr = "\r";
 				infoplistcontents  = "";

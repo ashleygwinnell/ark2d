@@ -23,7 +23,7 @@
 #ifdef ARK2D_MACINTOSH
 	#include <OpenAL/al.h>
 	#include <OpenAL/alc.h>
-	#include <OpenAL/MacOSX_OALExtensions.h>
+	//#include <OpenAL/MacOSX_OALExtensions.h>
 
 	//typedef unsigned int ALuint;
 	//typedef float ALfloat;

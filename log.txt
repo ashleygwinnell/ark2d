@@ -315,6 +315,10 @@
 - Spritesheet class to accept String constructor.
 - Misc fixes.
 
+14:35 14/08/2011
+- Implemented WAV loading without ALUT.
+- Created Inverse Polarity.app
+
 TODO:
 - Add "clean" target to build system.
 - Load FTFont from data.

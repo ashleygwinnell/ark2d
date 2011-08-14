@@ -12,6 +12,10 @@
 	#include <windows.h>
 #endif
 
+//
+// http://www.devmaster.net/articles/openal-tutorials/lesson4.php
+//
+
 #include <stdlib.h>
 #include <string>
 #include <stdio.h>
@@ -74,6 +78,13 @@ class Sound {
 
 	private:
 		string getALErrorString(ALenum err);
+
+		static unsigned short wav_readByte16(const unsigned char buffer[2]);
+		static unsigned short wav_readByte32(const unsigned char buffer[4]);
+
+	public:
+		static bool initOpenAL();
+		static bool deinitOpenAL();
 
 };
 
