@@ -57,7 +57,7 @@
         "date_modified": 1313341329.2192
     }, 
     "src\\ARK2D\\ARKString.cpp": {
-        "date_modified": 1310749348.288
+        "date_modified": 1313451718.55
     }, 
     "src\\ARK2D\\ARKThread.cpp": {
         "date_modified": 1313337105.2104
@@ -165,7 +165,7 @@
         "date_modified": 1302378293.7674
     }, 
     "src\\ARK2D\\StringUtil.cpp": {
-        "date_modified": 1313337105.3196
+        "date_modified": 1313417686.0288
     }, 
     "src\\ARK2D\\TargaImage.cpp": {
         "date_modified": 1302378293.7314
@@ -224,8 +224,11 @@
     "src\\ARK2D\\UI\\ScrollPanel.cpp": {
         "date_modified": 1311519726.1354
     }, 
+    "src\\ARK2D\\UI\\TextArea.cpp": {
+        "date_modified": 1313421697.3828
+    }, 
     "src\\ARK2D\\UI\\TextField.cpp": {
-        "date_modified": 1310605131.8584
+        "date_modified": 1313449699.293
     }, 
     "src\\ARK2D\\UI\\UIComponent.cpp": {
         "date_modified": 1311112829.8912

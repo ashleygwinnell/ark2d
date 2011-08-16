@@ -319,10 +319,16 @@
 - Implemented WAV loading without ALUT.
 - Created Inverse Polarity.app
 
+23:39 15/08/2011
+- Fixed a bunch of stuff on Windows which were made when working on Mac.
+- Added "multiline" property to TextField class and implemented multiline rendering.
+- Added ARKString methods split(delimiter), equals(str), contains(str) and countOccurrences(delim).
+
 TODO:
 - Add "clean" target to build system.
 - Load FTFont from data.
 - TextField work:
+ - use up and down keys to move up and down on multiline textfields.
  - use mouse to select text.
  - use mouse to select cursor/caret position.
  - use keyboard to select text.

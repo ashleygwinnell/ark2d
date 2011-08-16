@@ -19,6 +19,8 @@
 #include "ErrorDialog.h"
 #include "ToString.h"
 
+class ARKString;
+
 using namespace std;
 
 class StringUtil {
@@ -43,6 +45,8 @@ class StringUtil {
 		static void trimLeft(string& str, const char* chars2remove);
 		static void trimRight(string& str, const char* chars2remove);
 		static void trim(string& str, const char* chars2remove);
+		static string trimret(string str, string charsToRemove);
+		static void trimAll(vector<ARKString>& strings, string chars2remove);
 
 		static string& str_replace(const string& search, const string& replace, string& subject);
 

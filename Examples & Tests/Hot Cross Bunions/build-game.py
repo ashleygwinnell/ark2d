@@ -45,7 +45,7 @@ if __name__ == "__main__":
 	a['game_resources_dir'] = a['game_dir'] + ds + "data";
 	a['mac_game_icns'] = a['game_resources_dir'] + ds + "icon.icns";
 	
-	b = json.dumps(a, separators=(',',':'));#.replace(" ", "-"); #.replace("\"", "\\\"").replace("&", "\&");
+	b = json.dumps(a, separators=(',',':')); #.replace(" ", "-"); #.replace("\"", "\\\"").replace("&", "\&");
 	b = str.encode(b);
 	b = base64.b64encode(b);
 	b = str(b);

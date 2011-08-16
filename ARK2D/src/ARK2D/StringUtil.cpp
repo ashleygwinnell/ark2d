@@ -7,6 +7,7 @@
 
 #include "StringUtil.h"
 #include "ToString.h"
+#include "ARKString.h"
 
 std::string StringUtil::append(string str, int i) {
 	std::ostringstream os;
@@ -230,7 +231,7 @@ char* StringUtil::file_get_contents(const char* fileName) {
     	} else {
     		f.close();
 
-    		char* text;
+    		char* text = NULL;
 
     		FILE* file = fopen(fileName, "rt");
     		if (file == NULL) {
@@ -306,6 +307,16 @@ void StringUtil::trimRight(string& str, const char* chars2remove) {
 void StringUtil::trim(string& str, const char* chars2remove) {
 	StringUtil::trimLeft(str, chars2remove);
 	StringUtil::trimRight(str, chars2remove);
+}
+string StringUtil::trimret(string str, string charsToRemove) {
+	StringUtil::trim(str, charsToRemove.c_str());
+	return str;
+}
+void StringUtil::trimAll(vector<ARKString>& strings, string chars2remove) {
+	//for(unsigned int i = 0; i < strings.size(); i++) {
+	//	const string& s = strings[i].get();
+	//	StringUtil::trim(s, chars2remove.c_str());
+	//}
 }
 
 string StringUtil::getExtension(string s) {
