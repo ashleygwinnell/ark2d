@@ -49,6 +49,9 @@ void Sound::setListenerOrientation(float at_x, float at_y, float at_z, float up_
 	ListenerOri[3] = up_x; ListenerOri[4] = up_y; ListenerOri[5] = up_z;
 }
 
+
+
+
 // returns true on success.
 bool Sound::load(bool loop) {
 
@@ -224,6 +227,7 @@ bool Sound::loadWAV(bool loop) {
 		}
 
 		return true;
+
 	#elif defined(ARK2D_MACINTOSH)
 
 		// References

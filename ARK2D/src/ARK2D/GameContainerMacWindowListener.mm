@@ -151,20 +151,23 @@ static int darwin_scancode_table[] = {
 @implementation GameContainerMacWindowListener 
 
 -(void) init:(NSWindow* )window {
-    NSNotificationCenter* center;
-    // NSView* view = [window contentView];
-    center = [NSNotificationCenter defaultCenter];
-    if ([window delegate] != nil) {
-        [center addObserver:self selector:@selector(windowDidExpose:) name:NSWindowDidExposeNotification object:window];
-    } else {
-        [window setDelegate:self];
-    }
-    
-    [window setNextResponder:self];
-      //  [view setNextResponder:self];
-    
-    m_window = window;
-
+   	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+   
+	    NSNotificationCenter* center;
+	    // NSView* view = [window contentView];
+	    center = [NSNotificationCenter defaultCenter];
+	    if ([window delegate] != nil) {
+	        [center addObserver:self selector:@selector(windowDidExpose:) name:NSWindowDidExposeNotification object:window];
+	    } else {
+	        [window setDelegate:self];
+	    }
+	    
+	    [window setNextResponder:self];
+	      //  [view setNextResponder:self];
+	    
+	    m_window = window;
+	
+	[pool release];
 }
 
 - (BOOL)windowShouldClose:(id)sender
@@ -186,20 +189,27 @@ static int darwin_scancode_table[] = {
 }
 
 -(void)keyDown:(NSEvent *)theEvent {
+	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+	
   	unsigned short scancode = [theEvent keyCode];
     std::cout << "key pressed: " << scancode << std::endl;
     if (scancode < 128) {
     	unsigned int key = darwin_scancode_table[scancode];
     	ARK2D::getInput()->pressKey(key);
     }
+    
+    [pool release];
 }
 -(void)keyUp:(NSEvent *)theEvent {
+	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    
     unsigned short scancode = [theEvent keyCode];
     std::cout << "key released: " << scancode << std::endl;
     if (scancode < 128) {
     	unsigned int key = darwin_scancode_table[scancode];
     	ARK2D::getInput()->releaseKey(key);
     }
+    [pool release];
 }
 
 -(void)mouseDown:(NSEvent *)theEvent {
@@ -211,6 +221,8 @@ static int darwin_scancode_table[] = {
     ARK2D::getInput()->releaseKey(Input::MOUSE_BUTTON_LEFT);
 }
 -(void)mouseMoved:(NSEvent *)theEvent {
+	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+	
 	NSPoint v = [theEvent locationInWindow];
 	//NSPoint v = [NSView convertPoint:[NSEvent mouseLocation] fromView:nil];
 	
@@ -228,6 +240,8 @@ static int darwin_scancode_table[] = {
 
 	i->mouse_x = (int) v.x;
 	i->mouse_y = (int) v.y;
+	
+	[pool release];
 }
 -(void)mouseDragged:(NSEvent* )theEvent {
 	[self mouseMoved:theEvent];
