@@ -1,0 +1,17 @@
+{
+	"enemies": [
+		{
+			"id": 1,
+			"x": 580,
+			"y": 240,
+			"path": {
+				"file": "sine.path",
+				"speed_modifier": 1,
+				"rotation": 45,
+				"flip_h": false,
+				"flip_v": false,
+				"delay": 0
+			}
+		}
+	]
+}

@@ -1,0 +1,94 @@
+Setting random seed. ...done.
+Initialising Gamepads... done.
+Initialising OpenGL... done.
+Loading BMFont... Loading Image from resource. 
+done.
+Initialising OpenAL... done.
+Initialising Window... done.
+Initialising LOVE ME, TOO! Wave Editor...
+Loaded Image: data/enemies.png
+Opening file: data/enemies.json
+Initialised LOVE ME, TOO! Wave Editor...
+
+g
+a
+m
+e
+
+_
+m
+o
+d
+e
+
+(
+
+)
+
+
+
+,
+
+
+
+d
+e
+r
+o
+
+p
+
+
+
+f
+a
+s
+d
+
+
+
+
+
+
+0
+0
+
+
+
+
+ 
+
+ 
+
+ 
+
+ 
+ 
+
+
+
+
+ 
+ 
+ 
+
+
+
+
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+Deinitialised OpenGL...
+Deinitialised Window...
