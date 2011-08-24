@@ -10,6 +10,7 @@
 #include "EditorLevel.h"
 #include "LevelGamePanel.h"
 #include "LevelToolPanel.h"
+#include "RSSL.h"
 
 class DefaultGame;
 
@@ -67,6 +68,7 @@ class LevelEditorState : public GameState {
 		float m_timer;
 
 		string m_currentFile;
+		RSSL* m_rssl;
 
 	public:
 		LevelEditorState();
@@ -87,7 +89,7 @@ class LevelEditorState : public GameState {
 		void selectWave(int index);
 
 		static void saveScript();
-		static string parseScript(string s);
+		static void parseScript(string s);
 
 		static void addWave();
 		static void moveWave();
@@ -101,6 +103,13 @@ class LevelEditorState : public GameState {
 		static void playPressed();
 		static void pausePressed();
 		static void stopPressed();
+
+		static void script_GameMode(RSSLFunction* f);
+		static void script_StartBoss(RSSLFunction* f);
+		static void script_CameraShake(RSSLFunction* f);
+		static void script_SpawnTrinket(RSSLFunction* f);
+
+		string pathDir(string s);
 
 		~LevelEditorState();
 };

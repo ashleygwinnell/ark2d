@@ -9,86 +9,11 @@ Initialising LOVE ME, TOO! Wave Editor...
 Loaded Image: data/enemies.png
 Opening file: data/enemies.json
 Initialised LOVE ME, TOO! Wave Editor...
-
-g
-a
-m
-e
-
-_
-m
-o
-d
-e
-
-(
-
-)
-
-
-
-,
-
-
-
-d
-e
-r
-o
-
-p
-
-
-
-f
-a
-s
-d
-
-
-
-
-
-
-0
-0
-
-
-
-
- 
-
- 
-
- 
-
- 
- 
-
-
-
-
- 
- 
- 
-
-
-
-
-
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
-
+Opening file: C:\xampp\htdocs\C++\ARK2D\Examples & Tests\LMT Wave Editor\data\levels\testlevel.level
+Opening file: C:\xampp\htdocs\C++\ARK2D\Examples & Tests\LMT Wave Editor\data\waves\example.wave
+Opening file: C:\xampp\htdocs\C++\ARK2D\Examples & Tests\LMT Wave Editor\data\paths\sine.path
+Opening file: C:\xampp\htdocs\C++\ARK2D\Examples & Tests\LMT Wave Editor\data\paths\sine.path
+Opening file: C:\xampp\htdocs\C++\ARK2D\Examples & Tests\LMT Wave Editor\data\paths\sine.path
+Opening file: C:\xampp\htdocs\C++\ARK2D\Examples & Tests\LMT Wave Editor\data\paths\sine.path
 Deinitialised OpenGL...
 Deinitialised Window...

@@ -34,6 +34,7 @@ if __name__ == "__main__":
 		"src" + ds + "LevelEditorState.cpp",
 		"src" + ds + "LevelGamePanel.cpp",
 		"src" + ds + "LevelToolPanel.cpp",
+		"src" + ds + "RSSL.cpp",
 		"src" + ds + "ToolPanel.cpp",
 		"src" + ds + "WaveEditorState.cpp",
 		"src" + ds + "Resources.rc",

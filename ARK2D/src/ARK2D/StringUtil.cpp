@@ -126,7 +126,7 @@ bool StringUtil::is_base64(unsigned char c) {
 	return (isalnum(c) || (c == '+') || (c == '/'));
 }
 
-string StringUtil::encodeBase64(unsigned char const* bytes_to_encode, unsigned int in_len) {
+string StringUtil::encodeBase64(const unsigned char* bytes_to_encode, unsigned int in_len) {
 	string ret;
 	int i = 0;
 	int j = 0;

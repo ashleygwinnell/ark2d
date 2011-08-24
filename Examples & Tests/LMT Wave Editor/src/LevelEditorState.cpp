@@ -36,6 +36,50 @@ void LevelEditorState::init(GameContainer* container, StateBasedGame* game) {
 
 	newLevel();
 
+	m_rssl = new RSSL();
+
+	RSSLFunction* gmf = new RSSLFunction();
+	gmf->name = "game_mode";
+	gmf->multiline = false;
+	gmf->callback = (void*) LevelEditorState::script_GameMode;
+	gmf->addArgument("mode", RSSL::TYPE_STRING);
+	gmf->addArgument("time", RSSL::TYPE_INT);
+	m_rssl->addFunction(gmf);
+
+	RSSLFunction* sbf = new RSSLFunction();
+	sbf->name = "start_boss";
+	sbf->multiline = false;
+	sbf->callback = (void*) LevelEditorState::script_StartBoss;
+	sbf->addArgument("boss_id", RSSL::TYPE_INT);
+	sbf->addArgument("time", RSSL::TYPE_INT);
+	m_rssl->addFunction(sbf);
+
+	RSSLFunction* csf = new RSSLFunction();
+	csf->name = "camera_shake";
+	csf->multiline = false;
+	csf->callback = (void*) LevelEditorState::script_CameraShake;
+	csf->addArgument("magnitude", RSSL::TYPE_INT);
+	csf->addArgument("time", RSSL::TYPE_INT);
+	m_rssl->addFunction(csf);
+
+	RSSLFunction* stf = new RSSLFunction();
+	stf->name = "spawn_trinket";
+	stf->multiline = false;
+	stf->callback = (void*) LevelEditorState::script_SpawnTrinket;
+	stf->addArgument("x", RSSL::TYPE_INT);
+	stf->addArgument("time", RSSL::TYPE_INT);
+	m_rssl->addFunction(stf);
+
+	/*RSSLFunction* messagef = new RSSLFunction();
+	messagef->name = "modal_dialog";
+	messagef->multiline = true;
+	messagef->callback = (void*) LevelEditorState::testScript;
+	messagef->addArgument("mode", RSSL::TYPE_STRING);
+	messagef->addArgument("time", RSSL::TYPE_INT);
+	messagef->addArgument("multiline", RSSL::TYPE_STRING);
+	m_rssl->addFunction(gmf);*/
+
+
 	m_sideBar = new LevelToolPanel();
 	m_sideBar->setLocation(10, 10);
 	m_sideBar->setPadding(1, 0, 0, 0);
@@ -418,159 +462,31 @@ void LevelEditorState::selectWave(int index) {
 
 	camera_shake(30, 20000)
 
+	spawn_trinket(240, 30000)
+
 	modal_message(1, 25000)
 	Hello World //a comment
 
-	spawn_trinket(240, 30000)
+
  */
-string LevelEditorState::parseScript(string s) {
-
-	string response = "";
+void LevelEditorState::parseScript(string s) {
 	try {
-		bool err = false;
+		DefaultGame* game = DefaultGame::getInstance();
+		game->m_levelState->m_rssl->parse(s); // this calls any functions from the script.
+		game->m_levelState->m_level->m_script = s;
+	} catch(RSSLException* e) {
+		string s = e->getMessage();
+		delete e;
 
-		stringbuf* sb = new stringbuf();
-		sb->str(s);
-
-		istream stream(sb);
-		string line;
-
-		int lineNumber = 1;
-		while(!stream.eof()) {
-			stringstream lineStream;
-			std::getline(stream, line);
-			if (line.length() == 0) { continue; }
-
-			ARKString arkLine(line);
-			if (arkLine.contains("#")) {
-				arkLine = arkLine.split("#")[0];
-			}
-
-			vector<ARKString> parts = arkLine.split("(");
-			if (parts.size() <= 1 || arkLine.countOccurrences(")") != 1) {
-				err = true;
-				response += "syntax error at line " + Cast::toString<int>(lineNumber) + "\r\nexpected something in the format `command_name(arguments)`.";
-				break;
-			}
-			ARKString commandName = parts[0];
-			ARKString argString = parts[1];
-			if (argString.length()==0 || argString.lastChar() != ")") {
-				err = true;
-				response += "unexpected line end. it should be ')' character.";
-				break;
-			}
-			argString = argString.substring(0, argString.length()-1);
-			argString = StringUtil::trimret(argString.get(), " ");
-			// param 1: game mode ( normal, surrounded, etc ) (unquoted string)
-			// param 2: time (int)
-			if (commandName.equals("game_mode")) {
-				vector<ARKString> args = argString.split(",");
-
-				if ((args.size() == 1 && args[0].length() == 0) || args.size() != 2) {
-					err = true;
-					response += "wrong args passed. expected xxx,xxx. \r\n";
-					break;
-				} else {
-					bool blankargument = false;
-					for(unsigned int i = 0; i < args.size(); i++) { // make sure we trim all args.
-						args[i] = StringUtil::trimret(args[i].get(), " ");
-						if (args[i].length() == 0) {
-							blankargument = true;
-							break;
-						}
-					}
-					if (blankargument) {
-						err = true;
-						response += "syntax error. one or more arguments to " + commandName.get() + " were blank. \r\n";
-						break;
-					}
-
-					// generic function stuff here.
-					ARKString gameMode = StringUtil::trimret(args[0].get(), " ");
-					ARKString time = StringUtil::trimret(args[1].get(), " ");
-
-					/*
-
-					 how can we generalise this?
-					 ...perhaps...
-
-					 RSSL* r = new RSSL();
-
-					 RSSLFunction* gmf = new RSSLFunction();
-					 gmf->name = "game_mode";
-					 gmf->multiline = false;
-					 gmf->addArgument("mode", type::string);
-					 gmf->addArgument("time", type::int);
-					 gmf->callback = (void*) Derp::derp;
-					 r->addFunction(gmf);
-
-					 RSSLFunction* messagef = new RSSLFunction();
-					 messagef->name = "modal_dialog";
-					 messagef->multiline = true;
-					 messagef->addArgument("mode", type::string);
-					 messagef->addArgument("time", type::int);
-					 messagef->addArgument("multiline", type::string);
-					 messagef->callback = (void*) Derp::derpMultiline;
-					 r->addFunction(gmf);
-
-					 try {
-					 	 r->parseString("..."); // this calls any functions from the script.
-					 } catch(RSSLException e) {
-					 	 // ...
-					 }
-					 */
-				}
-
-			}
-
-			// param 1: boss_id (int)
-			// param 2: time (int)
-			else if (commandName.equals("start_boss")) {
-
-			}
-
-			// param 1: pixels (int)
-			// param 2: time (int)
-			else if (commandName.equals("camera_shake")) {
-
-			}
-
-			// param 1: number of lines to read (int)
-			// param 2: time (int)
-			else if (commandName.equals("modal_message")) {
-
-			}
-
-			// param 1: spawn at x coordinate (int)
-			// param 2: time
-			else if (commandName.equals("spawn_trinket")) {
-
-			} else {
-				err = true;
-				response += "unknown command: " + commandName.get();
-			}
-			lineNumber += 1;
-		}
-
-		if (err == false) {
-			response += s;
-		}
-
-		return response;
-
-	} catch(string err) {
-		response += "Error parsing LMT script: ";
-		response += err;
+		string dialogResp = StringUtil::append(string("script parse response: \r\n"), s);
+		ErrorDialog::createAndShow(dialogResp);
 	}
-
-	return response;
 }
 void LevelEditorState::saveScript() {
 	DefaultGame* game = DefaultGame::getInstance();
 	ARKString str = game->m_levelState->m_eventsScriptText->getText();
-	string resp = LevelEditorState::parseScript(str.get());
-	string dialogResp = StringUtil::append(string("script parse response: \r\n"), resp);
-	ErrorDialog::createAndShow(dialogResp);
+
+	LevelEditorState::parseScript(str.get());
 }
 
 void LevelEditorState::addWave() {
@@ -646,21 +562,68 @@ void LevelEditorState::newLevel() {
 	game->m_levelState->m_level->m_waves.add(wave);*/
 
 	game->m_levelState->m_currentFile = "";
-
+	game->m_levelState->setTitle(game->m_levelState->m_currentFile);
 }
 void LevelEditorState::loadLevel() {
 	DefaultGame* game = DefaultGame::getInstance();
-	game->m_levelState->m_currentFile = "";
+
+	// unsaved changes
+	// if () {
+	//
+	//
+
+	string result = FileDialog::openFileDialog("Load Level");
+	if (StringUtil::getExtension(result) != "level") {
+		ErrorDialog::createAndShow("Level files must end in .level!");
+		return;
+	}
+
+	char* c = StringUtil::file_get_contents(result.c_str());
+	if (c == NULL) {
+		ErrorDialog::createAndShow(StringUtil::append("Could not load Level file: ", result));
+		return;
+	}
+
+	if (game->m_levelState->m_level != NULL) {
+		delete game->m_levelState->m_level;
+		game->m_levelState->m_level = NULL;
+	}
+
+	game->m_levelState->m_playing = false;
+	game->m_levelState->m_timer = 0.0f;
+
+	game->m_levelState->m_level = EditorLevel::createFromString(string(c));
+
+	game->m_levelState->m_currentFile = result;
+	game->m_levelState->setTitle(result);
 }
+
 void LevelEditorState::saveLevel() {
 	DefaultGame* game = DefaultGame::getInstance();
 
-	string s = game->m_levelState->m_level->toString();
-	std::cout << s << std::endl;
+	if (game->m_levelState->m_currentFile.size() == 0) {
+		saveAsLevel();
+		return;
+	}
 
-	game->m_levelState->m_currentFile = "";
+	string s = game->m_levelState->m_level->toString();
+	FileUtil::file_put_contents(game->m_levelState->m_currentFile, s);
+	ErrorDialog::createAndShow("Saved!");
 }
-void LevelEditorState::saveAsLevel() { }
+void LevelEditorState::saveAsLevel() {
+	DefaultGame* game = DefaultGame::getInstance();
+
+	string result = FileDialog::saveFileDialog("Save File");
+	if (StringUtil::getExtension(result) != "level") {
+		ErrorDialog::createAndShow("Level files must end in .level!");
+		return;
+	}
+	string s = game->m_levelState->m_level->toString();
+	FileUtil::file_put_contents(result, s);
+	game->m_levelState->setTitle(result);
+	game->m_levelState->m_currentFile = result;
+	ErrorDialog::createAndShow("Saved!");
+}
 
 void LevelEditorState::playPressed() {
 	DefaultGame* game = DefaultGame::getInstance();
@@ -675,6 +638,59 @@ void LevelEditorState::stopPressed() {
 	DefaultGame* game = DefaultGame::getInstance();
 	game->m_levelState->m_playing = false;
 	game->m_levelState->m_timer = 0.0f;
+}
+
+void LevelEditorState::script_GameMode(RSSLFunction* f) {
+	string mode = f->getArgument(0)->asString();
+	int delay = f->getArgument(1)->asInteger();
+
+	LevelEvent* e = new LevelEvent();
+	e->m_type = LevelEvent::TYPE__SET_GAME_MODE;
+	e->m_time = delay;
+	e->m_setGameModeType = 0;
+
+	DefaultGame* game = DefaultGame::getInstance();
+	game->m_levelState->m_level->m_events.push_back(e);
+}
+void LevelEditorState::script_StartBoss(RSSLFunction* f) {
+	int boss_id = f->getArgument(0)->asInteger();
+	int delay = f->getArgument(1)->asInteger();
+
+	LevelEvent* e = new LevelEvent();
+	e->m_type = LevelEvent::TYPE__START_BOSS;
+	e->m_time = delay;
+	e->m_startBossType = boss_id;
+
+	DefaultGame* game = DefaultGame::getInstance();
+	game->m_levelState->m_level->m_events.push_back(e);
+}
+void LevelEditorState::script_CameraShake(RSSLFunction* f) {
+	int magnitude = f->getArgument(0)->asInteger();
+	int delay = f->getArgument(1)->asInteger();
+
+	LevelEvent* e = new LevelEvent();
+	e->m_type = LevelEvent::TYPE__CAMERA_SHAKE;
+	e->m_time = delay;
+	e->m_cameraShakeMagnitude = magnitude;
+
+	DefaultGame* game = DefaultGame::getInstance();
+	game->m_levelState->m_level->m_events.push_back(e);
+}
+void LevelEditorState::script_SpawnTrinket(RSSLFunction* f) {
+	int x = f->getArgument(0)->asInteger();
+	int delay = f->getArgument(1)->asInteger();
+
+	LevelEvent* e = new LevelEvent();
+	e->m_type = LevelEvent::TYPE__SPAWN_TRINKET;
+	e->m_time = delay;
+	e->m_spawnTrinketX = x;
+
+	DefaultGame* game = DefaultGame::getInstance();
+	game->m_levelState->m_level->m_events.push_back(e);
+}
+
+string LevelEditorState::pathDir(string s) {
+	return DefaultGame::getInstance()->m_wavesLocationField->getText().get() + s;
 }
 
 LevelEditorState::~LevelEditorState() {

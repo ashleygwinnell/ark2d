@@ -7,11 +7,13 @@
 
 #include "EditorLevel.h"
 #include "DefaultGame.h"
+#include "LevelEditorState.h"
 
 EditorLevel::EditorLevel():
 	ARKGameObject(),
 	m_waves(),
-	m_timer(0.0f)
+	m_timer(0.0f),
+	m_script()
 {
 
 }
@@ -66,10 +68,46 @@ string EditorLevel::toString() {
 			s += "		}" + nl;
 		}
 	}
-	s += "	]" + nl;
+	s += "	]," + nl;
+
+	string scr = m_script.get();
+	scr = StringUtil::str_replace("\n", "\\n", scr);
+	s += "	\"script\": \"" + scr + "\"" + nl;
+
+
 	s += "}";
 	return s;
 }
 EditorLevel::~EditorLevel() {
 
+}
+
+EditorLevel* EditorLevel::createFromString(string s) {
+	EditorLevel* level = new EditorLevel();
+
+	DefaultGame* game = DefaultGame::getInstance();
+
+	JSONNode* root = libJSON::Parse(s);
+	JSONNode* waves = root->GetNode("waves");
+	for(unsigned int i = 0; i < waves->NodeSize(); i++) {
+		JSONNode* wave = waves->Children[i];
+
+		string filename = wave->GetNode("file")->NodeAsString();
+		filename = game->m_levelState->pathDir(filename);
+
+		string filecontents = StringUtil::file_get_contents(filename.c_str());
+
+		EditorWave* ewave = EditorWave::createFromString(filecontents);
+		ewave->fname = filename.substr(filename.find_last_of("\\")+1);
+		ewave->m_delay = wave->GetNode("delay")->NodeAsFloat();
+		ewave->m_offsetx = wave->GetNode("offsetx")->NodeAsInt();
+		ewave->m_offsety = wave->GetNode("offsety")->NodeAsInt();
+		ewave->setFlipped(wave->GetNode("flip_h")->NodeAsBool(), wave->GetNode("flip_v")->NodeAsBool());
+
+		level->m_waves.add(ewave);
+	}
+	string script = root->GetNode("script")->NodeAsString();
+	level->m_script = StringUtil::str_replace("\\n", "\n", script);
+
+	return level;
 }
