@@ -1,0 +1,13 @@
+{
+	"waves": [
+		{
+			"file": "example.wave",
+			"offsetx": -13,
+			"offsety": 52,
+			"flip_h": true,
+			"flip_v": false,
+			"delay": 0
+		}
+	],
+	"script": "game_mode(lala,200)"
+}

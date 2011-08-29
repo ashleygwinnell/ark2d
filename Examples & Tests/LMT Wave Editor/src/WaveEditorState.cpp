@@ -520,8 +520,13 @@ void WaveEditorState::selectEnemyPath() {
 	DefaultGame* game = DefaultGame::getInstance();
 	//int index = game->m_waveState->m_gamePanel->m_selectedIndex;
 	string file = FileDialog::openFileDialog("Set Enemy Path");
+	StringUtil::toLower(file);
 	std::cout << file << std::endl;
-	unsigned int found = file.find(game->m_pathsLocationField->getText().get());
+
+	string thisPath = game->m_pathsLocationField->getText().get();
+	StringUtil::toLower(thisPath);
+
+	unsigned int found = file.find(thisPath);
 	if (found == file.npos) {
 		ErrorDialog::createAndShow("Paths must be within the path directory.");
 		return;

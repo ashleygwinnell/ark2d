@@ -34,7 +34,7 @@ if __name__ == "__main__":
 	
 	a['game_mkdirs'] = [];
 	
-	b = json.dumps(a, separators=(',',':'));#.replace(" ", "-"); #.replace("\"", "\\\"").replace("&", "\&");
+	b = json.dumps(a, separators=(',',':')); #.replace(" ", "-"); #.replace("\"", "\\\"").replace("&", "\&");
 	b = base64.b64encode(b);
 	
 	subprocess.call([comm + b], shell=True);

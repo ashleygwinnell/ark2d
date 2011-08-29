@@ -77,7 +77,11 @@ EditorWave* EditorWave::createFromString(string s) {
 		enemyObj->m_path = path->GetNode("file")->NodeAsString();
 		enemyObj->m_delay = path->GetNode("delay")->NodeAsFloat();
 
-		StringUtil::str_replace("\\", "\\\\", enemyObj->m_path);
+		#ifdef ARK2D_WINDOWS
+			StringUtil::str_replace("\\", "\\\\", enemyObj->m_path);
+		#elif defined(ARK2D_MACINTOSH)
+			StringUtil::str_replace("\\", "/", enemyObj->m_path);
+		#endif
 
 		if (path->GetNode("speed_modifier") == NULL) {
 			enemyObj->m_speedModifier = 1.0f;

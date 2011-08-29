@@ -24,8 +24,8 @@ DefaultGame::DefaultGame(string title):
 
 void DefaultGame::initStates(GameContainer* container) {
 
-	Image* enemiesImage = new Image("data/enemies.png");
-	SpriteSheetDescription* enemiesDesc = new SpriteSheetDescription("data/enemies.json");
+	Image* enemiesImage = new Image(container->getResourcePath() + "data/enemies.png");
+	SpriteSheetDescription* enemiesDesc = new SpriteSheetDescription(container->getResourcePath() + "data/enemies.json");
 
 	m_enemyImages.push_back(enemiesImage->getSubImage(enemiesDesc->getItemByName("enemy1.png"))->getScaledCopy(2, 2));
 	m_enemyImages.push_back(enemiesImage->getSubImage(enemiesDesc->getItemByName("enemy2.png"))->getScaledCopy(2, 2));
@@ -80,8 +80,17 @@ void DefaultGame::initStates(GameContainer* container) {
 		m_pathsLocationField = new TextField();
 		m_pathsLocationField->setSize(750, 30);
 		m_pathsLocationField->setPadding(5);
-		string cwd = FileUtil::getCurrentDirectory() + "\\data\\paths\\";
-		m_pathsLocationField->setText(cwd); //m_pathsLocationField->setText("data/paths/");
+		//string cwd = FileUtil::getCurrentDirectory() + "\\data\\paths\\";
+		//string cwd = container->getResourcePath() + "../../../data" + FileUtil::getSeparator() + "paths" + FileUtil::getSeparator();
+
+		string cwd = container->getResourcePath();
+		string newcwd = cwd.substr(0,cwd.find_last_of("/"));
+		newcwd = newcwd.substr(0,newcwd.find_last_of("/"));
+		newcwd = newcwd.substr(0,newcwd.find_last_of("/"));
+		newcwd = newcwd.substr(0,newcwd.find_last_of("/"));
+		newcwd += FileUtil::getSeparator() + "data" + FileUtil::getSeparator() + "paths" + FileUtil::getSeparator();
+
+		m_pathsLocationField->setText(newcwd); //m_pathsLocationField->setText("data/paths/");
 		m_options->add(m_pathsLocationField);
 
 		m_wavesLocationLabel = new Label("Waves Location: ");
@@ -91,8 +100,17 @@ void DefaultGame::initStates(GameContainer* container) {
 		m_wavesLocationField = new TextField();
 		m_wavesLocationField->setSize(750, 30);
 		m_wavesLocationField->setPadding(5);
-		string cwd2 = FileUtil::getCurrentDirectory() + "\\data\\waves\\";
-		m_wavesLocationField->setText(cwd2); //m_pathsLocationField->setText("data/paths/");
+		//string cwd2 = FileUtil::getCurrentDirectory() + "\\data\\waves\\";
+		//string cwd2 = container->getResourcePath() + "../../../data" + FileUtil::getSeparator() + "waves" + FileUtil::getSeparator();
+
+		string cwd2 = container->getResourcePath();
+		string newcwd2 = cwd2.substr(0,cwd2.find_last_of("/"));
+		newcwd2 = newcwd2.substr(0,newcwd2.find_last_of("/"));
+		newcwd2 = newcwd2.substr(0,newcwd2.find_last_of("/"));
+		newcwd2 = newcwd2.substr(0,newcwd2.find_last_of("/"));
+		newcwd2 += FileUtil::getSeparator() + "data" + FileUtil::getSeparator() + "waves" + FileUtil::getSeparator();
+
+		m_wavesLocationField->setText(newcwd2); //m_pathsLocationField->setText("data/paths/");
 		m_options->add(m_wavesLocationField);
 
 		m_renderAllPathsLabel = new Label("Render All Paths: ");

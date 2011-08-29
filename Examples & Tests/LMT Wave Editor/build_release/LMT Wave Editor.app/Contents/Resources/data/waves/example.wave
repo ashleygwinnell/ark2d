@@ -1,0 +1,44 @@
+{
+	"enemies": [
+		{
+			"id": 1,
+			"x": 440,
+			"y": -20,
+			"path": {
+				"file": "sine.path",
+				"speed_modifier": 1,
+				"delay": 0
+			}
+		},
+		{
+			"id": 1,
+			"x": 440,
+			"y": 20,
+			"path": {
+				"file": "sine.path",
+				"speed_modifier": 1.2,
+				"delay": 0
+			}
+		},
+		{
+			"id": 1,
+			"x": 440,
+			"y": 60,
+			"path": {
+				"file": "sine.path",
+				"speed_modifier": 1.2,
+				"delay": 0
+			}
+		},
+		{
+			"id": 1,
+			"x": 440,
+			"y": 100,
+			"path": {
+				"file": "sine.path",
+				"speed_modifier": 1,
+				"delay": 0
+			}
+		}
+	]
+}

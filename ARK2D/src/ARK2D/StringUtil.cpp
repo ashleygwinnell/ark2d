@@ -270,7 +270,7 @@ void StringUtil::toUpper(string& str) {
 }
 
 void StringUtil::toLower(string& str) {
-	//transform(str.begin(), str.end(), str.begin(), tolower);
+	//std::transform(str.begin(), str.end(), str.begin(), tolower);
 
 	///int leng=str.length();
 	//for(int i=0; i<leng; i++) {
@@ -278,6 +278,17 @@ void StringUtil::toLower(string& str) {
 	//		str[i]+=32;
 	//	}
 	//}
+
+	/*for (int i=0;i<strlen(str.c_str());i++)  {
+		if (str[i] >= 0x41 && str[i] <= 0x5A) {
+			str[i] = str[i] + 0x20;
+		}
+	}*/
+
+	for (unsigned int q = 0; q < str.length(); q++) {
+		str[q] = tolower(str[q]);
+	}
+
 }
 
 

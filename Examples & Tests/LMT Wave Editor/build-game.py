@@ -36,17 +36,19 @@ if __name__ == "__main__":
 		"src" + ds + "LevelToolPanel.cpp",
 		"src" + ds + "RSSL.cpp",
 		"src" + ds + "ToolPanel.cpp",
-		"src" + ds + "WaveEditorState.cpp",
-		"src" + ds + "Resources.rc",
+		"src" + ds + "WaveEditorState.cpp"
 	];
+	
+	if (sys.platform == "win32"):
+		a['game_src_files'].extend(["src" + ds + "Resources.rc"]);
 	
 	a['game_mkdirs'] = [];
 	a['game_resources_dir'] = a['game_dir'] + ds + "data";
-	a['mac_game_icns'] = a['game_resources_dir'] + ds + "icon.icns";
+	# a['mac_game_icns'] = a['game_resources_dir'] + ds + "icon.icns";
 	
 	b = json.dumps(a, separators=(',',':'));
 	b = str.encode(b);
 	b = base64.b64encode(b);
 	b = str(b);
 	
-	subprocess.call(["C:\Python31\python.exe ../../ARK2D/build.py " + b + ""], shell=True);
+	subprocess.call([comm + b], shell=True);

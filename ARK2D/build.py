@@ -60,6 +60,7 @@ class ARK2DBuildSystem:
 			#self.gccCompiler = "gcc";
 			#self.gppCompiler = "g++";
 			self.build_artifact = self.build_folder + self.ds + self.platform + self.ds + "libARK2D.dylib";
+			self.mac_game_icns = '';
 		
 		self.windresources = [];
 		

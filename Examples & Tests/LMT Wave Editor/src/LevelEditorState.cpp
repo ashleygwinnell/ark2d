@@ -497,6 +497,7 @@ void LevelEditorState::addWave() {
 		ErrorDialog::createAndShow("Wave files must end in .wave!");
 		return;
 	}
+	StringUtil::toLower(file);
 
 	bool f = StringUtil::file_exists(file.c_str());
 	if (!f) {
@@ -504,13 +505,16 @@ void LevelEditorState::addWave() {
 		return;
 	}
 
-	unsigned int found = file.find(game->m_wavesLocationField->getText().get());
+	string derp = game->m_wavesLocationField->getText().get();
+	StringUtil::toLower(derp);
+	unsigned int found = file.find(derp);
 	if (found == file.npos) {
 		ErrorDialog::createAndShow("Waves must be within the wave directory.");
 		return;
 	}
 
-	string waveName = file.substr(file.find_last_of("\\")+1);
+	//string waveName = file.substr(file.find_last_of("\\")+1);
+	string waveName = file.substr(file.find_last_of(FileUtil::getSeparator())+1);
 
 	string contents = StringUtil::file_get_contents(file.c_str());
 
