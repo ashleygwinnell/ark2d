@@ -43,6 +43,9 @@ class Sound {
 		void setPanning(float pan);
 		~Sound();
 	protected:
+		// File Name
+		std::string m_FileName;
+
 		// Buffers hold sound data.
 		ALuint Buffer;
 
@@ -67,9 +70,6 @@ class Sound {
 		// Volume, no need to store internally to be honest, but keep it simples, yarp!
 		ALfloat m_volume;
 
-		// File Name
-		std::string m_FileName;
-
 		void setSourcePosition(float x, float y, float z);
 		void setSourceVelocity(float x, float y, float z);
 		static void setListenerPosition(float x, float y, float z);
@@ -80,10 +80,13 @@ class Sound {
 		bool loadOGG(bool loop);
 
 	protected:
+		void miscerror(string ss);
 		string getALErrorString(ALenum err);
 
+		void deinit();
+
 		static unsigned short wav_readByte16(const unsigned char buffer[2]);
-		static unsigned short wav_readByte32(const unsigned char buffer[4]);
+		static unsigned int wav_readByte32(const unsigned char buffer[4]);
 
 
 };

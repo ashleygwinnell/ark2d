@@ -7,12 +7,14 @@
 #include "Sound.h"
 #include "OutputWrapper.h"
 
-ALfloat Sound::ListenerPos[3] = {0.0, 0.0, 0.0};
+ALfloat Sound::ListenerPos[3] = { 0.0, 0.0, 0.0 };
 ALfloat Sound::ListenerVel[3] = { 0.0, 0.0, 0.0 };
 ALfloat Sound::ListenerOri[6] = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
 
 Sound::Sound(const std::string& fname):
-	m_FileName(fname)
+	m_FileName(fname),
+	Buffer(AL_NONE),
+	Source(AL_NONE)
 {
 	std::cout << "Loading Sound: " << fname.c_str() << std::endl;
 
@@ -23,6 +25,7 @@ Sound::Sound(const std::string& fname):
 	//this->setListenerOrientation(0.0, 0.0, -1.0,  0.0, 1.0, 0.0);
 
 	bool suc = this->load(false); // AL_TRUE on success - false (no looping)
+	std::cout << "load returned: " << suc << std::endl;
 	if (suc == true) {
 		SoundStore& ss = SoundStore::getInstance();
 		ss.addSound(fname, this);
@@ -61,7 +64,7 @@ bool Sound::load(bool loop) {
 	// Generate an open buffer.
 	alGenBuffers(1, &Buffer);
 	ALenum bufferGenError = alGetError();
-	if (bufferGenError != AL_NO_ERROR) {
+	if (bufferGenError != AL_NO_ERROR || Buffer == AL_NONE) {
 		ErrorDialog::createAndShow("Error creating OpenAL Buffers.");
 		return false; //alutGetErrorString(bufferGenError);
 	}
@@ -77,43 +80,70 @@ bool Sound::load(bool loop) {
 		string errStr = "Can only load WAV and OGG (1): ";
 		errStr += m_FileName;
 		ErrorDialog::createAndShow(errStr);
+		deinit();
 		return false;
 	}
 
 	if (b == false) {
+		deinit();
+		std::cout << "Did not load sound " << m_FileName << std::endl;
 		return false;
 	}
 
 	// By now, the file is loaded and copied into the Buffer.
 	// So, bind the Buffer with a Source.
 	// (clear error first)
+	ALenum derpError = alGetError();
+	if (derpError != AL_NO_ERROR) {
+		string str = "pre gen sources error in load() OpenAL: ";
+		str += getALErrorString(derpError);
+		ErrorDialog::createAndShow(str);
+		deinit();
+		return false;
+	}
+
 	alGetError();
 	alGenSources(1, &Source);
 
 	ALenum sourceGenError = alGetError();
-	if (sourceGenError != AL_NO_ERROR) {
+	if (sourceGenError != AL_NO_ERROR || Source == AL_NONE) {
 		string errStr = "Error creating OpenAL Sources for file:\r\n ";
 		errStr += m_FileName + "\r\n";
 		errStr += getALErrorString(sourceGenError);
 		ErrorDialog::createAndShow(errStr);
+		deinit();
 		return false; //alutGetErrorString(sourceGenError);
 	}
 
 	// Source Location details
-	alSourcef (Source, AL_PITCH,    1.0     );
-	alSourcef (Source, AL_GAIN,     1.0     );
-	alSourcefv(Source, AL_POSITION, SourcePos);
-	alSourcefv(Source, AL_VELOCITY, SourceVel);
-	alSourcei (Source, AL_BUFFER,   Buffer   );
-	alSourcei (Source, AL_LOOPING,  AL_FALSE     );
+	alSourcef (Source, AL_PITCH,    1.0     ); miscerror("pitch");
+	alSourcef (Source, AL_GAIN,     1.0     ); miscerror("gain");
+	alSourcefv(Source, AL_POSITION, SourcePos); miscerror("pos");
+	alSourcefv(Source, AL_VELOCITY, SourceVel); miscerror("vel");
+	alSourcei (Source, AL_BUFFER,   Buffer   ); miscerror("buf");
+	alSourcei (Source, AL_LOOPING,  AL_FALSE     ); miscerror("loop");
 
 	// Do another error check and return.
 	ALenum s = alGetError();
 	if (s != AL_NO_ERROR) {
-		ErrorDialog::createAndShow("Miscellaneous error in load() OpenAL.");
+		string str = "Miscellaneous error in load() OpenAL: ";
+		str += getALErrorString(s);
+		ErrorDialog::createAndShow(str);
+		deinit();
 		return false; //alutGetErrorString(s);
 	}
 	return true;
+}
+void Sound::miscerror(string ss) {
+	ALenum s = alGetError();
+	if (s != AL_NO_ERROR) {
+		string str = "Miscellaneous error in load() OpenAL: ";
+		str += ss;
+		str += getALErrorString(s);
+		ErrorDialog::createAndShow(str);
+		deinit();
+		//exit(0);
+	}
 }
 bool Sound::loadOGG(bool loop) {
 	// Some vars!
@@ -169,6 +199,15 @@ bool Sound::loadOGG(bool loop) {
 		bufferData.insert(bufferData.end(), array, array + bytes);
 	}
 	while (bytes > 0);
+
+	//if (bufferData.size() > 65536) {
+	//	bufferData.resize(65536);
+	//}
+
+	std::cout << "format: " << format << std::endl;
+	std::cout << "frequency: " << frequency << std::endl;
+	std::cout << "buffersize: " << bufferData.size() << std::endl;
+	std::cout << "buffersizecasted: " << (static_cast <ALsizei>( bufferData.size())) << std::endl;
 
 	// Load the wav into the buffer
 	alGetError();
@@ -299,7 +338,8 @@ bool Sound::loadWAV(bool loop) {
 			ErrorDialog::createAndShow(errStr); return false;
 		}
 		unsigned long subChunk1Size = wav_readByte32(buffer32);
-		if (subChunk1Size >= 16) {
+		//if (subChunk1Size >= 16) {
+		if (subChunk1Size < 16) {
 			string errStr = "Could not read wav file. This is not a wav file ('fmt ' chunk too small, truncated file?): "; errStr += m_FileName;
 			ErrorDialog::createAndShow(errStr); return false;
 		}
@@ -310,7 +350,7 @@ bool Sound::loadWAV(bool loop) {
 			ErrorDialog::createAndShow(errStr); return false;
 		}
 		unsigned short audioFormat = wav_readByte16(buffer16);
-		if (audioFormat == 1) {
+		if (audioFormat != 1) {
 			string errStr = "Could not read wav file. This is not a wav file (audio format is not PCM): "; errStr += m_FileName;
 			ErrorDialog::createAndShow(errStr); return false;
 		}
@@ -391,8 +431,22 @@ bool Sound::loadWAV(bool loop) {
 		fclose(f);
 		f = NULL;
 
+		std::cout << "format: " << format << std::endl;
+		std::cout << "datasize: " << data.size() << std::endl;
+		std::cout << "frequency: " << frequency << std::endl;
+
+
 		// Load the wav into the buffer
-		alGetError();
+		ALenum derpError = alGetError();
+		if (derpError != AL_NO_ERROR) {
+			ErrorDialog::createAndShow("pre buffer data error.");
+			return false;
+		}
+
+		if (data.size() > 65536) {
+			data.resize(65536);
+		}
+
 		alBufferData(Buffer, format, &data[0],  data.size(), frequency);
 		ALenum bufferwaverr = alGetError();
 		if (bufferwaverr != AL_NO_ERROR) {
@@ -400,7 +454,9 @@ bool Sound::loadWAV(bool loop) {
 			return false;
 		}
 
-		return false;
+
+
+		return true;
 
 	#endif
 }
@@ -462,7 +518,15 @@ string Sound::getALErrorString(ALenum err) {
 			return string("AL_OUT_OF_MEMORY");
 		break;
 	};
-	return "AL_UNKNOWN_ERROR";
+	//return "AL_UNKNOWN_ERROR";
+	const char* ch = (const char*) alGetString(err);
+	if (ch == NULL) {
+		std::cout << "errorstr: " << err << std::endl;
+
+		return "AL_UNKNOWN_ERROR";
+	} else {
+		return string(ch);
+	}
 }
 unsigned short Sound::wav_readByte16(const unsigned char buffer[2]) {
 	#ifdef BIG_ENDIAN
@@ -471,7 +535,7 @@ unsigned short Sound::wav_readByte16(const unsigned char buffer[2]) {
 		return (buffer[1] << 8) + buffer[0];
 	#endif
 }
-unsigned short Sound::wav_readByte32(const unsigned char buffer[4]) {
+unsigned int Sound::wav_readByte32(const unsigned char buffer[4]) {
 	#ifdef BIG_ENDIAN
 		return (buffer[0] << 24) + (buffer[1] << 16) + (buffer[2] << 8) + buffer[3];
 	#else
@@ -479,7 +543,16 @@ unsigned short Sound::wav_readByte32(const unsigned char buffer[4]) {
 	#endif
 }
 
+void Sound::deinit() {
+	// TODO: make sure source and buffer ids are valid before trying to delete.
+	if (Source != AL_NONE) {
+		alDeleteSources(1, &Source);
+	}
+	if (Buffer != AL_NONE) {
+		alDeleteBuffers(1, &Buffer);
+	}
+}
+
 Sound::~Sound() {
-	alDeleteBuffers(1, &Buffer);
-	alDeleteSources(1, &Source);
+	deinit();
 }

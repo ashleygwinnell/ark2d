@@ -380,10 +380,6 @@
 	
 		//alcProcessContext(ctx);
 	
-		ALfloat f1[] = { 0.0, 0.0, 0.0 };
-		ALfloat f2[] = { 0.0, 0.0, 0.0 };
-		ALfloat f3[] = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
-	
 		alListenerfv(AL_POSITION,    Sound::ListenerPos);
 		alListenerfv(AL_VELOCITY,    Sound::ListenerVel);
 		alListenerfv(AL_ORIENTATION, Sound::ListenerOri);
@@ -399,6 +395,7 @@
 	
 	bool GameContainerPlatform::deinitOpenAL() {
 		// discard context and device
+		return true;
 	}
 	
 	int GameContainer::getGlobalMouseX() const {

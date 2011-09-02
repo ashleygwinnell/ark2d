@@ -660,5 +660,6 @@ if __name__ == "__main__":
 		
 	except IndexError as ex:
 		a = ARK2DBuildSystem();
+		#a.clean();
 		a.dllInit();
 		a.start();	
