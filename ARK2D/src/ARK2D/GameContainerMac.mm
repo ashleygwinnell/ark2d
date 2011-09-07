@@ -174,7 +174,7 @@
 		OutputWrapper::println("...");
 		m_game.init(this);
 
-		OutputWrapper::print("Initialised ");
+		OutputWrapper::print("Initialised "); 
 		OutputWrapper::print(m_game.getTitle());
 		OutputWrapper::println("...");
 		

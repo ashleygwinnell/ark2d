@@ -27,7 +27,7 @@ void MenuState::leave(GameContainer* container, StateBasedGame* game, GameState*
 }
 
 void MenuState::init(GameContainer* container, StateBasedGame* game) {
-	bg = new Image("data/game/menu.png");
+	bg = new Image(container->getResourcePath() + "data/game/menu.png");
 }
 
 void MenuState::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {

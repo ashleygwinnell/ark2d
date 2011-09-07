@@ -51,3 +51,17 @@ bool ARK2D::is64BitArchitecture() {
 
 	return false;
 }
+
+bool ARK2D::isBigEndian() {
+	/*union {
+		uint32_t i;
+		char c[4];
+	} bint = {0x01020304};
+
+	return bint.c[0] == 1;*/
+	static unsigned long x(1);
+	static bool result(reinterpret_cast<unsigned char*>(&x)[0] == 0);
+	return result;
+}
+
+

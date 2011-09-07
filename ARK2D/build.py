@@ -52,9 +52,9 @@ class ARK2DBuildSystem:
 			self.platform = "macosx";
 			self.mingw_dir = ""; #/usr";
 			self.mingw_link = ""; #-L" + self.mingw_dir + self.ds + "lib"
-			self.gccCompiler = "i686-apple-darwin11-llvm-gcc-4.2";
-			self.gppCompiler = "i686-apple-darwin11-llvm-g++-4.2";
-			self.objcCompiler = "i686-apple-darwin11-llvm-g++-4.2";
+			self.gccCompiler = "i686-apple-darwin11-llvm-gcc-4.2 ";
+			self.gppCompiler = "i686-apple-darwin11-llvm-g++-4.2 ";
+			self.objcCompiler = "i686-apple-darwin11-llvm-g++-4.2 ";
 			#self.gccCompiler = "llvm-gcc-4.2";
 			#self.gppCompiler = "llvm-g++-4.2";
 			#self.gccCompiler = "gcc";
@@ -87,13 +87,15 @@ class ARK2DBuildSystem:
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "particles",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Font",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Tiled",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Tools",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "UI",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "libJSON",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "lpng151",
-			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "ogg",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "ogg130",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "tinyxml",
-			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "vorbis",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "vorbis132",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "vorbis132" + self.ds + "modes",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "zlib123"
 		]);
 		
@@ -150,6 +152,7 @@ class ARK2DBuildSystem:
 			'src' + self.ds + 'ARK2D' + self.ds + 'Tiled' + self.ds + 'TiledMapProperty.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'Tiled' + self.ds + 'TiledMapTile.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'Tiled' + self.ds + 'TiledMapTileset.cpp',
+			'src' + self.ds + 'ARK2D' + self.ds + 'Tools' + self.ds + 'Packer.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'UI' + self.ds + 'UIComponent.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'UI' + self.ds + 'AbstractUIComponent.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'UI' + self.ds + 'Panel.cpp',
@@ -198,35 +201,36 @@ class ARK2DBuildSystem:
 			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'lpng151' + self.ds + 'pngwrite.c',
 			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'lpng151' + self.ds + 'pngwtran.c',
 			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'lpng151' + self.ds + 'pngwutil.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'ogg' + self.ds + 'bitwise.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'ogg' + self.ds + 'framing.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'ogg130' + self.ds + 'bitwise.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'ogg130' + self.ds + 'framing.c',
 			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'tinyxml' + self.ds + 'tinystr.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'tinyxml' + self.ds + 'tinyxml.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'tinyxml' + self.ds + 'tinyxmlerror.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'tinyxml' + self.ds + 'tinyxmlparser.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'analysis.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'barkmel.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'bitrate.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'block.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'codebook.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'envelope.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'floor0.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'floor1.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'info.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'lookup.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'lpc.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'lsp.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'mapping0.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'mdct.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'psy.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'registry.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'res0.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'sharedbook.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'smallft.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'synthesis.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'tone.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'vorbisfile.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis' + self.ds + 'window.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'analysis.c',
+			#'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'barkmel.c', # contains a main method
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'bitrate.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'block.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'codebook.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'envelope.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'floor0.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'floor1.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'info.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'lookup.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'lpc.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'lsp.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'mapping0.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'mdct.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'psy.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'registry.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'res0.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'sharedbook.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'smallft.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'synthesis.c',
+			#'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'tone.c', # contains a main method
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'vorbisenc.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'vorbisfile.c',
+			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'window.c',
 			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'zlib123' + self.ds + 'adler32.c',
 			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'zlib123' + self.ds + 'compress.c',
 			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'zlib123' + self.ds + 'crc32.c',
@@ -337,7 +341,7 @@ class ARK2DBuildSystem:
 		
 	def startWindows(self):
 		print("Hurray for windows");
-		
+
 		#prepare dirs
 		for h in self.mkdirs:
 			print("mkdir " + h);
@@ -371,6 +375,8 @@ class ARK2DBuildSystem:
 			findex = h.rfind('.');
 			h_ext = h[findex+1:len(h)];
 			newf = h[0:findex] + ".o";
+			newfd = h[0:findex] + ".d";
+			
 			
 			if h_ext == 'c':
 				compileStr += self.gccCompiler;
@@ -386,14 +392,19 @@ class ARK2DBuildSystem:
 				if (h_ext == 'c' or h_ext == 'cpp' or h_ext == 'mm'):
 					compileStr += " -O3 -Wall -c -fmessage-length=0 ";
 					if (sys.platform == "darwin"): #compiling on mac
-						compileStr += "-I /usr/X11/include "; 
 						if not "vendor" in newf:
-							compileStr += " -x objective-c++ ";
+							compileStr += " -mmacosx-version-min=10.6 -x objective-c++ ";
+							compileStr += "-I /usr/X11/include "; 
+						
+						#  compileStr += " -march=i386 ";
 						# compileStr += " -march=i386 ";
 						#-march=i386 "; # i386
 						#-arch i386
-					compileStr += " -o";
-					compileStr += self.build_folder + self.ds + self.platform + self.ds + newf + " " + h + " ";
+						compileStr += " -o \"";
+						compileStr += self.build_folder + self.ds + self.platform + self.ds + newf + "\" \"" + h + "\" ";
+					else:
+						compileStr += " -o";
+						compileStr += self.build_folder + self.ds + self.platform + self.ds + newf + " " + h + " ";
 				elif h_ext == 'rc':
 					compileStr += h + " " + self.build_folder + self.ds + self.platform + self.ds + newf + " ";
 			

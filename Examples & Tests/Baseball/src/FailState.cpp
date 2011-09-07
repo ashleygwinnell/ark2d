@@ -27,7 +27,7 @@ void FailState::leave(GameContainer* container, StateBasedGame* game, GameState*
 }
 
 void FailState::init(GameContainer* container, StateBasedGame* game) {
-	bg = new Image("data/game/fail.png");
+	bg = new Image(container->getResourcePath() + "data/game/fail.png");
 }
 
 void FailState::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {

@@ -324,8 +324,15 @@
 - Added "multiline" property to TextField class and implemented multiline rendering.
 - Added ARKString methods split(delimiter), equals(str), contains(str) and countOccurrences(delim).
 
-TODO:
+01:47 07/09/2011
 - Add "clean" target to build system.
+- Fixed all OpenAL problems on Mac.
+- libvorbis required [below link] to compile and run on Mac OS.
+- https://trac.xiph.org/attachment/ticket/1707/vorbis.diff
+
+
+TODO:
+
 - Load FTFont from data.
 - TextField work:
  - use up and down keys to move up and down on multiline textfields.

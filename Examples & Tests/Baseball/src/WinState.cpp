@@ -27,7 +27,7 @@ void WinState::leave(GameContainer* container, StateBasedGame* game, GameState* 
 }
 
 void WinState::init(GameContainer* container, StateBasedGame* game) {
-	bg = new Image("data/game/win.png");
+	bg = new Image(container->getResourcePath() + "data/game/win.png");
 }
 
 void WinState::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {

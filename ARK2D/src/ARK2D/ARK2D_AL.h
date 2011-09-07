@@ -10,20 +10,24 @@
 	#include <AL/ALc.h>
 	#include <AL/ALext.h>
 	#include <AL/ALut.h>
-#endif
 
-#ifdef ARK2D_UBUNTU_LINUX
+	#include "vendor/ogg130/ogg.h"
+	#include "vendor/vorbis132/vorbisfile.h"
+#elif defined( ARK2D_UBUNTU_LINUX )
 	#include <AL/al.h>
 	#include <AL/alc.h>
 	#include <AL/alext.h>
 	#include <AL/alut.h>
+	#include "vendor/ogg130/ogg.h"
+	#include "vendor/vorbis132/vorbisfile.h"
 	//#include <AL/efx.h>
-#endif
-
-#ifdef ARK2D_MACINTOSH
+#elif defined( ARK2D_MACINTOSH )
 	#include <OpenAL/al.h>
 	#include <OpenAL/alc.h>
 	//#include <OpenAL/MacOSX_OALExtensions.h>
+	//#include "vendor/stbvorbis/stb.h"
+	#include "vendor/ogg130/ogg.h"
+	#include "vendor/vorbis132/vorbisfile.h"
 
 	//typedef unsigned int ALuint;
 	//typedef float ALfloat;
@@ -33,9 +37,9 @@
 
 #endif
 
-#ifndef ARK2D_AL_H_
-#define ARK2D_AL_H_
+//#ifndef ARK2D_AL_H_
+//#define ARK2D_AL_H_
 
-#include "vendor/vorbis/vorbisfile.h"
 
-#endif /* ARK2D_AL_H_ */
+
+//#endif /* ARK2D_AL_H_ */

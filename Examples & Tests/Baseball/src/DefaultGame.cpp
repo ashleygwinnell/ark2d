@@ -27,22 +27,22 @@ void DefaultGame::initStates(GameContainer* container) {
 
 	//myfont = new BMFont("data/game/04b-09.fnt", "data/game/04b-09.png");
 
-	screamsSounds.push_back(new Sound("data/game/sound/scream1.ogg"));
-	screamsSounds.push_back(new Sound("data/game/sound/scream2.ogg"));
-	screamsSounds.push_back(new Sound("data/game/sound/scream3.ogg"));
-	screamsSounds.push_back(new Sound("data/game/sound/scream4.ogg"));
+	screamsSounds.push_back(new Sound(container->getResourcePath() + "data/game/sound/scream1.ogg"));
+	screamsSounds.push_back(new Sound(container->getResourcePath() + "data/game/sound/scream2.ogg"));
+	screamsSounds.push_back(new Sound(container->getResourcePath() + "data/game/sound/scream3.ogg"));
+	screamsSounds.push_back(new Sound(container->getResourcePath() + "data/game/sound/scream4.ogg"));
 
-	pukeSounds.push_back(new Sound("data/game/sound/puke1.ogg"));
-	pukeSounds.push_back(new Sound("data/game/sound/puke2.ogg"));
-	pukeSounds.push_back(new Sound("data/game/sound/puke3.ogg"));
-	pukeSounds.push_back(new Sound("data/game/sound/puke4.ogg"));
-	pukeSounds.push_back(new Sound("data/game/sound/puke5.ogg"));
+	pukeSounds.push_back(new Sound(container->getResourcePath() + "data/game/sound/puke1.ogg"));
+	pukeSounds.push_back(new Sound(container->getResourcePath() + "data/game/sound/puke2.ogg"));
+	pukeSounds.push_back(new Sound(container->getResourcePath() + "data/game/sound/puke3.ogg"));
+	pukeSounds.push_back(new Sound(container->getResourcePath() + "data/game/sound/puke4.ogg"));
+	pukeSounds.push_back(new Sound(container->getResourcePath() + "data/game/sound/puke5.ogg"));
 
-	musicHappy = new Sound("data/game/sound/soundtrack-happy.ogg");
-	musicSad = new Sound("data/game/sound/soundtrack-dark.ogg");
+	musicHappy = new Sound(container->getResourcePath() + "data/game/sound/soundtrack-happy.ogg");
+	musicSad = new Sound(container->getResourcePath() + "data/game/sound/soundtrack-dark.ogg");
 
-	sheet = new Image("data/game/sheet.png");
-	sheet_desc = new SpriteSheetDescription("data/game/sheet.json");
+	sheet = new Image(container->getResourcePath() + "data/game/sheet.png");
+	sheet_desc = new SpriteSheetDescription(container->getResourcePath() + "data/game/sheet.json");
 
 	back = sheet->getSubImage(sheet_desc->getItemByName("back.png")); //new Image("data/game/back.png");
 

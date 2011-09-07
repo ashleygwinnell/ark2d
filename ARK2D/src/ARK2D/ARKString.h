@@ -106,7 +106,7 @@ class ARKString {
 			string thisString = m_string;
 
 			vector<ARKString> pieces;
-			unsigned int cutIndex;
+			size_t cutIndex;
 
 			while ((cutIndex = thisString.find_first_of(delim)) != string::npos)
 			{

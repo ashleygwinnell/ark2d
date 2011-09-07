@@ -6,15 +6,16 @@
 
 #include "Sound.h"
 #include "OutputWrapper.h"
+#include "StringUtil.h"
 
 ALfloat Sound::ListenerPos[3] = { 0.0, 0.0, 0.0 };
 ALfloat Sound::ListenerVel[3] = { 0.0, 0.0, 0.0 };
 ALfloat Sound::ListenerOri[6] = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
 
 Sound::Sound(const std::string& fname):
-	m_FileName(fname),
-	Buffer(AL_NONE),
-	Source(AL_NONE)
+	m_FileName(fname)//,
+	//Buffer(AL_NONE),
+	//Source(AL_NONE)
 {
 	std::cout << "Loading Sound: " << fname.c_str() << std::endl;
 
@@ -29,8 +30,6 @@ Sound::Sound(const std::string& fname):
 	if (suc == true) {
 		SoundStore& ss = SoundStore::getInstance();
 		ss.addSound(fname, this);
-	} else {
-
 	}
 }
 
@@ -66,15 +65,16 @@ bool Sound::load(bool loop) {
 	ALenum bufferGenError = alGetError();
 	if (bufferGenError != AL_NO_ERROR || Buffer == AL_NONE) {
 		ErrorDialog::createAndShow("Error creating OpenAL Buffers.");
+		deinit();
 		return false; //alutGetErrorString(bufferGenError);
 	}
 
 	// Load Sound contents!
 	bool b = false;
-	unsigned int pos = m_FileName.find_last_of('.');
-	if (m_FileName.substr(pos) == ".wav") {
+	string ext = StringUtil::getExtension(m_FileName);
+	if (ext == "wav") {
 		b = loadWAV(loop);
-	} else if (m_FileName.substr(pos) == ".ogg") {
+	} else if (ext == "ogg") {
 		b = loadOGG(loop);
 	} else {
 		string errStr = "Can only load WAV and OGG (1): ";
@@ -93,19 +93,19 @@ bool Sound::load(bool loop) {
 	// By now, the file is loaded and copied into the Buffer.
 	// So, bind the Buffer with a Source.
 	// (clear error first)
-	ALenum derpError = alGetError();
+	/*ALenum derpError = alGetError();
 	if (derpError != AL_NO_ERROR) {
 		string str = "pre gen sources error in load() OpenAL: ";
 		str += getALErrorString(derpError);
 		ErrorDialog::createAndShow(str);
 		deinit();
 		return false;
-	}
+	}*/
 
 	alGetError();
 	alGenSources(1, &Source);
 
-	ALenum sourceGenError = alGetError();
+/*	ALenum sourceGenError = alGetError();
 	if (sourceGenError != AL_NO_ERROR || Source == AL_NONE) {
 		string errStr = "Error creating OpenAL Sources for file:\r\n ";
 		errStr += m_FileName + "\r\n";
@@ -113,27 +113,31 @@ bool Sound::load(bool loop) {
 		ErrorDialog::createAndShow(errStr);
 		deinit();
 		return false; //alutGetErrorString(sourceGenError);
-	}
+	}*/
+
 
 	// Source Location details
-	alSourcef (Source, AL_PITCH,    1.0     ); miscerror("pitch");
-	alSourcef (Source, AL_GAIN,     1.0     ); miscerror("gain");
-	alSourcefv(Source, AL_POSITION, SourcePos); miscerror("pos");
-	alSourcefv(Source, AL_VELOCITY, SourceVel); miscerror("vel");
-	alSourcei (Source, AL_BUFFER,   Buffer   ); miscerror("buf");
-	alSourcei (Source, AL_LOOPING,  AL_FALSE     ); miscerror("loop");
+	alSourcef (Source, AL_PITCH,    1.0     ); //miscerror("pitch");
+	alSourcef (Source, AL_GAIN,     1.0     ); //miscerror("gain");
+	alSourcefv(Source, AL_POSITION, SourcePos); //miscerror("pos");
+	alSourcefv(Source, AL_VELOCITY, SourceVel); //miscerror("vel");
+	alSourcei (Source, AL_BUFFER,   Buffer   ); //miscerror("buf");
+	alSourcei (Source, AL_LOOPING,  AL_FALSE ); //miscerror("loop");
+
+	miscerror("source");
 
 	// Do another error check and return.
-	ALenum s = alGetError();
+	/*ALenum s = alGetError();
 	if (s != AL_NO_ERROR) {
 		string str = "Miscellaneous error in load() OpenAL: ";
 		str += getALErrorString(s);
 		ErrorDialog::createAndShow(str);
 		deinit();
 		return false; //alutGetErrorString(s);
-	}
+	}*/
 	return true;
 }
+
 void Sound::miscerror(string ss) {
 	ALenum s = alGetError();
 	if (s != AL_NO_ERROR) {
@@ -146,22 +150,33 @@ void Sound::miscerror(string ss) {
 	}
 }
 bool Sound::loadOGG(bool loop) {
+
+	// references
+	// http://www.ogre3d.org/tikiwiki/OpenAl+Soundmanager
+
+
+
 	// Some vars!
 	const unsigned int BUFFER_SIZE = 32768; // 32kb buffer
 	ALenum format;
 	ALsizei frequency;
 	int bitStream;
 	long bytes;
+	//long totalSize;
 	int endian = 0; // 0 for Little-Endian, 1 for Big-Endian
-	#ifdef BIG_ENDIAN
+	if (ARK2D::isBigEndian()) {
 		endian = 1;
-	#endif
+	}
+
+	std::cout << "1" << std::endl;
 
 	char array[BUFFER_SIZE]; // Local fixed size array
-	FILE* f;
-	vorbis_info* oggInfo;
+	FILE* f = NULL;
+	vorbis_info* oggInfo = NULL;
 	OggVorbis_File oggFile;
-	std::vector<char> bufferData;
+	vector<char> bufferData;
+
+	std::cout << "2" << std::endl;
 
 	// Open for binary reading
 	f = fopen(m_FileName.c_str(), "rb");
@@ -171,23 +186,97 @@ bool Sound::loadOGG(bool loop) {
 		ErrorDialog::createAndShow(errStr);
 		return false;
 	}
+int r;
+	//int r = ov_test(f, &oggFile, NULL, 0);
+	//if (r == 0) {
+	//	miscerror("Not a valid Ogg Vorbis file");
+	//}
+//
+//	r = ov_test_open(&oggFile);
+//	if (r == 0) {
+//		miscerror("Unable to open Ogg Vorbis file");
+//	}
+
+	std::cout << "3" << std::endl;
 
 	// open using the SDK, no need to call fclose() now.
-	ov_open(f, &oggFile, NULL, 0);
+	int e = ov_open(f, &oggFile, NULL, 0);
+	if (e < 0) {
+		string errStr = "Sound::loadOGG() - could not open ogg file: ";
+		errStr += m_FileName;
+		errStr += getOggErrorString(e);
+		ErrorDialog::createAndShow(errStr);
+		return false;
+	}
 
+	//bool b = ov_fopen(const_cast<char*>(m_FileName.c_str()), &oggFile);
+	//if (b == false) {
+	//	string errStr = "Sound::loadOGG() - could not open file:";
+	//	errStr += m_FileName;
+	//	ErrorDialog::createAndShow(errStr);
+	//	return false;
+	//}
+
+	std::cout << "4" << std::endl;
 	// Get some info about the OGG and store it in oggInfo.
 	oggInfo = ov_info(&oggFile, -1);
+	if (oggInfo == NULL) {
+		string errStr = "Sound::loadOGG() - could not get ogg info: ";
+		errStr += m_FileName;
+		ErrorDialog::createAndShow(errStr);
 
-	// Check the number of channels... always use 16-bit samples
+		ov_clear(&oggFile);
+
+		return false;
+	}
+
+	//int samples = ov_pcm_total(&oggFile, -1);
+	//totalSize = 2 * oggInfo->channels * samples;
+
+
+
+	std::cout << "5" << std::endl;
+
 	if (oggInfo->channels == 1) {
 		format = AL_FORMAT_MONO16;
 	} else {
 		format = AL_FORMAT_STEREO16;
 	}
 
+	// Check the number of channels... always use 16-bit samples
+	//switch(oggInfo->channels){
+	//	case 1:
+	//		format = AL_FORMAT_MONO16;
+	//		break;
+	//	case 2:
+	//		format = AL_FORMAT_STEREO16;
+	//		break;
+	//	case 4:
+	//		format = alGetEnumValue("AL_FORMAT_QUAD16");
+	//		break;
+	//	case 6:
+	//		format = alGetEnumValue("AL_FORMAT_51CHN16");
+	//		break;
+	//	case 7:
+	//		format = alGetEnumValue("AL_FORMAT_61CHN16");
+	//		break;
+	//	case 8:
+	//		format = alGetEnumValue("AL_FORMAT_71CHN16");
+	//		break;
+	//	default:
+	//		string errStr = "Sound::loadOGG() - could not load sound. Invalid `format`. :";
+	//		errStr += m_FileName;
+	//		ErrorDialog::createAndShow(errStr);
+	//		return false;
+	//		break;
+	//}
+
+	std::cout << "6" << std::endl;
+
 	//oggFile. = loop;
 	// The frequency of the sampling rate
-	frequency = oggInfo->rate;
+	frequency = (ALsizei) oggInfo->rate;
+
 
 	// Now we are ready to decode the OGG file and put the raw audio data into the buffer.
 	// We use a fixed size buffer and keep on reading until there is no more data left, like this:
@@ -195,10 +284,47 @@ bool Sound::loadOGG(bool loop) {
 		// Read up to a buffer's worth of decoded sound data
 		bytes = ov_read(&oggFile, &array[0], BUFFER_SIZE, endian, 2, 1, &bitStream);
 
+		if (bytes < 0) {
+			std::cout << "ov_read error: " << getOggErrorString(r) << std::endl;
+		}
+
 		// Append to end of buffer
 		bufferData.insert(bufferData.end(), array, array + bytes);
 	}
 	while (bytes > 0);
+
+	std::cout << "7" << std::endl;
+
+
+
+	//vector<int16_t> samples;
+	//char tmpbuf[4096];
+	//bool firstrun = true;
+	//while(1)
+	//{
+	//	int result = ov_read(&oggFile, &array[0], BUFFER_SIZE, endian, 2, 1, &bitStream);
+	//	if(result > 0)
+	//	{
+	//		firstrun = false;
+	//		//samples.insert(samples.end(), tmpbuf, tmpbuf + (result));
+	//		bufferData.insert(bufferData.end(), array, array + (result));
+	//	}
+	//	else
+	//	{
+	//		if(result < 0)
+	//		{
+	//			printf("Sound::loadOGG() : Loading ogg sound data failed!");
+	//			ov_clear(&oggFile);
+	//			return false;
+	//		}
+	//		else
+	//		{
+	//			if(firstrun)
+	//				return false;
+	//			break;
+	//		}
+	//	}
+	//}
 
 	//if (bufferData.size() > 65536) {
 	//	bufferData.resize(65536);
@@ -207,12 +333,13 @@ bool Sound::loadOGG(bool loop) {
 	std::cout << "format: " << format << std::endl;
 	std::cout << "frequency: " << frequency << std::endl;
 	std::cout << "buffersize: " << bufferData.size() << std::endl;
-	std::cout << "buffersizecasted: " << (static_cast <ALsizei>( bufferData.size())) << std::endl;
+	//std::cout << "samplessize: " << samples.size() << std::endl;
+	//std::cout << "pcmtotal: " << ov_pcm_total(&oggFile, -1) << std::endl;
 
 	// Load the wav into the buffer
 	alGetError();
-	alBufferData(Buffer, format, &bufferData[0],  static_cast <ALsizei>( bufferData.size() ), frequency);
-	//alBufferData(Buffer, format, &bufferData[0],  (ALsizei) bufferData.size(), frequency);
+	//alBufferData(Buffer, format, &bufferData[0],  static_cast <ALsizei>( bufferData.size() ), frequency);
+	alBufferData(Buffer, format, &bufferData[0],  bufferData.size(), frequency);
 	ALenum bufferwaverr = alGetError();
 	if (bufferwaverr != AL_NO_ERROR) {
 		ErrorDialog::createAndShow("Error copying OGG file into buffer.");
@@ -221,8 +348,16 @@ bool Sound::loadOGG(bool loop) {
 
 	// Now all the audio data has been decoded and stuffed into the buffer.
 	// We can release the file resources (resource leaks are bad!).
+	bufferData.clear();
 	ov_clear(&oggFile);
 
+	//if (f != NULL) {
+	//	fclose(f);
+	//}
+
+	std::cout << "8" << std::endl;
+
+	//return true;
 	return true;
 }
 bool Sound::loadWAV(bool loop) {
@@ -443,9 +578,9 @@ bool Sound::loadWAV(bool loop) {
 			return false;
 		}
 
-		if (data.size() > 65536) {
-			data.resize(65536);
-		}
+		//if (data.size() > 65536) {
+		//	data.resize(65536);
+		//}
 
 		alBufferData(Buffer, format, &data[0],  data.size(), frequency);
 		ALenum bufferwaverr = alGetError();
@@ -461,7 +596,9 @@ bool Sound::loadWAV(bool loop) {
 	#endif
 }
 
-
+// TODO: AL Doppler effects
+// alDopplerFactor(1.0f); // 1.2 is 20% pitch shift up.
+// alDopplerVelocity( 343.0f ); // m/s this may need to be scaled at some point
 
 void Sound::play() {
 	alSourcePlay(Source);
@@ -496,59 +633,72 @@ string Sound::getALErrorString(ALenum err) {
 	{
 		case AL_NO_ERROR:
 			return string("AL_NO_ERROR");
-		break;
-
+			break;
 		case AL_INVALID_NAME:
 			return string("AL_INVALID_NAME");
-		break;
-
+			break;
 		case AL_INVALID_ENUM:
 			return string("AL_INVALID_ENUM");
-		break;
-
+			break;
 		case AL_INVALID_VALUE:
 			return string("AL_INVALID_VALUE");
-		break;
-
+			break;
 		case AL_INVALID_OPERATION:
 			return string("AL_INVALID_OPERATION");
-		break;
-
+			break;
 		case AL_OUT_OF_MEMORY:
 			return string("AL_OUT_OF_MEMORY");
-		break;
+			break;
 	};
 	//return "AL_UNKNOWN_ERROR";
-	const char* ch = (const char*) alGetString(err);
-	if (ch == NULL) {
-		std::cout << "errorstr: " << err << std::endl;
+	//const char* ch = (const char*) alGetString(err);
+	//if (ch == NULL) {
+	//	std::cout << "errorstr: " << err << std::endl;
 
-		return "AL_UNKNOWN_ERROR";
-	} else {
-		return string(ch);
+	return string("AL_UNKNOWN_ERROR");
+	//} else {
+	//	return string(ch);
+	//}
+}
+string Sound::getOggErrorString(int code) {
+	switch(code) {
+		case OV_EREAD:
+			return string("Read from media.");
+		case OV_ENOTVORBIS:
+			return string("Not Vorbis data.");
+		case OV_EVERSION:
+			return string("Vorbis version mismatch.");
+		case OV_EBADHEADER:
+			return string("Invalid Vorbis header.");
+		case OV_EFAULT:
+			return string("Internal logic fault (bug or heap/stack corruption.");
+		default:
+			return string("Unknown Ogg error.");
 	}
 }
 unsigned short Sound::wav_readByte16(const unsigned char buffer[2]) {
-	#ifdef BIG_ENDIAN
+	if (ARK2D::isBigEndian()) {
 		return (buffer[0] << 8) + buffer[1];
-	#else
+	} else {
 		return (buffer[1] << 8) + buffer[0];
-	#endif
+	}
 }
 unsigned int Sound::wav_readByte32(const unsigned char buffer[4]) {
-	#ifdef BIG_ENDIAN
+	if (ARK2D::isBigEndian()) {
 		return (buffer[0] << 24) + (buffer[1] << 16) + (buffer[2] << 8) + buffer[3];
-	#else
+	} else {
 		return (buffer[3] << 24) + (buffer[2] << 16) + (buffer[1] << 8) + buffer[0];
-	#endif
+	}
 }
 
 void Sound::deinit() {
-	// TODO: make sure source and buffer ids are valid before trying to delete.
-	if (Source != AL_NONE) {
+
+	// make sure source and buffer ids are valid before trying to delete.
+	if (alIsSource(Source)) {
+		alSourceStop(Source);
 		alDeleteSources(1, &Source);
 	}
-	if (Buffer != AL_NONE) {
+	if (alIsBuffer(Buffer)) {
 		alDeleteBuffers(1, &Buffer);
 	}
 }

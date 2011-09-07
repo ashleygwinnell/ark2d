@@ -82,6 +82,7 @@ class Sound {
 	protected:
 		void miscerror(string ss);
 		string getALErrorString(ALenum err);
+		string getOggErrorString(int code);
 
 		void deinit();
 

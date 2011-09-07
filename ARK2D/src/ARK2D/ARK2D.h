@@ -17,6 +17,8 @@
 	#include <windows.h>
 #endif
 
+#include <stdint.h>
+
 class GameContainer;
 //#include "GameContainer.h"
 class Game;
@@ -33,6 +35,7 @@ class ARK2D {
 		static Input* getInput();
 
 		static bool is64BitArchitecture();
+		static bool isBigEndian();
 
 	private:
 		static GameContainer* s_container;
