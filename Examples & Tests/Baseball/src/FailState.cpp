@@ -41,6 +41,10 @@ void FailState::update(GameContainer* container, StateBasedGame* game, GameTimer
 
 void FailState::render(GameContainer* container, StateBasedGame* game, Graphics* g) {
 	bg->drawCentered(int(container->getWidth()/2), int(container->getHeight()/2));
+
+	g->setDrawColor(Color::black_50a);
+	g->fillRoundedRect(200, 590, 300, 30, 5);
+	g->getFont()->drawStringCenteredAt("Press Enter To Retry", int(container->getWidth()/2), int(600));
 }
 
 void FailState::keyPressed(unsigned int key) {
@@ -51,6 +55,6 @@ void FailState::keyReleased(unsigned int key) {
 }
 
 FailState::~FailState() {
-
+	delete bg;
 }
 

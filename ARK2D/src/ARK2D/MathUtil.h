@@ -73,6 +73,8 @@ class MathUtil {
 			pointToRotate->setY(pointToRotate->getY() + centery);
 		}
 
+		//template <class T>
+		//static Vector2<T> s_moveAngleFromOriginV;
 
 		template <class T>
 		static Vector2<T>* moveAngleFromOrigin(double angleDegrees, float distance) {

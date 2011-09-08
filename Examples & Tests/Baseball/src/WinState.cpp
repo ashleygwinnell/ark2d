@@ -41,6 +41,10 @@ void WinState::update(GameContainer* container, StateBasedGame* game, GameTimer*
 
 void WinState::render(GameContainer* container, StateBasedGame* game, Graphics* g) {
 	bg->drawCentered(int(container->getWidth()/2), int(container->getHeight()/2));
+
+	g->setDrawColor(Color::black_50a);
+	g->fillRoundedRect(150, 610, 400, 30, 5);
+	g->getFont()->drawStringCenteredAt("Press Enter To Play Again", int(container->getWidth()/2), int(620));
 }
 
 void WinState::keyPressed(unsigned int key) {
@@ -51,6 +55,6 @@ void WinState::keyReleased(unsigned int key) {
 }
 
 WinState::~WinState() {
-
+	delete bg;
 }
 

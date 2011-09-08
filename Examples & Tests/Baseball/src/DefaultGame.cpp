@@ -90,5 +90,16 @@ DefaultGame* DefaultGame::getGame() {
 }
 
 DefaultGame::~DefaultGame() {
+	delete state_blank;
+	delete state_menu;
+	delete state_instructions;
+	delete state_ingame;
+	delete state_win;
+	delete state_fail;
 
+	delete musicHappy;
+	delete musicSad;
+
+	delete sheet;
+	delete sheet_desc;
 }

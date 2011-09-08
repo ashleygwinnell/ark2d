@@ -44,6 +44,8 @@ void Baseball::update(GameContainer* container, GameTimer* timer) {
 
 	Vector2<int>* dist = MathUtil::moveAngleFromOrigin<int>(m_degrees, m_speed_pps * timer->getDelta());
 	m_bounds->setLocationByCenter(m_bounds->getCenterX() + dist->m_x, m_bounds->getCenterY() + dist->m_y);
+	delete dist;
+
 	//m_animation->update(timer);
 
 	/*DefaultGame* m_game = DefaultGame::getGame();
@@ -82,5 +84,5 @@ void Baseball::render(GameContainer* container, Graphics* g) {
 }
 
 Baseball::~Baseball() {
-
+	delete m_animation;
 }

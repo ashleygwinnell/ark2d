@@ -72,6 +72,7 @@ void Boss::update(GameContainer* container, GameTimer* timer) {
 				Vector2<int>* v = MathUtil::moveAngleFromOrigin<int>(b->m_degrees, m_bounds->getWidth()/4);
 				bb->setLocationByCenter(bb->getCenterX() + v->m_x, bb->getCenterY() + v->m_y);
 				m_game->state_ingame->baseballs.add(b);
+				delete v;
 			}
 
 			m_timer -= 3.0f;
@@ -88,6 +89,7 @@ void Boss::update(GameContainer* container, GameTimer* timer) {
 			Vector2<int>* v = MathUtil::moveAngleFromOrigin<int>(b->m_degrees, m_bounds->getWidth()/4);
 			bb->setLocationByCenter(bb->getCenterX() + v->m_x, bb->getCenterY() + v->m_y);
 			m_game->state_ingame->baseballs.add(b);
+			delete v;
 
 
 					Baseball* b2 = new Baseball();
@@ -98,6 +100,7 @@ void Boss::update(GameContainer* container, GameTimer* timer) {
 					Vector2<int>* v2 = MathUtil::moveAngleFromOrigin<int>(b2->m_degrees, m_bounds->getWidth()/4);
 					bb2->setLocationByCenter(bb2->getCenterX() + v2->m_x, bb2->getCenterY() + v2->m_y);
 					m_game->state_ingame->baseballs.add(b2);
+					delete v2;
 
 
 							Baseball* b3 = new Baseball();
@@ -108,6 +111,7 @@ void Boss::update(GameContainer* container, GameTimer* timer) {
 							Vector2<int>* v3 = MathUtil::moveAngleFromOrigin<int>(b3->m_degrees, m_bounds->getWidth()/4);
 							bb3->setLocationByCenter(bb3->getCenterX() + v3->m_x, bb3->getCenterY() + v3->m_y);
 							m_game->state_ingame->baseballs.add(b3);
+							delete v3;
 
 			m_timer -= 2.0f;
 			playSound();
@@ -122,6 +126,7 @@ void Boss::update(GameContainer* container, GameTimer* timer) {
 			Vector2<int>* v = MathUtil::moveAngleFromOrigin<int>(b->m_degrees, m_bounds->getWidth()/4);
 			bb->setLocationByCenter(bb->getCenterX() + v->m_x, bb->getCenterY() + v->m_y);
 			m_game->state_ingame->baseballs.add(b);
+			delete v;
 
 			m_timer -= 1.5f;
 			playSound();
@@ -136,6 +141,7 @@ void Boss::update(GameContainer* container, GameTimer* timer) {
 			Vector2<int>* v = MathUtil::moveAngleFromOrigin<int>(b->m_degrees, m_bounds->getWidth()/4);
 			bb->setLocationByCenter(bb->getCenterX() + v->m_x, bb->getCenterY() + v->m_y);
 			m_game->state_ingame->baseballs.add(b);
+			delete v;
 
 			m_timer -= 1.5f;
 			playSound();
@@ -150,6 +156,7 @@ void Boss::update(GameContainer* container, GameTimer* timer) {
 			Vector2<int>* v = MathUtil::moveAngleFromOrigin<int>(b->m_degrees, m_bounds->getWidth()/4);
 			bb->setLocationByCenter(bb->getCenterX() + v->m_x, bb->getCenterY() + v->m_y);
 			m_game->state_ingame->baseballs.add(b);
+			delete v;
 
 			m_timer -= 2.0f;
 
@@ -216,5 +223,6 @@ void Boss::render(GameContainer* container, Graphics* g) {
 }
 
 Boss::~Boss() {
-
+	delete m_animation;
+	delete m_animationRight;
 }

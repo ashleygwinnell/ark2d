@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
 
 	DefaultGame game("Armoured Baseball: The Dark Project");
 	GameContainer container(game, 700, 700, 32, false);
-	container.setClearColor(Color::darker_grey);
+	container.setClearColor(Color::light_grey);
 	container.setIcon("data/icon.ico");
 	container.setCursorVisible(true);
 	container.start();

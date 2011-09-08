@@ -42,6 +42,14 @@ void MenuState::update(GameContainer* container, StateBasedGame* game, GameTimer
 void MenuState::render(GameContainer* container, StateBasedGame* game, Graphics* g) {
 	//g->drawString("Menu State", 10, 10);
 	bg->drawCentered(int(container->getWidth()/2), int(container->getHeight()/2));
+
+	g->setDrawColor(Color::black_50a);
+	g->fillRoundedRect(150, 390, 400, 30, 5);
+	g->getFont()->drawStringCenteredAt("Press Enter To Start!", int(container->getWidth()/2), int(400));
+
+	g->setDrawColor(Color::black_50a);
+	g->fillRoundedRect(150, 590, 400, 30, 5);
+	g->getFont()->drawStringCenteredAt("By Ash, Jeff and Marija.", int(container->getWidth()/2), int(600));
 }
 
 void MenuState::keyPressed(unsigned int key) {
@@ -52,6 +60,6 @@ void MenuState::keyReleased(unsigned int key) {
 }
 
 MenuState::~MenuState() {
-
+	delete bg;
 }
 

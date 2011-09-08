@@ -40,7 +40,7 @@ class InGameState : public GameState {
 		virtual void keyPressed(unsigned int key);
 		virtual void keyReleased(unsigned int key);
 
-		~InGameState();
+		virtual ~InGameState();
 };
 
 #endif /* INGAMESTATE_H_ */

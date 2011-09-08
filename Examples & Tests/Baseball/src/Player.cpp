@@ -68,6 +68,7 @@ void Player::update(GameContainer* container, GameTimer* timer) {
 					b->getBounds()->getCenterX(), b->getBounds()->getCenterY(), 40);
 
 			if (collides) {
+				delete b;
 				it = data.erase(it);
 				m_game->SCORE += 10;
 				//m_game->screamsSounds.
@@ -96,5 +97,5 @@ void Player::render(GameContainer* container, Graphics* g) {
 }
 
 Player::~Player() {
-
+	delete m_centerPoint;
 }

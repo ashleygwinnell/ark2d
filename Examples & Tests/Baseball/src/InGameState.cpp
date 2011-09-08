@@ -33,6 +33,14 @@ unsigned int InGameState::id() {
 
 void InGameState::enter(GameContainer* container, StateBasedGame* game, GameState* from) {
 
+	DefaultGame* g = DefaultGame::getGame();
+	g->LIVES = 3;
+	g->SCORE = 0;
+	g->state_ingame->baseballs.removeAll();
+	g->state_ingame->m_timer = 0.0f;
+	g->state_ingame->boss->m_timer = 0.0f;
+	g->state_ingame->boss->m_spitTimer = 0.0f;
+
 }
 void InGameState::leave(GameContainer* container, StateBasedGame* game, GameState* to) {
 	DefaultGame* m_game = DefaultGame::getGame();
@@ -66,6 +74,8 @@ void InGameState::update(GameContainer* container, StateBasedGame* game, GameTim
 			}
 
 			if (b->m_dead) {
+				delete b;
+
 				it = data.erase(it);
 				m_game->LIVES--;
 			} else {
@@ -89,18 +99,20 @@ void InGameState::render(GameContainer* container, StateBasedGame* game, Graphic
 	baseballs.renderAll(container, g);
 	boss->render(container, g);
 
+	g->setDrawColor(Color::black_50a);
+	g->fillRoundedRect(5,5,container->getWidth()-10, 35, 5);
 
 	string scoreStr = "Score: ";
 	scoreStr = StringUtil::append(scoreStr, m_game->SCORE);
-	g->drawString(scoreStr, 10, 10);
+	g->drawString(scoreStr, 12, 8);
 
 	string winStr = "Win in: ";
 	winStr = StringUtil::append(winStr, int(m_game->state_ingame->m_timerLevelSix - m_game->state_ingame->m_timer));
-	g->drawString(winStr, container->getWidth() - 10 - g->getFont()->getStringWidth(winStr), 10);
+	g->drawString(winStr, container->getWidth() - 12 - g->getFont()->getStringWidth(winStr), 8);
 
 	string livesStr = "Lives: ";
 	livesStr = StringUtil::append(livesStr, m_game->LIVES);
-	g->drawString(livesStr, 10, container->getHeight() - 10 - g->getFont()->getStringHeight(livesStr));
+	g->getFont()->drawStringCenteredAt(livesStr, int(container->getWidth()/2), 19);
 }
 
 void InGameState::keyPressed(unsigned int key) {
@@ -111,6 +123,7 @@ void InGameState::keyReleased(unsigned int key) {
 }
 
 InGameState::~InGameState() {
-
+	delete player;
+	delete boss;
 }
 
