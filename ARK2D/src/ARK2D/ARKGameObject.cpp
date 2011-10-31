@@ -11,6 +11,13 @@ ARKGameObject::ARKGameObject() {
 
 }
 
+bool ARKGameObject::isPendingRemoval() {
+	return m_pendingRemoval;
+}
+void ARKGameObject::setPendingRemoval(bool b) {
+	m_pendingRemoval = b;
+}
+
 ARKGameObject::~ARKGameObject() {
 
 }

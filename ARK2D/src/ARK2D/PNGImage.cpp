@@ -147,37 +147,61 @@ int PNGImage::load(void* data) {
 
 
 
-	if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB) {
-		ErrorDialog::createAndShow("[process_file] input file is PNG_COLOR_TYPE_RGB but must be PNG_COLOR_TYPE_RGBA (lacks the alpha channel)");
-		return 1;
-	}
+	/*
+		if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB) {
+			ErrorDialog::createAndShow("[process_file] input file is PNG_COLOR_TYPE_RGB but must be PNG_COLOR_TYPE_RGBA (lacks the alpha channel)");
+			return 1;
+		}
 
-	if (png_get_color_type(png_ptr, info_ptr) != PNG_COLOR_TYPE_RGBA) {
-		ErrorDialog::createAndShow("[process_file] color_type of input file must be PNG_COLOR_TYPE_RGBA (%d) (is %d)");
-		return 1;
-	}
+		if (png_get_color_type(png_ptr, info_ptr) != PNG_COLOR_TYPE_RGBA) {
+			ErrorDialog::createAndShow("[process_file] color_type of input file must be PNG_COLOR_TYPE_RGBA (%d) (is %d)");
+			return 1;
+		}
+	*/
 
 	//png_byte* row = row_pointers[0];
 	//png_byte* ptr = &row[0];
 	// printf("Pixel at position [ %d - %d ] has RGBA values: %d - %d - %d - %d\n",
 	//                               0, 0, ptr[0], ptr[1], ptr[2], ptr[3]);
-
-	int curOffset = 0;
-	m_data = (unsigned char*) malloc(width * height * 4);
-	for(unsigned int i = 0; i < height; i++) {
-		png_byte* row = row_pointers[i];
-		for (unsigned int j = 0; j < width; j++) {
-			png_byte* ptr = &row[j*4];
-			//if (i < 1) {
-			//	printf("Pixel at position [ %d - %d ] has RGBA values: %d - %d - %d - %d\n",
-			//			i, j, ptr[0], ptr[1], ptr[2], ptr[3]);
-			//}
-			memcpy((m_data + curOffset), &ptr[0], 1);
-			memcpy((m_data + curOffset + 1), &ptr[1], 1);
-			memcpy((m_data + curOffset + 2), &ptr[2], 1);
-			memcpy((m_data + curOffset + 3), &ptr[3], 1);
-			curOffset += 4;
+	if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB) {
+		int curOffset = 0;
+		m_data = (unsigned char*) malloc(width * height * 4);
+		for(unsigned int i = 0; i < height; i++) {
+			png_byte* row = row_pointers[i];
+			for (unsigned int j = 0; j < width; j++) {
+				png_byte* ptr = &row[j*3];
+				//if (i < 1) {
+				//	printf("Pixel at position [ %d - %d ] has RGBA values: %d - %d - %d - %d\n",
+				//			i, j, ptr[0], ptr[1], ptr[2], ptr[3]);
+				//}
+				memcpy((m_data + curOffset), &ptr[0], 1);
+				memcpy((m_data + curOffset + 1), &ptr[1], 1);
+				memcpy((m_data + curOffset + 2), &ptr[2], 1);
+				//memcpy((m_data + curOffset + 3), &ptr[3], 1);
+				curOffset += 3;
+			}
 		}
+	} else if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGBA) {
+		int curOffset = 0;
+		m_data = (unsigned char*) malloc(width * height * 4);
+		for(unsigned int i = 0; i < height; i++) {
+			png_byte* row = row_pointers[i];
+			for (unsigned int j = 0; j < width; j++) {
+				png_byte* ptr = &row[j*4];
+				//if (i < 1) {
+				//	printf("Pixel at position [ %d - %d ] has RGBA values: %d - %d - %d - %d\n",
+				//			i, j, ptr[0], ptr[1], ptr[2], ptr[3]);
+				//}
+				memcpy((m_data + curOffset), &ptr[0], 1);
+				memcpy((m_data + curOffset + 1), &ptr[1], 1);
+				memcpy((m_data + curOffset + 2), &ptr[2], 1);
+				memcpy((m_data + curOffset + 3), &ptr[3], 1);
+				curOffset += 4;
+			}
+		}
+	} else {
+		ErrorDialog::createAndShow("[process_file] color_type of input file must be PNG_COLOR_TYPE_RGBA (%d) (is %d)");
+		return 1;
 	}
 
 	return 0;
@@ -268,39 +292,67 @@ int PNGImage::load() {
 
 
 
-	if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB) {
-		string s = string(m_filename.c_str()) + " [process_file] input file is PNG_COLOR_TYPE_RGB but must be PNG_COLOR_TYPE_RGBA (lacks the alpha channel)";
-		ErrorDialog::createAndShow(s);
-		return 1;
-	}
+	/*
+		if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB) {
+			string s = string(m_filename.c_str()) + " [process_file] input file is PNG_COLOR_TYPE_RGB but must be PNG_COLOR_TYPE_RGBA (lacks the alpha channel)";
+			ErrorDialog::createAndShow(s);
+			return 1;
+		}
 
-	if (png_get_color_type(png_ptr, info_ptr) != PNG_COLOR_TYPE_RGBA) {
-		string s = string(m_filename.c_str()) + " [process_file] color_type of input file must be PNG_COLOR_TYPE_RGBA (%d) (is %d)";
-		ErrorDialog::createAndShow(s);
-		return 1;
-	}
+		if (png_get_color_type(png_ptr, info_ptr) != PNG_COLOR_TYPE_RGBA) {
+			string s = string(m_filename.c_str()) + " [process_file] color_type of input file must be PNG_COLOR_TYPE_RGBA (%d) (is %d)";
+			ErrorDialog::createAndShow(s);
+			return 1;
+		}
+	*/
 
 	//png_byte* row = row_pointers[0];
 	//png_byte* ptr = &row[0];
 	// printf("Pixel at position [ %d - %d ] has RGBA values: %d - %d - %d - %d\n",
 	//                               0, 0, ptr[0], ptr[1], ptr[2], ptr[3]);
 
-	int curOffset = 0;
-	m_data = (unsigned char*) malloc(width * height * 4);
-	for(unsigned int i = 0; i < height; i++) {
-		png_byte* row = row_pointers[i];
-		for (unsigned int j = 0; j < width; j++) {
-			png_byte* ptr = &row[j*4];
-			//if (i < 1) {
-			//	printf("Pixel at position [ %d - %d ] has RGBA values: %d - %d - %d - %d\n",
-			//			i, j, ptr[0], ptr[1], ptr[2], ptr[3]);
-			//}
-			memcpy((m_data + curOffset), &ptr[0], 1);
-			memcpy((m_data + curOffset + 1), &ptr[1], 1);
-			memcpy((m_data + curOffset + 2), &ptr[2], 1);
-			memcpy((m_data + curOffset + 3), &ptr[3], 1);
-			curOffset += 4;
+	if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGBA) {
+		int curOffset = 0;
+		m_data = (unsigned char*) malloc(width * height * 4);
+		for(unsigned int i = 0; i < height; i++) {
+			png_byte* row = row_pointers[i];
+			for (unsigned int j = 0; j < width; j++) {
+				png_byte* ptr = &row[j*4];
+				//if (i < 1) {
+				//	printf("Pixel at position [ %d - %d ] has RGBA values: %d - %d - %d - %d\n",
+				//			i, j, ptr[0], ptr[1], ptr[2], ptr[3]);
+				//}
+				memcpy((m_data + curOffset), &ptr[0], 1);
+				memcpy((m_data + curOffset + 1), &ptr[1], 1);
+				memcpy((m_data + curOffset + 2), &ptr[2], 1);
+				memcpy((m_data + curOffset + 3), &ptr[3], 1);
+				curOffset += 4;
+			}
 		}
+	} else if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB) {
+		int curOffset = 0;
+		m_data = (unsigned char*) malloc(width * height * 4);
+		for(unsigned int i = 0; i < height; i++) {
+			png_byte* row = row_pointers[i];
+			for (unsigned int j = 0; j < width; j++) {
+				png_byte* ptr = &row[j*3];
+				//if (i < 1) {
+				//	printf("Pixel at position [ %d - %d ] has RGBA values: %d - %d - %d - %d\n",
+				//			i, j, ptr[0], ptr[1], ptr[2], ptr[3]);
+				//}
+				unsigned char a = 255;
+				memcpy((m_data + curOffset), &ptr[0], 1);
+				memcpy((m_data + curOffset + 1), &ptr[1], 1);
+				memcpy((m_data + curOffset + 2), &ptr[2], 1);
+				memcpy((m_data + curOffset + 3), &a, 1);
+				//m_data[curOffset + 3] = 255;
+				curOffset += 4;
+			}
+		}
+	} else {
+		string s = string(m_filename.c_str()) + " [process_file] color_type of input file must be PNG_COLOR_TYPE_RGBA or RGB (%d) (is %d)";
+		ErrorDialog::createAndShow(s);
+		return 1;
 	}
 
 	return 0;

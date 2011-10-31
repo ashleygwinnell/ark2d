@@ -7,6 +7,7 @@
 
 #include "GameContainer.h"
 #include "GameContainerMac.h"
+#include "ARKLog.h"
 
 #ifdef ARK2D_MACINTOSH
 
@@ -88,7 +89,9 @@
 			GameContainerMacWindowListener* listener = [GameContainerMacWindowListener alloc];
 			[listener init:window];
 			[window setDelegate:listener];
-			[window setRestorable:NO];
+			
+			
+			//[window setRestorable:NO];
 			
 			NSOpenGLContext* context = m_platformSpecific.createGLContext();
 			m_platformSpecific.makeContextCurrent(window, context);
@@ -177,12 +180,14 @@
 		OutputWrapper::print("Initialised "); 
 		OutputWrapper::print(m_game.getTitle());
 		OutputWrapper::println("...");
-		
+		 
 		while(m_bRunning) {
 			m_timer.tick();
 			m_platformSpecific.doEvents();
 			
 			processGamepadInput(); 
+		   
+			ARKLog::update();
 		   
 			int delta = (int) (m_timer.getDelta() * 1000);
 			m_game.update(this, &m_timer);
@@ -194,6 +199,7 @@
 			
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			m_game.render(this, &m_graphics);
+			ARKLog::render();
 			
 			swapBuffers();
 			
@@ -206,7 +212,7 @@
 	}
 
 	void GameContainer::close() const {
-		
+		exit(0);
 	}
 	
 	NSOpenGLContext* GameContainerPlatform::createGLContext() 

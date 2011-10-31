@@ -92,7 +92,7 @@ class MathUtil {
 		}
 
 		template <class T>
-		static Vector2<T> angleToNormalisedVector(double angleDegrees) {
+		static Vector2<T>* angleToNormalisedVector(double angleDegrees) {
 			double angleRadians = toRadians(angleDegrees);
 			double x = double(cos(angleRadians));
 			double y = double(sin(angleRadians));

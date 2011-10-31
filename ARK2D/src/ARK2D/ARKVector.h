@@ -57,17 +57,22 @@ class ARKVector {
 			}
 		}
 		void removeAll() {
+			clear();
+		}
+		void clear() {
 			vec.clear();
 		}
 		void updateAll(GameContainer* container, GameTimer* timer) {
 			for(unsigned int i = 0; i < vec.size(); i++) {
 				T obj = vec.at(i);
+				if (obj == NULL) { continue; }
 				obj->update(container, timer);
 			}
 		}
 		void renderAll(GameContainer* container, Graphics* g) {
 			for(unsigned int i = 0; i < vec.size(); i++) {
 				T obj = vec.at(i);
+				if (obj == NULL) { continue; }
 				obj->render(container, g);
 			}
 		}

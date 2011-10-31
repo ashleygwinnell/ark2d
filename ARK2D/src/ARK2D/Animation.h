@@ -31,6 +31,8 @@ class Animation {
 
 		void draw(int x, int y);
 		void drawCentered(int x, int y);
+		void drawFlipped(int x, int y, bool fx, bool fy);
+		void drawCenteredFlipped(int x, int y, bool fx, bool fy);
 
 		virtual ~Animation();
 

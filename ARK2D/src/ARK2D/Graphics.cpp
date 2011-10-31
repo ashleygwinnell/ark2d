@@ -26,6 +26,9 @@ void Graphics::setFont(BMFont* f) {
 BMFont* Graphics::getFont() const {
 	return m_Font;
 }
+BMFont* Graphics::getDefaultFont() const {
+	return m_DefaultFont;
+}
 
 void Graphics::translate(int x, int y) const {
 	glTranslatef(x,y,0);

@@ -17,6 +17,7 @@
 	#include "ARK2D_windres.h"
 	#include "Image.h"
 
+	#include "ARKLog.h"
 
 		LRESULT CALLBACK GameContainerPlatform::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
@@ -932,6 +933,8 @@
 				//if (myAverageDelta > dt) {
 				//	this->m_game->update(this, dt - myAverageDelta);
 				//}
+				ARKLog::update();
+
 				int delta = (int) (m_timer.getDelta() * 1000);
 				m_game.update(this, &m_timer);
 				m_input.clearKeyPressedRecord();
@@ -952,6 +955,7 @@
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 				m_game.render(this, &m_graphics);
 
+				ARKLog::render();
 				//myLastRenderTime = this->time();
 
 				swapBuffers();

@@ -45,7 +45,7 @@ static int darwin_scancode_table[] = {
 	/*  24 */   Input::KEY_EQUALS,
 	/*  25 */   Input::KEY_9,
 	/*  26 */   Input::KEY_7,
-	/*  27 */   0, // Input::KEY_MINUS,
+	/*  27 */   Input::KEY_HYPHEN, // 0, // Input::KEY_MINUS,
 	/*  28 */   Input::KEY_8,
 	/*  29 */   Input::KEY_0,
 	/*  30 */   0, // Input::KEY_RIGHTBRACKET,
@@ -210,6 +210,22 @@ static int darwin_scancode_table[] = {
     	ARK2D::getInput()->releaseKey(key);
     }
     [pool release];
+}
+
+-(void)flagsChanged:(NSEvent *)theEvent {
+	int flags = [theEvent modifierFlags];
+
+	// opt = (flags & NSAlternateKeyMask) ? YES : NO;
+	// ctrl = (flags & NSControlKeyMask) ? YES : NO;
+	// command = (flags & NSCommandKeyMask) ? YES : NO;
+	
+	if (flags & NSShiftKeyMask) {
+		ARK2D::getInput()->pressKey(darwin_scancode_table[56]); // lshift
+	} else {
+		ARK2D::getInput()->releaseKey(darwin_scancode_table[56]); // rshift
+	}
+	
+	// shift = ( flags & NSShiftKeyMask ) ? YES : NO;
 }
 
 -(void)mouseDown:(NSEvent *)theEvent {

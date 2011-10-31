@@ -208,11 +208,13 @@ TiledMap::TiledMap(const string& file):
 
 
 				//#ifdef ARK2D_VERBOSE
-				//std::cout << "Before ready()" << std::endl;
+				std::cout << "Before ready()" << std::endl;
 				//#endif
 
 				// ready for stuff, woo.
 				tileset.ready();
+
+				std::cout << "After ready()" << std::endl;
 
 				// add tile properties O_O
 				TiXmlElement* tileset_property_e = 0;

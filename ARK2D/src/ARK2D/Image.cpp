@@ -162,17 +162,42 @@ GLuint Image::load(const Color& mask) {
 		m_Width = png->getWidth();
 		m_Height = png->getHeight();
 
+		std::cout << "w: " << m_Width << " h: " << m_Height << std::endl;
+
 		// apply mask
 		unsigned int offset = 0;
 		for (unsigned int i = 0; i < m_Height; i++) {
 			for (unsigned int j = 0; j < m_Width; j++) {
-				unsigned int r = (unsigned int) pixelData[offset];
+				unsigned int r = ((unsigned int) (unsigned char) pixelData[offset]);
+				unsigned int g = ((unsigned int) (unsigned char) pixelData[offset+1]);
+				unsigned int b = ((unsigned int) (unsigned char) pixelData[offset+2]);
+				unsigned int a = ((unsigned int) (unsigned char) pixelData[offset+3]);
+
+				/*unsigned int r = (unsigned int) pixelData[offset];
 				unsigned int g = (unsigned int) pixelData[offset+1];
 				unsigned int b = (unsigned int) pixelData[offset+2];
 				unsigned int a = (unsigned int) pixelData[offset+3];
+				*/
+
+				if (i == 0 && j == 0) {
+					std::cout << "tl pixel data- " << "r: " << r << " g: " << g << " b: " << b << " a: " << a << std::endl;
+					std::cout << "mask data- " << "r: " << mask.getRed() << " g: " << mask.getGreen() << " b: " << mask.getBlue() << " a: " << mask.getAlpha() << std::endl;
+				}
+
 				if (r == mask.getRed() && g == mask.getGreen() && b == mask.getBlue() && a == mask.getAlpha()) {
+					std::cout << "replacing " << j << ":" << i << std::endl;
+					pixelData[offset] = (unsigned char) 0;
+					pixelData[offset+1] = (unsigned char) 0;
+					pixelData[offset+2] = (unsigned char) 0;
 					pixelData[offset+3] = (unsigned char) 0;
 				}
+
+				/*if (i == 0 && j == 0) {
+					std::cout << "after" << std::endl;
+					std::cout << "tl pixel data- " << "r: " << r << " g: " << g << " b: " << b << " a: " << a << std::endl;
+					std::cout << "mask data- " << "r: " << mask.getRed() << " g: " << mask.getGreen() << " b: " << mask.getBlue() << " a: " << mask.getAlpha() << std::endl;
+				}*/
+
 				offset += 4;
 			}
 		}
@@ -183,7 +208,7 @@ GLuint Image::load(const Color& mask) {
 		glBindTexture(GL_TEXTURE_2D, Object);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, png->getWidth(), png->getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
 		glBindTexture(GL_TEXTURE_2D, 0);
 		texture = Object;
 

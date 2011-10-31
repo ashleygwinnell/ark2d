@@ -84,6 +84,7 @@
 #include "ARK2D/UI/ScrollPanel.h"
 #include "ARK2D/UI/Checkbox.h"
 #include "ARK2D/UI/FileDialog.h"
+#include "ARK2D/ARKLog.h"
 
 // Particle Engine
 #include "ARK2D/particles/Particle.h"

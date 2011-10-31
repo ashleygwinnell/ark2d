@@ -10,7 +10,9 @@
 
 #include <iostream>
 
-#if defined(_WIN32) || defined(ARK2D_WINDOWS)
+#include "ARK2D.h"
+
+#if defined(ARK2D_WINDOWS)
 	#include <windows.h>
 
 	typedef BITMAPFILEHEADER ARK2D_BITMAPFILEHEADER;
@@ -18,10 +20,10 @@
 	typedef RGBQUAD ARK2D_RGBQUAD;
 	typedef BITMAPINFO ARK2D_BITMAPINFO;
 #else
-	typedef char 			ARK2D_BYTE;
-	typedef unsigned short  ARK2D_WORD;
-	typedef unsigned int    ARK2D_DWORD;
-	typedef unsigned long   ARK2D_LONG;
+	typedef uint8_t 		ARK2D_BYTE;
+	typedef uint16_t  		ARK2D_WORD;
+	typedef uint32_t    	ARK2D_DWORD;
+	typedef unsigned long  	ARK2D_LONG;
 
 	struct ARK2D_BITMAPFILEHEADER {
 		ARK2D_WORD bfType;

@@ -11,6 +11,8 @@
 #include <stdlib.h>
 
 #include "BMPImage.h"
+#include "ErrorDialog.h"
+#include "StringUtil.h"
 
 using std::ios;
 using std::ifstream;
@@ -23,6 +25,11 @@ using std::ifstream;
  **/
 int BMPImage::LoadBMP (const char* szFile)
 {
+	#if defined(ARK2D_MACINTOSH)
+		ErrorDialog::createAndShow(StringUtil::append("Loading bitmaps is broken on Mac: ", string(szFile)));
+		exit(0);
+	#endif
+
 	ARK2D_BITMAPFILEHEADER bmfh;
 	ARK2D_BITMAPINFOHEADER bmih;
 

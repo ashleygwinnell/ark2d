@@ -20,6 +20,8 @@
 -(void)keyDown:(NSEvent *)theEvent;
 -(void)keyUp:(NSEvent *)theEvent;
 
+-(void)flagsChanged:(NSEvent *)theEvent;
+
 -(void)mouseDown:(NSEvent *)theEvent;
 -(void)mouseUp:(NSEvent *)theEvent;
 -(void)mouseMoved:(NSEvent *)theEvent;

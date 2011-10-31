@@ -43,6 +43,7 @@ unsigned int Animation::getFrameTime() {
 }
 
 void Animation::update(GameTimer* timer) {
+	if (m_frames.size() == 0) { return; }
 	m_timer += (unsigned int) (timer->getDelta() * 1000);
 	if (m_timer > m_frameTime) {
 		m_timer -= m_frameTime;
@@ -71,6 +72,14 @@ void Animation::draw(int x, int y) {
 }
 void Animation::drawCentered(int x, int y) {
 	m_frames[m_currentFrameIndex]->drawCentered(x, y);
+}
+void Animation::drawFlipped(int x, int y, bool fx, bool fy) {
+	m_frames[m_currentFrameIndex]->drawFlipped(x,y,fx,fy);
+}
+void Animation::drawCenteredFlipped(int x, int y, bool fx, bool fy) {
+	m_frames[m_currentFrameIndex]->drawFlipped(
+		x - (m_frames[m_currentFrameIndex]->getWidth()/2),
+		y - (m_frames[m_currentFrameIndex]->getHeight()/2),fx,fy);
 }
 
 Animation::~Animation() {

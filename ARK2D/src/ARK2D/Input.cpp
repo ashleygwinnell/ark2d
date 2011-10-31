@@ -21,6 +21,7 @@ const int Input::KEY_SPACE;
 const int Input::KEY_PERIOD;
 const int Input::KEY_COMMA;
 const int Input::KEY_EQUALS;
+const int Input::KEY_HYPHEN;
 const int Input::KEY_0;
 const int Input::KEY_1;
 const int Input::KEY_2;
@@ -79,6 +80,9 @@ Input::Input():
 
 	keyNames[Input::KEY_EQUALS] = "equals";
 	keyChars[Input::KEY_EQUALS] = "=";
+
+	keyNames[Input::KEY_HYPHEN] = "hyphen";
+	keyChars[Input::KEY_HYPHEN] = "-";
 
 	keyNames[Input::KEY_0] = keyChars[Input::KEY_0] = "0";
 	keyNames[Input::KEY_1] = keyChars[Input::KEY_1] = "1";
@@ -250,6 +254,24 @@ const string Input::getKeyChar(unsigned int key) {
 		return returnString;
 
 	#elif defined(ARK2D_MACINTOSH)
+
+		// temp fix for scripting keys.
+		if (isKeyDown(KEY_LSHIFT) || isKeyDown(KEY_RSHIFT)) {
+			switch (key) {
+				case KEY_9:
+					return "(";
+				case KEY_0:
+					return ")";
+				case KEY_HYPHEN:
+					return "_";
+				case KEY_APOSTROPHE:
+					return "\"";
+			}
+		}
+
+		if (key == (unsigned int) KEY_ENTER) {
+			return "\n";
+		}
 
 		map<int, string>::iterator it = keyChars.find(key);
 		if (it != keyChars.end()) {
