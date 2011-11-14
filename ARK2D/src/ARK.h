@@ -35,6 +35,8 @@
 #include "ARK2D/ARK2D_state/TranslateOutInTransition.h"
 #include "ARK2D/ARK2D_state/SlideRectanglesAcrossTransition.h"
 #include "ARK2D/ARK2D_state/FadeTransition.h"
+#include "ARK2D/ARK2D_state/FadeToColourTransition.h"
+#include "ARK2D/ARK2D_state/FadeFromColourTransition.h"
 
 #include "ARK2D/Constants.h"
 

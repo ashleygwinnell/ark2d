@@ -122,6 +122,12 @@ unsigned int Color::getAlpha() const {
 void Color::bind() const {
 	glColor4f(m_r/255.f, m_g/255.f, m_b/255.f, m_a/255.f);
 }
+bool Color::operator==(Color c) {
+	if (m_r == c.getRed() && m_g == c.getGreen() && m_b == c.getBlue() && m_a == c.getAlpha()) {
+		return true;
+	}
+	return false;
+}
 
 Color::~Color() {
 

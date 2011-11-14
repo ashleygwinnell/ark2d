@@ -33,6 +33,8 @@ class Color {
 
 		void bind() const;
 
+		bool operator==(Color c);
+
 		~Color();
 	public:
 		static Color* getRandom();

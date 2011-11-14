@@ -582,6 +582,8 @@ void LevelEditorState::loadLevel() {
 		return;
 	}
 
+	// make sure it's in the
+
 	char* c = StringUtil::file_get_contents(result.c_str());
 	if (c == NULL) {
 		ErrorDialog::createAndShow(StringUtil::append("Could not load Level file: ", result));

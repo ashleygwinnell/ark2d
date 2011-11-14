@@ -30,6 +30,9 @@ class TiledMapLayer {
 		unsigned int getTileGID(unsigned int x, unsigned int y) const;
 		void setTileGID(unsigned int x, unsigned int y, unsigned int gid);
 
+		void setOpacity(float f);
+		float getOpacity();
+
 		void draw(int xOffset, int yOffset) const;
 
 		~TiledMapLayer();
@@ -41,6 +44,7 @@ class TiledMapLayer {
 		unsigned int m_width;
 		unsigned int m_height;
 		bool m_visible;
+		float m_opacity;
 		vector<TiledMapProperty> m_properties;
 		vector< std::vector<unsigned int > > m_data;
 };

@@ -65,6 +65,7 @@ class ARK2DBuildSystem:
 		self.windresources = [];
 		
 		self.mkdirs = [];
+		self.game_mkdirs = [];
 		self.src_files = [];
 		self.dll_files = [];
 		self.static_libraries = [];
@@ -143,6 +144,7 @@ class ARK2DBuildSystem:
 			'src' + self.ds + 'ARK2D' + self.ds + 'TargaImage.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'Texture.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'Timeline.cpp',
+			'src' + self.ds + 'ARK2D' + self.ds + 'ARKLog.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'Font' + self.ds + 'FTFont.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'Font' + self.ds + 'BMFont.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'Tiled' + self.ds + 'TiledMap.cpp',
@@ -170,6 +172,8 @@ class ARK2DBuildSystem:
 			'src' + self.ds + 'ARK2D' + self.ds + 'ARK2D_Path' + self.ds + 'PathIO.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'ARK2D_State' + self.ds + 'EmptyTransition.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'ARK2D_State' + self.ds + 'FadeTransition.cpp',
+			'src' + self.ds + 'ARK2D' + self.ds + 'ARK2D_State' + self.ds + 'FadeToColourTransition.cpp',
+			'src' + self.ds + 'ARK2D' + self.ds + 'ARK2D_State' + self.ds + 'FadeFromColourTransition.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'ARK2D_State' + self.ds + 'GameState.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'ARK2D_State' + self.ds + 'LoadingState.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'ARK2D_State' + self.ds + 'SlideRectanglesAcrossTransition.cpp',
@@ -321,6 +325,7 @@ class ARK2DBuildSystem:
 			self.build_folder + self.ds + self.platform + self.ds + "build-cache" # cache folder
 			
 		]);
+		self.mkdirs.extend(self.game_mkdirs);
 		
 	def gamePostInit(self):
 	
@@ -393,7 +398,7 @@ class ARK2DBuildSystem:
 					compileStr += " -O3 -Wall -c -fmessage-length=0 ";
 					if (sys.platform == "darwin"): #compiling on mac
 						if not "vendor" in newf:
-							compileStr += " -mmacosx-version-min=10.6 -x objective-c++ ";
+							compileStr += " -mmacosx-version-min=10.5 -DMAC_OS_X_VERSION_MIN_REQUIRED=1050 -x objective-c++ ";
 							compileStr += "-I /usr/X11/include "; 
 						
 						#  compileStr += " -march=i386 ";
@@ -622,12 +627,13 @@ if __name__ == "__main__":
 		j = json.loads(b); #.replace("-", " "));
 			
 		a = ARK2DBuildSystem();
-		a.ark2d_dir = j["ark2d_dir"]
+		a.ark2d_dir = j["ark2d_dir"];
+		#a.build_folder = j['build_folder'];
 		a.game_name = j["game_name"];
 		a.game_short_name = j['game_short_name'];
 		a.game_dir  = j["game_dir"];
 		a.src_files.extend(j["game_src_files"]);
-		a.mkdirs.extend(j['game_mkdirs']);
+		a.game_mkdirs = j['game_mkdirs'];
 		a.build_artifact = "";
 		
 		#a.clean();

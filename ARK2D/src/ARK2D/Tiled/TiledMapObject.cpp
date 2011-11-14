@@ -3,7 +3,15 @@
 
 
 // tiled map object
-TiledMapObject::TiledMapObject() {
+TiledMapObject::TiledMapObject():
+	m_name(),
+	m_type(),
+	m_x(0),
+	m_y(0),
+	m_width(1),
+	m_height(1),
+	m_gid(0)
+{
 
 }
 
@@ -47,6 +55,13 @@ void TiledMapObject::setHeight(unsigned int h) {
 }
 unsigned int TiledMapObject::getHeight() {
 	return m_height;
+}
+
+void TiledMapObject::setGID(unsigned int h) {
+	m_gid = h;
+}
+unsigned int TiledMapObject::getGID() {
+	return m_gid;
 }
 
 TiledMapObject::~TiledMapObject() {

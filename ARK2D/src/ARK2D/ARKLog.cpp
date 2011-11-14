@@ -51,7 +51,7 @@ void ARKLog::i(ARKString s) {
 }
 void ARKLog::update() {
 	Input* i = ARK2D::getInput();
-	if (i->isKeyPressed(Input::KEY_D)) {
+	if (i->isKeyPressed(Input::KEY_D) && i->isKeyDown(Input::KEY_LSHIFT)) {
 		s_visible = !s_visible;
 	}
 }

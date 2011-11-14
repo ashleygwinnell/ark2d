@@ -600,6 +600,9 @@ void Image::drawCentered(int x, int y) const {
 void Image::drawCentered(float x, float y) const {
 	this->draw(x - (this->m_Width/2), y - (this->m_Height/2));
 }
+void Image::drawCenteredFlipped(int x, int y, bool flipx, bool flipy) {
+	this->drawFlipped(x - (this->m_Width/2), y - (this->m_Height/2), flipx, flipy);
+}
 
 void Image::bind() const {
 	if (texture == s_current_texture_id) { return; }
@@ -626,6 +629,7 @@ void Image::setCornerColor(unsigned int corner, Color c) const {
 			m_tr_corner_color = Color(c); break;
 	}
 }*/
+
 
 void Image::setSize(int w, int h) {
 	m_Width = w;

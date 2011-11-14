@@ -11,6 +11,7 @@ TiledMapLayer::TiledMapLayer():
 	m_width(0),
 	m_height(0),
 	m_visible(true),
+	m_opacity(1.0f),
 	m_properties(),
 	m_data()
 {
@@ -86,6 +87,13 @@ unsigned int TiledMapLayer::getTileGID(unsigned int x, unsigned int y) const {
 
 }
 
+void TiledMapLayer::setOpacity(float f) {
+	m_opacity = f;
+}
+float TiledMapLayer::getOpacity() {
+	return m_opacity;
+}
+
 void TiledMapLayer::draw(int xOffset, int yOffset) const
 {
 	if (!m_visible) { return; }
@@ -104,7 +112,9 @@ void TiledMapLayer::draw(int xOffset, int yOffset) const
 
 				Image* t = tileset->getTileByGID(gid)->getImage();
 				if (t != NULL) {
+					t->setAlpha(m_opacity);
 					t->draw((int) (x * tileset->getTileWidth()) + xOffset, (int) (y * tileset->getTileHeight()) + yOffset);
+					t->setAlpha(1.0f);
 				}
 			}
 		}

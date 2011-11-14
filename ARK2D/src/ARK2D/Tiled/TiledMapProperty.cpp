@@ -15,10 +15,10 @@ TiledMapProperty::TiledMapProperty(const string& name, const string& value):
 
 }
 
-const string TiledMapProperty::getName() {
+const string TiledMapProperty::getName() const {
 	return m_name;
 }
-const string TiledMapProperty::getValue() {
+const string TiledMapProperty::getValue() const {
 	return m_value;
 }
 

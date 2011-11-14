@@ -30,6 +30,9 @@ class TiledMapObject {
 		void setHeight(unsigned int h);
 		unsigned int getHeight();
 
+		void setGID(unsigned int h);
+		unsigned int getGID();
+
 		~TiledMapObject();
 	private:
 		string m_name;
@@ -38,6 +41,7 @@ class TiledMapObject {
 		signed int m_y;
 		unsigned int m_width;
 		unsigned int m_height;
+		unsigned int m_gid;
 		vector<TiledMapProperty*> m_properties;
 };
 

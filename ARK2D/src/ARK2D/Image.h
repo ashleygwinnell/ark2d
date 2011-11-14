@@ -89,6 +89,7 @@ class Image {
 		void draw(float x, float y, unsigned int w, unsigned int h);
 		void drawCentered(int x, int y) const;
 		void drawCentered(float x, float y) const;
+		void drawCenteredFlipped(int x, int y, bool flipx, bool flipy);
 		void drawFlipped(int x, int y, bool flipx, bool flipy); // not const as modifies inner variables
 		//void setCornerColor(unsigned int corner, Color c) const;
 		//void copyAreaToImage(const Image& image, unsigned int dest_x, unsigned int dest_y,

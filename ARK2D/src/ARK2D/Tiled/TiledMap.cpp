@@ -271,6 +271,13 @@ TiledMap::TiledMap(const string& file):
 			layer.setWidth(Cast::fromString<unsigned int>(layer_element->Attribute("width")));
 			layer.setHeight(Cast::fromString<unsigned int>(layer_element->Attribute("height")));
 
+			const char* opacity_cstr = layer_element->Attribute("opacity");
+			if (opacity_cstr != NULL) {
+				float opac = Cast::fromString<float>(layer_element->Attribute("opacity"));
+				layer.setOpacity(opac);
+			}
+
+
 			const char* visible_cstr = layer_element->Attribute("visible");
 			if (visible_cstr != NULL) {
 				unsigned int visible = Cast::fromString<unsigned int>(visible_cstr);
@@ -424,16 +431,29 @@ TiledMap::TiledMap(const string& file):
 					object_element;
 					object_element = object_element->NextSiblingElement("object")) {
 
+				TiledMapObject* obj = new TiledMapObject();
+
 				const char* object_name = object_element->Attribute("name");
+				if (object_name != NULL) {
+					obj->setName(object_name);
+				}
+
 				const char* object_type = object_element->Attribute("type");
+				if (object_type != NULL) {
+					obj->setType(object_type);
+				}
+
 				signed int object_x = Cast::fromString<signed int>(object_element->Attribute("x"));
 				signed int object_y = Cast::fromString<signed int>(object_element->Attribute("y"));
-
-				TiledMapObject* obj = new TiledMapObject();
-				obj->setName(object_name);
-				obj->setType(object_type);
 				obj->setX(object_x);
 				obj->setY(object_y);
+
+				const char* gid_cstr = object_element->Attribute("gid");
+				if (gid_cstr != NULL) {
+					int gid = Cast::fromString<signed int>(gid_cstr);
+					obj->setGID(gid);
+				}
+
 				group.addObject(obj);
 			}
 
@@ -510,8 +530,8 @@ TiledMapLayer* TiledMap::getLayerByName(const char* name) {
 			return const_cast<TiledMapLayer*>(&layer);
 		}
 	}
-	ErrorDialog::createAndShow(StringUtil::append("There is no Layer by  name: ", name));
-	exit(0);
+	//ErrorDialog::createAndShow(StringUtil::append("There is no Layer by  name: ", name));
+	//exit(0);
 	return NULL;
 }
 
@@ -548,6 +568,25 @@ TiledMapTileset* TiledMap::getTileset(unsigned int index) {
 		ErrorDialog::createAndShow(StringUtil::append("There is no Tileset at index: ", index)); exit(0);
 	}
 }
+
+TiledMapProperty* TiledMap::getProperty(unsigned int index) {
+	try {
+		return &m_properties.at(index);
+	} catch (...) {
+		ErrorDialog::createAndShow(StringUtil::append("There is no TiledMap Property at index: ", index)); exit(0);
+	}
+}
+TiledMapProperty* TiledMap::getPropertyByName(const char* name) {
+	vector<TiledMapProperty>::iterator it;
+	for (it = m_properties.begin(); it != m_properties.end(); it++) {
+		const TiledMapProperty& p = (*it);
+		if (p.getName().compare(name) == 0) {
+			return const_cast<TiledMapProperty*>(&p);
+		}
+	}
+	return NULL;
+}
+
 
 TiledMapTileset* TiledMap::getTilesetByGID(unsigned int gid) {
 	// find which tileset it's in.

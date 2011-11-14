@@ -43,6 +43,9 @@ class TiledMap {
 		TiledMapTileset* getTileset(unsigned int index);
 		TiledMapTileset* getTilesetByGID(unsigned int gid);
 
+		TiledMapProperty* getProperty(unsigned int index);
+		TiledMapProperty* getPropertyByName(const char* name);
+
 		unsigned int getTileWidth();
 		unsigned int getTileHeight();
 

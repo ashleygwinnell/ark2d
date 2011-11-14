@@ -13,8 +13,8 @@ class TiledMapProperty : public ToString {
 		TiledMapProperty();
 		TiledMapProperty(const std::string& name, const std::string& value);
 
-		const string getName();
-		const string getValue();
+		const string getName() const;
+		const string getValue() const;
 
 		void setName(const string& s);
 		void setValue(const string& s);

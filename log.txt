@@ -331,7 +331,10 @@
 - https://trac.xiph.org/attachment/ticket/1707/vorbis.diff
 
 
-TODO:
+TODO / BUGS:
+
+- BMP Loading on Mac does not work.
+- PNG Masking does not work.
 
 - Load FTFont from data.
 - TextField work:
