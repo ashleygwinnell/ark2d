@@ -9,7 +9,7 @@ import binascii
 if __name__ == "__main__":
 	a = dict();
 	a['game_short_name'] = "baseball";
-	a['game_name'] = "Armoured Baseball: The Dark Project";
+	a['game_name'] = "Armoured Baseball - The Dark Project";
 	
 	if (sys.platform == "win32"):
 		a['ark2d_dir'] = "C:\\xampp\\htdocs\\C++\\ARK2D\\ARK2D";
