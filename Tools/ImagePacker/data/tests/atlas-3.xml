@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+<sheet size="256" spacing="1">
+<item x="0" y="0" width="60" height="60" name="60x60.png" path="/Users/ashleygwinnell/Projects/Java/TDD/data/tests/60x60.png" />
+<item x="61" y="0" width="60" height="60" name="60x60.png" path="/Users/ashleygwinnell/Projects/Java/TDD/data/tests/60x60.png" />
+</sheet>

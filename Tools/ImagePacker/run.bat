@@ -1,0 +1,1 @@
+java bin/org/ashleygwinnell/imagepacker/ImagePacker

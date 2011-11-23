@@ -12,7 +12,7 @@ TiledMapProperty::TiledMapProperty(const string& name, const string& value):
 	m_name(name),
 	m_value(value)
 {
-
+ 
 }
 
 const string TiledMapProperty::getName() const {
