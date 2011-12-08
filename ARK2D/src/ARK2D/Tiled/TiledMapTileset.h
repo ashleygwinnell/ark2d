@@ -7,7 +7,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../Image.h"
+#include "../Image/Image.h"
 
 #include "TiledMapTile.h"
 

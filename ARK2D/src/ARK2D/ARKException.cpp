@@ -6,7 +6,7 @@
  */
 
 #include "ARKException.h"
-#include "ErrorDialog.h"
+#include "UI/ErrorDialog.h"
 
 ARKException::ARKException():
 	m_string("") {

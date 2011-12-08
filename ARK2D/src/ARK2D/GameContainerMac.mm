@@ -7,7 +7,7 @@
 
 #include "GameContainer.h"
 #include "GameContainerMac.h"
-#include "ARKLog.h"
+#include "Util/ARKLog.h"
 
 #ifdef ARK2D_MACINTOSH
 

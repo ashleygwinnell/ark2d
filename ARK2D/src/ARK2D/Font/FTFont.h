@@ -27,7 +27,7 @@
 #endif
 
 #include "../ARK2D_GL.h"
-#include "../ErrorDialog.h"
+#include "../UI/ErrorDialog.h"
 
 #include <stdio.h>
 #include <iostream>

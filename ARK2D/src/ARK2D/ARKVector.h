@@ -76,6 +76,19 @@ class ARKVector {
 				obj->render(container, g);
 			}
 		}
+		string toString() {
+			string s = "[";
+				for(unsigned int i = 0; i < vec.size(); i++) {
+					T obj = vec.at(i);
+					if (obj == NULL) { continue; }
+					s += obj->toString();
+					if (i != vec.size() - 1) {
+						s += ",";
+					}
+				}
+			s += "]";
+			return s;
+		}
 		~ARKVector() {
 
 		}

@@ -8,8 +8,8 @@
 #ifndef ARKSTRING_H_
 #define ARKSTRING_H_
 
-#include "StringUtil.h"
-#include "Cast.h"
+#include "Util/StringUtil.h"
+#include "Util/Cast.h"
 
 #include <string>
 using namespace std;

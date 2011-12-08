@@ -10,7 +10,7 @@
 
 #include <vector>
 
-#include "Image.h"
+#include "Image/Image.h"
 #include "GameTimer.h"
 
 class Animation {

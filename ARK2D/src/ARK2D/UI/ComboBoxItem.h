@@ -14,7 +14,7 @@
 #include "../Graphics.h"
 #include "../Color.h"
 #include "../Input.h"
-#include "../GigaRectangle.h"
+#include "../Geometry/GigaRectangle.h"
 
 class ComboBox;
 

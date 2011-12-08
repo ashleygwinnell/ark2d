@@ -9,7 +9,7 @@
 #include <iostream>
 #include <fstream>
 #include "BMFont.h"
-#include "../Image.h"
+#include "../Image/Image.h"
 #include "../GameContainer.h"
 
 using namespace std;

@@ -8,9 +8,11 @@
 #ifndef CONFIGURABLEEMITTER_H_
 #define CONFIGURABLEEMITTER_H_
 
+
 #include "../Color.h"
 #include "Range.h"
 #include "ParticleEmitter.h"
+#include "../Image/Image.h"
 
 
 #include <string>
@@ -35,6 +37,9 @@ class SimpleValue : public Value {
 		void setValue(float value) {
 			m_value = value;
 		}
+		virtual ~SimpleValue() {
+
+		}
 };
 class RandomValue : public Value {
 	public:
@@ -51,7 +56,9 @@ class RandomValue : public Value {
 		void setValue(float value) {
 			m_value = value;
 		}
+		virtual ~RandomValue() {
 
+		}
 };
 class LinearInterpolator : public Value {
 	public:

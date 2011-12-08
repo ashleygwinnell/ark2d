@@ -8,7 +8,7 @@
 #ifndef EASING_H_
 #define EASING_H_
 
-#include "MathUtil.h"
+#include "Util/MathUtil.h"
 
 #include <math.h>
 #include <string>

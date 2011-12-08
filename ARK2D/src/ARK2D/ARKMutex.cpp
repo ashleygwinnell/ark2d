@@ -7,8 +7,8 @@
 
 
 #include "ARKMutex.h"
-#include "ErrorDialog.h"
-#include "StringUtil.h"
+#include "UI/ErrorDialog.h"
+#include "Util/StringUtil.h"
 
 #if defined (ARK2D_WINDOWS)
 	ARKMutex::ARKMutex() {

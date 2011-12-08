@@ -9,7 +9,7 @@
 #include "../ARK2D_GL.h"
 #include "../GameTimer.h"
 #include "../Graphics.h"
-#include "../Image.h"
+#include "../Image/Image.h"
 #include "../Color.h"
 #include "../OutputWrapper.h"
 

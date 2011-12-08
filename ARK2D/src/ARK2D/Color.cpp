@@ -5,10 +5,10 @@
  *      Author: Ashley
  */
 
-#include "MathUtil.h"
-#include "ErrorDialog.h"
+#include "Util/MathUtil.h"
+#include "UI/ErrorDialog.h"
+#include "Util/Cast.h"
 #include "Color.h"
-#include "Cast.h"
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>

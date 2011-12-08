@@ -12,7 +12,7 @@
 #include <string>
 #include <cstring>
 #include <stdlib.h>
-#include "MathUtil.h"
+#include "Util/MathUtil.h"
 #include "ARK2D_GL.h"
 
 class Color {

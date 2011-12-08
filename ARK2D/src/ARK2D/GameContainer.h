@@ -16,14 +16,13 @@
 #include "Game.h"
 #include "Input.h"
 #include "GameTimer.h"
-//#include "GigaRectangle.h"
 #include "Graphics.h"
 #include "Font/BMFont.h"
-#include "Image.h"
-#include "ErrorDialog.h"
+#include "Image/Image.h"
+#include "UI/ErrorDialog.h"
 #include "OutputWrapper.h"
 
-#include "Sound.h"
+#include "Audio/Sound.h"
 
 #include <vector>
 #include <ctime>

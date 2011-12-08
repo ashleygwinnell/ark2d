@@ -2,65 +2,14 @@
     "src/ARK2D/ARK2D.cpp": {
         "date_modified": 1315078309.0
     }, 
-    "src/ARK2D/ARK2D_Path/Path.cpp": {
-        "date_modified": 1312738088.0
-    }, 
-    "src/ARK2D/ARK2D_Path/PathGroup.cpp": {
-        "date_modified": 1312738088.0
-    }, 
-    "src/ARK2D/ARK2D_Path/PathIO.cpp": {
-        "date_modified": 1312738088.0
-    }, 
-    "src/ARK2D/ARK2D_Path/SubPath.cpp": {
-        "date_modified": 1312738088.0
-    }, 
-    "src/ARK2D/ARK2D_State/EmptyTransition.cpp": {
-        "date_modified": 1312738088.0
-    }, 
-    "src/ARK2D/ARK2D_State/FadeFromColourTransition.cpp": {
-        "date_modified": 1320489068.0
-    }, 
-    "src/ARK2D/ARK2D_State/FadeToColourTransition.cpp": {
-        "date_modified": 1320489166.0
-    }, 
-    "src/ARK2D/ARK2D_State/FadeTransition.cpp": {
-        "date_modified": 1312738088.0
-    }, 
-    "src/ARK2D/ARK2D_State/GameState.cpp": {
-        "date_modified": 1312738088.0
-    }, 
-    "src/ARK2D/ARK2D_State/LoadingState.cpp": {
-        "date_modified": 1312738088.0
-    }, 
-    "src/ARK2D/ARK2D_State/SlideRectanglesAcrossTransition.cpp": {
-        "date_modified": 1312738088.0
-    }, 
-    "src/ARK2D/ARK2D_State/StateBasedGame.cpp": {
-        "date_modified": 1313091069.0
-    }, 
-    "src/ARK2D/ARK2D_State/Transition.cpp": {
-        "date_modified": 1312738088.0
-    }, 
-    "src/ARK2D/ARK2D_State/TranslateOutInTransition.cpp": {
-        "date_modified": 1312738088.0
-    }, 
-    "src/ARK2D/ARK2D_Util/VerticalMenu.cpp": {
-        "date_modified": 1312738088.0
-    }, 
-    "src/ARK2D/ARK2D_Util/VerticalMenuItem.cpp": {
-        "date_modified": 1312738088.0
-    }, 
     "src/ARK2D/ARKException.cpp": {
-        "date_modified": 1312738088.0
+        "date_modified": 1323291594.0
     }, 
     "src/ARK2D/ARKGameObject.cpp": {
-        "date_modified": 1318976869.0
-    }, 
-    "src/ARK2D/ARKLog.cpp": {
-        "date_modified": 1320416017.0
+        "date_modified": 1323099323.0
     }, 
     "src/ARK2D/ARKMutex.cpp": {
-        "date_modified": 1313360505.0
+        "date_modified": 1323293634.0
     }, 
     "src/ARK2D/ARKString.cpp": {
         "date_modified": 1312738088.0
@@ -71,32 +20,23 @@
     "src/ARK2D/Animation.cpp": {
         "date_modified": 1317481338.0
     }, 
-    "src/ARK2D/BMPImage.cpp": {
-        "date_modified": 1315779768.0
+    "src/ARK2D/Audio/Sound.cpp": {
+        "date_modified": 1323307197.0
     }, 
-    "src/ARK2D/CameraShake.cpp": {
-        "date_modified": 1312738088.0
-    }, 
-    "src/ARK2D/Circle.cpp": {
+    "src/ARK2D/Audio/SoundStore.cpp": {
         "date_modified": 1312738088.0
     }, 
     "src/ARK2D/Color.cpp": {
-        "date_modified": 1320420546.0
+        "date_modified": 1323305446.0
     }, 
     "src/ARK2D/Easing.cpp": {
         "date_modified": 1312738088.0
     }, 
-    "src/ARK2D/ErrorDialog.cpp": {
-        "date_modified": 1313168547.0
-    }, 
     "src/ARK2D/Event.cpp": {
         "date_modified": 1312738088.0
     }, 
-    "src/ARK2D/FileUtil.cpp": {
-        "date_modified": 1312738088.0
-    }, 
     "src/ARK2D/Font/BMFont.cpp": {
-        "date_modified": 1313089208.0
+        "date_modified": 1323292097.0
     }, 
     "src/ARK2D/Font/FTFont.cpp": {
         "date_modified": 1312738088.0
@@ -105,13 +45,13 @@
         "date_modified": 1313090631.0
     }, 
     "src/ARK2D/GameContainer.cpp": {
-        "date_modified": 1313360505.0
+        "date_modified": 1323308361.0
     }, 
     "src/ARK2D/GameContainerLinux.cpp": {
         "date_modified": 1313100671.0
     }, 
     "src/ARK2D/GameContainerMac.mm": {
-        "date_modified": 1319761343.0
+        "date_modified": 1323305259.0
     }, 
     "src/ARK2D/GameContainerMacAppDelegate.mm": {
         "date_modified": 1313084458.0
@@ -120,7 +60,7 @@
         "date_modified": 1315669154.0
     }, 
     "src/ARK2D/GameContainerWindows.cpp": {
-        "date_modified": 1319761385.0
+        "date_modified": 1323308381.0
     }, 
     "src/ARK2D/GameTimer.cpp": {
         "date_modified": 1313159729.0
@@ -128,68 +68,122 @@
     "src/ARK2D/Gamepad.cpp": {
         "date_modified": 1312738088.0
     }, 
-    "src/ARK2D/GigaRectangle.cpp": {
+    "src/ARK2D/Geometry/Circle.cpp": {
         "date_modified": 1312738088.0
     }, 
-    "src/ARK2D/GigaRectangleF.cpp": {
+    "src/ARK2D/Geometry/GigaRectangle.cpp": {
         "date_modified": 1312738088.0
+    }, 
+    "src/ARK2D/Geometry/Matrix44.cpp": {
+        "date_modified": 1323308615.0
+    }, 
+    "src/ARK2D/Geometry/Vector2.cpp": {
+        "date_modified": 1323308582.0
+    }, 
+    "src/ARK2D/Geometry/Vector4.cpp": {
+        "date_modified": 1323308599.0
     }, 
     "src/ARK2D/Graphics.cpp": {
         "date_modified": 1319759461.0
     }, 
-    "src/ARK2D/Image.cpp": {
-        "date_modified": 1320416516.0
+    "src/ARK2D/Image/BMPImage.cpp": {
+        "date_modified": 1323293634.0
+    }, 
+    "src/ARK2D/Image/Image.cpp": {
+        "date_modified": 1323293634.0
+    }, 
+    "src/ARK2D/Image/PNGImage.cpp": {
+        "date_modified": 1323291183.0
+    }, 
+    "src/ARK2D/Image/TargaImage.cpp": {
+        "date_modified": 1323291183.0
+    }, 
+    "src/ARK2D/Image/Texture.cpp": {
+        "date_modified": 1312738088.0
     }, 
     "src/ARK2D/Input.cpp": {
         "date_modified": 1315669087.0
     }, 
-    "src/ARK2D/LocalHighscores.cpp": {
-        "date_modified": 1313242643.0
-    }, 
-    "src/ARK2D/MathUtil.cpp": {
-        "date_modified": 1312738088.0
-    }, 
     "src/ARK2D/OutputWrapper.cpp": {
         "date_modified": 1312738088.0
     }, 
-    "src/ARK2D/PNGImage.cpp": {
-        "date_modified": 1315772508.0
+    "src/ARK2D/Particles/ConfigurableEmitter.cpp": {
+        "date_modified": 1312738088.0
+    }, 
+    "src/ARK2D/Particles/Particle.cpp": {
+        "date_modified": 1323292097.0
+    }, 
+    "src/ARK2D/Particles/ParticleIO.cpp": {
+        "date_modified": 1323293634.0
+    }, 
+    "src/ARK2D/Particles/ParticlePool.cpp": {
+        "date_modified": 1312738088.0
+    }, 
+    "src/ARK2D/Particles/ParticleSystem.cpp": {
+        "date_modified": 1323292098.0
+    }, 
+    "src/ARK2D/Path/Path.cpp": {
+        "date_modified": 1312738088.0
+    }, 
+    "src/ARK2D/Path/PathGroup.cpp": {
+        "date_modified": 1312738088.0
+    }, 
+    "src/ARK2D/Path/PathIO.cpp": {
+        "date_modified": 1323309884.0
+    }, 
+    "src/ARK2D/Path/SubPath.cpp": {
+        "date_modified": 1312738088.0
     }, 
     "src/ARK2D/Shader.cpp": {
-        "date_modified": 1312738088.0
+        "date_modified": 1323293635.0
     }, 
     "src/ARK2D/Sort.cpp": {
-        "date_modified": 1312738088.0
-    }, 
-    "src/ARK2D/Sound.cpp": {
-        "date_modified": 1315149479.0
-    }, 
-    "src/ARK2D/SoundStore.cpp": {
         "date_modified": 1312738088.0
     }, 
     "src/ARK2D/SpriteSheet.cpp": {
         "date_modified": 1312738088.0
     }, 
     "src/ARK2D/SpriteSheetDescription.cpp": {
-        "date_modified": 1313239870.0
+        "date_modified": 1323305446.0
     }, 
     "src/ARK2D/SpriteSheetDescriptionItem.cpp": {
         "date_modified": 1312738088.0
     }, 
+    "src/ARK2D/State/GameState.cpp": {
+        "date_modified": 1312738088.0
+    }, 
+    "src/ARK2D/State/LoadingState.cpp": {
+        "date_modified": 1312738088.0
+    }, 
+    "src/ARK2D/State/StateBasedGame.cpp": {
+        "date_modified": 1323310578.0
+    }, 
+    "src/ARK2D/State/Transition/EmptyTransition.cpp": {
+        "date_modified": 1312738088.0
+    }, 
+    "src/ARK2D/State/Transition/FadeFromColourTransition.cpp": {
+        "date_modified": 1323309653.0
+    }, 
+    "src/ARK2D/State/Transition/FadeToColourTransition.cpp": {
+        "date_modified": 1323309653.0
+    }, 
+    "src/ARK2D/State/Transition/FadeTransition.cpp": {
+        "date_modified": 1323309653.0
+    }, 
+    "src/ARK2D/State/Transition/SlideRectanglesAcrossTransition.cpp": {
+        "date_modified": 1312738088.0
+    }, 
+    "src/ARK2D/State/Transition/Transition.cpp": {
+        "date_modified": 1323309653.0
+    }, 
+    "src/ARK2D/State/Transition/TranslateOutInTransition.cpp": {
+        "date_modified": 1323309653.0
+    }, 
     "src/ARK2D/StringStore.cpp": {
         "date_modified": 1312738088.0
     }, 
-    "src/ARK2D/StringUtil.cpp": {
-        "date_modified": 1314654683.0
-    }, 
-    "src/ARK2D/TargaImage.cpp": {
-        "date_modified": 1312738088.0
-    }, 
-    "src/ARK2D/Texture.cpp": {
-        "date_modified": 1312738088.0
-    }, 
     "src/ARK2D/Tiled/TiledMap.cpp": {
-        "date_modified": 1321184360.0
+        "date_modified": 1323305446.0
     }, 
     "src/ARK2D/Tiled/TiledMapLayer.cpp": {
         "date_modified": 1320422506.0
@@ -201,7 +195,7 @@
         "date_modified": 1312738088.0
     }, 
     "src/ARK2D/Tiled/TiledMapProperty.cpp": {
-        "date_modified": 1322065798.0
+        "date_modified": 1323095988.0
     }, 
     "src/ARK2D/Tiled/TiledMapTile.cpp": {
         "date_modified": 1312738088.0
@@ -210,7 +204,7 @@
         "date_modified": 1312738088.0
     }, 
     "src/ARK2D/Timeline.cpp": {
-        "date_modified": 1312738088.0
+        "date_modified": 1323291595.0
     }, 
     "src/ARK2D/Tools/Packer.cpp": {
         "date_modified": 1315177761.0
@@ -230,6 +224,9 @@
     "src/ARK2D/UI/ComboBoxItem.cpp": {
         "date_modified": 1312738088.0
     }, 
+    "src/ARK2D/UI/ErrorDialog.cpp": {
+        "date_modified": 1323292472.0
+    }, 
     "src/ARK2D/UI/FileDialog.cpp": {
         "date_modified": 1313158303.0
     }, 
@@ -248,19 +245,28 @@
     "src/ARK2D/UI/UIComponent.cpp": {
         "date_modified": 1312738088.0
     }, 
-    "src/ARK2D/particles/ConfigurableEmitter.cpp": {
+    "src/ARK2D/Util/ARKLog.cpp": {
+        "date_modified": 1323309298.0
+    }, 
+    "src/ARK2D/Util/CameraShake.cpp": {
+        "date_modified": 1323308962.0
+    }, 
+    "src/ARK2D/Util/FileUtil.cpp": {
+        "date_modified": 1323293219.0
+    }, 
+    "src/ARK2D/Util/LocalHighscores.cpp": {
+        "date_modified": 1323310364.0
+    }, 
+    "src/ARK2D/Util/MathUtil.cpp": {
+        "date_modified": 1323293219.0
+    }, 
+    "src/ARK2D/Util/StringUtil.cpp": {
+        "date_modified": 1323293226.0
+    }, 
+    "src/ARK2D/Util/VerticalMenu.cpp": {
         "date_modified": 1312738088.0
     }, 
-    "src/ARK2D/particles/Particle.cpp": {
-        "date_modified": 1312738088.0
-    }, 
-    "src/ARK2D/particles/ParticleIO.cpp": {
-        "date_modified": 1312738088.0
-    }, 
-    "src/ARK2D/particles/ParticlePool.cpp": {
-        "date_modified": 1312738088.0
-    }, 
-    "src/ARK2D/particles/ParticleSystem.cpp": {
+    "src/ARK2D/Util/VerticalMenuItem.cpp": {
         "date_modified": 1312738088.0
     }, 
     "src/ARK2D/vendor/libJSON/JSONNode.cpp": {

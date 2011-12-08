@@ -10,7 +10,7 @@
 #include <vector>
 #include <map>
 #include "GameTimer.h"
-#include "ErrorDialog.h"
+#include "UI/ErrorDialog.h"
 
 #include "Timeline.h"
 

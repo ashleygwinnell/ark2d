@@ -8,13 +8,13 @@
 #ifndef TEXTFIELD_H_
 #define TEXTFIELD_H_
 
-#include "../ARKString.h"
 #include "AbstractUIComponent.h"
 
+#include "../ARKString.h"
 #include "../Input.h"
-#include "../GigaRectangle.h"
 #include "../Graphics.h"
 #include "../Color.h"
+#include "../Geometry/GigaRectangle.h"
 
 /**
  * Unlike HTML, padding does not (currently) affect height.

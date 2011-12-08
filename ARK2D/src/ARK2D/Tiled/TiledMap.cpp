@@ -13,10 +13,10 @@
 
 #include "TiledMap.h"
 #include "TiledMapTile.h"
-#include "../ErrorDialog.h"
-#include "../Cast.h"
-#include "../StringUtil.h"
-#include "../Image.h"
+#include "../UI/ErrorDialog.h"
+#include "../Util/Cast.h"
+#include "../Util/StringUtil.h"
+#include "../Image/Image.h"
 #include "../vendor/zlib123/zlib.h"
 
 #include "../GameContainer.h"

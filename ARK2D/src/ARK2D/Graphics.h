@@ -11,8 +11,8 @@
 #include <string>
 #include "Font/BMFont.h"
 #include "Color.h"
-#include "StringUtil.h"
-#include "Matrix44.h"
+#include "Util/StringUtil.h"
+#include "Geometry/Matrix44.h"
 
 #include "ARK2D_GL.h"
 

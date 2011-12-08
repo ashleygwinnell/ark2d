@@ -11,9 +11,9 @@
 #include "Particle.h"
 #include "ParticlePool.h"
 #include "../Color.h"
-#include "../ErrorDialog.h"
-#include "../Image.h"
-#include "../StringUtil.h"
+#include "../UI/ErrorDialog.h"
+#include "../Image/Image.h"
+#include "../Util/StringUtil.h"
 
 
 

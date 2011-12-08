@@ -6,8 +6,8 @@
  *      		...with much help from http://www.swiftless.com/tutorials/glsl/1_setup.html
  */
 #include "Shader.h"
-#include "ErrorDialog.h"
-#include "StringUtil.h"
+#include "UI/ErrorDialog.h"
+#include "Util/StringUtil.h"
 #include <stdlib.h>
 
 #include "ARK2D_GL.h"

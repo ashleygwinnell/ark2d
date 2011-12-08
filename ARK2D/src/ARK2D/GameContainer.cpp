@@ -5,7 +5,7 @@
  *      Author: Ashley Gwinnell
  */
 
-#include "GigaRectangle.h"
+#include "Geometry/GigaRectangle.h"
 #include "GameContainer.h"
 #include "ARK2D.h"
 

@@ -8,12 +8,12 @@
 #ifndef BUTTON_H_
 #define BUTTON_H_
 
-#include "../ARKString.h"
 #include "AbstractUIComponent.h"
 
+#include "../ARKString.h"
 #include "../Input.h"
-#include "../GigaRectangle.h"
 #include "../Graphics.h"
+#include "../Geometry/GigaRectangle.h"
 
 class Button : public AbstractUIComponent {
 	private:

@@ -11,9 +11,9 @@
 #include "UIComponent.h"
 #include "../Graphics.h"
 #include "../GameContainer.h"
-#include "../Vector4.h"
 #include "../Input.h"
-#include "../GigaRectangle.h"
+#include "../Geometry/Vector4.h"
+#include "../Geometry/GigaRectangle.h"
 
 class AbstractUIComponent : public UIComponent {
 	public:

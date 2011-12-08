@@ -12,7 +12,7 @@
 #include <vector>
 #include "../vendor/tinyxml/tinyxml.h"
 #include "../ToString.h"
-#include "../Image.h"
+#include "../Image/Image.h"
 #include "../Color.h"
 
 #include "TiledMapTileset.h"

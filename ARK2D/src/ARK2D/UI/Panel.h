@@ -17,7 +17,7 @@ using namespace std;
 #include "../Graphics.h"
 #include "../GameContainer.h"
 #include "../Input.h"
-#include "../GigaRectangle.h"
+#include "../Geometry/GigaRectangle.h"
 
 class Panel : public AbstractUIComponent {
 	public:

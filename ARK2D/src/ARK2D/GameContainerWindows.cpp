@@ -12,12 +12,12 @@
 
 #if defined(ARK2D_WINDOWS)
 
-	#include "GigaRectangle.h"
+	#include "Geometry/GigaRectangle.h"
 
 	#include "ARK2D_windres.h"
-	#include "Image.h"
+	#include "Image/Image.h"
 
-	#include "ARKLog.h"
+	#include "Util/ARKLog.h"
 
 		LRESULT CALLBACK GameContainerPlatform::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{

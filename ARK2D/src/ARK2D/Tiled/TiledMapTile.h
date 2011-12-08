@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-#include "../Image.h"
+#include "../Image/Image.h"
 
 class TiledMapProperty;
 

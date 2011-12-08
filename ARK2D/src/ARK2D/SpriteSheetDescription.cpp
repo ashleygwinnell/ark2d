@@ -6,10 +6,10 @@
  */
 
 #include "SpriteSheetDescription.h"
-#include "StringUtil.h"
-#include "Cast.h"
+#include "Util/StringUtil.h"
+#include "Util/Cast.h"
 #include "ARK2D_JSON.h"
-#include "ErrorDialog.h"
+#include "UI/ErrorDialog.h"
 
 SpriteSheetDescription::SpriteSheetDescription(const char* path): m_path(path) {
 	//std::cout << "Loading Spritesheet Description: " << path;
