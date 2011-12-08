@@ -8,8 +8,12 @@
 #ifndef ARKLOG_H_
 #define ARKLOG_H_
 
-#include "../../ARK.h"
 #include <string>
+#include <list>
+
+struct GameContainer;
+struct Graphics;
+struct ARKString;
 
 using namespace std;
 

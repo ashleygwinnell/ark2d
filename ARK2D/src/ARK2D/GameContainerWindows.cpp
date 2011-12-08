@@ -457,7 +457,7 @@
 
 		void GameContainer::initGamepads() {
 
-			//OutputWrapper::print("Initialising Gamepads");
+			//ARKLog::i("Initialising Gamepads");
 
 			unsigned int numPadsSupported = joyGetNumDevs();
 			unsigned int joystickId = 0;
@@ -793,15 +793,15 @@
 
 
 			// populate the gamepads.
-			OutputWrapper::print("Initialising Gamepads... ");
+			ARKLog::i("Initialising Gamepads... ");
 			initGamepads();
-			OutputWrapper::println("done.");
+			ARKLog::i("done.");
 
 			// Enable OpenGL
-			OutputWrapper::print("Initialising OpenGL... ");
+			ARKLog::i("Initialising OpenGL... ");
 			m_platformSpecific.enableOpenGL(m_platformSpecific.m_hWindow, &m_platformSpecific.m_hDeviceContext, &m_platformSpecific.m_hRenderingContext);
 			this->enable2D();
-			OutputWrapper::println("done.");
+			ARKLog::i("done.");
 
 			// Load default Font - relies on Image so must be done after OpenGL is initted.
 			//BMFont* fnt = new BMFont("data/fonts/default.fnt", "data/fonts/default.png");
@@ -811,30 +811,30 @@
 			m_graphics.m_Font = fnt;
 
 			// Enable OpenAL
-			OutputWrapper::print("Initialising OpenAL... ");
+			ARKLog::i("Initialising OpenAL... ");
 			this->enableOpenAL();
-			OutputWrapper::println("done.");
+			ARKLog::i("done.");
 
 
 
-			OutputWrapper::print("Initialising Window... ");
+			ARKLog::i("Initialising Window... ");
 			ShowWindow(m_platformSpecific.m_hWindow, SW_SHOWNORMAL);
 			UpdateWindow(m_platformSpecific.m_hWindow);
 			//ClipCursor(&m_windowRect);
-			OutputWrapper::println("done.");
+			ARKLog::i("done.");
 
 
 
 
 
-			OutputWrapper::print("Initialising ");
-			OutputWrapper::print(m_game.getTitle());
-			OutputWrapper::println("...");
+			ARKLog::i("Initialising ");
+			ARKLog::i(m_game.getTitle());
+			ARKLog::i("...");
 			m_game.init(this);
 
-			OutputWrapper::print("Initialised ");
-			OutputWrapper::print(m_game.getTitle());
-			OutputWrapper::println("...");
+			ARKLog::i("Initialised ");
+			ARKLog::i(m_game.getTitle());
+			ARKLog::i("...");
 
 
 			//LONGLONG cur_time;        // current timer value, moved from inside the loop
@@ -967,11 +967,11 @@
 			this->disable2D();
 			m_platformSpecific.disableOpenGL( m_platformSpecific.m_hWindow, m_platformSpecific.m_hDeviceContext, m_platformSpecific.m_hRenderingContext );
 
-			OutputWrapper::println("Deinitialised OpenGL...");
+			ARKLog::i("Deinitialised OpenGL...");
 
 			// destroy the window explicitly
 			DestroyWindow( m_platformSpecific.m_hWindow );
-			OutputWrapper::println("Deinitialised Window...");
+			ARKLog::i("Deinitialised Window...");
 		}
 
 

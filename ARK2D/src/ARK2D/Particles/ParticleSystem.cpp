@@ -11,7 +11,7 @@
 #include "../Graphics.h"
 #include "../Image/Image.h"
 #include "../Color.h"
-#include "../OutputWrapper.h"
+#include "../Util/ARKLog.h"
 
 #include "ParticleSystem.h"
 #include "ParticleEmitter.h"
@@ -283,7 +283,7 @@ Particle* ParticleSystem::getNewParticle(ParticleEmitter* emitter, float life) {
 		return p;
 	}
 
-	OutputWrapper::println("Ran out of particles (increase the limit)!");
+	ARKLog::w("Ran out of particles (increase the limit)!");
 	if (dummy->m_emitter == NULL) {
 		dummy->init(emitter, life);
 		dummy->setImage(sprite);

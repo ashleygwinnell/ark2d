@@ -12,7 +12,6 @@
 #include "Transition.h"
 #include "../../Color.h"
 #include "../../Timeline.h"
-#include "../../OutputWrapper.h"
 #include "../../Constants.h"
 
 #include <vector>

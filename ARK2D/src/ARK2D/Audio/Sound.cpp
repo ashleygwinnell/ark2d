@@ -5,7 +5,6 @@
  */
 
 #include "Sound.h"
-#include "../OutputWrapper.h"
 #include "../Util/StringUtil.h"
 
 ALfloat Sound::ListenerPos[3] = { 0.0, 0.0, 0.0 };

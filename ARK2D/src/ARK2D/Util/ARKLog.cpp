@@ -7,6 +7,11 @@
 
 #include "ARKLog.h"
 
+#include "../ARK2D.h"
+#include "../GameContainer.h"
+#include "../Graphics.h"
+#include "../ARKString.h"
+
 list<ARKLogMessage> ARKLog::s_messages;
 unsigned int ARKLog::s_maxMessages = 64;
 

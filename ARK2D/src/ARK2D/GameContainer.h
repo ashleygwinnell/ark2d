@@ -20,7 +20,7 @@
 #include "Font/BMFont.h"
 #include "Image/Image.h"
 #include "UI/ErrorDialog.h"
-#include "OutputWrapper.h"
+#include "Util/ARKLog.h"
 
 #include "Audio/Sound.h"
 

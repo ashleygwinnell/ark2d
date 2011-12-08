@@ -22,7 +22,7 @@
 #include "../GameContainer.h"
 #include "../Graphics.h"
 
-#include "../OutputWrapper.h"
+#include "../Util/ARKLog.h"
 
 //#include "zlib123/zutil.h"
 //#include "zlib123/deflate.h"
@@ -40,8 +40,7 @@ TiledMap::TiledMap(const string& file):
 		ErrorDialog::createAndShow(StringUtil::append("Could not load Tiled Map: ", m_file));
 		exit(0);
 	} else {
-		OutputWrapper::print("Loading TiledMap file: ");
-		OutputWrapper::println(m_file);
+		ARKLog::i(StringUtil::append("Loading TiledMap file: ", m_file));
 		const char* version;
 		const char* orientation;
 		TiXmlNode* mapnode = m_xmldocument.FirstChild("map");
@@ -93,9 +92,7 @@ TiledMap::TiledMap(const string& file):
 				src.insert(0, path);
 			}
 
-			OutputWrapper::print("Loading TiledMap Tileset file: ");
-			OutputWrapper::println(src);
-
+			ARKLog::i(StringUtil::append("Loading TiledMap Tileset file: ", src));
 
 			//std::cout << src << std::endl;
 			TiXmlDocument tileset_d(src);
@@ -146,8 +143,7 @@ TiledMap::TiledMap(const string& file):
 					image_src.insert(0, image_path);
 				}
 
-				OutputWrapper::print("Loading TiledMap Tileset Image file: ");
-				OutputWrapper::println(image_src);
+				ARKLog::i(StringUtil::append("Loading TiledMap Tileset Image file: ", image_src));
 				if (!hasImageMask) {
 					tileset.setImage(new Image(image_src));
 				} else {
@@ -249,10 +245,7 @@ TiledMap::TiledMap(const string& file):
 				// add it, finally.
 				addTileset(tileset);
 
-				OutputWrapper::print("Loaded TiledMap Tileset file: ");
-				OutputWrapper::println(src);
-
-
+				ARKLog::i(StringUtil::append("Loaded TiledMap Tileset file: ", src));
 
 			}
 		}
@@ -304,7 +297,7 @@ TiledMap::TiledMap(const string& file):
 
 					//std::cout << "Befpre setting tile gids()" << std::endl;
 
-					OutputWrapper::print("Loading TiledMap data... ");
+					ARKLog::i("Loading TiledMap data... ");
 
 					// for each tile...
 					unsigned int layer_current_x = 0;
@@ -331,7 +324,7 @@ TiledMap::TiledMap(const string& file):
 						//std::cout << count << std::endl;
 					}
 
-					OutputWrapper::println("done.");
+					ARKLog::i("done.");
 
 
 					//std::cout << "layer width: " << layer.getWidth() << std::endl;
@@ -465,7 +458,7 @@ TiledMap::TiledMap(const string& file):
 
 		//std::cout << (*mapnode);
 	}
-	OutputWrapper::println("Loading TiledMap... done.");
+	ARKLog::i("Loading TiledMap... done.");
 }
 void TiledMap::addProperty(const TiledMapProperty& property) {
 	m_properties.push_back(property);

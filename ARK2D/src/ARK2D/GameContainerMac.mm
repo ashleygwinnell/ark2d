@@ -156,9 +156,9 @@
 		//setTitle(m_game.getTitle());
 		
 		// populate the gamepads.
-		OutputWrapper::print("Initialising Gamepads... ");
+		ARKLog::i("Initialising Gamepads... ");
 		initGamepads();
-		OutputWrapper::println("done.");
+		ARKLog::i("done.");
 		
 		// initialise OpenGL -- this is done already
 		glClearColor(m_clearColor.getRed()/255.0f, m_clearColor.getGreen()/255.0f, m_clearColor.getBlue()/255.0f, m_clearColor.getAlpha()/255.0f);
@@ -172,14 +172,14 @@
 		enableOpenAL();
 		
 		// initialise game.
-		OutputWrapper::print("Initialising ");
-		OutputWrapper::print(m_game.getTitle());
-		OutputWrapper::println("...");
+		ARKLog::i("Initialising ");
+		ARKLog::i(m_game.getTitle());
+		ARKLog::i("...");
 		m_game.init(this);
 
-		OutputWrapper::print("Initialised "); 
-		OutputWrapper::print(m_game.getTitle());
-		OutputWrapper::println("...");
+		ARKLog::i("Initialised "); 
+		ARKLog::i(m_game.getTitle());
+		ARKLog::i("...");
 		 
 		while(m_bRunning) {
 			m_timer.tick();

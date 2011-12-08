@@ -75,8 +75,6 @@
 
 #include "ARK2D/StringStore.h"
 
-#include "ARK2D/OutputWrapper.h"
-
 // JSON Implementation
 #include "ARK2D/ARK2D_JSON.h"
 

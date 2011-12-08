@@ -17,7 +17,7 @@
 
 #include "../Image/Image.h"
 #include "../Color.h"
-#include "../OutputWrapper.h"
+#include "../Util/ARKLog.h"
 #include "../Util/StringUtil.h"
 
 using std::string;

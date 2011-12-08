@@ -7,14 +7,14 @@
 
 
 #include "MathUtil.h"
-#include "../OutputWrapper.h"
+#include "ARKLog.h"
 
 void MathUtil::seedRandom() {
-	OutputWrapper::print("Setting random seed.");
+	ARKLog::i("Setting random seed.");
 	time_t t;
 	time(&t);
 	srand(t);
-	OutputWrapper::println(" ...done.");
+	ARKLog::i(" ...done.");
 }
 
 void MathUtil::snap(int& snap, int& x, int& y) {
