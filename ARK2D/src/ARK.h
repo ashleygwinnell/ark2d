@@ -30,6 +30,7 @@
 
 #include "ARK2D/State/StateBasedGame.h"
 #include "ARK2D/State/GameState.h"
+#include "ARK2D/State/IntelligentGameState.h"
 #include "ARK2D/State/LoadingState.h"
 #include "ARK2D/State/Transition/Transition.h"
 #include "ARK2D/State/Transition/EmptyTransition.h"

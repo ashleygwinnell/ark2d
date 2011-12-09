@@ -7,7 +7,9 @@
 
 #include "ARKGameObject.h"
 
-ARKGameObject::ARKGameObject() {
+ARKGameObject::ARKGameObject():
+	m_pendingRemoval(false), m_renderingLayer(0)
+	{
 
 }
 
@@ -16,6 +18,13 @@ bool ARKGameObject::isPendingRemoval() {
 }
 void ARKGameObject::setPendingRemoval(bool b) {
 	m_pendingRemoval = b;
+}
+
+int ARKGameObject::getRenderingLayer() {
+	return m_renderingLayer;
+}
+void ARKGameObject::setRenderingLayer(int i) {
+	m_renderingLayer = i;
 }
 
 ARKGameObject::~ARKGameObject() {

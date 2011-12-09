@@ -11,6 +11,7 @@
 #include <vector>
 #include <iterator>
 #include "ARKGameObject.h"
+#include "Util/MathUtil.h"
 
 using namespace std;
 

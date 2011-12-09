@@ -15,11 +15,17 @@ class Graphics;
 class ARKGameObject {
 	protected:
 		bool m_pendingRemoval;
+		int m_renderingLayer;
 
 	public:
 		ARKGameObject();
+
 		virtual bool isPendingRemoval();
 		virtual void setPendingRemoval(bool b);
+
+		virtual int getRenderingLayer();
+		virtual void setRenderingLayer(int i);
+
 		virtual void update(GameContainer* container, GameTimer* timer) = 0;
 		virtual void render(GameContainer* container, Graphics* g) = 0;
 
