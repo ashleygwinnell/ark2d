@@ -12,17 +12,20 @@
 #include "../Graphics.h"
 #include "../ARKString.h"
 
-list<ARKLogMessage> ARKLog::s_messages;
-unsigned int ARKLog::s_maxMessages = 64;
+ARKLog::ARKLog():
+	m_messages(),
+	m_maxMessages(64),
+	m_visible(false),
+	m_enabled(true)
+	{
 
-bool ARKLog::s_enabled = true;
-bool ARKLog::s_visible = false;
+}
 
 void ARKLog::message(string s, unsigned int type) {
 	ARKLogMessage item;
 	item.level = type;
 	item.message = s;
-	s_messages.push_back(item);
+	m_messages.push_back(item);
 	std::cout << "Log " << getTypeString(type) << ": " << s << std::endl;
 }
 void ARKLog::e(const char* s) {
@@ -37,6 +40,10 @@ void ARKLog::i(const char* s) {
 	string str(s);
 	message(str, TYPE_INFORMATION);
 }
+void ARKLog::g(const char* s) {
+	string str(s);
+	message(str, TYPE_GAME);
+}
 void ARKLog::e(string s) {
 	message(s, TYPE_ERROR);
 }
@@ -45,6 +52,9 @@ void ARKLog::w(string s) {
 }
 void ARKLog::i(string s) {
 	message(s, TYPE_INFORMATION);
+}
+void ARKLog::g(string s) {
+	message(s, TYPE_GAME);
 }
 void ARKLog::e(ARKString s) {
 	message(s.get(), TYPE_ERROR);
@@ -55,16 +65,19 @@ void ARKLog::w(ARKString s) {
 void ARKLog::i(ARKString s) {
 	message(s.get(), TYPE_INFORMATION);
 }
+void ARKLog::g(ARKString s) {
+	message(s.get(), TYPE_GAME);
+}
 void ARKLog::update() {
 	Input* i = ARK2D::getInput();
 	if (i->isKeyPressed(Input::KEY_D) && i->isKeyDown(Input::KEY_LSHIFT)) {
-		s_visible = !s_visible;
+		m_visible = !m_visible;
 	}
 }
 void ARKLog::render() {
 
 
-	if (!s_visible) {
+	if (!m_visible) {
 		return;
 	}
 
@@ -81,21 +94,21 @@ void ARKLog::render() {
 	g->setFont(defaultFont);
 
 	// remove old items
-	if (s_messages.size() > s_maxMessages) {
-		int removeCount = s_messages.size() - s_maxMessages;
+	if (m_messages.size() > m_maxMessages) {
+		int removeCount = m_messages.size() - m_maxMessages;
 		for(; removeCount > 0; removeCount--) {
-			s_messages.pop_front();
+			m_messages.pop_front();
 		}
 	}
 
 	list<ARKLogMessage>::iterator it;
 	int actualHeight = 0;
-	for(it = s_messages.begin(); it != s_messages.end(); it++) {
+	for(it = m_messages.begin(); it != m_messages.end(); it++) {
 		actualHeight += defaultFont->getLineHeight();
 	}
 	int y = 0;
 	if (actualHeight > (signed int) container->getHeight()) { y -= (actualHeight - container->getHeight()); }
-	for(it = s_messages.begin(); it != s_messages.end(); it++) {
+	for(it = m_messages.begin(); it != m_messages.end(); it++) {
 		ARKLogMessage m = (*it);
 		g->drawString(m.message, 0, y);
 		y += defaultFont->getLineHeight();
@@ -118,4 +131,8 @@ string ARKLog::getTypeString(unsigned int type) {
 		break;
 	}
 	return "";
+}
+
+ARKLog::~ARKLog() {
+
 }

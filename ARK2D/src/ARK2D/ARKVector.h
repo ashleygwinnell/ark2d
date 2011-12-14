@@ -60,17 +60,30 @@ class ARKVector {
 		void removeAll() {
 			clear();
 		}
+		void pruneAll() { // only use with ARKGameObject
+			typename vector<T>::iterator it = vec.begin();
+			while (it != vec.end()) {
+				T obj = (*it);
+				if (obj->isPendingRemoval()) {
+					it = vec.erase(it);
+					break;
+				} else {
+					++it;
+				}
+			}
+		}
+
 		void clear() {
 			vec.clear();
 		}
-		void updateAll(GameContainer* container, GameTimer* timer) {
+		void updateAll(GameContainer* container, GameTimer* timer) { // only use with ARKGameObject
 			for(unsigned int i = 0; i < vec.size(); i++) {
 				T obj = vec.at(i);
 				if (obj == NULL) { continue; }
 				obj->update(container, timer);
 			}
 		}
-		void renderAll(GameContainer* container, Graphics* g) {
+		void renderAll(GameContainer* container, Graphics* g) { // only use with ARKGameObject
 			for(unsigned int i = 0; i < vec.size(); i++) {
 				T obj = vec.at(i);
 				if (obj == NULL) { continue; }

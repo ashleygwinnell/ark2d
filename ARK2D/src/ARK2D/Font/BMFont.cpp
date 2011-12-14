@@ -55,7 +55,7 @@ BMFont::BMFont(const string& f, const string& i, const Color& mask):
 	m_ImageFile(i)//,
 	//m_Image(i, mask)
 {
-	ARKLog::i(StringUtil::append("Loading BMFont: ", f));
+	ARK2D::getLog()->i(StringUtil::append("Loading BMFont: ", f));
 
 	m_Image = new Image(i, mask);
 	Parse();

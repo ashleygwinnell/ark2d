@@ -8,13 +8,14 @@
 
 #include "MathUtil.h"
 #include "ARKLog.h"
+#include "../ARK2D.h"
 
 void MathUtil::seedRandom() {
-	ARKLog::i("Setting random seed.");
+	ARK2D::getLog()->i("Setting random seed.");
 	time_t t;
 	time(&t);
 	srand(t);
-	ARKLog::i(" ...done.");
+	ARK2D::getLog()->i(" ...done.");
 }
 
 void MathUtil::snap(int& snap, int& x, int& y) {

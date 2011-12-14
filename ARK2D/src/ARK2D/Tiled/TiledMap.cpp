@@ -40,7 +40,7 @@ TiledMap::TiledMap(const string& file):
 		ErrorDialog::createAndShow(StringUtil::append("Could not load Tiled Map: ", m_file));
 		exit(0);
 	} else {
-		ARKLog::i(StringUtil::append("Loading TiledMap file: ", m_file));
+		ARK2D::getLog()->i(StringUtil::append("Loading TiledMap file: ", m_file));
 		const char* version;
 		const char* orientation;
 		TiXmlNode* mapnode = m_xmldocument.FirstChild("map");
@@ -92,7 +92,7 @@ TiledMap::TiledMap(const string& file):
 				src.insert(0, path);
 			}
 
-			ARKLog::i(StringUtil::append("Loading TiledMap Tileset file: ", src));
+			ARK2D::getLog()->i(StringUtil::append("Loading TiledMap Tileset file: ", src));
 
 			//std::cout << src << std::endl;
 			TiXmlDocument tileset_d(src);
@@ -143,7 +143,7 @@ TiledMap::TiledMap(const string& file):
 					image_src.insert(0, image_path);
 				}
 
-				ARKLog::i(StringUtil::append("Loading TiledMap Tileset Image file: ", image_src));
+				ARK2D::getLog()->i(StringUtil::append("Loading TiledMap Tileset Image file: ", image_src));
 				if (!hasImageMask) {
 					tileset.setImage(new Image(image_src));
 				} else {
@@ -245,7 +245,7 @@ TiledMap::TiledMap(const string& file):
 				// add it, finally.
 				addTileset(tileset);
 
-				ARKLog::i(StringUtil::append("Loaded TiledMap Tileset file: ", src));
+				ARK2D::getLog()->i(StringUtil::append("Loaded TiledMap Tileset file: ", src));
 
 			}
 		}
@@ -297,7 +297,7 @@ TiledMap::TiledMap(const string& file):
 
 					//std::cout << "Befpre setting tile gids()" << std::endl;
 
-					ARKLog::i("Loading TiledMap data... ");
+					ARK2D::getLog()->i("Loading TiledMap data... ");
 
 					// for each tile...
 					unsigned int layer_current_x = 0;
@@ -324,7 +324,7 @@ TiledMap::TiledMap(const string& file):
 						//std::cout << count << std::endl;
 					}
 
-					ARKLog::i("done.");
+					ARK2D::getLog()->i("done.");
 
 
 					//std::cout << "layer width: " << layer.getWidth() << std::endl;
@@ -458,7 +458,7 @@ TiledMap::TiledMap(const string& file):
 
 		//std::cout << (*mapnode);
 	}
-	ARKLog::i("Loading TiledMap... done.");
+	ARK2D::getLog()->i("Loading TiledMap... done.");
 }
 void TiledMap::addProperty(const TiledMapProperty& property) {
 	m_properties.push_back(property);

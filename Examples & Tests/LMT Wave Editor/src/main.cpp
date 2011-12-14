@@ -10,7 +10,7 @@
 
 int main(int argc, char** argv) {
 
-	OutputWrapper::setEnabled(true);
+	//OutputWrapper::setEnabled(true);
 
 	DefaultGame game(string("LOVE ME, TOO! Wave Editor"));
 	GameContainer container(game, 1020, 768, 32, false);

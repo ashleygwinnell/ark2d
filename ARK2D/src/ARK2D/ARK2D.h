@@ -24,6 +24,7 @@ class GameContainer;
 class Game;
 class Input;
 class Graphics;
+class ARKLog;
 
 class ARK2D {
 	friend class GameContainer;
@@ -33,6 +34,7 @@ class ARK2D {
 		static Game* getGame();
 		static Graphics* getGraphics();
 		static Input* getInput();
+		static ARKLog* getLog();
 
 		static bool is64BitArchitecture();
 		static bool isBigEndian();
@@ -42,6 +44,7 @@ class ARK2D {
 		static Game* s_game;
 		static Graphics* s_graphics;
 		static Input* s_input;
+		static ARKLog* s_log;
 
 };
 

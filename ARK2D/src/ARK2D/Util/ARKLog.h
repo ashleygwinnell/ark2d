@@ -28,33 +28,41 @@ class ARKLogMessage {
 
 class ARKLog {
 	friend class GameContainer;
+
 	public:
-		static const unsigned int TYPE_INFORMATION = 0;
+		static const unsigned int TYPE_GAME = 3;
+		static const unsigned int TYPE_INFORMATION = 2;
 		static const unsigned int TYPE_WARNING = 1;
-		static const unsigned int TYPE_ERROR = 2;
-	private:
-		static list<ARKLogMessage> s_messages;
-		static unsigned int s_maxMessages;
+		static const unsigned int TYPE_ERROR = 0;
 
-		static bool s_visible;
-		static bool s_enabled;
+	protected:
+		list<ARKLogMessage> m_messages;
+		unsigned int m_maxMessages;
+
+		bool m_visible;
+		bool m_enabled;
 
 	public:
-		static void message(string s, unsigned int type);
-		static void e(const char* s);
-		static void w(const char* s);
-		static void i(const char* s);
-		static void e(string s);
-		static void w(string s);
-		static void i(string s);
-		static void e(ARKString s);
-		static void w(ARKString s);
-		static void i(ARKString s);
-		static void update();
-		static void render();
+		ARKLog();
+		void message(string s, unsigned int type);
+		void e(const char* s);
+		void w(const char* s);
+		void i(const char* s);
+		void g(const char* s);
+		void e(string s);
+		void w(string s);
+		void i(string s);
+		void g(string s);
+		void e(ARKString s);
+		void w(ARKString s);
+		void i(ARKString s);
+		void g(ARKString s);
+		void update();
+		void render();
+		virtual ~ARKLog();
 
-	private:
-		static string getTypeString(unsigned int type);
+	protected:
+		string getTypeString(unsigned int type);
 };
 
 #endif /* ARKLOG_H_ */

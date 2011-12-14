@@ -14,6 +14,7 @@ GameContainer* ARK2D::s_container = 0;
 Game* ARK2D::s_game = 0;
 Graphics* ARK2D::s_graphics = 0;
 Input* ARK2D::s_input = 0;
+ARKLog* ARK2D::s_log = 0;
 
 GameContainer* ARK2D::getContainer() {
 	return s_container;
@@ -29,6 +30,10 @@ Graphics* ARK2D::getGraphics() {
 
 Input* ARK2D::getInput() {
 	return s_input;
+}
+
+ARKLog* ARK2D::getLog() {
+	return s_log;
 }
 
 bool ARK2D::is64BitArchitecture() {

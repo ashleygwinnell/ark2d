@@ -161,6 +161,7 @@
 			ARK2D::s_game = &m_game;
 			ARK2D::s_graphics = &m_graphics;
 			ARK2D::s_input = &m_input;
+			ARK2D::s_log = new ARKLog();
 
 			m_platformSpecific.m_windowRect.left = (long) 0; 			// Set Left Value To 0
 			m_platformSpecific.m_windowRect.right = (long) width; 		// Set Right Value To Requested Width
@@ -457,7 +458,7 @@
 
 		void GameContainer::initGamepads() {
 
-			//ARKLog::i("Initialising Gamepads");
+			//ARK2D::getLog()->i("Initialising Gamepads");
 
 			unsigned int numPadsSupported = joyGetNumDevs();
 			unsigned int joystickId = 0;
@@ -793,15 +794,15 @@
 
 
 			// populate the gamepads.
-			ARKLog::i("Initialising Gamepads... ");
+			ARK2D::getLog()->i("Initialising Gamepads... ");
 			initGamepads();
-			ARKLog::i("done.");
+			ARK2D::getLog()->i("done.");
 
 			// Enable OpenGL
-			ARKLog::i("Initialising OpenGL... ");
+			ARK2D::getLog()->i("Initialising OpenGL... ");
 			m_platformSpecific.enableOpenGL(m_platformSpecific.m_hWindow, &m_platformSpecific.m_hDeviceContext, &m_platformSpecific.m_hRenderingContext);
 			this->enable2D();
-			ARKLog::i("done.");
+			ARK2D::getLog()->i("done.");
 
 			// Load default Font - relies on Image so must be done after OpenGL is initted.
 			//BMFont* fnt = new BMFont("data/fonts/default.fnt", "data/fonts/default.png");
@@ -811,30 +812,30 @@
 			m_graphics.m_Font = fnt;
 
 			// Enable OpenAL
-			ARKLog::i("Initialising OpenAL... ");
+			ARK2D::getLog()->i("Initialising OpenAL... ");
 			this->enableOpenAL();
-			ARKLog::i("done.");
+			ARK2D::getLog()->i("done.");
 
 
 
-			ARKLog::i("Initialising Window... ");
+			ARK2D::getLog()->i("Initialising Window... ");
 			ShowWindow(m_platformSpecific.m_hWindow, SW_SHOWNORMAL);
 			UpdateWindow(m_platformSpecific.m_hWindow);
 			//ClipCursor(&m_windowRect);
-			ARKLog::i("done.");
+			ARK2D::getLog()->i("done.");
 
 
 
 
 
-			ARKLog::i("Initialising ");
-			ARKLog::i(m_game.getTitle());
-			ARKLog::i("...");
+			ARK2D::getLog()->i("Initialising ");
+			ARK2D::getLog()->i(m_game.getTitle());
+			ARK2D::getLog()->i("...");
 			m_game.init(this);
 
-			ARKLog::i("Initialised ");
-			ARKLog::i(m_game.getTitle());
-			ARKLog::i("...");
+			ARK2D::getLog()->i("Initialised ");
+			ARK2D::getLog()->i(m_game.getTitle());
+			ARK2D::getLog()->i("...");
 
 
 			//LONGLONG cur_time;        // current timer value, moved from inside the loop
@@ -933,7 +934,7 @@
 				//if (myAverageDelta > dt) {
 				//	this->m_game->update(this, dt - myAverageDelta);
 				//}
-				ARKLog::update();
+				ARK2D::getLog()->update();
 
 				int delta = (int) (m_timer.getDelta() * 1000);
 				m_game.update(this, &m_timer);
@@ -955,7 +956,7 @@
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 				m_game.render(this, &m_graphics);
 
-				ARKLog::render();
+				ARK2D::getLog()->render();
 				//myLastRenderTime = this->time();
 
 				swapBuffers();
@@ -967,11 +968,11 @@
 			this->disable2D();
 			m_platformSpecific.disableOpenGL( m_platformSpecific.m_hWindow, m_platformSpecific.m_hDeviceContext, m_platformSpecific.m_hRenderingContext );
 
-			ARKLog::i("Deinitialised OpenGL...");
+			ARK2D::getLog()->i("Deinitialised OpenGL...");
 
 			// destroy the window explicitly
 			DestroyWindow( m_platformSpecific.m_hWindow );
-			ARKLog::i("Deinitialised Window...");
+			ARK2D::getLog()->i("Deinitialised Window...");
 		}
 
 

@@ -283,7 +283,7 @@ Particle* ParticleSystem::getNewParticle(ParticleEmitter* emitter, float life) {
 		return p;
 	}
 
-	ARKLog::w("Ran out of particles (increase the limit)!");
+	ARK2D::getLog()->w("Ran out of particles (increase the limit)!");
 	if (dummy->m_emitter == NULL) {
 		dummy->init(emitter, life);
 		dummy->setImage(sprite);

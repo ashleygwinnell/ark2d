@@ -41,7 +41,7 @@
 			ARK2D::s_game = &m_game;
 			ARK2D::s_graphics = &m_graphics;
 			ARK2D::s_input = &m_input;
-		
+			ARK2D::s_log = new ARKLog();
 		
 			ProcessSerialNumber psn;
 			if (!GetCurrentProcess(&psn)) {
@@ -156,9 +156,9 @@
 		//setTitle(m_game.getTitle());
 		
 		// populate the gamepads.
-		ARKLog::i("Initialising Gamepads... ");
+		ARK2D::getLog()->i("Initialising Gamepads... ");
 		initGamepads();
-		ARKLog::i("done.");
+		ARK2D::getLog()->i("done.");
 		
 		// initialise OpenGL -- this is done already
 		glClearColor(m_clearColor.getRed()/255.0f, m_clearColor.getGreen()/255.0f, m_clearColor.getBlue()/255.0f, m_clearColor.getAlpha()/255.0f);
@@ -172,14 +172,14 @@
 		enableOpenAL();
 		
 		// initialise game.
-		ARKLog::i("Initialising ");
-		ARKLog::i(m_game.getTitle());
-		ARKLog::i("...");
+		ARK2D::getLog()->i("Initialising ");
+		ARK2D::getLog()->i(m_game.getTitle());
+		ARK2D::getLog()->i("...");
 		m_game.init(this);
 
-		ARKLog::i("Initialised "); 
-		ARKLog::i(m_game.getTitle());
-		ARKLog::i("...");
+		ARK2D::getLog()->i("Initialised "); 
+		ARK2D::getLog()->i(m_game.getTitle());
+		ARK2D::getLog()->i("...");
 		 
 		while(m_bRunning) {
 			m_timer.tick();
@@ -187,7 +187,7 @@
 			
 			processGamepadInput(); 
 		   
-			ARKLog::update();
+			ARK2D::getLog()->update();
 		   
 			int delta = (int) (m_timer.getDelta() * 1000);
 			m_game.update(this, &m_timer);
@@ -199,7 +199,7 @@
 			
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			m_game.render(this, &m_graphics);
-			ARKLog::render();
+			ARK2D::getLog()->render();
 			
 			swapBuffers();
 			

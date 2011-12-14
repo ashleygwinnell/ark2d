@@ -52,6 +52,7 @@ class GameContainer {
 	friend class GameContainerPlatform;
 	friend class Graphics;
 	friend class Input;
+	friend class ARKLog;
 
 	public:
 

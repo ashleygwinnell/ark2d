@@ -20,6 +20,7 @@ void IntelligentGameState::pruneEntities() {
 	// Automatically remove any objects  that are cruddy.
 	map<string, ARKVector<ARKGameObject*> >::iterator it;
 	for (it = m_entities.begin(); it != m_entities.end(); ++it) {
+		it->second.pruneAll();
 		ARKVector<ARKGameObject*> thisEntities = it->second;
 
 		bool anyRemoved = false;
