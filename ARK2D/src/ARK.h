@@ -69,6 +69,7 @@
 #include "ARK2D/Util/VerticalMenuItem.h" // can probably be removed?
 #include "ARK2D/Util/CameraShake.h" // can probably be removed?
 #include "ARK2D/Util/LocalHighscores.h"
+#include "ARK2D/Util/RSSL.h" // basic scripting.
 
 #include "ARK2D/Timeline.h"
 #include "ARK2D/SpriteSheetDescription.h"
@@ -103,6 +104,7 @@
 // Containers
 #include "ARK2D/ARKGameObject.h"
 #include "ARK2D/ARKVector.h"
+#include "ARK2D/ARKPool.h"
 
 // Paths
 #include "ARK2D/Path/SubPath.h"
@@ -112,3 +114,6 @@
 
 // Tools
 #include "ARK2D/Tools/Packer.h"
+
+// Misc
+#include "ARK2D/ToString.h"

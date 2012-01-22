@@ -1,5 +1,6 @@
 import sys
 import os
+import errno
 import subprocess
 import json 
 import platform;
@@ -34,12 +35,12 @@ class ARK2DBuildSystem:
 		self.game_resources_dir = "";
 		#self.mac_game_icns = "";
 		
-		self.build_folder = "build_release";
+		self.build_folder = "build";
 		self.arch = platform.machine();
 		
 		if (sys.platform == "win32"):
 			self.ds = "\\";
-			self.platform = "win32";
+			self.platform = "windows";
 			self.mingw_dir = "C:\\MinGW";
 			self.mingw_link = "-L" + self.mingw_dir + self.ds + "lib"
 			self.gccCompiler = "gcc";
@@ -49,7 +50,7 @@ class ARK2DBuildSystem:
 			
 		elif(sys.platform == "darwin"):
 			self.ds = "/";
-			self.platform = "macosx";
+			self.platform = "osx";
 			self.mingw_dir = ""; #/usr";
 			self.mingw_link = ""; #-L" + self.mingw_dir + self.ds + "lib"
 			self.gccCompiler = "i686-apple-darwin11-llvm-gcc-4.2 ";
@@ -193,6 +194,7 @@ class ARK2DBuildSystem:
 			'src' + self.ds + 'ARK2D' + self.ds + 'Util' + self.ds + 'VerticalMenuItem.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'Util' + self.ds + 'CameraShake.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'Util' + self.ds + 'LocalHighscores.cpp',
+			'src' + self.ds + 'ARK2D' + self.ds + 'Util' + self.ds + 'RSSL.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'libJSON' + self.ds + 'JSON_Worker.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'libJSON' + self.ds + 'jsonmain.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'libJSON' + self.ds + 'JSONNode.cpp',
@@ -262,12 +264,12 @@ class ARK2DBuildSystem:
 			]);
 			
 			self.dll_files.extend([
-				'lib\\win\\kernel32.dll', 
-				'lib\\win\\glew32.dll', 
-				'lib\\win\\OpenAL32.dll', 
-				'lib\\win\\alut.dll', 
-				'lib\\win\\winmm.dll',
-				'lib\\win\\freetype6.dll'
+				'lib\\windows\\kernel32.dll', 
+				'lib\\windows\\glew32.dll', 
+				'lib\\windows\\OpenAL32.dll', 
+				'lib\\windows\\alut.dll', 
+				'lib\\windows\\winmm.dll',
+				'lib\\windows\\freetype6.dll'
 			]);
 			self.static_libraries.extend([
 				'glu32', 
@@ -355,8 +357,17 @@ class ARK2DBuildSystem:
 
 		#prepare dirs
 		for h in self.mkdirs:
+			#h = "'" + h + "'";
 			print("mkdir " + h);
-			subprocess.call(["mkdir " + h], shell=True);
+			#subprocess.call(['mkdir C:\\' + h], shell=True);
+			try:
+				os.makedirs(h);
+			except OSError as exc: 
+				if exc.errno == errno.EEXIST:
+					pass
+				else: raise
+				
+		
 		
 		# make sure cache file exists
 		
@@ -373,12 +384,14 @@ class ARK2DBuildSystem:
 		fjson = json.loads(fcontents);
 		fchanged = False;
 		
+		
+		
 		print("loaded build cache file: ");
 		print(cachefilename);
 			
 		print("compiling");
 		#print(self.src_files);
-			
+		
 		#compile
 		for h in self.src_files:
 			compileStr = "";
@@ -400,6 +413,8 @@ class ARK2DBuildSystem:
 				
 			if (not h in fjson or fjson[h]['date_modified'] < os.stat(h).st_mtime):
 				
+				processThisFile = True;
+
 				if (h_ext == 'c' or h_ext == 'cpp' or h_ext == 'mm'):
 					compileStr += " -O3 -Wall -c -fmessage-length=0 ";
 					if (sys.platform == "darwin"): #compiling on mac
@@ -414,16 +429,24 @@ class ARK2DBuildSystem:
 						compileStr += " -o \"";
 						compileStr += self.build_folder + self.ds + self.platform + self.ds + newf + "\" \"" + h + "\" ";
 					else:
-						compileStr += " -o";
-						compileStr += self.build_folder + self.ds + self.platform + self.ds + newf + " " + h + " ";
+						#compileStr += " -o \"" + self.build_folder + self.ds + self.platform + self.ds + newf + "\" \"" + h + "\" ";
+						compileStr += " -o " + self.build_folder + self.ds + self.platform + self.ds + newf + " " + h + " ";
 				elif h_ext == 'rc':
-					compileStr += h + " " + self.build_folder + self.ds + self.platform + self.ds + newf + " ";
+					if (sys.platform == "win32"):
+						compileStr += h + " " + self.build_folder + self.ds + self.platform + self.ds + newf + " ";
+					else:
+						processThisFile = False;
 			
-				fjson[h] = {"date_modified": os.stat(h).st_mtime };
-			
-				print(compileStr);
-				subprocess.call([compileStr], shell=True);	
-				fchanged = True;
+				if (processThisFile):
+					fjson[h] = {"date_modified": os.stat(h).st_mtime };
+	
+					print(compileStr);
+					#subprocess.call(["dir"], shell=True);
+					#subprocess.call([compileStr], shell=True);	 
+					
+					# the above did not work on win7 64bit.
+					os.system(compileStr);
+					fchanged = True;
 					
 					
 	
@@ -444,11 +467,13 @@ class ARK2DBuildSystem:
 		 
 			linkingStr = "";
 			linkingStr += self.gppCompiler + " " + self.mingw_link + " " + self.linkingFlags + " -o" + self.build_artifact + "";
+			#linkingStr += self.gppCompiler + " " + self.mingw_link + " -o" + self.build_artifact + "";
 		
 			for h in self.src_files:
 				findex = h.rfind('.');
 				newf = h[0:findex] + ".o";
 				#print(newf);
+				h_ext = h[findex+1:len(h)];
 				linkingStr += " " + self.build_folder + self.ds + self.platform + self.ds + newf;
 			
 			for f in self.dll_files:
@@ -456,10 +481,13 @@ class ARK2DBuildSystem:
 				
 			for f in self.static_libraries:
 				linkingStr += " -l" + f;
+				#pass;
 				
 			print(linkingStr);
 			
-			subprocess.call([linkingStr], shell=True);	
+			#subprocess.call([linkingStr], shell=True);	
+			#print(len(linkingStr));
+			os.system(linkingStr);
 			
 			#copy game resources in to .build
 			if(self.building_game):
@@ -468,6 +496,15 @@ class ARK2DBuildSystem:
 				try:
 					dll = self.ark2d_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + 'libARK2D.dll'
 					shutil.copy(dll, self.game_dir.replace('\\\\','\\') + '\\' + self.build_folder + '\\' + self.platform);
+				except:
+					pass;
+					
+				#copying other dlls in to project.
+				try:
+					otherdlls = ['alut.dll', 'freetype6.dll', 'glew32.dll', 'OpenAL32.dll', 'wrap_oal.dll', 'zlib1.dll'];
+					for one in otherdlls:
+						one = self.ark2d_dir + self.ds + 'lib' + self.ds + self.platform + self.ds + one;
+						shutil.copy(one, self.game_dir.replace('\\\\','\\') + '\\' + self.build_folder + '\\' + self.platform);
 				except:
 					pass;
 			
@@ -573,7 +610,9 @@ class ARK2DBuildSystem:
 				for h in self.src_files:
 					findex = h.rfind('.');
 					newf = h[0:findex] + ".o";
-					linkingStr += " " + self.build_folder + self.ds + self.platform + self.ds + newf;
+					h_ext = h[findex+1:len(h)];
+					if (h_ext != 'rc'):
+						linkingStr += " " + self.build_folder + self.ds + self.platform + self.ds + newf;
 				
 				for f in self.dll_files:
 					linkingStr += " " + f;
@@ -598,8 +637,15 @@ class ARK2DBuildSystem:
 		self.startWindows();
 		
 	def clean(self):
-		subprocess.call(["rm -r -d " + self.build_folder], shell=True);
-			
+		if (sys.platform == "darwin"):
+			cm = "rm -r -d " + self.build_folder + self.ds + self.platform;
+		elif(sys.platform == "win32"):
+			cm = "rmdir /S /Q " + self.build_folder + self.ds + self.platform;
+		
+		#subprocess.call([], shell=True);
+		print(cm);
+		os.system(cm);
+		
 	def start(self):
 	
 		if (sys.platform == "win32"):
@@ -613,38 +659,53 @@ class ARK2DBuildSystem:
 	
 	pass;
 	
-		
+## 
+# TODO:
+##
+# 1) 
+# 	copy build_release\libARK2D.dll
+# 	copy lib\alut.dll
+# 	copy lib\glew32.dll
+# 	copy/merge data directory
+# 2)
+# 	when compiling games, check to see if the library needs updating and compile that too (before the game).
+##	
 if __name__ == "__main__":
 	
-	try:
-		#print(sys.argv[1]);
-		b = sys.argv[1];
-		if (b[0] == 'b'):
-			b = str(b[2:len(b)-1]);
-		
-		b = str(base64.b64decode(b.encode('latin-1')));
-		
-		if (b[0] == 'b'):
-			b = str(b[2:len(b)-1]);
+	print("Starting");
+	
+	if (len(sys.argv)==2 and sys.argv[1] == "library"):
+		print("Building library");
+		a = ARK2DBuildSystem();
+		#a.clean();
+		a.dllInit();
+		a.start();	
 			
-		#j = j.encode('latin-1');
-		#j = str(j[2:len(j)-1]);
-		#print(b);
-		j = json.loads(b); #.replace("-", " "));
+	else:
+	
+		if (sys.platform == "win32"):
+			arkPlatform = "windows";
+		elif(sys.platform == "darwin"):
+			arkPlatform = "mac";
+		
+		f = open("config.json", "r");
+		fcontents = f.read();
+		f.close();
+		
+		#print(fcontents);
+		j = json.loads(fcontents);
 			
 		a = ARK2DBuildSystem();
-		a.ark2d_dir = j["ark2d_dir"];
-		#a.build_folder = j['build_folder'];
+		a.ark2d_dir = j[arkPlatform]["ark2d_dir"];
 		a.game_name = j["game_name"];
 		a.game_short_name = j['game_short_name'];
-		a.game_dir  = j["game_dir"];
+		a.game_dir  = j[arkPlatform]["game_dir"];
 		a.src_files.extend(j["game_src_files"]);
 		a.game_mkdirs = j['game_mkdirs'];
 		a.build_artifact = "";
 		
 		if (j['clean'] == True):
 			a.clean();
-		
 		
 		a.gamePreInit();
 		
@@ -657,35 +718,17 @@ if __name__ == "__main__":
 		elif(sys.platform=="darwin"):
 			a.dll_files.append(a.ark2d_dir + a.ds + a.build_folder + a.ds + a.platform + a.ds + 'libARK2D.dylib');
 			
-			if ('mac_game_icns' in j):
-				a.mac_game_icns = j['mac_game_icns'];
+			if ('mac_game_icns' in j[arkPlatform]):
+				a.mac_game_icns = j[arkPlatform]['mac_game_icns'];
 				
 		
-		if ('game_resources_dir' in j):
-			a.game_resources_dir = j['game_resources_dir'];
+		if ('game_resources_dir' in j[arkPlatform]):
+			a.game_resources_dir = j[arkPlatform]['game_resources_dir'];
 				
 		
 		a.gamePostInit();
 		a.start();
 		
-		#copyCommand = "copy /y " + a.ark2d_dir + a.ds + a.build_folder + a.ds + 'libARK2D.dll \"' + a.game_dir + a.ds + a.build_folder + a.ds + 'libARK2D.dll\"';
-		#print(copyCommand);
-		#subprocess.call([copyCommand], shell=True);
 		
-		## 
-		# TODO:
-		##
-		# 1) 
-		# 	copy build_release\libARK2D.dll
-		# 	copy lib\alut.dll
-		# 	copy lib\glew32.dll
-		# 	copy/merge data directory
-		# 2)
-		# 	when compiling games, check to see if the library needs updating and compile that too (before the game).
-		##
+
 		
-	except IndexError as ex:
-		a = ARK2DBuildSystem();
-		a.clean();
-		a.dllInit();
-		a.start();	

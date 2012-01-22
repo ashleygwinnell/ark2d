@@ -1,0 +1,14 @@
+{
+	"clean": false,
+	"windows": {
+		"python_executable": "C:\\Python31\\python.exe",
+		"ark2d_dir": "C:\\Dropbox\\ARK2D\\ark2d"
+	},
+	"mac": {
+		"python_executable": "/usr/local/bin/python3.1",
+		"ark2d_dir": "/Users/ashleygwinnell/Projects/C++/ark2d/ARK2D"
+	},
+	"src_files": [
+	
+	]
+}

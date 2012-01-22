@@ -11,6 +11,8 @@
 
 EditorLevel::EditorLevel():
 	ARKGameObject(),
+	m_id(1),
+	m_name(""),
 	m_waves(),
 	m_timer(0.0f),
 	m_script()
@@ -52,6 +54,8 @@ string EditorLevel::toString() {
 	const string nl = "\n";
 	string s = "";
 	s += "{" + nl;
+	s += "	\"id\": " + Cast::toString<int>(m_id) + "," + nl;
+	s += "	\"name\": \"" + m_name + "\"," + nl;
 	s += "	\"waves\": [" + nl;
 	for(unsigned int i = 0; i < m_waves.size(); i++) {
 		EditorWave* w = m_waves.get(i);
@@ -88,17 +92,22 @@ EditorLevel* EditorLevel::createFromString(string s) {
 	DefaultGame* game = DefaultGame::getInstance();
 
 	JSONNode* root = libJSON::Parse(s);
+
+	level->m_id = root->GetNode("id")->NodeAsInt();
+	level->m_name = root->GetNode("name")->NodeAsString();
+
 	JSONNode* waves = root->GetNode("waves");
 	for(unsigned int i = 0; i < waves->NodeSize(); i++) {
 		JSONNode* wave = waves->Children[i];
 
 		string filename = wave->GetNode("file")->NodeAsString();
-		filename = game->m_levelState->pathDir(filename);
+		string filename2 = game->m_levelState->pathDir(filename);
+		//filename = game->m_levelState->pathDir(filename);
 
-		string filecontents = StringUtil::file_get_contents(filename.c_str());
+		string filecontents = StringUtil::file_get_contents(filename2.c_str());
 
 		EditorWave* ewave = EditorWave::createFromString(filecontents);
-		ewave->fname = filename.substr(filename.find_last_of("\\")+1);
+		ewave->fname = filename;
 		ewave->m_delay = wave->GetNode("delay")->NodeAsFloat();
 		ewave->m_offsetx = wave->GetNode("offsetx")->NodeAsInt();
 		ewave->m_offsety = wave->GetNode("offsety")->NodeAsInt();

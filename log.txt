@@ -335,7 +335,7 @@ TODO / BUGS:
 
 - BMP Loading on Mac does not work.
 - PNG Masking does not work.
-
+- Build system work - build dependency tree.
 - Load FTFont from data.
 - TextField work:
  - use up and down keys to move up and down on multiline textfields.

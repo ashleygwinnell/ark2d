@@ -19,6 +19,9 @@ bool ARKGameObject::isPendingRemoval() {
 void ARKGameObject::setPendingRemoval(bool b) {
 	m_pendingRemoval = b;
 }
+void ARKGameObject::onPrune() {
+
+}
 
 int ARKGameObject::getRenderingLayer() {
 	return m_renderingLayer;

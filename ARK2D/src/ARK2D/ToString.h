@@ -9,9 +9,10 @@
 #define TOSTRING_H_
 
 #include <string>
+using namespace std;
 
 class ToString {
-	virtual std::string toString() = 0;
+	virtual string toString() = 0;
 };
 
 #endif /* TOSTRING_H_ */

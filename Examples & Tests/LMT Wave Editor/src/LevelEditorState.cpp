@@ -13,6 +13,7 @@
 LevelEditorState::LevelEditorState():
 	GameState(),
 	m_level(NULL),
+	m_levelIDField(NULL),
 	m_playing(false),
 	m_timer(0.0f),
 	m_currentFile("")
@@ -220,6 +221,36 @@ void LevelEditorState::init(GameContainer* container, StateBasedGame* game) {
 		m_eventsPanel->add(m_eventsScriptSave);
 
 
+	m_levelDetailsPanel = new ScrollPanel();
+	m_levelDetailsPanel->setWidth(240);
+	m_levelDetailsPanel->setHeight(500);
+	m_levelDetailsPanel->setPadding(10);
+	m_levelDetailsPanel->setVisible(true);
+	m_levelDetailsPanel->setLocation(m_gamePanel->getX() + m_gamePanel->getWidth() + 10, 10);
+
+		m_levelIDLabel = new Label();
+		m_levelIDLabel->setText("Level ID: ");
+		m_levelIDLabel->setSize(200, 30);
+		m_levelDetailsPanel->add(m_levelIDLabel);
+
+		m_levelIDField = new TextField();
+		m_levelIDField->setSize(200, 30);
+		m_levelIDField->setPadding(5);
+		m_levelIDField->setText("");
+		m_levelDetailsPanel->add(m_levelIDField);
+
+		m_levelNameLabel = new Label();
+		m_levelNameLabel->setText("Level Name: ");
+		m_levelNameLabel->setSize(200, 30);
+		m_levelDetailsPanel->add(m_levelNameLabel);
+
+		m_levelNameField = new TextField();
+		m_levelNameField->setSize(200, 30);
+		m_levelNameField->setPadding(5);
+		m_levelNameField->setText("");
+		m_levelDetailsPanel->add(m_levelNameField);
+
+
 	m_waveDetailsPanel = new ScrollPanel();
 	m_waveDetailsPanel->setWidth(240);
 	m_waveDetailsPanel->setHeight(500);
@@ -362,6 +393,7 @@ void LevelEditorState::render(GameContainer* container, StateBasedGame* game, Gr
 		m_gamePanel->postRender();
 	}
 
+	m_levelDetailsPanel->render();
 	m_waveDetailsPanel->render();
 
 	if (m_gamePanel->isVisible()) {
@@ -377,6 +409,7 @@ void LevelEditorState::resize(GameContainer* container, int width, int height) {
 	{
 		m_gamePanel->setWidth(container->getWidth() - 334);
 		m_eventsPanel->setWidth(width - 80);
+		m_levelDetailsPanel->setX(m_gamePanel->getX() + m_gamePanel->getWidth() + 10);
 		m_waveDetailsPanel->setX(m_gamePanel->getX() + m_gamePanel->getWidth() + 10);
 
 		m_sideBar->setHeight(height - 20);
@@ -389,18 +422,21 @@ void LevelEditorState::keyPressed(unsigned int key) {
 	m_sideBar->keyPressed(key);
 	m_gamePanel->keyPressed(key);
 	m_eventsPanel->keyPressed(key);
+	m_levelDetailsPanel->keyPressed(key);
 	m_waveDetailsPanel->keyPressed(key);
 }
 void LevelEditorState::keyReleased(unsigned int key) {
 	m_sideBar->keyReleased(key);
 	m_gamePanel->keyReleased(key);
 	m_eventsPanel->keyReleased(key);
+	m_levelDetailsPanel->keyReleased(key);
 	m_waveDetailsPanel->keyReleased(key);
 }
 void LevelEditorState::mouseMoved(int x, int y, int oldx, int oldy) {
 	m_sideBar->mouseMoved(x, y, oldx, oldy);
 	m_gamePanel->mouseMoved(x, y, oldx, oldy);
 	m_eventsPanel->mouseMoved(x, y, oldx, oldy);
+	m_levelDetailsPanel->mouseMoved(x, y, oldx, oldy);
 	m_waveDetailsPanel->mouseMoved(x, y, oldx, oldy);
 
 	if (m_gamePanel->m_selectedIndex != -1 && m_gamePanel->m_movingWave) {
@@ -419,8 +455,10 @@ void LevelEditorState::setTitle(string title) {
 void LevelEditorState::selectWave(int index) {
 	m_gamePanel->m_selectedIndex = index;
 	if (index == -1) {
+		m_levelDetailsPanel->setVisible(true);
 		m_waveDetailsPanel->setVisible(false);
 	} else {
+		m_levelDetailsPanel->setVisible(false);
 		m_waveDetailsPanel->setVisible(true);
 
 		EditorWave* wave = m_level->m_waves.get(index);
@@ -567,6 +605,11 @@ void LevelEditorState::newLevel() {
 
 	game->m_levelState->m_currentFile = "";
 	game->m_levelState->setTitle(game->m_levelState->m_currentFile);
+
+	if (game->m_levelState->m_levelIDField != NULL) {
+		game->m_levelState->m_levelIDField->setText("");
+		game->m_levelState->m_levelNameField->setText("");
+	}
 }
 void LevelEditorState::loadLevel() {
 	DefaultGame* game = DefaultGame::getInstance();
@@ -602,10 +645,16 @@ void LevelEditorState::loadLevel() {
 
 	game->m_levelState->m_currentFile = result;
 	game->m_levelState->setTitle(result);
+
+	game->m_levelState->m_levelIDField->setText((int) game->m_levelState->m_level->m_id);
+	game->m_levelState->m_levelNameField->setText(game->m_levelState->m_level->m_name);
 }
 
 void LevelEditorState::saveLevel() {
 	DefaultGame* game = DefaultGame::getInstance();
+
+	game->m_levelState->m_level->m_id = game->m_levelState->m_levelIDField->getText().getAsInt();
+	game->m_levelState->m_level->m_name = game->m_levelState->m_levelNameField->getText().get();
 
 	if (game->m_levelState->m_currentFile.size() == 0) {
 		saveAsLevel();
@@ -624,6 +673,7 @@ void LevelEditorState::saveAsLevel() {
 		ErrorDialog::createAndShow("Level files must end in .level!");
 		return;
 	}
+
 	string s = game->m_levelState->m_level->toString();
 	FileUtil::file_put_contents(result, s);
 	game->m_levelState->setTitle(result);

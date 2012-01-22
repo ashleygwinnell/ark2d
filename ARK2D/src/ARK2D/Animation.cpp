@@ -16,7 +16,7 @@ Animation::Animation():
 	m_pingPong(false)
 	{
 
-}
+} 
 
 void Animation::addImage(Image* image) {
 	m_frames.push_back(image);

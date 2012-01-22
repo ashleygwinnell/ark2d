@@ -7,23 +7,24 @@
 
 #include "IntelligentGameState.h"
 #include "../ARKGameObject.h"
-#include "../ARKVector.h"
+#include "../ARKVector.h" 
+#include "../ARKPool.h"
 
 IntelligentGameState::IntelligentGameState(): GameState(), m_entities() {
 
 }
 
-void IntelligentGameState::add(string group, ARKGameObject* entity) {
+void IntelligentGameState::add(string group, ARKGameObject* entity) { 
 	m_entities[group].add(entity);
-}
-void IntelligentGameState::pruneEntities() {
+}   
+void IntelligentGameState::pruneEntities() { 
 	// Automatically remove any objects  that are cruddy.
-	map<string, ARKVector<ARKGameObject*> >::iterator it;
-	for (it = m_entities.begin(); it != m_entities.end(); ++it) {
+	map<string, ARKVector<ARKGameObject*> >::iterator it; 
+	for (it = m_entities.begin(); it != m_entities.end(); ++it) { 
 		it->second.pruneAll();
 		ARKVector<ARKGameObject*> thisEntities = it->second;
 
-		bool anyRemoved = false;
+		bool anyRemoved = false; 	 
 		for(unsigned int i = 0; i < thisEntities.size(); i++) {
 			ARKGameObject* thisObject = thisEntities.get(i);
 			if (thisObject->isPendingRemoval()) {

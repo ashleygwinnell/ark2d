@@ -28,6 +28,8 @@ class LevelEvent {
 
 class EditorLevel : public ARKGameObject {
 	public:
+		unsigned int m_id;
+		string m_name;
 		ARKVector<EditorWave*> m_waves;
 		vector<LevelEvent*> m_events;
 		float m_timer;

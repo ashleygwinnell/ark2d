@@ -10,7 +10,6 @@
 #include "EditorLevel.h"
 #include "LevelGamePanel.h"
 #include "LevelToolPanel.h"
-#include "RSSL.h"
 
 class DefaultGame;
 
@@ -37,6 +36,13 @@ class LevelEditorState : public GameState {
 		Button* m_rewindButton;
 
 		LevelGamePanel* m_gamePanel;
+
+		ScrollPanel* m_levelDetailsPanel;
+			Label* m_levelIDLabel;
+			TextField* m_levelIDField;
+			Label* m_levelNameLabel;
+			TextField* m_levelNameField;
+
 
 		ScrollPanel* m_waveDetailsPanel;
 

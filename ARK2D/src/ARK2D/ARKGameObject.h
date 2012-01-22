@@ -22,6 +22,7 @@ class ARKGameObject {
 
 		virtual bool isPendingRemoval();
 		virtual void setPendingRemoval(bool b);
+		virtual void onPrune(); /* This even fires when removed from an ARKVector and when made inactive in a ARKPool */
 
 		virtual int getRenderingLayer();
 		virtual void setRenderingLayer(int i);
