@@ -1,36 +1,97 @@
 /*
  * Circle.h
  *
- *  Created on: 13 Nov 2010
- *      Author: Ashley
+ *  Created on: 22 Jan 2012
+ *      Author: ashleygwinnell
  */
 
 #ifndef CIRCLE_H_
 #define CIRCLE_H_
 
 #include "../Util/MathUtil.h"
+#include "Shape.h"
 
-class Circle {
-	public:
-		Circle();
-		Circle(float x, float y, float r);
+namespace ARK {
+	template <class T>
+	class Circle : public Shape<T> {
+		private:
+			T m_x;
+			T m_y;
+			T m_radius;
+		public:
+			Circle(): Shape<T>(), m_x(0), m_y(0), m_radius(0) {
 
-		float m_x;
-		float m_y;
-		float m_radius;
+			}
+			Circle(T x, T y, T r): Shape<T>(), m_x(x), m_y(y), m_radius(r) {
 
-		float getX();
-		float getY();
-		float getRadius();
+			}
 
-		void setX(float f);
-		void setY(float f);
-		void setRadius(float f);
+			virtual T getMinX() {
+				return m_x - m_radius;
+			}
+			virtual T getMaxX() {
+				return m_x + m_radius;
+			}
+			virtual T getCenterX() {
+				return m_x;
+			}
 
-		static bool s_collides(Circle* c1, Circle* c2);
-		static bool s_collides(float x1, float y1, float r1, float x2, float y2, float r2);
+			virtual T getMinY() {
+				return m_y - m_radius;
+			}
+			virtual T getMaxY() {
+				return m_y + m_radius;
+			}
+			virtual T getCenterY() {
+				return m_y;
+			}
 
-		virtual ~Circle();
-};
+			virtual T getWidth() {
+				return 2 * m_radius;
+			}
+			virtual T getHeight() {
+				return 2 * m_radius;
+			}
 
+			virtual T getRadius() {
+				return m_radius;
+			}
+			virtual void setRadius(T radius) {
+				m_radius = radius;
+			}
+
+			virtual void setLocation(T x, T y) {
+				m_x = x + m_radius;
+				m_y = y + m_radius;
+			}
+			virtual void setLocationByCenter(T x, T y) {
+				m_x = x;
+				m_y = y;
+			}
+
+			virtual bool contains(T x, T y) {
+				float distance = (float) MathUtil::distance(m_x, m_y, x, y);
+				if (distance <= m_radius) {
+					return true;
+				}
+				return false;
+			}
+			virtual bool collides(Shape<T>* s) {
+				Circle<T>* circle = NULL;
+				circle = dynamic_cast<Circle<T>* >(s);
+				if (circle != NULL) {
+					return Shape<T>::collision_circleCircle(m_x, m_y, m_radius, circle->getCenterX(), circle->getCenterY(), circle->getRadius());
+				}
+
+				return false;
+			}
+			virtual void resolve(Shape<T>* s) {
+
+			}
+
+			virtual ~Circle() {
+
+			}
+	};
+}
 #endif /* CIRCLE_H_ */

@@ -21,8 +21,11 @@
 #include "ARK2D/Geometry/Vector2.h"
 #include "ARK2D/Geometry/Vector4.h"
 #include "ARK2D/Geometry/Matrix44.h"
-#include "ARK2D/Geometry/Circle.h"
 #include "ARK2D/Geometry/GigaRectangle.h"
+
+#include "ARK2D/Geometry/Shape.h"
+#include "ARK2D/Geometry/Rectangle.h"
+#include "ARK2D/Geometry/Circle.h"
 
 #include "ARK2D/Game.h"
 
