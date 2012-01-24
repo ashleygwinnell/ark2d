@@ -18,6 +18,7 @@ namespace ARK {
 			T m_x;
 			T m_y;
 			T m_radius;
+			static unsigned int RENDER_SEGMENTS;
 		public:
 			Circle(): Shape<T>(), m_x(0), m_y(0), m_radius(0) {
 
@@ -83,10 +84,33 @@ namespace ARK {
 					return Shape<T>::collision_circleCircle(m_x, m_y, m_radius, circle->getCenterX(), circle->getCenterY(), circle->getRadius());
 				}
 
+				Rectangle<T>* rect = NULL;
+				rect = dynamic_cast<Rectangle<T>* >(s);
+				if (rect != NULL) {
+					return Shape<T>::collision_circleRectangle(m_x, m_y, m_radius, rect->getMinX(), rect->getMinY(), rect->getWidth(), rect->getHeight());
+				}
+
+				Line<T>* line = NULL;
+				line = dynamic_cast<Line<T>* >(s);
+				if (line != NULL) {
+					return Shape<T>::collision_circleLine(m_x, m_y, m_radius, line->getStart()->getX(), line->getStart()->getY(), line->getEnd()->getX(), line->getEnd()->getY());
+				}
+
+				Polygon<T>* polygon = NULL;
+				polygon = dynamic_cast<Polygon<T>* >(s);
+				if (polygon != NULL) {
+					return Shape<T>::collision_polygonCircle(polygon, m_x, m_y, m_radius);
+				}
+
 				return false;
 			}
 			virtual void resolve(Shape<T>* s) {
 
+			}
+
+			virtual void render() {
+				Graphics* g = ARK2D::getGraphics();
+				g->drawCircle(m_x, m_y, m_radius, RENDER_SEGMENTS);
 			}
 
 			virtual ~Circle() {
@@ -94,4 +118,8 @@ namespace ARK {
 			}
 	};
 }
+
+template <class T>
+unsigned int ARK::Circle<T>::RENDER_SEGMENTS = 20;
+
 #endif /* CIRCLE_H_ */

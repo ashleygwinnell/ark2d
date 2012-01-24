@@ -5,8 +5,8 @@
  *      Author: ashleygwinnell
  */
 
-#ifndef RECTANGLE_H_
-#define RECTANGLE_H_
+#ifndef ARKRECTANGLE_H_
+#define ARKRECTANGLE_H_
 
 #include "Shape.h"
 #include "Vector2.h"
@@ -22,6 +22,9 @@ namespace ARK {
 
 		public:
 			Rectangle():Shape<T>(), m_x(0), m_y(0), m_width(1), m_height(1) {
+
+			}
+			Rectangle(T x, T y, int width, int height):Shape<T>(), m_x(x), m_y(y), m_width(width), m_height(height) {
 
 			}
 
@@ -73,10 +76,27 @@ namespace ARK {
 				if (rect != NULL) {
 					return Shape<T>::collision_rectangleRectangle(m_x, m_y, m_width, m_height, rect->getMinX(), rect->getMinY(), rect->getWidth(), rect->getHeight());
 				}
+
+				Circle<T>* circle = NULL;
+				circle = dynamic_cast<Circle<T>* >(s);
+				if (circle != NULL) {
+					return Shape<T>::collision_circleRectangle(circle->getCenterX(), circle->getCenterY(), circle->getRadius(), m_x, m_y, m_width, m_height);
+				}
+
+				Line<T>* line = NULL;
+				line = dynamic_cast<Line<T>* >(s);
+				if (line != NULL) {
+					return Shape<T>::collision_rectangleLine(m_x, m_y, m_width, m_height, line->getStart()->getX(), line->getStart()->getY(), line->getEnd()->getX(), line->getEnd()->getY());
+				}
+
 				return false;
 			}
 			virtual void resolve(Shape<T>* s) {
 
+			}
+			virtual void render() {
+				Graphics* g = ARK2D::getGraphics();
+				g->drawRect(m_x, m_y, m_width, m_height);
 			}
 
 
@@ -86,4 +106,4 @@ namespace ARK {
 			}
 	};
 }
-#endif /* RECTANGLE_H_ */
+#endif /* ARKRECTANGLE_H_ */

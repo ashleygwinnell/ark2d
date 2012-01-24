@@ -3,28 +3,42 @@
  *
  *  Created on: Jan 22, 2012
  *      Author: ashleygwinnell
+ *
+ *-----------------------------------------
+ * Note:
+ *  On Mac there is a conflict in this class name.
+ *  You will need to use ARK::Polygon in all cases if compiling for Mac.
+ *-----------------------------------------
  */
 
-#ifndef POLYGON_H_
-#define POLYGON_H_
+#ifndef ARKPOLYGON_H_
+#define ARKPOLYGON_H_
 
 #include "Shape.h"
-#include <vector>
-using namespace std;
 
 namespace ARK {
+
 	template <class T>
-	class Polygon: public Shape<T> {
+	class Polygon : public Shape<T> {
 		private:
-		vector<Vector2<T>* > m_points;
+			std::vector<Vector2<T>* > m_points;
 
 		public:
 			Polygon(): Shape<T>(), m_points() {
 
 			}
+			Polygon(Vector2<T>* coords[]): Shape<T>(), m_points() {
+				int l = sizeof(coords) / sizeof(coords[0]);
+				for(unsigned int i = 0; i < l; i++) {
+					m_points.push_back(coords[i]);
+				}
+			}
 
-			void addPoint(T x, T y) {
+			virtual void addPoint(T x, T y) {
 				m_points.push_back(new Vector2<T>(x, y));
+			}
+			virtual vector<Vector2<T>* >* getPoints() {
+				return &m_points;
 			}
 
 			virtual T getMinX() {
@@ -79,24 +93,58 @@ namespace ARK {
 			}
 
 			virtual void setLocation(T x, T y) {
+				T dx = x - getMinX();
+				T dy = y - getMinY();
 
+				for(unsigned int i = 0; i < m_points.size(); i++) {
+					m_points.at(i)->add(dx, dy);
+				}
 			}
 			virtual void setLocationByCenter(T x, T y) {
+				T dx = x - getCenterX();
+				T dy = y - getCenterY();
 
+				for(unsigned int i = 0; i < m_points.size(); i++) {
+					m_points.at(i)->add(dx, dy);
+				}
 			}
 
 			virtual bool contains(T x, T y) {
 				return false;
 			}
 			virtual bool collides(Shape<T>* s) {
+				Polygon<T>* polygon = NULL;
+				polygon = dynamic_cast<Polygon<T>* >(s);
+				if (polygon != NULL) {
+					return Shape<T>::collision_polygonPolygon(this, polygon);
+				}
+
+				Circle<T>* circle = NULL;
+				circle = dynamic_cast<Circle<T>* >(s);
+				if (circle != NULL) {
+					return Shape<T>::collision_polygonCircle(this, circle->getCenterX(), circle->getCenterY(), circle->getRadius());
+				}
+
 				return false;
 			}
 			virtual void resolve(Shape<T>* s) {
 
 			}
+			virtual void render() {
+				if (m_points.size() < 3) { return; }
+
+				Graphics* g = ARK2D::getGraphics();
+				for(unsigned int i = 0; i < m_points.size(); i++) {
+					unsigned int nextIndex = i+1;
+					if (nextIndex == m_points.size()) { nextIndex = 0; }
+					g->drawLine(m_points.at(i)->getX(), m_points.at(i)->getY(), m_points.at(nextIndex)->getX(), m_points.at(nextIndex)->getY());
+				}
+			}
 
 			virtual ~Polygon() {
-				delete[] m_points;
+				for(unsigned int i = 0; i < m_points.size(); i++) {
+					delete m_points.at(i);
+				}
 			}
 	};
 }

@@ -144,6 +144,7 @@ class ARK2DBuildSystem:
 			'src' + self.ds + 'ARK2D' + self.ds + 'Geometry' + self.ds + 'Rectangle.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'Geometry' + self.ds + 'Circle.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'Geometry' + self.ds + 'Polygon.cpp',
+			'src' + self.ds + 'ARK2D' + self.ds + 'Geometry' + self.ds + 'Line.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'Image' + self.ds + 'Image.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'Image' + self.ds + 'BMPImage.cpp',
 			'src' + self.ds + 'ARK2D' + self.ds + 'Image' + self.ds + 'PNGImage.cpp',

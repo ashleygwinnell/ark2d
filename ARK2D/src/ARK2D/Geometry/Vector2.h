@@ -11,6 +11,8 @@
 #include <math.h>
 #include <cmath>
 #include <stdlib.h>
+#include "../Util/ARKLog.h"
+#include "../ARK2D.h"
 
 template <class T=float>
 class Vector2 {
@@ -42,8 +44,8 @@ class Vector2 {
 			m_y = y;
 		}
 
-		Vector2* add(Vector2 v) {
-			return add(v.getX(), v.getY());
+		Vector2* add(Vector2<T>* v) {
+			return add(v->getX(), v->getY());
 		}
 		Vector2* add(T x, T y) {
 			m_x += x;
@@ -51,8 +53,8 @@ class Vector2 {
 			return this;
 		}
 
-		void set(Vector2 v) {
-			set(v.getX(), v.getY());
+		void set(Vector2<T>* v) {
+			set(v->getX(), v->getY());
 		}
 
 		void set(T x, T y) {
@@ -60,8 +62,8 @@ class Vector2 {
 			m_y = y;
 		}
 
-		Vector2* subtract(Vector2 v) {
-			return subtract(v.getX(), v.getY());
+		Vector2* subtract(Vector2<T>* v) {
+			return subtract(v->getX(), v->getY());
 		}
 		Vector2* subtract(T x, T y) {
 			m_x -= x;
@@ -69,12 +71,23 @@ class Vector2 {
 			return this;
 		}
 
-		Vector2* distance(Vector2 v) {
-			return this->distance(v.getX(), v.getY());
+		Vector2* distance(Vector2<T>* v) {
+			ARK2D::getLog()->w("Vector2* Vector2::distance(Vector2* v) is inefficient, use other method.");
+			Vector2<T>* result = new Vector2<T>();
+			distance(v, result);
+			return result;
 		}
 		Vector2* distance(T x, T y) {
-			Vector2* dist = new Vector2(abs(m_x - x), abs(m_y - y));
-			return dist;
+			ARK2D::getLog()->w("Vector2* Vector2::distance(T x, T y) is inefficient, use other method.");
+			Vector2<T>* result = new Vector2<T>();
+			distance(x, y, result);
+			return result;
+		}
+		void distance(Vector2<T>* v, Vector2<T>* result) {
+			distance(v->getX(), v->getY(), result);
+		}
+		void distance(T x, T y, Vector2<T>* result) {
+			result->set(abs(m_x - x), abs(m_y - y));
 		}
 
 		Vector2* friction(T x, T y) {
@@ -101,6 +114,20 @@ class Vector2 {
 				if (m_y < 0) { m_y = 0; }
 			}
 			return this;
+		}
+
+		T dot(Vector2* v) {
+			return dot(v->getX(), v->getY());
+		}
+		T dot(T x, T y) {
+			return (m_x * x) + (m_y * y);
+		}
+
+		T lengthSquared() {
+			return (m_x*m_x) + (m_y * m_y);
+		}
+		T length() {
+			return sqrt(lengthSquared());
 		}
 
 		~Vector2() {

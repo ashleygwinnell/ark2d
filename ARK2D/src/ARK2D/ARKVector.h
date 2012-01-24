@@ -284,6 +284,17 @@ class ARKVectorIterator {
 		ARKVectorIterator(ARKVector<T>* p): parent(p), index(0), iterator(NULL) {
 
 		}
+		/*T current() {
+			if (parent->isUsingList()) {
+				--iterator;
+				T obj = *iterator;
+				++iterator;
+				return obj;
+			}
+			--index;
+			T obj = parent->get(index);
+			++index;
+		}*/
 		T next() {
 			if (parent->isUsingList()) {
 				if (hasNext()) {

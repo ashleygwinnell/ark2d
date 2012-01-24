@@ -24,8 +24,11 @@
 #include "ARK2D/Geometry/GigaRectangle.h"
 
 #include "ARK2D/Geometry/Shape.h"
+#include "ARK2D/Geometry/Polygon.h"
 #include "ARK2D/Geometry/Rectangle.h"
 #include "ARK2D/Geometry/Circle.h"
+#include "ARK2D/Geometry/Line.h"
+
 
 #include "ARK2D/Game.h"
 

@@ -64,6 +64,12 @@ class ARKPool {
 			m_active.remove(obj);
 			m_inactive.add(obj);
 		}
+		void prune(ARKVectorIterator<T>* it, T obj) {
+			obj->setPendingRemoval(false);
+			obj->onPrune();
+			m_inactive.add(obj);
+			it->remove();
+		}
 		void pruneAll() {
 			ARKVectorIterator<T>* it = m_active.iterator();
 			while (it->hasNext()) {
@@ -71,10 +77,11 @@ class ARKPool {
 				if (obj == NULL) { ErrorDialog::createAndShow("This is bad, very bad."); }
 				if (obj->isPendingRemoval()) {
 
-					obj->setPendingRemoval(false);
+					prune(it, obj);
+					/*obj->setPendingRemoval(false);
 					obj->onPrune();
 					m_inactive.add(obj);
-					it->remove();
+					it->remove();*/
 				}
 			}
 			/*for (unsigned int i = 0; i < m_active.size(); i++) {
