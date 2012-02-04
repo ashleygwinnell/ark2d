@@ -5,7 +5,9 @@
  */
 
 #include "Graphics.h"
+#include "Font/Font.h"
 #include "Font/BMFont.h"
+#include "Font/FTFont.h"
 #include "Color.h"
 
 #include "ARK2D_GL.h"
@@ -20,13 +22,13 @@ Graphics::Graphics():
 	//m_Font = m_DefaultFont;
 }
 
-void Graphics::setFont(BMFont* f) {
+void Graphics::setFont(ARK::Font* f) {
 	m_Font = f;
 }
-BMFont* Graphics::getFont() const {
+ARK::Font* Graphics::getFont() const {
 	return m_Font;
 }
-BMFont* Graphics::getDefaultFont() const {
+ARK::Font* Graphics::getDefaultFont() const {
 	return m_DefaultFont;
 }
 

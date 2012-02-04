@@ -20,6 +20,8 @@
 #include "../Util/ARKLog.h"
 #include "../Util/StringUtil.h"
 
+#include "Font.h"
+
 using std::string;
 using std::istream;
 using std::stringstream;
@@ -52,7 +54,7 @@ struct FontVertex {
 	float x, y, tu, tv;
 };
 
-class BMFont {
+class BMFont : public ARK::Font {
 	private:
 		bool m_loaded;
 		char* m_data;

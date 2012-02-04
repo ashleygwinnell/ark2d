@@ -245,7 +245,7 @@ static int darwin_scancode_table[] = {
 	int ch = ARK2D::getContainer()->getHeight();
 	if (v.y > ch/2) { 
 		int diff = v.y - (ch/2);
-		v.y -= 2 * diff;
+		v.y -= 2 * diff; 
 	} else {
 		int diff = (ch/2) - v.y;
 		v.y += 2 * diff;

@@ -77,6 +77,7 @@
 			"src/ARK2D/Timeline.cpp",
 			"src/ARK2D/Audio/Sound.cpp",
 			"src/ARK2D/Audio/SoundStore.cpp",
+			"src/ARK2D/Font/Font.cpp",
 			"src/ARK2D/Font/FTFont.cpp",
 			"src/ARK2D/Font/BMFont.cpp",
 			"src/ARK2D/Geometry/GigaRectangle.cpp",

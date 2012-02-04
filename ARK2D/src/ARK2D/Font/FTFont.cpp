@@ -192,9 +192,9 @@ void FTFontData::clean() {
 }
 
 
-FTFont::FTFont(const char* filename, unsigned int height): m_data(NULL) {
+FTFont::FTFont(string filename, unsigned int height): m_data(NULL) {
 	m_data = new FTFontData();
-	m_data->init(filename, height);
+	m_data->init(filename.c_str(), height);
 }
 
 void FTFont::drawString(const string& str, int x, int y) {

@@ -13,6 +13,7 @@
 #include "Color.h"
 #include "Util/StringUtil.h"
 #include "Geometry/Matrix44.h"
+#include "Font/Font.h"
 
 #include "ARK2D_GL.h"
 
@@ -26,9 +27,9 @@ class Graphics
 	public:
 		Graphics();
 
-		void setFont(BMFont* f);
-		BMFont* getFont() const;
-		BMFont* getDefaultFont() const;
+		void setFont(ARK::Font* f);
+		ARK::Font* getFont() const;
+		ARK::Font* getDefaultFont() const;
 		void drawString(const std::string str, int x, int y) const;
 		void drawStringCenteredAt(const std::string str, int x, int y) const;
 		void drawStringWordWrap(const std::string str, int x, int y, int maxWidth, int ySpacing) const;
@@ -88,8 +89,8 @@ class Graphics
 		void resetMatrix() const;
 
 	private:
-		BMFont* m_DefaultFont;
-		BMFont* m_Font;
+		ARK::Font* m_DefaultFont;
+		ARK::Font* m_Font;
 		Color m_DrawColor;
 		Color m_MaskColor;
 		unsigned int m_LineWidth;

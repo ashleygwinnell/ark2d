@@ -29,6 +29,8 @@
 #include "../ARK2D_GL.h"
 #include "../UI/ErrorDialog.h"
 
+#include "Font.h"
+
 #include <stdio.h>
 #include <iostream>
 
@@ -71,11 +73,11 @@ class FTFontData {
 
 
 
-class FTFont {
+class FTFont : public ARK::Font {
 	private:
 		FTFontData* m_data;
 	public:
-		FTFont(const char* filename, unsigned int height);
+		FTFont(string filename, unsigned int height);
 		void drawString(const string& str, int x, int y);
 		unsigned int getLineHeight() const;
 		virtual ~FTFont();

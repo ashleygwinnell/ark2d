@@ -83,13 +83,13 @@ void ARKLog::render() {
 
 	GameContainer* container = ARK2D::getContainer();
 	Graphics* g = ARK2D::getGraphics();
-	BMFont* oldFont = g->getFont();
+	ARK::Font* oldFont = g->getFont();
 	const Color& oldColor = g->getDrawColor();
 
 	g->setDrawColor(Color::black_50a);
 	g->fillRect(0, 0, container->getWidth(), container->getHeight());
 
-	BMFont* defaultFont = g->getDefaultFont();
+	ARK::Font* defaultFont = g->getDefaultFont();
 	g->setDrawColor(Color::white);
 	g->setFont(defaultFont);
 

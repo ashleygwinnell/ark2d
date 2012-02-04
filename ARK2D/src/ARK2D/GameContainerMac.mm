@@ -11,6 +11,20 @@
 
 #ifdef ARK2D_MACINTOSH
 
+	bool isLionPlus() {
+		SInt32 MacVersionMajor;
+		SInt32 MacVersionMinor;
+		if (Gestalt(gestaltSystemVersionMajor, &MacVersionMajor) == noErr 
+			&& Gestalt(gestaltSystemVersionMinor, &MacVersionMinor) == noErr
+			) {
+			if (MacVersionMajor >= 10 
+				&& MacVersionMinor >= 7) {
+				return true;
+			} 
+			return false;
+		}
+		return false;
+	}
 	
 	void* GameContainerPlatform::getARK2DResource(int resourceId, int resourceType) {
 		return new string("");
@@ -90,8 +104,9 @@
 			[listener init:window];
 			[window setDelegate:listener];
 			
-			
-			//[window setRestorable:NO];
+			//if (isLionPlus()) {
+			//	[window setRestorable:NO];
+			//}
 			
 			NSOpenGLContext* context = m_platformSpecific.createGLContext();
 			m_platformSpecific.makeContextCurrent(window, context);
@@ -121,10 +136,19 @@
 			
 			m_bRunning = true;
 
-	}
+	} 
+	
+	
 
 	void GameContainer::setFullscreen(bool fullscreen) {
-
+		/*if (m_fullscreen == fullscreen) { return; }
+	
+		if (isLionPlus()) { 
+    		NSWindow* window = m_platformSpecific.m_window;
+    		[window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
+    		[window toggleFullScreen:nil]; 
+		}*/
+	
 	}
 
 	void GameContainer::processGamepadInput() {

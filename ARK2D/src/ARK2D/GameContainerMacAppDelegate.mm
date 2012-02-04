@@ -35,4 +35,10 @@
 }
 
 
+-(void)windowWillEnterFullScreen:(NSNotification* )theEvent { }
+-(void)windowDidEnterFullScreen:(NSNotification* )theEvent { }
+-(void)windowWillExitFullScreen:(NSNotification* )theEvent { }
+-(void)windowDidExitFullScreen:(NSNotification* )theEvent { }
+
+
 @end
