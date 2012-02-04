@@ -188,7 +188,7 @@ namespace ARK {
 			}
 			virtual void render() {
 				Graphics* g = ARK2D::getGraphics();
-				g->drawLine(first->getX(), first->getY(), second->getX(), second->getY());
+				g->drawLine((int) first->getX(), (int) first->getY(), (int) second->getX(), (int) second->getY());
 			}
 
 			virtual ~Line() {

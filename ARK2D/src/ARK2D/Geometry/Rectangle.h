@@ -55,6 +55,12 @@ namespace ARK {
 				return m_height;
 			}
 
+			virtual void setX(T x) {
+				m_x = x;
+			}
+			virtual void setY(T y) {
+				m_y = y;
+			}
 			virtual void setLocation(T x, T y) {
 				m_x = x;
 				m_y = y;
@@ -62,6 +68,17 @@ namespace ARK {
 			virtual void setLocationByCenter(T x, T y) {
 				m_x = x - (m_width/2);
 				m_y = y - (m_height/2);
+			}
+
+			virtual void setWidth(T w) {
+				m_width = (int) w;
+			}
+			virtual void setHeight(T h) {
+				m_height = (int) h;
+			}
+			virtual void setSize(T w, T h) {
+				m_width = (int) w;
+				m_height = (int) h;
 			}
 
 			virtual bool contains(T x, T y) {
@@ -96,7 +113,7 @@ namespace ARK {
 			}
 			virtual void render() {
 				Graphics* g = ARK2D::getGraphics();
-				g->drawRect(m_x, m_y, m_width, m_height);
+				g->drawRect((int)m_x, (int)m_y, (int)m_width, (int)m_height);
 			}
 
 

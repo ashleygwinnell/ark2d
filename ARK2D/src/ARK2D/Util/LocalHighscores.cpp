@@ -21,6 +21,13 @@ vector<LocalHighscoreItem*> LocalHighscores::data() {
 	return items;
 }
 
+void LocalHighscores::setFilename(string f) {
+	filename = f;
+}
+string LocalHighscores::getFilename() {
+	return filename;
+}
+
 void LocalHighscores::load() {
 	char* data = StringUtil::file_get_contents(filename.c_str());
 	if (data == NULL) {

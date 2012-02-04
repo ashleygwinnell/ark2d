@@ -80,9 +80,9 @@ namespace ARK {
 			Circle<T>* asCircle() {
 				return dynamic_cast<Circle<T>* >(this);
 			}
-			/*Polygon<T>* asPolygon() {
+			Polygon<T>* asPolygon() {
 				return dynamic_cast<Polygon<T>* >(this);
-			}*/
+			}
 
 			virtual ~Shape() {
 
@@ -171,6 +171,8 @@ namespace ARK {
 				return true;
 			}
 			static bool collision_polygonPolygon(Polygon<T>* one, Polygon<T>* two) { // convex polys only.
+
+
 				return false;
 			}
 			static bool collision_polygonCircle(Polygon<T>* one, T x1, T y1, T r1) { // any poly even with holes in - not very efficient.

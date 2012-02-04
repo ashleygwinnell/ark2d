@@ -19,13 +19,13 @@ Animation::Animation():
 } 
 
 void Animation::addImage(Image* image) {
-	m_frames.push_back(image);
+	m_frames.add(image);
 }
 Image* Animation::getCurrentFrame() {
-	return m_frames[m_currentFrameIndex];
+	return m_frames.get(m_currentFrameIndex);
 }
 Image* Animation::getFrame(unsigned int i) {
-	return m_frames[i];
+	return m_frames.get(i);
 }
 
 void Animation::setFrameTime(unsigned int ft) {
@@ -68,18 +68,17 @@ void Animation::update(GameTimer* timer) {
 	}
 }
 void Animation::draw(int x, int y) {
-	m_frames[m_currentFrameIndex]->draw(x, y);
+	m_frames.get(m_currentFrameIndex)->draw(x, y);
 }
 void Animation::drawCentered(int x, int y) {
-	m_frames[m_currentFrameIndex]->drawCentered(x, y);
+	m_frames.get(m_currentFrameIndex)->drawCentered(x, y);
 }
 void Animation::drawFlipped(int x, int y, bool fx, bool fy) {
-	m_frames[m_currentFrameIndex]->drawFlipped(x,y,fx,fy);
+	m_frames.get(m_currentFrameIndex)->drawFlipped(x,y,fx,fy);
 }
 void Animation::drawCenteredFlipped(int x, int y, bool fx, bool fy) {
-	m_frames[m_currentFrameIndex]->drawFlipped(
-		x - (m_frames[m_currentFrameIndex]->getWidth()/2),
-		y - (m_frames[m_currentFrameIndex]->getHeight()/2),fx,fy);
+	Image* img = m_frames.get(m_currentFrameIndex);
+	img->drawFlipped(x - (img->getWidth()/2), y - (img->getHeight()/2), fx, fy);
 }
 
 Animation::~Animation() {

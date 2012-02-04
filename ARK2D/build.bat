@@ -1,2 +1,3 @@
-build.py
+python build.py library
+
 pause

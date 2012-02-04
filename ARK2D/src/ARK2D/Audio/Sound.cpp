@@ -12,7 +12,8 @@ ALfloat Sound::ListenerVel[3] = { 0.0, 0.0, 0.0 };
 ALfloat Sound::ListenerOri[6] = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
 
 Sound::Sound(const std::string& fname):
-	m_FileName(fname)//,
+	m_FileName(fname),
+	m_groupId(0)
 	//Buffer(AL_NONE),
 	//Source(AL_NONE)
 {
@@ -624,10 +625,25 @@ void Sound::setVolume(float volume) {
 	alSourcef(Source, AL_GAIN, volume);
 }
 
+float Sound::getPitch() {
+	return m_pitch;
+}
+void Sound::setPitch(float pitch) {
+	m_pitch = pitch;
+	alSourcef(Source, AL_PITCH, pitch);
+}
+
 void Sound::setPanning(float pan) {
-	//SourcePos[0] = pan;
-	//alSourcefv(Source, AL_POSITION, SourcePos);
-	std::cerr << "OpenAL is broken -- seek alternative." << std::endl;
+	SourcePos[0] = pan;
+	alSourcefv(Source, AL_POSITION, SourcePos);
+	//std::cerr << "OpenAL is broken -- seek alternative." << std::endl;
+}
+
+void Sound::setGroupId(unsigned int id) {
+	m_groupId = id;
+}
+unsigned int Sound::getGroupId() {
+	return m_groupId;
 }
 
 string Sound::getALErrorString(ALenum err) {

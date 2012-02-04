@@ -8,11 +8,13 @@
 #ifndef ARK2D_H_
 #define ARK2D_H_
 
-#if defined(__linux__)
+#if defined(ARK2D_ANDROID)
+
+#elif defined(__linux__)
 	#define ARK2D_UBUNTU_LINUX
-#elif ( (defined(__MACH__)) || (defined(__APPLE__)) )
+#elif (defined(__MACH__) || defined(__APPLE__))
 	#define ARK2D_MACINTOSH
-#else
+#elif defined(_WIN32)
 	#define ARK2D_WINDOWS
 	#include <windows.h>
 #endif

@@ -40,7 +40,11 @@ class Sound {
 		void pause();
 		void setVolume(float volume);
 		float getVolume();
+		void setPitch(float pitch);
+		float getPitch(); /** 1.0 is normal, from 0.5 to 2.0*/
 		void setPanning(float pan);
+		void setGroupId(unsigned int id);
+		unsigned int getGroupId();
 		~Sound();
 	protected:
 		// File Name
@@ -69,6 +73,10 @@ class Sound {
 
 		// Volume, no need to store internally to be honest, but keep it simples, yarp!
 		ALfloat m_volume;
+		ALfloat m_pitch;
+
+		// sound group - set volume by sound group.
+		unsigned int m_groupId;
 
 		void setSourcePosition(float x, float y, float z);
 		void setSourceVelocity(float x, float y, float z);

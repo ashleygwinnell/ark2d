@@ -7,12 +7,12 @@
 
 #include "ARK2D.h"
 
-#if defined(ARK2D_WINDOWS) || defined(_WIN32)
+#if defined(ARK2D_ANDROID)
+
+#elif defined(ARK2D_WINDOWS)
 	#include <GL/GLew.h>
 	#include <GL/GL.h>
-#endif
-
-#if defined(ARK2D_UBUNTU_LINUX) || defined(__linux__)
+#elif defined(ARK2D_UBUNTU_LINUX)
 	#include <GL/glew.h>
 	#include <GL/gl.h>
 
@@ -29,9 +29,7 @@
 	//#include <GL/freeglut.h>
 	//#include <GL/freeglut_std.h>
 	//#include <GL/freeglut_ext.h>
-#endif
-
-#if defined(ARK2D_MACINTOSH)
+#elif defined(ARK2D_MACINTOSH)
 	#include <stdlib.h>
 	#include <OpenGL/OpenGL.h>
 	#include <OpenGL/gl.h>

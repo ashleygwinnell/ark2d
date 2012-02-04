@@ -110,7 +110,7 @@ namespace ARK {
 
 			virtual void render() {
 				Graphics* g = ARK2D::getGraphics();
-				g->drawCircle(m_x, m_y, m_radius, RENDER_SEGMENTS);
+				g->drawCircle((int)m_x, (int)m_y, (int)m_radius, RENDER_SEGMENTS);
 			}
 
 			virtual ~Circle() {

@@ -3,7 +3,8 @@ import os
 import errno
 import subprocess
 import json 
-import platform;
+import platform
+import zlib
 import base64
 import binascii
 import shutil
@@ -38,7 +39,14 @@ class ARK2DBuildSystem:
 		self.build_folder = "build";
 		self.arch = platform.machine();
 		
-		if (sys.platform == "win32"):
+		if (len(sys.argv)==3 and sys.argv[2] == "android"):
+			self.platform = "android";
+			if (sys.platform == "win32"):
+				self.ds = "\\";
+			elif(sys.platform == "darwin"):
+				self.ds = "/";
+			pass;
+		elif (sys.platform == "win32"):
 			self.ds = "\\";
 			self.platform = "windows";
 			self.mingw_dir = "C:\\MinGW";
@@ -74,6 +82,11 @@ class ARK2DBuildSystem:
 		
 	def dllInit(self):
 		
+		f = open("config.json", "r");
+		fcontents = f.read();
+		f.close();
+		config = json.loads(fcontents);
+		
 		self.building_library = True;
 		self.building_game = False;
 	
@@ -105,217 +118,25 @@ class ARK2DBuildSystem:
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "zlib123"
 		]);
 		
-		self.src_files.extend([
-			'src' + self.ds + 'main.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'ARK2D.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Animation.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'ARKException.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'ARKGameObject.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'ARKMutex.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'ARKString.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'ARKThread.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Color.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Easing.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Event.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Game.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'GameContainer.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'GameContainerLinux.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'GameContainerWindows.cpp',  
-			'src' + self.ds + 'ARK2D' + self.ds + 'Gamepad.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'GameTimer.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Graphics.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Input.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Shader.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Sort.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'SpriteSheet.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'SpriteSheetDescription.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'SpriteSheetDescriptionItem.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'StringStore.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Timeline.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Audio' + self.ds + 'Sound.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Audio' + self.ds + 'SoundStore.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Font' + self.ds + 'FTFont.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Font' + self.ds + 'BMFont.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Geometry' + self.ds + 'GigaRectangle.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Geometry' + self.ds + 'Vector2.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Geometry' + self.ds + 'Vector4.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Geometry' + self.ds + 'Matrix44.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Geometry' + self.ds + 'Shape.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Geometry' + self.ds + 'Rectangle.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Geometry' + self.ds + 'Circle.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Geometry' + self.ds + 'Polygon.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Geometry' + self.ds + 'Line.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Image' + self.ds + 'Image.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Image' + self.ds + 'BMPImage.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Image' + self.ds + 'PNGImage.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Image' + self.ds + 'TargaImage.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Image' + self.ds + 'Texture.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Path' + self.ds + 'PathGroup.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Path' + self.ds + 'Path.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Path' + self.ds + 'SubPath.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Path' + self.ds + 'PathIO.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Particles' + self.ds + 'ConfigurableEmitter.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Particles' + self.ds + 'Particle.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Particles' + self.ds + 'ParticleIO.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Particles' + self.ds + 'ParticlePool.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Particles' + self.ds + 'ParticleSystem.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'State' + self.ds + 'GameState.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'State' + self.ds + 'IntelligentGameState.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'State' + self.ds + 'LoadingState.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'State' + self.ds + 'StateBasedGame.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'State' + self.ds + 'Transition' + self.ds + 'EmptyTransition.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'State' + self.ds + 'Transition' + self.ds + 'FadeTransition.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'State' + self.ds + 'Transition' + self.ds + 'FadeToColourTransition.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'State' + self.ds + 'Transition' + self.ds + 'FadeFromColourTransition.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'State' + self.ds + 'Transition' + self.ds + 'SlideRectanglesAcrossTransition.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'State' + self.ds + 'Transition' + self.ds + 'Transition.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'State' + self.ds + 'Transition' + self.ds + 'TranslateOutInTransition.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Tiled' + self.ds + 'TiledMap.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Tiled' + self.ds + 'TiledMapLayer.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Tiled' + self.ds + 'TiledMapObject.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Tiled' + self.ds + 'TiledMapObjectGroup.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Tiled' + self.ds + 'TiledMapProperty.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Tiled' + self.ds + 'TiledMapTile.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Tiled' + self.ds + 'TiledMapTileset.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Tools' + self.ds + 'Packer.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'UI' + self.ds + 'UIComponent.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'UI' + self.ds + 'AbstractUIComponent.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'UI' + self.ds + 'Panel.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'UI' + self.ds + 'ScrollPanel.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'UI' + self.ds + 'Label.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'UI' + self.ds + 'TextField.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'UI' + self.ds + 'Button.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'UI' + self.ds + 'CheckBox.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'UI' + self.ds + 'FileDialog.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'UI' + self.ds + 'ComboBox.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'UI' + self.ds + 'ComboBoxItem.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'UI' + self.ds + 'ErrorDialog.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Util' + self.ds + 'FileUtil.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Util' + self.ds + 'MathUtil.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Util' + self.ds + 'StringUtil.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Util' + self.ds + 'ARKLog.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Util' + self.ds + 'VerticalMenu.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Util' + self.ds + 'VerticalMenuItem.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Util' + self.ds + 'CameraShake.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Util' + self.ds + 'LocalHighscores.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'Util' + self.ds + 'RSSL.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'libJSON' + self.ds + 'JSON_Worker.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'libJSON' + self.ds + 'jsonmain.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'libJSON' + self.ds + 'JSONNode.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'lpng151' + self.ds + 'png.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'lpng151' + self.ds + 'pngerror.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'lpng151' + self.ds + 'pngget.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'lpng151' + self.ds + 'pngmem.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'lpng151' + self.ds + 'pngpread.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'lpng151' + self.ds + 'pngread.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'lpng151' + self.ds + 'pngrio.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'lpng151' + self.ds + 'pngrtran.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'lpng151' + self.ds + 'pngrutil.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'lpng151' + self.ds + 'pngset.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'lpng151' + self.ds + 'pngtrans.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'lpng151' + self.ds + 'pngwio.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'lpng151' + self.ds + 'pngwrite.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'lpng151' + self.ds + 'pngwtran.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'lpng151' + self.ds + 'pngwutil.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'ogg130' + self.ds + 'bitwise.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'ogg130' + self.ds + 'framing.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'tinyxml' + self.ds + 'tinystr.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'tinyxml' + self.ds + 'tinyxml.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'tinyxml' + self.ds + 'tinyxmlerror.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'tinyxml' + self.ds + 'tinyxmlparser.cpp',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'analysis.c',
-			#'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'barkmel.c', # contains a main method
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'bitrate.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'block.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'codebook.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'envelope.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'floor0.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'floor1.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'info.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'lookup.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'lpc.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'lsp.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'mapping0.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'mdct.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'psy.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'registry.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'res0.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'sharedbook.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'smallft.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'synthesis.c',
-			#'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'tone.c', # contains a main method
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'vorbisenc.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'vorbisfile.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'vorbis132' + self.ds + 'window.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'zlib123' + self.ds + 'adler32.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'zlib123' + self.ds + 'compress.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'zlib123' + self.ds + 'crc32.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'zlib123' + self.ds + 'deflate.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'zlib123' + self.ds + 'gzio.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'zlib123' + self.ds + 'infback.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'zlib123' + self.ds + 'inffast.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'zlib123' + self.ds + 'inflate.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'zlib123' + self.ds + 'inftrees.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'zlib123' + self.ds + 'trees.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'zlib123' + self.ds + 'uncompr.c',
-			'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'zlib123' + self.ds + 'zutil.c'
-		]);
-			
-		if (sys.platform == "win32"):
-			
-			self.src_files.extend([
-				'src' + self.ds + 'ARK2D' + self.ds + 'vendor' + self.ds + 'glew.c',
-			]);
-			
-			self.dll_files.extend([
-				'lib\\windows\\kernel32.dll', 
-				'lib\\windows\\glew32.dll', 
-				'lib\\windows\\OpenAL32.dll', 
-				'lib\\windows\\alut.dll', 
-				'lib\\windows\\winmm.dll',
-				'lib\\windows\\freetype6.dll'
-			]);
-			self.static_libraries.extend([
-				'glu32', 
-				'winmm', 
-				'opengl32', 
-				'mingw32',
-				'freetype'
-			]);
 		
-			self.linkingFlags = " -mwindows -shared ";		
-
-			self.src_files.extend([
-				'src' + self.ds + 'ARK2D' + self.ds + 'ARK2D_windres.rc'
-			]);		
+		self.src_files.extend(config['src_files']['all']);
+		
+		if (self.platform == "android"):
+			self.src_files.extend(config['src_files']['android']);
+		elif (self.platform == "windows"):
+		
+			self.src_files.extend(config['src_files']['windows']);
+			self.dll_files.extend(config['dynamic_libraries']['windows']);
+			self.static_libraries.extend(config['static_libraries']['windows']);
+			self.linkingFlags = " -mwindows -shared ";
 			
-		elif (sys.platform == "darwin"):
-			
-			self.src_files.extend([
-				#'src' + self.ds + 'ARK2D' + self.ds + 'src-AL' + self.ds + 'glew.c',
-				'src' + self.ds + 'ARK2D' + self.ds + 'GameContainerMac.mm', #may not have objc compiler on win32
-				'src' + self.ds + 'ARK2D' + self.ds + 'GameContainerMacAppDelegate.mm',
-				'src' + self.ds + 'ARK2D' + self.ds + 'GameContainerMacWindowListener.mm',
-			]);
-			
-			self.dll_files.extend([
-			#	'lib' + self.ds + 'glew32.dll', 
-			#	'lib' + self.ds + 'OpenAL32.dll', 
-			#	'lib' + self.ds + 'alut.dll', 
-			#	'lib' + self.ds + 'winmm.dll',
-			#	'lib' + self.ds + 'freetype6.dll'
-				"/usr/X11/lib/libfreetype.6.dylib "
-			#	"lib/osx/openal.dylib "
-			]);
-			
-			self.static_libraries.extend([
-				#'glu32', 
-				#'opengl32', 
-				#'freetype2'
-			]);
+		elif (self.platform == "osx"):
 			
 			self.build_artifact = self.build_folder + self.ds + self.platform + self.ds + "libARK2D.dylib";
 			
+			self.src_files.extend(config['src_files']['mac']);
+			self.dll_files.extend(config['dynamic_libraries']['mac']);
+			self.static_libraries.extend(config['static_libraries']['mac']);
 			self.linkingFlags = "";
 			
 					
@@ -650,11 +471,63 @@ class ARK2DBuildSystem:
 		print(cm);
 		os.system(cm);
 		
+	def startAndroid(self):
+		print("Building Android");
+		
+		f = open("config.json", "r");
+		fcontents = f.read();
+		f.close();
+		config = json.loads(fcontents);
+		
+		nl = "\r\n";
+		ndkdir = config['mac']['android']['ndk_dir'];
+		ndkprojectpath = config['mac']['ark2d_dir']
+		appbuilddir = ndkprojectpath+"/build/android";
+		appbuildscript = ndkprojectpath+"/build/android/Android.mk";
+		appbuildscript2 = ndkprojectpath+"/build/android/Application.mk";
+		appplatform= "android-4";
+		
+		#make android.mk
+		android_make_file = "";
+		android_make_file += "LOCAL_PATH := $(call my-dir)/../../" + nl + nl;
+		android_make_file += "include $(CLEAR_VARS)" + nl+nl;
+		android_make_file += "LOCAL_MODULE    := ark2d" + nl+nl; # Here we give our module name and source file(s)
+		#android_make_file += "LOCAL_C_INCLUDES := $(LOCAL_PATH)/../libzip/ $(LOCAL_PATH)/../libpng/" + nl;
+		#android_make_file += "LOCAL_STATIC_LIBRARIES := libzip libpng" + nl;
+		android_make_file += "LOCAL_CFLAGS := -DARK2D_ANDROID -DDISABLE_IMPORTGL -Wno-psabi" + nl+nl;
+		android_make_file += "LOCAL_DEFAULT_CPP_EXTENSION := cpp" + nl+nl; 
+		android_make_file += "LOCAL_SRC_FILES := \\" + nl;
+		for h in self.src_files: #foreach file on config...
+			android_make_file += "	" + h + " \\" + nl;
+		android_make_file += nl;
+		android_make_file += "LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz" + nl+nl;
+		android_make_file += "include $(BUILD_SHARED_LIBRARY)" + nl;
+		f = open(appbuildscript, "w");
+		f.write(android_make_file);
+		f.close();
+		
+		#make application.mk
+		application_make_file = "";
+		#application_make_file += "APP_PROJECT_PATH := " + ndkprojectpath + nl;
+		#application_make_file += "APP_BUILD_SCRIPT := " + appbuildscript + nl;
+		#application_make_file += "APP_ABI := all" + nl;
+		#application_make_file += "APP_ABI := armeabi armeabi-v7a x86" + nl;
+		application_make_file += "APP_STL := stlport_static" + nl;
+		f = open(appbuildscript2, "w");
+		f.write(application_make_file);
+		f.close();
+		
+		buildline = ndkdir + "/ndk-build NDK_PROJECT_PATH=" + ndkprojectpath + " APP_BUILD_SCRIPT=" + appbuildscript + " NDK_APP_OUT=" + appbuilddir + " APP_PLATFORM=" + appplatform;
+		print(buildline);
+		subprocess.call([buildline], shell=True);	
+		
 	def start(self):
 	
-		if (sys.platform == "win32"):
+		if (self.platform == "android"):
+			self.startAndroid();
+		elif (self.platform == "windows"):
 			self.startWindows();
-		elif(sys.platform == "darwin"):
+		elif(self.platform == "osx"):
 			self.startMac();
 		else:
 			print(sys.platform); 
@@ -678,15 +551,17 @@ if __name__ == "__main__":
 	
 	print("Starting");
 	
-	if (len(sys.argv)==2 and sys.argv[1] == "library"):
-		print("Building library");
-		a = ARK2DBuildSystem();
-		#a.clean();
-		a.dllInit();
-		a.start();	
-			
+	if (len(sys.argv)>=2):
+		if (sys.argv[1] == "library"):
+			print("Building library");
+			a = ARK2DBuildSystem();
+			#a.clean();
+			a.dllInit();
+			a.start();
+		else:
+			print("Invalid parameters.");	
 	else:
-	
+		print("Building game");
 		if (sys.platform == "win32"):
 			arkPlatform = "windows";
 		elif(sys.platform == "darwin"):
@@ -698,6 +573,12 @@ if __name__ == "__main__":
 		
 		#print(fcontents);
 		j = json.loads(fcontents);
+		
+		try:
+			blah = j["game_name"];
+		except:
+			print("Config.json invalid or trying to build game from framework path.");
+			exit(0);
 			
 		a = ARK2DBuildSystem();
 		a.ark2d_dir = j[arkPlatform]["ark2d_dir"];

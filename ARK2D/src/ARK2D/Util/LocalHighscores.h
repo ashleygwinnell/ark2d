@@ -33,6 +33,8 @@ class LocalHighscores {
 		void save();
 		vector<LocalHighscoreItem*> data();
 		void sort();
+		void setFilename(string f);
+		string getFilename();
 		virtual ~LocalHighscores();
 
 	private:

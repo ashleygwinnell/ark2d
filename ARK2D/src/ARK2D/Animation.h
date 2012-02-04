@@ -8,10 +8,9 @@
 #ifndef ANIMATION_H_
 #define ANIMATION_H_
 
-#include <vector>
-
 #include "Image/Image.h"
 #include "GameTimer.h"
+#include "ARKVector.h"
 
 class Animation {
 	public:
@@ -37,7 +36,7 @@ class Animation {
 		virtual ~Animation();
 
 	private:
-		vector<Image*> m_frames;
+		ARKVector<Image*> m_frames;
 		unsigned int m_currentFrameIndex;
 		signed int m_nextFrameModifier;
 

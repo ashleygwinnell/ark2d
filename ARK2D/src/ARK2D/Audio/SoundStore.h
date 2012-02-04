@@ -27,6 +27,9 @@ class SoundStore {
 		void addSound(string s, Sound* sound);
 		Sound* getSound(string s);
 		map<string, Sound*> getMap();
+		void setVolumeByGroupId(unsigned int groupId, float volume);
+		void setPanningByGroupId(unsigned int groupId, float panning);
+		void setPitchByGroupId(unsigned int groupId, float pitch);
 		~SoundStore();
 
 	private:

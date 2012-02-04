@@ -90,6 +90,12 @@ class MathUtil {
 			//vector->x += distance * double(cos(angleRadians));
 			//vector->y +=
 		}
+		template <class T>
+		static void moveAngle(T& x, T& y, double angleDegrees, float distance) {
+			double angleRadians = toRadians(angleDegrees);
+			x += (distance * double(cos(angleRadians)));
+			y += (distance * double(sin(angleRadians)));
+		}
 
 		template <class T>
 		static Vector2<T>* angleToNormalisedVector(double angleDegrees) {
