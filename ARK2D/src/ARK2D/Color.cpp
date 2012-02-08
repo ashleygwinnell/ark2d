@@ -14,7 +14,7 @@
 #include <stdlib.h>
 #include <iostream>
 
-const Color Color::black = Color(0, 0, 0, 0);
+const Color Color::black = Color(0, 0, 0, 255);
 const Color Color::white = Color(255, 255, 255, 255);
 
 const Color Color::red = Color(255, 0, 0);

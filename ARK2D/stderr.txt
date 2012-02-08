@@ -1,0 +1,33 @@
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_tree.h: In member function `typename std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_Link_type std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_copy(const std::_Rb_tree_node<_Val>*, std::_Rb_tree_node<_Val>*) [with _Key = std::string, _Val = std::pair<const std::string, StaticEvent*>, _KeyOfValue = std::_Select1st<std::pair<const std::string, StaticEvent*> >, _Compare = std::less<std::string>, _Alloc = std::allocator<std::pair<const std::string, StaticEvent*> >]':
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_tree.h:1029: warning: '__top' might be used uninitialized in this function
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_tree.h:365: warning: '__tmp' might be used uninitialized in this function
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_tree.h: In member function `typename std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_Link_type std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_copy(const std::_Rb_tree_node<_Val>*, std::_Rb_tree_node<_Val>*) [with _Key = std::string, _Val = std::pair<const std::string, TweenedEvent*>, _KeyOfValue = std::_Select1st<std::pair<const std::string, TweenedEvent*> >, _Compare = std::less<std::string>, _Alloc = std::allocator<std::pair<const std::string, TweenedEvent*> >]':
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_tree.h:1029: warning: '__top' might be used uninitialized in this function
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_tree.h:365: warning: '__tmp' might be used uninitialized in this function
+src/ARK2D/Audio/Sound.cpp: In member function `bool Sound::loadWAV(bool)':
+src/ARK2D/Audio/Sound.cpp:378: warning: `alutLoadWAVFile' is deprecated (declared at C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/AL/ALut.h:113)
+src/ARK2D/Audio/Sound.cpp:378: warning: `alutLoadWAVFile' is deprecated (declared at C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/AL/ALut.h:113)
+src/ARK2D/Audio/Sound.cpp:399: warning: `alutUnloadWAV' is deprecated (declared at C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/AL/ALut.h:116)
+src/ARK2D/Audio/Sound.cpp:399: warning: `alutUnloadWAV' is deprecated (declared at C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/AL/ALut.h:116)
+src/ARK2D/Audio/Sound.cpp: In member function `bool Sound::loadOGG(bool)':
+src/ARK2D/Audio/Sound.cpp:191: warning: 'r' might be used uninitialized in this function
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_tree.h: In member function `typename std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_Link_type std::_Rb_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::_M_copy(const std::_Rb_tree_node<_Val>*, std::_Rb_tree_node<_Val>*) [with _Key = std::string, _Val = std::pair<const std::string, Sound*>, _KeyOfValue = std::_Select1st<std::pair<const std::string, Sound*> >, _Compare = std::less<std::string>, _Alloc = std::allocator<std::pair<const std::string, Sound*> >]':
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_tree.h:1029: warning: '__top' might be used uninitialized in this function
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_tree.h:365: warning: '__tmp' might be used uninitialized in this function
+src/ARK2D/Image/BMPImage.cpp:46:21: warning: multi-character character constant
+src/ARK2D/State/Transition/FadeToColourTransition.cpp: In member function `virtual void FadeToColourTransition::postRender(GameContainer*, StateBasedGame*, Graphics*)':
+src/ARK2D/State/Transition/FadeToColourTransition.cpp:33: warning: passing `float' for converting 1 of `void Color::setAlpha(unsigned int)'
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_vector.h: In member function `std::vector<_Tp, _Alloc>& std::vector<_Tp, _Alloc>::operator=(const std::vector<_Tp, _Alloc>&) [with _Tp = TiledMapProperty, _Alloc = std::allocator<TiledMapProperty>]':
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_vector.h:715: warning: '__result' might be used uninitialized in this function
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_uninitialized.h:82: warning: '__cur' might be used uninitialized in this function
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_uninitialized.h:82: warning: '__cur' might be used uninitialized in this function
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_uninitialized.h: In copy constructor `TiledMapLayer::TiledMapLayer(const TiledMapLayer&)':
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_uninitialized.h:82: warning: '__cur' might be used uninitialized in this function
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_uninitialized.h:82: warning: '__cur' might be used uninitialized in this function
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_vector.h: In member function `std::vector<_Tp, _Alloc>& std::vector<_Tp, _Alloc>::operator=(const std::vector<_Tp, _Alloc>&) [with _Tp = std::vector<unsigned int, std::allocator<unsigned int> >, _Alloc = std::allocator<std::vector<unsigned int, std::allocator<unsigned int> > >]':
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_vector.h:715: warning: '__result' might be used uninitialized in this function
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_uninitialized.h:82: warning: '__cur' might be used uninitialized in this function
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_uninitialized.h:82: warning: '__cur' might be used uninitialized in this function
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_list.h: In member function `void ARKLog::message(std::string, unsigned int)':
+C:/MinGW/bin/../lib/gcc/mingw32/3.4.5/../../../../include/c++/3.4.5/bits/stl_list.h:435: warning: '__p' might be used uninitialized in this function
+src/ARK2D/vendor/glew.c:9980: warning: 'glewExperimental' defined locally after being referenced with dllimport linkage

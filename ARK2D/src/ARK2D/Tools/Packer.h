@@ -17,6 +17,9 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <cstdlib>
+#include <cstring>
+#include <stdio.h>
 using namespace std;
 
 #define PACKER_AUDIO_MONO16   1

@@ -11,6 +11,7 @@
 #include "../ARK2D.h"
 #include "../GameContainer.h"
 #include "Vector2.h"
+#include <limits>
 
 namespace ARK {
 

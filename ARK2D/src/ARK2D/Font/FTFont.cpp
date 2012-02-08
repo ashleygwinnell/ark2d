@@ -197,7 +197,7 @@ FTFont::FTFont(string filename, unsigned int height): m_data(NULL) {
 	m_data->init(filename.c_str(), height);
 }
 
-void FTFont::drawString(const string& str, int x, int y) {
+void FTFont::drawString(const string& str, int x, int y) const {
 
 	//GLuint font = m_data->list_base;
 	glEnable(GL_TEXTURE_2D);
@@ -227,6 +227,20 @@ void FTFont::drawString(const string& str, int x, int y) {
 	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 
+}
+unsigned int FTFont::getStringWidth(const string& Str) const {
+	unsigned int total = 0;
+	for (unsigned int i = 0; i < Str.size(); i++ ) {
+		total += m_data->characterDatas[(int) Str[i]].advancex;
+	}
+	return total;
+}
+unsigned int FTFont::getStringHeight(const string& Str) const {
+	unsigned int total = 0;
+	for (unsigned int i = 0; i < Str.size(); i++ ) {
+		total += m_data->characterDatas[(int) Str[i]].advancey;
+	}
+	return total;
 }
 unsigned int FTFont::getLineHeight() const {
 	return (unsigned int) m_data->m_height;

@@ -7,16 +7,16 @@
 
 
 #include "GameContainerWindows.h"
-#include "GameContainer.h"
-#include "ARK2D.h"
+#include "GameContainer.h" 
+#include "ARK2D.h" 
 
 #if defined(ARK2D_WINDOWS)
 
 	#include "Geometry/GigaRectangle.h"
 
-	#include "ARK2D_windres.h"
+	#include "ARK2D_windres.h" 
 	#include "Image/Image.h"
-
+ 
 	#include "Util/ARKLog.h"
 
 		LRESULT CALLBACK GameContainerPlatform::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -24,6 +24,7 @@
 			switch (message)
 			{
 				case WM_CREATE:
+				{
 					// "data/icon_32.ico"
 					if (m_iconpath != "") {
 						HICON hLIcon;
@@ -56,7 +57,9 @@
 						}
 					}
 					return 0;
+				}
 				case WM_SIZE:
+				{
 					m_container->m_width =  LOWORD(lParam);
 					m_container->m_height = HIWORD(lParam);
 					if (m_container->m_scaleToWindow) {
@@ -68,11 +71,16 @@
 					}
 					m_container->m_game.resize(m_container, LOWORD(lParam), HIWORD(lParam));
 					return 0;
+				}
 				case WM_CLOSE:
+				{
 					PostQuitMessage( 0 );
 					return 0;
-				case WM_DESTROY:
+				}
+				case WM_DESTROY: 
+				{
 					return 0;
+				}
 				case WM_KEYDOWN:
 				{
 					m_container->m_input.pressKey(wParam);
@@ -84,8 +92,11 @@
 					break;
 				}
 				case WM_ACTIVATEAPP:
+				{
 					break;
+				}
 				case WM_MOUSEMOVE:
+				{
 					POINTS mouseXY = MAKEPOINTS(lParam);
 
 					ARK2D::getGame()->mouseMoved(mouseXY.x, mouseXY.y, m_container->m_input.mouse_x, m_container->m_input.mouse_y);
@@ -93,20 +104,31 @@
 					m_container->m_input.mouse_x = mouseXY.x;
 					m_container->m_input.mouse_y = mouseXY.y;
 					break;
+				}
 				case WM_LBUTTONDOWN:
+				{
 					m_container->m_input.pressKey(Input::MOUSE_BUTTON_LEFT);
 					break;
+				}
 				case WM_LBUTTONUP:
+				{
 					m_container->m_input.releaseKey(Input::MOUSE_BUTTON_LEFT);
 					break;
+				}
 				case WM_RBUTTONDOWN:
+				{
 					m_container->m_input.pressKey(Input::MOUSE_BUTTON_RIGHT);
 					break;
+				}
 				case WM_RBUTTONUP:
+				{
 					m_container->m_input.releaseKey(Input::MOUSE_BUTTON_RIGHT);
 					break;
+				}
 				default:
+				{
 					return DefWindowProc( hWnd, message, wParam, lParam );
+				}
 			}
 			return DefWindowProc( hWnd, message, wParam, lParam );
 		}
@@ -190,6 +212,10 @@
 				}
 			}
 			return NULL;
+		}
+
+		void GameContainer::setSize(int width, int height) {
+
 		}
 
 		void GameContainer::setFullscreen(bool fullscreen) {
@@ -614,9 +640,9 @@
 			HRSRC resourceSrc = FindResource(dllModule, MAKEINTRESOURCE(resourceId), MAKEINTRESOURCE(resourceType));
 			if (resourceSrc == NULL) {
 				std::cout << "bad 2: " << GetLastError() << std::endl;
-			}
+			} 
 			HGLOBAL resourceData = LoadResource(dllModule, resourceSrc);
-			if (resourceData == NULL) {
+			if (resourceData == NULL) {  
 				std::cout << "bad 3: " << GetLastError() << std::endl;
 			}
 			LPVOID resourcePointer = LockResource(resourceData);
@@ -633,7 +659,7 @@
 				newPointerEnd = '\0';
 			}
 
-			FreeResource(resourceData);
+			FreeResource(resourceData); 
 
 			FreeLibrary(dllModule);
 

@@ -78,7 +78,9 @@ class FTFont : public ARK::Font {
 		FTFontData* m_data;
 	public:
 		FTFont(string filename, unsigned int height);
-		void drawString(const string& str, int x, int y);
+		void drawString(const string& str, int x, int y) const;
+		unsigned int getStringWidth(const string& Str) const;
+		unsigned int getStringHeight(const string& Str) const;
 		unsigned int getLineHeight() const;
 		virtual ~FTFont();
 };

@@ -42,8 +42,8 @@ const Game& GameContainer::getGame() const {
 const Input& GameContainer::getInput() const {
 	return m_input;
 }
-const Graphics* GameContainer::getGraphics() const {
-	return &m_graphics;
+Graphics* GameContainer::getGraphics() const {
+	return const_cast<Graphics*>(&m_graphics);
 }
 unsigned int GameContainer::getFPS() {
 	return m_timer.getFPS();

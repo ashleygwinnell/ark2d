@@ -10,7 +10,7 @@ import binascii
 import shutil
 
 #
-# Windows requires MinGW with includes:
+# Windows requires MinGW 3.4.5 with includes:
 # 	AL/ 
 #		al.h, alc.h, alext.h, alut.h
 #	GL/
@@ -253,14 +253,18 @@ class ARK2DBuildSystem:
 						#-arch i386
 						compileStr += " -o \"";
 						compileStr += self.build_folder + self.ds + self.platform + self.ds + newf + "\" \"" + h + "\" ";
-					else:
+					elif (sys.platform == "win32"):
 						#compileStr += " -o \"" + self.build_folder + self.ds + self.platform + self.ds + newf + "\" \"" + h + "\" ";
+						#compileStr += " -Wno-strict-aliasing -Wno-unused-but-set-variable -fpermissive ";
 						compileStr += " -o " + self.build_folder + self.ds + self.platform + self.ds + newf + " " + h + " ";
+					else:
+						compileStr += " -o " + self.build_folder + self.ds + self.platform + self.ds + newf + " " + h + " ";			
+					
 				elif h_ext == 'rc':
 					if (sys.platform == "win32"):
 						compileStr += h + " " + self.build_folder + self.ds + self.platform + self.ds + newf + " ";
 					else:
-						processThisFile = False;
+						processThisFile = False; 
 			
 				if (processThisFile):
 					fjson[h] = {"date_modified": os.stat(h).st_mtime };
@@ -338,9 +342,12 @@ class ARK2DBuildSystem:
 					#cpy_game_res = 'copy "' + self.game_resources_dir.replace('\\\\','\\') + '" "' + self.game_dir.replace('\\\\','\\') + '\\' + self.build_folder + '\\' + self.platform + '\\"';
 					#print(cpy_game_res);
 					#subprocess.call([cpy_game_res], shell=True);
+					thisgameresdir = self.game_resources_dir.replace('\\\\','\\');
+					thisgameresdir2 = self.game_dir.replace('\\\\','\\') + '\\' + self.build_folder + '\\' + self.platform + '\\data';
 					try:
-						shutil.copytree(self.game_resources_dir.replace('\\\\','\\'), self.game_dir.replace('\\\\','\\') + '\\' + self.build_folder + '\\' + self.platform + '\\data');
+						shutil.copytree(thisgameresdir, thisgameresdir2);
 					except:
+						print("could not copy resources [from:"+thisgameresdir+",to:"+thisgameresdir2);
 						pass;
 				
 			
@@ -598,8 +605,9 @@ if __name__ == "__main__":
 		
 		if(sys.platform=="win32"):
 			a.dll_files.append(a.ark2d_dir + a.ds + a.build_folder + a.ds + a.platform + a.ds + 'libARK2D.dll');
-			a.linkingFlags += " -mwindows "; 
-			a.linkingFlags += " -enable-auto-import ";
+			a.linkingFlags += "-mwindows ";
+			#a.linkingFlags += "-static-libgcc -static-libstdc++ "; 
+			a.linkingFlags += "-enable-auto-import ";
 		elif(sys.platform=="darwin"):
 			a.dll_files.append(a.ark2d_dir + a.ds + a.build_folder + a.ds + a.platform + a.ds + 'libARK2D.dylib');
 			

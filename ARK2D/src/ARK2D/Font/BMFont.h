@@ -68,14 +68,12 @@ class BMFont : public ARK::Font {
 		BMFont(unsigned int fntResource, unsigned int imgResource, unsigned int imgResourceType);
 		BMFont(const string& f, const string& i);
 		BMFont(const string& f, const string& i, const Color& mask);
-		~BMFont();
 		void drawString(const string& Str, int drawx, int drawy) const;
-		void drawStringCentered(const string& Str, int left_x, int right_x, int y) const;
-		void drawStringCenteredAt(const string& Str, int x, int y) const;
 		unsigned int getStringWidth(const string& Str) const;
 		unsigned int getStringHeight(const string& Str) const;
-		unsigned int getLineHeight() const;
+		unsigned int getLineHeight() const ;
 		Image* getImage() const;
+		virtual ~BMFont();
 	private:
 		bool Parse();
 

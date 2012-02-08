@@ -190,15 +190,6 @@ bool BMFont::Parse() // istream& Stream, Charset& CharsetDesc
 	return true;
 }
 
-void BMFont::drawStringCentered(const string& Str, int left_x, int right_x, int y) const {
-	int c_x = (right_x / 2) + (left_x/2);
-	drawString(Str, c_x - (getStringWidth(Str)/2), y);
-}
-
-void BMFont::drawStringCenteredAt(const string& Str, int x, int y) const {
-	drawString(Str, x - (getStringWidth(Str)/2), y - (getStringHeight(Str)/2));
-}
-
 // remember that u and v are width and height, respectively.
 void BMFont::drawString(const string& Str, int drawx, int drawy) const {
 	if (m_loaded == false) { return; }

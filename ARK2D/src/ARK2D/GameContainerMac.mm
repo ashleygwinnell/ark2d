@@ -29,6 +29,7 @@
 	void* GameContainerPlatform::getARK2DResource(int resourceId, int resourceType) {
 		return new string("");
 	}
+	
 
 	GameContainer::GameContainer(Game& g, int width, int height, int bpp, bool fullscreen):
 		m_timer(),
@@ -108,6 +109,8 @@
 			//	[window setRestorable:NO];
 			//}
 			
+			m_platformSpecific.m_window = window;
+			
 			NSOpenGLContext* context = m_platformSpecific.createGLContext();
 			m_platformSpecific.makeContextCurrent(window, context);
 			
@@ -138,16 +141,44 @@
 
 	} 
 	
+	void GameContainer::setSize(int width, int height) {
+		NSWindow* window = m_platformSpecific.m_window;
+		NSRect frame = [window frame];
+
+		// need to shift origin (bottomleft) so window stays in same place
+		NSSize desiredContentSize = NSMakeSize (width, height); 	
+		frame.origin.x += (frame.size.width - desiredContentSize.width)/2;
+	    frame.origin.y += (frame.size.height - desiredContentSize.height)/2;
+	    frame.size = desiredContentSize;
 	
+	    [window setFrame: frame
+	           display: YES
+	           animate: YES];
+	           
+	    ARK2D::s_game->resize(this, width,height);
+	    m_width = width;
+	    m_height = height;
+	}
 
 	void GameContainer::setFullscreen(bool fullscreen) {
-		/*if (m_fullscreen == fullscreen) { return; }
+		return;
+		
+		// just some kinks to iron out.
+		if (m_fullscreen == fullscreen) { return; }
 	
 		if (isLionPlus()) { 
     		NSWindow* window = m_platformSpecific.m_window;
     		[window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
+    		
     		[window toggleFullScreen:nil]; 
-		}*/
+    		if (!m_fullscreen) {
+    			[window setStyleMask:NSBorderlessWindowMask];
+    		} else {
+    			unsigned int style = (NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask);
+    			[window setStyleMask:style];
+    		}
+    		m_fullscreen = !m_fullscreen;
+		}
 	
 	}
 

@@ -65,6 +65,8 @@ class GameContainer {
 		bool isFullscreen();
 		void setFullscreen(bool fs);
 
+		void setSize(int width, int height);
+
 		bool isResizable();
 		void setResizable(bool fs);
 		void setScaleToWindow(bool b);
@@ -81,7 +83,7 @@ class GameContainer {
 		const GigaRectangle<int>& getWindowRectangle() const;
 		const Game& getGame() const;
 		const Input& getInput() const;
-		const Graphics* getGraphics() const;
+		Graphics* getGraphics() const;
 		unsigned int getWidth() const;
 		unsigned int getHeight() const;
 		vector<Gamepad*> getGamepads() const;

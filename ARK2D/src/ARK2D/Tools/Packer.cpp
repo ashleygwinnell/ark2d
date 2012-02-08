@@ -7,8 +7,8 @@
 
 #include "Packer.h"
 
-string getExtension(string s) {
-	unsigned int pos = s.find_last_of('.') + 1;
+string getExtension(string s) { 
+	unsigned int pos = s.find_last_of('.') + 1;  
 	return s.substr(pos);
 }
 

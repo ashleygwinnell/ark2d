@@ -11,10 +11,10 @@
 #include "Particle.h"
 #include "ParticlePool.h"
 #include "../Color.h"
-#include "../UI/ErrorDialog.h"
+#include "../UI/ErrorDialog.h" 
 #include "../Image/Image.h"
 #include "../Util/StringUtil.h"
-
+ 
 
 
 ParticleSystem* ParticleIO::loadConfiguredSystem(string ref) {

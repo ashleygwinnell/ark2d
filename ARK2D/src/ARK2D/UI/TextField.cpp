@@ -53,7 +53,7 @@ void TextField::render() {
 
 	//AbstractUIComponent::preRender();
 
-	Graphics* g = ARK2D::getGraphics();
+	const Graphics* g = ARK2D::getGraphics();
 	renderBackground();
 
 	if (hasSelection())

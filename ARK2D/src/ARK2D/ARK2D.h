@@ -17,6 +17,7 @@
 #elif defined(_WIN32)
 	#define ARK2D_WINDOWS
 	#include <windows.h>
+	// #include <limits> // bad in mingw 3.x
 #endif
 
 #include <stdint.h>
