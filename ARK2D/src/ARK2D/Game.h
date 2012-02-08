@@ -24,7 +24,7 @@ class Game {
 		virtual void init(GameContainer* container) = 0;
 		virtual void update(GameContainer* container, GameTimer* timer) = 0;
 		virtual void render(GameContainer* container, Graphics* g) = 0;
-		virtual void resize(GameContainer* container, int width, int height) = 0;
+		virtual void resize(GameContainer* container, int width, int height);
 		virtual void keyPressed(unsigned int key);
 		virtual void keyReleased(unsigned int key);
 		virtual void mouseMoved(int x, int y, int oldx, int oldy);

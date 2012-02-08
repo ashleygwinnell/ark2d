@@ -16,7 +16,9 @@
 		m_height(height),
 		m_bpp(bpp),
 		m_fullscreen(fullscreen),
-		m_clearColor(Color::black)
+		m_clearColor(Color::black),
+		m_resizeBehaviour(RESIZE_BEHAVIOUR_SCALE),
+		m_platformSpecific()
 		{
 		m_input.setGameContainer(this);
 

@@ -44,6 +44,7 @@
 		m_resizable(false),
 		m_scaleToWindow(true),
 		m_clearColor(Color::black),
+		m_resizeBehaviour(RESIZE_BEHAVIOUR_SCALE),
 		m_platformSpecific()
 		{
 			NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
@@ -144,9 +145,14 @@
 	void GameContainer::setSize(int width, int height) {
 		NSWindow* window = m_platformSpecific.m_window;
 		NSRect frame = [window frame];
+		
+		NSRect contentRect;
+    	contentRect = [NSWindow contentRectForFrameRect: frame
+								styleMask: NSTitledWindowMask];
+		int diffy = (frame.size.height - contentRect.size.height);
 
 		// need to shift origin (bottomleft) so window stays in same place
-		NSSize desiredContentSize = NSMakeSize (width, height); 	
+		NSSize desiredContentSize = NSMakeSize (width, height + diffy); 	
 		frame.origin.x += (frame.size.width - desiredContentSize.width)/2;
 	    frame.origin.y += (frame.size.height - desiredContentSize.height)/2;
 	    frame.size = desiredContentSize;
@@ -154,10 +160,15 @@
 	    [window setFrame: frame
 	           display: YES
 	           animate: YES];
-	           
-	    ARK2D::s_game->resize(this, width,height);
-	    m_width = width;
-	    m_height = height;
+	    
+	    if (m_resizeBehaviour == RESIZE_BEHAVIOUR_SCALE) {
+	   		ARK2D::s_game->resize(this, width, height);
+	    } else if (m_resizeBehaviour == RESIZE_BEHAVIOUR_NOSCALE) {
+	    	m_width = width;
+	    	m_height = height;
+	    	ARK2D::s_game->resize(this, width, height);
+	    }
+	    
 	}
 
 	void GameContainer::setFullscreen(bool fullscreen) {

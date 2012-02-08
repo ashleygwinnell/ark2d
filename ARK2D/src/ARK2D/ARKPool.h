@@ -15,10 +15,15 @@
 using namespace std;
 
 template <class T=ARKGameObject*>
+class ARKPoolIterator;
+
+template <class T=ARKGameObject*>
 class ARKPool {
+	friend class ARKPoolIterator<T>;
 	private:
 		ARKVector<T> m_inactive;
 		ARKVector<T> m_active;
+		ARKPoolIterator<T>* it;
 
 	public:
 		ARKPool(): m_inactive(), m_active() {
@@ -40,6 +45,13 @@ class ARKPool {
 		}
 		ARKVector<T>* getInactive() {
 			return &m_inactive;
+		}
+		ARKPoolIterator<T>* iterator() {
+			if (it == NULL) {
+				it = new ARKPoolIterator<T>(this);
+			}
+			it->reset();
+			return it;
 		}
 		void setUsingList(bool b) {
 			m_active.setUsingList(b);
@@ -95,6 +107,9 @@ class ARKPool {
 		unsigned int size() {
 			return m_active.size() + m_inactive.size();
 		}
+		unsigned int sizeActive() {
+			return m_active.size();
+		}
 		void updateAll(GameContainer* container, GameTimer* timer) {
 			m_active.updateAll(container, timer);
 		}
@@ -105,6 +120,82 @@ class ARKPool {
 
 		}
 };
+template <class T>
+class ARKPoolIterator {
+	private:
+		ARKPool<T>* parent;
+		unsigned int index;
+		typename list<T>::iterator iterator; // Used only for lists.
+	public:
+		ARKPoolIterator(ARKPool<T>* p): parent(p), index(0), iterator(NULL) {
 
+		}
+		T next() {
+			if (parent->isUsingList()) {
+				if (hasNext()) {
+					T obj = (*iterator);
+					++iterator;
+					return obj;
+				}
+				ErrorDialog::createAndShow("Out of items in Pool Iterator (lst) - returning NULL.");
+				return NULL;
+			}
+
+			if (hasNext()) {
+				T obj = parent->m_active.get(index);
+				++index;
+				return obj;
+			}
+			ErrorDialog::createAndShow("Out of items in Pool Iterator (vec) - returning NULL.");
+			return NULL;
+		}
+		ARKPool<T>* getPool() {
+			return parent;
+		}
+		bool hasNext() {
+			signed int top = parent->m_active.size();
+			if (top == 0) { return false; }
+
+			if (parent->isUsingList()) {
+				if (iterator != parent->m_active.lst.end()) {
+					return true;
+				}
+				return false;
+			}
+
+			signed int thisIndex = index;
+			if (thisIndex >= top) {
+				return false;
+			}
+			return true;
+		}
+		/**
+		 * -1 because .next() forwards to the next element which is not normally the one we are trying to remove.
+		 */
+		void remove() {
+			if (parent->isUsingList()) {
+				iterator--;
+				T obj = (*iterator);
+				iterator = parent->m_active.lst.erase(iterator);
+				parent->m_inactive.add(obj);
+				return;
+			}
+
+			T obj = parent->m_active.get(index-1);
+			parent->m_active.remove(index-1);
+			parent->m_inactive.add(obj);
+		}
+		void reset() {
+			if (parent->isUsingList()) {
+				iterator = parent->m_active.lst.begin();
+				return;
+			}
+
+			index = 0;
+		}
+		~ARKPoolIterator() {
+
+		}
+};
 
 #endif /* ARKPOOL_H_ */

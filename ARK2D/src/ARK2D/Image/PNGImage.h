@@ -30,6 +30,7 @@ class PNGImage {
 		int getWidth();
 		int getHeight();
 		void* getImageData();
+		static void saveFile(std::string filename, char* data, int w, int h);
 		~PNGImage();
 	private:
 		std::string m_filename;

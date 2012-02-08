@@ -183,6 +183,10 @@ GameContainer* StateBasedGame::getContainer() {
 	return m_container;
 }
 
+void StateBasedGame::resize(GameContainer* container, int width, int height) {
+	Game::resize(container, width, height);
+}
+
 void StateBasedGame::keyPressed(unsigned int key) {
 	Game::keyPressed(key);
 	m_current_state->keyPressed(key);

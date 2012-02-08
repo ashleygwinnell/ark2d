@@ -18,6 +18,7 @@
 
 #include "../ARK2D_GL.h"
 #include "../UI/ErrorDialog.h"
+#include "../Util/StringUtil.h"
 
 #include "PNGImage.h"
 
@@ -357,6 +358,97 @@ int PNGImage::load() {
 
 	return 0;
 
+}
+
+void PNGImage::saveFile(std::string filename, char* data, int w, int h) {
+	/* create file */
+	FILE* fp = fopen(filename.c_str(), "wb");
+	if (!fp) {
+		ErrorDialog::createAndShow(StringUtil::append("[write_png_file] File %s could not be opened for writing", filename));
+		return;
+	}
+
+	/* initialize stuff */
+	png_structp png_ptr;
+	png_infop info_ptr;
+
+	png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+	if (!png_ptr) {
+		ErrorDialog::createAndShow("[write_png_file] png_create_write_struct failed");
+		return;
+	}
+
+	info_ptr = png_create_info_struct(png_ptr);
+	if (!info_ptr) {
+		ErrorDialog::createAndShow("[write_png_file] png_create_info_struct failed");
+		return;
+	}
+
+	if (setjmp(png_jmpbuf(png_ptr))) {
+		ErrorDialog::createAndShow("[write_png_file] Error during init_io");
+		return;
+	}
+
+	png_init_io(png_ptr, fp);
+
+//	png_set_sig_bytes(png_ptr, 8);
+
+
+	/* write header */
+	if (setjmp(png_jmpbuf(png_ptr))) {
+		ErrorDialog::createAndShow("[write_png_file] Error during writing header");
+		return;
+	}
+
+	png_set_IHDR(png_ptr, info_ptr, w, h,
+				 8, PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,
+				 PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
+
+	png_write_info(png_ptr, info_ptr);
+
+
+	/* write bytes */
+	if (setjmp(png_jmpbuf(png_ptr))) {
+		ErrorDialog::createAndShow("[write_png_file] Error during writing bytes");
+		return;
+	}
+
+	png_bytep* row_pointers = (png_bytep*) malloc(sizeof(png_bytep) * h);
+	for (int y=0; y<h; y++) {
+		row_pointers[y] = (png_byte*) malloc(w*4); //png_get_rowbytes(png_ptr,info_ptr));
+	}
+	int curOffset = 0;
+	for(int i = h-1; i >= 0; i--) {
+		png_byte* row = row_pointers[i];
+		for (int j = 0; j < w; j++) {
+			png_byte* ptr = &row[j*4];
+			memcpy(&ptr[0], (data + curOffset), 1);
+			memcpy(&ptr[1], (data + curOffset + 1), 1);
+			memcpy(&ptr[2], (data + curOffset + 2), 1);
+			memcpy(&ptr[3], (data + curOffset + 3), 1);
+			curOffset += 4;
+		}
+	}
+	png_write_image(png_ptr, row_pointers);
+
+
+
+
+	/* end write */
+	if (setjmp(png_jmpbuf(png_ptr))) {
+		ErrorDialog::createAndShow("[write_png_file] Error during end of write");
+		return;
+	}
+
+	png_write_end(png_ptr, NULL);
+
+	/* cleanup heap allocation */
+	for (int y = 0 ; y < h; y++) {
+		free(row_pointers[y]);
+	}
+	free(row_pointers);
+
+	fclose(fp);
 }
 
 PNGImage::~PNGImage() {

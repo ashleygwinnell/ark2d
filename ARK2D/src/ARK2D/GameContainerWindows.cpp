@@ -171,6 +171,7 @@
 			m_resizable(false),
 			m_scaleToWindow(true),
 			m_clearColor(Color::black),
+			m_resizeBehaviour(RESIZE_BEHAVIOUR_SCALE),
 			m_platformSpecific()
 		{
 			m_platformSpecific.m_container = this;

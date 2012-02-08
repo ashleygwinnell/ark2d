@@ -4,6 +4,7 @@
  *  Created on: 15-Oct-2009
  *      Author: user
  */
+#include "ARK2D.h"
 #include "Game.h"
 #include "GameContainer.h"
 #include "Timeline.h"
@@ -31,7 +32,29 @@ void Game::update(GameContainer* container, GameTimer* timer) {
 }
 //void Game::render(GameContainer& container, const Graphics& g) = 0;
 //void Game::resize(GameContainer& container, int width, int height) = 0;
+void Game::resize(GameContainer* container, int width, int height) {
+	if (container->getResizeBehaviour() == GameContainer::RESIZE_BEHAVIOUR_SCALE)
+	{
+		glLoadIdentity();
+		glViewport(0, 0, width, height);
 
+	}
+	else if (container->getResizeBehaviour() == GameContainer::RESIZE_BEHAVIOUR_NOSCALE)
+	{
+		glLoadIdentity();
+		glViewport(0, 0, width, height);
+
+		glMatrixMode(GL_PROJECTION) ;
+		glPushMatrix();
+		glLoadIdentity();
+
+		glOrtho(0, width, height, 0, -1, 1);
+
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+		glLoadIdentity();
+	}
+}
 
 void Game::keyPressed(unsigned int key) {
 

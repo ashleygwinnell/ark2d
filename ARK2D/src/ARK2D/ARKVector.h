@@ -20,9 +20,13 @@ using namespace std;
 template <class T=ARKGameObject*>
 class ARKVectorIterator;
 
+template <class T>
+class ARKPoolIterator;
+
 template <class T=ARKGameObject*>
 class ARKVector {
 	friend class ARKVectorIterator<T>;
+	friend class ARKPoolIterator<T>;
 	private:
 		vector<T> vec;
 		list<T> lst;

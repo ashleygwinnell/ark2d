@@ -579,9 +579,10 @@ if __name__ == "__main__":
 		f.close();
 		
 		#print(fcontents);
-		j = json.loads(fcontents);
+		j = False; 
 		
 		try:
+			j = json.loads(fcontents);
 			blah = j["game_name"];
 		except:
 			print("Config.json invalid or trying to build game from framework path.");

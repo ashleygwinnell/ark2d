@@ -91,6 +91,11 @@ class GameContainer {
 		// always ends in the trailing slash.
 		string getResourcePath() const;
 
+		int getResizeBehaviour();
+		void setResizeBehaviour(int b);
+
+		void saveScreenshot(string filename);
+
 		void close() const;
 		~GameContainer();
 
@@ -137,10 +142,14 @@ class GameContainer {
 
 		bool m_bRunning;
 
+		int m_resizeBehaviour;
+
+
 	// Platform Specific
 	public:
 		GameContainerPlatform m_platformSpecific;
-
+		static const int RESIZE_BEHAVIOUR_SCALE = 0;
+		static const int RESIZE_BEHAVIOUR_NOSCALE = 1;
 
 
 

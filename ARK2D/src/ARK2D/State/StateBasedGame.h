@@ -57,7 +57,7 @@ class StateBasedGame : public Game {
 		bool isInitialised();
 
 		virtual void initStates(GameContainer* container) = 0;
-		virtual void resize(GameContainer* container, int width, int height) = 0;
+		virtual void resize(GameContainer* container, int width, int height);
 
 		virtual void keyPressed(unsigned int key);
 		virtual void keyReleased(unsigned int key);
