@@ -32,12 +32,12 @@ void Panel::preRender() {
 }
 void Panel::postRender() {
 	AbstractUIComponent::postRender();
-
 	if (m_translate) {
 		Graphics* g = ARK2D::getGraphics();
 		g->popMatrix();
 	}
 	renderBorder();
+
 }
 void Panel::render() {
 	if (m_visible) {

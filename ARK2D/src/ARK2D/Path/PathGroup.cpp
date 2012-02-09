@@ -63,6 +63,7 @@ string PathGroup::getDescription() {
 }
 
 void PathGroup::setTimer(float t) {
+	if (t < 0) { timer = 0; return; }
 	timer = t;
 }
 float PathGroup::getTimer() {
@@ -302,10 +303,13 @@ void PathGroup::updateCenter() {
 }
 
 void PathGroup::renderCurve() {
+	renderCurve(Color::red);
+}
+void PathGroup::renderCurve(const Color& c) {
 	Graphics* g = ARK2D::getGraphics();
 
 	float ptimer = getTimer();
-	g->setDrawColor(Color::red);
+	g->setDrawColor(c);
 	setTimer(0.0f);
 	updateCurrent();
 	float px = getLocation()->getX(); //paths.at(0)->subpaths.at(0)->points.at(0)->getX();

@@ -107,13 +107,14 @@
 			[window setDelegate:listener];
 			
 			//if (isLionPlus()) {
-			//	[window setRestorable:NO];
-			//}
+			//	[window setRestorable:NO]; 
+			//} 
 			
 			m_platformSpecific.m_window = window;
 			
 			NSOpenGLContext* context = m_platformSpecific.createGLContext();
 			m_platformSpecific.makeContextCurrent(window, context);
+			m_platformSpecific.m_context = context;
 			
 			//enable gl
 			glEnable(GL_TEXTURE_2D);
@@ -144,23 +145,28 @@
 	
 	void GameContainer::setSize(int width, int height) {
 		NSWindow* window = m_platformSpecific.m_window;
-		NSRect frame = [window frame];
+		NSRect windowFrame = [window frame];
 		
 		NSRect contentRect;
-    	contentRect = [NSWindow contentRectForFrameRect: frame
+    	contentRect = [NSWindow contentRectForFrameRect: windowFrame
 								styleMask: NSTitledWindowMask];
-		int diffy = (frame.size.height - contentRect.size.height);
+		int diffy = (windowFrame.size.height - contentRect.size.height);
 
 		// need to shift origin (bottomleft) so window stays in same place
 		NSSize desiredContentSize = NSMakeSize (width, height + diffy); 	
-		frame.origin.x += (frame.size.width - desiredContentSize.width)/2;
-	    frame.origin.y += (frame.size.height - desiredContentSize.height)/2;
-	    frame.size = desiredContentSize;
+		windowFrame.origin.x += (windowFrame.size.width - desiredContentSize.width)/2;
+	    windowFrame.origin.y += (windowFrame.size.height - desiredContentSize.height)/2;
+	    windowFrame.size = desiredContentSize;
+	    contentRect.size = desiredContentSize;
 	
-	    [window setFrame: frame
-	           display: YES
-	           animate: YES];
-	    
+		// need to resize opengl NSView
+		//NSView* windowView = (NSView*) [window contentView];
+		//NSRect windowViewRect = [windowView frame];
+		NSRect windowViewRect = [[window contentView] frame];
+		windowViewRect.size = desiredContentSize;
+		
+		
+	
 	    if (m_resizeBehaviour == RESIZE_BEHAVIOUR_SCALE) {
 	   		ARK2D::s_game->resize(this, width, height);
 	    } else if (m_resizeBehaviour == RESIZE_BEHAVIOUR_NOSCALE) {
@@ -168,7 +174,12 @@
 	    	m_height = height;
 	    	ARK2D::s_game->resize(this, width, height);
 	    }
-	    
+	     [[window contentView] setFrame: windowViewRect];
+	     [window setFrame: windowFrame
+	           display: YES
+	           animate: YES];
+	           
+	           [m_platformSpecific.m_context update];
 	}
 
 	void GameContainer::setFullscreen(bool fullscreen) {
@@ -296,6 +307,7 @@
 			0 };
 		NSOpenGLPixelFormat* format = [[NSOpenGLPixelFormat alloc] initWithAttributes:attr];
 		NSOpenGLContext* glContext = [[NSOpenGLContext alloc] initWithFormat: format shareContext: nil];
+		//m_context = glContext;
 		//[glContext makeCurrentContext];
 	    
 	    [pool release];

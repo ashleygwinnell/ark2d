@@ -84,6 +84,7 @@ class PathGroup {
 
 		virtual void render();
 		virtual void renderCurve();
+		virtual void renderCurve(const Color& c);
 		virtual void renderPoint(float x, float y, bool linkPoint);
 		virtual void renderLine(float x, float y, float x2, float y2);
 		virtual ~PathGroup();

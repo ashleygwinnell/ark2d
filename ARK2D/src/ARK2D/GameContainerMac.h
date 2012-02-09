@@ -27,6 +27,7 @@
 				GameContainer* m_container;
 				NSWindow* m_window;
 				string m_resourcePath;
+				NSOpenGLContext* m_context;
 
 				static void* getARK2DResource(int resourceId, int resourceType);
 
