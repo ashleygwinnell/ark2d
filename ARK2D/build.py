@@ -176,6 +176,20 @@ class ARK2DBuildSystem:
 			f = open(path, "w");
 			f.write("{}");
 			f.close();
+			
+	def rmdir_recursive(self, dir):
+	    """Remove a directory, and all its contents if it is not already empty."""
+	    for name in os.listdir(dir):
+	        full_name = os.path.join(dir, name)
+	        # on Windows, if we don't have write permission we can't remove
+	        # the file/directory either, so turn that on
+	        if not os.access(full_name, os.W_OK):
+	            os.chmod(full_name, 0600)
+	        if os.path.isdir(full_name):
+	            rmdir_recursive(full_name)
+	        else:
+	            os.remove(full_name)
+	    os.rmdir(dir)
 		
 	def startWindows(self):
 		print("Hurray for windows");
@@ -486,47 +500,117 @@ class ARK2DBuildSystem:
 		f.close();
 		config = json.loads(fcontents);
 		
+		
+		
 		nl = "\r\n";
 		ndkdir = config['mac']['android']['ndk_dir'];
 		ndkprojectpath = config['mac']['ark2d_dir']
 		appbuilddir = ndkprojectpath+"/build/android";
 		appbuildscript = ndkprojectpath+"/build/android/Android.mk";
-		appbuildscript2 = ndkprojectpath+"/build/android/Application.mk";
-		appplatform= "android-4";
+		#appbuildscript2 = ndkprojectpath+"/build/android/Application.mk";
+		jnifolder = ndkprojectpath+"/jni";
+		appbuildscript3 = ndkprojectpath+"/jni/Application.mk";
+		appplatform= "android-5";
+		
+		# make some directories...
+		thisdirs = [ndkprojectpath + "/build", appbuilddir, jnifolder];
+		for thisstr in thisdirs:
+			print("mkdir " + thisstr);
+			try:
+				os.makedirs(thisstr);
+			except OSError as exc: 
+				if exc.errno == errno.EEXIST:
+					pass
+				else: raise
+		
+		
+		#copy stuff in vendor to ndk directory. 
+		#freetype
+		print("copying vendor headers (freetype)");
+		copyfreetype1 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/freetype/jni/include ' + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/";
+		copyfreetype2 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/freetype/jni/include ' + ndkdir + "/platforms/"+appplatform+"/arch-x86/usr/";
+		subprocess.call([copyfreetype1], shell=True);
+		subprocess.call([copyfreetype2], shell=True);
+		
+		print("Compiling vendor sources (freetype)");
+		libfreetypedir = ndkprojectpath + "/src/ARK2D/vendor/android/freetype";
+		compilefreetype1 = ndkdir + "/ndk-build NDK_PROJECT_PATH=" + libfreetypedir +" APP_PROJECT_PATH=" + libfreetypedir + " APP_BUILD_SCRIPT=" + libfreetypedir + "/jni/Android.mk APP_PLATFORM=" + appplatform;  
+		print(compilefreetype1);
+		subprocess.call([compilefreetype1], shell=True);
+		subprocess.call(['cp -r ' + libfreetypedir + "/obj/local/armeabi/libfreetype.a " + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/lib"], shell=True);
+		
+		#openal
+		print("copying vendor headers (openal)");
+		copyopenal1 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/openal/jni/include ' + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/";
+		copyopenal2 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/openal/jni/include ' + ndkdir + "/platforms/"+appplatform+"/arch-x86/usr/";
+		subprocess.call([copyopenal1], shell=True);
+		subprocess.call([copyopenal2], shell=True);
+		
+		print("Compiling vendor sources (openal)");
+		libopenaldir = ndkprojectpath + "/src/ARK2D/vendor/android/openal";
+		compileopenal1 = ndkdir + "/ndk-build NDK_PROJECT_PATH=" + libopenaldir +" APP_PROJECT_PATH=" + libopenaldir + " APP_BUILD_SCRIPT=" + libopenaldir + "/jni/Android.mk APP_PLATFORM=" + appplatform;  
+		print(compileopenal1);
+		subprocess.call([compileopenal1], shell=True);
+		subprocess.call(['cp -r ' + libopenaldir + "/libs/armeabi/libopenal.so " + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/lib"], shell=True);
+		
+		
 		
 		#make android.mk
+		print("Creating Android.mk");
 		android_make_file = "";
 		android_make_file += "LOCAL_PATH := $(call my-dir)/../../" + nl + nl;
 		android_make_file += "include $(CLEAR_VARS)" + nl+nl;
 		android_make_file += "LOCAL_MODULE    := ark2d" + nl+nl; # Here we give our module name and source file(s)
 		#android_make_file += "LOCAL_C_INCLUDES := $(LOCAL_PATH)/../libzip/ $(LOCAL_PATH)/../libpng/" + nl;
 		#android_make_file += "LOCAL_STATIC_LIBRARIES := libzip libpng" + nl;
-		android_make_file += "LOCAL_CFLAGS := -DARK2D_ANDROID -DDISABLE_IMPORTGL -Wno-psabi" + nl+nl;
+		#android_make_file += "LOCAL_C_INCLUDES += external/stlport/stlport" + nl+nl;
+		android_make_file += "LOCAL_SHARED_LIBRARIES += libstdc++" + nl+nl;
+		android_make_file += "LOCAL_CFLAGS := -DARK2D_ANDROID -DDISABLE_IMPORTGL -fno-exceptions -fno-rtti -Wno-psabi" + nl+nl;
 		android_make_file += "LOCAL_DEFAULT_CPP_EXTENSION := cpp" + nl+nl; 
 		android_make_file += "LOCAL_SRC_FILES := \\" + nl;
 		for h in self.src_files: #foreach file on config...
 			android_make_file += "	" + h + " \\" + nl;
 		android_make_file += nl;
-		android_make_file += "LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz" + nl+nl;
+		android_make_file += "LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz -lfreetype -lopenal " + nl+nl;
 		android_make_file += "include $(BUILD_SHARED_LIBRARY)" + nl;
 		f = open(appbuildscript, "w");
 		f.write(android_make_file);
 		f.close();
 		
 		#make application.mk
+		print("Creating Application.mk");
 		application_make_file = "";
-		#application_make_file += "APP_PROJECT_PATH := " + ndkprojectpath + nl;
-		#application_make_file += "APP_BUILD_SCRIPT := " + appbuildscript + nl;
+		application_make_file += "APP_PROJECT_PATH := " + ndkprojectpath + nl;
+		application_make_file += "APP_BUILD_SCRIPT := " + appbuildscript + nl;
+		application_make_file += "NDK_APP_OUT=" + appbuilddir + nl;
+		application_make_file += "NDK_PROJECT_PATH=" + ndkprojectpath + nl;
 		#application_make_file += "APP_ABI := all" + nl;
-		#application_make_file += "APP_ABI := armeabi armeabi-v7a x86" + nl;
-		application_make_file += "APP_STL := stlport_static" + nl;
-		f = open(appbuildscript2, "w");
+		#application_make_file += "APP_ABI := armeabi"; # armeabi-v7a x86" + nl;
+		application_make_file += "APP_STL := stlport_static" + nl; 
+		f = open(appbuildscript3, "w");
 		f.write(application_make_file);
 		f.close();
 		
-		buildline = ndkdir + "/ndk-build NDK_PROJECT_PATH=" + ndkprojectpath + " APP_BUILD_SCRIPT=" + appbuildscript + " NDK_APP_OUT=" + appbuilddir + " APP_PLATFORM=" + appplatform;
+		buildline = ndkdir + "/ndk-build";
+		buildline += " NDK_PROJECT_PATH=" + ndkprojectpath;
+		buildline += " NDK_APP_OUT=" + appbuilddir;
+		buildline += " APP_PROJECT_PATH=" + ndkprojectpath;
+		buildline += " APP_BUILD_SCRIPT=" + appbuildscript;
+		buildline += " APP_PLATFORM=" + appplatform;
+		#buildline += " NDK_LOG=1";
+		print("Building library");
 		print(buildline);
 		subprocess.call([buildline], shell=True);	
+		
+		print("Moving output to build folder");
+		libsdir = ndkprojectpath + "/libs";
+		subprocess.call(["cp -r " + libsdir + " " + appbuilddir + "/" ], shell=True);
+		
+		print("removing temp folders");
+		self.rmdir_recursive(libsdir);
+		self.rmdir_recursive(jnifolder);
+		
+		print("done!");
 		
 	def start(self):
 	

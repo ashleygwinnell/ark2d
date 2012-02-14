@@ -8,14 +8,7 @@
 #ifndef CAST_H_
 #define CAST_H_
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <cstdio>
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <cstring>
-
+#include "../ARK2D.h"
 #include "../UI/ErrorDialog.h"
 
 using namespace std;

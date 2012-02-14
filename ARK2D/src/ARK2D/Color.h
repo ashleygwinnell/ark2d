@@ -9,9 +9,7 @@
 #ifndef COLOR_H_
 #define COLOR_H_
 
-#include <string>
-#include <cstring>
-#include <stdlib.h>
+#include "ARK2D.h"
 #include "Util/MathUtil.h"
 #include "ARK2D_GL.h"
 

@@ -8,12 +8,12 @@
 #ifndef PNGIMAGE_H_
 #define PNGIMAGE_H_
 
+#include "../ARK2D.h"
 #include "../ARK2D_GL.h"
 
 #include "../vendor/lpng151/png.h"
 //#include <png.h>
-#include <string>
-#include <iostream>
+
 
 class PNGImagestream {
 	public:

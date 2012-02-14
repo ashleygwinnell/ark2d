@@ -5,20 +5,12 @@
  *      Author: Ashley
  */
 
-#include <stdlib.h>
-#include <string>
 
 #include "ErrorDialog.h"
 #include "../ARK2D.h"
 
-#if defined(ARK2D_WINDOWS)
-	#include <windows.h>
-#elif defined(ARK2D_MACINTOSH)
-	#include <Cocoa/Cocoa.h>
-#endif
-
-void ErrorDialog::createAndShow(std::string message) {
-	#ifdef _WIN32
+void ErrorDialog::createAndShow(string message) {
+	#if defined(ARK2D_WINDOWS)
 		MessageBox(NULL, message.c_str(), NULL, MB_OK | MB_ICONEXCLAMATION);
 	#elif defined(ARK2D_MACINTOSH)
 

@@ -10,10 +10,12 @@
 
 #include "../ARK2D_GL.h"
 
-using std::ifstream;
-using std::string;
-using std::istream;
-using std::vector;
+//using std::ifstream;
+//using std::string;
+//using std::istream;
+//using std::vector;
+
+using namespace std;
 
 TargaImage::TargaImage():
 	m_width(0),

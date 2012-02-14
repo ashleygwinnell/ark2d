@@ -51,28 +51,34 @@ void FadeTransition::preRender(GameContainer* container, StateBasedGame* game, G
 }
 void FadeTransition::postRender(GameContainer* container, StateBasedGame* game, Graphics* g) {
 
-	glColor4f(1.0f, 1.0f, 1.0f, m_alpha);
+	#if defined(ARK2D_ANDROID)
+		// ...
+	#else
 
-	int m_Width = container->getWidth();
-	int m_Height = container->getHeight();
+		glColor4f(1.0f, 1.0f, 1.0f, m_alpha);
 
-	glBindTexture(GL_TEXTURE_2D, m_textureId);
-	glPushMatrix();
-	glBegin( GL_QUADS );
-		glTexCoord2f( 0, 1.0f);
-		glVertex2f(0, 0);
+		int m_Width = container->getWidth();
+		int m_Height = container->getHeight();
 
-		glTexCoord2f( 0, 0 );
-		glVertex2f(0, m_Height);
+		glBindTexture(GL_TEXTURE_2D, m_textureId);
+		glPushMatrix();
+		glBegin( GL_QUADS );
+			glTexCoord2f( 0, 1.0f);
+			glVertex2f(0, 0);
 
-		glTexCoord2f( 1.0f, 0.0f );
-		glVertex2f(m_Width, m_Height);
+			glTexCoord2f( 0, 0 );
+			glVertex2f(0, m_Height);
 
-		glTexCoord2f(1.0f, 1.0f );
-		glVertex2f(m_Width, 0);
-	glEnd();
-	glPopMatrix();
-	glBindTexture(GL_TEXTURE_2D, 0);
+			glTexCoord2f( 1.0f, 0.0f );
+			glVertex2f(m_Width, m_Height);
+
+			glTexCoord2f(1.0f, 1.0f );
+			glVertex2f(m_Width, 0);
+		glEnd();
+		glPopMatrix();
+		glBindTexture(GL_TEXTURE_2D, 0);
+
+	#endif
 
 }
 bool FadeTransition::isComplete() {

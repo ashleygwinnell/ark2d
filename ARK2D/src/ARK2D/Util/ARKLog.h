@@ -8,8 +8,11 @@
 #ifndef ARKLOG_H_
 #define ARKLOG_H_
 
-#include <string>
-#include <list>
+#include "../ARK2D.h"
+//#ifndef ARK2D_ANDROID
+//	#include <string>
+//	#include <list>
+//#endif
 
 struct GameContainer;
 struct Graphics;

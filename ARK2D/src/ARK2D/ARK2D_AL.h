@@ -5,7 +5,43 @@
  *      Author: ashley
  */
 
-#ifdef ARK2D_WINDOWS
+#if defined(ARK2D_ANDROID)
+	/*typedef unsigned int ALuint;
+	typedef float ALfloat;
+	typedef int ALenum;
+	typedef int ALint;
+
+*/
+
+	/*#ifndef SOUNDTEMP__
+	#define SOUNDTEMP__
+
+		#define AL_SOURCE_STATE 0
+		#define AL_PLAYING 0
+		#define AL_GAIN 0
+		#define AL_PITCH 0
+		#define AL_POSITION 0
+
+		void alSourcePlay(ALuint i) { }
+		void alSourcePause(ALuint i) { }
+		void alSourceStop(ALuint i) {}
+		void alGetSourcei(ALuint i, ALuint j, ALfloat k) {  }
+		void alSourcef(ALuint i, ALuint j, ALfloat k) { }
+		void alSourcefv(ALuint i, ALuint j, ALfloat* k) { }
+		bool alIsSource(ALuint i) { return false; }
+		bool alIsBuffer(ALuint i) { return false; }
+		void alDeleteSources(ALuint d, ALuint* i) {}
+		void alDeleteBuffers(ALuint d, ALuint* i) {}
+	#endif*/
+
+	#include <AL/AL.h>
+	#include <AL/ALc.h>
+	#include <AL/ALext.h>
+
+	#include "vendor/ogg130/ogg.h"
+	#include "vendor/vorbis132/vorbisfile.h"
+
+#elif defined(ARK2D_WINDOWS)
 	#include <AL/AL.h>
 	#include <AL/ALc.h>
 	#include <AL/ALext.h>

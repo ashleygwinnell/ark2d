@@ -123,7 +123,8 @@ const string StringUtil::base64_chars =
 
 
 bool StringUtil::is_base64(unsigned char c) {
-	return (isalnum(c) || (c == '+') || (c == '/'));
+	return (base64_chars.find(c) != string::npos);
+	//return (isalnum(c) || (c == '+') || (c == '/'));
 }
 
 string StringUtil::encodeBase64(const unsigned char* bytes_to_encode, unsigned int in_len) {
@@ -218,44 +219,47 @@ bool StringUtil::file_exists(const char * filename) {
 }
 
 char* StringUtil::file_get_contents(const char* fileName) {
-    if (fileName != NULL) {
+	#if defined(ARK2D_ANDROID)
+		return NULL;
+	#else
+		if (fileName != NULL) {
 
-    	std::cout << "Opening file: " << fileName << std::endl;
-    	std::fstream f(fileName, std::ios::in);
-    	if (!f.is_open()) {
-    		//std::cout << "File does not exist." << std::endl;
-    		string str = "Could not open file ["; str += fileName; str += "] as it does not exist.";
-    		//ErrorDialog::createAndShow(str);
-    		std::cout << str << std::endl;
-    		return NULL;
-    	} else {
-    		f.close();
+			std::cout << "Opening file: " << fileName << std::endl;
+			std::fstream f(fileName, std::ios::in);
+			if (!f.is_open()) {
+				//std::cout << "File does not exist." << std::endl;
+				string str = "Could not open file ["; str += fileName; str += "] as it does not exist.";
+				//ErrorDialog::createAndShow(str);
+				std::cout << str << std::endl;
+				return NULL;
+			} else {
+				f.close();
 
-    		char* text = NULL;
+				char* text = NULL;
 
-    		FILE* file = fopen(fileName, "rt");
-    		if (file == NULL) {
-    			string str = "Could not open file ["; str += fileName; str += "] as it does not exist.";
-    			std::cout << str << std::endl;
-    			return NULL;
-    		}
+				FILE* file = fopen(fileName, "rt");
+				if (file == NULL) {
+					string str = "Could not open file ["; str += fileName; str += "] as it does not exist.";
+					std::cout << str << std::endl;
+					return NULL;
+				}
 
-    		fseek(file, 0, SEEK_END);
-			int count = ftell(file);
-			rewind(file);
+				fseek(file, 0, SEEK_END);
+				int count = ftell(file);
+				rewind(file);
 
-			if (count > 0) {
-				text = (char*)malloc(sizeof(char) * (count + 1));
-				count = fread(text, sizeof(char), count, file);
-				text[count] = '\0';
+				if (count > 0) {
+					text = (char*)malloc(sizeof(char) * (count + 1));
+					count = fread(text, sizeof(char), count, file);
+					text[count] = '\0';
+				}
+				fclose(file);
+
+				return text;
 			}
-			fclose(file);
-
-			return text;
-    	}
-    }
-    return NULL;
-
+		}
+		return NULL;
+	#endif
 }
 
 void StringUtil::toUpper(string& str) {
@@ -285,9 +289,13 @@ void StringUtil::toLower(string& str) {
 		}
 	}*/
 
-	for (unsigned int q = 0; q < str.length(); q++) {
-		str[q] = tolower(str[q]);
-	}
+	#if defined(ARK2D_ANDROID)
+		//ErrorDialog::createAndShow("not implemented");
+	#else
+		for (unsigned int q = 0; q < str.length(); q++) {
+			str[q] = tolower(str[q]);
+		}
+	#endif
 
 }
 

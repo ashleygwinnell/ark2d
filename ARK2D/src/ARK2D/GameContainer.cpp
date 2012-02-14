@@ -9,16 +9,13 @@
 #include "GameContainer.h"
 #include "ARK2D.h"
 
-
-#if defined(ARK2D_WINDOWS)
+#if defined(ARK2D_ANDROID)
+	#include "GameContainerAndroid.h"
+#elif defined(ARK2D_WINDOWS)
 	#include "GameContainerWindows.h"
-#endif
-
-#if defined(__linux__) || defined(ARK2D_UBUNTU_LINUX)
+#elif defined(ARK2D_UBUNTU_LINUX)
 	#include "GameContainerLinux.h"
-#endif
-
-#if defined(ARK2D_MACINTOSH)
+#elif defined(ARK2D_MACINTOSH)
 	#include "GameContainerMac.h"
 #endif
 
@@ -61,15 +58,19 @@ void GameContainer::setTitle(const std::string title) {
 }
 
 void GameContainer::enable2D() {
-	glMatrixMode(GL_PROJECTION) ;
-	glPushMatrix();
-	glLoadIdentity();
+	#if defined(ARK2D_ANDROID)
 
-	glOrtho(0, m_width, m_height, 0, -1, 1);
+	#else
+		glMatrixMode(GL_PROJECTION) ;
+		glPushMatrix();
+		glLoadIdentity();
 
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glLoadIdentity();
+		glOrtho(0, m_width, m_height, 0, -1, 1);
+
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+		glLoadIdentity();
+	#endif
 }
 
 void GameContainer::disable2D() {

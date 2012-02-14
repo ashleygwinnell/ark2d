@@ -12,7 +12,8 @@
 #include "../ARK2D_windres.h"
 
 
-#include <string>
+//#include <string>
+#include "../ARK2D.h"
 #include "TargaImage.h"
 #include "BMPImage.h"
 #include "PNGImage.h"

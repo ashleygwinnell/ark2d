@@ -66,7 +66,10 @@ void SlideRectanglesAcrossTransition::update(GameContainer* container, StateBase
 
 
 void SlideRectanglesAcrossTransition::halfwayLogic(GameContainer* container, StateBasedGame* game) {
-	std::random_shuffle(m_sliderects.begin(), m_sliderects.end());
+	#if defined(ARK2D_ANDROID)
+	#else
+		std::random_shuffle(m_sliderects.begin(), m_sliderects.end());
+	#endif
 }
 
 void SlideRectanglesAcrossTransition::preRender(GameContainer* container, StateBasedGame* game, Graphics* g) {

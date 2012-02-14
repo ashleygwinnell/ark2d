@@ -61,13 +61,19 @@ class ARKPool {
 			return m_active.isUsingList();
 		}
 		T get() {
+#ifdef EXCEPTIONS_AVAILABLE
 			try {
+#else
+				if (m_inactive.size() == 0) { ErrorDialog::createAndShow("ARKPool is empty"); return NULL; }
+#endif
 				T obj = m_inactive.pop();
 				m_active.add(obj);
 				return obj;
+#ifdef EXCEPTIONS_AVAILABLE
 			} catch(exception& e) {
 				throw e;
 			}
+#endif
 			return NULL;
 		}
 		void prune(T obj) {
@@ -82,6 +88,7 @@ class ARKPool {
 			m_inactive.add(obj);
 			it->remove();
 		}
+
 		void pruneAll() {
 			ARKVectorIterator<T>* it = m_active.iterator();
 			while (it->hasNext()) {
@@ -103,6 +110,14 @@ class ARKPool {
 					i = 0;
 				}
 			}*/
+		}
+		void reset() {
+			ARKVectorIterator<T>* it = m_active.iterator();
+			while (it->hasNext()) {
+				T obj = it->next();
+				obj->setPendingRemoval(true);
+			}
+			pruneAll();
 		}
 		unsigned int size() {
 			return m_active.size() + m_inactive.size();

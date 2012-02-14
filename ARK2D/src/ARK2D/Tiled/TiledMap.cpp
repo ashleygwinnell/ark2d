@@ -529,11 +529,11 @@ TiledMapLayer* TiledMap::getLayerByName(const char* name) {
 }
 
 TiledMapLayer* TiledMap::getLayer(unsigned int index) {
-	try {
-		return &m_layers.at(index);
-	}  catch (...) {
-		ErrorDialog::createAndShow(StringUtil::append("There is no Layer at index: ", index)); exit(0);
+	if (index >= m_layers.size()) {
+		ErrorDialog::createAndShow(StringUtil::append("There is no Layer at index: ", index));
+		return NULL;
 	}
+	return &m_layers.at(index);
 }
 
 TiledMapObjectGroup* TiledMap::getObjectGroupByName(const char* name) {
@@ -547,27 +547,27 @@ TiledMapObjectGroup* TiledMap::getObjectGroupByName(const char* name) {
 	return NULL;
 }
 TiledMapObjectGroup* TiledMap::getObjectGroup(unsigned int index) {
-	try {
-		return &m_objectgroups.at(index);
-	}  catch (...) {
-		ErrorDialog::createAndShow(StringUtil::append("There is no Object group at index: ", index)); exit(0);
+	if (index >= m_objectgroups.size()) {
+		ErrorDialog::createAndShow(StringUtil::append("There is no Object group at index: ", index));
+		return NULL;
 	}
+	return &m_objectgroups.at(index);
 }
 
 TiledMapTileset* TiledMap::getTileset(unsigned int index) {
-	try {
-		return &m_tilesets.at(index);
-	} catch (...) {
-		ErrorDialog::createAndShow(StringUtil::append("There is no Tileset at index: ", index)); exit(0);
+	if (index >= m_tilesets.size()) {
+		ErrorDialog::createAndShow(StringUtil::append("There is no Tileset at index: ", index));
+		return NULL;
 	}
+	return &m_tilesets.at(index);
 }
 
 TiledMapProperty* TiledMap::getProperty(unsigned int index) {
-	try {
-		return &m_properties.at(index);
-	} catch (...) {
-		ErrorDialog::createAndShow(StringUtil::append("There is no TiledMap Property at index: ", index)); exit(0);
+	if (index >= m_properties.size()) {
+		ErrorDialog::createAndShow(StringUtil::append("There is no TiledMap Property at index: ", index));
+		return NULL;
 	}
+	return &m_properties.at(index);
 }
 TiledMapProperty* TiledMap::getPropertyByName(const char* name) {
 	vector<TiledMapProperty>::iterator it;

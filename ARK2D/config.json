@@ -212,7 +212,7 @@
 			"src/ARK2D/GameContainerMacWindowListener.mm"
 		],
 		"android": [
-			
+			"src/ARK2D/GameContainerAndroid.cpp"
 		]	
 	}
 }

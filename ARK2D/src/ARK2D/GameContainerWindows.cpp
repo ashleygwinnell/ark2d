@@ -216,7 +216,7 @@
 		}
 
 		void GameContainer::setSize(int width, int height) {
-
+ 
 		}
 
 		void GameContainer::setFullscreen(bool fullscreen) {
@@ -512,11 +512,13 @@
 
 						bool duplicate = false;
 						for (unsigned int j = 0; j < numPadsSupported; j++) {
+#ifdef EXCEPTIONS_AVAILABLE
 							try {
 								if (m_gamepads.at(j)->id == 0) { }
 							} catch (...) {
 								continue;
 							}
+#endif
 
 							//cout << "Duplicate gamepad with id " << i << endl;
 							//cout << "id " << m_gamepads[j].id << endl;

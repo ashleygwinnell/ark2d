@@ -24,11 +24,23 @@ typedef int32_t ogg_int32_t;
 typedef uint32_t ogg_uint32_t;
 typedef int64_t ogg_int64_t;*/
 
-typedef signed short ogg_int16_t;
-typedef unsigned short ogg_uint16_t;
-typedef int ogg_int32_t;
-typedef unsigned int ogg_uint32_t;
-typedef int64_t ogg_int64_t;
+
+#if defined(ARK2D_ANDROID)
+	#include <inttypes.h>
+	typedef int16_t ogg_int16_t;
+	typedef uint16_t ogg_uint16_t;
+	typedef int32_t ogg_int32_t;
+	typedef uint32_t ogg_uint32_t;
+	typedef int64_t ogg_int64_t;
+#else
+	typedef signed short ogg_int16_t;
+	typedef unsigned short ogg_uint16_t;
+	typedef int ogg_int32_t;
+	typedef unsigned int ogg_uint32_t;
+	typedef int64_t ogg_int64_t;
+#endif
+
+
 
 /*
 typedef SIZE16 ogg_int16_t;

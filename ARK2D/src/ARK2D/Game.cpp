@@ -33,27 +33,31 @@ void Game::update(GameContainer* container, GameTimer* timer) {
 //void Game::render(GameContainer& container, const Graphics& g) = 0;
 //void Game::resize(GameContainer& container, int width, int height) = 0;
 void Game::resize(GameContainer* container, int width, int height) {
-	if (container->getResizeBehaviour() == GameContainer::RESIZE_BEHAVIOUR_SCALE)
-	{
-		glLoadIdentity();
-		glViewport(0, 0, width, height);
+	#if !defined(ARK2D_ANDROID)
+		if (container->getResizeBehaviour() == GameContainer::RESIZE_BEHAVIOUR_SCALE)
+		{
+			glLoadIdentity();
+			glViewport(0, 0, width, height);
 
-	}
-	else if (container->getResizeBehaviour() == GameContainer::RESIZE_BEHAVIOUR_NOSCALE)
-	{
-		glLoadIdentity();
-		glViewport(0, 0, width, height);
+		}
+		else if (container->getResizeBehaviour() == GameContainer::RESIZE_BEHAVIOUR_NOSCALE)
+		{
+			glLoadIdentity();
+			glViewport(0, 0, width, height);
 
-		glMatrixMode(GL_PROJECTION) ;
-		glPushMatrix();
-		glLoadIdentity();
+			glMatrixMode(GL_PROJECTION) ;
+			glPushMatrix();
+			glLoadIdentity();
 
-		glOrtho(0, width, height, 0, -1, 1);
+			glOrtho(0, width, height, 0, -1, 1);
 
-		glMatrixMode(GL_MODELVIEW);
-		glPushMatrix();
-		glLoadIdentity();
-	}
+			glMatrixMode(GL_MODELVIEW);
+			glPushMatrix();
+			glLoadIdentity();
+		}
+	#else
+
+	#endif
 }
 
 void Game::keyPressed(unsigned int key) {

@@ -8,18 +8,7 @@
 #ifndef GAMETIMER_H_
 #define GAMETIMER_H_
 
-#include <time.h>
-#include <sys/time.h>
-#include <list>
-
-#ifdef _WIN32
-	#ifndef ARK2D_WIN32
-		#define ARK2D_WIN32
-		#include <windows.h>
-		#include <mmsystem.h>
-		#include <winbase.h>
-	#endif
-#endif
+#include "ARK2D.h"
 
 class GameTimer {
 

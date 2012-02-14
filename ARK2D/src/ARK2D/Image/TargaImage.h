@@ -1,11 +1,10 @@
 #ifndef TARGA_HEADER_H
 #define TARGA_HEADER_H
 
-#include <vector>
-#include <string>
-#include <fstream>
-
+#include "../ARK2D.h"
 #include "../ARK2D_GL.h"
+
+using namespace std;
 
 // These masks are AND'd with the imageDesc in the TGA header,
 // bit 4 is left-to-right ordering
@@ -48,7 +47,7 @@ public:
     TargaImage();
     virtual ~TargaImage();
 
-    int load(const std::string& filename);
+    int load(const string& filename);
     void unload();
 
     unsigned int getWidth() const;

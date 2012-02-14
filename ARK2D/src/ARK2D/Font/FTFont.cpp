@@ -69,50 +69,57 @@ void FTFontData::make_dlist(FT_Face face, unsigned char ch, GLuint list_base, GL
 	delete[] expanded_data;
 
 
-	// create the display list...
-	glNewList(list_base+ch, GL_COMPILE);
-	glBindTexture(GL_TEXTURE_2D, tex_base[ch]);
+	// Now We Need To Account For The Fact That Many Of
+	// Our Textures Are Filled With Empty Padding Space.
+	// We Figure What Portion Of The Texture Is Used By
+	// The Actual Character And Store That Information In
+	// The x And y Variables, Then When We Draw The
+	// Quad, We Will Only Reference The Parts Of The Texture
+	// That Contains The Character Itself.
+	float x = (float) bitmap.width / (float) width;
+	float y = (float) bitmap.rows / (float) height;
 
-	glPushMatrix();
 
-		// First We Need To Move Over A Little So That
-		// The Character Has The Right Amount Of Space
-		// Between It And The One Before It.
-		glTranslatef(bitmap_glyph->left, 0, 0);
+	#if defined(ARK2D_ANDROID)
 
-		// Now We Move Down A Little In The Case That The
-		// Bitmap Extends Past The Bottom Of The Line
-		// This Is Only True For Characters Like 'g' Or 'y'.
-		glTranslatef(0, bitmap_glyph->top - bitmap.rows, 0);
-		//glTranslatef(0, bitmap_glyph->top, 0);
+	#else
+		// create the display list...
+		glNewList(list_base+ch, GL_COMPILE);
+		glBindTexture(GL_TEXTURE_2D, tex_base[ch]);
 
-		// Now We Need To Account For The Fact That Many Of
-		// Our Textures Are Filled With Empty Padding Space.
-		// We Figure What Portion Of The Texture Is Used By
-		// The Actual Character And Store That Information In
-		// The x And y Variables, Then When We Draw The
-		// Quad, We Will Only Reference The Parts Of The Texture
-		// That Contains The Character Itself.
-		float x = (float) bitmap.width / (float) width;
-		float y = (float) bitmap.rows / (float) height;
+		glPushMatrix();
 
-		// Here We Draw The Texturemapped Quads.
-		// The Bitmap That We Got From FreeType Was Not
-		// Oriented Quite Like We Would Like It To Be,
-		// But We Link The Texture To The Quad
-		// In Such A Way That The Result Will Be Properly Aligned.
-		glBegin(GL_QUADS);
-			glTexCoord2d(0,0); glVertex2f(0,0);
-			glTexCoord2d(0,y); glVertex2f(0,bitmap.rows);
-			glTexCoord2d(x,y); glVertex2f(bitmap.width,bitmap.rows);
-			glTexCoord2d(x,0); glVertex2f(bitmap.width,0);
-		glEnd();
+			// First We Need To Move Over A Little So That
+			// The Character Has The Right Amount Of Space
+			// Between It And The One Before It.
+			glTranslatef(bitmap_glyph->left, 0, 0);
 
-	glPopMatrix();
-	glTranslatef(face->glyph->advance.x >> 6 ,0,0);
+			// Now We Move Down A Little In The Case That The
+			// Bitmap Extends Past The Bottom Of The Line
+			// This Is Only True For Characters Like 'g' Or 'y'.
+			glTranslatef(0, bitmap_glyph->top - bitmap.rows, 0);
+			//glTranslatef(0, bitmap_glyph->top, 0);
 
-	// Finish The Display List
-	glEndList();
+
+			// Here We Draw The Texturemapped Quads.
+			// The Bitmap That We Got From FreeType Was Not
+			// Oriented Quite Like We Would Like It To Be,
+			// But We Link The Texture To The Quad
+			// In Such A Way That The Result Will Be Properly Aligned.
+			glBegin(GL_QUADS);
+				glTexCoord2d(0,0); glVertex2f(0,0);
+				glTexCoord2d(0,y); glVertex2f(0,bitmap.rows);
+				glTexCoord2d(x,y); glVertex2f(bitmap.width,bitmap.rows);
+				glTexCoord2d(x,0); glVertex2f(bitmap.width,0);
+			glEnd();
+
+		glPopMatrix();
+		glTranslatef(face->glyph->advance.x >> 6 ,0,0);
+
+		// Finish The Display List
+		glEndList();
+
+	#endif
 
 	// scorecharacter data.
 	FTFontCharData* charData = &characterDatas[ch];// + (sizeof(FTFontCharData) * ch_ui);
@@ -169,15 +176,20 @@ void FTFontData::init(const char* fname, unsigned int h) {
 	// so to make a font H pixels high, we need to make it h*64 or h << 6.
 	FT_Set_Char_Size(face, h << 6, h << 6, 96, 96);
 
-	// here we ask opengl to allocate resources for all the
-	// textures and display lists which we are about to create.
-	list_base = glGenLists(128);
-	glGenTextures(128, textures);
+	#if defined(ARK2D_ANDROID)
+	#else
 
-	// this is where we actually create each of the fonts display lists.
-	for(unsigned char i = 0; i < 128; i++) {
-		make_dlist(face, i, list_base, textures);
-	}
+		// here we ask opengl to allocate resources for all the
+		// textures and display lists which we are about to create.
+		list_base = glGenLists(128);
+		glGenTextures(128, textures);
+
+		// this is where we actually create each of the fonts display lists.
+		for(unsigned char i = 0; i < 128; i++) {
+			make_dlist(face, i, list_base, textures);
+		}
+
+	#endif
 
 	// we fon#t need the face information now the the display lists have been created.
 	// free the resources.
@@ -186,7 +198,10 @@ void FTFontData::init(const char* fname, unsigned int h) {
 }
 
 void FTFontData::clean() {
-	glDeleteLists(list_base, 128);
+	#if defined(ARK2D_ANDROID)
+	#else
+		glDeleteLists(list_base, 128);
+	#endif
 	glDeleteTextures(128, textures);
 	delete[] textures;
 }
@@ -198,35 +213,36 @@ FTFont::FTFont(string filename, unsigned int height): m_data(NULL) {
 }
 
 void FTFont::drawString(const string& str, int x, int y) const {
+	#if defined(ARK2D_ANDROID)
+	#else
+		//GLuint font = m_data->list_base;
+		glEnable(GL_TEXTURE_2D);
+		//glListBase(font);
+		for( unsigned int i = 0; i < str.size(); ++i ) {
+			unsigned char in = (unsigned char) str[i];
+			FTFontCharData& d = m_data->characterDatas[in];
+			glPushMatrix();
+			glTranslatef(
+				x + d.offsetx,
+				y + d.offsety + m_data->m_height,
+				0
+			);
+			// glCallLists(1, GL_UNSIGNED_BYTE, (GLvoid*) &in);
+			glBindTexture(GL_TEXTURE_2D, d.tid);
+			glBegin(GL_QUADS);
+				glTexCoord2d(0,0);       glVertex2f(0,0);
+				glTexCoord2d(0,d.th);    glVertex2f(0,d.height);
+				glTexCoord2d(d.tw,d.th); glVertex2f(d.width,d.height);
+				glTexCoord2d(d.tw,0);    glVertex2f(d.width,0);
+			glEnd();
 
-	//GLuint font = m_data->list_base;
-	glEnable(GL_TEXTURE_2D);
-	//glListBase(font);
-	for( unsigned int i = 0; i < str.size(); ++i ) {
-		unsigned char in = (unsigned char) str[i];
-		FTFontCharData& d = m_data->characterDatas[in];
-		glPushMatrix();
-		glTranslatef(
-			x + d.offsetx,
-			y + d.offsety + m_data->m_height,
-			0
-		);
-		// glCallLists(1, GL_UNSIGNED_BYTE, (GLvoid*) &in);
-		glBindTexture(GL_TEXTURE_2D, d.tid);
-		glBegin(GL_QUADS);
-			glTexCoord2d(0,0);       glVertex2f(0,0);
-			glTexCoord2d(0,d.th);    glVertex2f(0,d.height);
-			glTexCoord2d(d.tw,d.th); glVertex2f(d.width,d.height);
-			glTexCoord2d(d.tw,0);    glVertex2f(d.width,0);
-		glEnd();
 
+			glPopMatrix();
+			x += m_data->characterDatas[in].advancex;
 
-		glPopMatrix();
-		x += m_data->characterDatas[in].advancex;
-
-	}
-	glBindTexture(GL_TEXTURE_2D, 0);
-
+		}
+		glBindTexture(GL_TEXTURE_2D, 0);
+	#endif
 }
 unsigned int FTFont::getStringWidth(const string& Str) const {
 	unsigned int total = 0;

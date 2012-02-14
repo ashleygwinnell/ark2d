@@ -5,11 +5,11 @@
  *      Author: user
  */
 
+#include "../ARK2D.h"
 
-
-#include <stdlib.h>
-#include <string>
-#include <stdio.h>
+//#include <stdlib.h>
+//#include <string>
+//#include <stdio.h>
 
 #include "Image.h"
 #include "TargaImage.h"
@@ -549,35 +549,80 @@ void Image::draw(float x, float y) const {
 	}
 
 	glPushMatrix();
-
 	glTranslatef(x, y, 0);
-	glBegin( GL_QUADS );
-		//Top-left vertex (corner)
-		//glTexCoord2f( 0, 0 );
-		//glColor4f(m_tl_corner_color.getRed()/255.f, m_tl_corner_color.getGreen()/255.f,
-		//		m_tl_corner_color.getBlue()/255.f, m_tl_corner_color.getAlpha()/255.f);
-		glTexCoord2f( this->texture_offset_x, this->texture_offset_y );
-		glVertex2f(0, 0);
 
-		//Bottom-left vertex (corner)
-		//glTexCoord2f( 0, 1 );
-		glTexCoord2f( this->texture_offset_x, this->texture_offset_y + this->texture_height );
-		glVertex2f(0, 0 + this->m_Height);
+	#if defined(ARK2D_ANDROID)
 
-		//Bottom-right vertex (corner)
-		//glTexCoord2f( 1, 1 );
-		glTexCoord2f( this->texture_offset_x + this->texture_width, this->texture_offset_y + this->texture_height );
-		glVertex2f(0 + this->m_Width, 0 + this->m_Height);
+		float texCoords[] = {
+			this->texture_offset_x, this->texture_offset_y,
+			this->texture_offset_x + this->texture_width, this->texture_offset_y,
+			this->texture_offset_x, this->texture_offset_y + this->texture_height,
+			this->texture_offset_x + this->texture_width, this->texture_offset_y + this->texture_height
+		};
+		float verts[] = {
+			0,					0,					0,  // tl
+			0 + this->m_Width,	0,					0,	// tr
+			0,					0 + this->m_Height,	0,  // bl
+			0 + this->m_Width,	0 + this->m_Height,	0	// br
+		};
 
-		//Top-right vertex (corner)
-		//glTexCoord2f( 1, 0 );
-	//	glColor4f(m_tr_corner_color.getRed()/255.f, m_tr_corner_color.getGreen()/255.f,
-	//						m_tr_corner_color.getBlue()/255.f, m_tr_corner_color.getAlpha()/255.f);
-		glTexCoord2f( this->texture_offset_x + this->texture_width, this->texture_offset_y );
-		glVertex2f(0 + this->m_Width, 0);
-	glEnd();
+		float colorR = m_color->getRed()/255.0f;
+		float colorG = m_color->getGreen()/255.0f;
+		float colorB = m_color->getBlue()/255.0f;
+		float colorA = m_color->getAlpha()/255.0f;
+		float colors[] = {
+			colorR, colorG, colorB, colorA,
+			colorR, colorG, colorB, colorA,
+			colorR, colorG, colorB, colorA,
+			colorR, colorG, colorB, colorA
+		};
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glEnableClientState(GL_COLOR_ARRAY);
+
+		glVertexPointer(3, GL_FLOAT, 0, verts);
+		glColorPointer(4, GL_FLOAT, 0, colors);
+		glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+
+		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glDisableClientState(GL_COLOR_ARRAY);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glDisable(GL_TEXTURE_2D);
+
+	#else
+		glBegin( GL_QUADS );
+			//Top-left vertex (corner)
+			//glTexCoord2f( 0, 0 );
+			//glColor4f(m_tl_corner_color.getRed()/255.f, m_tl_corner_color.getGreen()/255.f,
+			//		m_tl_corner_color.getBlue()/255.f, m_tl_corner_color.getAlpha()/255.f);
+			glTexCoord2f( this->texture_offset_x, this->texture_offset_y );
+			glVertex2f(0, 0);
+
+			//Bottom-left vertex (corner)
+			//glTexCoord2f( 0, 1 );
+			glTexCoord2f( this->texture_offset_x, this->texture_offset_y + this->texture_height );
+			glVertex2f(0, 0 + this->m_Height);
+
+			//Bottom-right vertex (corner)
+			//glTexCoord2f( 1, 1 );
+			glTexCoord2f( this->texture_offset_x + this->texture_width, this->texture_offset_y + this->texture_height );
+			glVertex2f(0 + this->m_Width, 0 + this->m_Height);
+
+			//Top-right vertex (corner)
+			//glTexCoord2f( 1, 0 );
+		//	glColor4f(m_tr_corner_color.getRed()/255.f, m_tr_corner_color.getGreen()/255.f,
+		//						m_tr_corner_color.getBlue()/255.f, m_tr_corner_color.getAlpha()/255.f);
+			glTexCoord2f( this->texture_offset_x + this->texture_width, this->texture_offset_y );
+			glVertex2f(0 + this->m_Width, 0);
+		glEnd();
+	#endif
+
 	glTranslatef(x * -1, y * -1, 0);
-
 	glPopMatrix();
 
 

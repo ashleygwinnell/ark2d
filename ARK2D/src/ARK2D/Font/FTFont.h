@@ -11,7 +11,13 @@
 #include "../ARK2D.h"
 
 // FreeType Headers
-#ifdef ARK2D_WINDOWS
+#if defined(ARK2D_ANDROID)
+	#include <ft2build.h>
+	#include <freetype/freetype.h>
+	#include <freetype/ftglyph.h>
+	#include <freetype/ftoutln.h>
+	#include <freetype/fttrigon.h>
+#elif defined(ARK2D_WINDOWS)
 	#include <ft2build.h>
 	#include <freetype/freetype.h>
 	#include <freetype/ftglyph.h>

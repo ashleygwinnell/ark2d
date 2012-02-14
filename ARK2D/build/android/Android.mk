@@ -4,7 +4,9 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE    := ark2d
 
-LOCAL_CFLAGS := -DARK2D_ANDROID -DDISABLE_IMPORTGL -Wno-psabi
+LOCAL_SHARED_LIBRARIES += libstdc++
+
+LOCAL_CFLAGS := -DARK2D_ANDROID -DDISABLE_IMPORTGL -fno-exceptions -fno-rtti -Wno-psabi
 
 LOCAL_DEFAULT_CPP_EXTENSION := cpp
 
@@ -37,6 +39,7 @@ LOCAL_SRC_FILES := \
 	src/ARK2D/Timeline.cpp \
 	src/ARK2D/Audio/Sound.cpp \
 	src/ARK2D/Audio/SoundStore.cpp \
+	src/ARK2D/Font/Font.cpp \
 	src/ARK2D/Font/FTFont.cpp \
 	src/ARK2D/Font/BMFont.cpp \
 	src/ARK2D/Geometry/GigaRectangle.cpp \
@@ -160,7 +163,8 @@ LOCAL_SRC_FILES := \
 	src/ARK2D/vendor/zlib123/trees.c \
 	src/ARK2D/vendor/zlib123/uncompr.c \
 	src/ARK2D/vendor/zlib123/zutil.c \
+	src/ARK2D/GameContainerAndroid.cpp \
 
-LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz
+LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz -lfreetype -lopenal 
 
 include $(BUILD_SHARED_LIBRARY)

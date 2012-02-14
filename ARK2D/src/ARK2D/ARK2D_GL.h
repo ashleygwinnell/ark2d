@@ -8,7 +8,9 @@
 #include "ARK2D.h"
 
 #if defined(ARK2D_ANDROID)
-
+	#include <GLES/gl.h>
+	#include <GLES/glext.h>
+	#include <GLES/glplatform.h>
 #elif defined(ARK2D_WINDOWS)
 	#include <GL/GLew.h>
 	#include <GL/GL.h>

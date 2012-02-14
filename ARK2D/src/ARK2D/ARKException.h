@@ -8,7 +8,7 @@
 #ifndef ARKEXCEPTION_H_
 #define ARKEXCEPTION_H_
 
-#include <string>
+#include "ARK2D.h"
 
 using namespace std;
 

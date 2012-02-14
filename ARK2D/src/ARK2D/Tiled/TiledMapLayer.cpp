@@ -76,15 +76,17 @@ void TiledMapLayer::setTileGID(unsigned int x, unsigned int y, unsigned int gid)
 unsigned int TiledMapLayer::getTileGID(unsigned int x, unsigned int y) const {
 	//return m_data[x][y];
 	// TODO: THIS returns something bad.
-	try {
-		return m_data.at(x).at(y);
-	} catch (std::out_of_range outOfRange) {
-		//std::cout << "Exception: " << outOfRange.what() << std::endl;
-		//std::cout << "\t data.size(): " << m_data.size() << std::endl;
-		//std::cout << "\t data[" << x << "].size(): " << m_data.at(x).size() << std::endl;
+	if (x >= m_data.size()) {
 		return 0;
+	} else if (y >= m_data.at(x).size()) {
+		return NULL;
 	}
 
+	return m_data.at(x).at(y);
+
+	//std::cout << "Exception: " << outOfRange.what() << std::endl;
+	//std::cout << "\t data.size(): " << m_data.size() << std::endl;
+	//std::cout << "\t data[" << x << "].size(): " << m_data.at(x).size() << std::endl;
 }
 
 void TiledMapLayer::setOpacity(float f) {

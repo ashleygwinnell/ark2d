@@ -8,6 +8,9 @@
 #include "PathIO.h"
 
 PathGroup* PathIO::createFromFile(string file) {
+	if (file.length() == 0) {
+		return NULL;
+	}
 	char* c = StringUtil::file_get_contents(file.c_str());
 	if (c == NULL) {
 		ErrorDialog::createAndShow(StringUtil::append("Could not load Path file: ", file));
@@ -16,8 +19,9 @@ PathGroup* PathIO::createFromFile(string file) {
 	return createFromJSON(string(c));
 }
 PathGroup* PathIO::createFromJSON(string json) {
-
+#ifdef EXCEPTIONS_AVAILABLE
 	try {
+#endif
 		JSONNode* root = libJSON::Parse(json);
 
 		PathGroup* pathGroup = new PathGroup();
@@ -49,11 +53,12 @@ PathGroup* PathIO::createFromJSON(string json) {
 			pathGroup->addPath(pathObj);
 		}
 		return pathGroup;
-
+#ifdef EXCEPTIONS_AVAILABLE
 	} catch(...) {
 		ErrorDialog::createAndShow("exception in PathIO::createFromJson");
 		return NULL;
 	}
+#endif
 	return NULL;
 }
 string PathIO::getAsJSON(PathGroup* g) {

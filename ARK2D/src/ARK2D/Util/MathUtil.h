@@ -8,12 +8,7 @@
 #ifndef MATHUTIL_H_
 #define MATHUTIL_H_
 
-#include <math.h>
-#include <time.h>
-#include <ctime>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string>
+#include "../ARK2D.h"
 
 #include "../Geometry/Vector2.h"
 #include "Cast.h"

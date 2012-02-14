@@ -8,12 +8,13 @@
 #ifndef ERRORDIALOG_H_
 #define ERRORDIALOG_H_
 
-#include <stdlib.h>
-#include <string>
+#include "../ARK2D.h"
+
+using namespace std;
 
 class ErrorDialog {
 	public:
-		static void createAndShow(std::string message);
+		static void createAndShow(string message);
 };
 
 #endif /* ERRORDIALOG_H_ */

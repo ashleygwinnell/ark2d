@@ -34,15 +34,13 @@
 template <class T>
 class GigaRectangle;
 
-#ifdef ARK2D_WINDOWS
+#if defined(ARK2D_ANDROID)
+	#include "GameContainerAndroid.h"
+#elif defined(ARK2D_WINDOWS)
 	#include "GameContainerWindows.h"
-#endif
-
-#ifdef ARK2D_UBUNTU_LINUX
+#elif defined(ARK2D_UBUNTU_LINUX)
 	#include "GameContainerLinux.h"
-#endif
-
-#ifdef ARK2D_MACINTOSH
+#elif defined(ARK2D_MACINTOSH)
 	#include "GameContainerMac.h"
 #endif
 

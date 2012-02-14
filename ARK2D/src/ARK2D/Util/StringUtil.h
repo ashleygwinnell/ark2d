@@ -8,13 +8,16 @@
 #ifndef STRINGUTIL_H_
 #define STRINGUTIL_H_
 
-#include <vector>
-#include <string>
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <stdio.h>
-#include <algorithm>
+#include "../ARK2D.h"
+#ifndef ARK2D_ANDROID
+	#include <vector>
+	#include <string>
+	#include <fstream>
+	#include <iostream>
+	#include <sstream>
+	#include <stdio.h>
+	#include <algorithm>
+#endif
 
 #include "../UI/ErrorDialog.h"
 #include "../ToString.h"

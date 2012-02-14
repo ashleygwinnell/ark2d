@@ -17,7 +17,12 @@ string RSSLException::getMessage() {
 	return m_message;
 }
 void RSSLException::parseException(string s) {
+#ifdef EXCEPTIONS_AVAILABLE
 	throw new RSSLException(StringUtil::append("Error parsing RSSL: ", s));
+#else
+	ErrorDialog::createAndShow(StringUtil::append("Error parsing RSSL: ", s));
+	exit(0);
+#endif
 }
 
 string RSSLArgument::asString() {

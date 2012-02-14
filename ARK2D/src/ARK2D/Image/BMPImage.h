@@ -8,8 +8,6 @@
 #ifndef BMPIMAGE_H_
 #define BMPIMAGE_H_
 
-#include <iostream>
-
 #include "../ARK2D.h"
 
 #if defined(ARK2D_WINDOWS)

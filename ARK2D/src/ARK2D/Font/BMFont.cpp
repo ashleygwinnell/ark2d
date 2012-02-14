@@ -72,7 +72,9 @@ Image* BMFont::getImage() const {
 // Yarp!
 bool BMFont::Parse() // istream& Stream, Charset& CharsetDesc
 {
+#ifdef EXCEPTIONS_AVAILABLE
 	try {
+#endif
 		streambuf* fb;
 		if (m_data == NULL) {
 			fb = new filebuf;
@@ -182,11 +184,12 @@ bool BMFont::Parse() // istream& Stream, Charset& CharsetDesc
 		}
 
 		m_loaded = true;
-
+#ifdef EXCEPTIONS_AVAILABLE
 	} catch(...) {
 		ErrorDialog::createAndShow("error loading font");
 		return false;
 	}
+#endif
 	return true;
 }
 
