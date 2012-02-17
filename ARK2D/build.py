@@ -46,6 +46,13 @@ class ARK2DBuildSystem:
 			elif(sys.platform == "darwin"):
 				self.ds = "/";
 			pass;
+		elif (len(sys.argv)==2 and sys.argv[1] == "android"):
+			self.platform = "android";
+			if (sys.platform == "win32"):
+				self.ds = "\\";
+			elif(sys.platform == "darwin"):
+				self.ds = "/";
+			pass;
 		elif (sys.platform == "win32"):
 			self.ds = "\\";
 			self.platform = "windows";
@@ -180,16 +187,22 @@ class ARK2DBuildSystem:
 	def rmdir_recursive(self, dir):
 	    """Remove a directory, and all its contents if it is not already empty."""
 	    for name in os.listdir(dir):
-	        full_name = os.path.join(dir, name)
+	        full_name = os.path.join(dir, name);
 	        # on Windows, if we don't have write permission we can't remove
 	        # the file/directory either, so turn that on
 	        if not os.access(full_name, os.W_OK):
-	            os.chmod(full_name, 0600)
+	           # os.chmod(full_name, 0600);
+	           pass;
 	        if os.path.isdir(full_name):
-	            rmdir_recursive(full_name)
+	            self.rmdir_recursive(full_name);
 	        else:
-	            os.remove(full_name)
-	    os.rmdir(dir)
+	            os.remove(full_name);
+	    os.rmdir(dir);
+	    
+	def get_str_extension(self, str):
+		findex = str.rfind('.');
+		h_ext = str[findex+1:len(str)];
+		return h_ext;
 		
 	def startWindows(self):
 		print("Hurray for windows");
@@ -302,6 +315,10 @@ class ARK2DBuildSystem:
 		#link
 		self.doLink();
 		
+	def str_replace(self, str, edits):
+		for search, replace in edits:
+			str = str.replace(search, replace);
+		return str;
 		
 	def doLink(self):
 		
@@ -495,26 +512,62 @@ class ARK2DBuildSystem:
 	def startAndroid(self):
 		print("Building Android");
 		
+		# open config
 		f = open("config.json", "r");
 		fcontents = f.read();
 		f.close();
 		config = json.loads(fcontents);
 		
-		
-		
+		# define vars.	
 		nl = "\r\n";
-		ndkdir = config['mac']['android']['ndk_dir'];
-		ndkprojectpath = config['mac']['ark2d_dir']
-		appbuilddir = ndkprojectpath+"/build/android";
-		appbuildscript = ndkprojectpath+"/build/android/Android.mk";
-		#appbuildscript2 = ndkprojectpath+"/build/android/Application.mk";
-		jnifolder = ndkprojectpath+"/jni";
-		appbuildscript3 = ndkprojectpath+"/jni/Application.mk";
 		appplatform= "android-5";
+		ndkdir = config['mac']['android']['ndk_dir'];
+		if (self.building_game):
+			#game specific vars
+			game_name = config['game_name'];
+			game_name_safe = config['game_name_safe'];
+			game_short_name = config['game_short_name'];
+			game_description = config['game_description'];
+			company_name = config['company_name'];
+			company_name_safe = config['company_name_safe'];
+			javaPackageName = "org."+company_name_safe+"."+game_short_name;
+			
+			ark2ddir = config['mac']['ark2d_dir'];
+			rootPath = config['mac']['game_dir'];
+			ndkprojectpath = rootPath;
+			thisCreateDirs = [rootPath + "/build"];
+			thisCreateDirs.extend([rootPath+"/build/android/project"]);
+			thisCreateDirs.extend([rootPath+"/build/android/project/assets"]);
+			thisCreateDirs.extend([rootPath+"/build/android/project/assets/ark2d"]);
+			thisCreateDirs.extend([rootPath+"/build/android/project/src"]);
+			thisCreateDirs.extend([rootPath+"/build/android/project/gen"]);
+			thisCreateDirs.extend([rootPath+"/build/android/project/libs"]);
+			thisCreateDirs.extend([rootPath+"/build/android/project/libs/armeabi"]);
+			thisCreateDirs.extend([rootPath+"/build/android/project/obj"]);
+			thisCreateDirs.extend([rootPath+"/build/android/project/obj/local"]);
+			thisCreateDirs.extend([rootPath+"/build/android/project/obj/local/armeabi"]);
+			thisCreateDirs.extend([rootPath+"/build/android/project/res"]);
+			thisCreateDirs.extend([rootPath+"/build/android/project/res/drawable"]);
+			thisCreateDirs.extend([rootPath+"/build/android/project/res/values"]);
+			thisCreateDirs.extend([rootPath+"/build/android/project/src/org"]);
+			thisCreateDirs.extend([rootPath+"/build/android/project/src/org/" + company_name_safe]);
+			thisCreateDirs.extend([rootPath+"/build/android/project/src/org/" + company_name_safe + "/" + game_short_name]);
+			pass;
+		else:
+			rootPath = config['mac']['ark2d_dir'];
+			ndkprojectpath = rootPath;
+			thisCreateDirs = [ndkprojectpath + "/build"];
+			pass;
+		
+		appbuilddir = rootPath+"/build/android";
+		appbuildscript = rootPath+"/build/android/Android.mk";
+		jnifolder = rootPath+"/jni";
+		appbuildscript3 = rootPath+"/jni/Application.mk";
+		
+		thisCreateDirs.extend([appbuilddir, jnifolder]);
 		
 		# make some directories...
-		thisdirs = [ndkprojectpath + "/build", appbuilddir, jnifolder];
-		for thisstr in thisdirs:
+		for thisstr in thisCreateDirs:
 			print("mkdir " + thisstr);
 			try:
 				os.makedirs(thisstr);
@@ -523,94 +576,305 @@ class ARK2DBuildSystem:
 					pass
 				else: raise
 		
-		
-		#copy stuff in vendor to ndk directory. 
-		#freetype
-		print("copying vendor headers (freetype)");
-		copyfreetype1 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/freetype/jni/include ' + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/";
-		copyfreetype2 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/freetype/jni/include ' + ndkdir + "/platforms/"+appplatform+"/arch-x86/usr/";
-		subprocess.call([copyfreetype1], shell=True);
-		subprocess.call([copyfreetype2], shell=True);
-		
-		print("Compiling vendor sources (freetype)");
-		libfreetypedir = ndkprojectpath + "/src/ARK2D/vendor/android/freetype";
-		compilefreetype1 = ndkdir + "/ndk-build NDK_PROJECT_PATH=" + libfreetypedir +" APP_PROJECT_PATH=" + libfreetypedir + " APP_BUILD_SCRIPT=" + libfreetypedir + "/jni/Android.mk APP_PLATFORM=" + appplatform;  
-		print(compilefreetype1);
-		subprocess.call([compilefreetype1], shell=True);
-		subprocess.call(['cp -r ' + libfreetypedir + "/obj/local/armeabi/libfreetype.a " + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/lib"], shell=True);
-		
-		#openal
-		print("copying vendor headers (openal)");
-		copyopenal1 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/openal/jni/include ' + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/";
-		copyopenal2 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/openal/jni/include ' + ndkdir + "/platforms/"+appplatform+"/arch-x86/usr/";
-		subprocess.call([copyopenal1], shell=True);
-		subprocess.call([copyopenal2], shell=True);
-		
-		print("Compiling vendor sources (openal)");
-		libopenaldir = ndkprojectpath + "/src/ARK2D/vendor/android/openal";
-		compileopenal1 = ndkdir + "/ndk-build NDK_PROJECT_PATH=" + libopenaldir +" APP_PROJECT_PATH=" + libopenaldir + " APP_BUILD_SCRIPT=" + libopenaldir + "/jni/Android.mk APP_PLATFORM=" + appplatform;  
-		print(compileopenal1);
-		subprocess.call([compileopenal1], shell=True);
-		subprocess.call(['cp -r ' + libopenaldir + "/libs/armeabi/libopenal.so " + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/lib"], shell=True);
-		
-		
-		
-		#make android.mk
-		print("Creating Android.mk");
-		android_make_file = "";
-		android_make_file += "LOCAL_PATH := $(call my-dir)/../../" + nl + nl;
-		android_make_file += "include $(CLEAR_VARS)" + nl+nl;
-		android_make_file += "LOCAL_MODULE    := ark2d" + nl+nl; # Here we give our module name and source file(s)
-		#android_make_file += "LOCAL_C_INCLUDES := $(LOCAL_PATH)/../libzip/ $(LOCAL_PATH)/../libpng/" + nl;
-		#android_make_file += "LOCAL_STATIC_LIBRARIES := libzip libpng" + nl;
-		#android_make_file += "LOCAL_C_INCLUDES += external/stlport/stlport" + nl+nl;
-		android_make_file += "LOCAL_SHARED_LIBRARIES += libstdc++" + nl+nl;
-		android_make_file += "LOCAL_CFLAGS := -DARK2D_ANDROID -DDISABLE_IMPORTGL -fno-exceptions -fno-rtti -Wno-psabi" + nl+nl;
-		android_make_file += "LOCAL_DEFAULT_CPP_EXTENSION := cpp" + nl+nl; 
-		android_make_file += "LOCAL_SRC_FILES := \\" + nl;
-		for h in self.src_files: #foreach file on config...
-			android_make_file += "	" + h + " \\" + nl;
-		android_make_file += nl;
-		android_make_file += "LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz -lfreetype -lopenal " + nl+nl;
-		android_make_file += "include $(BUILD_SHARED_LIBRARY)" + nl;
-		f = open(appbuildscript, "w");
-		f.write(android_make_file);
-		f.close();
-		
-		#make application.mk
-		print("Creating Application.mk");
-		application_make_file = "";
-		application_make_file += "APP_PROJECT_PATH := " + ndkprojectpath + nl;
-		application_make_file += "APP_BUILD_SCRIPT := " + appbuildscript + nl;
-		application_make_file += "NDK_APP_OUT=" + appbuilddir + nl;
-		application_make_file += "NDK_PROJECT_PATH=" + ndkprojectpath + nl;
-		#application_make_file += "APP_ABI := all" + nl;
-		#application_make_file += "APP_ABI := armeabi"; # armeabi-v7a x86" + nl;
-		application_make_file += "APP_STL := stlport_static" + nl; 
-		f = open(appbuildscript3, "w");
-		f.write(application_make_file);
-		f.close();
-		
-		buildline = ndkdir + "/ndk-build";
-		buildline += " NDK_PROJECT_PATH=" + ndkprojectpath;
-		buildline += " NDK_APP_OUT=" + appbuilddir;
-		buildline += " APP_PROJECT_PATH=" + ndkprojectpath;
-		buildline += " APP_BUILD_SCRIPT=" + appbuildscript;
-		buildline += " APP_PLATFORM=" + appplatform;
-		#buildline += " NDK_LOG=1";
-		print("Building library");
-		print(buildline);
-		subprocess.call([buildline], shell=True);	
-		
-		print("Moving output to build folder");
-		libsdir = ndkprojectpath + "/libs";
-		subprocess.call(["cp -r " + libsdir + " " + appbuilddir + "/" ], shell=True);
-		
-		print("removing temp folders");
-		self.rmdir_recursive(libsdir);
-		self.rmdir_recursive(jnifolder);
-		
-		print("done!");
+		if (self.building_game):
+			 
+			#make android.mk
+			print("Creating Android.mk");
+			android_make_file = "";
+			android_make_file += "LOCAL_PATH := $(call my-dir)/../../" + nl + nl;
+			android_make_file += "include $(CLEAR_VARS)" + nl+nl;
+			android_make_file += "LOCAL_MODULE    := " + game_short_name +  nl+nl; # Here we give our module name and source file(s)
+			android_make_file += "LOCAL_C_INCLUDES := " + ark2ddir + "/src/ARK2D/vendor/android/libzip/jni/ " + nl;
+			android_make_file += "LOCAL_CFLAGS := -DARK2D_ANDROID -fno-exceptions -fno-rtti -Wno-psabi" + nl+nl;
+			android_make_file += "LOCAL_DEFAULT_CPP_EXTENSION := cpp" + nl+nl; 
+			android_make_file += "LOCAL_SRC_FILES := \\" + nl;
+			for h in self.src_files: #foreach file on config...
+				if (self.get_str_extension(h)!= "rc"):
+					android_make_file += "	" + h + " \\" + nl;
+					
+			android_make_file += "	src/jni.cpp \\ " + nl;
+				
+			android_make_file += nl; 
+			android_make_file += "LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz -lfreetype -lopenal -lark2d" + nl+nl;
+			android_make_file += "include $(BUILD_SHARED_LIBRARY)" + nl;
+			f = open(appbuildscript, "w");
+			f.write(android_make_file);
+			f.close();
+			
+			#make application.mk
+			print("Creating Application.mk");
+			application_make_file = "";
+			application_make_file += "APP_PROJECT_PATH := " + ndkprojectpath + nl;
+			application_make_file += "APP_BUILD_SCRIPT := " + appbuildscript + nl;
+			application_make_file += "NDK_APP_OUT=" + appbuilddir + nl;
+			application_make_file += "NDK_PROJECT_PATH=" + ndkprojectpath + nl;
+			#application_make_file += "APP_ABI := all" + nl;
+			#application_make_file += "APP_ABI := armeabi"; # armeabi-v7a x86" + nl;
+			application_make_file += "APP_STL := stlport_static" + nl; 
+			f = open(appbuildscript3, "w");
+			f.write(application_make_file);
+			f.close();
+			
+			#copy ark2d in to project
+			print("Copying ARK2D in to android sdk");
+			#subprocess.call(["cp -r " +ark2ddir + "/build/android/libs/armeabi/ " + appbuilddir + "/local/armeabi/"], shell=True);
+			subprocess.call(["cp -r " +ark2ddir + "/build/android/libs/armeabi/ " + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/lib/"], shell=True);
+			subprocess.call(["cp -r " +ark2ddir + "/build/android/libs/armeabi/ " + ndkdir + "/platforms/"+appplatform+"/arch-x86/usr/lib/"], shell=True);
+			
+			#copy resources in to "assets" dir.
+			subprocess.call(["cp -r " + rootPath + "/data/ " + rootPath + "/build/android/project/assets/"], shell=True);
+			
+			
+			#copy sample game c++/jni files...
+			print("generating game jni files");
+			print("	generating jni.h");
+			editsStrReplace = [("%GAME_CLASS_NAME%", game_name_safe), ("%GAME_SHORT_NAME%", game_short_name), ("%COMPANY_NAME%", company_name_safe), ("%PACKAGE_DOT_NOTATION%", javaPackageName)];
+			f = open(ark2ddir+"/lib/android/jni.h", "r");
+			fgamejnih = f.read();
+			f.close();
+			fgamejnih = self.str_replace(fgamejnih, editsStrReplace);
+			f = open(rootPath+"/src/jni.h", "w");
+			f.write(fgamejnih);
+			f.close();	
+			
+			print("	generating jni.cpp");
+			f = open(ark2ddir+"/lib/android/jni.cpp", "r");
+			fgamejnicpp = f.read();
+			f.close();
+			fgamejnicpp = self.str_replace(fgamejnicpp, editsStrReplace);
+			f = open(rootPath+"/src/jni.cpp", "w");
+			f.write(fgamejnicpp);
+			f.close();	
+			
+			#build game apk.
+			buildline = ndkdir + "/ndk-build";
+			buildline += " NDK_PROJECT_PATH=" + ndkprojectpath;
+			buildline += " NDK_APP_OUT=" + appbuilddir;
+			buildline += " APP_PROJECT_PATH=" + ndkprojectpath;
+			buildline += " APP_BUILD_SCRIPT=" + appbuildscript;
+			buildline += " APP_PLATFORM=" + appplatform;
+			#buildline += " NDK_LOG=1";
+			print("Building library");
+			print(buildline);
+			subprocess.call([buildline], shell=True);	
+			
+			#print("Moving output to build folder");
+			libsdir = ndkprojectpath + "/libs";
+			
+			print("removing temp folders");
+			self.rmdir_recursive(jnifolder);
+			self.rmdir_recursive(libsdir);
+			
+			print("done c++ bits.");
+			print("do androidy-javay bits...");
+			try:
+				print("using custom AndroidManifest.xml");
+				androidManifestPath = config['mac']['android_manifest'];
+				#todo: copy this to rootPath+"/build/android/project/AndroidManifest.xml";
+			except:
+				print("generating default AndroidManifest.xml");
+				androidManifestContents = "";
+				androidManifestContents += "<?xml version=\"1.0\" encoding=\"utf-8\"?>" + nl;
+				androidManifestContents += "<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"" + nl;
+				androidManifestContents += "	package=\"" + javaPackageName + "\" " + nl;
+				androidManifestContents += "	android:versionCode=\"1\" " + nl;
+				androidManifestContents += "	android:versionName=\"1.0\"> " + nl;
+				androidManifestContents += "	<uses-sdk android:minSdkVersion=\"7\" />" + nl;
+				androidManifestContents += "	<application" + nl;
+				#androidManifestContents += "		android:icon=\"@drawable/ic_launcher\" " + nl;
+				androidManifestContents += "		android:label=\"@string/application_name\" android:debuggable=\"true\"> " + nl;
+				androidManifestContents += "		<activity" + nl;
+				androidManifestContents += "			android:name=\"." + game_name_safe + "Activity\" " + nl;
+				androidManifestContents += "			android:label=\"@string/application_name\" " + nl;
+				androidManifestContents += "			android:configChanges=\"orientation|keyboardHidden\" " + nl;
+				androidManifestContents += "			android:theme=\"@android:style/Theme.NoTitleBar.Fullscreen\"> " + nl;
+				androidManifestContents += "			<intent-filter>" + nl;
+				androidManifestContents += "				<action android:name=\"android.intent.action.MAIN\" /> " + nl;
+				androidManifestContents += "				<category android:name=\"android.intent.category.LAUNCHER\" /> " + nl;
+				androidManifestContents += "			</intent-filter>" + nl;
+				androidManifestContents += "		</activity>" + nl;
+				androidManifestContents += "	</application>" + nl;
+				androidManifestContents += "</manifest>" + nl;
+				f = open(rootPath+"/build/android/project/AndroidManifest.xml", "w");
+				f.write(androidManifestContents);
+				f.close();
+				androidManifestPath = rootPath+"/build/android/project/AndroidManifest.xml";
+				
+			print("generating project.properties");
+			projectPropertiesContents = "";
+			projectPropertiesContents += "target=android-7";
+			f = open(rootPath+"/build/android/project/project.properties", "w");
+			f.write(projectPropertiesContents);
+			f.close();
+			
+			#generate strings.xml
+			androidStringsXmlContents = "";
+			androidStringsXmlContents += "<?xml version=\"1.0\" encoding=\"utf-8\"?>";
+			androidStringsXmlContents += "<resources>";
+			androidStringsXmlContents += "	<string name=\"application_name\">" + game_name + "</string>";
+			androidStringsXmlContents += "	<string name=\"application_description\">" + game_description + "</string>";
+			androidStringsXmlContents += "</resources>";
+			f = open(rootPath+"/build/android/project/res/values/strings.xml", "w");
+			f.write(androidStringsXmlContents);
+			f.close(); 
+			
+			#generate project .classpath file
+			androidProjectClasspathContents = "";
+			androidProjectClasspathContents += "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + nl;
+			androidProjectClasspathContents += "<classpath> " + nl;
+			androidProjectClasspathContents += "	<classpathentry kind=\"src\" path=\"src\"/> " + nl;
+			androidProjectClasspathContents += "	<classpathentry kind=\"src\" path=\"gen\"/> " + nl;
+			androidProjectClasspathContents += "	<classpathentry kind=\"con\" path=\"com.android.ide.eclipse.adt.ANDROID_FRAMEWORK\"/> " + nl;
+			androidProjectClasspathContents += "	<classpathentry kind=\"output\" path=\"bin/classes\"/> " + nl;
+			androidProjectClasspathContents += "</classpath> " + nl;
+			f = open(rootPath+"/build/android/project/.classpath", "w");
+			f.write(androidProjectClasspathContents);
+			f.close();
+
+				
+			#copy sample game java files...
+			print("generating android Activity");
+			f = open(ark2ddir+"/lib/android/GameActivity.java", "r");
+			fgamecontents = f.read();
+			f.close();
+			fgamecontents = self.str_replace(fgamecontents, editsStrReplace);
+			
+			f = open(rootPath+"/build/android/project/src/org/" + company_name_safe + "/" + game_short_name + "/" + game_name_safe + "Activity.java", "w");
+			f.write(fgamecontents);
+			f.close();		
+			
+			#copying library/s in to project.
+			print("Copying ark2d and game.so in to project.");
+			subprocess.call(["cp -r " +ark2ddir + "/src/ARK2D/vendor/android/freetype/obj/local/armeabi/ " + rootPath+"/build/android/project/libs/armeabi"], shell=True); #libfreetype
+			subprocess.call(["cp -r " +ark2ddir + "/src/ARK2D/vendor/android/freetype/obj/local/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi"], shell=True);
+			
+			subprocess.call(["cp -r " +ark2ddir + "/src/ARK2D/vendor/android/openal/libs/armeabi/ " + rootPath+"/build/android/project/libs/armeabi"], shell=True); #libfreetype
+			subprocess.call(["cp -r " +ark2ddir + "/src/ARK2D/vendor/android/openal/libs/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi"], shell=True);
+			
+			subprocess.call(["cp -r " +ark2ddir + "/src/ARK2D/vendor/android/libzip/libs/armeabi/ " + rootPath+"/build/android/project/libs/armeabi"], shell=True); #libzip
+			subprocess.call(["cp -r " +ark2ddir + "/src/ARK2D/vendor/android/libzip/libs/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi"], shell=True);
+			
+			#subprocess.call(["cp -r " +ark2ddir + "/build/android/local/armeabi/ " + rootPath+"/build/android/project/libs/armeabi"], shell=True); #libark2d
+			#subprocess.call(["cp -r " +ark2ddir + "/build/android/local/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi"], shell=True);
+			
+			subprocess.call(["cp -r " +ark2ddir + "/build/android/libs/armeabi/ " + rootPath+"/build/android/project/libs/armeabi"], shell=True); #libark2d
+			subprocess.call(["cp -r " +ark2ddir + "/build/android/libs/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi"], shell=True);
+			
+			subprocess.call(["cp -r " +rootPath + "/build/android/local/armeabi/ " + rootPath+"/build/android/project/libs/armeabi"], shell=True); #libgamename
+			subprocess.call(["cp -r " +rootPath + "/build/android/local/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi"], shell=True);
+			
+			#copying ark2d resources in to assets folder.
+			subprocess.call(["cp -r " +ark2ddir + "/data/ " + rootPath+"/build/android/project/assets/ark2d"], shell=True);
+			
+		elif (self.building_library):
+			
+			#copy stuff in vendor to ndk directory. 
+			#freetype
+			print("copying vendor headers (freetype)");
+			copyfreetype1 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/freetype/jni/include ' + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/";
+			copyfreetype2 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/freetype/jni/include ' + ndkdir + "/platforms/"+appplatform+"/arch-x86/usr/";
+			subprocess.call([copyfreetype1], shell=True);
+			subprocess.call([copyfreetype2], shell=True);
+			
+			print("Compiling vendor sources (freetype)");
+			libfreetypedir = ndkprojectpath + "/src/ARK2D/vendor/android/freetype";
+			compilefreetype1 = ndkdir + "/ndk-build NDK_PROJECT_PATH=" + libfreetypedir +" APP_PROJECT_PATH=" + libfreetypedir + " APP_BUILD_SCRIPT=" + libfreetypedir + "/jni/Android.mk APP_PLATFORM=" + appplatform;  
+			print(compilefreetype1);
+			subprocess.call([compilefreetype1], shell=True);
+			subprocess.call(['cp -r ' + libfreetypedir + "/obj/local/armeabi/libfreetype.a " + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/lib"], shell=True);
+			
+			#openal
+			print("copying vendor headers (openal)");
+			copyopenal1 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/openal/jni/include ' + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/";
+			copyopenal2 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/openal/jni/include ' + ndkdir + "/platforms/"+appplatform+"/arch-x86/usr/";
+			subprocess.call([copyopenal1], shell=True);
+			subprocess.call([copyopenal2], shell=True);
+			
+			print("Compiling vendor sources (openal)");
+			libopenaldir = ndkprojectpath + "/src/ARK2D/vendor/android/openal";
+			compileopenal1 = ndkdir + "/ndk-build NDK_PROJECT_PATH=" + libopenaldir +" APP_PROJECT_PATH=" + libopenaldir + " APP_BUILD_SCRIPT=" + libopenaldir + "/jni/Android.mk APP_PLATFORM=" + appplatform;  
+			print(compileopenal1);
+			subprocess.call([compileopenal1], shell=True);
+			subprocess.call(['cp -r ' + libopenaldir + "/libs/armeabi/libopenal.so " + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/lib"], shell=True);
+			
+			#openal
+			#print("copying vendor headers (libzip)");
+			#print("NOT");
+			#copyopenal1 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/libzip/jni/zip.h ' + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/include/";
+			#copyopenal2 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/libzip/jni/zip.h ' + ndkdir + "/platforms/"+appplatform+"/arch-x86/usr/include/";
+			#subprocess.call([copyopenal1], shell=True);
+			#subprocess.call([copyopenal2], shell=True);
+			
+			print("Compiling vendor sources (libzip)");
+			libzipdir = ndkprojectpath + "/src/ARK2D/vendor/android/libzip";
+			compilelibzip1 = ndkdir + "/ndk-build NDK_PROJECT_PATH=" + libzipdir +" APP_PROJECT_PATH=" + libzipdir + " APP_BUILD_SCRIPT=" + libzipdir + "/jni/Android.mk APP_PLATFORM=" + appplatform;  
+			print(compilelibzip1);
+			subprocess.call([compilelibzip1], shell=True);
+			subprocess.call(['cp -r ' + libzipdir + "/libs/armeabi/libzip.so " + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/lib"], shell=True);
+			
+			
+			
+			
+			#make android.mk
+			print("Creating Android.mk");
+			android_make_file = "";
+			android_make_file += "LOCAL_PATH := $(call my-dir)/../../" + nl + nl;
+			android_make_file += "include $(CLEAR_VARS)" + nl+nl;
+			android_make_file += "LOCAL_MODULE    := ark2d" + nl+nl; # Here we give our module name and source file(s)
+			#android_make_file += "LOCAL_C_INCLUDES := $(LOCAL_PATH)/../libzip/ $(LOCAL_PATH)/../libpng/" + nl;
+			android_make_file += "LOCAL_C_INCLUDES := $(LOCAL_PATH)/src/ARK2D/vendor/android/libzip/jni/ " + nl;
+			#android_make_file += "LOCAL_STATIC_LIBRARIES := libzip libpng" + nl;
+			#android_make_file += "LOCAL_C_INCLUDES += external/stlport/stlport" + nl+nl;
+			android_make_file += "LOCAL_SHARED_LIBRARIES += libstdc++" + nl+nl;
+			android_make_file += "LOCAL_CFLAGS := -DARK2D_ANDROID -DDISABLE_IMPORTGL -fno-exceptions -fno-rtti -Wno-psabi" + nl+nl;
+			android_make_file += "LOCAL_DEFAULT_CPP_EXTENSION := cpp" + nl+nl; 
+			android_make_file += "LOCAL_SRC_FILES := \\" + nl;
+			for h in self.src_files: #foreach file on config...
+				android_make_file += "	" + h + " \\" + nl;
+			android_make_file += nl;
+			android_make_file += "LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz -lfreetype -lopenal -lzip" + nl+nl;
+			android_make_file += "include $(BUILD_SHARED_LIBRARY)" + nl;
+			f = open(appbuildscript, "w");
+			f.write(android_make_file);
+			f.close();
+			
+			#make application.mk
+			print("Creating Application.mk");
+			application_make_file = "";
+			application_make_file += "APP_PROJECT_PATH := " + ndkprojectpath + nl;
+			application_make_file += "APP_BUILD_SCRIPT := " + appbuildscript + nl;
+			application_make_file += "NDK_APP_OUT=" + appbuilddir + nl;
+			application_make_file += "NDK_PROJECT_PATH=" + ndkprojectpath + nl;
+			#application_make_file += "APP_ABI := all" + nl;
+			#application_make_file += "APP_ABI := armeabi"; # armeabi-v7a x86" + nl;
+			application_make_file += "APP_STL := stlport_static" + nl; 
+			f = open(appbuildscript3, "w");
+			f.write(application_make_file);
+			f.close();
+			
+			buildline = ndkdir + "/ndk-build";
+			buildline += " NDK_PROJECT_PATH=" + ndkprojectpath;
+			buildline += " NDK_APP_OUT=" + appbuilddir;
+			buildline += " APP_PROJECT_PATH=" + ndkprojectpath;
+			buildline += " APP_BUILD_SCRIPT=" + appbuildscript;
+			buildline += " APP_PLATFORM=" + appplatform;
+			#buildline += " NDK_LOG=1";
+			print("Building library");
+			print(buildline);
+			subprocess.call([buildline], shell=True);	
+			
+			print("Moving output to build folder");
+			libsdir = ndkprojectpath + "/libs";
+			subprocess.call(["cp -r " + libsdir + " " + appbuilddir + "/" ], shell=True);
+			
+			print("removing temp folders");
+			self.rmdir_recursive(libsdir);
+			self.rmdir_recursive(jnifolder);
+			
+			print("done!");
+			
+		else:
+			pass;
 		
 	def start(self):
 	
@@ -642,15 +906,12 @@ if __name__ == "__main__":
 	
 	print("Starting");
 	
-	if (len(sys.argv)>=2):
-		if (sys.argv[1] == "library"):
-			print("Building library");
-			a = ARK2DBuildSystem();
-			#a.clean();
-			a.dllInit();
-			a.start();
-		else:
-			print("Invalid parameters.");	
+	if (len(sys.argv)>=2 and sys.argv[1] == "library"):
+		print("Building library");
+		a = ARK2DBuildSystem();
+		#a.clean();
+		a.dllInit();
+		a.start();	
 	else:
 		print("Building game");
 		if (sys.platform == "win32"):

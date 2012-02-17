@@ -66,6 +66,7 @@ class BMFont : public ARK::Font {
 	public:
 		BMFont();
 		BMFont(unsigned int fntResource, unsigned int imgResource, unsigned int imgResourceType);
+		BMFont(void* data, Image* i);
 		BMFont(const string& f, const string& i);
 		BMFont(const string& f, const string& i, const Color& mask);
 		void drawString(const string& Str, int drawx, int drawy) const;

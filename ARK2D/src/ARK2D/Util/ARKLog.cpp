@@ -26,7 +26,11 @@ void ARKLog::message(string s, unsigned int type) {
 	item.level = type;
 	item.message = s;
 	m_messages.push_back(item);
-	std::cout << "Log " << getTypeString(type) << ": " << s << std::endl;
+	#if defined(ARK2D_ANDROID)
+		__android_log_print(ANDROID_LOG_INFO, "ARK2D", s.c_str());
+	#else
+		std::cout << "Log " << getTypeString(type) << ": " << s << std::endl;
+	#endif
 }
 void ARKLog::e(const char* s) {
 	string str(s);
@@ -119,18 +123,27 @@ void ARKLog::render() {
 }
 
 string ARKLog::getTypeString(unsigned int type) {
-	switch(type) {
-	case TYPE_ERROR:
-		return "ERROR";
-		break;
-	case TYPE_WARNING:
-		return "WARNING";
-		break;
-	case TYPE_INFORMATION:
-		return "INFO";
-		break;
-	}
-	return "";
+	#if defined(ARK2D_ANDROID)
+		switch(type) {
+			case ANDROID_LOG_INFO:
+				return "INFO";
+				break;
+		}
+		return "";
+	#else
+		switch(type) {
+			case TYPE_ERROR:
+				return "ERROR";
+				break;
+			case TYPE_WARNING:
+				return "WARNING";
+				break;
+			case TYPE_INFORMATION:
+				return "INFO";
+				break;
+		}
+		return "";
+	#endif
 }
 
 ARKLog::~ARKLog() {

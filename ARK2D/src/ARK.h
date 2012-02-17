@@ -57,12 +57,17 @@
 #include "ARK2D/Audio/Sound.h"
 
 // Fonts
+#include "ARK2D/Font/Font.h"
 #include "ARK2D/Font/BMFont.h"
 #include "ARK2D/Font/FTFont.h"
+
+// Resources
+#include "ARK2D/Resource.h"
 
 // Tiled
 #include "ARK2D/Tiled/TiledMap.h"
 
+// Input
 #include "ARK2D/Input.h"
 
 // Utils

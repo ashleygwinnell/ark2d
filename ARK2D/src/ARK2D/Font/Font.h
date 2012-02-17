@@ -14,8 +14,10 @@ using namespace std;
 class BMFont;
 class FTFont;
 
+#include "../Resource.h"
+
 namespace ARK {
-	class Font {
+	class Font : public ARK::Resource {
 		public:
 			Font();
 			virtual void drawString(const string& str, int x, int y) const = 0;

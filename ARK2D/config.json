@@ -68,6 +68,7 @@
 			"src/ARK2D/GameTimer.cpp",
 			"src/ARK2D/Graphics.cpp",
 			"src/ARK2D/Input.cpp",
+			"src/ARK2D/Resource.cpp",
 			"src/ARK2D/Shader.cpp",
 			"src/ARK2D/Sort.cpp",
 			"src/ARK2D/SpriteSheet.cpp",

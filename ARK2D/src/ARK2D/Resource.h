@@ -12,19 +12,42 @@ class Image;
 class Sound;
 class Animation;
 
+
 #include <string>
 using namespace std;
 
+#include "ARK2D_windres.h"
+
+#if defined(ARK2D_ANDROID)
+	#include <zip.h>
+#endif
+
 namespace ARK {
+
+class Font;
 
 	class Resource {
 		public:
 			static Resource* get(string ref);
+		private:
+			static Resource* get(string ref, bool appendPath);
+			static void* getRawData(string ref); // remember to free() this data.
+			static unsigned int getResourceTypeByExtension(string extension);
+
+		public:
+
+			#if defined(ARK2D_ANDROID)
+				static zip* apkZip;
+				static string apkZipName;
+			#endif
 
 			Resource();
 			Image* asImage();
 			Sound* asSound();
+			ARK::Font* asFont();
 			virtual ~Resource();
+
+
 	};
 }
 

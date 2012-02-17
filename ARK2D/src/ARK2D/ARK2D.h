@@ -21,6 +21,8 @@
 	#include <stdint.h>
 	#include <stdio.h>
 	#include <stdlib.h>
+	#include <zip.h>
+	#define STL_AVAILABLE
 
 #elif defined(__linux__)
 	#define ARK2D_UBUNTU_LINUX

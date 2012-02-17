@@ -15,6 +15,7 @@
 using namespace std;
 
 BMFont::BMFont():
+	ARK::Font(),
 	m_loaded(false),
 	m_data(NULL)
 	{
@@ -27,11 +28,24 @@ BMFont::BMFont(unsigned int fntResource, unsigned int imgResource, unsigned int 
 	m_FontFile(""),
 	m_ImageFile("")
 {
-	std::cout << "Loading BMFont... ";
-		m_data = (char*) GameContainerPlatform::getARK2DResource(fntResource, ARK2D_RESOURCE_TYPE_FNT);
-		m_Image = new Image(imgResource, imgResourceType);
-		Parse();
-	std::cout << "done." << std::endl;
+	ARK2D::getLog()->i("Loading BMFont from raw data.");
+	m_data = (char*) GameContainerPlatform::getARK2DResource(fntResource, ARK2D_RESOURCE_TYPE_FNT);
+	m_Image = new Image(imgResource, imgResourceType);
+	Parse();
+	ARK2D::getLog()->i("Done");
+}
+
+BMFont::BMFont(void* data, Image* i):
+	m_loaded(false),
+	m_data(NULL),
+	m_FontFile(""),
+	m_ImageFile("")
+{
+	ARK2D::getLog()->i("Loading BMFont from raw data.");
+	m_data = (char*) data;
+	m_Image = i;
+	Parse();
+	ARK2D::getLog()->i("Done");
 }
 
 BMFont::BMFont(const string& f, const string& i):
@@ -41,11 +55,10 @@ BMFont::BMFont(const string& f, const string& i):
 	m_ImageFile(i)
 	//m_Image(i)
 {
-	std::cout << "Loading BMFont: ";
-	std::cout << f << "\r\n";
-		m_Image = new Image(i);
-		Parse();
-	std::cout << "done." << std::endl;
+	ARK2D::getLog()->i(StringUtil::append("Loading BMFont: ", f));
+	m_Image = ARK::Resource::get(i)->asImage();
+	Parse();
+	ARK2D::getLog()->i("Done");
 }
 
 BMFont::BMFont(const string& f, const string& i, const Color& mask):

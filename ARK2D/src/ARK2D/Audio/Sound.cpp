@@ -6,12 +6,14 @@
 
 #include "Sound.h"
 #include "../Util/StringUtil.h"
+#include "../Resource.h"
 
 ALfloat Sound::ListenerPos[3] = { 0.0, 0.0, 0.0 };
 ALfloat Sound::ListenerVel[3] = { 0.0, 0.0, 0.0 };
 ALfloat Sound::ListenerOri[6] = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
 
 Sound::Sound(const std::string& fname):
+	ARK::Resource(),
 	m_FileName(fname),
 	m_groupId(0)
 	//Buffer(AL_NONE),

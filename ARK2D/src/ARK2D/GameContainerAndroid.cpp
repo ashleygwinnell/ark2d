@@ -39,7 +39,13 @@ GameContainer::GameContainer(Game& g, int width, int height, int bpp, bool fulls
 }
 
 void GameContainer::setSize(int width, int height) {
-
+    if (m_resizeBehaviour == RESIZE_BEHAVIOUR_SCALE) {
+   		ARK2D::s_game->resize(this, width, height);
+    } else if (m_resizeBehaviour == RESIZE_BEHAVIOUR_NOSCALE) {
+    	m_width = width;
+    	m_height = height;
+    	ARK2D::s_game->resize(this, width, height);
+    }
 }
 
 void GameContainer::setFullscreen(bool fullscreen) {
@@ -51,6 +57,12 @@ int GameContainer::getGlobalMouseX() const {
 }
 int GameContainer::getGlobalMouseY() const {
 	return 0;
+}
+void GameContainer::setIcon(const std::string& path){
+
+}
+void GameContainer::setCursorVisible(bool b) {
+
 }
 
 void GameContainer::start() {
@@ -80,7 +92,7 @@ bool GameContainerPlatform::deinitOpenAL() {
 }
 
 string GameContainerPlatform::getResourcePath() const {
-	return "";
+	return "assets/";
 }
 
 void* GameContainerPlatform::getARK2DResource(int resourceId, int resourceType) {

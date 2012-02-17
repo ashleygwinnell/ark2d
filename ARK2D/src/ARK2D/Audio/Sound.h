@@ -27,8 +27,9 @@
 
 #include "../ARK2D.h"
 #include "../ARK2D_AL.h"
+#include "../Resource.h"
 
-class Sound {
+class Sound : public ARK::Resource {
 	friend class GameContainer;
 	friend class GameContainerPlatform;
 

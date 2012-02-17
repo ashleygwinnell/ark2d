@@ -21,6 +21,7 @@
 
 #include "../ARK2D_GL.h"
 #include "../GameContainer.h"
+#include "../Resource.h"
 
 // Currently bound Image texture;
 unsigned int Image::s_current_texture_id = 0;
@@ -279,6 +280,7 @@ PNGImage* Image::loadPNG() {
 }
 
 Image::Image():
+	ARK::Resource(),
 	m_data(NULL),
 	m_resourceType(0),
 	filename(""),
@@ -298,6 +300,7 @@ Image::Image():
 }
 
 Image::Image(unsigned int resource, unsigned int resourceType):
+	ARK::Resource(),
 	m_data(NULL),
 	m_resourceType(resourceType),
 	filename(""),
@@ -319,6 +322,7 @@ Image::Image(unsigned int resource, unsigned int resourceType):
 }
 
 Image::Image(void* data, unsigned int resourceType):
+	ARK::Resource(),
 	m_data(data),
 	m_resourceType(resourceType),
 	filename(""),
@@ -338,7 +342,8 @@ Image::Image(void* data, unsigned int resourceType):
 	this->texture = this->load();
 }
 
-Image::Image(const std::string& fname) :
+Image::Image(const std::string& fname):
+	ARK::Resource(),
 	m_data(NULL),
 	m_resourceType(0),
 	filename(fname),
@@ -359,6 +364,7 @@ Image::Image(const std::string& fname) :
 }
 
 Image::Image(const std::string& fname, const Color& mask) :
+	ARK::Resource(),
 	m_data(NULL),
 	m_resourceType(0),
 	filename(fname),
@@ -566,33 +572,36 @@ void Image::draw(float x, float y) const {
 			0 + this->m_Width,	0 + this->m_Height,	0	// br
 		};
 
-		float colorR = m_color->getRed()/255.0f;
-		float colorG = m_color->getGreen()/255.0f;
-		float colorB = m_color->getBlue()/255.0f;
-		float colorA = m_color->getAlpha()/255.0f;
-		float colors[] = {
-			colorR, colorG, colorB, colorA,
-			colorR, colorG, colorB, colorA,
-			colorR, colorG, colorB, colorA,
-			colorR, colorG, colorB, colorA
-		};
+		if (m_color != NULL) {
+			float colorR = m_color->getRed()/255.0f;
+			float colorG = m_color->getGreen()/255.0f;
+			float colorB = m_color->getBlue()/255.0f;
+			float colorA = m_color->getAlpha()/255.0f;
+			float colors[] = {
+				colorR, colorG, colorB, colorA,
+				colorR, colorG, colorB, colorA,
+				colorR, colorG, colorB, colorA,
+				colorR, colorG, colorB, colorA
+			};
+			glEnableClientState(GL_COLOR_ARRAY);
+			glColorPointer(4, GL_FLOAT, 0, colors);
+		}
 
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-		glEnableClientState(GL_COLOR_ARRAY);
 
 		glVertexPointer(3, GL_FLOAT, 0, verts);
-		glColorPointer(4, GL_FLOAT, 0, colors);
 		glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
 
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		glDisableClientState(GL_COLOR_ARRAY);
 
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glDisable(GL_TEXTURE_2D);
+		if (m_color != NULL) {
+			glDisableClientState(GL_COLOR_ARRAY);
+		}
+
 
 	#else
 		glBegin( GL_QUADS );
@@ -651,6 +660,8 @@ void Image::drawCenteredFlipped(int x, int y, bool flipx, bool flipy) {
 
 void Image::bind() const {
 	if (texture == s_current_texture_id) { return; }
+
+	glEnable(GL_TEXTURE_2D);
 	glBindTexture( GL_TEXTURE_2D, this->texture );
 	s_current_texture_id = texture;
 }
@@ -658,6 +669,7 @@ void Image::unbind() const {
 	//if (texture == s_current_texture_id) { return; }
 	glBindTexture(GL_TEXTURE_2D, 0);
 	s_current_texture_id = 0;
+	glDisable(GL_TEXTURE_2D);
 }
 
 /* void Image::copyAreaToImage(const Image& image, unsigned int dest_x, unsigned int dest_y, unsigned int x, unsigned int y, unsigned int width, unsigned int height) {

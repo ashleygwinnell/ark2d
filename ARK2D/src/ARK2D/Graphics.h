@@ -28,8 +28,10 @@ class Graphics
 		Graphics();
 
 		void setFont(ARK::Font* f);
+		void setDefaultFont(ARK::Font* f);
 		ARK::Font* getFont() const ;
 		ARK::Font* getDefaultFont() const;
+
 		void drawString(const std::string str, int x, int y) const;
 		void drawStringCenteredAt(const std::string str, int x, int y) const;
 		void drawStringWordWrap(const std::string str, int x, int y, int maxWidth, int ySpacing) const;

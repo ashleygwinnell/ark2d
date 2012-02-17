@@ -4,6 +4,7 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE    := ark2d
 
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/src/ARK2D/vendor/android/libzip/jni/ 
 LOCAL_SHARED_LIBRARIES += libstdc++
 
 LOCAL_CFLAGS := -DARK2D_ANDROID -DDISABLE_IMPORTGL -fno-exceptions -fno-rtti -Wno-psabi
@@ -30,6 +31,7 @@ LOCAL_SRC_FILES := \
 	src/ARK2D/GameTimer.cpp \
 	src/ARK2D/Graphics.cpp \
 	src/ARK2D/Input.cpp \
+	src/ARK2D/Resource.cpp \
 	src/ARK2D/Shader.cpp \
 	src/ARK2D/Sort.cpp \
 	src/ARK2D/SpriteSheet.cpp \
@@ -165,6 +167,6 @@ LOCAL_SRC_FILES := \
 	src/ARK2D/vendor/zlib123/zutil.c \
 	src/ARK2D/GameContainerAndroid.cpp \
 
-LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz -lfreetype -lopenal 
+LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz -lfreetype -lopenal -lzip
 
 include $(BUILD_SHARED_LIBRARY)

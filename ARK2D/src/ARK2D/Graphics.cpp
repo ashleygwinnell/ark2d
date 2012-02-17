@@ -15,8 +15,11 @@
 #include "GameContainer.h"
 
 Graphics::Graphics():
+	m_DefaultFont(NULL),
+	m_Font(NULL),
 	m_DrawColor(255, 0, 255),
-	m_MaskColor()
+	m_MaskColor(),
+	m_LineWidth(1)
 {
 	//m_DefaultFont = new BMFont("data/calibri.fnt", "data/calibri.bmp", Color::magenta);
 	//m_Font = m_DefaultFont;
@@ -25,6 +28,10 @@ Graphics::Graphics():
 void Graphics::setFont(ARK::Font* f) {
 	m_Font = f;
 }
+void Graphics::setDefaultFont(ARK::Font* f) {
+	m_DefaultFont = f;
+}
+
 ARK::Font* Graphics::getFont() const {
 	return m_Font;
 }

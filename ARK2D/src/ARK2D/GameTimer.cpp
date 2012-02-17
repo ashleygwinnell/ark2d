@@ -49,7 +49,9 @@ GameTimer::~GameTimer() {
 */
 
 long GameTimer::millis() {
-	#ifdef __WIN32
+	#if defined(ARK2D_ANDROID)
+		return clock();
+	#elif defined(ARK2D_WINDOWS)
 		return clock();
 	#elif defined(ARK2D_MACINTOSH)
 		timeval now;
@@ -113,9 +115,7 @@ unsigned int GameTimer::getFPS() const {
 // between ticks.
 //----------------------------------------------------------------
 float GameTimer::getDelta() const {
-
 	return m_TimeDelta;
-
 }
 
 void GameTimer::flush() {

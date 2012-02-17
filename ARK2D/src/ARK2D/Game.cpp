@@ -33,7 +33,7 @@ void Game::update(GameContainer* container, GameTimer* timer) {
 //void Game::render(GameContainer& container, const Graphics& g) = 0;
 //void Game::resize(GameContainer& container, int width, int height) = 0;
 void Game::resize(GameContainer* container, int width, int height) {
-	#if !defined(ARK2D_ANDROID)
+	//#if !defined(ARK2D_ANDROID)
 		if (container->getResizeBehaviour() == GameContainer::RESIZE_BEHAVIOUR_SCALE)
 		{
 			glLoadIdentity();
@@ -49,15 +49,23 @@ void Game::resize(GameContainer* container, int width, int height) {
 			glPushMatrix();
 			glLoadIdentity();
 
+#if defined(ARK2D_ANDROID)
+			glOrthof(0, width, height, 0, -1, 1);
+#else
 			glOrtho(0, width, height, 0, -1, 1);
+#endif
+
+
+
+
 
 			glMatrixMode(GL_MODELVIEW);
 			glPushMatrix();
 			glLoadIdentity();
 		}
-	#else
+	//#else
 
-	#endif
+	//#endif
 }
 
 void Game::keyPressed(unsigned int key) {

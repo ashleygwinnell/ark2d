@@ -19,8 +19,9 @@
 #include "PNGImage.h"
 #include "../Color.h"
 #include "../SpriteSheetDescriptionItem.h"
+#include "../Resource.h"
 
-class Image {
+class Image : public ARK::Resource {
 	private:
 
 		static unsigned int s_current_texture_id;

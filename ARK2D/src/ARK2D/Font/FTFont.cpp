@@ -207,7 +207,9 @@ void FTFontData::clean() {
 }
 
 
-FTFont::FTFont(string filename, unsigned int height): m_data(NULL) {
+FTFont::FTFont(string filename, unsigned int height):
+	ARK::Font(),
+	m_data(NULL) {
 	m_data = new FTFontData();
 	m_data->init(filename.c_str(), height);
 }
