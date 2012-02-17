@@ -22,6 +22,7 @@ GameContainer::GameContainer(Game& g, int width, int height, int bpp, bool fulls
 	m_fullscreen(fullscreen),
 	m_resizable(false),
 	m_scaleToWindow(true),
+	m_touchMode(true),
 	m_clearColor(Color::black),
 	m_resizeBehaviour(RESIZE_BEHAVIOUR_SCALE),
 	m_platformSpecific()

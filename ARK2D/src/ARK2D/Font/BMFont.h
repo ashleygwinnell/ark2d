@@ -21,10 +21,9 @@
 #include "../Util/StringUtil.h"
 
 #include "Font.h"
+#include "../ARK2D.h"
 
-using std::string;
-using std::istream;
-using std::stringstream;
+using namespace std;
 
 
 // CharDescriptor holds the information for a single character;
@@ -62,6 +61,7 @@ class BMFont : public ARK::Font {
 		string m_ImageFile;
 		Charset m_Charset;
 		Image* m_Image;
+		map<int, Image*> m_letterImages;
 
 	public:
 		BMFont();
@@ -69,7 +69,7 @@ class BMFont : public ARK::Font {
 		BMFont(void* data, Image* i);
 		BMFont(const string& f, const string& i);
 		BMFont(const string& f, const string& i, const Color& mask);
-		void drawString(const string& Str, int drawx, int drawy) const;
+		void drawString(const string& Str, int drawx, int drawy);
 		unsigned int getStringWidth(const string& Str) const;
 		unsigned int getStringHeight(const string& Str) const;
 		unsigned int getLineHeight() const ;

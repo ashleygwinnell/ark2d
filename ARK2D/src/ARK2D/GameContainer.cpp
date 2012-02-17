@@ -131,6 +131,13 @@ void GameContainer::setResizeBehaviour(int b) {
 	m_resizeBehaviour = b;
 }
 
+bool GameContainer::isTouchMode() {
+	return m_touchMode;
+}
+void GameContainer::setTouchMode(bool tm) {
+	m_touchMode = tm;
+}
+
 void GameContainer::saveScreenshot(string filename) {
 	void* data[m_width * m_height];
 	glReadPixels(0, 0, m_width, m_height, GL_RGBA, GL_UNSIGNED_BYTE, &data);

@@ -30,6 +30,7 @@ namespace ARK {
 
 	Resource* Resource::get(string ref, bool appendPath) {
 		GameContainer* container = ARK2D::getContainer();
+		string oldref = ref;
 		if (appendPath) {
 			ref = container->getResourcePath() + ref;
 		}
@@ -39,10 +40,11 @@ namespace ARK {
 		Resource* resource = NULL;
 		string extension = StringUtil::getExtension(ref);
 		if (extension == "fnt") {
-			string pngref = ref.substr(0, ref.find_last_of(".")) + ".png";
+			//string pngref = ref.substr(0, ref.find_last_of(".")) + ".png";
+			string pngref = oldref.substr(0, oldref.find_last_of(".")) + ".png";
 			#if defined(ARK2D_ANDROID)
 				void* fntData = getRawData(ref);
-				Image* imgData = get(pngref, false)->asImage();
+				Image* imgData = get(pngref)->asImage();
 				resource = new BMFont(fntData, imgData);
 
 				free(fntData);

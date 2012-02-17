@@ -5,19 +5,26 @@
  *      Author: Ashley
  */
 
+#include <stdlib.h>
 #include <sstream>
 #include <iostream>
 #include <fstream>
-#include "BMFont.h"
+#include <map>
 #include "../Image/Image.h"
 #include "../GameContainer.h"
 
-using namespace std;
+#include "BMFont.h"
+
 
 BMFont::BMFont():
 	ARK::Font(),
 	m_loaded(false),
-	m_data(NULL)
+	m_data(NULL),
+	m_FontFile(""),
+	m_ImageFile(""),
+	m_Charset(),
+	m_Image(NULL),
+	m_letterImages()
 	{
 
 }
@@ -26,7 +33,10 @@ BMFont::BMFont(unsigned int fntResource, unsigned int imgResource, unsigned int 
 	m_loaded(false),
 	m_data(NULL),
 	m_FontFile(""),
-	m_ImageFile("")
+	m_ImageFile(""),
+	m_Charset(),
+	m_Image(NULL),
+	m_letterImages()
 {
 	ARK2D::getLog()->i("Loading BMFont from raw data.");
 	m_data = (char*) GameContainerPlatform::getARK2DResource(fntResource, ARK2D_RESOURCE_TYPE_FNT);
@@ -39,7 +49,10 @@ BMFont::BMFont(void* data, Image* i):
 	m_loaded(false),
 	m_data(NULL),
 	m_FontFile(""),
-	m_ImageFile("")
+	m_ImageFile(""),
+	m_Charset(),
+	m_Image(NULL),
+	m_letterImages()
 {
 	ARK2D::getLog()->i("Loading BMFont from raw data.");
 	m_data = (char*) data;
@@ -52,8 +65,10 @@ BMFont::BMFont(const string& f, const string& i):
 	m_loaded(false),
 	m_data(NULL),
 	m_FontFile(f),
-	m_ImageFile(i)
-	//m_Image(i)
+	m_ImageFile(i),
+	m_Charset(),
+	m_Image(NULL),
+	m_letterImages()
 {
 	ARK2D::getLog()->i(StringUtil::append("Loading BMFont: ", f));
 	m_Image = ARK::Resource::get(i)->asImage();
@@ -65,8 +80,10 @@ BMFont::BMFont(const string& f, const string& i, const Color& mask):
 	m_loaded(false),
 	m_data(NULL),
 	m_FontFile(f),
-	m_ImageFile(i)//,
-	//m_Image(i, mask)
+	m_ImageFile(i),
+	m_Charset(),
+	m_Image(NULL),
+	m_letterImages()
 {
 	ARK2D::getLog()->i(StringUtil::append("Loading BMFont: ", f));
 
@@ -76,6 +93,9 @@ BMFont::BMFont(const string& f, const string& i, const Color& mask):
 
 BMFont::~BMFont() {
 	delete m_data;
+
+	// TODO:
+	// loop through m_letterImages and delete them.
 }
 
 Image* BMFont::getImage() const {
@@ -187,6 +207,7 @@ bool BMFont::Parse() // istream& Stream, Charset& CharsetDesc
 						Converter >> m_Charset.Chars[CharID].XAdvance;
 					else if( Key == "page" )
 						Converter >> m_Charset.Chars[CharID].Page;
+
 				}
 			}
 		}
@@ -207,29 +228,38 @@ bool BMFont::Parse() // istream& Stream, Charset& CharsetDesc
 }
 
 // remember that u and v are width and height, respectively.
-void BMFont::drawString(const string& Str, int drawx, int drawy) const {
+void BMFont::drawString(const string& Str, int drawx, int drawy) {
 	if (m_loaded == false) { return; }
 
-	short CharX, CharY, Width, Height, OffsetX, OffsetY;
+	short CharX, CharY, Width, Height, OffsetX, OffsetY, XAdvance;
 	//m_Image.getSubImage(10, 10, 10, 10).draw(drawx, drawy);
 
 //	int TotalX = 0;
 	for( unsigned int i = 0; i < Str.size(); ++i )
 	{
+		int charid = (int) Str[i];
+		CharX = m_Charset.Chars[charid].x;
+		CharY = m_Charset.Chars[charid].y;
+		Width = m_Charset.Chars[charid].Width;
+		Height = m_Charset.Chars[charid].Height;
+		OffsetX = m_Charset.Chars[charid].XOffset;
+		OffsetY = m_Charset.Chars[charid].YOffset;
+		XAdvance = m_Charset.Chars[charid].XAdvance;
 
-		CharX = m_Charset.Chars[(int) Str[i]].x;
-		CharY = m_Charset.Chars[(int) Str[i]].y;
-		Width = m_Charset.Chars[(int) Str[i]].Width;
-		Height = m_Charset.Chars[(int) Str[i]].Height;
-		OffsetX = m_Charset.Chars[(int) Str[i]].XOffset;
-		OffsetY = m_Charset.Chars[(int) Str[i]].YOffset;
-
-		Image* img = m_Image->getSubImage(CharX, CharY, Width, Height);
+		Image* img = NULL;
+		if (m_letterImages.find(charid) != m_letterImages.end()) {
+			img = (Image*) m_letterImages.find(charid)->second;
+		} else {
+			ARK2D::getLog()->i("new letter cache");
+			img = m_Image->getSubImage(CharX, CharY, Width, Height);
+			m_letterImages[charid] = img;
+		}
 		img->setAlpha(m_Image->getAlpha());
 		img->draw(drawx + OffsetX, drawy + OffsetY);
-		delete img;
+
+
 		//TotalX += Width;
-		drawx += m_Charset.Chars[(int) Str[i]].XAdvance;
+		drawx += XAdvance;
 		//drawy += m_Charset.Chars[Str[i]].YAdvance;
 
 		//upper left

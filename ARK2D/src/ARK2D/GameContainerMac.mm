@@ -43,6 +43,7 @@
 		m_fullscreen(fullscreen),
 		m_resizable(false),
 		m_scaleToWindow(true),
+		m_touchMode(false),
 		m_clearColor(Color::black),
 		m_resizeBehaviour(RESIZE_BEHAVIOUR_SCALE),
 		m_platformSpecific()
@@ -68,7 +69,7 @@
 			
 			// Get location of current app bundle and make sure there's a resources path.
 			m_platformSpecific.m_resourcePath = [[[NSBundle mainBundle] resourcePath] fileSystemRepresentation];
-			m_platformSpecific.m_resourcePath += "/";
+			m_platformSpecific.m_resourcePath += "/data/";
 			std::cout << "Resource path: " << m_platformSpecific.m_resourcePath << std::endl;
 			
 			if (NSApp == nil) {
@@ -241,7 +242,7 @@
 		glClearColor(m_clearColor.getRed()/255.0f, m_clearColor.getGreen()/255.0f, m_clearColor.getBlue()/255.0f, m_clearColor.getAlpha()/255.0f);
 		
 		// load default font.
-		BMFont* fnt = new BMFont(getResourcePath() + "ark2d/fonts/default.fnt", getResourcePath() + "ark2d/fonts/default.png");
+		BMFont* fnt = ARK::Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont(); // BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
 		m_graphics.m_DefaultFont = fnt;
 		m_graphics.m_Font = fnt;
 		
@@ -280,8 +281,7 @@
 			
 			swapBuffers();
 			
-			//sleep(delta/2);
-			usleep(delta/2);
+			usleep(delta * 500); // 0.017/2.
 		}
 		
 		disableOpenAL();

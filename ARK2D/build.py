@@ -416,6 +416,7 @@ class ARK2DBuildSystem:
 				subprocess.call(['mkdir ' + contents_folder ], shell=True);
 				subprocess.call(['mkdir ' + contents_folder + self.ds + "MacOS"], shell=True);
 				subprocess.call(['mkdir ' + resources_folder], shell=True);
+				subprocess.call(['mkdir ' + resources_folder + self.ds + "data"], shell=True);
 				subprocess.call(['mkdir ' + frameworks_folder], shell=True);
 				
 				#copying dylib in to project.
@@ -425,7 +426,7 @@ class ARK2DBuildSystem:
 				
 				#copy ark2d resources in to .app
 				print("copying ark2d resources in to project:");
-				cpyark2dres = 'cp -r ' + self.ark2d_dir + self.ds + 'data ' + resources_folder + self.ds + 'ark2d';
+				cpyark2dres = 'cp -r ' + self.ark2d_dir + self.ds + 'data ' + resources_folder + self.ds + 'data' + self.ds + 'ark2d';
 				print(cpyark2dres);
 				subprocess.call([cpyark2dres], shell=True);
 				

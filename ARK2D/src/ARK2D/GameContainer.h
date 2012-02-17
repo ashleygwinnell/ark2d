@@ -63,10 +63,14 @@ class GameContainer {
 		bool isFullscreen();
 		void setFullscreen(bool fs);
 
+		bool isTouchMode();
+		void setTouchMode(bool tm);
+
 		void setSize(int width, int height);
 
 		bool isResizable();
 		void setResizable(bool fs);
+
 		void setScaleToWindow(bool b);
 		unsigned int getFPS();
 		void setIcon(const std::string& path);
@@ -134,6 +138,7 @@ class GameContainer {
 		bool m_resizable;
 		bool m_scaleToWindow;
 		bool m_verbose;
+		bool m_touchMode;
 		int m_fps;
 
 		Color m_clearColor;

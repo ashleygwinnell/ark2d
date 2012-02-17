@@ -22,10 +22,12 @@ ARKLog::ARKLog():
 }
 
 void ARKLog::message(string s, unsigned int type) {
+
 	ARKLogMessage item;
 	item.level = type;
 	item.message = s;
 	m_messages.push_back(item);
+
 	#if defined(ARK2D_ANDROID)
 		__android_log_print(ANDROID_LOG_INFO, "ARK2D", s.c_str());
 	#else
@@ -80,6 +82,13 @@ void ARKLog::update() {
 }
 void ARKLog::render() {
 
+	// remove old items
+	if (m_messages.size() > m_maxMessages) {
+		int removeCount = m_messages.size() - m_maxMessages;
+		for(; removeCount > 0; removeCount--) {
+			m_messages.pop_front();
+		}
+	}
 
 	if (!m_visible) {
 		return;
@@ -97,13 +106,7 @@ void ARKLog::render() {
 	g->setDrawColor(Color::white);
 	g->setFont(defaultFont);
 
-	// remove old items
-	if (m_messages.size() > m_maxMessages) {
-		int removeCount = m_messages.size() - m_maxMessages;
-		for(; removeCount > 0; removeCount--) {
-			m_messages.pop_front();
-		}
-	}
+
 
 	list<ARKLogMessage>::iterator it;
 	int actualHeight = 0;

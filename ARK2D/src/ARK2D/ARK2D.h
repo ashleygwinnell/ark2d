@@ -12,6 +12,7 @@
 	#include <string>
 	#include <vector>
 	#include <list>
+	#include <map>
 	#include <sstream>
 	#include <iostream>
 	#include <jni.h>
@@ -38,6 +39,8 @@
 	#include <string>
 	#include <stdio.h>
 	#include <vector>
+	#include <list>
+	#include <map>
 	#include <fstream>
 	#include <iostream>
 	#include <cstdio>
@@ -47,7 +50,7 @@
 	#include <time.h>
 	#include <ctime>
 	#include <sys/time.h>
-	#include <list>
+
 #elif defined(_WIN32)
 	#define ARK2D_WINDOWS
 	#define STL_AVAILABLE

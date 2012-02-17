@@ -214,7 +214,7 @@ FTFont::FTFont(string filename, unsigned int height):
 	m_data->init(filename.c_str(), height);
 }
 
-void FTFont::drawString(const string& str, int x, int y) const {
+void FTFont::drawString(const string& str, int x, int y) {
 	#if defined(ARK2D_ANDROID)
 	#else
 		//GLuint font = m_data->list_base;

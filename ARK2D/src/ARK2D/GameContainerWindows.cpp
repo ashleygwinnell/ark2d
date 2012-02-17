@@ -170,6 +170,7 @@
 			m_fullscreen(fullscreen),
 			m_resizable(false),
 			m_scaleToWindow(true),
+			m_touchMode(false),
 			m_clearColor(Color::black),
 			m_resizeBehaviour(RESIZE_BEHAVIOUR_SCALE),
 			m_platformSpecific()
