@@ -28,7 +28,10 @@ class Color {
 		unsigned int getGreen() const;
 		unsigned int getBlue() const;
 		unsigned int getAlpha() const;
-
+		float getRedf() const;
+		float getGreenf() const;
+		float getBluef() const;
+		float getAlphaf() const;
 		void bind() const;
 
 		bool operator==(Color c);

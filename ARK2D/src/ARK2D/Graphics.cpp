@@ -179,40 +179,59 @@ void Graphics::fillRoundedRect(int x, int y, int width, int height, int radius, 
  * ...or maybe even OpenGL 3.0: hello deprecation model!
  */
 void Graphics::drawRect(int x, int y, int width, int height) const {
-	#if defined(ARK2D_ANDROID)
+	//#if defined(ARK2D_ANDROID)
+		float verts[] = {
+			0, 0,//tl
+			width, 0,// tr
+			width, height,// br
+			0, height//lr
+		};
+		glDisable(GL_TEXTURE_2D);
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glPushMatrix();
+		glTranslatef(x, y, 0);
 
-	#else
+		glVertexPointer(2, GL_FLOAT, 0, verts);
+		glDrawArrays(GL_LINE_LOOP, 0, 4);
+
+		glTranslatef(x * -1, y * -1, 0);
+		glPopMatrix();
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glEnable(GL_TEXTURE_2D);
+	/*#else
 		glBegin(GL_LINE_LOOP);
 			glVertex2i(x, y);
 			glVertex2i(x, y + height);
 			glVertex2i(x + width, y + height);
 			glVertex2i(x + width, y);
 		glEnd();
-	#endif
+	#endif*/
 }
 void Graphics::fillRect(int x, int y, int width, int height) const {
-	#if defined(ARK2D_ANDROID)
+	//#if defined(ARK2D_ANDROID)
 		glDisable(GL_TEXTURE_2D);
 		glEnableClientState(GL_VERTEX_ARRAY);
 
 		float rawVertices[] = {
-			0,		0,		0,  // tl
-			width,	0,		0,	// tr
-			0,		height,	0,  // bl
-			width,	height,	0	// br
+			0,		0,		  // tl
+			width,	0,			// tr
+			0,		height,	  // bl
+			width,	height	// br
 		};
+		glPushMatrix();
 		glTranslatef(x, y, 0);
 
-		glVertexPointer(3, GL_FLOAT, 0, rawVertices);
+		glVertexPointer(2, GL_FLOAT, 0, rawVertices);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 		glTranslatef(x * -1, y * -1, 0);
+		glPopMatrix();
 
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glEnable(GL_TEXTURE_2D);
-	#else
+	/*#else
 		glRecti(x, y, x + width, y + height);
-	#endif
+	#endif*/
 }
 
 void Graphics::fillTriangle(int x, int y, int width, int height) const {
@@ -245,8 +264,29 @@ void Graphics::drawPoint(float x, float y) const {
 
 
 void Graphics::drawCircle(int x, int y, int radius, int points) const {
-	#if defined(ARK2D_ANDROID)
-	#else
+	//#if defined(ARK2D_ANDROID)
+		float each = 360.0f / float(points);
+		float verts[points*2];
+		int j = 0;
+		for(float i = 0; i <= 360; i += each) {
+			double angle = 2 * PI * i / 360;
+			verts[j] = float(0 + cos(angle) * radius);
+			verts[j+1] = float(0 + sin(angle) * radius);
+			j+=2;
+		}
+		glDisable(GL_TEXTURE_2D);
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glPushMatrix();
+		glTranslatef(x, y, 0);
+
+		glVertexPointer(2, GL_FLOAT, 0, verts);
+		glDrawArrays(GL_LINE_LOOP, 0, points);
+
+		glTranslatef(x * -1, y * -1, 0);
+		glPopMatrix();
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glEnable(GL_TEXTURE_2D);
+	/*#else
 		float each = 360.0f / float(points);
 		glBegin(GL_LINE_LOOP);
 		for(float i = 0; i <= 360; i += each){
@@ -254,19 +294,38 @@ void Graphics::drawCircle(int x, int y, int radius, int points) const {
 			glVertex2d(x + cos(angle) * radius, y + sin(angle) * radius);
 		}
 		glEnd();
-	#endif
+	#endif*/
 }
 
 void Graphics::fillCircle(int x, int y, int radius, int points) const {
-	/*float each = 360.0f / float(points);
-	glBegin(GL_TRIANGLE_FAN);
-	glVertex2i(x, y);
-	for (float angle = 0; angle < 360; angle += each) {
-		glVertex2f(x + sin(angle) * radius, y + cos(angle) * radius);
-	}
-	glEnd();*/
 
-	#if defined(ARK2D_ANDROID)
+	float each = 360.0f / float(points);
+	float verts[(points+2)*2];
+	verts[0] = 0;
+	verts[1] = 0;
+	int j = 2;
+	for(float i = 0; i <= 360; i += each) {
+		double angle = 2 * PI * i / 360;
+		verts[j] = float(0 + cos(angle) * radius);
+		verts[j+1] = float(0 + sin(angle) * radius);
+		j+=2;
+	}
+	verts[j] = 0;
+	verts[j+1] = 0;
+	glDisable(GL_TEXTURE_2D);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glPushMatrix();
+	glTranslatef(x, y, 0);
+
+	glVertexPointer(2, GL_FLOAT, 0, verts);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, points+2);
+
+	glTranslatef(x * -1, y * -1, 0);
+	glPopMatrix();
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glEnable(GL_TEXTURE_2D);
+
+	/*#if defined(ARK2D_ANDROID)
 
 	#else
 		float each = 360.0f / float(points);
@@ -277,7 +336,7 @@ void Graphics::fillCircle(int x, int y, int radius, int points) const {
 			glVertex2d(x + cos(angle) * radius, y + sin(angle) * radius);
 		}
 		glEnd();
-	#endif
+	#endif*/
 }
 
 void Graphics::drawCircleSpikey(int x, int y, int radius, int points) const {

@@ -25,10 +25,19 @@ public class %GAME_CLASS_NAME%Activity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); 
          
+        String gameOrientation = "%GAME_ORIENTATION%";
+        if (gameOrientation.equals("landscape")) {
+        	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        } else if (gameOrientation.equals("portrait")) {
+        	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        } else {
+        	
+        }
+        
         mGLView = new %GAME_CLASS_NAME%View(this);
         setContentView(mGLView);
         
-        //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        
     } 
     
     @Override
@@ -91,17 +100,17 @@ class %GAME_CLASS_NAME%View extends GLSurfaceView {
 			int thisx = (int) event.getX(); //pointerIndex); 
 			int thisy = (int) event.getY(); //pointerIndex); 
 			
-			Log.e("jni", "touch-down: " + thisx + "," + thisy);
+			//Log.e("jni", "touch-down: " + thisx + "," + thisy);
 			%GAME_CLASS_NAME%Renderer.nativeTouchDown(thisx, thisy);
 		} else if (event.getAction() == MotionEvent.ACTION_MOVE) {
 			int thisx = (int) event.getX(); //pointerIndex); 
 			int thisy = (int) event.getY(); //pointerIndex);
-			Log.e("jni", "touch-move: " + thisx + "," + thisy);
+			//Log.e("jni", "touch-move: " + thisx + "," + thisy);
 			%GAME_CLASS_NAME%Renderer.nativeTouchMove(thisx, thisy);
 		} else if (event.getAction() == MotionEvent.ACTION_UP) {
 			int thisx = (int) event.getX(); //pointerIndex); 
 			int thisy = (int) event.getY(); //pointerIndex);
-			Log.e("jni", "touch-up: " + thisx + "," + thisy);
+			//Log.e("jni", "touch-up: " + thisx + "," + thisy);
 			%GAME_CLASS_NAME%Renderer.nativeTouchUp(thisx, thisy);
 		}
 		return true; 
@@ -157,7 +166,7 @@ class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
 	} 
 	@Override
 	public void onDrawFrame(GL10 gl) {
-		Log.i("game", "Render");
+		//Log.i("game", "Render");
 		nativeRender();
 	}  
 	  

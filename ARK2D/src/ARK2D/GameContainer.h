@@ -51,6 +51,7 @@ class GameContainer {
 	friend class Graphics;
 	friend class Input;
 	friend class ARKLog;
+	friend class Game;
 
 	public:
 
@@ -79,6 +80,7 @@ class GameContainer {
 		void setCursorVisible(bool b);
 
 		void setClearColor(const Color& color);
+		const Color& getClearColor();
 
 		GameTimer* getTimer();
 
@@ -86,8 +88,17 @@ class GameContainer {
 		const Game& getGame() const;
 		const Input& getInput() const;
 		Graphics* getGraphics() const;
-		unsigned int getWidth() const;
+		unsigned int getWidth() const; // dimensions defined in main or config
 		unsigned int getHeight() const;
+		unsigned int getDynamicWidth() const; // actual dimensions of the container. e.g. 800*480
+		unsigned int getDynamicHeight() const;
+		unsigned int getScreenWidth() const; // on pc, screen resolution. on mobile, same as dynamic widths.
+		unsigned int getScreenHeight() const;
+		float getScale() const; // actual scale.
+		float getScaleX() const; // display scale
+		float getScaleY() const; // display scale
+		float getTranslateX() const;
+		float getTranslateY() const;
 		vector<Gamepad*> getGamepads() const;
 
 		// always ends in the trailing slash.
@@ -131,15 +142,25 @@ class GameContainer {
 		vector<Gamepad*> m_gamepads;
 
 		string m_strTitle;
+		unsigned int m_originalWidth;
+		unsigned int m_originalHeight;
 		unsigned int m_width;
 		unsigned int m_height;
+		unsigned int m_screenWidth;
+		unsigned int m_screenHeight;
+		float m_scale;
+		float m_scaleX;
+		float m_scaleY;
+		int m_translateX; // used in scale mode on android to keep the game centered.
+		int m_translateY;
+
 		int m_bpp;
 		bool m_fullscreen;
 		bool m_resizable;
 		bool m_scaleToWindow;
 		bool m_verbose;
 		bool m_touchMode;
-		int m_fps;
+
 
 		Color m_clearColor;
 

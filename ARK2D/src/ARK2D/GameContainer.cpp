@@ -45,11 +45,42 @@ Graphics* GameContainer::getGraphics() const {
 unsigned int GameContainer::getFPS() {
 	return m_timer.getFPS();
 }
-unsigned int GameContainer::getWidth() const {
+unsigned int GameContainer::getDynamicWidth() const {
 	return m_width;
 }
-unsigned int GameContainer::getHeight() const {
+unsigned int GameContainer::getDynamicHeight() const { // this changes on window resize/scaling.
 	return m_height;
+}
+
+unsigned int GameContainer::getWidth() const { // this is fixed at the static/initial/defined size
+	return m_originalWidth;
+}
+unsigned int GameContainer::getHeight() const {
+	return m_originalHeight;
+}
+
+unsigned int GameContainer::getScreenWidth() const {
+	return m_screenWidth;
+}
+unsigned int GameContainer::getScreenHeight() const {
+	return m_screenHeight;
+}
+
+float GameContainer::getScale() const {
+	return m_scale;
+}
+float GameContainer::getScaleX() const {
+	return m_scaleX;
+}
+float GameContainer::getScaleY() const {
+	return m_scaleY;
+}
+
+float GameContainer::getTranslateX() const {
+	return m_translateX;
+}
+float GameContainer::getTranslateY() const {
+	return m_translateY;
 }
 
 void GameContainer::setTitle(const std::string title) {
@@ -104,6 +135,9 @@ vector<Gamepad*> GameContainer::getGamepads() const {
 
 void GameContainer::setClearColor(const Color& color) {
 	m_clearColor = color;
+}
+const Color& GameContainer::getClearColor() {
+	return m_clearColor;
 }
 
 GameTimer* GameContainer::getTimer() {

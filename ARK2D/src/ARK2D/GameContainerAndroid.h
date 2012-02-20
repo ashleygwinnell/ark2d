@@ -22,6 +22,8 @@ class GameContainerPlatform {
 	public:
 		GameContainerPlatform();
 		void setTitle(string title);
+		void initGL(string clearColorStr, int w, int h);
+		void initGL2D(int w, int h);
 		bool initOpenAL();
 		bool deinitOpenAL();
 		string getResourcePath() const;

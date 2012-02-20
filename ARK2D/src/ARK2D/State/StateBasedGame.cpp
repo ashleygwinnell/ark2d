@@ -100,7 +100,7 @@ void StateBasedGame::postUpdate(GameContainer* container, GameTimer* timer) {
 }
 void StateBasedGame::update(GameContainer* container, GameTimer* timer) {
 
-	preUpdate(container, timer);
+	//preUpdate(container, timer);
 
 	Game::update(container, timer);
 
@@ -139,17 +139,73 @@ void StateBasedGame::update(GameContainer* container, GameTimer* timer) {
 
 	m_current_state->update(container, this, timer);
 
-	postUpdate(container, timer);
+	//postUpdate(container, timer);
 }
 
 void StateBasedGame::preRender(GameContainer* container, Graphics* g) {
+	#if defined( ARK2D_ANDROID )
 
+
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		glLoadIdentity();
+
+		/*g->setScissorTestEnabled(true);
+		glScissor(container->getTranslateX(), container->getTranslateY(),
+			float(container->getWidth()) * container->getScaleX(),
+			float(container->getHeight()) * container->getScaleY());
+			*/
+
+		/*
+		 	g->setScissorTestEnabled(true);
+		g->scissor(
+			container->getTranslateX(),
+			container->getTranslateY(),
+			(int) float(container->getWidth()) * container->getScaleX(),
+			(int) float(container->getHeight()) * container->getScaleY()
+		);
+		 */
+
+		/*g->setScissorTestEnabled(true);
+		g->scissor(
+			container->getTranslateX(),
+			container->getTranslateY(),
+			container->getWidth() * container->getScaleX(),
+			container->getHeight() * container->getScaleY()
+		);*/
+
+		g->pushMatrix();
+		g->translate(container->getTranslateX(), container->getTranslateY());
+		g->pushMatrix();
+		g->scale(container->getScale(), container->getScale());
+	#endif
 }
 void StateBasedGame::postRender(GameContainer* container, Graphics* g) {
+	#if defined( ARK2D_ANDROID )
+		g->popMatrix(); // pop scale
+		g->popMatrix(); // pop translate
 
+		// draw scissor boxes because glScissor does not work on some HTC phones.
+		Color cc = container->getClearColor();
+		g->setDrawColor(cc.getRed(), cc.getGreen(), cc.getBlue(), cc.getAlpha());
+
+		// left edge
+		g->fillRect(0,0, container->getTranslateX(), container->getHeight() * container->getScaleY());
+
+		// right edge
+		g->fillRect(container->getTranslateX() + container->getWidth() * container->getScaleX(), 0,
+					container->getTranslateX(), container->getHeight() * container->getScaleY());
+
+		// top edge
+		g->fillRect(0,0, container->getWidth() * container->getScaleX(), container->getTranslateY());
+
+		// bottom edge
+		g->fillRect(0, container->getTranslateY() + container->getHeight() * container->getScaleY(),
+					container->getWidth() * container->getScaleX(), container->getTranslateY());
+
+	#endif
 }
 void StateBasedGame::render(GameContainer* container, Graphics* g) {
-	preRender(container, g);
+	//preRender(container, g);
 
 
 	// Render pre-enter transition
@@ -169,7 +225,7 @@ void StateBasedGame::render(GameContainer* container, Graphics* g) {
 		m_enterTransition->postRender(container, this, g);
 	}
 
-	postRender(container, g);
+	//postRender(container, g);
 }
 
 bool StateBasedGame::isTransitioning() {

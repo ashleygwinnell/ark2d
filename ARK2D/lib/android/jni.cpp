@@ -25,7 +25,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	ARK::Resource::apkZipName = string(apkstr);
 
 	game = new %GAME_CLASS_NAME%("%GAME_CLASS_NAME%");
-	container = new GameContainer(*game, 800,600,32,false);
+	container = new GameContainer(*game, %GAME_WIDTH%, %GAME_HEIGHT%, 32, false);
 	g = ARK2D::getGraphics();
 	timer = container->getTimer();
 	arklog = ARK2D::getLog();
@@ -34,29 +34,9 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	arklog->i("seed random");
 	MathUtil::seedRandom();
 
-	arklog->i("init opengl");
-	// TODO: init opengl
-	glViewport(0, 0, 800, 600);
-	glClearColor(0.1f, 0.2f, 0.3f, 1.0f);
-	glClear( GL_COLOR_BUFFER_BIT );
-
-	glShadeModel(GL_SMOOTH);
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
-
-	//enable 2d?
-	glMatrixMode(GL_PROJECTION) ;
-	glPushMatrix();
-	glLoadIdentity();
-
-	glOrthof(0, 800, 600, 0, -1, 1);
-
-	glMatrixMode(GL_MODELVIEW);
-	glPushMatrix();
-	glLoadIdentity();
+	// init opengl
+	container->m_platformSpecific.initGL("%GAME_CLEAR_COLOR%", %GAME_WIDTH%, %GAME_HEIGHT%);
+	container->m_platformSpecific.initGL2D(%GAME_WIDTH%, %GAME_HEIGHT%);
 
 
 	arklog->i("init fonts");
@@ -128,26 +108,97 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 
 	// TODO: frame limiting, input handling?
 	if (arklog != NULL) {
-		arklog->i("native update");
+		//arklog->i("native update");
 		timer->tick();
+		game->preUpdate(container, timer);
 		game->update(container, timer);
+		game->postUpdate(container, timer);
 
 
-		arklog->i("native render");
-		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-		glLoadIdentity();
+		//arklog->i("native render");
 		//fillRect(100,100,10,10);
+		game->preRender(container, g);
 		game->render(container, g);
+		game->postRender(container, g);
 		//fillRect(200,200,10,10);
 	}
 }
 
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeTouchDown(JNIEnv* env, jclass thiz, jint x, jint y) {
+	if(container != NULL) {
+		float thisx = (float) x;
+		float thisy = (float) y;
+		thisx /= container->getScale();
+		thisy /= container->getScale();
 
+		thisx -= container->getTranslateX();
+		thisy -= container->getTranslateY();
+
+		string logstr = "touch-down: ";
+		logstr += Cast::toString<int>((int) x);
+		logstr += ",";
+		logstr += Cast::toString<int>((int) y);
+		logstr += " -- ";
+		logstr += Cast::toString<int>((int) thisx);
+		logstr += ",";
+		logstr += Cast::toString<int>((int) thisy);
+		arklog->i(logstr);
+
+		Input* i = ARK2D::getInput();
+		i->mouse_x = (int) thisx;
+		i->mouse_y = (int) thisy;
+		i->pressKey(Input::MOUSE_BUTTON_LEFT);
+	}
 }
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeTouchMove(JNIEnv* env, jclass thiz, jint x, jint y) {
+	if(container != NULL) {
+		float thisx = (float) x;
+		float thisy = (float) y;
+		thisx /= container->getScale();
+		thisy /= container->getScale();
 
+		thisx -= container->getTranslateX();
+		thisy -= container->getTranslateY();
+
+		string logstr = "touch-move: ";
+		logstr += Cast::toString<int>((int) x);
+		logstr += ",";
+		logstr += Cast::toString<int>((int) y);
+		logstr += " -- ";
+		logstr += Cast::toString<int>((int) thisx);
+		logstr += ",";
+		logstr += Cast::toString<int>((int) thisy);
+		arklog->i(logstr);
+
+		Input* i = ARK2D::getInput();
+		game->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
+		i->mouse_x = (int) thisx;
+		i->mouse_y = (int) thisy;
+	}
 }
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeTouchUp(JNIEnv* env, jclass thiz, jint x, jint y) {
+	if(container != NULL) {
+		float thisx = (float) x;
+		float thisy = (float) y;
+		thisx /= container->getScale();
+		thisy /= container->getScale();
 
+		thisx -= container->getTranslateX();
+		thisy -= container->getTranslateY();
+
+		string logstr = "touch-up: ";
+		logstr += Cast::toString<int>((int) x);
+		logstr += ",";
+		logstr += Cast::toString<int>((int) y);
+		logstr += " -- ";
+		logstr += Cast::toString<int>((int) thisx);
+		logstr += ",";
+		logstr += Cast::toString<int>((int) thisy);
+		arklog->i(logstr);
+
+		Input* i = ARK2D::getInput();
+		i->mouse_x = (int) thisx;
+		i->mouse_y = (int) thisy;
+		i->releaseKey(Input::MOUSE_BUTTON_LEFT);
+	}
 }

@@ -44,11 +44,11 @@ class StateBasedGame : public Game {
 		void init(GameContainer* container);
 
 		virtual void preUpdate(GameContainer* container, GameTimer* timer);
-		void update(GameContainer* container, GameTimer* timer);
+		virtual void update(GameContainer* container, GameTimer* timer);
 		virtual void postUpdate(GameContainer* container, GameTimer* timer);
 
 		virtual void preRender(GameContainer* container, Graphics* g);
-		void render(GameContainer* container, Graphics* g);
+		virtual void render(GameContainer* container, Graphics* g);
 		virtual void postRender(GameContainer* container, Graphics* g);
 
 		GameContainer* getContainer();

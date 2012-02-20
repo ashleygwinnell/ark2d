@@ -153,6 +153,10 @@
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_list.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_list.c \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_carray.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/map \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_map.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_tree.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_tree.c \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/sstream \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_sstream.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_sstream.c \
@@ -471,6 +475,14 @@
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_list.c:
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_carray.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/map:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_map.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_tree.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_tree.c:
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/sstream:
 

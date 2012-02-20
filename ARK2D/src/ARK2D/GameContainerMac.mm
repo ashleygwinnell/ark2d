@@ -37,8 +37,17 @@
 		m_input(),
 		m_graphics(),
 		m_gamepads(),
+		m_originalWidth(width),
+		m_originalHeight(height),
 		m_width(width),
 		m_height(height),
+		m_screenWidth(0),
+		m_screenHeight(0),
+		m_scale(1.0f),
+		m_scaleX(1.0f),
+		m_scaleY(1.0f),
+		m_translateX(0),
+		m_translateY(0),
 		m_bpp(bpp),
 		m_fullscreen(fullscreen),
 		m_resizable(false),
@@ -226,7 +235,7 @@
 	}
 
 	void GameContainer::start() {
-		
+	
 		// seed the random
 		MathUtil::seedRandom();
 		
@@ -268,7 +277,9 @@
 			ARK2D::getLog()->update();
 		   
 			int delta = (int) (m_timer.getDelta() * 1000);
+			m_game.preUpdate(this, &m_timer);
 			m_game.update(this, &m_timer);
+			m_game.postUpdate(this, &m_timer);
 			m_input.clearKeyPressedRecord();
 			for (unsigned int i = 0; i < m_gamepads.size(); i++) {
 				m_gamepads.at(i)->clearButtonPressedRecord();
@@ -276,7 +287,9 @@
 			
 			
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			m_game.preRender(this, &m_graphics);
 			m_game.render(this, &m_graphics);
+			m_game.postRender(this, &m_graphics);
 			ARK2D::getLog()->render();
 			
 			swapBuffers();

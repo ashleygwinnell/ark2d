@@ -22,8 +22,15 @@ class Game {
 		string getTitle();
 		Timeline* getTimeline();
 		virtual void init(GameContainer* container) = 0;
+
+		virtual void preUpdate(GameContainer* container, GameTimer* timer) = 0;
 		virtual void update(GameContainer* container, GameTimer* timer) = 0;
+		virtual void postUpdate(GameContainer* container, GameTimer* timer) = 0;
+
+		virtual void preRender(GameContainer* container, Graphics* g) = 0;
 		virtual void render(GameContainer* container, Graphics* g) = 0;
+		virtual void postRender(GameContainer* container, Graphics* g) = 0;
+
 		virtual void resize(GameContainer* container, int width, int height);
 		virtual void keyPressed(unsigned int key);
 		virtual void keyReleased(unsigned int key);

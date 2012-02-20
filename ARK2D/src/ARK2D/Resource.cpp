@@ -131,7 +131,7 @@ namespace ARK {
 				char fileUncompressedBuffer[fileUncompressedBufferSize];
 				signed int done = zip_fread(file, &fileUncompressedBuffer, fileUncompressedBufferSize);
 				if (done == -1) { break; }
-				memcpy(fileUncompressed + i, fileUncompressedBuffer, done);
+				memcpy(fileUncompressed + i, &fileUncompressedBuffer[0], done);
 			}
 			zip_fclose(file);
 

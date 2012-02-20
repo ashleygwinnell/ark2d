@@ -118,6 +118,18 @@ unsigned int Color::getBlue() const {
 unsigned int Color::getAlpha() const {
 	return m_a;
 }
+float Color::getRedf() const {
+	return float(m_r)/255.0f;
+}
+float Color::getGreenf() const {
+	return float(m_g)/255.0f;
+}
+float Color::getBluef() const {
+	return float(m_b)/255.0f;
+}
+float Color::getAlphaf() const {
+	return float(m_a)/255.0f;
+}
 
 void Color::bind() const {
 	glColor4f(m_r/255.f, m_g/255.f, m_b/255.f, m_a/255.f);

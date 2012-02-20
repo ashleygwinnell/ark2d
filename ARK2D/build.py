@@ -629,7 +629,7 @@ class ARK2DBuildSystem:
 			#copy sample game c++/jni files...
 			print("generating game jni files");
 			print("	generating jni.h");
-			editsStrReplace = [("%GAME_CLASS_NAME%", game_name_safe), ("%GAME_SHORT_NAME%", game_short_name), ("%COMPANY_NAME%", company_name_safe), ("%PACKAGE_DOT_NOTATION%", javaPackageName)];
+			editsStrReplace = [("%GAME_CLASS_NAME%", game_name_safe), ("%GAME_SHORT_NAME%", game_short_name), ("%COMPANY_NAME%", company_name_safe), ("%PACKAGE_DOT_NOTATION%", javaPackageName), ("%GAME_WIDTH%", str(config['game_width'])), ("%GAME_HEIGHT%", str(config['game_height'])), ("%GAME_ORIENTATION%", config['game_orientation']), ("%GAME_CLEAR_COLOR%", config['game_clear_color']) ];
 			f = open(ark2ddir+"/lib/android/jni.h", "r");
 			fgamejnih = f.read();
 			f.close();
