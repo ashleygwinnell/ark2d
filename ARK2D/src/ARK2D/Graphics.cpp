@@ -221,7 +221,7 @@ void Graphics::drawRects(int rects[], int colors[]) const {
 		glColorPointer(4, GL_UNSIGNED_INT, 0, &colors);
 	}
 
-	glVertexPointer(2, GL_INT, 0, rects);
+	glVertexPointer(2, GL_FIXED, 0, rects);
 	for(int i = 0; i < total; i++) {
 		glDrawArrays(GL_LINE_LOOP, i*4, 4);
 	}

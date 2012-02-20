@@ -21,37 +21,37 @@
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stddef.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_cstdlib.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stdlib.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/stdlib.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/cdefs.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/cdefs_elf.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/../include/stdlib.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/sys/cdefs.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/sys/cdefs_elf.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/string.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/string.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/malloc.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/alloca.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/strings.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/types.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/stdint.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/_types.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/machine/_types.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/linux/posix_types.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/linux/stddef.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/linux/compiler.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/asm/posix_types.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/asm/types.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/linux/types.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/machine/kernel.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/sysmacros.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/memory.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/../include/string.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/malloc.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/alloca.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/strings.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/sys/types.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/stdint.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/sys/_types.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/machine/_types.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/linux/posix_types.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/linux/stddef.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/linux/compiler.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/asm/posix_types.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/asm/types.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/linux/types.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/machine/kernel.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/sys/sysmacros.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/memory.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_cmath.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/math.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/math.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/../include/math.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/limits.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/limits.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/limits.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/linux/limits.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/machine/internal_types.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/machine/limits.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/syslimits.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/../include/limits.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/sys/limits.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/linux/limits.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/machine/internal_types.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/machine/limits.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/sys/syslimits.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_cstring.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/using/cstring \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_algobase.h \
@@ -71,7 +71,7 @@
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/../../gabi++/include/cstddef \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_cstdio.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stdio.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/stdio.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/../include/stdio.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stdarg.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_construct.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_alloc.c \
@@ -79,13 +79,13 @@
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_iosfwd.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/char_traits.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_cwchar.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/wchar.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/../include/wchar.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/time.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/time.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/time.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/linux/time.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/asm/siginfo.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/asm-generic/siginfo.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/../include/time.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/sys/time.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/linux/time.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/asm/siginfo.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/asm-generic/siginfo.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_mbstate_t.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_uninitialized.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_string_base.h \
@@ -107,12 +107,12 @@
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_locale.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_threads.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/pthread.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/pthread.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/../include/pthread.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/signal.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/signal.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/asm/signal.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/asm-generic/signal.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sched.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/../include/signal.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/asm/signal.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/asm-generic/signal.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/sched.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_threads.c \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_ctime.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_facets_fwd.h \
@@ -163,12 +163,12 @@
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/sstream \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_sstream.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_sstream.c \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/jni.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/android/log.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/GLES/gl.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/GLES/glplatform.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/KHR/khrplatform.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/GLES/glext.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/jni.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/android/log.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/GLES/gl.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/GLES/glplatform.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/KHR/khrplatform.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/GLES/glext.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Font/../Image/Image.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Font/../Image/../ARK2D_GL.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Font/../Image/../ARK2D.h \
@@ -180,8 +180,8 @@
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Font/../Image/../vendor/lpng151/png.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Font/../Image/../vendor/lpng151/pnglibconf.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/setjmp.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/setjmp.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/machine/setjmp.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/../include/setjmp.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/machine/setjmp.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Font/../Image/../vendor/lpng151/pngconf.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Font/../Image/../Color.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Font/../Image/../Util/MathUtil.h \
@@ -205,21 +205,21 @@
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Font/../Util/../ToString.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Font/../ARK2D.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Font/FTFont.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/ft2build.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/config/ftheader.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/freetype.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/config/ftconfig.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/config/ftoption.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/config/ftstdlib.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/fterrors.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/ftmoderr.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/fterrdef.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/fttypes.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/ftsystem.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/ftimage.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/ftglyph.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/ftoutln.h \
- /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/fttrigon.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/ft2build.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/config/ftheader.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/freetype.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/config/ftconfig.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/config/ftoption.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/config/ftstdlib.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/fterrors.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/ftmoderr.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/fterrdef.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/fttypes.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/ftsystem.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/ftimage.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/ftglyph.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/ftoutln.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/fttrigon.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Font/../UI/ErrorDialog.h
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Font/Font.h:
@@ -264,67 +264,67 @@
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stdlib.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/stdlib.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/../include/stdlib.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/cdefs.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/sys/cdefs.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/cdefs_elf.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/sys/cdefs_elf.h:
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/string.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/string.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/../include/string.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/malloc.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/malloc.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/alloca.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/alloca.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/strings.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/strings.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/types.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/sys/types.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/stdint.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/stdint.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/_types.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/sys/_types.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/machine/_types.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/machine/_types.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/linux/posix_types.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/linux/posix_types.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/linux/stddef.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/linux/stddef.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/linux/compiler.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/linux/compiler.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/asm/posix_types.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/asm/posix_types.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/asm/types.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/asm/types.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/linux/types.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/linux/types.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/machine/kernel.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/machine/kernel.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/sysmacros.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/sys/sysmacros.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/memory.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/memory.h:
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_cmath.h:
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/math.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/math.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/../include/math.h:
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/limits.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/limits.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/../include/limits.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/limits.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/sys/limits.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/linux/limits.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/linux/limits.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/machine/internal_types.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/machine/internal_types.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/machine/limits.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/machine/limits.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/syslimits.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/sys/syslimits.h:
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_cstring.h:
 
@@ -364,7 +364,7 @@
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stdio.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/stdio.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/../include/stdio.h:
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stdarg.h:
 
@@ -380,19 +380,19 @@
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_cwchar.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/wchar.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/../include/wchar.h:
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/time.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/time.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/../include/time.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/time.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/sys/time.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/linux/time.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/linux/time.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/asm/siginfo.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/asm/siginfo.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/asm-generic/siginfo.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/asm-generic/siginfo.h:
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_mbstate_t.h:
 
@@ -436,17 +436,17 @@
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/pthread.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/pthread.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/../include/pthread.h:
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/signal.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/signal.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/../include/signal.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/asm/signal.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/asm/signal.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/asm-generic/signal.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/asm-generic/signal.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sched.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/sched.h:
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_threads.c:
 
@@ -548,17 +548,17 @@
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_sstream.c:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/jni.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/jni.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/android/log.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/android/log.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/GLES/gl.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/GLES/gl.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/GLES/glplatform.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/GLES/glplatform.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/KHR/khrplatform.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/KHR/khrplatform.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/GLES/glext.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/GLES/glext.h:
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Font/../Image/Image.h:
 
@@ -582,9 +582,9 @@
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/setjmp.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/setjmp.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/../include/setjmp.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/machine/setjmp.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/machine/setjmp.h:
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Font/../Image/../vendor/lpng151/pngconf.h:
 
@@ -632,34 +632,34 @@
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Font/FTFont.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/ft2build.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/ft2build.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/config/ftheader.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/config/ftheader.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/freetype.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/freetype.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/config/ftconfig.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/config/ftconfig.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/config/ftoption.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/config/ftoption.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/config/ftstdlib.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/config/ftstdlib.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/fterrors.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/fterrors.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/ftmoderr.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/ftmoderr.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/fterrdef.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/fterrdef.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/fttypes.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/fttypes.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/ftsystem.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/ftsystem.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/ftimage.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/ftimage.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/ftglyph.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/ftglyph.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/ftoutln.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/ftoutln.h:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/freetype/fttrigon.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-8/arch-arm/usr/include/freetype/fttrigon.h:
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Font/../UI/ErrorDialog.h:

@@ -521,8 +521,10 @@ class ARK2DBuildSystem:
 		
 		# define vars.	
 		nl = "\r\n";
-		appplatform= "android-5";
+		appplatformno = "8";
+		appplatform= "android-" + appplatformno;
 		ndkdir = config['mac']['android']['ndk_dir'];
+		
 		if (self.building_game):
 			#game specific vars
 			game_name = config['game_name'];
@@ -678,9 +680,13 @@ class ARK2DBuildSystem:
 				androidManifestContents += "<?xml version=\"1.0\" encoding=\"utf-8\"?>" + nl;
 				androidManifestContents += "<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"" + nl;
 				androidManifestContents += "	package=\"" + javaPackageName + "\" " + nl;
+				if (config['android']['app_to_sd'] == True):
+					androidManifestContents += "	android:installLocation=\"preferExternal\"" + nl;
+				else:
+					androidManifestContents += "	android:installLocation=\"internalOnly\"" + nl;
 				androidManifestContents += "	android:versionCode=\"1\" " + nl;
 				androidManifestContents += "	android:versionName=\"1.0\"> " + nl;
-				androidManifestContents += "	<uses-sdk android:minSdkVersion=\"7\" />" + nl;
+				androidManifestContents += "	<uses-sdk android:minSdkVersion=\"" + appplatformno + "\" />" + nl;
 				androidManifestContents += "	<application" + nl;
 				androidManifestContents += "		android:icon=\"@drawable/ic_launcher\" " + nl;
 				androidManifestContents += "		android:label=\"@string/application_name\" android:debuggable=\"true\"> " + nl;
@@ -712,7 +718,7 @@ class ARK2DBuildSystem:
 				
 			print("generating project.properties");
 			projectPropertiesContents = "";
-			projectPropertiesContents += "target=android-7";
+			projectPropertiesContents += "target=" + appplatform;
 			f = open(rootPath+"/build/android/project/project.properties", "w");
 			f.write(projectPropertiesContents);
 			f.close();
