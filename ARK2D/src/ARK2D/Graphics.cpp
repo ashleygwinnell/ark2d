@@ -207,6 +207,28 @@ void Graphics::drawRect(int x, int y, int width, int height) const {
 		glEnd();
 	#endif*/
 }
+//TODO: It's broken.
+// rects must be [[x1,y1,x2,y2,x3,y3,x4,y4], etc].
+// colors must be [[r,g,b,a, r,g,b,a, r,g,b,a, r,g,b,a], etc], or NULL
+void Graphics::drawRects(int rects[], int colors[]) const {
+	return;
+
+	int total = (sizeof(rects) / sizeof(int))/8;
+	glDisable(GL_TEXTURE_2D);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	if (colors != NULL) {
+		glEnableClientState(GL_COLOR_ARRAY);
+		glColorPointer(4, GL_UNSIGNED_INT, 0, &colors);
+	}
+
+	glVertexPointer(2, GL_INT, 0, rects);
+	for(int i = 0; i < total; i++) {
+		glDrawArrays(GL_LINE_LOOP, i*4, 4);
+	}
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glEnable(GL_TEXTURE_2D);
+}
 void Graphics::fillRect(int x, int y, int width, int height) const {
 	//#if defined(ARK2D_ANDROID)
 		glDisable(GL_TEXTURE_2D);

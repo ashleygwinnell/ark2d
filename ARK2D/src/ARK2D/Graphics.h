@@ -68,6 +68,7 @@ class Graphics
 
 		void drawLine(int x1, int y1, int x2, int y2) const;
 		void drawRect(int x, int y, int width, int height) const;
+		void drawRects(int rects[], int colors[] = NULL) const;
 		void fillRect(int x, int y, int width, int height) const;
 		void fillRoundedRect(int x, int y, int width, int height, int radius) const;
 		void fillRoundedRect(int x, int y, int width, int height, int radius, int segs) const;

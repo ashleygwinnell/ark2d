@@ -682,7 +682,7 @@ class ARK2DBuildSystem:
 				androidManifestContents += "	android:versionName=\"1.0\"> " + nl;
 				androidManifestContents += "	<uses-sdk android:minSdkVersion=\"7\" />" + nl;
 				androidManifestContents += "	<application" + nl;
-				#androidManifestContents += "		android:icon=\"@drawable/ic_launcher\" " + nl;
+				androidManifestContents += "		android:icon=\"@drawable/ic_launcher\" " + nl;
 				androidManifestContents += "		android:label=\"@string/application_name\" android:debuggable=\"true\"> " + nl;
 				androidManifestContents += "		<activity" + nl;
 				androidManifestContents += "			android:name=\"." + game_name_safe + "Activity\" " + nl;
@@ -700,6 +700,15 @@ class ARK2DBuildSystem:
 				f.write(androidManifestContents);
 				f.close();
 				androidManifestPath = rootPath+"/build/android/project/AndroidManifest.xml";
+				
+			print("copying icon in to project: ");
+			print("TODO: resizing for different DPIs");
+			if (config['mac']['android']['icon'] != ''):
+				subprocess.call(['cp ' + config['mac']['android']['icon'] + " " + rootPath+"/build/android/project/res/drawable/ic_launcher.png"], shell=True);
+			else:
+				subprocess.call(['cp ' + ark2ddir + "/__preproduction/icon/512.png " + rootPath+"/build/android/project/res/drawable/ic_launcher.png"], shell=True);
+				
+			
 				
 			print("generating project.properties");
 			projectPropertiesContents = "";
