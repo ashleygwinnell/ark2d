@@ -77,6 +77,14 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		arklog->i("native resume");
 	}
 }
+JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeBackPressed(JNIEnv* env,  jclass cls) {
+	// stop...
+	if (container != NULL) {
+		Input* i = ARK2D::getInput();
+		i->pressKey(Input::ANDROID_BACK);
+		i->releaseKey(Input::ANDROID_BACK);
+	}
+}
 void fillRect(int x, int y, int w, int h) {
 	glDisable(GL_TEXTURE_2D);
 	glEnableClientState(GL_VERTEX_ARRAY);

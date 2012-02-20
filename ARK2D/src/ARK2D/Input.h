@@ -27,6 +27,11 @@ class Input {
 
 	public:
 		//#ifdef ARK2D_WINDOWS
+			static const int ANDROID_HOME   = 0x400; // 1000 -- made up value that (probably) won't clash.
+			static const int ANDROID_MENU   = 0x401; // 1000 -- made up value that (probably) won't clash.
+			static const int ANDROID_BACK   = 0x402; // 1000 -- made up value that (probably) won't clash.
+			static const int ANDROID_SEARCH = 0x403; // 1000 -- made up value that (probably) won't clash.
+
 			static const int MOUSE_BUTTON_LEFT = 0x01;
 			static const int MOUSE_BUTTON_RIGHT = 0x02;
 			static const int MOUSE_BUTTON_MIDDLE = 0x04;

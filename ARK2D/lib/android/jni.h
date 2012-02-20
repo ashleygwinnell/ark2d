@@ -46,6 +46,14 @@
 		 */
 		JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeResume
 		  (JNIEnv *, jclass);
+
+		/*
+		 * Class:     org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer
+		 * Method:    nativeBackPressed
+		 * Signature: ()V
+		 */
+		JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeBackPressed
+		  (JNIEnv *, jclass);
 		  
 		/*
 		 * Class:     org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer

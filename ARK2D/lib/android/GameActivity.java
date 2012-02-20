@@ -41,6 +41,12 @@ public class %GAME_CLASS_NAME%Activity extends Activity {
     } 
     
     @Override
+    public void onBackPressed() {
+    	//super.onBackPressed();
+    	%GAME_CLASS_NAME%Renderer.nativeBackPressed();
+    }
+    
+    @Override
     protected void onPause() {
     	Log.i("game", "Activity Pause");
     	super.onPause();
@@ -181,6 +187,7 @@ class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
 	
 	public static native void nativePause();
 	public static native void nativeResume();
+	public static native void nativeBackPressed();
 	
 	
 }
