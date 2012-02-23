@@ -26,12 +26,22 @@ namespace ARK {
 
 class Font;
 
+	class RawDataReturns {
+		public:
+			void* data;
+			int size;
+			RawDataReturns(): data(NULL), size(0) { }
+			~RawDataReturns() {
+				free(data);
+			}
+	};
+
 	class Resource {
 		public:
 			static Resource* get(string ref);
 		private:
 			static Resource* get(string ref, bool appendPath);
-			static void* getRawData(string ref); // remember to free() this data.
+			static RawDataReturns* getRawData(string ref); // remember to free() this data.
 			static unsigned int getResourceTypeByExtension(string extension);
 
 		public:

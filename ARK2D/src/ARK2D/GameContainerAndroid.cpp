@@ -99,7 +99,7 @@ void GameContainer::start() {
 }
 
 void GameContainer::close() const {
-
+	exit(0);
 }
 
 GameContainerPlatform::GameContainerPlatform():
@@ -148,7 +148,61 @@ void GameContainerPlatform::initGL2D(int w, int h) {
 }
 
 bool GameContainerPlatform::initOpenAL() {
-	return false;
+	if (alcGetCurrentContext() != NULL) {
+		ErrorDialog::createAndShow("OpenAL is already initialised. Exiting program.");
+		exit(0);
+	}
+
+	// Load OpenAL.
+	ALCdevice* dev = NULL;
+
+	dev = alcOpenDevice(NULL);
+	if(dev == NULL) {
+		ErrorDialog::createAndShow("Could not open Audio Device.");
+		exit(0);
+	} else if (alcGetError(dev) != ALC_NO_ERROR) {
+		ErrorDialog::createAndShow("Could not open Audio Device.");
+		exit(0);
+	}
+
+	// TODO: check the context attributes, maybe something is useful:
+	// http://www.openal.org/openal_webstf/specs/oal11spec_html/oal11spec6.html
+	// 6.2.1. Context Attributes
+	// my bet is on ALC_STEREO_SOURCES
+	ALCcontext* ctx = NULL;
+	ctx = alcCreateContext(dev, NULL);
+	if(ctx == NULL) {
+		ErrorDialog::createAndShow("Could not create Audio Context.");
+		return false;
+	} else if (alcGetError(dev) != ALC_NO_ERROR) {
+		ErrorDialog::createAndShow("Could not create Audio Context.");
+		return false;
+	}
+
+	ALboolean b = alcMakeContextCurrent(ctx);
+	if (b != ALC_TRUE) {
+		ErrorDialog::createAndShow("Could not make Audio Context current.");
+		exit(0);
+	}
+
+	if (alcGetError(dev) != ALC_NO_ERROR) {
+		ErrorDialog::createAndShow("Problem with Audio Device.");
+		exit(0);
+	}
+
+	//alcProcessContext(ctx);
+
+	alListenerfv(AL_POSITION,    Sound::ListenerPos);
+	alListenerfv(AL_VELOCITY,    Sound::ListenerVel);
+	alListenerfv(AL_ORIENTATION, Sound::ListenerOri);
+
+	if (alGetError() != AL_NO_ERROR) {
+		ErrorDialog::createAndShow("Could not set OpenAL Listener");
+		exit(0);
+	}
+
+	std::cout << "Initialised OpenAL" << std::endl;
+	return true;
 }
 
 bool GameContainerPlatform::deinitOpenAL() {

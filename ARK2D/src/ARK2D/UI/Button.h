@@ -67,19 +67,23 @@ class Button : public AbstractUIComponent {
 				if (GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), (signed int) (m_width), (signed int)(m_height), (signed int) (i->getMouseX()), (signed int) (i->getMouseY()))) {
 					if (m_state == STATE_DOWN) {
 						m_state = STATE_OVER;
-						if (m_event != NULL) {
-							if (m_eventObj == NULL) {
-								void (*pt)() = (void(*)()) m_event;
-								pt();
-							} else {
-								void (*pt)(void*) = (void(*)(void*)) m_event;
-								pt(m_eventObj);
-							}
-						}
+						doEvent();
 					}
 				} else {
 					m_state = STATE_OFF;
 					setFocussed(false);
+				}
+			}
+		}
+
+		void doEvent() {
+			if (m_event != NULL) {
+				if (m_eventObj == NULL) {
+					void (*pt)() = (void(*)()) m_event;
+					pt();
+				} else {
+					void (*pt)(void*) = (void(*)(void*)) m_event;
+					pt(m_eventObj);
 				}
 			}
 		}

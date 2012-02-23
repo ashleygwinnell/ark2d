@@ -12,6 +12,7 @@ LOCAL_CFLAGS := -DARK2D_ANDROID -DDISABLE_IMPORTGL -fno-exceptions -fno-rtti -Wn
 LOCAL_DEFAULT_CPP_EXTENSION := cpp
 
 LOCAL_SRC_FILES := \
+	src/ARK2D/GameContainerAndroid.cpp \
 	src/main.cpp \
 	src/ARK2D/ARK2D.cpp \
 	src/ARK2D/Animation.cpp \
@@ -107,6 +108,7 @@ LOCAL_SRC_FILES := \
 	src/ARK2D/Util/CameraShake.cpp \
 	src/ARK2D/Util/LocalHighscores.cpp \
 	src/ARK2D/Util/RSSL.cpp \
+	src/ARK2D/vendor/FileInterface.cpp \
 	src/ARK2D/vendor/libJSON/JSON_Worker.cpp \
 	src/ARK2D/vendor/libJSON/jsonmain.cpp \
 	src/ARK2D/vendor/libJSON/JSONNode.cpp \
@@ -165,7 +167,6 @@ LOCAL_SRC_FILES := \
 	src/ARK2D/vendor/zlib123/trees.c \
 	src/ARK2D/vendor/zlib123/uncompr.c \
 	src/ARK2D/vendor/zlib123/zutil.c \
-	src/ARK2D/GameContainerAndroid.cpp \
 
 LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz -lfreetype -lopenal -lzip
 

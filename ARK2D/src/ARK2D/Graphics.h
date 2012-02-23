@@ -87,6 +87,9 @@ class Graphics
 		void setLineWidth(unsigned int i);
 		unsigned int getLineWidth();
 
+		void setPointSize(float i);
+		float getPointSize();
+
 		void loadMatrix(Matrix44<float>* m) const;
 		void loadMatrix(const Matrix44<float>& m) const;
 		void resetMatrix() const;
@@ -97,6 +100,7 @@ class Graphics
 		Color m_DrawColor;
 		Color m_MaskColor;
 		unsigned int m_LineWidth;
+		float m_pointSize;
 };
 
 #endif /* GRAPHICS_H_ */

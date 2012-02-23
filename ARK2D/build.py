@@ -126,7 +126,7 @@ class ARK2DBuildSystem:
 		]);
 		
 		
-		self.src_files.extend(config['src_files']['all']);
+		#self.src_files.extend(config['src_files']['all']);
 		
 		if (self.platform == "android"):
 			self.src_files.extend(config['src_files']['android']);
@@ -146,7 +146,7 @@ class ARK2DBuildSystem:
 			self.static_libraries.extend(config['static_libraries']['mac']);
 			self.linkingFlags = "";
 			
-					
+		self.src_files.extend(config['src_files']['all']);
 		
 		
 	def gamePreInit(self):
@@ -521,8 +521,13 @@ class ARK2DBuildSystem:
 		
 		# define vars.	
 		nl = "\r\n";
-		appplatformno = "8";
-		appplatform= "android-" + appplatformno;
+		
+		#sdk version, not NDK.
+		appplatformno = config['android']['sdk_version'];
+		appplatform= "android-" + str(appplatformno);
+		ndkappplatformno = config['android']['ndk_version'];
+		ndkappplatform = "android-" + str(ndkappplatformno);
+		
 		ndkdir = config['mac']['android']['ndk_dir'];
 		
 		if (self.building_game):
@@ -621,8 +626,8 @@ class ARK2DBuildSystem:
 			#copy ark2d in to project
 			print("Copying ARK2D in to android sdk");
 			#subprocess.call(["cp -r " +ark2ddir + "/build/android/libs/armeabi/ " + appbuilddir + "/local/armeabi/"], shell=True);
-			subprocess.call(["cp -r " +ark2ddir + "/build/android/libs/armeabi/ " + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/lib/"], shell=True);
-			subprocess.call(["cp -r " +ark2ddir + "/build/android/libs/armeabi/ " + ndkdir + "/platforms/"+appplatform+"/arch-x86/usr/lib/"], shell=True);
+			subprocess.call(["cp -r " +ark2ddir + "/build/android/libs/armeabi/ " + ndkdir + "/platforms/"+ndkappplatform+"/arch-arm/usr/lib/"], shell=True);
+			subprocess.call(["cp -r " +ark2ddir + "/build/android/libs/armeabi/ " + ndkdir + "/platforms/"+ndkappplatform+"/arch-x86/usr/lib/"], shell=True);
 			
 			#copy resources in to "assets" dir.
 			subprocess.call(["cp -r " + rootPath + "/data/ " + rootPath + "/build/android/project/assets/"], shell=True);
@@ -655,7 +660,7 @@ class ARK2DBuildSystem:
 			buildline += " NDK_APP_OUT=" + appbuilddir;
 			buildline += " APP_PROJECT_PATH=" + ndkprojectpath;
 			buildline += " APP_BUILD_SCRIPT=" + appbuildscript;
-			buildline += " APP_PLATFORM=" + appplatform;
+			buildline += " APP_PLATFORM=" + ndkappplatform;
 			#buildline += " NDK_LOG=1";
 			print("Building library");
 			print(buildline);
@@ -686,7 +691,7 @@ class ARK2DBuildSystem:
 					androidManifestContents += "	android:installLocation=\"internalOnly\"" + nl;
 				androidManifestContents += "	android:versionCode=\"1\" " + nl;
 				androidManifestContents += "	android:versionName=\"1.0\"> " + nl;
-				androidManifestContents += "	<uses-sdk android:minSdkVersion=\"" + appplatformno + "\" />" + nl;
+				androidManifestContents += "	<uses-sdk android:minSdkVersion=\"" + str(appplatformno) + "\" />" + nl;
 				androidManifestContents += "	<application" + nl;
 				androidManifestContents += "		android:icon=\"@drawable/ic_launcher\" " + nl;
 				androidManifestContents += "		android:label=\"@string/application_name\" android:debuggable=\"true\"> " + nl;
@@ -787,46 +792,46 @@ class ARK2DBuildSystem:
 			#copy stuff in vendor to ndk directory. 
 			#freetype
 			print("copying vendor headers (freetype)");
-			copyfreetype1 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/freetype/jni/include ' + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/";
-			copyfreetype2 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/freetype/jni/include ' + ndkdir + "/platforms/"+appplatform+"/arch-x86/usr/";
+			copyfreetype1 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/freetype/jni/include ' + ndkdir + "/platforms/"+ndkappplatform+"/arch-arm/usr/";
+			copyfreetype2 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/freetype/jni/include ' + ndkdir + "/platforms/"+ndkappplatform+"/arch-x86/usr/";
 			subprocess.call([copyfreetype1], shell=True);
 			subprocess.call([copyfreetype2], shell=True);
 			
 			print("Compiling vendor sources (freetype)");
 			libfreetypedir = ndkprojectpath + "/src/ARK2D/vendor/android/freetype";
-			compilefreetype1 = ndkdir + "/ndk-build NDK_PROJECT_PATH=" + libfreetypedir +" APP_PROJECT_PATH=" + libfreetypedir + " APP_BUILD_SCRIPT=" + libfreetypedir + "/jni/Android.mk APP_PLATFORM=" + appplatform;  
+			compilefreetype1 = ndkdir + "/ndk-build NDK_PROJECT_PATH=" + libfreetypedir +" APP_PROJECT_PATH=" + libfreetypedir + " APP_BUILD_SCRIPT=" + libfreetypedir + "/jni/Android.mk APP_PLATFORM=" + ndkappplatform;  
 			print(compilefreetype1);
 			subprocess.call([compilefreetype1], shell=True);
-			subprocess.call(['cp -r ' + libfreetypedir + "/obj/local/armeabi/libfreetype.a " + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/lib"], shell=True);
+			subprocess.call(['cp -r ' + libfreetypedir + "/obj/local/armeabi/libfreetype.a " + ndkdir + "/platforms/"+ndkappplatform+"/arch-arm/usr/lib"], shell=True);
 			
 			#openal
 			print("copying vendor headers (openal)");
-			copyopenal1 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/openal/jni/include ' + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/";
-			copyopenal2 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/openal/jni/include ' + ndkdir + "/platforms/"+appplatform+"/arch-x86/usr/";
+			copyopenal1 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/openal/jni/include ' + ndkdir + "/platforms/"+ndkappplatform+"/arch-arm/usr/";
+			copyopenal2 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/openal/jni/include ' + ndkdir + "/platforms/"+ndkappplatform+"/arch-x86/usr/";
 			subprocess.call([copyopenal1], shell=True);
 			subprocess.call([copyopenal2], shell=True);
 			
 			print("Compiling vendor sources (openal)");
 			libopenaldir = ndkprojectpath + "/src/ARK2D/vendor/android/openal";
-			compileopenal1 = ndkdir + "/ndk-build NDK_PROJECT_PATH=" + libopenaldir +" APP_PROJECT_PATH=" + libopenaldir + " APP_BUILD_SCRIPT=" + libopenaldir + "/jni/Android.mk APP_PLATFORM=" + appplatform;  
+			compileopenal1 = ndkdir + "/ndk-build NDK_PROJECT_PATH=" + libopenaldir +" APP_PROJECT_PATH=" + libopenaldir + " APP_BUILD_SCRIPT=" + libopenaldir + "/jni/Android.mk APP_PLATFORM=" + ndkappplatform;  
 			print(compileopenal1);
 			subprocess.call([compileopenal1], shell=True);
-			subprocess.call(['cp -r ' + libopenaldir + "/libs/armeabi/libopenal.so " + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/lib"], shell=True);
+			subprocess.call(['cp -r ' + libopenaldir + "/libs/armeabi/libopenal.so " + ndkdir + "/platforms/"+ndkappplatform+"/arch-arm/usr/lib"], shell=True);
 			
 			#openal
 			#print("copying vendor headers (libzip)");
 			#print("NOT");
-			#copyopenal1 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/libzip/jni/zip.h ' + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/include/";
-			#copyopenal2 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/libzip/jni/zip.h ' + ndkdir + "/platforms/"+appplatform+"/arch-x86/usr/include/";
+			#copyopenal1 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/libzip/jni/zip.h ' + ndkdir + "/platforms/"+ndkappplatform+"/arch-arm/usr/include/";
+			#copyopenal2 = 'cp -r ' + ndkprojectpath + '/src/ARK2D/vendor/android/libzip/jni/zip.h ' + ndkdir + "/platforms/"+ndkappplatform+"/arch-x86/usr/include/";
 			#subprocess.call([copyopenal1], shell=True);
 			#subprocess.call([copyopenal2], shell=True);
 			
 			print("Compiling vendor sources (libzip)");
 			libzipdir = ndkprojectpath + "/src/ARK2D/vendor/android/libzip";
-			compilelibzip1 = ndkdir + "/ndk-build NDK_PROJECT_PATH=" + libzipdir +" APP_PROJECT_PATH=" + libzipdir + " APP_BUILD_SCRIPT=" + libzipdir + "/jni/Android.mk APP_PLATFORM=" + appplatform;  
+			compilelibzip1 = ndkdir + "/ndk-build NDK_PROJECT_PATH=" + libzipdir +" APP_PROJECT_PATH=" + libzipdir + " APP_BUILD_SCRIPT=" + libzipdir + "/jni/Android.mk APP_PLATFORM=" + ndkappplatform;  
 			print(compilelibzip1);
 			subprocess.call([compilelibzip1], shell=True);
-			subprocess.call(['cp -r ' + libzipdir + "/libs/armeabi/libzip.so " + ndkdir + "/platforms/"+appplatform+"/arch-arm/usr/lib"], shell=True);
+			subprocess.call(['cp -r ' + libzipdir + "/libs/armeabi/libzip.so " + ndkdir + "/platforms/"+ndkappplatform+"/arch-arm/usr/lib"], shell=True);
 			
 			
 			
@@ -873,7 +878,7 @@ class ARK2DBuildSystem:
 			buildline += " NDK_APP_OUT=" + appbuilddir;
 			buildline += " APP_PROJECT_PATH=" + ndkprojectpath;
 			buildline += " APP_BUILD_SCRIPT=" + appbuildscript;
-			buildline += " APP_PLATFORM=" + appplatform;
+			buildline += " APP_PLATFORM=" + ndkappplatform;
 			#buildline += " NDK_LOG=1";
 			print("Building library");
 			print(buildline);

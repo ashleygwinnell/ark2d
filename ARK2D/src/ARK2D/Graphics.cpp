@@ -19,7 +19,8 @@ Graphics::Graphics():
 	m_Font(NULL),
 	m_DrawColor(255, 0, 255),
 	m_MaskColor(),
-	m_LineWidth(1)
+	m_LineWidth(1),
+	m_pointSize(1)
 {
 	//m_DefaultFont = new BMFont("data/calibri.fnt", "data/calibri.bmp", Color::magenta);
 	//m_Font = m_DefaultFont;
@@ -221,7 +222,12 @@ void Graphics::drawRects(int rects[], int colors[]) const {
 		glColorPointer(4, GL_UNSIGNED_INT, 0, &colors);
 	}
 
-	glVertexPointer(2, GL_FIXED, 0, rects);
+	#if defined(ARK2D_ANDROID)
+		glVertexPointer(2, GL_FIXED, 0, rects);
+	#else
+		glVertexPointer(2, GL_INT, 0, rects);
+	#endif
+
 	for(int i = 0; i < total; i++) {
 		glDrawArrays(GL_LINE_LOOP, i*4, 4);
 	}
@@ -270,17 +276,21 @@ void Graphics::fillTriangle(int x, int y, int width, int height) const {
 void Graphics::drawPoint(int x, int y) const {
 	#if defined(ARK2D_ANDROID)
 	#else
+		glEnable(GL_POINT_SMOOTH);
 		glBegin(GL_POINTS);
 		glVertex2i(x, y);
 		glEnd();
+		glDisable(GL_POINT_SMOOTH);
 	#endif
 }
 void Graphics::drawPoint(float x, float y) const {
 	#if defined(ARK2D_ANDROID)
 	#else
+		glEnable(GL_POINT_SMOOTH);
 		glBegin(GL_POINTS);
 		glVertex2f(x, y);
 		glEnd();
+		glDisable(GL_POINT_SMOOTH);
 	#endif
 }
 
@@ -418,6 +428,12 @@ const Color& Graphics::getMaskColor() const {
 	return m_MaskColor;
 }
 
+void Graphics::setPointSize(float f) {
+	glPointSize(f);
+}
+float Graphics::getPointSize() {
+	return m_pointSize;
+}
 void Graphics::setLineWidth(unsigned int i) {
 	glLineWidth(i);
 	m_LineWidth = i;

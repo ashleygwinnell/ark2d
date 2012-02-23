@@ -8,9 +8,12 @@
 
 #include "ErrorDialog.h"
 #include "../ARK2D.h"
+#include "../Util/ARKLog.h"
 
 void ErrorDialog::createAndShow(string message) {
-	#if defined(ARK2D_WINDOWS)
+	#if defined (ARK2D_ANDROID)
+		ARK2D::getLog()->e(message);
+	#elif defined(ARK2D_WINDOWS)
 		MessageBox(NULL, message.c_str(), NULL, MB_OK | MB_ICONEXCLAMATION);
 	#elif defined(ARK2D_MACINTOSH)
 

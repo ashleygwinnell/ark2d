@@ -7,34 +7,57 @@
 #include "Sound.h"
 #include "../Util/StringUtil.h"
 #include "../Resource.h"
+#include "../Util/ARKLog.h"
+#include "../vendor/FileInterface.h"
 
 ALfloat Sound::ListenerPos[3] = { 0.0, 0.0, 0.0 };
 ALfloat Sound::ListenerVel[3] = { 0.0, 0.0, 0.0 };
 ALfloat Sound::ListenerOri[6] = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
 
-Sound::Sound(const std::string& fname):
+Sound::Sound(const std::string& filename):
 	ARK::Resource(),
-	m_FileName(fname),
-	m_groupId(0)
+	m_FileName(filename),
+	m_groupId(0),
+	m_preloadedData(NULL),
+	m_preloadedDataLength(0)
 	//Buffer(AL_NONE),
 	//Source(AL_NONE)
 {
-	std::cout << "Loading Sound: " << fname.c_str() << std::endl;
+	ARK2D::getLog()->i(StringUtil::append("Loading Sound: ", filename));
 
 	this->setSourcePosition(0.0, 0.0, 0.0);
 	this->setSourceVelocity(0.0, 0.0, 0.0);
-	//this->setListenerPosition(0.0, 0.0, 0.0);
-	//this->setListenerVelocity(0.0, 0.0, 0.0);
-	//this->setListenerOrientation(0.0, 0.0, -1.0,  0.0, 1.0, 0.0);
 
 	bool suc = this->load(false); // AL_TRUE on success - false (no looping)
-	//std::cout << "load returned: " << suc << std::endl;
 	if (suc == true) {
 		SoundStore& ss = SoundStore::getInstance();
-		ss.addSound(fname, this);
+		ss.addSound(filename, this);
+		ARK2D::getLog()->i(StringUtil::append("Loaded Sound: ", filename));
+	} else {
+		ARK2D::getLog()->e(StringUtil::append("Did not load sound: ", filename));
 	}
 
-	std::cout << "Loaded Sound" << std::endl;
+
+}
+Sound::Sound(const std::string& filename, void* data, int dataLength):
+	ARK::Resource(),
+	m_FileName(filename),
+	m_groupId(0),
+	m_preloadedData(data),
+	m_preloadedDataLength(dataLength)
+	{
+	ARK2D::getLog()->i(StringUtil::append("Loading Sound from memory: ", filename));
+	this->setSourcePosition(0.0, 0.0, 0.0);
+	this->setSourceVelocity(0.0, 0.0, 0.0);
+
+	bool suc = this->load(false);
+	if (suc == true) {
+		SoundStore& ss = SoundStore::getInstance();
+		ss.addSound(filename, this);
+		ARK2D::getLog()->i(StringUtil::append("Loaded Sound: ", filename));
+	} else {
+		ARK2D::getLog()->e(StringUtil::append("Did not load sound: ", filename));
+	}
 }
 
 void Sound::setSourcePosition(float x, float y, float z) {
@@ -161,11 +184,40 @@ void Sound::miscerror(string ss) {
 		}
 //	#endif
 }
+
+
+/*size_t ark_ov_read (void* ptr, size_t size, size_t nmemb, void* datasource) {
+	return (size_t) fi_fread(ptr, (unsigned long int) size, (unsigned long int) nmemb, (FILE_INTERFACE*) datasource);
+}
+int ark_ov_seek (void *datasource, ogg_int64_t offset, int whence) {
+	return fi_fseek((FILE_INTERFACE*) datasource, offset, whence);
+}
+long ark_ov_tell (void *datasource) {
+	return fi_ftell((FILE_INTERFACE*) datasource);
+}
+int ark_ov_close (void *datasource) {
+	fi_fclose((FILE_INTERFACE*) datasource);
+	return 0;
+}*/
+size_t ark_ov_read (void* ptr, size_t size, size_t nmemb, void* datasource) {
+	return (size_t) fi_fread(ptr, (unsigned long int) size, (unsigned long int) nmemb, (FILE_INTERFACE*) datasource);
+}
+int ark_ov_seek (void *datasource, ogg_int64_t offset, int whence) {
+	return fi_fseek((FILE_INTERFACE*) datasource, offset, whence);
+}
+long ark_ov_tell (void *datasource) {
+	return fi_ftell((FILE_INTERFACE*) datasource);
+}
+int ark_ov_close (void *datasource) {
+	fi_fclose((FILE_INTERFACE*) datasource);
+	return 0;
+}
+
 bool Sound::loadOGG(bool loop) {
 
-	#if defined(ARK2D_ANDROID)
-		return false;
-	#else
+	//#if defined(ARK2D_ANDROID)
+	//	return false;
+	//#else
 
 		// references
 		// http://www.ogre3d.org/tikiwiki/OpenAl+Soundmanager
@@ -195,35 +247,62 @@ bool Sound::loadOGG(bool loop) {
 	//	std::cout << "2" << std::endl;
 
 		// Open for binary reading
-		f = fopen(m_FileName.c_str(), "rb");
-		if (f == NULL) {
-			string errStr = "Sound::loadOGG() - could not open file:";
-			errStr += m_FileName;
-			ErrorDialog::createAndShow(errStr);
-			return false;
-		}
-	int r;
-		//int r = ov_test(f, &oggFile, NULL, 0);
-		//if (r == 0) {
-		//	miscerror("Not a valid Ogg Vorbis file");
-		//}
-	//
-	//	r = ov_test_open(&oggFile);
-	//	if (r == 0) {
-	//		miscerror("Unable to open Ogg Vorbis file");
-	//	}
+		#if defined (ARK2D_ANDROID)
 
-		//std::cout << "3" << std::endl;
+			if (m_preloadedData != NULL) {
+				FILE_INTERFACE* fi = fi_fopen(m_FileName.c_str(), "r", m_preloadedData, m_preloadedDataLength);
+				ov_callbacks lalala;
+				lalala.read_func = &ark_ov_read;
+				lalala.seek_func = &ark_ov_seek;
+				lalala.tell_func = &ark_ov_tell;
+				lalala.close_func = &ark_ov_close;
+				//lalala.read_func = &fi_fread;
+				//lalala.seek_func = &fi_fseek;
+				//lalala.tell_func = &fi_ftell;
+				//lalala.close_func = &fi_fclose;
+				int e = ov_open_callbacks((void*) fi, &oggFile, NULL, 0, lalala);
+				if (e < 0) {
+					string errStr = "Sound::loadOGG() - could not open ogg file (ov_open_callbacks) : ";
+					errStr += m_FileName;
+					errStr += getOggErrorString(e);
+					ErrorDialog::createAndShow(errStr);
+					return false;
+				}
+			} else {
+				string errStr = "Sound::loadOGG() - Android must use Resource::get() for sounds: ";
+				errStr += m_FileName;
+				ErrorDialog::createAndShow(errStr);
+				return false;
+			}
 
-		// open using the SDK, no need to call fclose() now.
-		int e = ov_open(f, &oggFile, NULL, 0);
-		if (e < 0) {
-			string errStr = "Sound::loadOGG() - could not open ogg file: ";
-			errStr += m_FileName;
-			errStr += getOggErrorString(e);
-			ErrorDialog::createAndShow(errStr);
-			return false;
-		}
+
+
+		#else
+			f = fopen(m_FileName.c_str(), "rb");
+
+			if (f == NULL) {
+				string errStr = "Sound::loadOGG() - could not open file (fopen):";
+				errStr += m_FileName;
+				ErrorDialog::createAndShow(errStr);
+				return false;
+			}
+
+
+
+			// open using the SDK, no need to call fclose() now.
+			int e = ov_open(f, &oggFile, NULL, 0);
+			if (e < 0) {
+				string errStr = "Sound::loadOGG() - could not open ogg file (ov_open): ";
+				errStr += m_FileName;
+				errStr += getOggErrorString(e);
+				ErrorDialog::createAndShow(errStr);
+				return false;
+			}
+
+		#endif
+
+
+		int r;
 
 		//bool b = ov_fopen(const_cast<char*>(m_FileName.c_str()), &oggFile);
 		//if (b == false) {
@@ -235,6 +314,7 @@ bool Sound::loadOGG(bool loop) {
 
 	//	std::cout << "4" << std::endl;
 		// Get some info about the OGG and store it in oggInfo.
+		ARK2D::getLog()->i("Getting OGG Info");
 		oggInfo = ov_info(&oggFile, -1);
 		if (oggInfo == NULL) {
 			string errStr = "Sound::loadOGG() - could not get ogg info: ";
@@ -296,12 +376,13 @@ bool Sound::loadOGG(bool loop) {
 
 		// Now we are ready to decode the OGG file and put the raw audio data into the buffer.
 		// We use a fixed size buffer and keep on reading until there is no more data left, like this:
+		ARK2D::getLog()->i("Decoding OGG Data");
 		do {
 			// Read up to a buffer's worth of decoded sound data
 			bytes = ov_read(&oggFile, &array[0], BUFFER_SIZE, endian, 2, 1, &bitStream);
 
 			if (bytes < 0) {
-				std::cout << "ov_read error: " << getOggErrorString(r) << std::endl;
+				ARK2D::getLog()->i(StringUtil::append("ov_read error: ", getOggErrorString(r)));
 			}
 
 			// Append to end of buffer
@@ -376,10 +457,11 @@ bool Sound::loadOGG(bool loop) {
 
 		//return true;
 		return true;
-	#endif
+	//#endif
 }
 bool Sound::loadWAV(bool loop) {
 	#if defined(ARK2D_ANDROID)
+		ARK2D::getLog()->e("Wav not supported on Android");
 		return false;
 	#elif ( defined(ARK2D_WINDOWS) || defined(ARK2D_UBUNTU_LINUX) )
 		// Variables to load into.

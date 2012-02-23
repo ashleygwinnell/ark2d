@@ -35,6 +35,7 @@ class Sound : public ARK::Resource {
 
 	public:
 		Sound(const std::string& filename);
+		Sound(const std::string& filename, void* data, int dataLength);
 		void play();
 		bool isPlaying();
 		void stop();
@@ -50,6 +51,13 @@ class Sound : public ARK::Resource {
 	protected:
 		// File Name
 		std::string m_FileName;
+
+		// sound group - set volume by sound group.
+		unsigned int m_groupId;
+
+		// preloaded data, e.g. on Android using Resource::get().
+		void* m_preloadedData;
+		int m_preloadedDataLength;
 
 		// Buffers hold sound data.
 		ALuint Buffer;
@@ -76,8 +84,7 @@ class Sound : public ARK::Resource {
 		ALfloat m_volume;
 		ALfloat m_pitch;
 
-		// sound group - set volume by sound group.
-		unsigned int m_groupId;
+
 
 		void setSourcePosition(float x, float y, float z);
 		void setSourceVelocity(float x, float y, float z);

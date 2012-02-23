@@ -47,6 +47,11 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 
 	arklog->i("init openal");
 	// TODO: init openal
+	bool b = container->m_platformSpecific.initOpenAL();
+	if (!b) {
+		arklog->i("openal init failed");
+		exit(0);
+	}
 
 	arklog->i("init game class");
 	game->init(container);

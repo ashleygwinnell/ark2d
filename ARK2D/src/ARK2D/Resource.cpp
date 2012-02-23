@@ -19,6 +19,8 @@
 
 namespace ARK {
 
+
+
 	#if defined(ARK2D_ANDROID)
 		zip* Resource::apkZip = NULL;
 		string Resource::apkZipName = "";
@@ -43,11 +45,12 @@ namespace ARK {
 			//string pngref = ref.substr(0, ref.find_last_of(".")) + ".png";
 			string pngref = oldref.substr(0, oldref.find_last_of(".")) + ".png";
 			#if defined(ARK2D_ANDROID)
-				void* fntData = getRawData(ref);
-				Image* imgData = get(pngref)->asImage();
-				resource = new BMFont(fntData, imgData);
+				RawDataReturns* rt = getRawData(ref);
 
-				free(fntData);
+				Image* imgData = get(pngref)->asImage();
+				resource = new BMFont(rt->data, imgData);
+
+				delete rt;
 			#else
 				resource = new BMFont(ref, pngref);
 			#endif
@@ -55,18 +58,25 @@ namespace ARK {
 		else if (extension == "png" || extension == "bmp" || extension == "tga") { // Image
 			#if defined(ARK2D_ANDROID)
 				ARK2D::getLog()->i("Creating raw resource data... ");
-				void* fileData = getRawData(ref);
+				RawDataReturns* rt = getRawData(ref);
+				void* fileData = rt->data;
 
 				ARK2D::getLog()->i("Creating resource type from data... ");
 				resource = new Image(fileData, getResourceTypeByExtension(extension));
 
 				ARK2D::getLog()->i("Freeing raw resource data... ");
-				free(fileData);
+				delete rt;
 			#else
 				resource = new Image(ref);
 			#endif
 		} else if (extension == "wav" || extension == "ogg") { // Iound
-			resource = new Sound(ref);
+			#if defined(ARK2D_ANDROID)
+				RawDataReturns* rt = getRawData(ref);
+				resource = new Sound(ref, rt->data, rt->size);
+				delete rt;
+			#else
+				resource = new Sound(ref);
+			#endif
 		} else { // Assume plain text.
 
 		}
@@ -75,7 +85,7 @@ namespace ARK {
 
 		return resource;
 	}
-	void* Resource::getRawData(string ref) {
+	RawDataReturns* Resource::getRawData(string ref) {
 		#if defined(ARK2D_ANDROID)
 			if (apkZip == NULL) {
 				apkZip = zip_open(apkZipName.c_str(), 0, NULL);
@@ -135,7 +145,10 @@ namespace ARK {
 			}
 			zip_fclose(file);
 
-			return (void*) fileUncompressed;
+			RawDataReturns* rt = new RawDataReturns();
+			rt->data = (void*) fileUncompressed;
+			rt->size = (int) fileStats.size;
+			return rt;
 		#else
 			return NULL;
 		#endif
