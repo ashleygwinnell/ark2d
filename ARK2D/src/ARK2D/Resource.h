@@ -11,6 +11,7 @@
 class Image;
 class Sound;
 class Animation;
+class LocalHighscores;
 
 
 #include <string>
@@ -55,6 +56,7 @@ class Font;
 			Image* asImage();
 			Sound* asSound();
 			ARK::Font* asFont();
+			LocalHighscores* asLocalHighscores();
 			virtual ~Resource();
 
 

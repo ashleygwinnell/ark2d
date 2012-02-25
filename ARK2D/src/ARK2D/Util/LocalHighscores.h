@@ -15,6 +15,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include "../Resource.h"
 
 using namespace std;
 class LocalHighscoreItem {
@@ -22,23 +23,24 @@ class LocalHighscoreItem {
 		string name;
 		int score;
 };
-class LocalHighscores {
+class LocalHighscores : public ARK::Resource {
 	private:
-		string filename;
-		vector<LocalHighscoreItem*> items;
+		string m_filename;
+		void* m_data;
+		vector<LocalHighscoreItem*> m_items;
 	public:
-		LocalHighscores();
-		void load();
+		LocalHighscores(string filename);
+		LocalHighscores(string filename, void* data);
 		void addItem(string name, int score);
 		void save();
 		vector<LocalHighscoreItem*> data();
 		void sort();
-		void setFilename(string f);
 		string getFilename();
 		virtual ~LocalHighscores();
 
 	private:
 		static bool mysortcomparator(LocalHighscoreItem* one, LocalHighscoreItem* two);
+		void parse();
 };
 
 #endif /* LOCALHIGHSCORES_H_ */

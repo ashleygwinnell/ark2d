@@ -13,6 +13,7 @@
 #include "Font/FTFont.h"
 #include "Font/BMFont.h"
 #include "Font/Font.h"
+#include "Util/LocalHighscores.h"
 #include "GameContainer.h"
 #include "Util/StringUtil.h"
 #include "ARKString.h"
@@ -41,7 +42,8 @@ namespace ARK {
 
 		Resource* resource = NULL;
 		string extension = StringUtil::getExtension(ref);
-		if (extension == "fnt") {
+		if (extension == "fnt")
+		{
 			//string pngref = ref.substr(0, ref.find_last_of(".")) + ".png";
 			string pngref = oldref.substr(0, oldref.find_last_of(".")) + ".png";
 			#if defined(ARK2D_ANDROID)
@@ -55,7 +57,19 @@ namespace ARK {
 				resource = new BMFont(ref, pngref);
 			#endif
 		}
-		else if (extension == "png" || extension == "bmp" || extension == "tga") { // Image
+		else if (extension == "localhighscores")
+		{
+			LocalHighscores* scores = NULL;
+			#if defined(ARK2D_ANDROID)
+				RawDataReturns* rt = getRawData(ref);
+				scores = new LocalHighscores(ref, rt->data);
+			#else
+				LocalHighscores* scores = new LocalHighscores(ref);
+			#endif
+			resource = scores;
+		}
+		else if (extension == "png" || extension == "bmp" || extension == "tga")
+		{ // Image
 			#if defined(ARK2D_ANDROID)
 				ARK2D::getLog()->i("Creating raw resource data... ");
 				RawDataReturns* rt = getRawData(ref);
@@ -69,7 +83,9 @@ namespace ARK {
 			#else
 				resource = new Image(ref);
 			#endif
-		} else if (extension == "wav" || extension == "ogg") { // Iound
+		}
+		else if (extension == "wav" || extension == "ogg")
+		{ // Iound
 			#if defined(ARK2D_ANDROID)
 				RawDataReturns* rt = getRawData(ref);
 				resource = new Sound(ref, rt->data, rt->size);
@@ -77,7 +93,9 @@ namespace ARK {
 			#else
 				resource = new Sound(ref);
 			#endif
-		} else { // Assume plain text.
+		}
+		else
+		{ // Assume plain text.
 
 		}
 
@@ -162,6 +180,8 @@ namespace ARK {
 			return ARK2D_RESOURCE_TYPE_PNG;
 		} else if (extension == "fnt") {
 			return ARK2D_RESOURCE_TYPE_FNT;
+		} else if (extension == "localhighscores") {
+			return ARK2D_RESOURCE_TYPE_LOCAL_HIGHSCORES;
 		} else if (extension == "txt") {
 			return ARK2D_RESOURCE_TYPE_TXT;
 		}
@@ -180,6 +200,9 @@ namespace ARK {
 	}
 	ARK::Font* Resource::asFont() {
 		return dynamic_cast<ARK::Font*>(this);
+	}
+	LocalHighscores* Resource::asLocalHighscores() {
+		return dynamic_cast<LocalHighscores*>(this);
 	}
 
 	Resource::~Resource() {

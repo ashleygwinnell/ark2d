@@ -10,25 +10,51 @@
 #include "../ARK2D.h"
 #include "../GameContainer.h"
 
-LocalHighscores::LocalHighscores():
-	filename(""),
-	items()
+LocalHighscores::LocalHighscores(string filename):
+	ARK::Resource(),
+	m_filename(filename),
+	m_data(NULL),
+	m_items()
 	{
-	filename = ARK2D::getContainer()->getResourcePath() + "local_highscores.dat";
+	parse();
+}
+LocalHighscores::LocalHighscores(string filename, void* data):
+	ARK::Resource(),
+	m_filename(filename),
+	m_data(data),
+	m_items() {
+	parse();
 }
 
 vector<LocalHighscoreItem*> LocalHighscores::data() {
-	return items;
+	return m_items;
 }
 
-void LocalHighscores::setFilename(string f) {
-	filename = f;
-}
 string LocalHighscores::getFilename() {
-	return filename;
+	return m_filename;
 }
+void LocalHighscores::parse() {
+	string s;
+	if (m_data != NULL) {
+		s = string((char*) m_data);
+	} else {
+		s = StringUtil::file_get_contents(m_filename.c_str());
+	}
 
-void LocalHighscores::load() {
+	JSONNode* arr = libJSON::Parse(s);
+	for(unsigned int i = 0; i < arr->NodeSize(); i++) {
+		JSONNode* item = arr->NodeAt(i);
+
+		LocalHighscoreItem* it = new LocalHighscoreItem();
+		it->name = item->GetNode("name")->NodeAsString();
+		it->score = item->GetNode("score")->NodeAsInt();
+		m_items.push_back(it);
+	}
+	std::cout << "loaded local highscores" << std::endl;
+
+	this->sort();
+}
+/*void LocalHighscores::load() {
 	char* data = StringUtil::file_get_contents(filename.c_str());
 	if (data == NULL) {
 		save();
@@ -36,23 +62,12 @@ void LocalHighscores::load() {
 	} else {
 		string s = "";
 		s.append(data);
-		JSONNode* arr = libJSON::Parse(s);
-		for(unsigned int i = 0; i < arr->NodeSize(); i++) {
-			JSONNode* item = arr->NodeAt(i);
 
-			LocalHighscoreItem* it = new LocalHighscoreItem();
-			it->name = item->GetNode("name")->NodeAsString();
-			it->score = item->GetNode("score")->NodeAsInt();
-			items.push_back(it);
-		}
-		std::cout << "loaded local highscores" << std::endl;
-
-		this->sort();
 	}
-}
+}*/
 
 void LocalHighscores::sort() {
-	std::sort(items.begin(), items.end(), LocalHighscores::mysortcomparator);
+	std::sort(m_items.begin(), m_items.end(), LocalHighscores::mysortcomparator);
 	std::cout << "sorted local highscores" << std::endl;
 }
 
@@ -64,15 +79,15 @@ void LocalHighscores::addItem(string name, int score) {
 	LocalHighscoreItem* item = new LocalHighscoreItem();
 	item->name = name;
 	item->score = score;
-	items.push_back(item);
+	m_items.push_back(item);
 }
 void LocalHighscores::save() {
 
 	// TODO: sort.
 
 	string s = "[";
-		for(unsigned int i = 0; i < items.size(); i++) {
-			LocalHighscoreItem* it = items.at(i);
+		for(unsigned int i = 0; i < m_items.size(); i++) {
+			LocalHighscoreItem* it = m_items.at(i);
 			s.append("{");
 				s.append("\"name\": \"");
 				s.append(it->name);
@@ -80,13 +95,13 @@ void LocalHighscores::save() {
 				s.append("\"score\": ");
 				s.append(Cast::toString<int>(it->score));
 			s.append("}");
-			if (i != items.size()-1) {
+			if (i != m_items.size()-1) {
 				s.append(",");
 			}
 		}
 	s.append("]");
 
-	bool success = FileUtil::file_put_contents(filename, s);
+	bool success = FileUtil::file_put_contents(m_filename, s);
 	if (success) {
 		std::cout << "saved local highscores" << std::endl;
 	} else {

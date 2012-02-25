@@ -184,6 +184,14 @@ class ARK2DBuildSystem:
 			f.write("{}");
 			f.close();
 			
+	def openCacheFile(self, file):
+		self.createCacheFile(file);
+		f = open(file, "r")
+		fcontents = f.read();
+		f.close();
+		fjson = json.loads(fcontents);
+		return fjson;
+			
 	def rmdir_recursive(self, dir):
 	    """Remove a directory, and all its contents if it is not already empty."""
 	    for name in os.listdir(dir):
@@ -500,6 +508,52 @@ class ARK2DBuildSystem:
 		print("Hurray for Mac");
 		self.startWindows();
 		
+	def listDirectories(self, dir, usefullname=True):
+		thelist = [];
+		for name in os.listdir(dir):
+			full_name = os.path.join(dir, name);
+			
+			#thelist.extend([full_name]);
+			if os.path.isdir(full_name):
+				if usefullname==True:
+					thelist.extend([full_name]);
+				else:
+					thelist.extend([name]);
+					
+				#thelist.extend([full_name]); 
+				thelist.extend(self.listDirectories(full_name, usefullname));
+			#else:
+			#	os.remove(full_name);
+		return thelist;
+	
+	def listFiles(self, dir, usefullname=True, appendStr = ""):
+		thelist = [];
+		for name in os.listdir(dir):
+			if (self.get_str_extension(name) == "DS_Store"): 
+				continue;
+			 
+			full_name = os.path.join(dir, name);
+			
+			if os.path.isdir(full_name):
+				thelist.extend(self.listFiles(full_name, usefullname, name+"/"));
+			else:
+				if usefullname==True:
+					thelist.extend([appendStr + full_name]);
+				else:
+					thelist.extend([appendStr + name]);
+		return thelist;
+	
+	def makeDirectories(self, dir):
+		for thisstr in dir:
+			print("mkdir " + thisstr);
+			try:
+				os.makedirs(thisstr);
+			except OSError as exc: 
+				if exc.errno == errno.EEXIST:
+					pass
+				else: raise
+		pass;
+		
 	def clean(self):
 		if (sys.platform == "darwin"):
 			cm = "rm -r -d " + self.build_folder + self.ds + self.platform;
@@ -536,6 +590,7 @@ class ARK2DBuildSystem:
 			game_name_safe = config['game_name_safe'];
 			game_short_name = config['game_short_name'];
 			game_description = config['game_description'];
+			game_resources_dir = config['mac']['game_resources_dir'];
 			company_name = config['company_name'];
 			company_name_safe = config['company_name_safe'];
 			javaPackageName = "org."+company_name_safe+"."+game_short_name;
@@ -544,6 +599,7 @@ class ARK2DBuildSystem:
 			rootPath = config['mac']['game_dir'];
 			ndkprojectpath = rootPath;
 			thisCreateDirs = [rootPath + "/build"];
+			thisCreateDirs.extend([rootPath+"/build/android/build-cache"]);
 			thisCreateDirs.extend([rootPath+"/build/android/project"]);
 			thisCreateDirs.extend([rootPath+"/build/android/project/assets"]);
 			thisCreateDirs.extend([rootPath+"/build/android/project/assets/ark2d"]);
@@ -575,14 +631,15 @@ class ARK2DBuildSystem:
 		thisCreateDirs.extend([appbuilddir, jnifolder]);
 		
 		# make some directories...
-		for thisstr in thisCreateDirs:
-			print("mkdir " + thisstr);
-			try:
-				os.makedirs(thisstr);
-			except OSError as exc: 
-				if exc.errno == errno.EEXIST:
-					pass
-				else: raise
+		self.makeDirectories(thisCreateDirs);
+		#for thisstr in thisCreateDirs:
+		#	print("mkdir " + thisstr);
+		#	try:
+		#		os.makedirs(thisstr);
+		#	except OSError as exc: 
+		#		if exc.errno == errno.EEXIST:
+		#			pass
+		#		else: raise
 		
 		if (self.building_game):
 			 
@@ -630,8 +687,43 @@ class ARK2DBuildSystem:
 			subprocess.call(["cp -r " +ark2ddir + "/build/android/libs/armeabi/ " + ndkdir + "/platforms/"+ndkappplatform+"/arch-x86/usr/lib/"], shell=True);
 			
 			#copy resources in to "assets" dir.
-			subprocess.call(["cp -r " + rootPath + "/data/ " + rootPath + "/build/android/project/assets/"], shell=True);
+			#print("Copying game resources in to project");
+			#subprocess.call(["cp -r " + game_resources_dir + "/ " + rootPath + "/build/android/project/assets/"], shell=True);
 			
+			print("Making new asset directories");
+			directoriesToCreate = self.listDirectories(game_resources_dir, False);
+			for dir in directoriesToCreate:
+				self.makeDirectories([rootPath + "/build/android/project/assets/" + dir]);
+			#self.makeDirectories(directoriesToCreate);
+			
+			print("Creating/opening assets cache file...");
+			assetsCache = rootPath + "/build/android/build-cache/assets.json";
+			assetsJson = self.openCacheFile(assetsCache);
+			fchanged = False;
+			
+			print("Cool, now copying files")
+			filesToCopy = self.listFiles(game_resources_dir, False);
+			#print(filesToCopy);
+			for file in filesToCopy:
+				fromfile = game_resources_dir + "/" + file;
+				tofile = rootPath + "/build/android/project/assets/" + file;
+				if (not fromfile in assetsJson or assetsJson[fromfile]['date_modified'] < os.stat(fromfile).st_mtime):
+					file_ext = self.get_str_extension(file);
+					if (file_ext == "ogg"): # resample
+						print("resampling audio file from: " + fromfile + " to: " + tofile);
+						subprocess.call(["oggdec "+fromfile+" --quiet --output=- | oggenc --raw --quiet --quality=2 --output="+tofile+" -"], shell=True);
+					else: # standard copy
+						print("copying file from: " + fromfile + " to: " + tofile);
+						subprocess.call(["cp " + fromfile + " " + tofile], shell=True);
+						
+					assetsJson[fromfile] = {"date_modified": os.stat(fromfile).st_mtime };
+					fchanged = True;
+					
+			if (fchanged == True):
+				f = open(assetsCache, "w")
+				f.write(json.dumps(assetsJson, sort_keys=True, indent=4));
+				f.close();
+					
 			
 			#copy sample game c++/jni files...
 			print("generating game jni files");
@@ -720,7 +812,6 @@ class ARK2DBuildSystem:
 				subprocess.call(['cp ' + ark2ddir + "/__preproduction/icon/512.png " + rootPath+"/build/android/project/res/drawable/ic_launcher.png"], shell=True);
 				
 			
-				
 			print("generating project.properties");
 			projectPropertiesContents = "";
 			projectPropertiesContents += "target=" + appplatform;

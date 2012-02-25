@@ -1,0 +1,22 @@
+C++-AS3 Conversion for ARK2D
+
+Simple string replaces
+C++			AS3/FP.
+----------------------------------
+class ?			public class ?
+: public ?		extends ?
+int x;			var x:int;
+int x = 0;		var x:int = 0;
+import "ARK.h"		import net.flashpunk.*; (all reports)
+namespace ARK		package ARK
+Sound			Sfx
+
+----------------------------------
+how to do it…
+----------------------------------
+- analyse headers
+ - produce class definition and list of functions in data structures - SO META.
+ - this can (probably) be read linearly
+- analyse source files
+ - put shit in text strings in the data structures.
+- do regex and find and replace and shit in.
