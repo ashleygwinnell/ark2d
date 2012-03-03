@@ -34,12 +34,22 @@ string LocalHighscores::getFilename() {
 	return m_filename;
 }
 void LocalHighscores::parse() {
+
 	string s;
-	if (m_data != NULL) {
-		s = string((char*) m_data);
-	} else {
-		s = StringUtil::file_get_contents(m_filename.c_str());
-	}
+	#if defined(ARK2D_ANDROID)
+		if (StringUtil::file_exists(m_filename.c_str())) {
+			s = StringUtil::file_get_contents(m_filename.c_str());
+		} else {
+			s = string((char*) m_data);
+		}
+	#else
+
+		if (m_data != NULL) {
+			s = string((char*) m_data);
+		} else {
+			s = StringUtil::file_get_contents(m_filename.c_str());
+		}
+	#endif
 
 	JSONNode* arr = libJSON::Parse(s);
 	for(unsigned int i = 0; i < arr->NodeSize(); i++) {
@@ -50,7 +60,7 @@ void LocalHighscores::parse() {
 		it->score = item->GetNode("score")->NodeAsInt();
 		m_items.push_back(it);
 	}
-	std::cout << "loaded local highscores" << std::endl;
+	ARK2D::getLog()->i("loaded local highscores");
 
 	this->sort();
 }

@@ -8,6 +8,8 @@
 #include "StringUtil.h"
 #include "../ToString.h"
 #include "../ARKString.h"
+#include "../GameContainer.h"
+#include "../Util/ARKLog.h"
 
 std::string StringUtil::append(string str, int i) {
 	std::ostringstream os;
@@ -209,57 +211,73 @@ string StringUtil::decodeBase64(string const& encoded_string) {
 }
 
 bool StringUtil::file_exists(const char * filename) {
-	FILE* file = fopen(filename, "r");
+	string strFileName(filename);
+	#if defined(ARK2D_ANDROID)
+		strFileName = ARK2D::getContainer()->m_platformSpecific.m_externalDataStr + strFileName;
+	#endif
+	ARK2D::getLog()->i(StringUtil::append("Does file exist: ", strFileName));
+	FILE* file = NULL;
+	file = fopen(strFileName.c_str(), "r");
 	if (file != NULL) {
 		fclose(file);
 		return true;
 	}
-	fclose(file);
+	//fclose(file);
 	return false;
 }
 
-char* StringUtil::file_get_contents(const char* fileName) {
-	#if defined(ARK2D_ANDROID)
-		return NULL;
-	#else
-		if (fileName != NULL) {
+string StringUtil::file_get_contents(const char* fileName) {
+	if (fileName != NULL) {
+		string strFileName(fileName);
+		#if defined(ARK2D_ANDROID)
+			strFileName = ARK2D::getContainer()->m_platformSpecific.m_externalDataStr + strFileName;
+		#endif
 
-			std::cout << "Opening file: " << fileName << std::endl;
-			std::fstream f(fileName, std::ios::in);
-			if (!f.is_open()) {
-				//std::cout << "File does not exist." << std::endl;
-				string str = "Could not open file ["; str += fileName; str += "] as it does not exist.";
-				//ErrorDialog::createAndShow(str);
-				std::cout << str << std::endl;
-				return NULL;
-			} else {
-				f.close();
+		ARK2D::getLog()->i(StringUtil::append("Opening file: ", strFileName));
+		std::fstream f(strFileName.c_str(), std::ios::in);
+		if (!f.is_open()) {
+			//std::cout << "File does not exist." << std::endl;
+			string str = "Could not open file ["; str += strFileName; str += "] as it does not exist.";
+			ARK2D::getLog()->e(str);
+			//ErrorDialog::createAndShow(str);
+			//std::cout << str << std::endl;
+			return string("");
+		} else {
+			f.close();
 
-				char* text = NULL;
+			char* text = NULL;
 
-				FILE* file = fopen(fileName, "rt");
-				if (file == NULL) {
-					string str = "Could not open file ["; str += fileName; str += "] as it does not exist.";
-					std::cout << str << std::endl;
-					return NULL;
-				}
-
-				fseek(file, 0, SEEK_END);
-				int count = ftell(file);
-				rewind(file);
-
-				if (count > 0) {
-					text = (char*)malloc(sizeof(char) * (count + 1));
-					count = fread(text, sizeof(char), count, file);
-					text[count] = '\0';
-				}
-				fclose(file);
-
-				return text;
+			FILE* file = fopen(strFileName.c_str(), "rt");
+			if (file == NULL) {
+				string str = "Could not open file ["; str += strFileName; str += "] as it does not exist.";
+				ARK2D::getLog()->e(str);
+				return string("");
 			}
+
+			fseek(file, 0, SEEK_END);
+			int count = ftell(file);
+			rewind(file);
+
+			// ***********************
+			// TODO: memory leak. yay.
+			// *************************
+
+			if (count > 0) {
+				text = (char*)malloc(sizeof(char) * (count + 1));
+				count = fread(text, sizeof(char), count, file);
+				text[count] = '\0';
+			}
+			fclose(file);
+
+			string returnStr = (text == NULL)?string(""):string(text);
+			free(text);
+			return returnStr;
+
+			//return text;
 		}
-		return NULL;
-	#endif
+	}
+	return string("");
+
 }
 
 void StringUtil::toUpper(string& str) {

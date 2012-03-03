@@ -9,6 +9,9 @@
 
 #include <stdio.h>
 #include "../ARK2D.h"
+#include "StringUtil.h"
+#include "ARKLog.h"
+#include "../GameContainer.h"
 
 #ifdef ARK2D_WINDOWS
 	#include <direct.h>
@@ -22,6 +25,13 @@
 #endif
 
 bool FileUtil::file_put_contents(string filename, string contents) {
+
+	#if defined(ARK2D_ANDROID)
+		filename = ARK2D::getContainer()->m_platformSpecific.m_externalDataStr + filename;
+	#endif
+
+	ARK2D::getLog()->i(StringUtil::append("Making file: ", filename));
+
 	// yarp
 	fstream File;
 	File.open(filename.c_str(), ios::out);
@@ -30,6 +40,7 @@ bool FileUtil::file_put_contents(string filename, string contents) {
 		File.close();
 		return true;
 	}
+	ARK2D::getLog()->e(StringUtil::append("Making file failed. :( ", filename));
 	return false;
 }
 

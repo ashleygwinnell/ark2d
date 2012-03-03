@@ -212,6 +212,9 @@ bool GameContainerPlatform::deinitOpenAL() {
 string GameContainerPlatform::getResourcePath() const {
 	return "assets/";
 }
+string GameContainerPlatform::getExternalResourcePath() const {
+	return m_externalDataStr;
+}
 
 void* GameContainerPlatform::getARK2DResource(int resourceId, int resourceType) {
 	return NULL;

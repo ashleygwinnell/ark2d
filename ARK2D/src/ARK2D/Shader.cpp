@@ -28,18 +28,20 @@ void Shader::init(const char* vertexShaderFile, const char* fragmentShaderFile) 
 		m_shader_vertex_program = glCreateShader(GL_VERTEX_SHADER);
 		m_shader_fragment_program = glCreateShader(GL_FRAGMENT_SHADER);
 
-		const char* vertexShaderText = StringUtil::file_get_contents(vertexShaderFile);
-		const char* fragmentShaderText = StringUtil::file_get_contents(fragmentShaderFile);
+		string vertexShaderText = StringUtil::file_get_contents(vertexShaderFile);
+		string fragmentShaderText = StringUtil::file_get_contents(fragmentShaderFile);
 
 		// do a little check to see if we were able to load both the files,
-		if (vertexShaderText == NULL || fragmentShaderText == NULL) {
+		if (vertexShaderText.length() == 0 || fragmentShaderText.length() == 0) {
 			ErrorDialog::createAndShow("Either vertex shader or fragment shader file not found.");
 			return;
 		}
+		const char* vertexShaderTextChar = vertexShaderText.c_str();
+		const char* fragmentShaderTextChar = fragmentShaderText.c_str();
 
 		// pass our shader file contents to OpenGL to attach it to our shaders
-		glShaderSource(m_shader_vertex_program, 1, &vertexShaderText, 0);
-		glShaderSource(m_shader_fragment_program, 1, &fragmentShaderText, 0);
+		glShaderSource(m_shader_vertex_program, 1, &vertexShaderTextChar, 0);
+		glShaderSource(m_shader_fragment_program, 1, &fragmentShaderTextChar, 0);
 
 		// compile our shaders, yes.
 		glCompileShader(m_shader_vertex_program);

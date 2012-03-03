@@ -18,6 +18,7 @@ class GameContainerPlatform {
 
 	public:
 		GameContainer* m_container;
+		string m_externalDataStr;
 
 	public:
 		GameContainerPlatform();
@@ -27,6 +28,7 @@ class GameContainerPlatform {
 		bool initOpenAL();
 		bool deinitOpenAL();
 		string getResourcePath() const;
+		string getExternalResourcePath() const;
 		virtual ~GameContainerPlatform();
 
 		static void* getARK2DResource(int resourceId, int resourceType);

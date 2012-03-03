@@ -40,7 +40,7 @@ class StringUtil {
 		static string decodeBase64(string const& s);
 
 		static bool file_exists(const char * filename);
-		static char* file_get_contents(const char* fileName);
+		static string file_get_contents(const char* fileName);
 
 		static void toUpper(string& str);
 		static void toLower(string& str);

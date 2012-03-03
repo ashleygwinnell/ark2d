@@ -64,7 +64,7 @@ namespace ARK {
 				RawDataReturns* rt = getRawData(ref);
 				scores = new LocalHighscores(ref, rt->data);
 			#else
-				LocalHighscores* scores = new LocalHighscores(ref);
+				scores = new LocalHighscores(ref);
 			#endif
 			resource = scores;
 		}

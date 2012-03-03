@@ -15,7 +15,7 @@ GameTimer* timer = NULL;
 %GAME_CLASS_NAME%* game = NULL;
 ARKLog* arklog = NULL;
 
-JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeInit(JNIEnv* env, jclass cls, jstring apkPath) {
+JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeInit(JNIEnv* env, jclass cls, jstring apkPath, jstring externalDataPath) {
 	//__android_log_print(ANDROID_LOG_INFO, "%GAME_CLASS_NAME%Activity", "native init");
 
 	// set apk name
@@ -24,6 +24,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	apkstr = env->GetStringUTFChars(apkPath, &isCopy);
 	ARK::Resource::apkZipName = string(apkstr);
 
+	// init game stuff
 	game = new %GAME_CLASS_NAME%("%GAME_CLASS_NAME%");
 	container = new GameContainer(*game, %GAME_WIDTH%, %GAME_HEIGHT%, 32, false);
 	g = ARK2D::getGraphics();
@@ -31,6 +32,13 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	arklog = ARK2D::getLog();
 	arklog->i("native init (ark2d) done");
 
+	// set external data path
+	const char* externalDataStr;
+	jboolean isCopy2;
+	externalDataStr = env->GetStringUTFChars(externalDataPath, &isCopy2);
+	container->m_platformSpecific.m_externalDataStr = string(externalDataStr);
+
+	// random init.
 	arklog->i("seed random");
 	MathUtil::seedRandom();
 

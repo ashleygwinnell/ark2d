@@ -13,7 +13,7 @@
 		 * Signature: ()V
 		 */
 		JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeInit
-		  (JNIEnv *, jclass, jstring);
+		  (JNIEnv *, jclass, jstring, jstring);
 		
 		/*
 		 * Class:     org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer

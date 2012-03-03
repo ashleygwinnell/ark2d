@@ -23,8 +23,8 @@ SpriteSheetDescription::SpriteSheetDescription(string path): m_path(path) {
 
 void SpriteSheetDescription::load() {
 	if (StringUtil::getExtension(m_path).compare("json") == 0) {
-		char* c = StringUtil::file_get_contents(m_path.c_str());
-		if (c == NULL) {
+		string c = StringUtil::file_get_contents(m_path.c_str());
+		if (c.length()==0) {
 			ErrorDialog::createAndShow("Could not open spritesheet description.");
 			exit(0);
 		}

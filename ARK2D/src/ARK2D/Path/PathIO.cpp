@@ -11,8 +11,8 @@ PathGroup* PathIO::createFromFile(string file) {
 	if (file.length() == 0) {
 		return NULL;
 	}
-	char* c = StringUtil::file_get_contents(file.c_str());
-	if (c == NULL) {
+	string c = StringUtil::file_get_contents(file.c_str());
+	if (c.length()==0) {
 		ErrorDialog::createAndShow(StringUtil::append("Could not load Path file: ", file));
 		return NULL;
 	}

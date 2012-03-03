@@ -1,5 +1,6 @@
 package org.%COMPANY_NAME%.%GAME_SHORT_NAME%;
 
+import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -16,6 +17,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.opengl.GLSurfaceView; 
 import android.opengl.GLU;
 import android.os.Bundle; 
+import android.os.Environment;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -74,6 +76,8 @@ public class %GAME_CLASS_NAME%Activity extends Activity {
     		throw new RuntimeException("Could not load native libraries");
     	}
     } 
+    
+    
 }
  
 class %GAME_CLASS_NAME%View extends GLSurfaceView {  
@@ -133,23 +137,42 @@ class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
 	public %GAME_CLASS_NAME%Renderer(Context context) {
 		this.context = context;
 	}
+	
+	public static void createDir(String path) {
+		Log.i("game", "making path; " + path);
+		File extf = new File(path);
+		if (!extf.exists()) {
+	        if (!extf.mkdirs()) {
+	            Log.e("game", "Problem creating folder: " + path);
+	        }
+	    }
+	}
+	
 	@Override  
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 	//	nativeInit();   
 		Log.i("game", "Surface Created");
-	
-		String apkFilePath = null;
+	 
+		String apkFilePath = null; 
 		ApplicationInfo appInfo = null;
+		String externalDataPath = null; 
 		PackageManager packMgmr = context.getPackageManager();  
 		try {  
             appInfo = packMgmr.getApplicationInfo("%PACKAGE_DOT_NOTATION%", 0);
+            externalDataPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/%PACKAGE_DOT_NOTATION%/files/"; // does not include trailing slash.
         } catch (NameNotFoundException e) {
             e.printStackTrace();
             throw new RuntimeException("Unable to locate assets, aborting...");
         }
 		apkFilePath = appInfo.sourceDir;
 		Log.i("game", "APK File Path:" + apkFilePath);
-		nativeInit(apkFilePath);
+		Log.i("game", "Save File Path:" + externalDataPath);
+	
+		createDir(externalDataPath);
+		createDir(externalDataPath+"assets/"); 
+		
+		
+		nativeInit(apkFilePath, externalDataPath);
 		 
 	}
 	@Override
@@ -176,7 +199,7 @@ class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
 		nativeRender();
 	}  
 	  
-	public static native void nativeInit(String apkPath); 
+	public static native void nativeInit(String apkPath, String externalDataPath); 
 	public static native void nativeResize(int width, int height);
 	public static native void nativeRender();
 	public static native void nativeDone();

@@ -15,6 +15,7 @@
 	#include <map>
 	#include <sstream>
 	#include <iostream>
+	#include <fstream>
 	#include <jni.h>
 	#include <sys/time.h>
 	#include <time.h>
@@ -23,6 +24,8 @@
 	#include <stdio.h>
 	#include <stdlib.h>
 	#include <zip.h>
+	#include <sys/stat.h>
+	#include <sys/types.h>
 	#define STL_AVAILABLE
 
 #elif defined(__linux__)

@@ -798,6 +798,8 @@ class ARK2DBuildSystem:
 				androidManifestContents += "			</intent-filter>" + nl;
 				androidManifestContents += "		</activity>" + nl;
 				androidManifestContents += "	</application>" + nl;
+				for permission in config['android']['permissions']:
+					androidManifestContents += "	<uses-permission android:name=\"android.permission." + permission + "\" />" + nl;
 				androidManifestContents += "</manifest>" + nl;
 				f = open(rootPath+"/build/android/project/AndroidManifest.xml", "w");
 				f.write(androidManifestContents);
