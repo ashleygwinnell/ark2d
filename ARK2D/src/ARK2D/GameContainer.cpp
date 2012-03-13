@@ -123,7 +123,16 @@ void GameContainer::resize(int w, int h) {
 	this->m_height = h;
 }
 
-
+bool GameContainer::isShowingFPS() {
+	return m_showingFPS;
+}
+void GameContainer::setShowingFPS(bool b) {
+	m_showingFPS = b;
+}
+void GameContainer::renderFPS() {
+	string fps = string("FPS: ") + Cast::toString<unsigned int>(m_timer.getFPS());
+	m_graphics.drawString(fps, getWidth() - 10 - m_graphics.getFont()->getStringWidth(fps), 10);
+}
 
 
 void GameContainer::deinitGamepads() {

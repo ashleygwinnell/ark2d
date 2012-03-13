@@ -7,8 +7,8 @@
 
 #include "IntelligentGameState.h"
 #include "../ARKGameObject.h"
-#include "../ARKVector.h" 
-#include "../ARKPool.h"
+#include "../Util/Containers/ARKVector.h"
+#include "../Util/Containers/ARKPool.h"
 
 IntelligentGameState::IntelligentGameState(): GameState(), m_entities() {
 

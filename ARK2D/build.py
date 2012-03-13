@@ -106,15 +106,18 @@ class ARK2DBuildSystem:
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Audio",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Font",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Geometry",
-			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Image",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Graphics",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Graphics" + self.ds + "Image",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Particles",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Path",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "State",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "State" + self.ds + "Transition",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Threading",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Tiled",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Tools",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "UI",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Util",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Util" + self.ds + "Containers",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "libJSON",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "lpng151",
@@ -508,7 +511,7 @@ class ARK2DBuildSystem:
 		print("Hurray for Mac");
 		self.startWindows();
 		
-	def listDirectories(self, dir, usefullname=True):
+	def listDirectories(self, dir, usefullname=True, appendStr = ""):
 		thelist = [];
 		for name in os.listdir(dir):
 			full_name = os.path.join(dir, name);
@@ -516,12 +519,12 @@ class ARK2DBuildSystem:
 			#thelist.extend([full_name]);
 			if os.path.isdir(full_name):
 				if usefullname==True:
-					thelist.extend([full_name]);
+					thelist.extend([appendStr + full_name]);
 				else:
-					thelist.extend([name]);
+					thelist.extend([appendStr + name]);
 					
 				#thelist.extend([full_name]); 
-				thelist.extend(self.listDirectories(full_name, usefullname));
+				thelist.extend(self.listDirectories(full_name, usefullname, appendStr+name+"/"));
 			#else:
 			#	os.remove(full_name);
 		return thelist;
@@ -533,9 +536,10 @@ class ARK2DBuildSystem:
 				continue;
 			 
 			full_name = os.path.join(dir, name);
+			#print(full_name);
 			
 			if os.path.isdir(full_name):
-				thelist.extend(self.listFiles(full_name, usefullname, name+"/"));
+				thelist.extend(self.listFiles(full_name, usefullname, appendStr+name+"/"));
 			else:
 				if usefullname==True:
 					thelist.extend([appendStr + full_name]);
@@ -582,6 +586,7 @@ class ARK2DBuildSystem:
 		ndkappplatformno = config['android']['ndk_version'];
 		ndkappplatform = "android-" + str(ndkappplatformno);
 		
+		
 		ndkdir = config['mac']['android']['ndk_dir'];
 		
 		if (self.building_game):
@@ -594,6 +599,8 @@ class ARK2DBuildSystem:
 			company_name = config['company_name'];
 			company_name_safe = config['company_name_safe'];
 			javaPackageName = "org."+company_name_safe+"."+game_short_name;
+			
+			audio_quality = config['android']['audio_quality'];
 			
 			ark2ddir = config['mac']['ark2d_dir'];
 			rootPath = config['mac']['game_dir'];
@@ -627,6 +634,12 @@ class ARK2DBuildSystem:
 		appbuildscript = rootPath+"/build/android/Android.mk";
 		jnifolder = rootPath+"/jni";
 		appbuildscript3 = rootPath+"/jni/Application.mk";
+		
+		#check for spaces
+		if (" " in ndkprojectpath) or (" " in ndkdir):
+			print("Android build paths (and ndk directory) may not contain spaces.");
+			return;
+		
 		
 		thisCreateDirs.extend([appbuilddir, jnifolder]);
 		
@@ -703,18 +716,23 @@ class ARK2DBuildSystem:
 			
 			print("Cool, now copying files")
 			filesToCopy = self.listFiles(game_resources_dir, False);
-			#print(filesToCopy);
+			print(filesToCopy);
 			for file in filesToCopy:
 				fromfile = game_resources_dir + "/" + file;
 				tofile = rootPath + "/build/android/project/assets/" + file;
+				
+				#replace spaces in paths on max osx with slash-spaces
+				#fromfile = fromfile.replace(" ", "\ ");
+				#tofile = tofile.replace(" ", "\ ");
+				
 				if (not fromfile in assetsJson or assetsJson[fromfile]['date_modified'] < os.stat(fromfile).st_mtime):
 					file_ext = self.get_str_extension(file);
 					if (file_ext == "ogg"): # resample
 						print("resampling audio file from: " + fromfile + " to: " + tofile);
-						subprocess.call(["oggdec "+fromfile+" --quiet --output=- | oggenc --raw --quiet --quality=2 --output="+tofile+" -"], shell=True);
+						subprocess.call(["oggdec "+fromfile+" --quiet --output=- | oggenc --raw --quiet --quality=" + str(audio_quality) + " --output="+tofile+" -"], shell=True);
 					else: # standard copy
 						print("copying file from: " + fromfile + " to: " + tofile);
-						subprocess.call(["cp " + fromfile + " " + tofile], shell=True);
+						subprocess.call(["cp -r " + fromfile + " " + tofile], shell=True);
 						
 					assetsJson[fromfile] = {"date_modified": os.stat(fromfile).st_mtime };
 					fchanged = True;
@@ -728,7 +746,7 @@ class ARK2DBuildSystem:
 			#copy sample game c++/jni files...
 			print("generating game jni files");
 			print("	generating jni.h");
-			editsStrReplace = [("%GAME_CLASS_NAME%", game_name_safe), ("%GAME_SHORT_NAME%", game_short_name), ("%COMPANY_NAME%", company_name_safe), ("%PACKAGE_DOT_NOTATION%", javaPackageName), ("%GAME_WIDTH%", str(config['game_width'])), ("%GAME_HEIGHT%", str(config['game_height'])), ("%GAME_ORIENTATION%", config['game_orientation']), ("%GAME_CLEAR_COLOR%", config['game_clear_color']) ];
+			editsStrReplace = [("%GAME_CLASS_NAME%", game_name_safe), ("%GAME_SHORT_NAME%", game_short_name), ("%COMPANY_NAME%", company_name_safe), ("%PACKAGE_DOT_NOTATION%", javaPackageName), ("%GAME_WIDTH%", str(config['android']['game_width'])), ("%GAME_HEIGHT%", str(config['android']['game_height'])), ("%GAME_ORIENTATION%", config['game_orientation']), ("%GAME_CLEAR_COLOR%", config['game_clear_color']) ];
 			f = open(ark2ddir+"/lib/android/jni.h", "r");
 			fgamejnih = f.read();
 			f.close();

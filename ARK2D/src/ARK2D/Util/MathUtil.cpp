@@ -96,3 +96,25 @@ const char* MathUtil::getPercentage_CSTR(int top, int denominator) {
 	std::string str = Cast::toString<int>(pc).append(&"%"[0]);
 	return str.c_str();
 }
+#if defined(ARK2D_ANDROID)
+	unsigned int util_androidlog2( unsigned int x )
+	{
+	  unsigned int ans = 0 ;
+	  while( x>>=1 ) ans++;
+	  return ans ;
+	}
+	// http://weseetips.com/2008/09/10/how-to-calculate-log2-of-any-number/
+	double Log2AndroidTwo( double n )
+	{
+	    // log(n)/log(2) is log2.
+	    return log( n ) / log( 2.0 );
+	}
+#endif
+
+int MathUtil::nextPowerOfTwo(int val) {
+	#if defined(ARK2D_ANDROID)
+		return (1 << (int) ceil(Log2AndroidTwo((double)val)));
+	#else
+		return (1 << (int) ceil(log2((double)val)));
+	#endif
+}

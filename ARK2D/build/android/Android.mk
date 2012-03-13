@@ -15,13 +15,9 @@ LOCAL_SRC_FILES := \
 	src/ARK2D/GameContainerAndroid.cpp \
 	src/main.cpp \
 	src/ARK2D/ARK2D.cpp \
-	src/ARK2D/Animation.cpp \
 	src/ARK2D/ARKException.cpp \
 	src/ARK2D/ARKGameObject.cpp \
-	src/ARK2D/ARKMutex.cpp \
 	src/ARK2D/ARKString.cpp \
-	src/ARK2D/ARKThread.cpp \
-	src/ARK2D/Color.cpp \
 	src/ARK2D/Easing.cpp \
 	src/ARK2D/Event.cpp \
 	src/ARK2D/Game.cpp \
@@ -33,11 +29,7 @@ LOCAL_SRC_FILES := \
 	src/ARK2D/Graphics.cpp \
 	src/ARK2D/Input.cpp \
 	src/ARK2D/Resource.cpp \
-	src/ARK2D/Shader.cpp \
 	src/ARK2D/Sort.cpp \
-	src/ARK2D/SpriteSheet.cpp \
-	src/ARK2D/SpriteSheetDescription.cpp \
-	src/ARK2D/SpriteSheetDescriptionItem.cpp \
 	src/ARK2D/StringStore.cpp \
 	src/ARK2D/Timeline.cpp \
 	src/ARK2D/Audio/Sound.cpp \
@@ -45,6 +37,16 @@ LOCAL_SRC_FILES := \
 	src/ARK2D/Font/Font.cpp \
 	src/ARK2D/Font/FTFont.cpp \
 	src/ARK2D/Font/BMFont.cpp \
+	src/ARK2D/Graphics/Animation.cpp \
+	src/ARK2D/Graphics/Color.cpp \
+	src/ARK2D/Graphics/Shader.cpp \
+	src/ARK2D/Graphics/SpriteSheetDescription.cpp \
+	src/ARK2D/Graphics/SpriteSheetDescriptionItem.cpp \
+	src/ARK2D/Graphics/Image/Image.cpp \
+	src/ARK2D/Graphics/Image/BMPImage.cpp \
+	src/ARK2D/Graphics/Image/PNGImage.cpp \
+	src/ARK2D/Graphics/Image/TargaImage.cpp \
+	src/ARK2D/Graphics/Image/Texture.cpp \
 	src/ARK2D/Geometry/GigaRectangle.cpp \
 	src/ARK2D/Geometry/Vector2.cpp \
 	src/ARK2D/Geometry/Vector4.cpp \
@@ -54,11 +56,6 @@ LOCAL_SRC_FILES := \
 	src/ARK2D/Geometry/Circle.cpp \
 	src/ARK2D/Geometry/Polygon.cpp \
 	src/ARK2D/Geometry/Line.cpp \
-	src/ARK2D/Image/Image.cpp \
-	src/ARK2D/Image/BMPImage.cpp \
-	src/ARK2D/Image/PNGImage.cpp \
-	src/ARK2D/Image/TargaImage.cpp \
-	src/ARK2D/Image/Texture.cpp \
 	src/ARK2D/Path/PathGroup.cpp \
 	src/ARK2D/Path/Path.cpp \
 	src/ARK2D/Path/SubPath.cpp \
@@ -79,6 +76,8 @@ LOCAL_SRC_FILES := \
 	src/ARK2D/State/Transition/SlideRectanglesAcrossTransition.cpp \
 	src/ARK2D/State/Transition/Transition.cpp \
 	src/ARK2D/State/Transition/TranslateOutInTransition.cpp \
+	src/ARK2D/Threading/ARKThread.cpp \
+	src/ARK2D/Threading/ARKMutex.cpp \
 	src/ARK2D/Tiled/TiledMap.cpp \
 	src/ARK2D/Tiled/TiledMapLayer.cpp \
 	src/ARK2D/Tiled/TiledMapObject.cpp \

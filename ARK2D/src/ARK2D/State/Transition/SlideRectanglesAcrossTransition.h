@@ -10,7 +10,7 @@
 
 
 #include "Transition.h"
-#include "../../Color.h"
+#include "../../Graphics/Color.h"
 #include "../../Timeline.h"
 #include "../../Constants.h"
 

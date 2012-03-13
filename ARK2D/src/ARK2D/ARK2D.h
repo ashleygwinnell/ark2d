@@ -26,6 +26,7 @@
 	#include <zip.h>
 	#include <sys/stat.h>
 	#include <sys/types.h>
+	#include <math.h>
 	#define STL_AVAILABLE
 
 #elif defined(__linux__)
@@ -89,9 +90,14 @@ class ARK2D {
 		static Graphics* getGraphics();
 		static Input* getInput();
 		static ARKLog* getLog();
+		static unsigned int getPlatform();
 
 		static bool is64BitArchitecture();
 		static bool isBigEndian();
+
+		static const unsigned int PLATFORM_WINDOWS = 0;
+		static const unsigned int PLATFORM_OSX = 1;
+		static const unsigned int PLATFORM_ANDROID = 2;
 
 	private:
 		static GameContainer* s_container;

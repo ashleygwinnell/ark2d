@@ -32,6 +32,7 @@ class MathUtil {
 		static const char* getPercentage_CSTR(int top, int denominator);
 		static void snap(int& snap, int& x, int& y);
 
+		static int nextPowerOfTwo(int val);
 
 
 		template <class T>
@@ -99,6 +100,7 @@ class MathUtil {
 			double y = double(sin(angleRadians));
 			return new Vector2<T>(x, y);
 		}
+
 };
 
 #endif /* MATHUTIL_H_ */

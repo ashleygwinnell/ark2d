@@ -5,14 +5,16 @@
  *      Author: Ashley
  */
 
-#ifndef TOSTRING_H_
-#define TOSTRING_H_
+#ifndef ARKTOSTRING_H_
+#define ARKTOSTRING_H_
 
 #include <string>
 using namespace std;
 
-class ToString {
-	virtual string toString() = 0;
-};
+namespace ARK {
+	class ToString {
+		virtual string toString() = 0;
+	};
+}
 
-#endif /* TOSTRING_H_ */
+#endif /* ARKTOSTRING_H_ */

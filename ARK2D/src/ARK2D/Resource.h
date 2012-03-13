@@ -12,7 +12,8 @@ class Image;
 class Sound;
 class Animation;
 class LocalHighscores;
-
+class TiledMap;
+class ARKString;
 
 #include <string>
 using namespace std;
@@ -28,6 +29,7 @@ namespace ARK {
 class Font;
 
 	class RawDataReturns {
+		friend class TiledMap;
 		public:
 			void* data;
 			int size;
@@ -38,12 +40,15 @@ class Font;
 	};
 
 	class Resource {
+
 		public:
 			static Resource* get(string ref);
-		private:
+			static string latestName();
+		protected:
 			static Resource* get(string ref, bool appendPath);
 			static RawDataReturns* getRawData(string ref); // remember to free() this data.
 			static unsigned int getResourceTypeByExtension(string extension);
+			static string s_latestName;
 
 		public:
 
@@ -52,11 +57,14 @@ class Font;
 				static string apkZipName;
 			#endif
 
+
 			Resource();
 			Image* asImage();
 			Sound* asSound();
 			ARK::Font* asFont();
 			LocalHighscores* asLocalHighscores();
+			TiledMap* asTiledMap();
+			ARKString* asString();
 			virtual ~Resource();
 
 

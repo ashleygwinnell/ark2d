@@ -31,6 +31,7 @@ class CameraShake {
 		float getXOffset();
 		float getYOffset();
 
+		bool isShaking();
 		void update(GameContainer* container, GameTimer* timer);
 
 		void preRender(GameContainer* container, Graphics* g);

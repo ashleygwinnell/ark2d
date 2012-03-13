@@ -8,30 +8,37 @@
 #include "ARK2D.h"
 #include "Resource.h"
 
-#include "Image/Image.h"
+#include "Graphics/Image/Image.h"
 #include "Audio/Sound.h"
 #include "Font/FTFont.h"
 #include "Font/BMFont.h"
 #include "Font/Font.h"
 #include "Util/LocalHighscores.h"
+#include "Tiled/TiledMap.h"
 #include "GameContainer.h"
 #include "Util/StringUtil.h"
 #include "ARKString.h"
 
 namespace ARK {
 
-
+	string Resource::s_latestName;
 
 	#if defined(ARK2D_ANDROID)
 		zip* Resource::apkZip = NULL;
 		string Resource::apkZipName = "";
 	#endif
 
+	string Resource::latestName() {
+		return s_latestName;
+	}
+
 	Resource* Resource::get(string ref) {
 		return get(ref, true);
 	}
 
 	Resource* Resource::get(string ref, bool appendPath) {
+		s_latestName = ref;
+
 		GameContainer* container = ARK2D::getContainer();
 		string oldref = ref;
 		if (appendPath) {
@@ -57,6 +64,17 @@ namespace ARK {
 				resource = new BMFont(ref, pngref);
 			#endif
 		}
+		else if (extension == "tmx")
+		{
+			TiledMap* map = NULL;
+			#if defined(ARK2D_ANDROID)
+				RawDataReturns* rt = getRawData(ref);
+				map = new TiledMap(ref, rt->data);
+			#else
+				map = new TiledMap(ref);
+			#endif
+			resource = map;
+		}
 		else if (extension == "localhighscores")
 		{
 			LocalHighscores* scores = NULL;
@@ -64,7 +82,7 @@ namespace ARK {
 				RawDataReturns* rt = getRawData(ref);
 				scores = new LocalHighscores(ref, rt->data);
 			#else
-				scores = new LocalHighscores(ref);
+				scores = new LocalHighscores(oldref);
 			#endif
 			resource = scores;
 		}
@@ -96,7 +114,21 @@ namespace ARK {
 		}
 		else
 		{ // Assume plain text.
+			ARKString* arkstr = new ARKString();
+			#if defined(ARK2D_ANDROID)
+				RawDataReturns* rt = getRawData(ref);
+				char* newtextbuffer = (char*) malloc(rt->size+1);
+				memcpy(newtextbuffer, rt->data, rt->size);
+				newtextbuffer[rt->size] = '\0';
+				arkstr->append(newtextbuffer);
+				delete rt;
+				free(newtextbuffer);
 
+			#else
+				string s = StringUtil::file_get_contents(oldref.c_str());
+				arkstr->append(s);
+			#endif
+			resource = arkstr;
 		}
 
 		ARK2D::getLog()->i(StringUtil::append("Loaded Resource: ", ref));
@@ -182,6 +214,8 @@ namespace ARK {
 			return ARK2D_RESOURCE_TYPE_FNT;
 		} else if (extension == "localhighscores") {
 			return ARK2D_RESOURCE_TYPE_LOCAL_HIGHSCORES;
+		} else if (extension == "tmx") {
+			return ARK2D_RESOURCE_TYPE_TILED_MAP;
 		} else if (extension == "txt") {
 			return ARK2D_RESOURCE_TYPE_TXT;
 		}
@@ -203,6 +237,12 @@ namespace ARK {
 	}
 	LocalHighscores* Resource::asLocalHighscores() {
 		return dynamic_cast<LocalHighscores*>(this);
+	}
+	TiledMap* Resource::asTiledMap() {
+		return dynamic_cast<TiledMap*>(this);
+	}
+	ARKString* Resource::asString() {
+		return dynamic_cast<ARKString*>(this);
 	}
 
 	Resource::~Resource() {

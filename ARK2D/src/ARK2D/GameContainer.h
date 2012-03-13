@@ -18,7 +18,7 @@
 #include "GameTimer.h"
 #include "Graphics.h"
 #include "Font/BMFont.h"
-#include "Image/Image.h"
+#include "Graphics/Image/Image.h"
 #include "UI/ErrorDialog.h"
 #include "Util/ARKLog.h"
 
@@ -109,6 +109,16 @@ class GameContainer {
 
 		void saveScreenshot(string filename);
 
+		bool isShowingFPS();
+		void setShowingFPS(bool b);
+#if defined(ARK2D_ANDROID)
+		void renderFPS();
+#else
+	private:
+		void renderFPS();
+	public:
+#endif
+
 		void close() const;
 		~GameContainer();
 
@@ -120,6 +130,9 @@ class GameContainer {
 		void enableOpenAL();
 		void disableOpenAL();
 		void swapBuffers();
+
+
+
 		float time();
 
 		void initGamepads();
@@ -167,6 +180,7 @@ class GameContainer {
 		bool m_bRunning;
 
 		int m_resizeBehaviour;
+		bool m_showingFPS;
 
 
 	// Platform Specific

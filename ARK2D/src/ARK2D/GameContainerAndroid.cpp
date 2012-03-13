@@ -34,6 +34,7 @@ GameContainer::GameContainer(Game& g, int width, int height, int bpp, bool fulls
 	m_touchMode(true),
 	m_clearColor(Color::black),
 	m_resizeBehaviour(RESIZE_BEHAVIOUR_SCALE),
+	m_showingFPS(false),
 	m_platformSpecific()
 {
 	m_platformSpecific.m_container = this;
@@ -123,6 +124,8 @@ void GameContainerPlatform::initGL(string clearColorStr, int w, int h) {
 		clearColor = &m_container->m_clearColor;
 	}
 
+
+
 	glViewport(0, 0, w, h);
 	glClearColor(clearColor->getRedf(),clearColor->getGreenf(), clearColor->getBluef(), clearColor->getAlphaf());
 	glClear( GL_COLOR_BUFFER_BIT );
@@ -145,6 +148,10 @@ void GameContainerPlatform::initGL2D(int w, int h) {
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
+
+	glDisable( GL_DEPTH_TEST );
+	glDisable( GL_LIGHTING );
+	glDisable( GL_DITHER );
 }
 
 bool GameContainerPlatform::initOpenAL() {

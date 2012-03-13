@@ -22,7 +22,7 @@
 
 			#include "ARK2D_windres.h"
 			#include "ARK2D_GL.h"
-			#include "Image/Image.h"
+			#include "Graphics/Image/Image.h"
 
 			#include <windows.h>
 			#include <string>

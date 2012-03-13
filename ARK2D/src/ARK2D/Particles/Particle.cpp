@@ -7,8 +7,8 @@
 
 
 #include "../ARK2D_GL.h"
-#include "../Color.h"
-#include "../Image/Image.h"
+#include "../Graphics/Color.h"
+#include "../Graphics/Image/Image.h"
 #include "../Graphics.h"
 #include "../ARK2D.h"
 

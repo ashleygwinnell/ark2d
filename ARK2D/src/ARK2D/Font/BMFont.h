@@ -15,8 +15,8 @@
 
 #include "../ARK2D_GL.h"
 
-#include "../Image/Image.h"
-#include "../Color.h"
+#include "../Graphics/Image/Image.h"
+#include "../Graphics/Color.h"
 #include "../Util/ARKLog.h"
 #include "../Util/StringUtil.h"
 

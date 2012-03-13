@@ -8,7 +8,7 @@
 
 using namespace std;
 
-class TiledMapProperty : public ToString {
+class TiledMapProperty : public ARK::ToString {
 	public:
 		TiledMapProperty();
 		TiledMapProperty(const std::string& name, const std::string& value);

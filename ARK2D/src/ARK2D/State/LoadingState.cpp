@@ -8,7 +8,7 @@
 #include "LoadingState.h"
 
 #include "GameState.h"
-#include "../ARKThread.h"
+#include "../Threading/ARKThread.h"
 #include "../GameContainer.h"
 #include "StateBasedGame.h"
 

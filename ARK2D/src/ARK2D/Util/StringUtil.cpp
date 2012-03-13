@@ -231,6 +231,8 @@ string StringUtil::file_get_contents(const char* fileName) {
 		string strFileName(fileName);
 		#if defined(ARK2D_ANDROID)
 			strFileName = ARK2D::getContainer()->m_platformSpecific.m_externalDataStr + strFileName;
+		#else
+			strFileName = ARK2D::getContainer()->getResourcePath() + strFileName;
 		#endif
 
 		ARK2D::getLog()->i(StringUtil::append("Opening file: ", strFileName));

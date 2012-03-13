@@ -14,7 +14,7 @@ using namespace std;
 #include "GameState.h"
 
 class ARKGameObject;
-#include "../ARKVector.h"
+#include "../Util/Containers/ARKVector.h"
 
 class IntelligentGameState : public GameState {
 	private:

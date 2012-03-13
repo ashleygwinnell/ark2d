@@ -28,6 +28,8 @@ bool FileUtil::file_put_contents(string filename, string contents) {
 
 	#if defined(ARK2D_ANDROID)
 		filename = ARK2D::getContainer()->m_platformSpecific.m_externalDataStr + filename;
+	#else
+		filename = ARK2D::getContainer()->getResourcePath() + filename;
 	#endif
 
 	ARK2D::getLog()->i(StringUtil::append("Making file: ", filename));

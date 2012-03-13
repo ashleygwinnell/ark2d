@@ -8,7 +8,7 @@
 #include "Font/Font.h"
 #include "Font/BMFont.h"
 #include "Font/FTFont.h"
-#include "Color.h"
+#include "Graphics/Color.h"
 
 #include "ARK2D_GL.h"
 #include "ARK2D.h"

@@ -55,6 +55,7 @@
 		m_touchMode(false),
 		m_clearColor(Color::black),
 		m_resizeBehaviour(RESIZE_BEHAVIOUR_SCALE),
+		m_showingFPS(false),
 		m_platformSpecific()
 		{
 			NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
@@ -290,10 +291,11 @@
 			m_game.preRender(this, &m_graphics);
 			m_game.render(this, &m_graphics);
 			m_game.postRender(this, &m_graphics);
+			if (m_showingFPS) { renderFPS(); }
 			ARK2D::getLog()->render();
 			
 			swapBuffers();
-			
+			 
 			usleep(delta * 500); // 0.017/2.
 		}
 		

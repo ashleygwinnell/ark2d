@@ -61,6 +61,16 @@ long GameTimer::millis() {
 	return 0;
 }
 
+void GameTimer::sleep(int millis) {
+	#if defined(ARK2D_WINDOWS)
+		Sleep(millis);
+	#elif defined(ARK2D_MACINTOSH)
+		usleep(millis * 1000);
+	#else
+		// ... log not implemented
+	#endif
+}
+
 //----------------------------------------------------------------
 // Name: Tick()
 // Desc: Signifies a new frame in the game.

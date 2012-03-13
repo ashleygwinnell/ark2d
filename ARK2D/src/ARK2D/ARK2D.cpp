@@ -35,6 +35,15 @@ Input* ARK2D::getInput() {
 ARKLog* ARK2D::getLog() {
 	return s_log;
 }
+unsigned int ARK2D::getPlatform() {
+	#if defined(ARK2D_WINDOWS)
+		return PLATFORM_WINDOWS;
+	#elif defined(ARK2D_MACINTOSH)
+		return PLATFORM_OSX;
+	#elif defined(ARK2D_ANDROID)
+		return PLATFORM_ANDROID;
+	#endif
+}
 
 bool ARK2D::is64BitArchitecture() {
 

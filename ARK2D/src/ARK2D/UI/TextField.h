@@ -13,7 +13,7 @@
 #include "../ARKString.h"
 #include "../Input.h"
 #include "../Graphics.h"
-#include "../Color.h"
+#include "../Graphics/Color.h"
 #include "../Geometry/GigaRectangle.h"
 
 /**

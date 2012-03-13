@@ -19,6 +19,7 @@ class GameTimer {
 		unsigned int getFPS() const;
 		float getDelta() const;
 		void flush();
+		void sleep(int millis);
 
 	private:
 		unsigned int m_FrameCount;

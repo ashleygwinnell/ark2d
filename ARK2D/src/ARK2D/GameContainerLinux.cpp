@@ -28,6 +28,7 @@
 		m_touchMode(false),
 		m_clearColor(Color::black),
 		m_resizeBehaviour(RESIZE_BEHAVIOUR_SCALE),
+		m_showingFPS(false),
 		m_platformSpecific()
 		{
 		m_input.setGameContainer(this);

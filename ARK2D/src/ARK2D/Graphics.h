@@ -10,7 +10,7 @@
 
 #include <string>
 #include "Font/BMFont.h"
-#include "Color.h"
+#include "Graphics/Color.h"
 #include "Util/StringUtil.h"
 #include "Geometry/Matrix44.h"
 #include "Font/Font.h"

@@ -10,15 +10,16 @@
 
 #include "Util/StringUtil.h"
 #include "Util/Cast.h"
+#include "Resource.h"
 
 #include <string>
 using namespace std;
 
-class ARKString {
+class ARKString : public ARK::Resource {
 	private:
 		string m_string;
 	public:
-		ARKString(): m_string("") {
+		ARKString(): ARK::Resource(), m_string("") {
 
 		}
 		ARKString(string s): m_string(s) {
@@ -31,6 +32,9 @@ class ARKString {
 		}
 		void operator+=(const char* c) {
 			m_string.append(c);
+		}
+		void operator+=(string s) {
+			m_string.append(s);
 		}
 		void operator+=(unsigned int i) {
 			m_string = StringUtil::append(m_string, i);
@@ -59,7 +63,9 @@ class ARKString {
 			m_string = Cast::toString<float>(f);
 		}
 
-
+		void append(string s) {
+			m_string.append(s);
+		}
 		void insert(const ARKString& str, int at) {
 			insert(str.get(), at);
 		}

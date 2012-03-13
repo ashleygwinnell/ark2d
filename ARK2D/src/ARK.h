@@ -12,7 +12,7 @@
 #include "ARK2D/ARKException.h"
 
 
-#include "ARK2D/Shader.h"
+
 #include "ARK2D/GameTimer.h"
 
 #include "ARK2D/GameContainer.h"
@@ -48,10 +48,12 @@
 
 #include "ARK2D/Constants.h"
 
-#include "ARK2D/Color.h"
 #include "ARK2D/Graphics.h"
-#include "ARK2D/Image/Image.h"
-#include "ARK2D/Animation.h"
+#include "ARK2D/Graphics/Color.h"
+#include "ARK2D/Graphics/Animation.h"
+#include "ARK2D/Graphics/SpriteSheetDescription.h"
+#include "ARK2D/Graphics/Shader.h"
+#include "ARK2D/Graphics/Image/Image.h"
 
 // Audio
 #include "ARK2D/Audio/Sound.h"
@@ -61,11 +63,13 @@
 #include "ARK2D/Font/BMFont.h"
 #include "ARK2D/Font/FTFont.h"
 
+// Tiled
+#include "ARK2D/Tiled/TiledMap.h"
+
 // Resources
 #include "ARK2D/Resource.h"
 
-// Tiled
-#include "ARK2D/Tiled/TiledMap.h"
+
 
 // Input
 #include "ARK2D/Input.h"
@@ -83,7 +87,6 @@
 #include "ARK2D/Util/RSSL.h" // basic scripting.
 
 #include "ARK2D/Timeline.h"
-#include "ARK2D/SpriteSheetDescription.h"
 #include "ARK2D/Event.h"
 
 #include "ARK2D/StringStore.h"
@@ -114,8 +117,12 @@
 
 // Containers
 #include "ARK2D/ARKGameObject.h"
-#include "ARK2D/ARKVector.h"
-#include "ARK2D/ARKPool.h"
+#include "ARK2D/Util/Containers/ARKVector.h"
+#include "ARK2D/Util/Containers/ARKPool.h"
+
+// Multithreading
+#include "ARK2D/Threading/ARKThread.h"
+#include "ARK2D/Threading/ARKMutex.h"
 
 // Paths
 #include "ARK2D/Path/SubPath.h"

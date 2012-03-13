@@ -52,20 +52,27 @@ float CameraShake::getYOffset() {
 }
 
 
+bool CameraShake::isShaking() {
+	if (m_timeline->getKeyedIndependentEvent("CAMERA_SHAKE_X_1") == NULL
+			&& m_timeline->getKeyedIndependentEvent("CAMERA_SHAKE_X_2") == NULL
+			&& m_timeline->getKeyedIndependentEvent("CAMERA_SHAKE_X_3") == NULL
+			&& m_timeline->getKeyedIndependentEvent("CAMERA_SHAKE_X_4") == NULL
+			) {
+		return false;
+	}
+	return true;
+}
 void CameraShake::update(GameContainer* container, GameTimer* timer) {
 	m_timeline->update(timer);
 
-	if (m_timeline->getKeyedIndependentEvent("CAMERA_SHAKE_X_1") == NULL
-		&& m_timeline->getKeyedIndependentEvent("CAMERA_SHAKE_X_2") == NULL
-		&& m_timeline->getKeyedIndependentEvent("CAMERA_SHAKE_X_3") == NULL
-		&& m_timeline->getKeyedIndependentEvent("CAMERA_SHAKE_X_4") == NULL
-		) {
+	if (!isShaking()) {
 		m_offset_x = 0;
 	}
 }
 
 
 void CameraShake::preRender(GameContainer* container, Graphics* g) {
+	if (!isShaking()) { return; }
 	g->pushMatrix();
 	g->translate(m_offset_x, m_offset_y);
 }
@@ -73,6 +80,7 @@ void CameraShake::render(GameContainer* container, Graphics* g) {
 
 }
 void CameraShake::postRender(GameContainer* container, Graphics* g) {
+	if (!isShaking()) { return; }
 	g->translate(m_offset_x * -1, m_offset_y * -1);
 	g->popMatrix();
 }

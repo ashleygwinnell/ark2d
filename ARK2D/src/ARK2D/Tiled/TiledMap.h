@@ -12,23 +12,26 @@
 #include <vector>
 #include "../vendor/tinyxml/tinyxml.h"
 #include "../ToString.h"
-#include "../Image/Image.h"
-#include "../Color.h"
+#include "../Graphics/Image/Image.h"
+#include "../Graphics/Color.h"
 
 #include "TiledMapTileset.h"
 #include "TiledMapProperty.h"
 #include "TiledMapLayer.h"
-#include "TiledMapObjectGroup.h"
+#include "TiledMapObjectGroup.h" 
 #include "TiledMapObject.h"
+
+#include "../Resource.h"
 
 using namespace std;
 
-class TiledMap {
+class TiledMap : public ARK::Resource {
 
 	friend class TiledMapLayer;
 
 	public:
 		TiledMap(const string& file);
+		TiledMap(const string& file, void* data);
 		void addProperty(const TiledMapProperty& property);
 		void addTileset(const TiledMapTileset& tileset);
 		void addLayer(const TiledMapLayer& layer);
@@ -57,10 +60,11 @@ class TiledMap {
 		void printProperties();
 		void draw();
 		void draw(signed int x, signed int y);
-		~TiledMap();
+		virtual ~TiledMap();
 	private:
 		string m_file;
 		TiXmlDocument m_xmldocument;
+		void* m_data;
 		vector<TiledMapProperty> m_properties;
 		vector<TiledMapTileset> m_tilesets;
 		vector<TiledMapLayer> m_layers;
@@ -72,6 +76,9 @@ class TiledMap {
 		unsigned int m_heightInTiles;
 		unsigned int m_widthInPixels;
 		unsigned int m_heightInPixels;
+
+		void parse();
+		void parseTileset(unsigned int& firstgid, string& src, TiXmlDocument* tileset_d);
 
 };
 

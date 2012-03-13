@@ -9,10 +9,10 @@
 #define CONFIGURABLEEMITTER_H_
 
 
-#include "../Color.h"
+#include "../Graphics/Color.h"
 #include "Range.h"
 #include "ParticleEmitter.h"
-#include "../Image/Image.h"
+#include "../Graphics/Image/Image.h"
 
 
 #include <string>

@@ -12,7 +12,7 @@
 #include "AbstractUIComponent.h"
 
 #include "../Graphics.h"
-#include "../Color.h"
+#include "../Graphics/Color.h"
 #include "../Input.h"
 #include "../Geometry/GigaRectangle.h"
 

@@ -10,7 +10,7 @@
 #include <iostream>
 #include <fstream>
 #include <map>
-#include "../Image/Image.h"
+#include "../Graphics/Image/Image.h"
 #include "../GameContainer.h"
 
 #include "BMFont.h"
@@ -246,7 +246,7 @@ void BMFont::drawString(const string& Str, int drawx, int drawy) {
 		OffsetY = m_Charset.Chars[charid].YOffset;
 		XAdvance = m_Charset.Chars[charid].XAdvance;
 
-		Image* img = NULL;
+		/*Image* img = NULL;
 		if (m_letterImages.find(charid) != m_letterImages.end()) {
 			img = (Image*) m_letterImages.find(charid)->second;
 		} else {
@@ -255,8 +255,18 @@ void BMFont::drawString(const string& Str, int drawx, int drawy) {
 			m_letterImages[charid] = img;
 		}
 		img->setAlpha(m_Image->getAlpha());
-		img->draw(drawx + OffsetX, drawy + OffsetY);
+		img->draw(drawx + OffsetX, drawy + OffsetY);*/
 
+		m_Image->drawSubImageStart();
+		m_Image->drawSubImage(CharX, CharY, drawx+OffsetX, drawy+OffsetY, Width, Height, Width, Height);
+		m_Image->drawSubImageEnd();
+
+
+		// ******
+		// TODO:
+		// 		- optimise this by making a single vector with triangle strip.
+		// 		- reduce calls to opengl by N relative to string length. ;D
+		// ******
 
 		//TotalX += Width;
 		drawx += XAdvance;

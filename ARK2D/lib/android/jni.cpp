@@ -141,6 +141,8 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		game->preRender(container, g);
 		game->render(container, g);
 		game->postRender(container, g);
+		if (container->isShowingFPS()) { container->renderFPS(); }
+
 		//fillRect(200,200,10,10);
 	}
 }
