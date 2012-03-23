@@ -44,51 +44,62 @@
 #include <vector>
 using namespace std;
 
-class FTFontCharData {
-	public:
-		float x;
-		float y;
-		int width;
-		int height;
-		float th;
-		float tw;
-		int tid;
-		int advancex;
-		int advancey;
-		int offsetx;
-		int offsety;
-};
+namespace ARK {
+	namespace Font {
 
-class FTFontData {
-	private:
-		inline int next_p2(int a);
-		void make_dlist(FT_Face face, unsigned char ch, GLuint list_base, GLuint* tex_base);
-	public:
-		float m_height; // holds the height of the font.
-		GLuint* textures; // holds the texture ids
-		GLuint list_base; // holds the first display list id.
-		FTFontCharData* characterDatas; // holds the character datas (this is the pointer to the first of 128?).
-		int m_lineHeight;
+		#ifndef DOXYGEN_SHOULD_SKIP_THIS
+		class FTFontCharData {
+			public:
+				float x;
+				float y;
+				int width;
+				int height;
+				float th;
+				float tw;
+				int tid;
+				int advancex;
+				int advancey;
+				int offsetx;
+				int offsety;
+		};
 
-		// this function will create a font with the height H from the file name.
-		void init(const char* fname, unsigned int h);
+		class FTFontData {
+			private:
+				inline int next_p2(int a);
+				void make_dlist(FT_Face face, unsigned char ch, GLuint list_base, GLuint* tex_base);
+			public:
+				float m_height; // holds the height of the font.
+				GLuint* textures; // holds the texture ids
+				GLuint list_base; // holds the first display list id.
+				FTFontCharData* characterDatas; // holds the character datas (this is the pointer to the first of 128?).
+				int m_lineHeight;
 
-		// freee the resources for the font.
-		void clean();
-};
+				// this function will create a font with the height H from the file name.
+				void init(const char* fname, unsigned int h);
 
+				// freee the resources for the font.
+				void clean();
+		};
+		#endif
 
-
-class FTFont : public ARK::Font {
-	private:
-		FTFontData* m_data;
-	public:
-		FTFont(string filename, unsigned int height);
-		void drawString(const string& str, int x, int y);
-		unsigned int getStringWidth(const string& Str) const;
-		unsigned int getStringHeight(const string& Str) const;
-		unsigned int getLineHeight() const;
-		virtual ~FTFont();
-};
+		/**
+		 * \brief Freetype font implementation, for displaying TTF fonts.
+		 *
+		 *
+		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+		 */
+		class FTFont : public ARK::Font::Font {
+			private:
+				FTFontData* m_data;
+			public:
+				FTFont(string filename, unsigned int height);
+				void drawString(const string& str, int x, int y);
+				unsigned int getStringWidth(const string& Str) const;
+				unsigned int getStringHeight(const string& Str) const;
+				unsigned int getLineHeight() const;
+				virtual ~FTFont();
+		};
+	}
+}
 
 #endif /* FTFONT_H_ */

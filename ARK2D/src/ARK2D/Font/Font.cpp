@@ -9,26 +9,32 @@
 #include "BMFont.h"
 #include "FTFont.h"
 
-ARK::Font::Font() {
+namespace ARK {
+	namespace Font {
+		Font::Font() {
 
-}
+		}
 
-void ARK::Font::drawStringCentered(const string& Str, int left_x, int right_x, int y) {
-	int c_x = (right_x / 2) + (left_x/2);
-	drawString(Str, c_x - (getStringWidth(Str)/2), y);
-}
 
-void ARK::Font::drawStringCenteredAt(const string& Str, int x, int y) {
-	drawString(Str, x - (getStringWidth(Str)/2), y - (getStringHeight(Str)/2));
-}
+		void Font::drawStringCentered(const string& Str, int left_x, int right_x, int y) {
+			int c_x = (right_x / 2) + (left_x/2);
+			drawString(Str, c_x - (getStringWidth(Str)/2), y);
+		}
 
-BMFont* ARK::Font::asBMFont() {
-	return dynamic_cast<BMFont*>(this);
-}
-FTFont* ARK::Font::asFTFont() {
-	return dynamic_cast<FTFont*>(this);
-}
+		void Font::drawStringCenteredAt(const string& Str, int x, int y) {
+			drawString(Str, x - (getStringWidth(Str)/2), y - (getStringHeight(Str)/2));
+		}
 
-ARK::Font::~Font() {
+		ARK::Font::BMFont* Font::asBMFont() {
+			return dynamic_cast<ARK::Font::BMFont*>(this);
+		}
+		ARK::Font::FTFont* Font::asFTFont() {
+			return dynamic_cast<ARK::Font::FTFont*>(this);
+		}
 
+		Font::~Font() {
+
+		}
+
+	}
 }

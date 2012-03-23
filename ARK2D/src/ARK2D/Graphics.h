@@ -12,11 +12,18 @@
 #include "Font/BMFont.h"
 #include "Graphics/Color.h"
 #include "Util/StringUtil.h"
-#include "Geometry/Matrix44.h"
+#include "Util/Matrix44.h"
 #include "Font/Font.h"
 
 #include "ARK2D_GL.h"
 
+/*!
+ * \brief Contains rendering methods.
+ *
+ * @warning Primitive shapes are slow on most mobile devices so try to use textures where you can.
+ *
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class Graphics
 {
 	friend class GameContainer;
@@ -27,10 +34,10 @@ class Graphics
 	public:
 		Graphics();
 
-		void setFont(ARK::Font* f);
-		void setDefaultFont(ARK::Font* f);
-		ARK::Font* getFont() const ;
-		ARK::Font* getDefaultFont() const;
+		void setFont(ARK::Font::Font* f);
+		void setDefaultFont(ARK::Font::Font* f);
+		ARK::Font::Font* getFont() const ;
+		ARK::Font::Font* getDefaultFont() const;
 
 		void drawString(const std::string str, int x, int y) const;
 		void drawStringCenteredAt(const std::string str, int x, int y) const;
@@ -95,8 +102,8 @@ class Graphics
 		void resetMatrix() const;
 
 	private:
-		ARK::Font* m_DefaultFont;
-		ARK::Font* m_Font;
+		ARK::Font::Font* m_DefaultFont;
+		ARK::Font::Font* m_Font;
 		Color m_DrawColor;
 		Color m_MaskColor;
 		unsigned int m_LineWidth;

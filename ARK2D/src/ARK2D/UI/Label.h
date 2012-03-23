@@ -13,19 +13,28 @@
 #include <string>
 using namespace std;
 
-/**
- * TODO: text alignment left top right bottom etc.
- */
-class Label : public AbstractUIComponent {
-	private:
-		string m_text;
-	public:
-		Label();
-		Label(string text);
-		void setText(string text);
-		void render();
-		void renderBounds();
-		virtual ~Label();
-};
+namespace ARK {
+	namespace UI {
 
+		/*!
+		 * \brief A generic text label.
+		 *
+		 * @todo Set font functionality.
+		 * @todo Text alignment left top right bottom etc.
+		 *
+		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+		 */
+		class Label : public AbstractUIComponent {
+			private:
+				string m_text;
+			public:
+				Label();
+				Label(string text);
+				void setText(string text);
+				void render();
+				void renderBounds();
+				virtual ~Label();
+		};
+	}
+}
 #endif /* LABEL_H_ */

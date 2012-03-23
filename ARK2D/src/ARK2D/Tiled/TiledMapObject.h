@@ -8,41 +8,51 @@
 
 using namespace std;
 
-class TiledMapObject {
-	public:
-		TiledMapObject();
+namespace ARK {
+	namespace Tiled {
 
-		void setName(string s);
-		string& getName();
+		/*!
+		 * \brief An Object in an Object Group in a Tiled Map.
+		 *
+		 * @warning You should never need to create this manually.
+		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+		 */
+		class TiledMapObject {
+			public:
+				TiledMapObject();
 
-		void setType(string s);
-		string& getType();
+				void setName(string s);
+				string& getName();
 
-		void setX(signed int x);
-		signed int getX();
+				void setType(string s);
+				string& getType();
 
-		void setY(signed int y);
-		signed int getY();
+				void setX(signed int x);
+				signed int getX();
 
-		void setWidth(unsigned int w);
-		unsigned int getWidth();
+				void setY(signed int y);
+				signed int getY();
 
-		void setHeight(unsigned int h);
-		unsigned int getHeight();
+				void setWidth(unsigned int w);
+				unsigned int getWidth();
 
-		void setGID(unsigned int h);
-		unsigned int getGID();
+				void setHeight(unsigned int h);
+				unsigned int getHeight();
 
-		~TiledMapObject();
-	private:
-		string m_name;
-		string m_type;
-		signed int m_x;
-		signed int m_y;
-		unsigned int m_width;
-		unsigned int m_height;
-		unsigned int m_gid;
-		vector<TiledMapProperty*> m_properties;
-};
+				void setGID(unsigned int h);
+				unsigned int getGID();
 
+				~TiledMapObject();
+			private:
+				string m_name;
+				string m_type;
+				signed int m_x;
+				signed int m_y;
+				unsigned int m_width;
+				unsigned int m_height;
+				unsigned int m_gid;
+				vector<TiledMapProperty*> m_properties;
+		};
+	}
+}
 #endif

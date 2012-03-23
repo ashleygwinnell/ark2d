@@ -12,9 +12,22 @@
 
 using namespace std;
 
-class ErrorDialog {
-	public:
-		static void createAndShow(string message);
-};
+namespace ARK {
+	namespace UI {
+
+		/*!
+		 * \brief An error dialog.
+		 *
+		 * @todo Create a singular dialogs class which does all the dialogs of all the types.
+		 * @todo Deprecate this. See previous TODO.
+		 *
+		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+		 */
+		class ErrorDialog {
+			public:
+				static void createAndShow(string message);
+		};
+	}
+}
 
 #endif /* ERRORDIALOG_H_ */

@@ -8,8 +8,9 @@
 
 #import <Cocoa/Cocoa.h>
 #import "GameContainerMacWindowListener.h"
+#include "ARK2D_namespaces.h"
 #include "ARK2D.h" 
-#include "Input.h"
+#include "Controls/Input.h"
 #include "Game.h"
 #include "GameContainer.h"
 

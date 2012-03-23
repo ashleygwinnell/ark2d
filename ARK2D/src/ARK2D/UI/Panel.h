@@ -16,29 +16,41 @@ using namespace std;
 
 #include "../Graphics.h"
 #include "../GameContainer.h"
-#include "../Input.h"
 #include "../Geometry/GigaRectangle.h"
+#include "../Controls/Input.h"
 
-class Panel : public AbstractUIComponent {
-	public:
-		vector<AbstractUIComponent*> m_children;
-		bool m_translate;
-		bool m_showBorder;
-		Panel();
-		void add(AbstractUIComponent* c);
-		void setTranslating(bool b);
+namespace ARK {
+	namespace UI {
 
-		virtual void preRender();
-		virtual void postRender();
-		virtual void render();
-		virtual void renderChildren();
-		virtual void renderBorder();
+		/*!
+		 * \brief A panel that holds a bunch of other UIComponents.
+		 *
+		 * @todo Layout Managers.
+		 *
+		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+		 */
+		class Panel : public AbstractUIComponent {
+			public:
+				vector<AbstractUIComponent*> m_children;
+				bool m_translate;
+				bool m_showBorder;
+				Panel();
+				void add(AbstractUIComponent* c);
+				void setTranslating(bool b);
 
-		virtual void keyPressed(unsigned int key);
-		virtual void keyReleased(unsigned int key);
-		virtual void mouseMoved(int x, int y, int oldx, int oldy);
+				virtual void preRender();
+				virtual void postRender();
+				virtual void render();
+				virtual void renderChildren();
+				virtual void renderBorder();
 
-		virtual ~Panel();
-};
+				virtual void keyPressed(unsigned int key);
+				virtual void keyReleased(unsigned int key);
+				virtual void mouseMoved(int x, int y, int oldx, int oldy);
+
+				virtual ~Panel();
+		};
+	}
+}
 
 #endif /* PANEL_H_ */

@@ -22,6 +22,9 @@ void FadeTransition::init(GameContainer* container, StateBasedGame* game, GameSt
 	int width = container->getWidth();
 	int height = container->getHeight();
 
+	m_time_current = 0.0f;
+	m_alpha = 1.0f;
+
 	// Generate one texture (we're creating only one).
 	unsigned Object(0);
 	glGenTextures(1, &Object);

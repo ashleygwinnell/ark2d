@@ -8,6 +8,11 @@
 #ifndef SPRITESHEETDESCRIPTIONITEM_H_
 #define SPRITESHEETDESCRIPTIONITEM_H_
 
+/*!
+ * \brief An item in a SpriteSheetDescription.
+ *
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class SpriteSheetDescriptionItem {
 	private:
 		const char* m_name;

@@ -15,6 +15,11 @@
 #include <string>
 using namespace std;
 
+/*!
+ * \brief A string with extra game-relevant functionality.
+ *
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class ARKString : public ARK::Resource {
 	private:
 		string m_string;
@@ -127,7 +132,8 @@ class ARKString : public ARK::Resource {
 			return pieces;
 		}
 		unsigned int countOccurrences(string s) {
-			return split(s).size() - 1; // TODO: do this better. it's -1 because split includes empty strings AFTER the delimter.
+			// @TODO: do this better. it's -1 because split includes empty strings AFTER the delimter.
+			return split(s).size() - 1;
 		}
 		bool equals(string s) {
 			return (strcmp(m_string.c_str(), s.c_str()) == 0);

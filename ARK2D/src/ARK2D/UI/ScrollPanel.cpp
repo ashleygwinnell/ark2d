@@ -7,209 +7,214 @@
 
 #include "ScrollPanel.h"
 
-ScrollPanel::ScrollPanel():
-	Panel(),
-	m_upButton(), m_downButton(), m_scrollYButton(),
-	m_offsetX(0), m_offsetY(0),
-	m_calculatedWidth(1), m_calculatedHeight(1),
-	m_layout(LAYOUT_FLOW)
-{
-	m_upButton.setEvent((void*) ScrollPanel::upButtonPressedStatic);
-	m_upButton.setEventObj(this);
-	m_upButton.setSize(15, 15);
-	m_upButton.setParent(this);
-
-	m_downButton.setEvent((void*) ScrollPanel::downButtonPressedStatic);
-	m_downButton.setEventObj(this);
-	m_downButton.setSize(15, 15);
-	m_downButton.setParent(this);
-
-	m_scrollYButton.setSize(15, 15);
-	m_scrollYButton.setParent(this);
-}
-
-void ScrollPanel::add(AbstractUIComponent* c) {
-	Panel::add(c);
-	calculateSize();
-}
-
-void ScrollPanel::calculateSize() {
-	int currentX = 0;
-	int currentY = 0;
-	int maxWidth = 0;
-	int maxHeight = 0;
-	currentX += getPaddingLeft();
-	currentY += getPaddingTop();
-
-	bool startedNewLine = true;
-	for(unsigned int i = 0; i < m_children.size(); i++)
-	{
-		AbstractUIComponent* current = m_children.at(i);
-		if (startedNewLine) {
-			currentY += current->getMarginTop();
-			startedNewLine = false;
-		}
-
-		int newcx = currentX + current->getWidth() + current->getMarginRight();
-		if (newcx > (signed int) m_width - getPaddingX()) {
-			if (currentX > maxWidth) {
-				maxWidth = currentX;
-			}
-
-			currentY += current->getHeight() + current->getMarginBottom();
-			currentX = getPaddingLeft();
-			startedNewLine = true;
-		}
-
-		currentX += current->getWidth() + current->getMarginRight();
-
-		int newcy = currentY + current->getHeight() + current->getMarginBottom();
-		if (newcy > maxHeight) {
-			maxHeight = newcy;
-		}
-	}
-	maxWidth += getPaddingRight();
-	maxHeight += getPaddingBottom();
-
-	m_calculatedWidth = maxWidth;
-	m_calculatedHeight = maxHeight;
-}
-
-void ScrollPanel::renderScrollbars() {
-	m_upButton.setLocation(m_width-15, 0);
-	m_upButton.render();
-
-	int syh = (int) ((float(m_height-30) / float(m_calculatedHeight)) * m_height);
-	m_scrollYButton.setHeight(syh);
-	m_scrollYButton.setLocation(m_width-15, 15); // set position based on m_offsetY;
-	m_scrollYButton.render();
-
-	m_downButton.setLocation(m_width-15, m_height-15);
-	m_downButton.render();
-
-	Graphics* g = ARK2D::getGraphics();
-	g->setDrawColor(Color::white);
-	g->setLineWidth(1);
-	g->drawLine(m_width-15, 0, m_width-15, m_height);
-}
-
-void ScrollPanel::render() {
-	if (!m_visible) { return; }
-
-	// buttons are down.
-	if (m_downButton.getState() == Button::STATE_DOWN) {
-		m_offsetY -= 3;
-	} else if (m_upButton.getState() == Button::STATE_DOWN) {
-		m_offsetY += 3;
-	}
-
-	// keep in bounds.
-	if (m_offsetY >= 0) {
-		m_offsetY = 0;
-	} else if (m_offsetY < (signed int) (m_height) - m_calculatedHeight) {
-		m_offsetY = (signed int) (m_height) - m_calculatedHeight;
-	}
-
-	if (m_layout == LAYOUT_FLOW) {
-		Panel::preRender();
-
-		int cx = getPaddingLeft() + m_offsetX;
-		int cy = getPaddingTop() + m_offsetY;
-		//int maxWidth = 0;
-		//int maxHeight = 0;
-		bool startedNewLine = true;
-		int startedNewLineAtIndex = 0;
-		for(unsigned int i = 0; i < m_children.size(); i++)
+namespace ARK {
+	namespace UI {
+		ScrollPanel::ScrollPanel():
+			Panel(),
+			m_upButton(), m_downButton(), m_scrollYButton(),
+			m_offsetX(0), m_offsetY(0),
+			m_calculatedWidth(1), m_calculatedHeight(1),
+			m_layout(LAYOUT_FLOW)
 		{
-			AbstractUIComponent* c = m_children.at(i);
-			cx += c->getMarginLeft();
-			if (startedNewLine) {
-				cy += c->getMarginTop();
-				startedNewLine = false;
-			}
+			m_upButton.setEvent((void*) ScrollPanel::upButtonPressedStatic);
+			m_upButton.setEventObj(this);
+			m_upButton.setSize(15, 15);
+			m_upButton.setParent(this);
 
-			int newcx = cx + c->getWidth() + c->getMarginRight();
-			if (newcx > (signed int) m_width - getPaddingX()) {
-				//cy += c->getHeight() + c->getMarginBottom();
+			m_downButton.setEvent((void*) ScrollPanel::downButtonPressedStatic);
+			m_downButton.setEventObj(this);
+			m_downButton.setSize(15, 15);
+			m_downButton.setParent(this);
 
-				// get the tallest item in the row...
-				unsigned int tallestHeight = 0;
-				AbstractUIComponent* tallestComponent = NULL;
-				for(unsigned int j = startedNewLineAtIndex; j < i; j++) {
-					if (m_children.at(j)->getHeight() + m_children.at(j)->getPaddingY() > tallestHeight) {
-						tallestComponent = m_children.at(j);
-					}
+			m_scrollYButton.setSize(15, 15);
+			m_scrollYButton.setParent(this);
+		}
+
+		void ScrollPanel::add(AbstractUIComponent* c) {
+			Panel::add(c);
+			calculateSize();
+		}
+
+		void ScrollPanel::calculateSize() {
+			int currentX = 0;
+			int currentY = 0;
+			int maxWidth = 0;
+			int maxHeight = 0;
+			currentX += getPaddingLeft();
+			currentY += getPaddingTop();
+
+			bool startedNewLine = true;
+			for(unsigned int i = 0; i < m_children.size(); i++)
+			{
+				AbstractUIComponent* current = m_children.at(i);
+				if (startedNewLine) {
+					currentY += current->getMarginTop();
+					startedNewLine = false;
 				}
-				if (tallestComponent != NULL) {
-					cy += tallestComponent->getHeight() + tallestComponent->getMarginBottom();
-				} else { cy += c->getHeight() + c->getMarginBottom(); }
 
-				cx = getPaddingLeft();
-				startedNewLine = true;
-				startedNewLineAtIndex = i;
+				int newcx = currentX + current->getWidth() + current->getMarginRight();
+				if (newcx > (signed int) m_width - getPaddingX()) {
+					if (currentX > maxWidth) {
+						maxWidth = currentX;
+					}
+
+					currentY += current->getHeight() + current->getMarginBottom();
+					currentX = getPaddingLeft();
+					startedNewLine = true;
+				}
+
+				currentX += current->getWidth() + current->getMarginRight();
+
+				int newcy = currentY + current->getHeight() + current->getMarginBottom();
+				if (newcy > maxHeight) {
+					maxHeight = newcy;
+				}
 			}
-			c->setLocation(cx, cy);
-			c->render();
+			maxWidth += getPaddingRight();
+			maxHeight += getPaddingBottom();
 
-			cx += c->getWidth() + c->getMarginRight();
-
+			m_calculatedWidth = maxWidth;
+			m_calculatedHeight = maxHeight;
 		}
 
-		if (m_calculatedWidth >= (int) m_width) {
+		void ScrollPanel::renderScrollbars() {
+			m_upButton.setLocation(m_width-15, 0);
+			m_upButton.render();
 
+			int syh = (int) ((float(m_height-30) / float(m_calculatedHeight)) * m_height);
+			m_scrollYButton.setHeight(syh);
+			m_scrollYButton.setLocation(m_width-15, 15); // set position based on m_offsetY;
+			m_scrollYButton.render();
+
+			m_downButton.setLocation(m_width-15, m_height-15);
+			m_downButton.render();
+
+			Graphics* g = ARK2D::getGraphics();
+			g->setDrawColor(Color::white);
+			g->setLineWidth(1);
+			g->drawLine(m_width-15, 0, m_width-15, m_height);
 		}
-		if (m_calculatedHeight >= (int) m_height) {
-			// vertical scroll bars.
-			//g->setDrawColor(Color::white);
-			//g->fillRect(0, 0, 10, 10);
-			renderScrollbars();
+
+		void ScrollPanel::render() {
+			if (!m_visible) { return; }
+
+			// buttons are down.
+			if (m_downButton.getState() == Button::STATE_DOWN) {
+				m_offsetY -= 3;
+			} else if (m_upButton.getState() == Button::STATE_DOWN) {
+				m_offsetY += 3;
+			}
+
+			// keep in bounds.
+			if (m_offsetY >= 0) {
+				m_offsetY = 0;
+			} else if (m_offsetY < (signed int) (m_height) - m_calculatedHeight) {
+				m_offsetY = (signed int) (m_height) - m_calculatedHeight;
+			}
+
+			if (m_layout == LAYOUT_FLOW) {
+				Panel::preRender();
+
+				int cx = getPaddingLeft() + m_offsetX;
+				int cy = getPaddingTop() + m_offsetY;
+				//int maxWidth = 0;
+				//int maxHeight = 0;
+				bool startedNewLine = true;
+				int startedNewLineAtIndex = 0;
+				for(unsigned int i = 0; i < m_children.size(); i++)
+				{
+					AbstractUIComponent* c = m_children.at(i);
+					cx += c->getMarginLeft();
+					if (startedNewLine) {
+						cy += c->getMarginTop();
+						startedNewLine = false;
+					}
+
+					int newcx = cx + c->getWidth() + c->getMarginRight();
+					if (newcx > (signed int) m_width - getPaddingX()) {
+						//cy += c->getHeight() + c->getMarginBottom();
+
+						// get the tallest item in the row...
+						unsigned int tallestHeight = 0;
+						AbstractUIComponent* tallestComponent = NULL;
+						for(unsigned int j = startedNewLineAtIndex; j < i; j++) {
+							if (m_children.at(j)->getHeight() + m_children.at(j)->getPaddingY() > tallestHeight) {
+								tallestComponent = m_children.at(j);
+							}
+						}
+						if (tallestComponent != NULL) {
+							cy += tallestComponent->getHeight() + tallestComponent->getMarginBottom();
+						} else { cy += c->getHeight() + c->getMarginBottom(); }
+
+						cx = getPaddingLeft();
+						startedNewLine = true;
+						startedNewLineAtIndex = i;
+					}
+					c->setLocation(cx, cy);
+					c->render();
+
+					cx += c->getWidth() + c->getMarginRight();
+
+				}
+
+				if (m_calculatedWidth >= (int) m_width) {
+
+				}
+				if (m_calculatedHeight >= (int) m_height) {
+					// vertical scroll bars.
+					//g->setDrawColor(Color::white);
+					//g->fillRect(0, 0, 10, 10);
+					renderScrollbars();
+				}
+
+				Panel::postRender();
+			} else {
+
+				// @TODO: this depends on panel layout used
+				m_calculatedWidth = m_width;
+				m_calculatedHeight = m_height;
+
+				Panel::preRender();
+				Panel::renderChildren();
+				Panel::postRender();
+			}
 		}
 
-		Panel::postRender();
-	} else {
+		void ScrollPanel::upButtonPressedStatic(void* p) {
+			ScrollPanel* scrollPanel = (ScrollPanel*) p;
+			scrollPanel->upButtonPressed();
+		}
+		void ScrollPanel::upButtonPressed() {
+			m_offsetY += 3;
+			std::cout << "scroll up pressed" << std::endl;
+		}
 
-		m_calculatedWidth = m_width; // TODO: this depends on panel layout used
-		m_calculatedHeight = m_height;
+		void ScrollPanel::downButtonPressedStatic(void* p) {
+			ScrollPanel* scrollPanel = (ScrollPanel*) p;
+			scrollPanel->downButtonPressed();
+		}
+		void ScrollPanel::downButtonPressed() {
+			std::cout << "scroll down pressed" << std::endl;
+		}
 
-		Panel::preRender();
-		Panel::renderChildren();
-		Panel::postRender();
+
+		void ScrollPanel::keyPressed(unsigned int key) {
+			Panel::keyPressed(key);
+			m_upButton.keyPressed(key);
+			m_downButton.keyPressed(key);
+			//m_scrollYButton.keyPressed(key);
+		}
+		void ScrollPanel::keyReleased(unsigned int key) {
+			Panel::keyReleased(key);
+			m_upButton.keyReleased(key);
+			m_downButton.keyReleased(key);
+			//m_scrollYButton.keyReleased(key);
+		}
+		void ScrollPanel::mouseMoved(int x, int y, int oldx, int oldy) {
+			Panel::mouseMoved(x, y, oldx, oldy);
+			m_upButton.mouseMoved(x, y, oldx, oldy);
+			m_downButton.mouseMoved(x, y, oldx, oldy);
+			//m_scrollYButton.mouseMoved(x, y, oldx, oldy);
+		}
 	}
-}
-
-void ScrollPanel::upButtonPressedStatic(void* p) {
-	ScrollPanel* scrollPanel = (ScrollPanel*) p;
-	scrollPanel->upButtonPressed();
-}
-void ScrollPanel::upButtonPressed() {
-	m_offsetY += 3;
-	std::cout << "scroll up pressed" << std::endl;
-}
-
-void ScrollPanel::downButtonPressedStatic(void* p) {
-	ScrollPanel* scrollPanel = (ScrollPanel*) p;
-	scrollPanel->downButtonPressed();
-}
-void ScrollPanel::downButtonPressed() {
-	std::cout << "scroll down pressed" << std::endl;
-}
-
-
-void ScrollPanel::keyPressed(unsigned int key) {
-	Panel::keyPressed(key);
-	m_upButton.keyPressed(key);
-	m_downButton.keyPressed(key);
-	//m_scrollYButton.keyPressed(key);
-}
-void ScrollPanel::keyReleased(unsigned int key) {
-	Panel::keyReleased(key);
-	m_upButton.keyReleased(key);
-	m_downButton.keyReleased(key);
-	//m_scrollYButton.keyReleased(key);
-}
-void ScrollPanel::mouseMoved(int x, int y, int oldx, int oldy) {
-	Panel::mouseMoved(x, y, oldx, oldy);
-	m_upButton.mouseMoved(x, y, oldx, oldy);
-	m_downButton.mouseMoved(x, y, oldx, oldy);
-	//m_scrollYButton.mouseMoved(x, y, oldx, oldy);
 }

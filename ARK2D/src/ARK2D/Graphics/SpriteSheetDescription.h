@@ -21,6 +21,12 @@
 
 using namespace std;
 
+/*!
+ * \brief Read a spritesheet description file produce by a Sprite Sheet tool.
+ * It can read JSON or CSV.
+ *
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class SpriteSheetDescription {
 	public:
 		SpriteSheetDescription(const char* path);

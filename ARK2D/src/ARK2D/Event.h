@@ -25,6 +25,7 @@ class DefaultEvent : public Event {
 		void eventPerformed() {
 			//	std::cout << "DefaultEvent class" << std::endl;
 		}
+		virtual ~DefaultEvent() { }
 };
 
 #endif /* EVENT_H_ */

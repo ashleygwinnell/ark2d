@@ -7,11 +7,11 @@
 
 #include "GameContainer.h"
 #include "GameContainerMac.h"
-#include "Util/ARKLog.h"
+#include "Util/Log.h" 
 
 #ifdef ARK2D_MACINTOSH
 
-	bool isLionPlus() {
+	bool isLionPlus() { 
 		SInt32 MacVersionMajor;
 		SInt32 MacVersionMinor;
 		if (Gestalt(gestaltSystemVersionMajor, &MacVersionMajor) == noErr 
@@ -68,7 +68,7 @@
 			ARK2D::s_game = &m_game;
 			ARK2D::s_graphics = &m_graphics;
 			ARK2D::s_input = &m_input;
-			ARK2D::s_log = new ARKLog();
+			ARK2D::s_log = new ARK::Util::Log();
 		
 			ProcessSerialNumber psn;
 			if (!GetCurrentProcess(&psn)) {
@@ -248,11 +248,11 @@
 		initGamepads();
 		ARK2D::getLog()->i("done.");
 		
-		// initialise OpenGL -- this is done already
+		// initialise OpenGL -- this is done already 
 		glClearColor(m_clearColor.getRed()/255.0f, m_clearColor.getGreen()/255.0f, m_clearColor.getBlue()/255.0f, m_clearColor.getAlpha()/255.0f);
 		
 		// load default font.
-		BMFont* fnt = ARK::Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont(); // BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
+		ARK::Font::BMFont* fnt = ARK::Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont(); // BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
 		m_graphics.m_DefaultFont = fnt;
 		m_graphics.m_Font = fnt;
 		
@@ -396,7 +396,7 @@
 	void GameContainerPlatform::doEvents() {
 		NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 		    
-		/* TODO Update activity every 30 seconds to prevent screensaver */
+		//! @todo Update activity every 30 seconds to prevent screensaver
 		for ( ; ; ) {
 			NSEvent *event = [NSApp nextEventMatchingMask:NSAnyEventMask untilDate:[NSDate distantPast] inMode:NSDefaultRunLoopMode dequeue:YES ];
 			if ( event == nil ) {
@@ -452,7 +452,7 @@
 			exit(0);
 		}
 	
-		// TODO: check the context attributes, maybe something is useful:
+		//! @todo: check the context attributes, maybe something is useful:
 		// http://www.openal.org/openal_webstf/specs/oal11spec_html/oal11spec6.html
 		// 6.2.1. Context Attributes
 		// my bet is on ALC_STEREO_SOURCES
@@ -464,7 +464,7 @@
 		} else if (alcGetError(dev) != ALC_NO_ERROR) {
 			ErrorDialog::createAndShow("Could not create Audio Context.");
 			return false;
-		}
+		} 
 	
 		ALboolean b = alcMakeContextCurrent(ctx);
 		if (b != ALC_TRUE) {
@@ -474,14 +474,14 @@
 	
 		if (alcGetError(dev) != ALC_NO_ERROR) {
 			ErrorDialog::createAndShow("Problem with Audio Device.");
-			exit(0);
-		}
-	
+			exit(0);  
+		} 
+	 
 		//alcProcessContext(ctx);
 	
-		alListenerfv(AL_POSITION,    Sound::ListenerPos);
-		alListenerfv(AL_VELOCITY,    Sound::ListenerVel);
-		alListenerfv(AL_ORIENTATION, Sound::ListenerOri);
+		alListenerfv(AL_POSITION,    ARK::Audio::Sound::ListenerPos);
+		alListenerfv(AL_VELOCITY,    ARK::Audio::Sound::ListenerVel);
+		alListenerfv(AL_ORIENTATION, ARK::Audio::Sound::ListenerOri);
 	
 		if (alGetError() != AL_NO_ERROR) {
 			ErrorDialog::createAndShow("Could not set OpenAL Listener");

@@ -26,17 +26,17 @@ Graphics::Graphics():
 	//m_Font = m_DefaultFont;
 }
 
-void Graphics::setFont(ARK::Font* f) {
+void Graphics::setFont(ARK::Font::Font* f) {
 	m_Font = f;
 }
-void Graphics::setDefaultFont(ARK::Font* f) {
+void Graphics::setDefaultFont(ARK::Font::Font* f) {
 	m_DefaultFont = f;
 }
 
-ARK::Font* Graphics::getFont() const {
+ARK::Font::Font* Graphics::getFont() const {
 	return m_Font;
 }
-ARK::Font* Graphics::getDefaultFont() const {
+ARK::Font::Font* Graphics::getDefaultFont() const {
 	return m_DefaultFont;
 }
 
@@ -208,7 +208,7 @@ void Graphics::drawRect(int x, int y, int width, int height) const {
 		glEnd();
 	#endif*/
 }
-//TODO: It's broken.
+//! @todo: drawRects is broken.
 // rects must be [[x1,y1,x2,y2,x3,y3,x4,y4], etc].
 // colors must be [[r,g,b,a, r,g,b,a, r,g,b,a, r,g,b,a], etc], or NULL
 void Graphics::drawRects(int rects[], int colors[]) const {

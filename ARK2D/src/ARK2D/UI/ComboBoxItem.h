@@ -13,32 +13,40 @@
 
 #include "../Graphics.h"
 #include "../Graphics/Color.h"
-#include "../Input.h"
 #include "../Geometry/GigaRectangle.h"
+#include "../Controls/Input.h"
 
-class ComboBox;
+namespace ARK {
+	namespace UI {
 
-class ComboBoxItem : public AbstractUIComponent {
-	friend class ComboBox;
-	private:
-		ComboBox* parent;
-		string m_text;
-		string m_value;
-	public:
+		class ComboBox;
 
-		ComboBoxItem();
-		void setText(string t);
-		const string& getText();
+		/*!
+		 * \brief A drop-down menu item.
+		 */
+		class ComboBoxItem : public AbstractUIComponent {
+			friend class ComboBox;
+			private:
+				ComboBox* parent;
+				string m_text;
+				string m_value;
+			public:
 
-		void setValue(string t);
-		const string& getValue();
+				ComboBoxItem();
+				void setText(string t);
+				const string& getText();
 
-		void setItemChangedEvent(void* event);
+				void setValue(string t);
+				const string& getValue();
 
-		void render();
-		void renderBackground();
-		void renderOverlay();
-		void keyPressed(unsigned int key);
-};
+				void setItemChangedEvent(void* event);
+
+				void render();
+				void renderBackground();
+				void renderOverlay();
+				void keyPressed(unsigned int key);
+		};
+	}
+}
 
 #endif /* COMBOBOXITEM_H_ */

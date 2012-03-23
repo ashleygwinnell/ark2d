@@ -8,9 +8,12 @@
 #ifndef GIGARECTANGLE_H_
 #define GIGARECTANGLE_H_
 
+#include "../ARK2D_namespaces.h"
 #include "../ARK2D.h"
 #include "Vector2.h"
 #include "../GameContainer.h"
+
+
 
 template <class T>
 class GigaRectangle {

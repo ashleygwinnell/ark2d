@@ -9,8 +9,15 @@
 #define FADETRANSITION_H_
 
 #include "Transition.h"
-#include "../../Timeline.h"
+#include "../../Tween/Timeline.h"
 
+/*!
+ * \brief Fade directly from one GameState in to another.
+ *
+ * @warning This generates a new OpenGL Texture each time.
+ * @todo Optimise this to use the same texture each time.
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class FadeTransition : public Transition {
 	public:
 		FadeTransition(unsigned int timeMillis);

@@ -5,6 +5,7 @@
  *      Author: ashleygwinnell
  */
 
+#include "ARK2D_namespaces.h"
 #include "ARK2D.h"
 #include "Resource.h"
 
@@ -57,21 +58,21 @@ namespace ARK {
 				RawDataReturns* rt = getRawData(ref);
 
 				Image* imgData = get(pngref)->asImage();
-				resource = new BMFont(rt->data, imgData);
+				resource = new ARK::Font::BMFont(rt->data, imgData);
 
 				delete rt;
 			#else
-				resource = new BMFont(ref, pngref);
+				resource = new ARK::Font::BMFont(ref, pngref);
 			#endif
 		}
 		else if (extension == "tmx")
 		{
-			TiledMap* map = NULL;
+			ARK::Tiled::TiledMap* map = NULL;
 			#if defined(ARK2D_ANDROID)
 				RawDataReturns* rt = getRawData(ref);
-				map = new TiledMap(ref, rt->data);
+				map = new ARK::Tiled::TiledMap(ref, rt->data);
 			#else
-				map = new TiledMap(ref);
+				map = new ARK::Tiled::TiledMap(ref);
 			#endif
 			resource = map;
 		}
@@ -230,16 +231,16 @@ namespace ARK {
 		return dynamic_cast<Image*>(this);
 	}
 	Sound* Resource::asSound() {
-		return dynamic_cast<Sound*>(this);
+		return dynamic_cast<ARK::Audio::Sound*>(this);
 	}
-	ARK::Font* Resource::asFont() {
-		return dynamic_cast<ARK::Font*>(this);
+	ARK::Font::Font* Resource::asFont() {
+		return dynamic_cast<ARK::Font::Font*>(this);
 	}
 	LocalHighscores* Resource::asLocalHighscores() {
-		return dynamic_cast<LocalHighscores*>(this);
+		return dynamic_cast<ARK::Util::LocalHighscores*>(this);
 	}
 	TiledMap* Resource::asTiledMap() {
-		return dynamic_cast<TiledMap*>(this);
+		return dynamic_cast<ARK::Tiled::TiledMap*>(this);
 	}
 	ARKString* Resource::asString() {
 		return dynamic_cast<ARKString*>(this);

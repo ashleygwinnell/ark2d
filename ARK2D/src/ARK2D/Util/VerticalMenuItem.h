@@ -11,6 +11,10 @@
 #include <string>
 #include "../Event.h"
 
+/*!
+ * @deprecated
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class VerticalMenuItem {
 	public:
 		VerticalMenuItem();

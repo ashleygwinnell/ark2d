@@ -11,6 +11,7 @@
 #include "LoadingState.h"
 #include "Transition/Transition.h"
 #include "Transition/EmptyTransition.h"
+#include "../UI/ErrorDialog.h"
 
 StateBasedGame::StateBasedGame(string title):
 	Game(title),
@@ -21,7 +22,8 @@ StateBasedGame::StateBasedGame(string title):
 	m_loading_state(NULL),
 	m_enterTransition(NULL),
 	m_leaveTransition(NULL),
-	m_initialised(false) {
+	m_initialised(false),
+	m_autoDeleteTransitions(false) {
 
 }
 
@@ -30,6 +32,7 @@ string StateBasedGame::getTitle() {
 }
 void StateBasedGame::addState(GameState* state) {
 	m_states.push_back(state);
+	//m_from_state = state;
 	m_current_state = state;
 }
 void StateBasedGame::setLoadingState(LoadingState* state) {
@@ -50,16 +53,31 @@ void StateBasedGame::enterState(GameState* state) {
 	enterState(state, new EmptyTransition(), new EmptyTransition());
 }
 
+void StateBasedGame::enterState(unsigned int id, Transition* leave, Transition* enter) {
+	GameState* state = NULL;
+	for (unsigned int i = 0; i < m_states.size(); i++) {
+		if (m_states.at(i)->id() == id) {
+			state = m_states.at(i);
+			break;
+		}
+	}
+	if (state == NULL) {
+		ErrorDialog::createAndShow(StringUtil::append("State with id not found: ", id));
+		exit(0);
+	} else {
+		enterState(state, leave, enter);
+	}
+}
 void StateBasedGame::enterState(GameState* state, Transition* leave, Transition* enter) {
 
 	m_from_state = m_current_state;
 	m_current_state = state;
 
-	if (leave == NULL) {
+	if (leave == NULL) { // || m_leaveTransition == NULL) {
 		//std::cout << "leave was null :(" << std::endl;
 		leave = new EmptyTransition();
 	}
-	if (enter == NULL) {
+	if (enter == NULL) { // || m_enterTransition == NULL) {
 		//std::cout << "enter was null :(" << std::endl;
 		enter = new EmptyTransition();
 	}
@@ -110,7 +128,7 @@ void StateBasedGame::update(GameContainer* container, GameTimer* timer) {
 		if (m_leaveTransition->isComplete()) {
 			m_from_state->leave(container, this, m_current_state);
 
-			delete m_leaveTransition;
+			if (m_autoDeleteTransitions) { delete m_leaveTransition; }
 			m_leaveTransition = NULL;
 
 			if (m_enterTransition == NULL) {
@@ -129,7 +147,7 @@ void StateBasedGame::update(GameContainer* container, GameTimer* timer) {
 		if (m_enterTransition->isComplete()) {
 			m_current_state->enter(container, this, m_from_state);
 
-			delete m_enterTransition;
+			if (m_autoDeleteTransitions) { delete m_enterTransition; }
 			m_enterTransition = NULL;
 		} else {
 			return;

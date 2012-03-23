@@ -13,6 +13,14 @@
 #include "../Util/MathUtil.h"
 #include "../ARK2D_GL.h"
 
+/*!
+ * \brief RGBA colour class.
+ *
+ * @todo Colour merging.
+ * @todo Fade from one colour to another.
+ *
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class Color {
 	public:
 		Color();
@@ -33,6 +41,7 @@ class Color {
 		float getBluef() const;
 		float getAlphaf() const;
 		void bind() const;
+		Color* copy();
 
 		bool operator==(Color c);
 

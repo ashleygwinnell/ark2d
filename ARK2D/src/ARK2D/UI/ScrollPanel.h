@@ -12,37 +12,47 @@
 #include "AbstractUIComponent.h"
 #include "Panel.h"
 
-class ScrollPanel : public Panel {
-	public:
-		Button m_upButton;
-		Button m_downButton;
-		Button m_scrollYButton;
-		int m_offsetX;
-		int m_offsetY;
-		int m_calculatedWidth;
-		int m_calculatedHeight;
+namespace ARK {
+	namespace UI {
 
-		unsigned int m_layout;
-		static const unsigned int LAYOUT_FLOW = 0;
+		/*!
+		 * \brief A Panel with a scroll bar.
+		 *
+		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+		 */
+		class ScrollPanel : public Panel {
+			public:
+				Button m_upButton;
+				Button m_downButton;
+				Button m_scrollYButton;
+				int m_offsetX;
+				int m_offsetY;
+				int m_calculatedWidth;
+				int m_calculatedHeight;
 
-		ScrollPanel();
-		void add(AbstractUIComponent* c);
-		void calculateSize();
+				unsigned int m_layout;
+				static const unsigned int LAYOUT_FLOW = 0;
 
-		void renderScrollbars();
-		void render();
+				ScrollPanel();
+				void add(AbstractUIComponent* c);
+				void calculateSize();
 
-		static void upButtonPressedStatic(void* p);
-		void upButtonPressed();
+				void renderScrollbars();
+				void render();
 
-		static void downButtonPressedStatic(void* p);
-		void downButtonPressed();
+				static void upButtonPressedStatic(void* p);
+				void upButtonPressed();
+
+				static void downButtonPressedStatic(void* p);
+				void downButtonPressed();
 
 
-		void keyPressed(unsigned int key);
-		void keyReleased(unsigned int key);
-		void mouseMoved(int x, int y, int oldx, int oldy);
+				void keyPressed(unsigned int key);
+				void keyReleased(unsigned int key);
+				void mouseMoved(int x, int y, int oldx, int oldy);
 
-};
+		};
+	}
+}
 
 #endif /* SCROLLPANEL_H_ */

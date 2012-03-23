@@ -12,6 +12,11 @@
 using namespace std;
 
 namespace ARK {
+	/*!
+	 * \brief Class to extend if you want to implement a toString method.
+	 *
+	 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+	 */
 	class ToString {
 		virtual string toString() = 0;
 	};

@@ -1,0 +1,28 @@
+var floor1_8c =
+[
+    [ "floor1_rangedB", "floor1_8c.html#a37f3b99c09729950dc533b9819785b47", null ],
+    [ "lsfit_acc", "floor1_8c.html#ac90a0d3add9cbeaa3f349e4d64d11b54", null ],
+    [ "accumulate_fit", "floor1_8c.html#a2cba6106c4e618944b17bf15fc3fcef2", null ],
+    [ "fit_line", "floor1_8c.html#a709d59d0bde0aa3d039e785e63cac86a", null ],
+    [ "floor1_encode", "floor1_8c.html#a412dda71482901941e7f85df60347253", null ],
+    [ "floor1_fit", "floor1_8c.html#a9cf8bca345f5cc65b555411560dbceb7", null ],
+    [ "floor1_free_info", "floor1_8c.html#af8241c19565683da0538dcda16beafac", null ],
+    [ "floor1_free_look", "floor1_8c.html#a2efdb3cb488c31ec20b96b5639c5489d", null ],
+    [ "floor1_interpolate_fit", "floor1_8c.html#a833379c90cf29a7f88e6a33977f6f37a", null ],
+    [ "floor1_inverse1", "floor1_8c.html#abb605de5e39498560fa415ccbc443d95", null ],
+    [ "floor1_inverse2", "floor1_8c.html#a61c4671922b2ee51147847488043ba27", null ],
+    [ "floor1_look", "floor1_8c.html#a0eb40df765cb1cf4414ed5afce67742c", null ],
+    [ "floor1_pack", "floor1_8c.html#aed243a9b649a2a993fec774dbed1de31", null ],
+    [ "floor1_unpack", "floor1_8c.html#aac603a2b744a126f24d04a35ce38c52e", null ],
+    [ "icomp", "floor1_8c.html#a1fe50f06863517f294583b42a3b26516", null ],
+    [ "ilog", "floor1_8c.html#a06eb38cefc1bcb1030becf7c620ddcbc", null ],
+    [ "ilog2", "floor1_8c.html#a2905056776588600725679ad1791e700", null ],
+    [ "inspect_error", "floor1_8c.html#ab33ddb215a12f4c6a3b5cd2eff285750", null ],
+    [ "post_Y", "floor1_8c.html#a7e257845ab3e218f3496c2b39a87c62d", null ],
+    [ "render_line", "floor1_8c.html#a7bc2004a8a4291490371032a3a4621c4", null ],
+    [ "render_line0", "floor1_8c.html#a22facc095a1c935c53c0fa99cd69640d", null ],
+    [ "render_point", "floor1_8c.html#acbfda126a083ae7787f250dac3a074d4", null ],
+    [ "vorbis_dBquant", "floor1_8c.html#aac28287cba727ada959373158cb8a4c1", null ],
+    [ "floor1_exportbundle", "floor1_8c.html#a83d2dd5d9a585ff53889728a85260b74", null ],
+    [ "FLOOR1_fromdB_LOOKUP", "floor1_8c.html#ada123b6b6c43aedb8cc33bdb519e0237", null ]
+];

@@ -45,7 +45,7 @@ GameContainer::GameContainer(Game& g, int width, int height, int bpp, bool fulls
 	ARK2D::s_game = &m_game;
 	ARK2D::s_graphics = &m_graphics;
 	ARK2D::s_input = &m_input;
-	ARK2D::s_log = new ARKLog();
+	ARK2D::s_log = new ARK::Util::Log();
 
 }
 
@@ -172,7 +172,7 @@ bool GameContainerPlatform::initOpenAL() {
 		exit(0);
 	}
 
-	// TODO: check the context attributes, maybe something is useful:
+	//! @todo: check the context attributes, maybe something is useful:
 	// http://www.openal.org/openal_webstf/specs/oal11spec_html/oal11spec6.html
 	// 6.2.1. Context Attributes
 	// my bet is on ALC_STEREO_SOURCES

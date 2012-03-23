@@ -19,75 +19,84 @@
 
 using namespace std;
 
-class PathGroup {
-	private:
-		vector<Path*> paths;
-		Vector2<float> currentLocation;
-		Vector2<float> centerLocation;
-		Vector2<float> calcVector;
-		unsigned int current;
-		float timer;
-		bool relative;
+namespace ARK {
+	namespace Path {
 
-		string name;
-		string description;
+		/*!
+		 * \brief The PathGroup strings many Paths together to enable longer and more fluid paths.
+		 *
+		 * @author Ashley Gwinnell <info@ashleygwinell.co.uk>
+		 */
+		class PathGroup {
+			private:
+				vector<Path*> paths;
+				Vector2<float> currentLocation;
+				Vector2<float> centerLocation;
+				Vector2<float> calcVector;
+				unsigned int current;
+				float timer;
+				bool relative;
 
-		bool m_isFlippedH;
-		bool m_isFlippedV;
-		float m_rotatedAngle;
+				string name;
+				string description;
 
-	public:
-		PathGroup();
-		void setRelative(bool b);
-		bool isRelative();
-		void addPath(Path* p);
-		void addPath(Path* p, unsigned int index);
-		void removePath(unsigned int index);
-		vector<Path*> getPaths();
-		unsigned int getNumPaths();
-		void clear();
-		Path* getPath(unsigned int index);
+				bool m_isFlippedH;
+				bool m_isFlippedV;
+				float m_rotatedAngle;
 
-		void setName(string n);
-		void setDescription(string d);
+			public:
+				PathGroup();
+				void setRelative(bool b);
+				bool isRelative();
+				void addPath(Path* p);
+				void addPath(Path* p, unsigned int index);
+				void removePath(unsigned int index);
+				vector<Path*> getPaths();
+				unsigned int getNumPaths();
+				void clear();
+				Path* getPath(unsigned int index);
 
-		string getName();
-		string getDescription();
+				void setName(string n);
+				void setDescription(string d);
 
-		void setTimer(float t);
-		float getTimer();
-		void incrementTimer(float t);
+				string getName();
+				string getDescription();
 
-		float getDuration();
+				void setTimer(float t);
+				float getTimer();
+				void incrementTimer(float t);
 
-		void update(GameTimer* gt);
-		void updateCurrent();
+				float getDuration();
 
-		/*float getStartTime(unsigned int index);*/
-		Vector2<float>* getLocation();
-		unsigned int getIndex();
+				void update(GameTimer* gt);
+				void updateCurrent();
 
-		Vector2<float>* getCenter();
-		void updateCenter();
+				/*float getStartTime(unsigned int index);*/
+				Vector2<float>* getLocation();
+				unsigned int getIndex();
 
-		void flip(bool hf, bool vf);
-		void flip(bool hf, bool vf, int cx, int cy);
-		void setFlip(bool hf, bool vf);
-		bool isFlippedH();
-		bool isFlippedV();
+				Vector2<float>* getCenter();
+				void updateCenter();
 
-		void rotate(float degrees);
-		void rotate(float degrees, int cx, int cy);
-		void setRotation(float f);
-		float getRotation();
+				void flip(bool hf, bool vf);
+				void flip(bool hf, bool vf, int cx, int cy);
+				void setFlip(bool hf, bool vf);
+				bool isFlippedH();
+				bool isFlippedV();
+
+				void rotate(float degrees);
+				void rotate(float degrees, int cx, int cy);
+				void setRotation(float f);
+				float getRotation();
 
 
-		virtual void render();
-		virtual void renderCurve();
-		virtual void renderCurve(const Color& c);
-		virtual void renderPoint(float x, float y, bool linkPoint);
-		virtual void renderLine(float x, float y, float x2, float y2);
-		virtual ~PathGroup();
-};
-
+				virtual void render();
+				virtual void renderCurve();
+				virtual void renderCurve(const Color& c);
+				virtual void renderPoint(float x, float y, bool linkPoint);
+				virtual void renderLine(float x, float y, float x2, float y2);
+				virtual ~PathGroup();
+		};
+	}
+}
 #endif /* PATHGROUP_H_ */

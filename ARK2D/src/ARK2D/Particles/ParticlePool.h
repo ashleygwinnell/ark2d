@@ -8,21 +8,36 @@
 #ifndef PARTICLEPOOL_H_
 #define PARTICLEPOOL_H_
 
-class Particle;
-class ParticleSystem;
+
 
 #include <vector>
 using namespace std;
 
-class ParticlePool {
-	public:
-		vector<Particle*> particlesActive;
-		vector<Particle*> particlesInactive;
+namespace ARK {
+	namespace Particles {
 
-		ParticlePool(ParticleSystem* system, int particles);
-		~ParticlePool();
+		class Particle;
+		class ParticleSystem;
 
-		void reset(ParticleSystem* system);
-};
+		/*!
+		 * \brief Used internally by the particle engine.
+		 *
+		 * Adapted from Kevin Glass's Java implementation.
+		 *
+		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+		 * @author Kevin Glass
+		 */
+		class ParticlePool {
+			public:
+				vector<Particle*> particlesActive;
+				vector<Particle*> particlesInactive;
+
+				ParticlePool(ParticleSystem* system, int particles);
+				~ParticlePool();
+
+				void reset(ParticleSystem* system);
+		};
+	}
+}
 
 #endif /* PARTICLEPOOL_H_ */

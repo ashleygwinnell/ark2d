@@ -9,11 +9,20 @@
 #define FADEFROMCOLOURTRANSITION_H_
 
 #include "Transition.h"
-#include "../../Timeline.h"
+#include "../../Tween/Timeline.h"
 
+/*!
+ * \brief Fade from the colour to a game state as part 2 of a two part transition.
+ *
+ * \warning Do NOT use default immutable colours from the Color class. This class modifies the colour passed in.
+ *
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ * @todo This transition does not work.
+ */
 class FadeFromColourTransition : public Transition {
 	public:
 		FadeFromColourTransition(float time);
+		FadeFromColourTransition(float time, Color* c);
 		void init(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to);
 		void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
 		void preRender(GameContainer* container, StateBasedGame* game, Graphics* g);
@@ -28,6 +37,7 @@ class FadeFromColourTransition : public Transition {
 		float m_time_current;
 
 		Color* m_color;
+		float m_colorOriginalAlpha;
 		float m_alpha;
 
 		unsigned int m_textureId;

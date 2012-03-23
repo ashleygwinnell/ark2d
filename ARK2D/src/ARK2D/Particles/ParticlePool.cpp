@@ -9,23 +9,28 @@
 #include "Particle.h"
 #include "ParticleSystem.h"
 
-ParticlePool::ParticlePool(ParticleSystem* system, int particles):
-	particlesActive(),
-	particlesInactive()
-	{
-	for (int i = 0; i < particles; i++) {
-		particlesActive.push_back( ParticleSystem::createParticle(system) );
+namespace ARK {
+	namespace Particles {
+
+		ParticlePool::ParticlePool(ParticleSystem* system, int particles):
+			particlesActive(),
+			particlesInactive()
+			{
+			for (int i = 0; i < particles; i++) {
+				particlesActive.push_back( ParticleSystem::createParticle(system) );
+			}
+			reset(system);
+		}
+
+		void ParticlePool::reset(ParticleSystem* system) {
+			//particlesInactive.clear();
+			for (unsigned int i = 0; i < particlesActive.size(); i++) {
+				particlesInactive.push_back(particlesActive[i]);
+			}
+		}
+
+		ParticlePool::~ParticlePool() {
+
+		}
 	}
-	reset(system);
-}
-
-void ParticlePool::reset(ParticleSystem* system) {
-	//particlesInactive.clear();
-	for (unsigned int i = 0; i < particlesActive.size(); i++) {
-		particlesInactive.push_back(particlesActive[i]);
-	}
-}
-
-ParticlePool::~ParticlePool() {
-
 }

@@ -2,7 +2,7 @@
  * GameContainer.h
  *
  *  Created on: 15-Oct-2009
- *      Author: user
+ *      Author: Ashley
  */
 
 #ifndef GAMECONTAINER_H_
@@ -12,15 +12,16 @@
 #include "ARK2D_AL.h"
 #include "ARK2D_GL.h"
 
-#include "Gamepad.h"
+
 #include "Game.h"
-#include "Input.h"
+#include "Controls/Gamepad.h"
+#include "Controls/Input.h"
 #include "GameTimer.h"
 #include "Graphics.h"
 #include "Font/BMFont.h"
 #include "Graphics/Image/Image.h"
 #include "UI/ErrorDialog.h"
-#include "Util/ARKLog.h"
+#include "Util/Log.h"
 
 #include "Audio/Sound.h"
 
@@ -46,11 +47,18 @@ class GigaRectangle;
 
 using namespace std;
 
+/*!
+ * \brief Create this class in your main method. It is the main entry point for the library.
+ *
+ * The main container for a game that holds references to context-aware input,
+ * the game itself and controls the game loop with frame limiting, etc.
+ *
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class GameContainer {
 	friend class GameContainerPlatform;
 	friend class Graphics;
-	friend class Input;
-	friend class ARKLog;
+	friend class Log;
 	friend class Game;
 
 	public:
@@ -140,10 +148,10 @@ class GameContainer {
 		void deinitGamepads();
 
 		void resizeWindowToFitViewport();
-
+	public:
 		int getGlobalMouseX() const;
 		int getGlobalMouseY() const;
-
+	private:
 		GigaRectangle<int>* m_window_rectangle;
 
 

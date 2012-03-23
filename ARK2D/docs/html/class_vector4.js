@@ -1,0 +1,28 @@
+var class_vector4 =
+[
+    [ "Vector4", "class_vector4.html#afdef97d94e5697622b5322637028accf", null ],
+    [ "Vector4", "class_vector4.html#ad20c99699600c4648336a12314e534e8", null ],
+    [ "Vector4", "class_vector4.html#ad0da88beeb8b4f77e05f9faddc21469b", null ],
+    [ "~Vector4", "class_vector4.html#a7690b9650603707369fa9c919bcbd700", null ],
+    [ "add", "class_vector4.html#aba16672ef925ea17576289b235b5d1ba", null ],
+    [ "add", "class_vector4.html#a5ef91cfb36aa982030030a17ec55927e", null ],
+    [ "getW", "class_vector4.html#ad61a97501a7c55547c6c8d17f280c8c8", null ],
+    [ "getX", "class_vector4.html#aef7f19da6135f2af5239fbfaeef04f7a", null ],
+    [ "getY", "class_vector4.html#a779589f1b584a20e76366b62bacd0e2b", null ],
+    [ "getZ", "class_vector4.html#a444b237e5d3e060662a48bdbfa74349b", null ],
+    [ "set", "class_vector4.html#ac8e1e71ec2d210b492a2c8994eccc175", null ],
+    [ "set", "class_vector4.html#a0923ad01d1b4b6b154a198261d4f84ac", null ],
+    [ "setW", "class_vector4.html#ab061993c01ed8ee5c98f674b7bf697cd", null ],
+    [ "setX", "class_vector4.html#ae350e4f43a45cae51a08803f0f2bc5bf", null ],
+    [ "setY", "class_vector4.html#adaee9b66ce9f626377fbc262edb50c82", null ],
+    [ "setZ", "class_vector4.html#a45d1b9dd8f43fe8f609e53f98151a85c", null ],
+    [ "subtract", "class_vector4.html#aa27f605f66b67eaad75cf81b7fc459d7", null ],
+    [ "subtract", "class_vector4.html#a228e84123c168d15d955c3d689e4d6d3", null ],
+    [ "toOne", "class_vector4.html#a547a6753cfeffb2858f279f4d91f2dc5", null ],
+    [ "toValue", "class_vector4.html#a5386f79ce6fb007119346b777744192f", null ],
+    [ "toZero", "class_vector4.html#a70818c61588890d87a2601e9a4b12af8", null ],
+    [ "m_w", "class_vector4.html#ac175a61baacfc469dd3ef043961e291c", null ],
+    [ "m_x", "class_vector4.html#aa1ca595fae4e75050d110dbae97995a6", null ],
+    [ "m_y", "class_vector4.html#a4d80bef22d157c3895bef8c0effd4625", null ],
+    [ "m_z", "class_vector4.html#a85b2be07e1c3cad3addb200f92924245", null ]
+];

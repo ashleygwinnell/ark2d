@@ -14,12 +14,17 @@ using namespace std;
 #include "GameState.h"
 
 class ARKGameObject;
-#include "../Util/Containers/ARKVector.h"
+#include "../Util/Containers/Vector.h"
 
+/*!
+ * \brief This game state holds, updates and renders entities intelligently using ARKGameObject properties.
+ *
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class IntelligentGameState : public GameState {
 	private:
 
-		map<string, ARKVector<ARKGameObject*> > m_entities;
+		map<string, Vector<ARKGameObject*> > m_entities;
 
 	public:
 		IntelligentGameState();

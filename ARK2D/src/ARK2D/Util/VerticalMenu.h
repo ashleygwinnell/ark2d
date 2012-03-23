@@ -18,6 +18,10 @@ class Graphics;
 
 class VerticalMenuItem;
 
+/*!
+ * @deprecated
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class VerticalMenu {
 	public:
 		VerticalMenu(GameContainer* container);

@@ -12,6 +12,10 @@
 
 using namespace std;
 
+/*!
+ * @deprecated
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class ARKException {
 	public:
 		ARKException();

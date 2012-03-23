@@ -17,6 +17,11 @@ class GameContainer;
 #include "../GameState.h"
 #include "../StateBasedGame.h"
 
+/*!
+ * \brief The interface to implement for a GameState Transition.
+ *
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class Transition {
 	public:
 		Transition();

@@ -12,6 +12,11 @@ class GameContainer;
 class GameTimer;
 class Graphics;
 
+/*!
+ * \brief A default game object for use in Vector and Pool Containers.
+ * @todo Rename to GameObject.
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class ARKGameObject {
 	protected:
 		bool m_pendingRemoval;
@@ -22,7 +27,7 @@ class ARKGameObject {
 
 		virtual bool isPendingRemoval();
 		virtual void setPendingRemoval(bool b);
-		virtual void onPrune(); /* This even fires when removed from an ARKVector and when made inactive in a ARKPool */
+		virtual void onPrune(); /* This even fires when removed from an ARK::Util::Container::Vector and when made inactive in a ARKPool */
 
 		virtual int getRenderingLayer();
 		virtual void setRenderingLayer(int i);

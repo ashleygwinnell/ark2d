@@ -3,7 +3,7 @@
  *
  *  Created on: 27-Apr-2010
  *      Author: Ashley
- *      		...with much help from http://www.swiftless.com/tutorials/glsl/1_setup.html
+ *      		...with much help from
  */
 
 #ifndef SHADER_H_
@@ -14,6 +14,14 @@
 
 #include <string>
 
+/*!
+ * \brief OpenGL Shader support.
+ *
+ * @todo Read Shader from memory buffer, as well as file.
+ *
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ * @author unascribed http://www.swiftless.com/tutorials/glsl/1_setup.html
+ */
 class Shader {
 	public:
 		Shader();

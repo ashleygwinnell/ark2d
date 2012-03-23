@@ -22,6 +22,12 @@ class Transition;
 
 using namespace std;
 
+/*!
+ * \brief Games with multiple game states should inherit from this class for easy management and transition effects between states.
+ *
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ * @todo continue updating during transitions.
+ */
 class StateBasedGame : public Game {
 	public:
 		StateBasedGame(string title);
@@ -39,6 +45,7 @@ class StateBasedGame : public Game {
 
 		vector<GameState*> getStates();
 
+		void enterState(unsigned int id, Transition* leave, Transition* enter);
 		void enterState(GameState* state, Transition* leave, Transition* enter);
 
 		void init(GameContainer* container);
@@ -77,6 +84,7 @@ class StateBasedGame : public Game {
 		Transition* m_leaveTransition;
 
 		bool m_initialised;
+		bool m_autoDeleteTransitions;
 
 	protected:
 		bool isDuringTransition();

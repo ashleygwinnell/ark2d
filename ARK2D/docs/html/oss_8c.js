@@ -1,0 +1,25 @@
+var oss_8c =
+[
+    [ "ok", "oss_8c.html#acdb7c74a1e5ebaee18a3e929adfbf33b", null ],
+    [ "ok", "oss_8c.html#acdb7c74a1e5ebaee18a3e929adfbf33b", null ],
+    [ "SOUND_MIXER_READ", "oss_8c.html#a19eed602e8099bf94c7973238ede724d", null ],
+    [ "SOUND_MIXER_WRITE", "oss_8c.html#ae6926e59833e3fd9149f953e269eacd9", null ],
+    [ "alc_oss_deinit", "oss_8c.html#a5600c0300dd15e5284246dbf472eeec8", null ],
+    [ "alc_oss_init", "oss_8c.html#ad37ff23585feab2c3ea349539d65f2b0", null ],
+    [ "alc_oss_probe", "oss_8c.html#a2f3988d774476e042a5cab1aa3b91fc0", null ],
+    [ "log2i", "oss_8c.html#a7f920280d0ac737440479db585aa3d56", null ],
+    [ "oss_available_samples", "oss_8c.html#ae7fd65b554622bfc10217dbdec2140f6", null ],
+    [ "oss_capture_samples", "oss_8c.html#af0b6bebc6ec45ccd3edbc9fdfad5c6ca", null ],
+    [ "oss_close_capture", "oss_8c.html#aca07b4960a4748cdabc7d83132b07628", null ],
+    [ "oss_close_playback", "oss_8c.html#a5c678ba0d436e6027cb9b5f0f0ed5250", null ],
+    [ "oss_open_capture", "oss_8c.html#a90dd4ea8b03a3e1f76aab5231880ff60", null ],
+    [ "oss_open_playback", "oss_8c.html#a6dde818b8a952e87f30da6ff1a236443", null ],
+    [ "oss_reset_playback", "oss_8c.html#a52b6ccb88091ab3736deabaddb1d4e36", null ],
+    [ "oss_start_capture", "oss_8c.html#a77fde521b212e677297152298b8add79", null ],
+    [ "oss_stop_capture", "oss_8c.html#a2f13bc30dd0b11df0166d5591607c761", null ],
+    [ "oss_stop_playback", "oss_8c.html#a74be66625edae2097809b84c58ae8ea7", null ],
+    [ "OSSCaptureProc", "oss_8c.html#aa212867ee5823e5356790b0c4265263a", null ],
+    [ "OSSProc", "oss_8c.html#a7b177c1a6c9767f15d29525fc9c76995", null ],
+    [ "oss_device", "oss_8c.html#aff7c480f1c32677f9cbaf41fb61c647f", null ],
+    [ "oss_funcs", "oss_8c.html#accbbf60f28d93066a2edf1815740236c", null ]
+];

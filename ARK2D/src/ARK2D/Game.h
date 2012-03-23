@@ -10,11 +10,23 @@
 #include <string>
 using namespace std;
 
+#include "ARK2D_namespaces.h"
+
 class GameContainer;
 class Graphics;
 class GameTimer;
-class Timeline;
 
+namespace ARK {
+	namespace Tween {
+		class Timeline;
+	}
+}
+
+/*!
+ * \brief A game with one game state should extend this class. e.g. test cases.
+ *
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class Game {
 	public:
 

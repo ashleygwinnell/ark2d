@@ -22,66 +22,80 @@
 #include "TiledMapObject.h"
 
 #include "../Resource.h"
-
 using namespace std;
 
-class TiledMap : public ARK::Resource {
+namespace ARK {
+	namespace Tiled {
 
-	friend class TiledMapLayer;
+		/*!
+		 * \brief Class for managing tiled maps.
+		 *
+		 * @warning Don't use the constructor of this class to create a tiled map.
+		 *
+		 * @see Resource class
+		 * @see Resource::asTiledMap()
+		 *
+		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+		 */
+		class TiledMap : public ARK::Resource {
 
-	public:
-		TiledMap(const string& file);
-		TiledMap(const string& file, void* data);
-		void addProperty(const TiledMapProperty& property);
-		void addTileset(const TiledMapTileset& tileset);
-		void addLayer(const TiledMapLayer& layer);
-		void addObjectGroup(const TiledMapObjectGroup& objectgroup);
+			friend class TiledMapLayer;
 
-		TiledMapLayer* getLayerByName(const char* name);
-		TiledMapLayer* getLayer(unsigned int index);
+			public:
+				TiledMap(const string& file);
+				TiledMap(const string& file, void* data);
+				void addProperty(const TiledMapProperty& property);
+				void addTileset(const TiledMapTileset& tileset);
+				void addLayer(const TiledMapLayer& layer);
+				void addObjectGroup(const TiledMapObjectGroup& objectgroup);
 
-		TiledMapObjectGroup* getObjectGroupByName(const char* name);
-		TiledMapObjectGroup* getObjectGroup(unsigned int index);
+				TiledMapLayer* getLayerByName(const char* name);
+				TiledMapLayer* getLayer(unsigned int index);
 
-		TiledMapTileset* getTileset(unsigned int index);
-		TiledMapTileset* getTilesetByGID(unsigned int gid);
+				TiledMapObjectGroup* getObjectGroupByName(const char* name);
+				TiledMapObjectGroup* getObjectGroup(unsigned int index);
 
-		TiledMapProperty* getProperty(unsigned int index);
-		TiledMapProperty* getPropertyByName(const char* name);
+				TiledMapTileset* getTileset(unsigned int index);
+				TiledMapTileset* getTilesetByGID(unsigned int gid);
 
-		unsigned int getTileWidth();
-		unsigned int getTileHeight();
+				TiledMapProperty* getProperty(unsigned int index);
+				TiledMapProperty* getPropertyByName(const char* name);
 
-		unsigned int getWidth();
-		unsigned int getHeight();
-		unsigned int getWidthInTiles();
-		unsigned int getHeightInTiles();
+				unsigned int getTileWidth();
+				unsigned int getTileHeight();
 
-		void printProperties();
-		void draw();
-		void draw(signed int x, signed int y);
-		virtual ~TiledMap();
-	private:
-		string m_file;
-		TiXmlDocument m_xmldocument;
-		void* m_data;
-		vector<TiledMapProperty> m_properties;
-		vector<TiledMapTileset> m_tilesets;
-		vector<TiledMapLayer> m_layers;
-		vector<TiledMapObjectGroup> m_objectgroups;
-		int m_tileWidth;
-		int m_tileHeight;
+				unsigned int getWidth();
+				unsigned int getHeight();
+				unsigned int getWidthInTiles();
+				unsigned int getHeightInTiles();
 
-		unsigned int m_widthInTiles;
-		unsigned int m_heightInTiles;
-		unsigned int m_widthInPixels;
-		unsigned int m_heightInPixels;
+				void printProperties();
+				void draw();
+				void draw(signed int x, signed int y);
+				virtual ~TiledMap();
+			private:
+				string m_file;
+				TiXmlDocument m_xmldocument;
+				void* m_data;
+				vector<TiledMapProperty> m_properties;
+				vector<TiledMapTileset> m_tilesets;
+				vector<TiledMapLayer> m_layers;
+				vector<TiledMapObjectGroup> m_objectgroups;
+				int m_tileWidth;
+				int m_tileHeight;
 
-		void parse();
-		void parseTileset(unsigned int& firstgid, string& src, TiXmlDocument* tileset_d);
+				unsigned int m_widthInTiles;
+				unsigned int m_heightInTiles;
+				unsigned int m_widthInPixels;
+				unsigned int m_heightInPixels;
 
-};
+				void parse();
+				void parseTileset(unsigned int& firstgid, string& src, TiXmlDocument* tileset_d);
 
+		};
+
+	}
+}
 
 
 

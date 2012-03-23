@@ -12,22 +12,33 @@
 #include <vector>
 
 #include "../Graphics/Image/Image.h"
-
-class TiledMapProperty;
-
 using namespace std;
 
-class TiledMapTile {
-	public:
-		TiledMapTile();
-		Image* getImage() const;
-		vector<TiledMapProperty*> getProperties() const;
+namespace ARK {
+	namespace Tiled {
 
-		virtual ~TiledMapTile();
+		class TiledMapProperty;
 
-	public:
-		Image* m_image;
-		vector<TiledMapProperty*> m_properties;
-};
+		/*!
+		 * \brief A tile with an image reference on a Tiled Map.
+		 *
+		 * @warning You should never need to create this manually.
+		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+		 */
+		class TiledMapTile {
+			public:
+				TiledMapTile();
+				Image* getImage() const;
+				vector<TiledMapProperty*> getProperties() const;
+
+				virtual ~TiledMapTile();
+
+			public:
+				Image* m_image;
+				vector<TiledMapProperty*> m_properties;
+		};
+
+	}
+}
 
 #endif /* TILEDMAPTILE_H_ */

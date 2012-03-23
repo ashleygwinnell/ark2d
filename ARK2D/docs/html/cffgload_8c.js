@@ -1,0 +1,27 @@
+var cffgload_8c =
+[
+    [ "CFF_COUNT_CHECK_WIDTH", "cffgload_8c.html#aaea2eb2399ab43c559d5f11586afb00b", null ],
+    [ "CFF_COUNT_CLEAR_STACK", "cffgload_8c.html#ae4b1860a6cc535b3aedf87be8414e8ad", null ],
+    [ "CFF_COUNT_EXACT", "cffgload_8c.html#a200aa687b5bec5e8f82212d6046a7de1", null ],
+    [ "FT_COMPONENT", "cffgload_8c.html#a9c208ea57bc9a5fcbfc81a6106d28f3a", null ],
+    [ "CFF_Operator", "cffgload_8c.html#aec8587f065b7ee6610fd8fc7d2acf080", null ],
+    [ "CFF_Operator_", "cffgload_8c.html#a067cb784f09b7b8fbeea25bed36cd0b8", null ],
+    [ "cff_builder_add_contour", "cffgload_8c.html#a66a4ce27c4cc8ba934723e2901b10009", null ],
+    [ "cff_builder_add_point", "cffgload_8c.html#a4030ce5ff5a6c0481669ef2c85467d48", null ],
+    [ "cff_builder_add_point1", "cffgload_8c.html#a7f9c5899c41eeaed4d1591817226c3bd", null ],
+    [ "cff_builder_close_contour", "cffgload_8c.html#a49c112b628c9d26f1f941fb5003b02a1", null ],
+    [ "cff_builder_done", "cffgload_8c.html#a331926927f9297364b4c80fa564d3a24", null ],
+    [ "cff_builder_init", "cffgload_8c.html#a22ff251e5d5145812b6947f57f88f164", null ],
+    [ "cff_builder_start_point", "cffgload_8c.html#a124921350d4bb8dc0a5ce0fa23c825b4", null ],
+    [ "cff_compute_bias", "cffgload_8c.html#a0f0b9f0317100cda289c952d593ed406", null ],
+    [ "cff_decoder_init", "cffgload_8c.html#a8bbc0e91ca59bd98aa5f749ac2dc1f9e", null ],
+    [ "cff_decoder_parse_charstrings", "cffgload_8c.html#a04ab294b7e8ed9309f8ac19a1485148b", null ],
+    [ "cff_decoder_prepare", "cffgload_8c.html#a560ec3f07b5b59462a7d3199cd1df656", null ],
+    [ "cff_free_glyph_data", "cffgload_8c.html#a684aca1fb6a6c8d8301115c626324ebd", null ],
+    [ "cff_get_glyph_data", "cffgload_8c.html#ac698637f0794f418dcaa31b1dab1d4de", null ],
+    [ "cff_lookup_glyph_by_stdcharcode", "cffgload_8c.html#aeecb96a848a30832f21f511aa430642f", null ],
+    [ "cff_operator_seac", "cffgload_8c.html#a968ee1765da35c8d1cb158628f56be94", null ],
+    [ "cff_slot_load", "cffgload_8c.html#a419a19342ade0454d7ca77044d5ad127", null ],
+    [ "check_points", "cffgload_8c.html#a0ef1a40bab4619b9460a434e3e6a9426", null ],
+    [ "cff_argument_counts", "cffgload_8c.html#a41d5ed5cfcef57e07ffad2f15b9ec3d6", null ]
+];

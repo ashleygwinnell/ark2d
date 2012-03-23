@@ -20,6 +20,9 @@ void SlideRectanglesAcrossTransition::init(GameContainer* container, StateBasedG
 
 	Transition::init(container, game, from, to);
 	m_easing = Easing::LINEAR;
+	m_current_time = 0;
+	m_doneHalfWayLogic = false;
+	m_sliderects.clear();
 
 	//if (m_dir == Constants::DIRECTION_RIGHT) {
 

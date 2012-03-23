@@ -10,6 +10,11 @@
 
 #include "Transition.h"
 
+/*!
+ * \brief An empty transition that implements the Transition interface. This is used internally when a NULL transition is specified.
+ *
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class EmptyTransition : public Transition {
 	public:
 		EmptyTransition();

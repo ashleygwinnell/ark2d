@@ -13,106 +13,120 @@
 #include <map>
 using namespace std;
 
-class Image;
-class Color;
+#include "../ARK2D_namespaces.h"
+
 class GameTimer;
 
-class ParticleEmitter;
-class ParticlePool;
-class Particle;
+namespace ARK {
+	namespace Particles {
 
-class ParticleSystem {
-	public:
-		static const unsigned int BLEND_ADDITIVE = 1;
-		static const unsigned int BLEND_COMBINE = 2;
 
-		static const unsigned int DEFAULT_PARTICLES = 100;
+		class ParticleEmitter;
+		class ParticlePool;
+		class Particle;
 
-		vector<ParticleEmitter*> removeMe;
+		/*!
+		 * \brief Main Particle System class that contains the Emitters, Pools and Particles.
+		 *
+		 * Adapted from Kevin Glass's Java implementation.
+		 *
+		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+		 * @author Kevin Glass
+		 */
+		class ParticleSystem {
+			public:
+				static const unsigned int BLEND_ADDITIVE = 1;
+				static const unsigned int BLEND_COMBINE = 2;
 
-		map<ParticleEmitter*, ParticlePool*> particlesByEmitter;
+				static const unsigned int DEFAULT_PARTICLES = 100;
 
-		// The maximum number of particles allows per emitter
-		int maxParticlesPerEmitter;
+				vector<ParticleEmitter*> removeMe;
 
-		// The list of emitters producing and controlling particles
-		vector<ParticleEmitter*> emitters;
+				map<ParticleEmitter*, ParticlePool*> particlesByEmitter;
 
-		// The dummy particle to return should no more particles be available
-		Particle* dummy;
+				// The maximum number of particles allows per emitter
+				int maxParticlesPerEmitter;
 
-		// The blending mode
-		unsigned int blendingMode;
+				// The list of emitters producing and controlling particles
+				vector<ParticleEmitter*> emitters;
 
-		// The number of particles in use
-		int pCount;
+				// The dummy particle to return should no more particles be available
+				Particle* dummy;
 
-		// True if we're going to use points to render the particles
-		bool usePoints;
+				// The blending mode
+				unsigned int blendingMode;
 
-		// The x coordinate at which this system should be rendered
-		float m_x;
+				// The number of particles in use
+				int pCount;
 
-		// The y coordinate at which this system should be rendered
-		float m_y;
+				// True if we're going to use points to render the particles
+				bool usePoints;
 
-		// True if we should remove completed emitters
-		bool removeCompletedEmitters;
+				// The x coordinate at which this system should be rendered
+				float m_x;
 
-		// The default image for the particles
-		Image* sprite;
+				// The y coordinate at which this system should be rendered
+				float m_y;
 
-		// True if the particle system is visible
-		bool m_visible;
+				// True if we should remove completed emitters
+				bool removeCompletedEmitters;
 
-		// The mask used to make the particle image background transparent if any
-		Color* mask;
+				// The default image for the particles
+				Image* sprite;
 
-		ParticleSystem(Image* defaultSprite);
+				// True if the particle system is visible
+				bool m_visible;
 
-		void reset();
+				// The mask used to make the particle image background transparent if any
+				Color* mask;
 
-		bool isVisible();
-		void setVisible(bool b);
+				ParticleSystem(Image* defaultSprite);
 
-		void setRemoveCompletedEmitters(bool b);
+				void reset();
 
-		void setUsePoints(bool b);
-		bool isUsePoints();
+				bool isVisible();
+				void setVisible(bool b);
 
-		unsigned int getBlendingMode();
-		void setBlendingMode(unsigned int i);
+				void setRemoveCompletedEmitters(bool b);
 
-		unsigned int getEmitterCount();
+				void setUsePoints(bool b);
+				bool isUsePoints();
 
-		ParticleEmitter* getEmitter(unsigned int index);
-		void addEmitter(ParticleEmitter* e);
-		void removeEmitter(ParticleEmitter* e);
-		void removeAllEmitters();
-		float getX();
-		float getY();
-		void setPosition(float x, float y);
+				unsigned int getBlendingMode();
+				void setBlendingMode(unsigned int i);
 
-		void render();
-		void render(float x, float y);
+				unsigned int getEmitterCount();
 
-		void update(GameTimer* timer);
-		void update(float delta);
+				ParticleEmitter* getEmitter(unsigned int index);
+				void addEmitter(ParticleEmitter* e);
+				void removeEmitter(ParticleEmitter* e);
+				void removeAllEmitters();
+				float getX();
+				float getY();
+				void setPosition(float x, float y);
 
-		unsigned int getParticleCount();
+				void render();
+				void render(float x, float y);
 
-		Particle* getNewParticle(ParticleEmitter* emitter, float life);
+				void update(GameTimer* timer);
+				void update(float delta);
 
-		void release(Particle* p);
-		void releaseAll(ParticleEmitter* e);
+				unsigned int getParticleCount();
 
-		void moveAll(ParticleEmitter* emitter, float x, float y);
+				Particle* getNewParticle(ParticleEmitter* emitter, float life);
 
-		void load(Image* defaultSprite, int numberOfParticles);
+				void release(Particle* p);
+				void releaseAll(ParticleEmitter* e);
 
-		virtual ~ParticleSystem();
+				void moveAll(ParticleEmitter* emitter, float x, float y);
 
-		static Particle* createParticle(ParticleSystem* system);
-};
+				void load(Image* defaultSprite, int numberOfParticles);
+
+				virtual ~ParticleSystem();
+
+				static Particle* createParticle(ParticleSystem* system);
+		};
+	}
+}
 
 #endif /* PARTICLESYSTEM_H_ */

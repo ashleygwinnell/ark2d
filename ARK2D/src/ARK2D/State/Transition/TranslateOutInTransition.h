@@ -10,6 +10,11 @@
 
 #include "Transition.h"
 
+/*!
+ * \brief Slide the whole state left or right in to another. Like an Android activity transition.
+ *
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class TranslateOutInTransition : public Transition {
 	public:
 		TranslateOutInTransition(unsigned int dir);

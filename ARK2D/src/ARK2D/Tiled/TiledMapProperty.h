@@ -8,25 +8,39 @@
 
 using namespace std;
 
-class TiledMapProperty : public ARK::ToString {
-	public:
-		TiledMapProperty();
-		TiledMapProperty(const std::string& name, const std::string& value);
+namespace ARK {
+	namespace Tiled {
 
-		const string getName() const;
-		const string getValue() const;
+		/*!
+		 * \brief A key-value pair on a Tiled Map.
+		 *
+		 * @todo Deprecate this for a normal tuple.
+		 *
+		 * @warning You should never need to create this manually.
+		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+		 */
+		class TiledMapProperty : public ARK::ToString {
+			public:
+				TiledMapProperty();
+				TiledMapProperty(const std::string& name, const std::string& value);
 
-		void setName(const string& s);
-		void setValue(const string& s);
+				const string getName() const;
+				const string getValue() const;
 
-		string toString();
-		const string operator+=(std::string f);
+				void setName(const string& s);
+				void setValue(const string& s);
 
-		virtual ~TiledMapProperty();
+				string toString();
+				const string operator+=(std::string f);
 
-	private:
-		string m_name;
-		string m_value;
-};
+				virtual ~TiledMapProperty();
+
+			private:
+				string m_name;
+				string m_value;
+		};
+
+	}
+}
 
 #endif

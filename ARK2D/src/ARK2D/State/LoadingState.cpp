@@ -8,12 +8,12 @@
 #include "LoadingState.h"
 
 #include "GameState.h"
-#include "../Threading/ARKThread.h"
+#include "../Threading/Thread.h"
 #include "../GameContainer.h"
 #include "StateBasedGame.h"
 
 LoadingState::LoadingState(): GameState(), m_thread(NULL), m_loading(true) {
-	m_thread = new ARKThread();
+	m_thread = new ARK::Threading::Thread();
 }
 
 bool LoadingState::isLoading() {
@@ -23,7 +23,7 @@ void LoadingState::setLoading(bool b) {
 	m_loading = b;
 }
 
-ARKThread* LoadingState::getThread() {
+ARK::Threading::Thread* LoadingState::getThread() {
 	return m_thread;
 }
 

@@ -13,6 +13,11 @@ class GameContainer;
 class GameTimer;
 class Graphics;
 
+/*!
+ * \brief All game states (FSM model) should extend this class.
+ *
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class GameState {
 	public:
 		GameState();

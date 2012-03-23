@@ -6,7 +6,7 @@
  */
 
 #include "TranslateOutInTransition.h"
-#include "../../Timeline.h"
+#include "../../Tween/Timeline.h"
 
 TranslateOutInTransition::TranslateOutInTransition(unsigned int dir):
 		m_direction(dir),
@@ -26,6 +26,8 @@ TranslateOutInTransition::TranslateOutInTransition(unsigned int dir, float timeS
 
 void TranslateOutInTransition::init(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to) {
 	Transition::init(container, game, from, to);
+	m_offset_x = 0.0f;
+	m_current_time = 0.0f;
 	m_easing = Easing::LINEAR;
 	switch(m_direction) {
 		case TranslateOutInTransition::DIRECTION_UP:
@@ -36,7 +38,7 @@ void TranslateOutInTransition::init(GameContainer* container, StateBasedGame* ga
 			m_offset_x = 0;
 			break;
 		case TranslateOutInTransition::DIRECTION_RIGHT:
-			m_offset_x = -480;
+			m_offset_x = float(container->getWidth()) * -1;
 			break;
 	}
 }
@@ -52,10 +54,10 @@ void TranslateOutInTransition::update(GameContainer* container, StateBasedGame* 
 
 			break;
 		case TranslateOutInTransition::DIRECTION_LEFT:
-			m_offset_x = Easing::ease(m_easing, m_current_time, 0, -480, m_time);
+			m_offset_x = Easing::ease(m_easing, m_current_time, 0, float(container->getWidth()) * -1, m_time);
 			break;
 		case TranslateOutInTransition::DIRECTION_RIGHT:
-			m_offset_x = Easing::ease(m_easing, m_current_time, -480, 480, m_time);
+			m_offset_x = Easing::ease(m_easing, m_current_time, float(container->getWidth()) * -1, float(container->getWidth()), m_time);
 			break;
 	}
 }

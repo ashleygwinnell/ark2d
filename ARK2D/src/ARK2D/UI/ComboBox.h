@@ -13,36 +13,46 @@ using namespace std;
 
 #include "../ARK2D.h"
 #include "AbstractUIComponent.h"
-
-class ComboBoxItem;
-
 #include <vector>
 using namespace std;
 
-class ComboBox : public AbstractUIComponent {
-	friend class ComboBoxItem;
-	private:
-		vector<ComboBoxItem*> m_items;
-		ComboBoxItem* m_selected;
-		bool m_open;
-		void* m_itemChangedEvent;
+namespace ARK {
+	namespace UI {
+		class ComboBoxItem;
 
-	public:
-		ComboBox();
-		void addItem(ComboBoxItem* cbi);
-		void setOpen(bool b);
-		bool isOpen();
-		void setItemChangedEvent(void* event);
-		ComboBoxItem* getSelected();
-		void setSelectedByValue(string value);
-		void keyPressed(unsigned int key);
-		void keyReleased(unsigned int key);
-		void render();
-		void renderBackground();
-		void renderArrow();
-		void renderText(int x, int y);
-		void renderOverlay();
+		/*!
+		 * \brief A drop-down menu.
+		 *
+		 * Subscribe to change events for functionality.
+		 *
+		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+		 */
+		class ComboBox : public AbstractUIComponent {
+			friend class ComboBoxItem;
+			private:
+				vector<ComboBoxItem*> m_items;
+				ComboBoxItem* m_selected;
+				bool m_open;
+				void* m_itemChangedEvent;
 
-};
+			public:
+				ComboBox();
+				void addItem(ComboBoxItem* cbi);
+				void setOpen(bool b);
+				bool isOpen();
+				void setItemChangedEvent(void* event);
+				ComboBoxItem* getSelected();
+				void setSelectedByValue(string value);
+				void keyPressed(unsigned int key);
+				void keyReleased(unsigned int key);
+				void render();
+				void renderBackground();
+				void renderArrow();
+				void renderText(int x, int y);
+				void renderOverlay();
+
+		};
+	}
+}
 
 #endif /* COMBOBOX_H_ */

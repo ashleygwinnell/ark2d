@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include "../ARK2D.h"
 #include "StringUtil.h"
-#include "ARKLog.h"
+#include "Log.h"
 #include "../GameContainer.h"
 
 #ifdef ARK2D_WINDOWS
@@ -24,56 +24,62 @@
 	#define DIRECTORY_SEPARATOR "/"
 #endif
 
-bool FileUtil::file_put_contents(string filename, string contents) {
+namespace ARK {
+	namespace Util {
 
-	#if defined(ARK2D_ANDROID)
-		filename = ARK2D::getContainer()->m_platformSpecific.m_externalDataStr + filename;
-	#else
-		filename = ARK2D::getContainer()->getResourcePath() + filename;
-	#endif
+		bool FileUtil::file_put_contents(string filename, string contents) {
 
-	ARK2D::getLog()->i(StringUtil::append("Making file: ", filename));
+			#if defined(ARK2D_ANDROID)
+				filename = ARK2D::getContainer()->m_platformSpecific.m_externalDataStr + filename;
+			#else
+				filename = ARK2D::getContainer()->getResourcePath() + filename;
+			#endif
 
-	// yarp
-	fstream File;
-	File.open(filename.c_str(), ios::out);
-	if (File.is_open()) {
-		File << contents;
-		File.close();
-		return true;
-	}
-	ARK2D::getLog()->e(StringUtil::append("Making file failed. :( ", filename));
-	return false;
-}
+			ARK2D::getLog()->i(StringUtil::append("Making file: ", filename));
 
-string FileUtil::getCurrentDirectory() {
-	char currentPath[FILENAME_MAX];
-	if(!GetCurrentDirectoryMacro(currentPath, sizeof(currentPath))) {
-		return "";
-	}
-	currentPath[sizeof(currentPath)-1] = '\0';
-	return string(currentPath);
-}
-string FileUtil::getSeparator() {
-	return DIRECTORY_SEPARATOR;
-}
-
-string FileUtil::getOSDirectory() {
-	#if defined(ARK2D_WINDOWS)
-		char dir[MAX_PATH];
-		dir[MAX_PATH-1] = '\0';
-		GetWindowsDirectory((LPSTR) &dir, MAX_PATH);
-
-		// never add a backslash.
-		// if windows is installed to C:\ then it returns C:
-		string ret(dir);
-		if (ret.substr(ret.size()-1, 1) == DIRECTORY_SEPARATOR) {
-			ret = ret.substr(0, ret.size()-1);
+			// yarp
+			fstream File;
+			File.open(filename.c_str(), ios::out);
+			if (File.is_open()) {
+				File << contents;
+				File.close();
+				return true;
+			}
+			ARK2D::getLog()->e(StringUtil::append("Making file failed. :( ", filename));
+			return false;
 		}
-		return ret;
 
-	#elif defined(ARK2D_UBUNTU_LINUX)
+		string FileUtil::getCurrentDirectory() {
+			char currentPath[FILENAME_MAX];
+			if(!GetCurrentDirectoryMacro(currentPath, sizeof(currentPath))) {
+				return "";
+			}
+			currentPath[sizeof(currentPath)-1] = '\0';
+			return string(currentPath);
+		}
+		string FileUtil::getSeparator() {
+			return DIRECTORY_SEPARATOR;
+		}
 
-	#endif
-	return "whoops?";
+		string FileUtil::getOSDirectory() {
+			#if defined(ARK2D_WINDOWS)
+				char dir[MAX_PATH];
+				dir[MAX_PATH-1] = '\0';
+				GetWindowsDirectory((LPSTR) &dir, MAX_PATH);
+
+				// never add a backslash.
+				// if windows is installed to C:\ then it returns C:
+				string ret(dir);
+				if (ret.substr(ret.size()-1, 1) == DIRECTORY_SEPARATOR) {
+					ret = ret.substr(0, ret.size()-1);
+				}
+				return ret;
+
+			#elif defined(ARK2D_UBUNTU_LINUX)
+
+			#endif
+			return "whoops?";
+		}
+
+	}
 }

@@ -11,7 +11,7 @@
 
 #include "Transition.h"
 #include "../../Graphics/Color.h"
-#include "../../Timeline.h"
+#include "../../Tween/Timeline.h"
 #include "../../Constants.h"
 
 #include <vector>
@@ -22,6 +22,13 @@ class SlideRect { public:
 	float xoffsetSpeed;
 };
 
+/*!
+ * \brief Slide rectangles across the screen like in indie-hit VVVVVV.
+ *
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ * @todo Introduce a Colour set instead of a single colour?
+ * @todo Implement sliding rectangles DOWN the screen.
+ */
 class SlideRectanglesAcrossTransition: public Transition {
 	public:
 		Color* m_color; // the colour for the overlay

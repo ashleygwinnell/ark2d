@@ -204,7 +204,7 @@ GLuint Image::load(const Color& mask) {
 			}
 		}*/
 
-		// TODO: auto-power-of-twoing
+		//! auto-power-of-twoing
 		unsigned int tempTextureWidth = MathUtil::nextPowerOfTwo(m_Width);
 		unsigned int tempTextureHeight = MathUtil::nextPowerOfTwo(m_Height);
 

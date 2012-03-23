@@ -9,24 +9,23 @@
 #define RESOURCE_H_
 
 class Image;
-class Sound;
 class Animation;
-class LocalHighscores;
-class TiledMap;
 class ARKString;
 
 #include <string>
 using namespace std;
 
 #include "ARK2D_windres.h"
+#include "ARK2D_namespaces.h"
 
 #if defined(ARK2D_ANDROID)
 	#include <zip.h>
 #endif
 
+
 namespace ARK {
 
-class Font;
+
 
 	class RawDataReturns {
 		friend class TiledMap;
@@ -39,6 +38,11 @@ class Font;
 			}
 	};
 
+	/*!
+	 * \brief Load assets in to game. Images, Sounds, TiledMaps, LocalHighscores, Text files, Fonts, etc.
+	 *
+	 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+	 */
 	class Resource {
 
 		public:
@@ -61,7 +65,7 @@ class Font;
 			Resource();
 			Image* asImage();
 			Sound* asSound();
-			ARK::Font* asFont();
+			ARK::Font::Font* asFont();
 			LocalHighscores* asLocalHighscores();
 			TiledMap* asTiledMap();
 			ARKString* asString();

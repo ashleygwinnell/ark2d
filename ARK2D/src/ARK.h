@@ -5,30 +5,20 @@
  *      Author: Ashley
  */
 
-//const bool ARK2D_VERBOSE = true;
-// OH U
-
 #include "ARK2D/ARK2D.h"
 #include "ARK2D/ARKException.h"
 
-
-
 #include "ARK2D/GameTimer.h"
-
 #include "ARK2D/GameContainer.h"
 
 // Geometry
 #include "ARK2D/Geometry/Vector2.h"
-#include "ARK2D/Geometry/Vector4.h"
-#include "ARK2D/Geometry/Matrix44.h"
 #include "ARK2D/Geometry/GigaRectangle.h"
-
 #include "ARK2D/Geometry/Shape.h"
 #include "ARK2D/Geometry/Polygon.h"
 #include "ARK2D/Geometry/Rectangle.h"
 #include "ARK2D/Geometry/Circle.h"
 #include "ARK2D/Geometry/Line.h"
-
 
 #include "ARK2D/Game.h"
 
@@ -69,27 +59,32 @@
 // Resources
 #include "ARK2D/Resource.h"
 
+// Tweening
+#include "ARK2D/Tween/Timeline.h"
+#include "ARK2D/Tween/Easing.h"
 
-
-// Input
-#include "ARK2D/Input.h"
+// Input / Controls
+#include "ARK2D/Controls/Input.h"
+#include "ARK2D/Controls/Gamepad.h"
 
 // Utils
+#include "ARK2D/Util/ArcadeHighscoreInput.h"
 #include "ARK2D/Util/FileUtil.h"
 #include "ARK2D/Util/MathUtil.h"
 #include "ARK2D/Util/StringUtil.h"
-#include "ARK2D/Util/ARKLog.h"
+#include "ARK2D/Util/Log.h"
 #include "ARK2D/Util/Cast.h"
 #include "ARK2D/Util/VerticalMenu.h" // can probably be removed?
 #include "ARK2D/Util/VerticalMenuItem.h" // can probably be removed?
 #include "ARK2D/Util/CameraShake.h" // can probably be removed?
 #include "ARK2D/Util/LocalHighscores.h"
 #include "ARK2D/Util/RSSL.h" // basic scripting.
+#include "ARK2D/Util/Vector4.h"
+#include "ARK2D/Util/Matrix44.h"
+#include "ARK2D/Util/Range.h"
+#include "ARK2D/Util/StringStore.h"
 
-#include "ARK2D/Timeline.h"
 #include "ARK2D/Event.h"
-
-#include "ARK2D/StringStore.h"
 
 // JSON Implementation
 #include "ARK2D/ARK2D_JSON.h"
@@ -112,17 +107,16 @@
 #include "ARK2D/Particles/ParticleIO.h"
 #include "ARK2D/Particles/ParticlePool.h"
 #include "ARK2D/Particles/ParticleSystem.h"
-#include "ARK2D/Particles/Range.h"
 #include "ARK2D/Particles/ConfigurableEmitter.h"
 
 // Containers
 #include "ARK2D/ARKGameObject.h"
-#include "ARK2D/Util/Containers/ARKVector.h"
-#include "ARK2D/Util/Containers/ARKPool.h"
+#include "ARK2D/Util/Containers/Vector.h"
+#include "ARK2D/Util/Containers/Pool.h"
 
 // Multithreading
-#include "ARK2D/Threading/ARKThread.h"
-#include "ARK2D/Threading/ARKMutex.h"
+#include "ARK2D/Threading/Thread.h"
+#include "ARK2D/Threading/Mutex.h"
 
 // Paths
 #include "ARK2D/Path/SubPath.h"
@@ -135,3 +129,6 @@
 
 // Misc
 #include "ARK2D/ToString.h"
+
+// Tests
+#include "ARK2D/Tests/TransitionTest.h"

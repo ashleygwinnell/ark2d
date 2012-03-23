@@ -71,10 +71,9 @@ void GameTimer::sleep(int millis) {
 	#endif
 }
 
-//----------------------------------------------------------------
-// Name: Tick()
-// Desc: Signifies a new frame in the game.
-//----------------------------------------------------------------
+/*!
+ * Signifies a new frame in the game.
+ */
 void GameTimer::tick() {
 
 	// Get the number of ticks passed since program launch.
@@ -119,11 +118,9 @@ unsigned int GameTimer::getFPS() const {
 }
 
 
-//----------------------------------------------------------------
-// Name: GetTimeDelta()
-// Desc: Returns the average amount of seconds that have passed
-// between ticks.
-//----------------------------------------------------------------
+/*!
+ * Returns the average amount of seconds that have passed
+ */
 float GameTimer::getDelta() const {
 	return m_TimeDelta;
 }

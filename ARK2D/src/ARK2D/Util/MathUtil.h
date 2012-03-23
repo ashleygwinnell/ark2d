@@ -17,90 +17,101 @@
 	#define PI 3.14159265
 #endif
 
-class MathUtil {
-	public:
-		static const double PIE = 3.14159265;
+namespace ARK {
+	namespace Util {
 
-		static void seedRandom();
-		static int randBetween(int lower, int upper);
+		/*!
+		 * \brief Math utility functions (and also random functions).
+		 *
+		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+		 */
+		class MathUtil {
+			public:
+				static const double PIE = 3.14159265;
 
-		static double distance(float x1, float y1, float x2, float y2);
-		static double angle(int x1, int y1, int x2, int y2);
-		static double anglef(float x1, float y1, float x2, float y2);
-		static double toRadians(double angle);
-		static double getPercentage(int top, int denominator);
-		static const char* getPercentage_CSTR(int top, int denominator);
-		static void snap(int& snap, int& x, int& y);
+				static void seedRandom();
+				static int randBetween(int lower, int upper);
 
-		static int nextPowerOfTwo(int val);
+				static double distance(float x1, float y1, float x2, float y2);
+				static double angle(int x1, int y1, int x2, int y2);
+				static double anglef(float x1, float y1, float x2, float y2);
+				static double toRadians(double angle);
+				static double getPercentage(int top, int denominator);
+				static const char* getPercentage_CSTR(int top, int denominator);
+				static void snap(int& snap, int& x, int& y);
+
+				static int nextPowerOfTwo(int val);
 
 
-		template <class T>
-		static Vector2<T>* findCenter() {
-			// get lowest x
-			// get highest x
-			// get lowest y
-			// get highest y
-			// find center.
-			return new Vector2<T>(0, 0);
-		}
+				template <class T>
+				static Vector2<T>* findCenter() {
+					// get lowest x
+					// get highest x
+					// get lowest y
+					// get highest y
+					// find center.
+					return new Vector2<T>(0, 0);
+				}
 
-		template <class T>
-		static void rotatePointAroundPoint(Vector2<T>* pointToRotate, Vector2<T>* centerOfRotation, float angle) {
-			T centerx = centerOfRotation->getX();
-			T centery = centerOfRotation->getY();
+				template <class T>
+				static void rotatePointAroundPoint(Vector2<T>* pointToRotate, Vector2<T>* centerOfRotation, float angle) {
+					T centerx = centerOfRotation->getX();
+					T centery = centerOfRotation->getY();
 
-			double newAngle = MathUtil::toRadians((double) angle);
+					double newAngle = MathUtil::toRadians((double) angle);
 
-			// normalise by making the center of rotation the origin (0, 0).
-			pointToRotate->setX(pointToRotate->getX() - centerx);
-			pointToRotate->setY(pointToRotate->getY() - centery);
+					// normalise by making the center of rotation the origin (0, 0).
+					pointToRotate->setX(pointToRotate->getX() - centerx);
+					pointToRotate->setY(pointToRotate->getY() - centery);
 
-			//std::cout << (pointToRotate->getX() * cos(angle))  - (pointToRotate->getY() * sin(angle)) << std::endl;
-			T newx = (pointToRotate->getX() * cos(newAngle)) - (pointToRotate->getY() * sin(newAngle));
-			T newy = (pointToRotate->getX() * sin(newAngle)) + (pointToRotate->getY() * cos(newAngle));
+					//std::cout << (pointToRotate->getX() * cos(angle))  - (pointToRotate->getY() * sin(angle)) << std::endl;
+					T newx = (pointToRotate->getX() * cos(newAngle)) - (pointToRotate->getY() * sin(newAngle));
+					T newy = (pointToRotate->getX() * sin(newAngle)) + (pointToRotate->getY() * cos(newAngle));
 
-			//std::cout << newx << " : " << newy << std::endl;
+					//std::cout << newx << " : " << newy << std::endl;
 
-			pointToRotate->setX( newx );
-			pointToRotate->setY( newy );
+					pointToRotate->setX( newx );
+					pointToRotate->setY( newy );
 
-			pointToRotate->setX(pointToRotate->getX() + centerx);
-			pointToRotate->setY(pointToRotate->getY() + centery);
-		}
+					pointToRotate->setX(pointToRotate->getX() + centerx);
+					pointToRotate->setY(pointToRotate->getY() + centery);
+				}
 
-		//template <class T>
-		//static Vector2<T> s_moveAngleFromOriginV;
+				//template <class T>
+				//static Vector2<T> s_moveAngleFromOriginV;
 
-		template <class T>
-		static Vector2<T>* moveAngleFromOrigin(double angleDegrees, float distance) {
-			Vector2<T>* v = new Vector2<T>(0, 0);
-			moveAngle(v, angleDegrees, distance);
-			return v;
-		}
+				template <class T>
+				static Vector2<T>* moveAngleFromOrigin(double angleDegrees, float distance) {
+					Vector2<T>* v = new Vector2<T>(0, 0);
+					moveAngle(v, angleDegrees, distance);
+					return v;
+				}
 
-		template <class T>
-		static void moveAngle(Vector2<T>* vector, double angleDegrees, float distance)  {
-			double angleRadians = toRadians(angleDegrees);
-			vector->add((int) (distance * double(cos(angleRadians))), (int) (distance * double(sin(angleRadians))));
-			//vector->x += distance * double(cos(angleRadians));
-			//vector->y +=
-		}
-		template <class T>
-		static void moveAngle(T& x, T& y, double angleDegrees, float distance) {
-			double angleRadians = toRadians(angleDegrees);
-			x += (distance * double(cos(angleRadians)));
-			y += (distance * double(sin(angleRadians)));
-		}
+				template <class T>
+				static void moveAngle(Vector2<T>* vector, double angleDegrees, float distance)  {
+					double angleRadians = toRadians(angleDegrees);
+					vector->add((int) (distance * double(cos(angleRadians))), (int) (distance * double(sin(angleRadians))));
+					//vector->x += distance * double(cos(angleRadians));
+					//vector->y +=
+				}
+				template <class T>
+				static void moveAngle(T& x, T& y, double angleDegrees, float distance) {
+					double angleRadians = toRadians(angleDegrees);
+					x += (distance * double(cos(angleRadians)));
+					y += (distance * double(sin(angleRadians)));
+				}
 
-		template <class T>
-		static Vector2<T>* angleToNormalisedVector(double angleDegrees) {
-			double angleRadians = toRadians(angleDegrees);
-			double x = double(cos(angleRadians));
-			double y = double(sin(angleRadians));
-			return new Vector2<T>(x, y);
-		}
+				template <class T>
+				static Vector2<T>* angleToNormalisedVector(double angleDegrees) {
+					double angleRadians = toRadians(angleDegrees);
+					double x = double(cos(angleRadians));
+					double y = double(sin(angleRadians));
+					return new Vector2<T>(x, y);
+				}
 
-};
+		};
+
+	}
+}
 
 #endif /* MATHUTIL_H_ */

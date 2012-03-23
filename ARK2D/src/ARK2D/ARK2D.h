@@ -8,6 +8,8 @@
 #ifndef ARK2D_H_
 #define ARK2D_H_
 
+#include "ARK2D_namespaces.h"
+
 #if defined(ARK2D_ANDROID)
 	#include <string>
 	#include <vector>
@@ -77,10 +79,13 @@
 class GameContainer;
 //#include "GameContainer.h"
 class Game;
-class Input;
 class Graphics;
-class ARKLog;
 
+/*!
+ * \brief Main static way of accessing global variables such as container, game, input and log.
+ *
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class ARK2D {
 	friend class GameContainer;
 
@@ -89,7 +94,7 @@ class ARK2D {
 		static Game* getGame();
 		static Graphics* getGraphics();
 		static Input* getInput();
-		static ARKLog* getLog();
+		static Log* getLog();
 		static unsigned int getPlatform();
 
 		static bool is64BitArchitecture();
@@ -104,7 +109,7 @@ class ARK2D {
 		static Game* s_game;
 		static Graphics* s_graphics;
 		static Input* s_input;
-		static ARKLog* s_log;
+		static Log* s_log;
 
 };
 

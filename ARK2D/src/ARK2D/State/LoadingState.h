@@ -8,12 +8,19 @@
 #ifndef LOADINGSTATE_H_
 #define LOADINGSTATE_H_
 
+#include "../ARK2D_namespaces.h"
 #include "GameState.h"
-class ARKThread;
 class GameContainer;
 class StateBasedGame;
 class GameState;
 
+
+/*!
+ * \brief This state contains thread information and state for you to multithread loading in your game.
+ *
+ * @warning Note that you CANNOT load Images in this separate thread because OpenGL fails.
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class LoadingState : public GameState {
 	public:
 		LoadingState();
@@ -23,7 +30,7 @@ class LoadingState : public GameState {
 		virtual bool isLoading();
 		virtual void setLoading(bool b);
 
-		ARKThread* getThread();
+		ARK::Threading::Thread* getThread();
 
 		virtual void enter(GameContainer* container, StateBasedGame* game, GameState* from);
 		virtual void leave(GameContainer* container, StateBasedGame* game, GameState* to);
@@ -36,7 +43,7 @@ class LoadingState : public GameState {
 		virtual ~LoadingState();
 
 	protected:
-		ARKThread* m_thread;
+		ARK::Threading::Thread* m_thread;
 		bool m_loading;
 
 };

@@ -18,27 +18,37 @@ using namespace std;
 #import <Cocoa/Cocoa.h>
 #endif
 
-class FileDialogPlatformData {
-	public:
-		#ifdef ARK2D_WINDOWS
-			OPENFILENAME opf;
-			string title;
-			char buffer[256];
-		#elif defined(ARK2D_MACINTOSH)
+namespace ARK {
+	namespace UI {
 
-		#endif
-};
+		class FileDialogPlatformData {
+			public:
+				#ifdef ARK2D_WINDOWS
+					OPENFILENAME opf;
+					string title;
+					char buffer[256];
+				#elif defined(ARK2D_MACINTOSH)
 
-class FileDialog {
-	private:
-		static void init(FileDialogPlatformData* fdpd);
+				#endif
+		};
 
-	public:
-		static string openFileDialog();
-		static string openFileDialog(string title);
+		/*!
+		 * \brief File dialogs such as open file and save file
+		 *
+		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+		 */
+		class FileDialog {
+			private:
+				static void init(FileDialogPlatformData* fdpd);
 
-		static string saveFileDialog();
-		static string saveFileDialog(string title);
-};
+			public:
+				static string openFileDialog();
+				static string openFileDialog(string title);
+
+				static string saveFileDialog();
+				static string saveFileDialog(string title);
+		};
+	}
+}
 
 #endif /* FILEDIALOG_H_ */

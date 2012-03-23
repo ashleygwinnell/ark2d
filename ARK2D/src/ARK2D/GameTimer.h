@@ -10,6 +10,11 @@
 
 #include "ARK2D.h"
 
+/*!
+ * \brief Controls the main game loop.
+ *
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class GameTimer {
 
 	public:

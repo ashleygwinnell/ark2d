@@ -12,114 +12,123 @@
 #include "Shape.h"
 
 namespace ARK {
-	template <class T>
-	class Circle : public Shape<T> {
-		private:
-			T m_x;
-			T m_y;
-			T m_radius;
-			static unsigned int RENDER_SEGMENTS;
-		public:
-			Circle(): Shape<T>(), m_x(0), m_y(0), m_radius(0) {
+	namespace Geometry {
 
-			}
-			Circle(T x, T y, T r): Shape<T>(), m_x(x), m_y(y), m_radius(r) {
+		/*!
+		 * \brief It's a Circle!
+		 * It's computationally expensive to render circles because it's one more point per smoothness.
+		 *
+		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+		 */
+		template <class T>
+		class Circle : public Shape<T> {
+			private:
+				T m_x;
+				T m_y;
+				T m_radius;
+				static unsigned int RENDER_SEGMENTS;
+			public:
+				Circle(): Shape<T>(), m_x(0), m_y(0), m_radius(0) {
 
-			}
-
-			virtual T getMinX() {
-				return m_x - m_radius;
-			}
-			virtual T getMaxX() {
-				return m_x + m_radius;
-			}
-			virtual T getCenterX() {
-				return m_x;
-			}
-
-			virtual T getMinY() {
-				return m_y - m_radius;
-			}
-			virtual T getMaxY() {
-				return m_y + m_radius;
-			}
-			virtual T getCenterY() {
-				return m_y;
-			}
-
-			virtual T getWidth() {
-				return 2 * m_radius;
-			}
-			virtual T getHeight() {
-				return 2 * m_radius;
-			}
-
-			virtual T getRadius() {
-				return m_radius;
-			}
-			virtual void setRadius(T radius) {
-				m_radius = radius;
-			}
-
-			virtual void setLocation(T x, T y) {
-				m_x = x + m_radius;
-				m_y = y + m_radius;
-			}
-			virtual void setLocationByCenter(T x, T y) {
-				m_x = x;
-				m_y = y;
-			}
-
-			virtual bool contains(T x, T y) {
-				float distance = (float) MathUtil::distance(m_x, m_y, x, y);
-				if (distance <= m_radius) {
-					return true;
 				}
-				return false;
-			}
-			virtual bool collides(Shape<T>* s) {
-				Circle<T>* circle = NULL;
-				circle = dynamic_cast<Circle<T>* >(s);
-				if (circle != NULL) {
-					return Shape<T>::collision_circleCircle(m_x, m_y, m_radius, circle->getCenterX(), circle->getCenterY(), circle->getRadius());
+				Circle(T x, T y, T r): Shape<T>(), m_x(x), m_y(y), m_radius(r) {
+
 				}
 
-				Rectangle<T>* rect = NULL;
-				rect = dynamic_cast<Rectangle<T>* >(s);
-				if (rect != NULL) {
-					return Shape<T>::collision_circleRectangle(m_x, m_y, m_radius, rect->getMinX(), rect->getMinY(), rect->getWidth(), rect->getHeight());
+				virtual T getMinX() {
+					return m_x - m_radius;
+				}
+				virtual T getMaxX() {
+					return m_x + m_radius;
+				}
+				virtual T getCenterX() {
+					return m_x;
 				}
 
-				Line<T>* line = NULL;
-				line = dynamic_cast<Line<T>* >(s);
-				if (line != NULL) {
-					return Shape<T>::collision_circleLine(m_x, m_y, m_radius, line->getStart()->getX(), line->getStart()->getY(), line->getEnd()->getX(), line->getEnd()->getY());
+				virtual T getMinY() {
+					return m_y - m_radius;
+				}
+				virtual T getMaxY() {
+					return m_y + m_radius;
+				}
+				virtual T getCenterY() {
+					return m_y;
 				}
 
-				Polygon<T>* polygon = NULL;
-				polygon = dynamic_cast<Polygon<T>* >(s);
-				if (polygon != NULL) {
-					return Shape<T>::collision_polygonCircle(polygon, m_x, m_y, m_radius);
+				virtual T getWidth() {
+					return 2 * m_radius;
+				}
+				virtual T getHeight() {
+					return 2 * m_radius;
 				}
 
-				return false;
-			}
-			virtual void resolve(Shape<T>* s) {
+				virtual T getRadius() {
+					return m_radius;
+				}
+				virtual void setRadius(T radius) {
+					m_radius = radius;
+				}
 
-			}
+				virtual void setLocation(T x, T y) {
+					m_x = x + m_radius;
+					m_y = y + m_radius;
+				}
+				virtual void setLocationByCenter(T x, T y) {
+					m_x = x;
+					m_y = y;
+				}
 
-			virtual void render() {
-				Graphics* g = ARK2D::getGraphics();
-				g->drawCircle((int)m_x, (int)m_y, (int)m_radius, RENDER_SEGMENTS);
-			}
+				virtual bool contains(T x, T y) {
+					float distance = (float) MathUtil::distance(m_x, m_y, x, y);
+					if (distance <= m_radius) {
+						return true;
+					}
+					return false;
+				}
+				virtual bool collides(Shape<T>* s) {
+					Circle<T>* circle = NULL;
+					circle = dynamic_cast<Circle<T>* >(s);
+					if (circle != NULL) {
+						return Shape<T>::collision_circleCircle(m_x, m_y, m_radius, circle->getCenterX(), circle->getCenterY(), circle->getRadius());
+					}
 
-			virtual ~Circle() {
+					Rectangle<T>* rect = NULL;
+					rect = dynamic_cast<Rectangle<T>* >(s);
+					if (rect != NULL) {
+						return Shape<T>::collision_circleRectangle(m_x, m_y, m_radius, rect->getMinX(), rect->getMinY(), rect->getWidth(), rect->getHeight());
+					}
 
-			}
-	};
+					Line<T>* line = NULL;
+					line = dynamic_cast<Line<T>* >(s);
+					if (line != NULL) {
+						return Shape<T>::collision_circleLine(m_x, m_y, m_radius, line->getStart()->getX(), line->getStart()->getY(), line->getEnd()->getX(), line->getEnd()->getY());
+					}
+
+					Polygon<T>* polygon = NULL;
+					polygon = dynamic_cast<Polygon<T>* >(s);
+					if (polygon != NULL) {
+						return Shape<T>::collision_polygonCircle(polygon, m_x, m_y, m_radius);
+					}
+
+					return false;
+				}
+				virtual void resolve(Shape<T>* s) {
+
+				}
+
+				virtual void render() {
+					Graphics* g = ARK2D::getGraphics();
+					g->drawCircle((int)m_x, (int)m_y, (int)m_radius, RENDER_SEGMENTS);
+				}
+
+				virtual ~Circle() {
+
+				}
+		};
+	}
 }
 
 template <class T>
-unsigned int ARK::Circle<T>::RENDER_SEGMENTS = 20;
+unsigned int ARK::Geometry::Circle<T>::RENDER_SEGMENTS = 20;
 
 #endif /* CIRCLE_H_ */

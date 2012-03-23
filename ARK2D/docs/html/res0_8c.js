@@ -1,0 +1,26 @@
+var res0_8c =
+[
+    [ "_01class", "res0_8c.html#a8067a0c8ac0060096fab7f83f7bc39cb", null ],
+    [ "_01forward", "res0_8c.html#a6c5901f943f74b86305c67b88be064fa", null ],
+    [ "_01inverse", "res0_8c.html#a4ef3ef8885708589d5f54a4302616151", null ],
+    [ "_2class", "res0_8c.html#a865d2db9748e51798100372f5506c2d4", null ],
+    [ "_encodepart", "res0_8c.html#a1192e682973af3a062fb496072287eba", null ],
+    [ "icount", "res0_8c.html#ac07c94d7b25eb26541d89f0f5950cc12", null ],
+    [ "ilog", "res0_8c.html#a06eb38cefc1bcb1030becf7c620ddcbc", null ],
+    [ "local_book_besterror", "res0_8c.html#aadd8701737f2e6e824001691f0b175ae", null ],
+    [ "res0_free_info", "res0_8c.html#ae35036e8e25a71bb6eef1288526bab81", null ],
+    [ "res0_free_look", "res0_8c.html#ad2452cd7bd6b1bb85f0901f191af44ce", null ],
+    [ "res0_inverse", "res0_8c.html#a0d593c58683c43ea9e4ab327ffadec97", null ],
+    [ "res0_look", "res0_8c.html#aa9a3e8055cf19fae5a0eb0f489e1eb86", null ],
+    [ "res0_pack", "res0_8c.html#a6eec0ebcdf40a65e65b15fedf564a6dc", null ],
+    [ "res0_unpack", "res0_8c.html#aeb3e5f0ef16725bfd83a4787654efd3d", null ],
+    [ "res1_class", "res0_8c.html#adeadf7c62bc24778f8bfe1627922fb2d", null ],
+    [ "res1_forward", "res0_8c.html#a0ca4eb8856ca238d8aa1ec5f540b4556", null ],
+    [ "res1_inverse", "res0_8c.html#af25924309ef39b18adff8a37484dc37e", null ],
+    [ "res2_class", "res0_8c.html#af3c3a9914ae8807653c1af9b4c2d6edc", null ],
+    [ "res2_forward", "res0_8c.html#a7a1911ccd7eae9eca1c379195e194e4b", null ],
+    [ "res2_inverse", "res0_8c.html#a1009f8b935601c07a71b10ed3937864b", null ],
+    [ "residue0_exportbundle", "res0_8c.html#a5c4a4341186906935d6fba11fc33b15e", null ],
+    [ "residue1_exportbundle", "res0_8c.html#a7c1a7255356856f157ebbd7dfaf40ea3", null ],
+    [ "residue2_exportbundle", "res0_8c.html#a07f05d4d9aa7f98e182548fe093c9cb8", null ]
+];

@@ -13,41 +13,51 @@
 
 using namespace std;
 
-class Cast {
-	public:
-		static string inttohexcolor(unsigned int i) {
-			char buffer[3]; // eg. FF
-			sprintf(buffer, "%X", i);
-			return string(buffer);
-		}
-		static unsigned int hextoint(char* hexChars) {
-			unsigned int x;
-			stringstream ss;
-			ss << std::hex << hexChars;
-			ss >> x;
-			return x;
-		}
+namespace ARK {
+	namespace Util {
 
-		template<class T>
-		static string toString(const T& t)
-		{
-			 ostringstream stream;
-			 stream << t;
-			 return stream.str();
-		}
-		static string toString(bool b) {
-			return (b)?"true":"false";
-		}
+		/*!
+		 * \brief Casting to and from Strings and Integers, because dynamic types and casting in standard C++ are bad.
+		 *
+		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+		 */
+		class Cast {
+			public:
+				static string inttohexcolor(unsigned int i) {
+					char buffer[3]; // eg. FF
+					sprintf(buffer, "%X", i);
+					return string(buffer);
+				}
+				static unsigned int hextoint(char* hexChars) {
+					unsigned int x;
+					stringstream ss;
+					ss << std::hex << hexChars;
+					ss >> x;
+					return x;
+				}
 
-		template<class T>
-		static T fromString(const string& s)
-		{
-			istringstream stream (s);
-			T t;
-			stream >> t;
-			return t;
+				template<class T>
+				static string toString(const T& t)
+				{
+					 ostringstream stream;
+					 stream << t;
+					 return stream.str();
+				}
+				static string toString(bool b) {
+					return (b)?"true":"false";
+				}
+
+				template<class T>
+				static T fromString(const string& s)
+				{
+					istringstream stream (s);
+					T t;
+					stream >> t;
+					return t;
+				};
+
 		};
-
-};
+	}
+}
 
 #endif /* CAST_H_ */

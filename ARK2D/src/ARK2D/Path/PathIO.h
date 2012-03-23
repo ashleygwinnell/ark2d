@@ -11,17 +11,29 @@
 #include "PathGroup.h"
 #include "../UI/ErrorDialog.h"
 #include "../Util/StringUtil.h"
-#include "../Easing.h"
+#include "../Tween/Easing.h"
 #include "../ARK2D_JSON.h"
 
 #include <string>
 using namespace std;
 
-class PathIO {
-	public:
-		static PathGroup* createFromFile(string file);
-		static PathGroup* createFromJSON(string json);
-		static string getAsJSON(PathGroup* g);
-};
+namespace ARK {
+	namespace Path {
+
+		/*
+		 * \brief Load paths using this class.
+		 *
+		 * You can also get the String value of a PathGroup with this class.
+		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+		 */
+		class PathIO {
+			public:
+				static PathGroup* createFromFile(string file);
+				static PathGroup* createFromJSON(string json);
+				static string getAsJSON(PathGroup* g);
+		};
+
+	}
+}
 
 #endif /* PATHIO_H_ */

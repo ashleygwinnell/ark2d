@@ -134,6 +134,9 @@ float Color::getAlphaf() const {
 void Color::bind() const {
 	glColor4f(m_r/255.f, m_g/255.f, m_b/255.f, m_a/255.f);
 }
+Color* Color::copy() {
+	return new Color(m_r,m_g,m_b,m_a);
+}
 bool Color::operator==(Color c) {
 	if (m_r == c.getRed() && m_g == c.getGreen() && m_b == c.getBlue() && m_a == c.getAlpha()) {
 		return true;

@@ -8,10 +8,16 @@
 #ifndef ANIMATION_H_
 #define ANIMATION_H_
 
+#include "../ARK2D_namespaces.h"
 #include "Image/Image.h"
 #include "../GameTimer.h"
-#include "../Util/Containers/ARKVector.h"
+#include "../Util/Containers/Vector.h"
 
+/*!
+ * \brief A bunch of Image frames thrown together to produce an animation.
+ *
+ * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+ */
 class Animation {
 	public:
 		Animation();
@@ -36,7 +42,7 @@ class Animation {
 		virtual ~Animation();
 
 	private:
-		ARKVector<Image*> m_frames;
+		Vector<Image*> m_frames;
 		unsigned int m_currentFrameIndex;
 		signed int m_nextFrameModifier;
 

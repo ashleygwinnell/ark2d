@@ -7,8 +7,8 @@
 
 #include "IntelligentGameState.h"
 #include "../ARKGameObject.h"
-#include "../Util/Containers/ARKVector.h"
-#include "../Util/Containers/ARKPool.h"
+#include "../Util/Containers/Vector.h"
+#include "../Util/Containers/Pool.h"
 
 IntelligentGameState::IntelligentGameState(): GameState(), m_entities() {
 
@@ -19,10 +19,10 @@ void IntelligentGameState::add(string group, ARKGameObject* entity) {
 }   
 void IntelligentGameState::pruneEntities() { 
 	// Automatically remove any objects  that are cruddy.
-	map<string, ARKVector<ARKGameObject*> >::iterator it; 
+	map<string, Vector<ARKGameObject*> >::iterator it;
 	for (it = m_entities.begin(); it != m_entities.end(); ++it) { 
 		it->second.pruneAll();
-		ARKVector<ARKGameObject*> thisEntities = it->second;
+		Vector<ARKGameObject*> thisEntities = it->second;
 
 		bool anyRemoved = false; 	 
 		for(unsigned int i = 0; i < thisEntities.size(); i++) {

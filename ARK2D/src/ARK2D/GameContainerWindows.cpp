@@ -17,7 +17,7 @@
 	#include "ARK2D_windres.h" 
 	#include "Graphics/Image/Image.h"
  
-	#include "Util/ARKLog.h"
+	#include "Util/Log.h"
 
 		LRESULT CALLBACK GameContainerPlatform::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
@@ -195,7 +195,7 @@
 			ARK2D::s_game = &m_game;
 			ARK2D::s_graphics = &m_graphics;
 			ARK2D::s_input = &m_input;
-			ARK2D::s_log = new ARKLog();
+			ARK2D::s_log = new ARK::Util::Log();
 
 			m_platformSpecific.m_windowRect.left = (long) 0; 			// Set Left Value To 0
 			m_platformSpecific.m_windowRect.right = (long) width; 		// Set Right Value To Requested Width
@@ -692,7 +692,7 @@
 
 
 			// Display modes!
-			// TODO: read the registry... O_O
+			//! @todo: read the registry for display modes... O_O
 			GameContainerDisplayMode dm_800x600x32;
 			dm_800x600x32.width = 800;
 			dm_800x600x32.height = 600;
@@ -977,7 +977,7 @@
 				ARK2D::getLog()->update();
 
 				int delta = (int) (m_timer.getDelta() * 1000);
-				m_game.preUupdate(this, &m_timer);
+				m_game.preUpdate(this, &m_timer);
 				m_game.update(this, &m_timer);
 				m_game.postUpdate(this, &m_timer);
 				m_input.clearKeyPressedRecord();

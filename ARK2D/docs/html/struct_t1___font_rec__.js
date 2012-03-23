@@ -1,0 +1,26 @@
+var struct_t1___font_rec__ =
+[
+    [ "charstrings", "struct_t1___font_rec__.html#aa1714f1aa75ab0b7265d1649bc21cb39", null ],
+    [ "charstrings_block", "struct_t1___font_rec__.html#a8985630587cf6364837fe172391cfadb", null ],
+    [ "charstrings_len", "struct_t1___font_rec__.html#af3c80aee40a87b1eb382c159ee75cd44", null ],
+    [ "encoding", "struct_t1___font_rec__.html#a78de0ca49e25ea59a2736ec5837c77b4", null ],
+    [ "encoding_type", "struct_t1___font_rec__.html#a20cb798239623daa4ac7fe833a2a9dc9", null ],
+    [ "font_bbox", "struct_t1___font_rec__.html#a86fd1af4c03e34b7d151054ccc7525a7", null ],
+    [ "font_extra", "struct_t1___font_rec__.html#a8f2f0990ef8ab29e961047b8c2ceca0d", null ],
+    [ "font_id", "struct_t1___font_rec__.html#a14178cf438d1a5fcb31b7d398d06cfaf", null ],
+    [ "font_info", "struct_t1___font_rec__.html#a38098edc6279f539983e0d4694b9949a", null ],
+    [ "font_matrix", "struct_t1___font_rec__.html#a87c95f084851d2bb9e48889e9444b2a8", null ],
+    [ "font_name", "struct_t1___font_rec__.html#a878fc12d0ddda382ffc09c27a7ed81ad", null ],
+    [ "font_offset", "struct_t1___font_rec__.html#ab6e773e20df1c585dc14ee3fa7ed1737", null ],
+    [ "font_type", "struct_t1___font_rec__.html#a9d37e54d3a584f823dca80eca624f700", null ],
+    [ "glyph_names", "struct_t1___font_rec__.html#a767a1ed62cee1678ee5aa2d61f30d82d", null ],
+    [ "glyph_names_block", "struct_t1___font_rec__.html#ae39e95d7c50028e8d4a9a24665b37e78", null ],
+    [ "num_glyphs", "struct_t1___font_rec__.html#a5f3d9894e881e65aa991f365abf81754", null ],
+    [ "num_subrs", "struct_t1___font_rec__.html#a88194da9611e06106a8ef3c92b27cfd6", null ],
+    [ "paint_type", "struct_t1___font_rec__.html#a83a850c12dbc17178d9832a98b84835a", null ],
+    [ "private_dict", "struct_t1___font_rec__.html#a14386570a1b12e477407836e470a258f", null ],
+    [ "stroke_width", "struct_t1___font_rec__.html#ac71ace1872be6b2adbd3d6f5ca456d23", null ],
+    [ "subrs", "struct_t1___font_rec__.html#a46fcdb34f96efc9ee53b21d219780694", null ],
+    [ "subrs_block", "struct_t1___font_rec__.html#a46675e2cba990def15e0ea01b11578a7", null ],
+    [ "subrs_len", "struct_t1___font_rec__.html#aa24ce3583a6ada78cde3770d95b9bb9a", null ]
+];

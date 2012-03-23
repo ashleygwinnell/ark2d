@@ -2,12 +2,12 @@
  * GameInterface.cpp
  *
  *  Created on: 15-Oct-2009
- *      Author: user
+ *      Author: Ashley
  */
 #include "ARK2D.h"
 #include "Game.h"
 #include "GameContainer.h"
-#include "Timeline.h"
+#include "Tween/Timeline.h"
 //class GameContainer;
 
 Game::Game(string title) {

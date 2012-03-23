@@ -1,9 +1,8 @@
 //
 //  testAppDelegate.h
-//  test
 //
 //  Created by Ashley Gwinnell on 11/08/2011.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 Ashley Gwinnell. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
