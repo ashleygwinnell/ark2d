@@ -1,27 +1,23 @@
 /*
- * TransitionTest.h
+ * ParticlesTest.h
  *
  *  Created on: Mar 23, 2012
  *      Author: ashleygwinnell
  */
 
-#ifndef TRANSITIONTEST_H_
-#define TRANSITIONTEST_H_
+#ifndef PARTICLESTEST_H_
+#define PARTICLESTEST_H_
 
-/*#include "../State/StateBasedGame.h"
-#include "../State/GameState.h"
-#include "../Util/Containers/Vector.h"
-#include "../ARK2D.h"*/
 #include "../../ARK.h"
 
 namespace ARK {
 	namespace Tests {
 
-		class TransitionTestGameState : public GameState {
+		class ParticlesTestGameState : public GameState {
 			public:
-				int index;
-				string name;
-				TransitionTestGameState(int index, string name);
+				Image* defaultParticle;
+				ParticleSystem* system;
+				ParticlesTestGameState();
 				void enter(GameContainer* container, StateBasedGame* game, GameState* from);
 				void leave(GameContainer* container, StateBasedGame* game, GameState* to);
 
@@ -29,29 +25,21 @@ namespace ARK {
 				void init(GameContainer* container, StateBasedGame* game);
 				void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
 				void render(GameContainer* container, StateBasedGame* game, Graphics* g);
-				virtual ~TransitionTestGameState();
+				virtual ~ParticlesTestGameState();
 		};
 
-		class TransitionTest : public StateBasedGame {
+		class ParticlesTest : public StateBasedGame {
 			public:
-				unsigned int transitionIndex;
-				ARK::Util::Containers::Vector<Transition*> leaveTransitions;
-				ARK::Util::Containers::Vector<Transition*> entryTransitions;
-
-				TransitionTest();
+				ParticlesTest();
 				virtual void initStates(GameContainer* container);
 				virtual void update(GameContainer* container, GameTimer* timer);
 				virtual void render(GameContainer* container, Graphics* g);
 				virtual void resize(GameContainer* container, int width, int height);
 
 				static int start();
-
-				virtual ~TransitionTest();
+				virtual ~ParticlesTest();
 		};
 
 	}
 }
-
-
-
-#endif /* TRANSITIONTEST_H_ */
+#endif /* PARTICLESTEST_H_ */

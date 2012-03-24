@@ -1,27 +1,34 @@
 /*
- * TransitionTest.h
+ * CollisionTestState.h
  *
  *  Created on: Mar 23, 2012
  *      Author: ashleygwinnell
  */
 
-#ifndef TRANSITIONTEST_H_
-#define TRANSITIONTEST_H_
+#ifndef COLLISIONTESTSTATE_H__
+#define COLLISIONTESTSTATE_H__
 
-/*#include "../State/StateBasedGame.h"
-#include "../State/GameState.h"
-#include "../Util/Containers/Vector.h"
-#include "../ARK2D.h"*/
 #include "../../ARK.h"
 
 namespace ARK {
 	namespace Tests {
 
-		class TransitionTestGameState : public GameState {
+		class CollisionTestGameState : public GameState {
 			public:
-				int index;
-				string name;
-				TransitionTestGameState(int index, string name);
+
+				ARK::Geometry::Circle<float>* circleOne;
+				ARK::Geometry::Circle<float>* circleTwo;
+				ARK::Geometry::Rectangle<float>* rectangleOne;
+				ARK::Geometry::Rectangle<float>* rectangleTwo;
+				ARK::Geometry::Line<float>* lineOne;
+				ARK::Geometry::Line<float>* lineTwo;
+				ARK::Geometry::Polygon<float>* polygonOne;
+				ARK::Geometry::Polygon<float>* polygonTwo;
+
+				Shape<float>* current;
+				std::vector<Shape<float>*> shapes;
+
+				CollisionTestGameState();
 				void enter(GameContainer* container, StateBasedGame* game, GameState* from);
 				void leave(GameContainer* container, StateBasedGame* game, GameState* to);
 
@@ -29,16 +36,13 @@ namespace ARK {
 				void init(GameContainer* container, StateBasedGame* game);
 				void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
 				void render(GameContainer* container, StateBasedGame* game, Graphics* g);
-				virtual ~TransitionTestGameState();
+				virtual ~CollisionTestGameState();
 		};
 
-		class TransitionTest : public StateBasedGame {
+		class CollisionTest : public StateBasedGame {
 			public:
-				unsigned int transitionIndex;
-				ARK::Util::Containers::Vector<Transition*> leaveTransitions;
-				ARK::Util::Containers::Vector<Transition*> entryTransitions;
+				CollisionTest();
 
-				TransitionTest();
 				virtual void initStates(GameContainer* container);
 				virtual void update(GameContainer* container, GameTimer* timer);
 				virtual void render(GameContainer* container, Graphics* g);
@@ -46,7 +50,7 @@ namespace ARK {
 
 				static int start();
 
-				virtual ~TransitionTest();
+				virtual ~CollisionTest();
 		};
 
 	}
@@ -54,4 +58,4 @@ namespace ARK {
 
 
 
-#endif /* TRANSITIONTEST_H_ */
+#endif /* COLLISIONTESTSTATE_H_ */

@@ -863,6 +863,7 @@ void Image::bind() const {
 }
 void Image::unbind() const {
 	//if (texture == s_current_texture_id) { return; }
+	//if (s_current_texture_id == 0) { return; }
 	glBindTexture(GL_TEXTURE_2D, 0);
 	s_current_texture_id = 0;
 	glDisable(GL_TEXTURE_2D);

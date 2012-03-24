@@ -37,6 +37,7 @@ namespace ARK {
 				Panel();
 				void add(AbstractUIComponent* c);
 				void setTranslating(bool b);
+				void setShowBorder(bool b);
 
 				virtual void preRender();
 				virtual void postRender();

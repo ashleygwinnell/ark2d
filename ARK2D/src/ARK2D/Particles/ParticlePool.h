@@ -21,6 +21,7 @@ namespace ARK {
 
 		/*!
 		 * \brief Used internally by the particle engine.
+		 * todo: Replace vectors with lists because items are very often removed from the middle.
 		 *
 		 * Adapted from Kevin Glass's Java implementation.
 		 *

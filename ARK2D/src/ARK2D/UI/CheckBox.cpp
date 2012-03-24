@@ -13,7 +13,8 @@ namespace ARK {
 		CheckBox::CheckBox():
 			AbstractUIComponent(),
 			m_checked(false),
-			m_state(STATE_OFF)
+			m_state(STATE_OFF),
+			m_stateChangedEvent(NULL)
 			{
 			setSize(30, 30);
 			m_clipping = false;
@@ -24,6 +25,15 @@ namespace ARK {
 		}
 		void CheckBox::setChecked(bool b) {
 			m_checked = b;
+		}
+		void CheckBox::setStateChangedEvent(void* function) {
+			m_stateChangedEvent = function;
+		}
+		void CheckBox::doStateChangedEvent() {
+			if (m_stateChangedEvent != NULL) {
+				void (*pt)() = (void(*)()) m_stateChangedEvent;
+				pt();
+			}
 		}
 
 		void CheckBox::render() {
@@ -71,6 +81,7 @@ namespace ARK {
 				if (m_state == STATE_DOWN) {
 					m_state = STATE_OVER;
 					m_checked = !m_checked;
+					doStateChangedEvent();
 				}
 			} else {
 				m_state = STATE_OFF;

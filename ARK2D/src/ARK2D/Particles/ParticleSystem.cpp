@@ -140,14 +140,13 @@ namespace ARK {
 			if (blendingMode == BLEND_ADDITIVE) {
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 			}
-			if (isUsePoints()) {
-				glEnable(GL_POINT_SMOOTH);
-			}
+			//if (isUsePoints()) {
+			//	glEnable(GL_POINT_SMOOTH);
+			//}
 			for(unsigned int i = 0; i < emitters.size(); i++) {
 				ParticleEmitter* emitter = emitters.at(i);
-				if (!emitter->isEnabled()) {
-					continue;
-				}
+				if (!emitter->isEnabled()) { continue; }
+
 				//std::cout << "render" << std::endl;
 				// check for additive override and enable when set
 				if (emitter->useAdditive()) {
@@ -157,15 +156,23 @@ namespace ARK {
 				// now get the particle pool for this emitter and render all particles that are in use
 				ParticlePool* pool = particlesByEmitter.find(emitter)->second;
 				Image* image = emitter->getImage();
-				if (image == NULL) {
+				if (image == NULL && !emitter->usePoints()) {// && (!usePoints)) {
 					//image = sprite;
 					//emitter->u
-					sprite->bind();
+					sprite->bind(); // we need to cancel this out if we're rendering points.
 				}
 
 				//if (!emitter->isOriented() && !emitter->usePoints(this)) {
 				//	image->startUse();
 				//}
+
+
+
+				/*!
+				 * todo: we don't know what particles are points and what are images
+				 * 		 so are currently binding and unbinding the default image LOTS.
+				 * 		 TOO MUCH.
+				 */
 
 				for (unsigned int i = 0; i < pool->particlesActive.size(); i++) {
 					if (pool->particlesActive.at(i)->inUse()) {
@@ -183,16 +190,16 @@ namespace ARK {
 				}
 				//std::cout << "render2" << std::endl;
 			}
-			if (isUsePoints()) {
-				glDisable(GL_POINT_SMOOTH);
-			}
+			//if (isUsePoints()) {
+			//	glDisable(GL_POINT_SMOOTH);
+			//}
 
 			if (blendingMode == BLEND_ADDITIVE) {
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 			}
 
 			g->setDrawColor(Color::white);
-			g->translate(x * -1, y * -1);
+			//g->translate(x * -1, y * -1);
 			g->popMatrix();
 		}
 

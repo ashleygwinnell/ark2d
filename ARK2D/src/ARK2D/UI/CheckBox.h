@@ -26,12 +26,15 @@ namespace ARK {
 				static const unsigned int STATE_OFF = Button::STATE_OFF;
 				static const unsigned int STATE_OVER = Button::STATE_OVER;
 				static const unsigned int STATE_DOWN = Button::STATE_DOWN;
+				void* m_stateChangedEvent;
 
 			public:
 				CheckBox();
 
 				bool isChecked();
 				void setChecked(bool b);
+				void setStateChangedEvent(void* function);
+				void doStateChangedEvent();
 
 				virtual void render();
 				virtual void renderTick();

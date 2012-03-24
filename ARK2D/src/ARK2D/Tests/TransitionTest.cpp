@@ -107,6 +107,13 @@ namespace ARK {
 
 		}
 
+		int TransitionTest::start() {
+			ARK::Tests::TransitionTest* test = new ARK::Tests::TransitionTest();
+			GameContainer container(*test, 800, 600, 32, false);
+			container.start();
+			return 0;
+		}
+
 	}
 }
 

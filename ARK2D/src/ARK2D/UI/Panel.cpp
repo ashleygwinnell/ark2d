@@ -22,6 +22,9 @@ namespace ARK {
 		void Panel::setTranslating(bool b) {
 			m_translate = b;
 		}
+		void Panel::setShowBorder(bool b) {
+			m_showBorder = b;
+		}
 
 		void Panel::preRender() {
 			AbstractUIComponent::preRender();

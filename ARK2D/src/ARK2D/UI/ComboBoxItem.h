@@ -30,6 +30,7 @@ namespace ARK {
 				ComboBox* parent;
 				string m_text;
 				string m_value;
+				unsigned int m_state;
 			public:
 
 				ComboBoxItem();
@@ -45,6 +46,7 @@ namespace ARK {
 				void renderBackground();
 				void renderOverlay();
 				void keyPressed(unsigned int key);
+				void mouseMoved(int x, int y, int oldx, int oldy);
 		};
 	}
 }

@@ -33,7 +33,9 @@ namespace ARK {
 				vector<ComboBoxItem*> m_items;
 				ComboBoxItem* m_selected;
 				bool m_open;
+				unsigned int m_state;
 				void* m_itemChangedEvent;
+				int m_originalHeight;
 
 			public:
 				ComboBox();
@@ -43,8 +45,10 @@ namespace ARK {
 				void setItemChangedEvent(void* event);
 				ComboBoxItem* getSelected();
 				void setSelectedByValue(string value);
+				void setSize(unsigned int w, unsigned int h);
 				void keyPressed(unsigned int key);
 				void keyReleased(unsigned int key);
+				void mouseMoved(int x, int y, int oldx, int oldy);
 				void render();
 				void renderBackground();
 				void renderArrow();

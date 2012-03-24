@@ -27,6 +27,7 @@ namespace ARK {
 
 		/*!
 		 * \brief Main Particle System class that contains the Emitters, Pools and Particles.
+		 * \warning todo: Occasionally these break when starting.
 		 *
 		 * Adapted from Kevin Glass's Java implementation.
 		 *

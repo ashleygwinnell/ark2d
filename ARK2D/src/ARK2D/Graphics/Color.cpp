@@ -132,7 +132,7 @@ float Color::getAlphaf() const {
 }
 
 void Color::bind() const {
-	glColor4f(m_r/255.f, m_g/255.f, m_b/255.f, m_a/255.f);
+	glColor4f(getRedf(), getGreenf(), getBluef(), getAlphaf());
 }
 Color* Color::copy() {
 	return new Color(m_r,m_g,m_b,m_a);

@@ -96,8 +96,8 @@ class GameContainer {
 		const Game& getGame() const;
 		const Input& getInput() const;
 		Graphics* getGraphics() const;
-		unsigned int getWidth() const; // dimensions defined in main or config
-		unsigned int getHeight() const;
+		inline unsigned int getWidth() const { return m_originalWidth; } // dimensions defined in main or config
+		inline unsigned int getHeight() const { return m_originalHeight; }
 		unsigned int getDynamicWidth() const; // actual dimensions of the container. e.g. 800*480
 		unsigned int getDynamicHeight() const;
 		unsigned int getScreenWidth() const; // on pc, screen resolution. on mobile, same as dynamic widths.

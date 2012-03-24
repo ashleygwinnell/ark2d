@@ -341,7 +341,7 @@ namespace ARK {
 			return m_useOriented;
 		}
 		bool ConfigurableEmitter::usePoints() {
-			return (m_usePoints == (signed int) Particle::INHERIT_POINTS) && (m_engine->isUsePoints()) ||
+			return ((m_usePoints == ((signed int) Particle::INHERIT_POINTS)) && (m_engine->isUsePoints())) ||
 					   (m_usePoints == (signed int)Particle::USE_POINTS);
 		}
 		void ConfigurableEmitter::resetState() {
@@ -352,6 +352,59 @@ namespace ARK {
 		void ConfigurableEmitter::addColorPoint(float pos, Color* col) {
 			m_colors.push_back(new ColorRecord(pos, col));
 		}
+
+		Range<int>* ConfigurableEmitter::getSpawnInterval() {
+			return &m_spawnInterval;
+		}
+		Range<int>* ConfigurableEmitter::getSpawnCount() {
+			return &m_spawnCount;
+		}
+		Range<int>* ConfigurableEmitter::getInitialLife() {
+			return &m_initialLife;
+		}
+		Range<int>* ConfigurableEmitter::getInitialSize() {
+			return &m_initialSize;
+		}
+		Range<int>* ConfigurableEmitter::getInitialDistance() {
+			return &m_initialDistance;
+		}
+		Range<int>* ConfigurableEmitter::getOffsetX() {
+			return &m_xOffset;
+		}
+		Range<int>* ConfigurableEmitter::getOffsetY() {
+			return &m_yOffset;
+		}
+		Range<int>* ConfigurableEmitter::getSpeed() {
+			return &m_speed;
+		}
+		Range<int>* ConfigurableEmitter::getLength() {
+			return &m_length;
+		}
+		Range<int>* ConfigurableEmitter::getEmitCount() {
+			return &m_emitCount;
+		}
+		void ConfigurableEmitter::setSpread(float value) {
+			m_spread.setValue(value);
+		}
+		void ConfigurableEmitter::setAngularOffset(float value) {
+			m_angularOffset.setValue(value);
+		}
+		void ConfigurableEmitter::setGrowthFactor(float value) {
+			m_growthFactor.setValue(value);
+		}
+		void ConfigurableEmitter::setGravityFactor(float value) {
+			m_gravityFactor.setValue(value);
+		}
+		void ConfigurableEmitter::setWindFactor(float value) {
+			m_windFactor.setValue(value);
+		}
+		void ConfigurableEmitter::setStartAlpha(float value) {
+			m_startAlpha.setValue(value);
+		}
+		void ConfigurableEmitter::setEndAlpha(float value) {
+			m_endAlpha.setValue(value);
+		}
+
 
 		ConfigurableEmitter::~ConfigurableEmitter() {
 

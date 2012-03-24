@@ -31,6 +31,7 @@ namespace ARK {
 				Label();
 				Label(string text);
 				void setText(string text);
+				void setText(string text, bool updateSize);
 				void render();
 				void renderBounds();
 				virtual ~Label();

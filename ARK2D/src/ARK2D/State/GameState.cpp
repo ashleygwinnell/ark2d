@@ -9,7 +9,9 @@
 #include "GameState.h"
 #include "StateBasedGame.h"
 
-GameState::GameState() {
+
+
+GameState::GameState(): m_rootUIComponent(NULL) {
 
 }
 
@@ -21,13 +23,13 @@ void GameState::leave(GameContainer* container, StateBasedGame* game, GameState*
 }
 
 void GameState::keyPressed(unsigned int key) {
-
+	if (m_rootUIComponent != NULL) { m_rootUIComponent->keyPressed(key); }
 }
 void GameState::keyReleased(unsigned int key) {
-
+	if (m_rootUIComponent != NULL) { m_rootUIComponent->keyReleased(key); }
 }
 void GameState::mouseMoved(int x, int y, int oldx, int oldy) {
-
+	if (m_rootUIComponent != NULL) { m_rootUIComponent->mouseMoved(x,y,oldx,oldy); }
 }
 GameState::~GameState() {
 	// hmm

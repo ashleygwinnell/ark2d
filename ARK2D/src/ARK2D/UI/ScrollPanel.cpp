@@ -144,9 +144,13 @@ namespace ARK {
 						}
 						if (tallestComponent != NULL) {
 							cy += tallestComponent->getHeight() + tallestComponent->getMarginBottom();
-						} else { cy += c->getHeight() + c->getMarginBottom(); }
+						} else {
+							cy += c->getHeight() + c->getMarginBottom();
+						}
 
 						cx = getPaddingLeft();
+						cx += c->getMarginLeft();
+						cy += c->getMarginTop();
 						startedNewLine = true;
 						startedNewLineAtIndex = i;
 					}
@@ -154,6 +158,8 @@ namespace ARK {
 					c->render();
 
 					cx += c->getWidth() + c->getMarginRight();
+
+					if (startedNewLine) { cy -= c->getMarginTop(); }
 
 				}
 

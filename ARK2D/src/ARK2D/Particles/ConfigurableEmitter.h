@@ -235,6 +235,26 @@ namespace ARK {
 				void setPosition(float x, float y);
 				void setPosition(float x, float y, bool moveParticles);
 
+				Range<int>* getSpawnInterval();
+				Range<int>* getSpawnCount();
+				Range<int>* getInitialLife();
+				Range<int>* getInitialSize();
+				Range<int>* getInitialDistance();
+				Range<int>* getOffsetX();
+				Range<int>* getOffsetY();
+				Range<int>* getSpeed();
+				Range<int>* getLength();
+				Range<int>* getEmitCount();
+				void setSpread(float value);
+				void setAngularOffset(float value);
+				void setGrowthFactor(float value);
+				void setGravityFactor(float value);
+				void setWindFactor(float value);
+				void setStartAlpha(float value);
+				void setEndAlpha(float value);
+				void setAlpha(float value);
+
+
 				virtual ~ConfigurableEmitter();
 		};
 	}

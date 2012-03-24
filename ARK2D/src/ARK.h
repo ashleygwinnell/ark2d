@@ -89,7 +89,8 @@
 // JSON Implementation
 #include "ARK2D/ARK2D_JSON.h"
 
-// UI
+//
+#include "ARK2D/UI/AbstractUIComponent.h"
 #include "ARK2D/UI/Label.h"
 #include "ARK2D/UI/TextField.h"
 #include "ARK2D/UI/Button.h"
@@ -132,3 +133,6 @@
 
 // Tests
 #include "ARK2D/Tests/TransitionTest.h"
+#include "ARK2D/Tests/CollisionTest.h"
+#include "ARK2D/Tests/ParticlesTest.h"
+#include "ARK2D/Tests/UITest.h"

@@ -12,6 +12,7 @@ class StateBasedGame;
 class GameContainer;
 class GameTimer;
 class Graphics;
+#include "../UI/AbstractUIComponent.h"
 
 /*!
  * \brief All game states (FSM model) should extend this class.
@@ -35,6 +36,9 @@ class GameState {
 		virtual void mouseMoved(int x, int y, int oldx, int oldy);
 
 		virtual ~GameState();
+
+	protected:
+		AbstractUIComponent* m_rootUIComponent;
 };
 
 #endif /* GAMESTATE_H_ */

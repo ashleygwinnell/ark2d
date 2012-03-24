@@ -108,6 +108,7 @@ using namespace ARK::Geometry;
 using namespace ARK::Tiled;
 using namespace ARK::Tween;
 using namespace ARK::Path;
+using namespace ARK::Particles;
 using namespace ARK::UI;
 using namespace ARK::Util;
 using namespace ARK::Util::Containers;

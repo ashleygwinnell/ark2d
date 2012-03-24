@@ -52,12 +52,12 @@ unsigned int GameContainer::getDynamicHeight() const { // this changes on window
 	return m_height;
 }
 
-unsigned int GameContainer::getWidth() const { // this is fixed at the static/initial/defined size
+/*unsigned int GameContainer::getWidth() const { // this is fixed at the static/initial/defined size
 	return m_originalWidth;
 }
 unsigned int GameContainer::getHeight() const {
 	return m_originalHeight;
-}
+}*/
 
 unsigned int GameContainer::getScreenWidth() const {
 	return m_screenWidth;

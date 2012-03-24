@@ -59,6 +59,11 @@ namespace ARK {
 				void setMax(T i) {
 					m_high = i;
 				}
+				void set(bool enabled, T low, T high) {
+					m_enabled = enabled;
+					m_low = low;
+					m_high = high;
+				}
 
 				virtual ~Range() {
 

@@ -80,15 +80,23 @@ namespace ARK {
 		void Particle::render() {
 			Graphics* g = ARK2D::getGraphics();
 			if ((m_engine->isUsePoints() && usePoints == INHERIT_POINTS) || usePoints == USE_POINTS) {
+				//m_engine->sprite->unbind();
+				g->setDrawColor(*m_color);
+				g->setPointSize(m_size / 2);
+				g->drawPoint(m_x, m_y);
 				#if defined(ARK2D_ANDROID)
 
 				#else
 					//! @todo: bind no texture (-1)
-					glBegin(GL_POINT_SMOOTH);
-					glPointSize(m_size / 2);
+
+					/*g->pushMatrix();
+					g->translate(m_x, m_y);
 					m_color->bind();
-					g->drawPoint(m_x, m_y);
+					glBegin(GL_POINT);
+					glPointSize(m_size / 2);
+					g->drawPoint(0, 0);
 					glEnd();
+					g->popMatrix();*/
 				#endif
 			} else if (oriented || scaleY != 1.0f) {
 				g->pushMatrix();
