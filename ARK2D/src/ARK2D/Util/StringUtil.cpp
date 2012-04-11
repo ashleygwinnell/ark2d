@@ -6,9 +6,9 @@
  */
 
 #include "StringUtil.h"
-#include "../ToString.h"
-#include "../ARKString.h"
-#include "../GameContainer.h"
+#include "../Core/ToString.h"
+#include "../Core/String.h"
+#include "../Core/GameContainer.h"
 #include "../Util/Log.h"
 
 namespace ARK {
@@ -256,7 +256,7 @@ namespace ARK {
 					if (file == NULL) {
 						string str = "Could not open file ["; str += strFileName; str += "] as it does not exist.";
 						ARK2D::getLog()->e(str);
-						return string("");
+						return string(""); 
 					}
 
 					fseek(file, 0, SEEK_END);
@@ -354,7 +354,7 @@ namespace ARK {
 			StringUtil::trim(str, charsToRemove.c_str());
 			return str;
 		}
-		void StringUtil::trimAll(vector<ARKString>& strings, string chars2remove) {
+		void StringUtil::trimAll(vector<String>& strings, string chars2remove) {
 			//for(unsigned int i = 0; i < strings.size(); i++) {
 			//	const string& s = strings[i].get();
 			//	StringUtil::trim(s, chars2remove.c_str());

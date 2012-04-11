@@ -8,13 +8,13 @@
 #include "LocalHighscores.h"
 
 #include "../ARK2D.h"
-#include "../GameContainer.h"
+#include "../Core/GameContainer.h"
 
 namespace ARK {
 	namespace Util {
 
 		LocalHighscores::LocalHighscores(string filename):
-			ARK::Resource(),
+			ARK::Core::Resource(),
 			m_filename(filename),
 			m_data(NULL),
 			m_items()
@@ -22,7 +22,7 @@ namespace ARK {
 			parse();
 		}
 		LocalHighscores::LocalHighscores(string filename, void* data):
-			ARK::Resource(),
+			ARK::Core::Resource(),
 			m_filename(filename),
 			m_data(data),
 			m_items() {

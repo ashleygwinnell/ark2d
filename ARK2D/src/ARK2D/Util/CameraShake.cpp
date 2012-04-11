@@ -6,9 +6,9 @@
  */
 
 #include "CameraShake.h"
-#include "../Game.h"
+#include "../Core/Game.h"
 #include "../Tween/Timeline.h"
-#include "../Graphics.h"
+#include "../Graphics/Renderer.h"
 
 namespace ARK {
 	namespace Util {
@@ -74,15 +74,15 @@ namespace ARK {
 		}
 
 
-		void CameraShake::preRender(GameContainer* container, Graphics* g) {
+		void CameraShake::preRender(GameContainer* container, Renderer* g) {
 			if (!isShaking()) { return; }
 			g->pushMatrix();
 			g->translate(m_offset_x, m_offset_y);
 		}
-		void CameraShake::render(GameContainer* container, Graphics* g) {
+		void CameraShake::render(GameContainer* container, Renderer* g) {
 
 		}
-		void CameraShake::postRender(GameContainer* container, Graphics* g) {
+		void CameraShake::postRender(GameContainer* container, Renderer* g) {
 			if (!isShaking()) { return; }
 			g->translate(m_offset_x * -1, m_offset_y * -1);
 			g->popMatrix();

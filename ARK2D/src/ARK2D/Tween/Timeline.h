@@ -18,7 +18,7 @@
 #include <vector>
 #include <map>
 #include <math.h>
-#include "../GameTimer.h"
+#include "../Core/GameTimer.h"
 #include "Easing.h"
 
 namespace ARK {

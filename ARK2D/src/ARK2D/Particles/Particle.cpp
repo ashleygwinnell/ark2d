@@ -6,10 +6,10 @@
  */
 
 
-#include "../ARK2D_GL.h"
+#include "../Includes.h"
 #include "../Graphics/Color.h"
-#include "../Graphics/Image/Image.h"
-#include "../Graphics.h"
+#include "../Graphics/Image.h"
+#include "../Graphics/Renderer.h"
 #include "../ARK2D.h"
 
 #include "Particle.h"
@@ -78,7 +78,7 @@ namespace ARK {
 		}
 
 		void Particle::render() {
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			if ((m_engine->isUsePoints() && usePoints == INHERIT_POINTS) || usePoints == USE_POINTS) {
 				//m_engine->sprite->unbind();
 				g->setDrawColor(*m_color);

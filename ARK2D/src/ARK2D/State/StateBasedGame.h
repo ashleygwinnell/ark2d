@@ -8,88 +8,90 @@
 #ifndef STATEBASEDGAME_H_
 #define STATEBASEDGAME_H_
 
-#include "../Game.h"
-#include "../GameContainer.h"
-#include "../Graphics.h"
-#include "../GameTimer.h"
+#include "../Core/Game.h"
+#include "../Namespaces.h"
+#include "../Core/GameContainer.h"
+#include "../Graphics/Renderer.h"
+#include "../Core/GameTimer.h"
 
 #include <vector>
 #include <string>
-
-class GameState;
-class LoadingState;
-class Transition;
-
 using namespace std;
 
-/*!
- * \brief Games with multiple game states should inherit from this class for easy management and transition effects between states.
- *
- * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
- * @todo continue updating during transitions.
- */
-class StateBasedGame : public Game {
-	public:
-		StateBasedGame(string title);
-		string getTitle();
 
-		void addState(GameState* state);
-		void enterState(unsigned int id);
-		void enterState(GameState* state);
+namespace ARK {
+	namespace State {
 
-		void setLoadingState(LoadingState* state);
-		LoadingState* getLoadingState();
+		/*!
+		 * \brief Games with multiple game states should inherit from this class for easy management and transition effects between states.
+		 *
+		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+		 * @todo continue updating during transitions.
+		 */
+		class StateBasedGame : public ARK::Core::Game {
+			public:
+				StateBasedGame(string title);
+				string getTitle();
 
-		GameState* getCurrentState();
-		unsigned int getCurrentStateID();
+				void addState(GameState* state);
+				void enterState(unsigned int id);
+				void enterState(GameState* state);
 
-		vector<GameState*> getStates();
+				void setLoadingState(LoadingState* state);
+				LoadingState* getLoadingState();
 
-		void enterState(unsigned int id, Transition* leave, Transition* enter);
-		void enterState(GameState* state, Transition* leave, Transition* enter);
+				GameState* getCurrentState();
+				unsigned int getCurrentStateID();
 
-		void init(GameContainer* container);
+				vector<GameState*> getStates();
 
-		virtual void preUpdate(GameContainer* container, GameTimer* timer);
-		virtual void update(GameContainer* container, GameTimer* timer);
-		virtual void postUpdate(GameContainer* container, GameTimer* timer);
+				void enterState(unsigned int id, ARK::State::Transition::Transition* leave, ARK::State::Transition::Transition* enter);
+				void enterState(GameState* state, ARK::State::Transition::Transition* leave, ARK::State::Transition::Transition* enter);
 
-		virtual void preRender(GameContainer* container, Graphics* g);
-		virtual void render(GameContainer* container, Graphics* g);
-		virtual void postRender(GameContainer* container, Graphics* g);
+				void init(GameContainer* container);
 
-		GameContainer* getContainer();
+				virtual void preUpdate(GameContainer* container, GameTimer* timer);
+				virtual void update(GameContainer* container, GameTimer* timer);
+				virtual void postUpdate(GameContainer* container, GameTimer* timer);
 
-		bool isTransitioning();
-		bool isInitialised();
+				virtual void preRender(GameContainer* container, Renderer* g);
+				virtual void render(GameContainer* container, Renderer* g);
+				virtual void postRender(GameContainer* container, Renderer* g);
 
-		virtual void initStates(GameContainer* container) = 0;
-		virtual void resize(GameContainer* container, int width, int height);
+				GameContainer* getContainer();
 
-		virtual void keyPressed(unsigned int key);
-		virtual void keyReleased(unsigned int key);
-		virtual void mouseMoved(int x, int y, int oldx, int oldy);
+				bool isTransitioning();
+				bool isInitialised();
 
-		virtual ~StateBasedGame();
+				virtual void initStates(GameContainer* container) = 0;
+				virtual void resize(GameContainer* container, int width, int height);
 
-	private:
-		vector<GameState*> m_states;
-		GameState* m_from_state;
-		GameState* m_current_state;
-		GameContainer* m_container;
+				virtual void keyPressed(unsigned int key);
+				virtual void keyReleased(unsigned int key);
+				virtual void mouseMoved(int x, int y, int oldx, int oldy);
 
-		LoadingState* m_loading_state;
+				virtual ~StateBasedGame();
 
-		Transition* m_enterTransition;
-		Transition* m_leaveTransition;
+			private:
+				vector<GameState*> m_states;
+				GameState* m_from_state;
+				GameState* m_current_state;
+				GameContainer* m_container;
 
-		bool m_initialised;
-		bool m_autoDeleteTransitions;
+				LoadingState* m_loading_state;
 
-	protected:
-		bool isDuringTransition();
+				ARK::State::Transition::Transition* m_enterTransition;
+				ARK::State::Transition::Transition* m_leaveTransition;
 
+				bool m_initialised;
+				bool m_autoDeleteTransitions;
 
-};
+			protected:
+				bool isDuringTransition();
+
+		};
+
+	}
+}
 
 #endif

@@ -11,30 +11,37 @@
 #include "Transition.h"
 #include "../../Tween/Timeline.h"
 
-/*!
- * \brief Fade directly from one GameState in to another.
- *
- * @warning This generates a new OpenGL Texture each time.
- * @todo Optimise this to use the same texture each time.
- * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
- */
-class FadeTransition : public Transition {
-	public:
-		FadeTransition(unsigned int timeMillis);
-		void init(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to);
-		void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
-		void preRender(GameContainer* container, StateBasedGame* game, Graphics* g);
-		void postRender(GameContainer* container, StateBasedGame* game, Graphics* g);
-		bool isComplete();
-		virtual ~FadeTransition();
+namespace ARK {
+	namespace State {
+		namespace Transition {
 
-	private:
-		unsigned int m_time;
-		unsigned int m_time_current;
+			/*!
+			 * \brief Fade directly from one GameState in to another.
+			 *
+			 * @warning This generates a new OpenGL Texture each time.
+			 * @todo Optimise this to use the same texture each time.
+			 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+			 */
+			class FadeTransition : public Transition {
+				public:
+					FadeTransition(unsigned int timeMillis);
+					void init(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to);
+					void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
+					void preRender(GameContainer* container, StateBasedGame* game, Renderer* g);
+					void postRender(GameContainer* container, StateBasedGame* game, Renderer* g);
+					bool isComplete();
+					virtual ~FadeTransition();
 
-		float m_alpha;
+				private:
+					unsigned int m_time;
+					unsigned int m_time_current;
 
-		unsigned int m_textureId;
-};
+					float m_alpha;
+
+					unsigned int m_textureId;
+			};
+		}
+	}
+}
 
 #endif /* EMPTYTRANSITION_H_ */

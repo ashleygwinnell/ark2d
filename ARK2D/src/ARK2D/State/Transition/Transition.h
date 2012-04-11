@@ -8,38 +8,44 @@
 #ifndef TRANSITION_H_
 #define TRANSITION_H_
 
-//#include "../GameContainer.h"
-class GameContainer;
-#include "../../Game.h"
-#include "../../GameTimer.h"
-#include "../../Graphics.h"
+#include "../../Namespaces.h"
+#include "../../Core/Game.h"
+#include "../../Core/GameTimer.h"
+#include "../../Graphics/Renderer.h"
 
 #include "../GameState.h"
 #include "../StateBasedGame.h"
 
-/*!
- * \brief The interface to implement for a GameState Transition.
- *
- * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
- */
-class Transition {
-	public:
-		Transition();
-		void setEasing(unsigned int easing);
-		unsigned int getEasing();
-		virtual void init(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to) = 0;
-		virtual void update(GameContainer* container, StateBasedGame* game, GameTimer* delta) = 0;
-		virtual void preRender(GameContainer* container, StateBasedGame* game, Graphics* g) = 0;
-		virtual void postRender(GameContainer* container, StateBasedGame* game, Graphics* g) = 0;
-		virtual bool isComplete() = 0;
-		virtual ~Transition();
+namespace ARK {
+	namespace State {
+		namespace Transition {
 
-	protected:
-		GameContainer* m_container;
-		GameState* m_from;
-		GameState* m_to;
-		unsigned int m_easing;
-};
+			/*!
+			 * \brief The interface to implement for a GameState Transition.
+			 *
+			 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+			 */
+			class Transition {
+				public:
+					Transition();
+					void setEasing(unsigned int easing);
+					unsigned int getEasing();
+					virtual void init(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to) = 0;
+					virtual void update(GameContainer* container, StateBasedGame* game, GameTimer* delta) = 0;
+					virtual void preRender(GameContainer* container, StateBasedGame* game, Renderer* g) = 0;
+					virtual void postRender(GameContainer* container, StateBasedGame* game, Renderer* g) = 0;
+					virtual bool isComplete() = 0;
+					virtual ~Transition();
+
+				protected:
+					GameContainer* m_container;
+					GameState* m_from;
+					GameState* m_to;
+					unsigned int m_easing;
+			};
+		}
+	}
+}
 
 #endif /* TRANSITION_H_ */
 

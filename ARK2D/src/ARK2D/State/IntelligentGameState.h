@@ -13,38 +13,43 @@ using namespace std;
 #include <string>
 #include "GameState.h"
 
-class ARKGameObject;
+#include "../Namespaces.h"
 #include "../Util/Containers/Vector.h"
 
-/*!
- * \brief This game state holds, updates and renders entities intelligently using ARKGameObject properties.
- *
- * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
- */
-class IntelligentGameState : public GameState {
-	private:
+namespace ARK {
+	namespace State {
 
-		map<string, Vector<ARKGameObject*> > m_entities;
+		/*!
+		 * \brief This game state holds, updates and renders entities intelligently using ARKGameObject properties.
+		 *
+		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+		 */
+		class IntelligentGameState : public GameState {
+			private:
 
-	public:
-		IntelligentGameState();
+				map<string, Vector<GameObject*> > m_entities;
 
-		void add(string group, ARKGameObject* entity);
-		void pruneEntities();
+			public:
+				IntelligentGameState();
 
-		virtual void enter(GameContainer* container, StateBasedGame* game, GameState* from);
-		virtual void leave(GameContainer* container, StateBasedGame* game, GameState* to);
+				void add(string group, GameObject* entity);
+				void pruneEntities();
 
-		virtual unsigned int id() = 0;
-		virtual void init(GameContainer* container, StateBasedGame* game);
-		virtual void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
-		virtual void render(GameContainer* container, StateBasedGame* game, Graphics* g);
+				virtual void enter(GameContainer* container, StateBasedGame* game, GameState* from);
+				virtual void leave(GameContainer* container, StateBasedGame* game, GameState* to);
 
-		virtual void keyPressed(unsigned int key);
-		virtual void keyReleased(unsigned int key);
-		virtual void mouseMoved(int x, int y, int oldx, int oldy);
+				virtual unsigned int id() = 0;
+				virtual void init(GameContainer* container, StateBasedGame* game);
+				virtual void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
+				virtual void render(GameContainer* container, StateBasedGame* game, Renderer* g);
 
-		virtual ~IntelligentGameState();
-};
+				virtual void keyPressed(unsigned int key);
+				virtual void keyReleased(unsigned int key);
+				virtual void mouseMoved(int x, int y, int oldx, int oldy);
+
+				virtual ~IntelligentGameState();
+		};
+	}
+}
 
 #endif /* INTELLIGENTGAMESTATE_H_ */

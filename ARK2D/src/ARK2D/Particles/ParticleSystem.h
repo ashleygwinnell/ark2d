@@ -13,9 +13,7 @@
 #include <map>
 using namespace std;
 
-#include "../ARK2D_namespaces.h"
-
-class GameTimer;
+#include "../Namespaces.h"
 
 namespace ARK {
 	namespace Particles {

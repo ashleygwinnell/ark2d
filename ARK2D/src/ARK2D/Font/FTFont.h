@@ -32,7 +32,7 @@
 	#include <freetype/fttrigon.h>
 #endif
 
-#include "../ARK2D_GL.h"
+#include "../Includes.h"
 #include "../UI/ErrorDialog.h"
 
 #include "Font.h"

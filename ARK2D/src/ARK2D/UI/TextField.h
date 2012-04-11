@@ -10,9 +10,9 @@
 
 #include "AbstractUIComponent.h"
 
-#include "../ARKString.h"
+#include "../Core/String.h"
 #include "../Controls/Input.h"
-#include "../Graphics.h"
+#include "../Graphics/Renderer.h"
 #include "../Graphics/Color.h"
 #include "../Geometry/GigaRectangle.h"
 
@@ -32,7 +32,7 @@ namespace ARK {
 		 */
 		class TextField : public AbstractUIComponent {
 			public:
-				ARKString m_text;
+				String m_text;
 				int m_cursorPosition;
 
 				int m_selectedDir; // -1 for left, 0 for none and +1 for right.
@@ -60,7 +60,7 @@ namespace ARK {
 				void setText(string s);
 				void setText(int i);
 				void setText(float f);
-				const ARKString& getText();
+				const String& getText();
 
 				void setMultiline(bool b);
 				void setTextAlignY(signed int align);

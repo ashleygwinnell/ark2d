@@ -11,9 +11,7 @@
 #include <string>
 using namespace std;
 
-#include "../ARK2D_namespaces.h"
-
-class Color;
+#include "../Namespaces.h"
 #include "../Util/Range.h"
 
 #include "../vendor/tinyxml/tinyxml.h"

@@ -121,6 +121,8 @@ namespace ARK {
 					return false;
 				}
 				virtual bool collides(Shape<T>* s) {
+					if (s == NULL) { ErrorDialog::createAndShow("A Shape was NULL"); }
+
 					Polygon<T>* polygon = NULL;
 					polygon = dynamic_cast<Polygon<T>* >(s);
 					if (polygon != NULL) {
@@ -141,7 +143,7 @@ namespace ARK {
 				virtual void render() {
 					if (m_points.size() < 3) { return; }
 
-					Graphics* g = ARK2D::getGraphics();
+					Renderer* g = ARK2D::getRenderer();
 					for(unsigned int i = 0; i < m_points.size(); i++) {
 						unsigned int nextIndex = i+1;
 						if (nextIndex == m_points.size()) { nextIndex = 0; }

@@ -8,7 +8,7 @@
 #ifndef UICOMPONENT_H_
 #define UICOMPONENT_H_
 
-#include "../ARK2D_namespaces.h"
+#include "../Namespaces.h"
 
 namespace ARK {
 	namespace UI {

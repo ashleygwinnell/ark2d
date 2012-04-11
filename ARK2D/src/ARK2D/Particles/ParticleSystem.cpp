@@ -6,10 +6,10 @@
  */
 
 #include "../ARK2D.h"
-#include "../ARK2D_GL.h"
-#include "../GameTimer.h"
-#include "../Graphics.h"
-#include "../Graphics/Image/Image.h"
+#include "../Includes.h"
+#include "../Core/GameTimer.h"
+#include "../Graphics/Renderer.h"
+#include "../Graphics/Image.h"
 #include "../Graphics/Color.h"
 #include "../Util/Log.h"
 
@@ -133,7 +133,7 @@ namespace ARK {
 				return;
 			}
 
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 
 			g->pushMatrix();
 			g->translate(x, y);

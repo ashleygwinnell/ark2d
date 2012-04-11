@@ -5,11 +5,19 @@
  *      Author: Ashley
  */
 
+// Main
 #include "ARK2D/ARK2D.h"
-#include "ARK2D/ARKException.h"
 
-#include "ARK2D/GameTimer.h"
-#include "ARK2D/GameContainer.h"
+// Core
+#include "ARK2D/Core/Constants.h"
+#include "ARK2D/Core/Exception.h"
+#include "ARK2D/Core/Game.h"
+#include "ARK2D/Core/GameContainer.h"
+#include "ARK2D/Core/GameObject.h"
+#include "ARK2D/Core/GameTimer.h"
+#include "ARK2D/Core/Event.h"
+#include "ARK2D/Core/Resource.h"
+#include "ARK2D/Core/ToString.h"
 
 // Geometry
 #include "ARK2D/Geometry/Vector2.h"
@@ -20,10 +28,7 @@
 #include "ARK2D/Geometry/Circle.h"
 #include "ARK2D/Geometry/Line.h"
 
-#include "ARK2D/Game.h"
-
-#include "ARK2D/Constants.h"
-
+// State Based Game / Finite State Machine
 #include "ARK2D/State/StateBasedGame.h"
 #include "ARK2D/State/GameState.h"
 #include "ARK2D/State/IntelligentGameState.h"
@@ -36,14 +41,15 @@
 #include "ARK2D/State/Transition/FadeToColourTransition.h"
 #include "ARK2D/State/Transition/FadeFromColourTransition.h"
 
-#include "ARK2D/Constants.h"
 
-#include "ARK2D/Graphics.h"
+// Graphics
+#include "ARK2D/Graphics/Renderer.h"
 #include "ARK2D/Graphics/Color.h"
 #include "ARK2D/Graphics/Animation.h"
 #include "ARK2D/Graphics/SpriteSheetDescription.h"
 #include "ARK2D/Graphics/Shader.h"
-#include "ARK2D/Graphics/Image/Image.h"
+#include "ARK2D/Graphics/Image.h"
+#include "ARK2D/Graphics/Texture.h"
 
 // Audio
 #include "ARK2D/Audio/Sound.h"
@@ -55,9 +61,6 @@
 
 // Tiled
 #include "ARK2D/Tiled/TiledMap.h"
-
-// Resources
-#include "ARK2D/Resource.h"
 
 // Tweening
 #include "ARK2D/Tween/Timeline.h"
@@ -84,12 +87,10 @@
 #include "ARK2D/Util/Range.h"
 #include "ARK2D/Util/StringStore.h"
 
-#include "ARK2D/Event.h"
-
 // JSON Implementation
-#include "ARK2D/ARK2D_JSON.h"
+#include "ARK2D/Includes.h"
 
-//
+// User Interface
 #include "ARK2D/UI/AbstractUIComponent.h"
 #include "ARK2D/UI/Label.h"
 #include "ARK2D/UI/TextField.h"
@@ -111,7 +112,6 @@
 #include "ARK2D/Particles/ConfigurableEmitter.h"
 
 // Containers
-#include "ARK2D/ARKGameObject.h"
 #include "ARK2D/Util/Containers/Vector.h"
 #include "ARK2D/Util/Containers/Pool.h"
 
@@ -120,7 +120,6 @@
 #include "ARK2D/Threading/Mutex.h"
 
 // Paths
-#include "ARK2D/Path/SubPath.h"
 #include "ARK2D/Path/Path.h"
 #include "ARK2D/Path/PathGroup.h"
 #include "ARK2D/Path/PathIO.h"
@@ -128,11 +127,12 @@
 // Tools
 #include "ARK2D/Tools/Packer.h"
 
-// Misc
-#include "ARK2D/ToString.h"
 
 // Tests
 #include "ARK2D/Tests/TransitionTest.h"
 #include "ARK2D/Tests/CollisionTest.h"
 #include "ARK2D/Tests/ParticlesTest.h"
 #include "ARK2D/Tests/UITest.h"
+
+// Namespaces
+#include "ARK2D/Namespaces.h"

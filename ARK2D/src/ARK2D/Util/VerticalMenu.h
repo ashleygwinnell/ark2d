@@ -12,9 +12,7 @@
 #include <vector>
 #include <stdlib.h>
 
-class GameContainer;
-class GameTimer;
-class Graphics;
+#include "../Namespaces.h"
 
 class VerticalMenuItem;
 
@@ -30,8 +28,8 @@ class VerticalMenu {
 
 		void setSpacing(unsigned int spacing);
 		void update(GameContainer* container, GameTimer* timer);
-		void draw(Graphics* g, signed int x, signed int y);
-		void drawCentered(Graphics* g, signed int x, signed int y);
+		void draw(Renderer* g, signed int x, signed int y);
+		void drawCentered(Renderer* g, signed int x, signed int y);
 		bool isWraparound();
 		void setWraparound(bool b);
 
@@ -47,7 +45,7 @@ class VerticalMenu {
 
 		virtual void preRenderFocusedItem(unsigned int index);
 		virtual void preRenderBlurredItem(unsigned int index);
-		virtual void renderItem(Graphics* g, VerticalMenuItem* item, signed int x, signed int y);
+		virtual void renderItem(Renderer* g, VerticalMenuItem* item, signed int x, signed int y);
 
 		unsigned int size();
 		unsigned int sizeVisible();

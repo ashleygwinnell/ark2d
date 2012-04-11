@@ -11,7 +11,7 @@
 #include <string>
 #include <vector>
 
-#include "../Graphics/Image/Image.h"
+#include "../Graphics/Image.h"
 using namespace std;
 
 namespace ARK {

@@ -6,58 +6,65 @@
  */
 
 #include "FadeFromColourTransition.h"
-#include "../../ARK2D_GL.h"
+#include "../../Includes.h"
 
-FadeFromColourTransition::FadeFromColourTransition(float time):
-	Transition(),
-	m_time(time),
-	m_time_current(0.0f),
-	m_color(NULL),
-	m_alpha(1.0f)
-	{
+namespace ARK {
+	namespace State {
+		namespace Transition {
 
-}
-FadeFromColourTransition::FadeFromColourTransition(float time, Color* c):
-	Transition(),
-	m_time(time),
-	m_time_current(0.0f),
-	m_color(c),
-	m_alpha(1.0f) {
-	m_colorOriginalAlpha = m_color->getAlphaf();
-}
-void FadeFromColourTransition::init(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to) {
-	Transition::init(container, game, from, to);
-	m_time_current = 0.0f;
-	m_alpha = m_colorOriginalAlpha;
-}
-void FadeFromColourTransition::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {
-	m_alpha = (float) Easing::ease(m_easing, double(m_time_current), double(m_colorOriginalAlpha), double(m_colorOriginalAlpha)*-1, double(m_time));
-	m_time_current += timer->getDelta();
-}
-void FadeFromColourTransition::preRender(GameContainer* container, StateBasedGame* game, Graphics* g) {
+			FadeFromColourTransition::FadeFromColourTransition(float time):
+				Transition(),
+				m_time(time),
+				m_time_current(0.0f),
+				m_color(NULL),
+				m_alpha(1.0f)
+				{
 
-}
-void FadeFromColourTransition::postRender(GameContainer* container, StateBasedGame* game, Graphics* g) {
+			}
+			FadeFromColourTransition::FadeFromColourTransition(float time, Color* c):
+				Transition(),
+				m_time(time),
+				m_time_current(0.0f),
+				m_color(c),
+				m_alpha(1.0f) {
+				m_colorOriginalAlpha = m_color->getAlphaf();
+			}
+			void FadeFromColourTransition::init(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to) {
+				Transition::init(container, game, from, to);
+				m_time_current = 0.0f;
+				m_alpha = m_colorOriginalAlpha;
+			}
+			void FadeFromColourTransition::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {
+				m_alpha = (float) Easing::ease(m_easing, double(m_time_current), double(m_colorOriginalAlpha), double(m_colorOriginalAlpha)*-1, double(m_time));
+				m_time_current += timer->getDelta();
+			}
+			void FadeFromColourTransition::preRender(GameContainer* container, StateBasedGame* game, Renderer* g) {
 
-	m_color->setAlpha(int(m_alpha*255));
-	g->setDrawColor(m_color->getRed(), m_color->getGreen(), m_color->getBlue(), m_color->getAlpha());
+			}
+			void FadeFromColourTransition::postRender(GameContainer* container, StateBasedGame* game, Renderer* g) {
 
-	//g->setDrawColor(Color::white);
-	g->fillRect(0,0, container->getWidth(), container->getHeight());
-}
-bool FadeFromColourTransition::isComplete() {
-	if (m_time_current >= m_time) {
-		m_color->setAlpha(m_colorOriginalAlpha*255);
-		return true;
+				m_color->setAlpha(int(m_alpha*255));
+				g->setDrawColor(m_color->getRed(), m_color->getGreen(), m_color->getBlue(), m_color->getAlpha());
+
+				//g->setDrawColor(Color::white);
+				g->fillRect(0,0, container->getWidth(), container->getHeight());
+			}
+			bool FadeFromColourTransition::isComplete() {
+				if (m_time_current >= m_time) {
+					m_color->setAlpha(m_colorOriginalAlpha*255);
+					return true;
+				}
+				return false;
+			}
+
+			void FadeFromColourTransition::setColor(Color* c) {
+				m_color = c;
+				m_colorOriginalAlpha = m_color->getAlphaf();
+			}
+
+			FadeFromColourTransition::~FadeFromColourTransition() {
+
+			}
+		}
 	}
-	return false;
-}
-
-void FadeFromColourTransition::setColor(Color* c) {
-	m_color = c;
-	m_colorOriginalAlpha = m_color->getAlphaf();
-}
-
-FadeFromColourTransition::~FadeFromColourTransition() {
-
 }

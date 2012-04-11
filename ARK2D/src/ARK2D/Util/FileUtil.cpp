@@ -11,7 +11,7 @@
 #include "../ARK2D.h"
 #include "StringUtil.h"
 #include "Log.h"
-#include "../GameContainer.h"
+#include "../Core/GameContainer.h"
 
 #ifdef ARK2D_WINDOWS
 	#include <direct.h>

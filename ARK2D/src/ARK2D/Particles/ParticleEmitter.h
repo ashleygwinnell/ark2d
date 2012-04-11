@@ -8,8 +8,7 @@
 #ifndef PARTICLEEMITTER_H_
 #define PARTICLEEMITTER_H_
 
-class Image;
-#include "../ARK2D_namespaces.h"
+#include "../Namespaces.h"
 
 namespace ARK {
 	namespace Particles {

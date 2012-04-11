@@ -9,7 +9,7 @@
 #define SHAPE_H_
 
 #include "../ARK2D.h"
-#include "../GameContainer.h"
+#include "../Core/GameContainer.h"
 #include "Vector2.h"
 #include <limits>
 namespace ARK {

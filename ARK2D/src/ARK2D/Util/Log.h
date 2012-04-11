@@ -14,9 +14,8 @@
 //	#include <list>
 //#endif
 
-struct GameContainer;
 struct Graphics;
-struct ARKString;
+#include "../Namespaces.h"
 
 using namespace std;
 
@@ -43,7 +42,7 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
 		class Log {
-			friend class GameContainer;
+			friend class ARK::Core::GameContainer;
 
 			public:
 				static const unsigned int TYPE_GAME = 3;
@@ -69,10 +68,10 @@ namespace ARK {
 				void w(string s);
 				void i(string s);
 				void g(string s);
-				void e(ARKString s);
-				void w(ARKString s);
-				void i(ARKString s);
-				void g(ARKString s);
+				void e(String s);
+				void w(String s);
+				void i(String s);
+				void g(String s);
 				void update();
 				void render();
 				virtual ~Log();

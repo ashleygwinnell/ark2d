@@ -184,7 +184,7 @@ namespace ARK {
 		}
 		void ArcadeHighscoreInput::render() {
 			GameContainer* container = ARK2D::getContainer();
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			int centerX = container->getWidth()/2;
 			int centerY = (container->getHeight()/2);
 

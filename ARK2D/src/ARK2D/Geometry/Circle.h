@@ -86,6 +86,8 @@ namespace ARK {
 					return false;
 				}
 				virtual bool collides(Shape<T>* s) {
+					if (s == NULL) { ErrorDialog::createAndShow("A Shape was NULL"); }
+
 					Circle<T>* circle = NULL;
 					circle = dynamic_cast<Circle<T>* >(s);
 					if (circle != NULL) {
@@ -117,7 +119,7 @@ namespace ARK {
 				}
 
 				virtual void render() {
-					Graphics* g = ARK2D::getGraphics();
+					Renderer* g = ARK2D::getRenderer();
 					g->drawCircle((int)m_x, (int)m_y, (int)m_radius, RENDER_SEGMENTS);
 				}
 

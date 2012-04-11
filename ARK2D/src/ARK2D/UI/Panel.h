@@ -14,8 +14,8 @@ using namespace std;
 #include "../ARK2D.h"
 #include "AbstractUIComponent.h"
 
-#include "../Graphics.h"
-#include "../GameContainer.h"
+#include "../Graphics/Renderer.h"
+#include "../Core/GameContainer.h"
 #include "../Geometry/GigaRectangle.h"
 #include "../Controls/Input.h"
 

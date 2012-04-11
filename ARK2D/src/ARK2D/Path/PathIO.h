@@ -12,7 +12,7 @@
 #include "../UI/ErrorDialog.h"
 #include "../Util/StringUtil.h"
 #include "../Tween/Easing.h"
-#include "../ARK2D_JSON.h"
+#include "../Includes.h"
 
 #include <string>
 using namespace std;

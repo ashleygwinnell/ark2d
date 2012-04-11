@@ -6,7 +6,7 @@
  */
 
 #include "RSSL.h"
-#include "../ARKString.h"
+#include "../Core/String.h"
 #include "StringUtil.h"
 #include "Cast.h"
 
@@ -81,20 +81,20 @@ namespace ARK {
 				std::getline(stream, line);
 				if (line.length() == 0) { continue; }
 
-				ARKString arkLine(line);
+				String arkLine(line);
 				if (arkLine.contains("#")) {
 					arkLine = arkLine.split("#")[0];
 				}
 
-				vector<ARKString> parts = arkLine.split("(");
+				vector<String> parts = arkLine.split("(");
 				if (parts.size() <= 1 || arkLine.countOccurrences(")") != 1) {
 					string s = "syntax error at line " + Cast::toString<int>(lineNumber) + "\r\nexpected something in the format `command_name(arguments)`.";
 					RSSLException::parseException(s);
 
 					return;
 				}
-				ARKString commandName = parts[0];
-				ARKString argString = parts[1];
+				String commandName = parts[0];
+				String argString = parts[1];
 				if (argString.length()==0 || argString.lastChar() != ")") {
 					string s = "unexpected line end. it should be ')' character.";
 					RSSLException::parseException(s);
@@ -111,7 +111,7 @@ namespace ARK {
 					RSSLFunction* f = m_functions.at(i);
 					if (commandName.equals(f->name))
 					{
-						vector<ARKString> args = argString.split(",");
+						vector<String> args = argString.split(",");
 
 						// if ((args.size() == 1 && args[0].length() == 0) || args.size() != 2) {
 						if (args.size() != f->m_args.size()) {
@@ -146,8 +146,8 @@ namespace ARK {
 								}
 
 							}
-							//ARKString gameMode = StringUtil::trimret(args[0].get(), " ");
-							//ARKString time = StringUtil::trimret(args[1].get(), " ");
+							//String gameMode = StringUtil::trimret(args[0].get(), " ");
+							//String time = StringUtil::trimret(args[1].get(), " ");
 
 							void (*pt)(RSSLFunction*) = (void(*)(RSSLFunction*)) f->callback;
 							pt(f);

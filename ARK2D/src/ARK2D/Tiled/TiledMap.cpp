@@ -16,14 +16,14 @@
 #include "../UI/ErrorDialog.h"
 #include "../Util/Cast.h"
 #include "../Util/StringUtil.h"
-#include "../Graphics/Image/Image.h"
+#include "../Graphics/Image.h"
 #include "../vendor/zlib123/zlib.h"
 
-#include "../GameContainer.h"
-#include "../Graphics.h"
+#include "../Core/GameContainer.h"
+#include "../Graphics/Renderer.h"
 
 #include "../Util/Log.h"
-#include "../Resource.h"
+#include "../Core/Resource.h"
 
 //#include "zlib123/zutil.h"
 //#include "zlib123/deflate.h"
@@ -35,7 +35,7 @@ namespace ARK {
 
 
 		TiledMap::TiledMap(const string& file, void* data):
-			ARK::Resource(),
+			ARK::Core::Resource(),
 			m_file(file),
 			m_xmldocument(file),
 			m_data(data),
@@ -47,7 +47,7 @@ namespace ARK {
 		}
 
 		TiledMap::TiledMap(const string& file):
-			ARK::Resource(),
+			ARK::Core::Resource(),
 			m_file(file),
 			m_xmldocument(file),
 			m_data(NULL),
@@ -136,7 +136,7 @@ namespace ARK {
 					#endif
 
 					TiXmlDocument tileset_d;
-					ARK::RawDataReturns* ret = ARK::Resource::getRawData(src);
+					ARK::Core::RawDataReturns* ret = ARK::Core::Resource::getRawData(src);
 					tileset_d.Parse((const char*)ret->data, 0, TIXML_ENCODING_UTF8);
 					parseTileset(firstgid, src, &tileset_d);
 				}
@@ -397,10 +397,10 @@ namespace ARK {
 			Image* img_obj = NULL;
 			if (!hasImageMask) {
 				//img_obj = new Image(image_src);
-				img_obj = ARK::Resource::get(image_src, false)->asImage();
+				img_obj = ARK::Core::Resource::get(image_src, false)->asImage();
 			} else {
 				//img_obj = new Image(image_src, Color(StringUtil::append("#", image_mask)));
-				img_obj = ARK::Resource::get(image_src, false)->asImage();
+				img_obj = ARK::Core::Resource::get(image_src, false)->asImage();
 				//! @TODO: image mask in resource::get();
 			}
 			tileset.setImage(img_obj);
@@ -533,7 +533,7 @@ namespace ARK {
 		}
 		void TiledMap::draw(signed int x, signed int y) {
 
-			//Graphics* g = const_cast<Graphics*>(ARK2D::getContainer()->getGraphics());
+			//Renderer* g = const_cast<Renderer*>(ARK2D::getContainer()->getRenderer());
 
 			//g->pushMatrix();
 			//g->translate(x, y);

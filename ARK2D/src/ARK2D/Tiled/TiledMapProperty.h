@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-#include "../ToString.h"
+#include "../Core/ToString.h"
 
 using namespace std;
 
@@ -19,7 +19,7 @@ namespace ARK {
 		 * @warning You should never need to create this manually.
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class TiledMapProperty : public ARK::ToString {
+		class TiledMapProperty : public ARK::Core::ToString {
 			public:
 				TiledMapProperty();
 				TiledMapProperty(const std::string& name, const std::string& value);

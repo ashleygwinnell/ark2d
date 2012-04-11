@@ -6,13 +6,10 @@
  */
 
 #include "ARK2D.h"
-//#include "GameContainer.h"
-//#include "Controls/Input.h"
-//#include "Game.h"
 
 GameContainer* ARK2D::s_container = 0;
 Game* ARK2D::s_game = 0;
-Graphics* ARK2D::s_graphics = 0;
+Renderer* ARK2D::s_graphics = 0;
 Input* ARK2D::s_input = 0;
 Log* ARK2D::s_log = 0;
 
@@ -24,7 +21,7 @@ Game* ARK2D::getGame() {
 	return s_game;
 }
 
-Graphics* ARK2D::getGraphics() {
+Renderer* ARK2D::getRenderer() {
 	return s_graphics;
 }
 

@@ -14,7 +14,7 @@ using namespace std;
 class BMFont;
 class FTFont;
 
-#include "../Resource.h"
+#include "../Core/Resource.h"
 
 namespace ARK {
 	namespace Font {
@@ -24,7 +24,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class Font : public ARK::Resource {
+		class Font : public ARK::Core::Resource {
 			public:
 				Font();
 				virtual void drawString(const string& str, int x, int y) = 0;

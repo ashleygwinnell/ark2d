@@ -15,7 +15,7 @@
 #include <vector>
 #include <string>
 
-class GameContainer;
+#include "../Namespaces.h"
 
 using std::vector;
 using std::map;

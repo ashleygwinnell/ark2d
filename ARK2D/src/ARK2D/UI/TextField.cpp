@@ -44,7 +44,7 @@ namespace ARK {
 			clearSelection();
 			m_cursorPosition = m_text.length();
 		}
-		const ARKString& TextField::getText() {
+		const String& TextField::getText() {
 			return m_text;
 		}
 
@@ -55,7 +55,7 @@ namespace ARK {
 
 			//AbstractUIComponent::preRender();
 
-			const Graphics* g = ARK2D::getGraphics();
+			const Renderer* g = ARK2D::getRenderer();
 			renderBackground();
 
 			if (hasSelection())
@@ -98,7 +98,7 @@ namespace ARK {
 				}
 				else
 				{
-					vector<ARKString> lines = m_text.split("\n");
+					vector<String> lines = m_text.split("\n");
 					int prePos = 0;
 					int curPos = 0;
 					int curLine = 0;
@@ -114,7 +114,7 @@ namespace ARK {
 
 					}
 
-					ARKString line = lines.at(curLine);
+					String line = lines.at(curLine);
 
 					int lh = g->getFont()->getLineHeight();
 					int sw = g->getFont()->getStringWidth(line.substring(0, curPos).get());
@@ -135,17 +135,17 @@ namespace ARK {
 			m_textAlignY = align;
 		}
 		void TextField::renderBackground() {
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::black_50a);
 			g->fillRect(m_x, m_y, m_width, m_height);
 		}
 		void TextField::renderSelectedArea(int x, int y, int w, int h) {
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::black_50a);
 			g->fillRect(x, y, w, h);
 		}
 		void TextField::renderText(int x, int y) {
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 
 			//g->setDrawColor(Color::white);
 			//string dbg = Cast::toString<bool>(m_text.contains("\n"));
@@ -163,7 +163,7 @@ namespace ARK {
 
 				g->setDrawColor(Color::white);
 				int cur_y = y;
-				vector<ARKString> lines = m_text.split("\n");
+				vector<String> lines = m_text.split("\n");
 				for(unsigned int i = 0; i < lines.size(); i++) {
 					g->drawString(lines.at(i).get(), x, cur_y);
 					if (m_wrap) { /**/ }
@@ -172,12 +172,12 @@ namespace ARK {
 			}
 		}
 		void TextField::renderCaret(int x1, int y1, int x2, int y2) {
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white_50a);
 			g->drawLine(x1, y1, x2, y2);
 		}
 		void TextField::renderOverlay() {
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white);
 			g->drawRect(m_x, m_y, m_width, m_height);
 		}

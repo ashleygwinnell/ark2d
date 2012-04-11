@@ -6,7 +6,7 @@
  */
 
 #include "CheckBox.h"
-#include "../Graphics.h"
+#include "../Graphics/Renderer.h"
 
 namespace ARK {
 	namespace UI {
@@ -46,7 +46,7 @@ namespace ARK {
 			AbstractUIComponent::postRender();
 		}
 		void CheckBox::renderTick() {
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white);
 			g->setLineWidth(2);
 			g->drawLine(m_x, m_y + (m_height/2), m_x + (m_width/3), m_y + m_height);
@@ -55,13 +55,13 @@ namespace ARK {
 		}
 
 		void CheckBox::renderBackground() {
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::black_50a);
 			g->fillRect(m_x, m_y, m_width, m_height);
 		}
 
 		void CheckBox::renderOverlay() {
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white);
 			if (m_state == STATE_OVER || m_state == STATE_DOWN) {
 				g->setDrawColor(Color::white_50a);

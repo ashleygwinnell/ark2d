@@ -9,8 +9,9 @@
 #define ARKPOOL_H_
 
 #include "Vector.h"
-#include "../../ARKGameObject.h"
+#include "../../Core/GameObject.h"
 #include "../MathUtil.h"
+#include "../../Namespaces.h"
 
 using namespace std;
 
@@ -19,7 +20,7 @@ namespace ARK {
 		namespace Containers {
 
 
-				template <class T=ARKGameObject*>
+				template <class T=GameObject*>
 				class PoolIterator;
 
 				/*!
@@ -28,7 +29,7 @@ namespace ARK {
 				 * Holds pointers to dynamically created objects to prevent allocation throughout game-playing.
 				 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 				 */
-				template <class T=ARKGameObject*>
+				template <class T=GameObject*>
 				class Pool {
 					friend class PoolIterator<T>;
 					private:
@@ -37,7 +38,7 @@ namespace ARK {
 						PoolIterator<T>* it;
 
 					public:
-						Pool(): m_inactive(), m_active() {
+						Pool(): m_inactive(), m_active(),it(NULL) {
 							m_inactive.setUsingList(true);
 							m_active.setUsingList(true);
 						}
@@ -130,16 +131,26 @@ namespace ARK {
 							}
 							pruneAll();
 						}
+						string toString() {
+							string s = "{";
+								s += "\"active\": ";
+								s += m_active.toString();
+								s += ", ";
+								s += "\"usingList\":";
+								s += Cast::toString<bool>(m_active.isUsingList());
+							s += "}";
+							return s;
+						}
 						unsigned int size() {
 							return m_active.size() + m_inactive.size();
 						}
 						unsigned int sizeActive() {
 							return m_active.size();
 						}
-						void updateAll(GameContainer* container, GameTimer* timer) {
+						void updateAll(ARK::Core::GameContainer* container, GameTimer* timer) {
 							m_active.updateAll(container, timer);
 						}
-						void renderAll(GameContainer* container, Graphics* graphics) {
+						void renderAll(ARK::Core::GameContainer* container, Renderer* graphics) {
 							m_active.renderAll(container, graphics);
 						}
 						virtual ~Pool() {

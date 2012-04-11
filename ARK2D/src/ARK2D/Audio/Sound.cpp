@@ -5,8 +5,8 @@
  */
 
 #include "Sound.h"
+#include "../Core/Resource.h"
 #include "../Util/StringUtil.h"
-#include "../Resource.h"
 #include "../Util/Log.h"
 #include "../vendor/FileInterface.h"
 
@@ -17,7 +17,7 @@ namespace ARK {
 		ALfloat Sound::ListenerOri[6] = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
 
 		Sound::Sound(const std::string& filename):
-			ARK::Resource(),
+			ARK::Core::Resource(),
 			m_FileName(filename),
 			m_groupId(0),
 			m_preloadedData(NULL),
@@ -42,7 +42,7 @@ namespace ARK {
 
 		}
 		Sound::Sound(const std::string& filename, void* data, int dataLength):
-			ARK::Resource(),
+			ARK::Core::Resource(),
 			m_FileName(filename),
 			m_groupId(0),
 			m_preloadedData(data),

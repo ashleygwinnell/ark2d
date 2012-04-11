@@ -89,7 +89,7 @@ namespace ARK {
 			m_downButton.setLocation(m_width-15, m_height-15);
 			m_downButton.render();
 
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white);
 			g->setLineWidth(1);
 			g->drawLine(m_width-15, 0, m_width-15, m_height);

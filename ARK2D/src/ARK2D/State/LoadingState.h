@@ -8,44 +8,45 @@
 #ifndef LOADINGSTATE_H_
 #define LOADINGSTATE_H_
 
-#include "../ARK2D_namespaces.h"
+#include "../Namespaces.h"
 #include "GameState.h"
-class GameContainer;
-class StateBasedGame;
-class GameState;
 
+namespace ARK {
+	namespace State {
 
-/*!
- * \brief This state contains thread information and state for you to multithread loading in your game.
- *
- * @warning Note that you CANNOT load Images in this separate thread because OpenGL fails.
- * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
- */
-class LoadingState : public GameState {
-	public:
-		LoadingState();
+		/*!
+		 * \brief This state contains thread information and state for you to multithread loading in your game.
+		 *
+		 * @warning Note that you CANNOT load Images in this separate thread because OpenGL fails.
+		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+		 */
+		class LoadingState : public GameState {
+			public:
+				LoadingState();
 
-		static void load();
+				static void load();
 
-		virtual bool isLoading();
-		virtual void setLoading(bool b);
+				virtual bool isLoading();
+				virtual void setLoading(bool b);
 
-		ARK::Threading::Thread* getThread();
+				ARK::Threading::Thread* getThread();
 
-		virtual void enter(GameContainer* container, StateBasedGame* game, GameState* from);
-		virtual void leave(GameContainer* container, StateBasedGame* game, GameState* to);
+				virtual void enter(GameContainer* container, StateBasedGame* game, GameState* from);
+				virtual void leave(GameContainer* container, StateBasedGame* game, GameState* to);
 
-		virtual unsigned int id() = 0;
-		virtual void init(GameContainer* container, StateBasedGame* game);
-		virtual void update(GameContainer* container, StateBasedGame* game, GameTimer* timer) = 0;
-		virtual void render(GameContainer* container, StateBasedGame* game, Graphics* g) = 0;
+				virtual unsigned int id() = 0;
+				virtual void init(GameContainer* container, StateBasedGame* game);
+				virtual void update(GameContainer* container, StateBasedGame* game, GameTimer* timer) = 0;
+				virtual void render(GameContainer* container, StateBasedGame* game, Renderer* g) = 0;
 
-		virtual ~LoadingState();
+				virtual ~LoadingState();
 
-	protected:
-		ARK::Threading::Thread* m_thread;
-		bool m_loading;
+			protected:
+				ARK::Threading::Thread* m_thread;
+				bool m_loading;
 
-};
+		};
+	}
+}
 
 #endif /* LOADINGSTATE_H_ */

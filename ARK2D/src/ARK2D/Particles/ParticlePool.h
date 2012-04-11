@@ -8,8 +8,6 @@
 #ifndef PARTICLEPOOL_H_
 #define PARTICLEPOOL_H_
 
-
-
 #include <vector>
 using namespace std;
 

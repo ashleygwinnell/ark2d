@@ -48,7 +48,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 
 
 	arklog->i("init fonts");
-	BMFont* fnt = ARK::Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont(); //new BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
+	ARK::Font::BMFont* fnt = ARK::Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont(); //new BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
 	g->setDefaultFont(fnt);
 	g->setFont(fnt);
 	// TODO: init default font.
@@ -157,7 +157,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		thisx -= container->getTranslateX();
 		thisy -= container->getTranslateY();
 
-		string logstr = "touch-down: ";
+		/*string logstr = "touch-down: ";
 		logstr += Cast::toString<int>((int) x);
 		logstr += ",";
 		logstr += Cast::toString<int>((int) y);
@@ -165,7 +165,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		logstr += Cast::toString<int>((int) thisx);
 		logstr += ",";
 		logstr += Cast::toString<int>((int) thisy);
-		arklog->i(logstr);
+		arklog->i(logstr);*/
 
 		Input* i = ARK2D::getInput();
 		i->mouse_x = (int) thisx;
@@ -183,7 +183,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		thisx -= container->getTranslateX();
 		thisy -= container->getTranslateY();
 
-		string logstr = "touch-move: ";
+		/*string logstr = "touch-move: ";
 		logstr += Cast::toString<int>((int) x);
 		logstr += ",";
 		logstr += Cast::toString<int>((int) y);
@@ -191,7 +191,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		logstr += Cast::toString<int>((int) thisx);
 		logstr += ",";
 		logstr += Cast::toString<int>((int) thisy);
-		arklog->i(logstr);
+		arklog->i(logstr);*/
 
 		Input* i = ARK2D::getInput();
 		game->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
@@ -209,7 +209,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		thisx -= container->getTranslateX();
 		thisy -= container->getTranslateY();
 
-		string logstr = "touch-up: ";
+		/*string logstr = "touch-up: ";
 		logstr += Cast::toString<int>((int) x);
 		logstr += ",";
 		logstr += Cast::toString<int>((int) y);
@@ -217,7 +217,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		logstr += Cast::toString<int>((int) thisx);
 		logstr += ",";
 		logstr += Cast::toString<int>((int) thisy);
-		arklog->i(logstr);
+		arklog->i(logstr);*/
 
 		Input* i = ARK2D::getInput();
 		i->mouse_x = (int) thisx;

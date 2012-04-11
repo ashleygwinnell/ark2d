@@ -9,42 +9,47 @@
 
 #include "GameState.h"
 #include "../Threading/Thread.h"
-#include "../GameContainer.h"
+#include "../Core/GameContainer.h"
 #include "StateBasedGame.h"
 
-LoadingState::LoadingState(): GameState(), m_thread(NULL), m_loading(true) {
-	m_thread = new ARK::Threading::Thread();
-}
+namespace ARK {
+	namespace State {
 
-bool LoadingState::isLoading() {
-	return m_loading;
-}
-void LoadingState::setLoading(bool b) {
-	m_loading = b;
-}
+		LoadingState::LoadingState(): GameState(), m_thread(NULL), m_loading(true) {
+			m_thread = new ARK::Threading::Thread();
+		}
 
-ARK::Threading::Thread* LoadingState::getThread() {
-	return m_thread;
-}
+		bool LoadingState::isLoading() {
+			return m_loading;
+		}
+		void LoadingState::setLoading(bool b) {
+			m_loading = b;
+		}
 
-void LoadingState::init(GameContainer* container, StateBasedGame* game) {
-	//m_thread->init((void*) &LoadingState::load);
-	//m_thread->start();
-}
+		ARK::Threading::Thread* LoadingState::getThread() {
+			return m_thread;
+		}
 
-void LoadingState::load() {
-	// ..
-}
+		void LoadingState::init(GameContainer* container, StateBasedGame* game) {
+			//m_thread->init((void*) &LoadingState::load);
+			//m_thread->start();
+		}
 
-void LoadingState::enter(GameContainer* container, StateBasedGame* game, GameState* from) {
-	GameState::enter(container, game, from);
-}
-void LoadingState::leave(GameContainer* container, StateBasedGame* game, GameState* to) {
-	GameState::leave(container, game, to);
-}
+		void LoadingState::load() {
+			// ..
+		}
 
-LoadingState::~LoadingState() {
-	delete m_thread;
+		void LoadingState::enter(GameContainer* container, StateBasedGame* game, GameState* from) {
+			GameState::enter(container, game, from);
+		}
+		void LoadingState::leave(GameContainer* container, StateBasedGame* game, GameState* to) {
+			GameState::leave(container, game, to);
+		}
 
-	//GameState::~GameState();
+		LoadingState::~LoadingState() {
+			delete m_thread;
+
+			//GameState::~GameState();
+		}
+	}
 }

@@ -8,10 +8,6 @@
 #ifndef TRANSITIONTEST_H_
 #define TRANSITIONTEST_H_
 
-/*#include "../State/StateBasedGame.h"
-#include "../State/GameState.h"
-#include "../Util/Containers/Vector.h"
-#include "../ARK2D.h"*/
 #include "../../ARK.h"
 
 namespace ARK {
@@ -28,20 +24,20 @@ namespace ARK {
 				unsigned int id();
 				void init(GameContainer* container, StateBasedGame* game);
 				void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
-				void render(GameContainer* container, StateBasedGame* game, Graphics* g);
+				void render(GameContainer* container, StateBasedGame* game, Renderer* g);
 				virtual ~TransitionTestGameState();
 		};
 
 		class TransitionTest : public StateBasedGame {
 			public:
 				unsigned int transitionIndex;
-				ARK::Util::Containers::Vector<Transition*> leaveTransitions;
-				ARK::Util::Containers::Vector<Transition*> entryTransitions;
+				ARK::Util::Containers::Vector<ARK::State::Transition::Transition*> leaveTransitions;
+				ARK::Util::Containers::Vector<ARK::State::Transition::Transition*> entryTransitions;
 
 				TransitionTest();
 				virtual void initStates(GameContainer* container);
 				virtual void update(GameContainer* container, GameTimer* timer);
-				virtual void render(GameContainer* container, Graphics* g);
+				virtual void render(GameContainer* container, Renderer* g);
 				virtual void resize(GameContainer* container, int width, int height);
 
 				static int start();

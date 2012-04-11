@@ -95,6 +95,8 @@ namespace ARK {
 					return false;
 				}
 				virtual bool collides(Shape<T>* s) {
+					if (s == NULL) { ErrorDialog::createAndShow("A Shape was NULL"); }
+
 					Rectangle<T>* rect = NULL;
 					rect = dynamic_cast<Rectangle<T>*>(s);
 					if (rect != NULL) {
@@ -119,7 +121,7 @@ namespace ARK {
 
 				}
 				virtual void render() {
-					Graphics* g = ARK2D::getGraphics();
+					Renderer* g = ARK2D::getRenderer();
 					g->drawRect((int)m_x, (int)m_y, (int)m_width, (int)m_height);
 				}
 

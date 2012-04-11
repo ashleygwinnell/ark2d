@@ -30,7 +30,7 @@ namespace ARK {
 			AbstractUIComponent::preRender();
 
 			if (m_translate) {
-				Graphics* g = ARK2D::getGraphics();
+				Renderer* g = ARK2D::getRenderer();
 				g->pushMatrix();
 				g->translate(m_x, m_y);
 			}
@@ -38,7 +38,7 @@ namespace ARK {
 		void Panel::postRender() {
 			AbstractUIComponent::postRender();
 			if (m_translate) {
-				Graphics* g = ARK2D::getGraphics();
+				Renderer* g = ARK2D::getRenderer();
 				g->popMatrix();
 			}
 			renderBorder();
@@ -58,7 +58,7 @@ namespace ARK {
 		}
 		void Panel::renderBorder() {
 			if (m_showBorder == true) {
-				Graphics* g = ARK2D::getGraphics();
+				Renderer* g = ARK2D::getRenderer();
 				g->setDrawColor(Color::white);
 				g->drawRect(m_x, m_y, m_width, m_height);
 			}

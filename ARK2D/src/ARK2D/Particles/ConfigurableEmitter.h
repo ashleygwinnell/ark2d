@@ -8,11 +8,11 @@
 #ifndef CONFIGURABLEEMITTER_H_
 #define CONFIGURABLEEMITTER_H_
 
-
+#include "../Namespaces.h"
 #include "../Graphics/Color.h"
 #include "../Util/Range.h"
 #include "ParticleEmitter.h"
-#include "../Graphics/Image/Image.h"
+#include "../Graphics/Image.h"
 
 
 #include <string>

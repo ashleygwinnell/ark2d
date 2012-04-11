@@ -69,7 +69,7 @@ namespace ARK {
 		void ParticlesTestGameState::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {
 			system->update(timer);
 		}
-		void ParticlesTestGameState::render(GameContainer* container, StateBasedGame* game, Graphics* g) {
+		void ParticlesTestGameState::render(GameContainer* container, StateBasedGame* game, Renderer* g) {
 			g->drawString("Particles Test:", 10, 10);
 			g->drawString(StringUtil::append("pcount ", system->pCount), 10, 30);
 			g->drawString(StringUtil::append("ecount ", system->emitters.size()), 10, 50);
@@ -98,7 +98,7 @@ namespace ARK {
 		void ParticlesTest::update(GameContainer* container, GameTimer* timer) {
 			StateBasedGame::update(container, timer);
 		}
-		void ParticlesTest::render(GameContainer* container, Graphics* g) {
+		void ParticlesTest::render(GameContainer* container, Renderer* g) {
 			StateBasedGame::render(container, g);
 		}
 		void ParticlesTest::resize(GameContainer* container, int width, int height) {

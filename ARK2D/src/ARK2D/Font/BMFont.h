@@ -13,9 +13,9 @@
 #include <stdlib.h>
 #include <iostream>
 
-#include "../ARK2D_GL.h"
+#include "../Includes.h"
 
-#include "../Graphics/Image/Image.h"
+#include "../Graphics/Image.h"
 #include "../Graphics/Color.h"
 #include "../Util/Log.h"
 #include "../Util/StringUtil.h"

@@ -11,7 +11,7 @@
 #include "../ARK2D.h"
 #include "AbstractUIComponent.h"
 
-#include "../Graphics.h"
+#include "../Graphics/Renderer.h"
 #include "../Graphics/Color.h"
 #include "../Geometry/GigaRectangle.h"
 #include "../Controls/Input.h"

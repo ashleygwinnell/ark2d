@@ -12,45 +12,52 @@
 #include "Transition.h"
 #include "../../Graphics/Color.h"
 #include "../../Tween/Timeline.h"
-#include "../../Constants.h"
+#include "../../Core/Constants.h"
 
 #include <vector>
 using std::vector;
 
-class SlideRect { public:
-	int xoffset;
-	float xoffsetSpeed;
-};
+namespace ARK {
+	namespace State {
+		namespace Transition {
 
-/*!
- * \brief Slide rectangles across the screen like in indie-hit VVVVVV.
- *
- * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
- * @todo Introduce a Colour set instead of a single colour?
- * @todo Implement sliding rectangles DOWN the screen.
- */
-class SlideRectanglesAcrossTransition: public Transition {
-	public:
-		Color* m_color; // the colour for the overlay
+			class SlideRect { public:
+				int xoffset;
+				float xoffsetSpeed;
+			};
 
-		unsigned int m_numrects;
+			/*!
+			 * \brief Slide rectangles across the screen like in indie-hit VVVVVV.
+			 *
+			 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+			 * @todo Introduce a Colour set instead of a single colour?
+			 * @todo Implement sliding rectangles DOWN the screen.
+			 */
+			class SlideRectanglesAcrossTransition: public Transition {
+				public:
+					Color* m_color; // the colour for the overlay
 
-		vector<SlideRect> m_sliderects;
+					unsigned int m_numrects;
 
-		float m_time;
-		float m_current_time;
-		unsigned int m_dir;
+					vector<SlideRect> m_sliderects;
 
-		bool m_doneHalfWayLogic;
+					float m_time;
+					float m_current_time;
+					unsigned int m_dir;
 
-		SlideRectanglesAcrossTransition(Color* color, unsigned int numrects, unsigned int dir, float time);
-		virtual void init(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to);
-		virtual void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
-		virtual void halfwayLogic(GameContainer* container, StateBasedGame* game);
-		virtual void preRender(GameContainer* container, StateBasedGame* game, Graphics* g);
-		virtual void postRender(GameContainer* container, StateBasedGame* game, Graphics* g);
-		virtual bool isComplete();
-		virtual ~SlideRectanglesAcrossTransition();
-};
+					bool m_doneHalfWayLogic;
+
+					SlideRectanglesAcrossTransition(Color* color, unsigned int numrects, unsigned int dir, float time);
+					virtual void init(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to);
+					virtual void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
+					virtual void halfwayLogic(GameContainer* container, StateBasedGame* game);
+					virtual void preRender(GameContainer* container, StateBasedGame* game, Renderer* g);
+					virtual void postRender(GameContainer* container, StateBasedGame* game, Renderer* g);
+					virtual bool isComplete();
+					virtual ~SlideRectanglesAcrossTransition();
+			};
+		}
+	}
+}
 
 #endif /* SLIDERECTANGLESACROSSTRANSITION_H_ */

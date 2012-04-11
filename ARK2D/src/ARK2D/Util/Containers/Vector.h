@@ -9,14 +9,14 @@
 #define ARKVECTOR_H_
 
 #include "../../ARK2D.h"
+#include "../../Namespaces.h"
 #if (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS) || defined(ARK2D_UBUNTU_LINUX))
 	#include <vector>
 	#include <list>
 	#include <iterator>
 #endif
 
-#include "../../ARKGameObject.h"
-#include "../../ARKException.h"
+#include "../../Core/GameObject.h"
 #include "../MathUtil.h"
 
 using namespace std;
@@ -25,7 +25,7 @@ namespace ARK {
 	namespace Util {
 		namespace Containers {
 
-			template <class T=ARKGameObject*>
+			template <class T=GameObject*>
 			class VectorIterator;
 
 			template <class T>
@@ -36,7 +36,7 @@ namespace ARK {
 			 *
 			 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 			 */
-			template <class T=ARKGameObject*>
+			template <class T=GameObject*>
 			class Vector {
 				friend class VectorIterator<T>;
 				friend class PoolIterator<T>;
@@ -288,7 +288,7 @@ namespace ARK {
 					 * only use with ARKGameObject
 					 * careful not to prune in any update functions!!
 					 */
-					void updateAll(GameContainer* container, GameTimer* timer) {
+					void updateAll(ARK::Core::GameContainer* container, GameTimer* timer) {
 						#if !defined(STL_AVAILABLE)
 
 						#else
@@ -314,7 +314,7 @@ namespace ARK {
 					 * only use with ARKGameObject
 					 * careful not to prune in any update functions!!
 					 */
-					void renderAll(GameContainer* container, Graphics* g) {
+					void renderAll(ARK::Core::GameContainer* container, Renderer* g) {
 						#if !defined(STL_AVAILABLE)
 
 						#else

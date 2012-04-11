@@ -10,8 +10,8 @@
 #include <iostream>
 #include <fstream>
 #include <map>
-#include "../Graphics/Image/Image.h"
-#include "../GameContainer.h"
+#include "../Graphics/Image.h"
+#include "../Core/GameContainer.h"
 
 #include "BMFont.h"
 
@@ -73,7 +73,7 @@ namespace ARK {
 			m_letterImages()
 		{
 			ARK2D::getLog()->i(StringUtil::append("Loading BMFont: ", f));
-			m_Image = ARK::Resource::get(i)->asImage();
+			m_Image = ARK::Core::Resource::get(i)->asImage();
 			Parse();
 			ARK2D::getLog()->i("Done");
 		}

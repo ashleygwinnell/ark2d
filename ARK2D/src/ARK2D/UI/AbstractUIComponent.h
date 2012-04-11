@@ -9,8 +9,8 @@
 #define ABSTRACTUICOMPONENT_H_
 
 #include "UIComponent.h"
-#include "../Graphics.h"
-#include "../GameContainer.h"
+#include "../Graphics/Renderer.h"
+#include "../Core/GameContainer.h"
 #include "../Controls/Input.h"
 #include "../Util/Vector4.h"
 #include "../Geometry/GigaRectangle.h"

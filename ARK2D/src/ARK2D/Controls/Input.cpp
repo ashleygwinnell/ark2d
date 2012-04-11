@@ -11,11 +11,11 @@
 
 #include <set>
 
-#include "../ARK2D_namespaces.h"
+#include "../Namespaces.h"
 
 #include "Input.h"
 #include "Gamepad.h"
-#include "../GameContainer.h"
+#include "../Core/GameContainer.h"
 
 namespace ARK {
 	namespace Controls {

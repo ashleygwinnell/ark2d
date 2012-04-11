@@ -20,9 +20,8 @@
 #endif
 
 #include "../UI/ErrorDialog.h"
-#include "../ToString.h"
-
-class ARKString;
+#include "../Core/ToString.h"
+#include "../Namespaces.h"
 
 using namespace std;
 
@@ -58,7 +57,7 @@ namespace ARK {
 				static void trimRight(string& str, const char* chars2remove);
 				static void trim(string& str, const char* chars2remove);
 				static string trimret(string str, string charsToRemove);
-				static void trimAll(vector<ARKString>& strings, string chars2remove);
+				static void trimAll(vector<String>& strings, string chars2remove);
 
 				static string& str_replace(const string& search, const string& replace, string& subject);
 

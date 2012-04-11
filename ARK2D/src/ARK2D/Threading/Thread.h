@@ -8,7 +8,7 @@
 #ifndef ARKTHREAD_H_
 #define ARKTHREAD_H_
 
-#include "../Event.h"
+#include "../Core/Event.h"
 
 #if defined (ARK2D_WINDOWS)
 	#include <windows.h>

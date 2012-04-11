@@ -170,6 +170,8 @@ namespace ARK {
 					return false;
 				}
 				virtual bool collides(Shape<T>* s) {
+					if (s == NULL) { ErrorDialog::createAndShow("A Shape was NULL"); }
+
 					Line<T>* line = NULL;
 					line = dynamic_cast<Line<T>* >(s);
 					if (line != NULL) {
@@ -194,7 +196,7 @@ namespace ARK {
 
 				}
 				virtual void render() {
-					Graphics* g = ARK2D::getGraphics();
+					Renderer* g = ARK2D::getRenderer();
 					g->drawLine((int) first->getX(), (int) first->getY(), (int) second->getX(), (int) second->getY());
 				}
 

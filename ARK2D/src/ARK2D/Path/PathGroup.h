@@ -9,9 +9,9 @@
 #define PATHGROUP_H_
 
 #include "../ARK2D.h"
-#include "../Graphics.h"
+#include "../Graphics/Renderer.h"
 #include "../Util/MathUtil.h"
-#include "../GameTimer.h"
+#include "../Core/GameTimer.h"
 #include "../Geometry/Vector2.h"
 #include <vector>
 

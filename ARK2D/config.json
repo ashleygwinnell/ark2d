@@ -58,35 +58,35 @@
 		"all": [
 			"src/main.cpp",
 			"src/ARK2D/ARK2D.cpp",
-			"src/ARK2D/ARKException.cpp",
-			"src/ARK2D/ARKGameObject.cpp",
-			"src/ARK2D/ARKString.cpp",
-			"src/ARK2D/Event.cpp",
-			"src/ARK2D/Game.cpp",
-			"src/ARK2D/GameContainer.cpp",
-			"src/ARK2D/GameContainerLinux.cpp",
-			"src/ARK2D/GameContainerWindows.cpp",  
-			"src/ARK2D/GameTimer.cpp",
-			"src/ARK2D/Graphics.cpp",
-			"src/ARK2D/Resource.cpp",
-			"src/ARK2D/Sort.cpp",
 			"src/ARK2D/Audio/Sound.cpp",
 			"src/ARK2D/Audio/SoundStore.cpp",
 			"src/ARK2D/Controls/Input.cpp",
 			"src/ARK2D/Controls/Gamepad.cpp",
+			"src/ARK2D/Core/Game.cpp",
+			"src/ARK2D/Core/Event.cpp",
+			"src/ARK2D/Core/Exception.cpp",
+			"src/ARK2D/Core/GameObject.cpp",
+			"src/ARK2D/Core/GameContainer.cpp",
+			"src/ARK2D/Core/GameTimer.cpp",
+			"src/ARK2D/Core/Resource.cpp",
+			"src/ARK2D/Core/Sort.cpp",
+			"src/ARK2D/Core/String.cpp",
+			"src/ARK2D/Core/Platform/GameContainerLinux.cpp",
+			"src/ARK2D/Core/Platform/GameContainerWindows.cpp",
 			"src/ARK2D/Font/Font.cpp",
 			"src/ARK2D/Font/FTFont.cpp",
 			"src/ARK2D/Font/BMFont.cpp",
 			"src/ARK2D/Graphics/Animation.cpp",
 			"src/ARK2D/Graphics/Color.cpp",
+			"src/ARK2D/Graphics/Renderer.cpp",
 			"src/ARK2D/Graphics/Shader.cpp",
 			"src/ARK2D/Graphics/SpriteSheetDescription.cpp",
 			"src/ARK2D/Graphics/SpriteSheetDescriptionItem.cpp",
-			"src/ARK2D/Graphics/Image/Image.cpp",
-			"src/ARK2D/Graphics/Image/BMPImage.cpp",
-			"src/ARK2D/Graphics/Image/PNGImage.cpp",
-			"src/ARK2D/Graphics/Image/TargaImage.cpp",
-			"src/ARK2D/Graphics/Image/Texture.cpp",
+			"src/ARK2D/Graphics/Image.cpp",
+			"src/ARK2D/Graphics/Texture.cpp",
+			"src/ARK2D/Graphics/ImageIO/BMPImage.cpp",
+			"src/ARK2D/Graphics/ImageIO/PNGImage.cpp",
+			"src/ARK2D/Graphics/ImageIO/TargaImage.cpp",
 			"src/ARK2D/Geometry/GigaRectangle.cpp",
 			"src/ARK2D/Geometry/Vector2.cpp",
 			"src/ARK2D/Geometry/Shape.cpp",
@@ -219,15 +219,15 @@
 		],
 		"windows": [
 			"src/ARK2D/vendor/glew.c",
-			"src/ARK2D/ARK2D_windres.rc"
+			"src/ARK2D/Windres.rc"
 		],
 		"mac": [
-			"src/ARK2D/GameContainerMac.mm",
-			"src/ARK2D/GameContainerMacAppDelegate.mm",
-			"src/ARK2D/GameContainerMacWindowListener.mm"
+			"src/ARK2D/Core/Platform/GameContainerMac.mm",
+			"src/ARK2D/Core/Platform/GameContainerMacAppDelegate.mm",
+			"src/ARK2D/Core/Platform/GameContainerMacWindowListener.mm"
 		],
 		"android": [
-			"src/ARK2D/GameContainerAndroid.cpp"
+			"src/ARK2D/Core/Platform/GameContainerAndroid.cpp"
 		]	
 	}
 }

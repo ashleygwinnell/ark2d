@@ -61,16 +61,16 @@ namespace ARK {
 			renderBackground();
 			renderOverlay();
 
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			g->drawString(m_text, m_x, m_y);
 		}
 		void ComboBoxItem::renderBackground() {
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::black_50a);
 			g->fillRect(m_x, m_y, m_width, m_height);
 		}
 		void ComboBoxItem::renderOverlay() {
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white);
 			if (m_state == Button::STATE_OVER) {
 				g->setDrawColor(Color::white_50a);

@@ -24,7 +24,7 @@ namespace ARK {
 				unsigned int id();
 				void init(GameContainer* container, StateBasedGame* game);
 				void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
-				void render(GameContainer* container, StateBasedGame* game, Graphics* g);
+				void render(GameContainer* container, StateBasedGame* game, Renderer* g);
 				virtual ~ParticlesTestGameState();
 		};
 
@@ -33,7 +33,7 @@ namespace ARK {
 				ParticlesTest();
 				virtual void initStates(GameContainer* container);
 				virtual void update(GameContainer* container, GameTimer* timer);
-				virtual void render(GameContainer* container, Graphics* g);
+				virtual void render(GameContainer* container, Renderer* g);
 				virtual void resize(GameContainer* container, int width, int height);
 
 				static int start();

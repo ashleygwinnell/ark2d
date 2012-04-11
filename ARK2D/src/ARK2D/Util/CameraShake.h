@@ -8,14 +8,8 @@
 #ifndef CAMERASHAKE_H_
 #define CAMERASHAKE_H_
 
-#include "../ARK2D_namespaces.h"
+#include "../Namespaces.h"
 #include "../Tween/Timeline.h"
-
-class GameContainer;
-class Game;
-class Event;
-class GameTimer;
-class Graphics;
 
 namespace ARK {
 	namespace Util {
@@ -43,9 +37,9 @@ namespace ARK {
 				bool isShaking();
 				void update(GameContainer* container, GameTimer* timer);
 
-				void preRender(GameContainer* container, Graphics* g);
-				void render(GameContainer* container, Graphics* g);
-				void postRender(GameContainer* container, Graphics* g);
+				void preRender(GameContainer* container, Renderer* g);
+				void render(GameContainer* container, Renderer* g);
+				void postRender(GameContainer* container, Renderer* g);
 
 				virtual ~CameraShake();
 

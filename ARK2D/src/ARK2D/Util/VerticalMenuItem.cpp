@@ -6,7 +6,7 @@
  */
 
 #include "VerticalMenuItem.h"
-#include "../Event.h"
+#include "../Core/Event.h"
 
 VerticalMenuItem::VerticalMenuItem():
 	m_visible(true),

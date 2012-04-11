@@ -8,12 +8,12 @@
 #ifndef BUTTON_H_
 #define BUTTON_H_
 
-#include "../ARK2D_namespaces.h"
+#include "../Namespaces.h"
 #include "AbstractUIComponent.h"
 
-#include "../ARKString.h"
+#include "../Core/String.h"
 #include "../Controls/Input.h"
-#include "../Graphics.h"
+#include "../Graphics/Renderer.h"
 #include "../Geometry/GigaRectangle.h"
 
 namespace ARK {
@@ -26,7 +26,7 @@ namespace ARK {
 		 */
 		class Button : public AbstractUIComponent {
 			private:
-				ARKString m_text;
+				String m_text;
 				Image* m_image;
 				unsigned int m_state; // 0 for mouse-off, 1 for mouse-over, 2 for mouse-down.
 				void* m_event;
@@ -109,7 +109,7 @@ namespace ARK {
 				void setText(string s) {
 					m_text += s;
 				}
-				const ARKString& getText() {
+				const String& getText() {
 					return m_text;
 				}
 				void setState(unsigned int i) {
@@ -122,7 +122,7 @@ namespace ARK {
 
 					//AbstractUIComponent::preRender();
 
-					Graphics* g = ARK2D::getGraphics();
+					Renderer* g = ARK2D::getRenderer();
 					renderBackground();
 
 					int renderTextX = m_x + (m_width/2) - (g->getFont()->getStringWidth(m_text.get())/2);
@@ -144,12 +144,12 @@ namespace ARK {
 					//AbstractUIComponent::postRender();
 				}
 				virtual void renderBackground() {
-					Graphics* g = ARK2D::getGraphics();
+					Renderer* g = ARK2D::getRenderer();
 					g->setDrawColor(Color::black_50a);
 					g->fillRect(m_x, m_y, m_width, m_height);
 				}
 				virtual void renderText(int x, int y) {
-					Graphics* g = ARK2D::getGraphics();
+					Renderer* g = ARK2D::getRenderer();
 					g->setDrawColor(Color::white);
 					g->drawString(m_text.get(), x, y);
 				}
@@ -157,7 +157,7 @@ namespace ARK {
 					m_image->draw(x, y);
 				}
 				virtual void renderOverlay() {
-					Graphics* g = ARK2D::getGraphics();
+					Renderer* g = ARK2D::getRenderer();
 					g->setDrawColor(Color::white);
 					if (m_state == STATE_OVER || m_state == STATE_DOWN) {
 						g->setDrawColor(Color::white_50a);

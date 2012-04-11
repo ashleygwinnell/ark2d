@@ -8,14 +8,14 @@
 #ifndef LOCALHIGHSCORES_H_
 #define LOCALHIGHSCORES_H_
 
-#include "../ARK2D_JSON.h"
+#include "../Includes.h"
 #include "FileUtil.h"
 #include "Cast.h"
 #include "StringUtil.h"
 #include <vector>
 #include <string>
 #include <algorithm>
-#include "../Resource.h"
+#include "../Core/Resource.h"
 
 using namespace std;
 
@@ -35,7 +35,7 @@ namespace ARK {
 		 * @see Resource
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class LocalHighscores : public ARK::Resource {
+		class LocalHighscores : public ARK::Core::Resource {
 			private:
 				string m_filename;
 				void* m_data;

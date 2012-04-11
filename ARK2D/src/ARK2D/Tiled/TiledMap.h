@@ -11,8 +11,9 @@
 #include <string>
 #include <vector>
 #include "../vendor/tinyxml/tinyxml.h"
-#include "../ToString.h"
-#include "../Graphics/Image/Image.h"
+#include "../Core/ToString.h"
+#include "../Core/Resource.h"
+#include "../Graphics/Image.h"
 #include "../Graphics/Color.h"
 
 #include "TiledMapTileset.h"
@@ -21,7 +22,6 @@
 #include "TiledMapObjectGroup.h" 
 #include "TiledMapObject.h"
 
-#include "../Resource.h"
 using namespace std;
 
 namespace ARK {
@@ -37,7 +37,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class TiledMap : public ARK::Resource {
+		class TiledMap : public ARK::Core::Resource {
 
 			friend class TiledMapLayer;
 

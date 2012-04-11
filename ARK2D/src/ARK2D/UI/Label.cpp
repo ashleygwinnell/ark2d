@@ -18,7 +18,7 @@ namespace ARK {
 		Label::Label(string text):
 			AbstractUIComponent(),
 			m_text(text) {
-			setSize(ARK2D::getGraphics()->getFont()->getStringWidth(text), ARK2D::getGraphics()->getFont()->getLineHeight());
+			setSize(ARK2D::getRenderer()->getFont()->getStringWidth(text), ARK2D::getRenderer()->getFont()->getLineHeight());
 		}
 		void Label::setText(string text) {
 			setText(text, false);
@@ -26,16 +26,16 @@ namespace ARK {
 		void Label::setText(string text, bool updateSize) {
 			m_text = text;
 			if (updateSize) {
-				setSize(ARK2D::getGraphics()->getFont()->getStringWidth(text), ARK2D::getGraphics()->getFont()->getLineHeight());
+				setSize(ARK2D::getRenderer()->getFont()->getStringWidth(text), ARK2D::getRenderer()->getFont()->getLineHeight());
 			}
 		}
 
 		void Label::render() {
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			g->drawString(m_text, m_x, m_y);
 		}
 		void Label::renderBounds() {
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			g->drawRect(m_x, m_y, m_width, m_height);
 		}
 

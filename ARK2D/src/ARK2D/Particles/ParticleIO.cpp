@@ -12,7 +12,7 @@
 #include "ParticlePool.h"
 #include "../Graphics/Color.h"
 #include "../UI/ErrorDialog.h" 
-#include "../Graphics/Image/Image.h"
+#include "../Graphics/Image.h"
 #include "../Util/StringUtil.h"
  
 

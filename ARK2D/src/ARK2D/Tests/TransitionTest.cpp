@@ -32,7 +32,7 @@ namespace ARK {
 		void TransitionTestGameState::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {
 
 		}
-		void TransitionTestGameState::render(GameContainer* container, StateBasedGame* game, Graphics* g) {
+		void TransitionTestGameState::render(GameContainer* container, StateBasedGame* game, Renderer* g) {
 			g->setDrawColor(Color::darker_grey);
 			g->fillRect(10,10,container->getWidth()-20, container->getHeight()-20);
 
@@ -93,7 +93,7 @@ namespace ARK {
 				}
 			}
 		}
-		void TransitionTest::render(GameContainer* container, Graphics* g) {
+		void TransitionTest::render(GameContainer* container, Renderer* g) {
 			StateBasedGame::render(container, g);
 			g->drawStringCenteredAt(StringUtil::append("",transitionIndex), container->getWidth()/2, container->getHeight()/2);
 			if (isTransitioning()) {

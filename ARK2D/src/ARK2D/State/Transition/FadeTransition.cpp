@@ -6,91 +6,98 @@
  */
 
 #include "FadeTransition.h"
-#include "../../ARK2D_GL.h"
+#include "../../Includes.h"
 
-FadeTransition::FadeTransition(unsigned int timeMillis):
-	Transition(),
-	m_time(timeMillis),
-	m_time_current(0),
-	m_alpha(1.0f)
-	{
+namespace ARK {
+	namespace State {
+		namespace Transition {
 
-}
-void FadeTransition::init(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to) {
-	Transition::init(container, game, from, to);
+			FadeTransition::FadeTransition(unsigned int timeMillis):
+				Transition(),
+				m_time(timeMillis),
+				m_time_current(0),
+				m_alpha(1.0f)
+				{
 
-	int width = container->getWidth();
-	int height = container->getHeight();
+			}
+			void FadeTransition::init(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to) {
+				Transition::init(container, game, from, to);
 
-	m_time_current = 0.0f;
-	m_alpha = 1.0f;
+				int width = container->getWidth();
+				int height = container->getHeight();
 
-	// Generate one texture (we're creating only one).
-	unsigned Object(0);
-	glGenTextures(1, &Object);
+				m_time_current = 0.0f;
+				m_alpha = 1.0f;
 
-	void* data[width * height];
-	glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, &data);
+				// Generate one texture (we're creating only one).
+				unsigned Object(0);
+				glGenTextures(1, &Object);
 
-	// bind?
-	glBindTexture(GL_TEXTURE_2D, Object);
+				void* data[width * height];
+				glReadPixels(0, 0, width, height, GL_RGBA, GL_UNSIGNED_BYTE, &data);
 
-	// You can use these values to specify mipmaps if you want to, such as 'GL_LINEAR_MIPMAP_LINEAR'.
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				// bind?
+				glBindTexture(GL_TEXTURE_2D, Object);
 
-	// Create the actual texture object.
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &data);
+				// You can use these values to specify mipmaps if you want to, such as 'GL_LINEAR_MIPMAP_LINEAR'.
+				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-	m_textureId = Object;
+				// Create the actual texture object.
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &data);
 
-}
-void FadeTransition::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {
-	m_alpha = (float) Easing::ease(m_easing, double(m_time_current), 1.0, -1.0, double(m_time));
-	m_time_current += int(timer->getDelta() * 1000.0f);
-}
-void FadeTransition::preRender(GameContainer* container, StateBasedGame* game, Graphics* g) {
+				m_textureId = Object;
 
-}
-void FadeTransition::postRender(GameContainer* container, StateBasedGame* game, Graphics* g) {
+			}
+			void FadeTransition::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {
+				m_alpha = (float) Easing::ease(m_easing, double(m_time_current), 1.0, -1.0, double(m_time));
+				m_time_current += int(timer->getDelta() * 1000.0f);
+			}
+			void FadeTransition::preRender(GameContainer* container, StateBasedGame* game, Renderer* g) {
 
-	#if defined(ARK2D_ANDROID)
-		// ...
-	#else
+			}
+			void FadeTransition::postRender(GameContainer* container, StateBasedGame* game, Renderer* g) {
 
-		glColor4f(1.0f, 1.0f, 1.0f, m_alpha);
+				#if defined(ARK2D_ANDROID)
+					// ...
+				#else
 
-		int m_Width = container->getWidth();
-		int m_Height = container->getHeight();
+					glColor4f(1.0f, 1.0f, 1.0f, m_alpha);
 
-		glBindTexture(GL_TEXTURE_2D, m_textureId);
-		glPushMatrix();
-		glBegin( GL_QUADS );
-			glTexCoord2f( 0, 1.0f);
-			glVertex2f(0, 0);
+					int m_Width = container->getWidth();
+					int m_Height = container->getHeight();
 
-			glTexCoord2f( 0, 0 );
-			glVertex2f(0, m_Height);
+					glBindTexture(GL_TEXTURE_2D, m_textureId);
+					glPushMatrix();
+					glBegin( GL_QUADS );
+						glTexCoord2f( 0, 1.0f);
+						glVertex2f(0, 0);
 
-			glTexCoord2f( 1.0f, 0.0f );
-			glVertex2f(m_Width, m_Height);
+						glTexCoord2f( 0, 0 );
+						glVertex2f(0, m_Height);
 
-			glTexCoord2f(1.0f, 1.0f );
-			glVertex2f(m_Width, 0);
-		glEnd();
-		glPopMatrix();
-		glBindTexture(GL_TEXTURE_2D, 0);
+						glTexCoord2f( 1.0f, 0.0f );
+						glVertex2f(m_Width, m_Height);
 
-	#endif
+						glTexCoord2f(1.0f, 1.0f );
+						glVertex2f(m_Width, 0);
+					glEnd();
+					glPopMatrix();
+					glBindTexture(GL_TEXTURE_2D, 0);
 
-}
-bool FadeTransition::isComplete() {
-	if (m_time_current >= m_time) {
-		return true;
+				#endif
+
+			}
+			bool FadeTransition::isComplete() {
+				if (m_time_current >= m_time) {
+					return true;
+				}
+				return false;
+			}
+
+			FadeTransition::~FadeTransition() {
+
+			}
+		}
 	}
-	return false;
-}
-
-FadeTransition::~FadeTransition() {
-
 }

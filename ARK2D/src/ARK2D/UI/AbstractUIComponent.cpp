@@ -111,7 +111,7 @@ namespace ARK {
 
 		void AbstractUIComponent::preRender() {
 			if (m_clipping) {
-				Graphics* g = ARK2D::getGraphics();
+				Renderer* g = ARK2D::getRenderer();
 				g->setScissorTestEnabled(true);
 				g->scissor(getOnScreenX(), getOnScreenY(), m_width, m_height);
 			}
@@ -119,7 +119,7 @@ namespace ARK {
 		void AbstractUIComponent::postRender() {
 			if (m_clipping) {
 				GameContainer* c = ARK2D::getContainer();
-				Graphics* g = ARK2D::getGraphics();
+				Renderer* g = ARK2D::getRenderer();
 				g->scissor(0, 0, c->getWidth(), c->getHeight());
 				g->setScissorTestEnabled(false);
 			}

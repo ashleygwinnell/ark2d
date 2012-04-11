@@ -5,9 +5,10 @@
  *      Author: Ashley
  */
 
-#include "../GameContainer.h"
-#include "../GameTimer.h"
-#include "../Graphics.h"
+#include "../Core/GameContainer.h"
+#include "../Core/GameTimer.h"
+#include "../Core/Event.h"
+#include "../Graphics/Renderer.h"
 
 #include "VerticalMenu.h"
 #include "VerticalMenuItem.h"
@@ -79,7 +80,7 @@ void VerticalMenu::update(GameContainer* container, GameTimer* timer) {
 }
 
 
-void VerticalMenu::draw(Graphics* g, signed int x, signed int y) {
+void VerticalMenu::draw(Renderer* g, signed int x, signed int y) {
 	signed int current_x = x;
 	signed int current_y = y;
 
@@ -134,7 +135,7 @@ unsigned int VerticalMenu::sizeVisible() {
 	return size;
 }
 
-void VerticalMenu::drawCentered(Graphics* g, signed int x, signed int y) {
+void VerticalMenu::drawCentered(Renderer* g, signed int x, signed int y) {
 	// calculate width and height...
 	signed int width = 0;
 	signed int height = 0;
@@ -191,7 +192,7 @@ void VerticalMenu::preRenderFocusedItem(unsigned int index) {
 void VerticalMenu::preRenderBlurredItem(unsigned int index) {
 
 }
-void VerticalMenu::renderItem(Graphics* g, VerticalMenuItem* item, signed int x, signed int y) {
+void VerticalMenu::renderItem(Renderer* g, VerticalMenuItem* item, signed int x, signed int y) {
 	if (!item->isVisible()) { return; }
 	g->drawString(item->getText(), x - (g->getFont()->getStringWidth(item->getText()) / 2), y);
 }

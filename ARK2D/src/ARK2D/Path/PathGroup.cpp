@@ -260,7 +260,7 @@ namespace ARK {
 
 
 		void PathGroup::render() {
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white);
 
 			// render points.
@@ -309,7 +309,7 @@ namespace ARK {
 			renderCurve(Color::red);
 		}
 		void PathGroup::renderCurve(const Color& c) {
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 
 			float ptimer = getTimer();
 			g->setDrawColor(c);
@@ -333,7 +333,7 @@ namespace ARK {
 			updateCurrent();
 		}
 		void PathGroup::renderPoint(float x, float y, bool linkPoint) {
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white);
 			if (linkPoint) {
 				g->fillCircle(int(x), int(y), 10, 10);
@@ -342,7 +342,7 @@ namespace ARK {
 			}
 		}
 		void PathGroup::renderLine(float x, float y, float x2, float y2) {
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white);
 			g->drawLine(int(x), int(y), int(x2), int(y2));
 		}

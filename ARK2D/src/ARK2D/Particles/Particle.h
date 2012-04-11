@@ -8,10 +8,8 @@
 #ifndef PARTICLE_H_
 #define PARTICLE_H_
 
-#include "../ARK2D_GL.h"
-
-class Image;
-class Color;
+#include "../Namespaces.h"
+#include "../Includes.h"
 
 namespace ARK {
 	namespace Particles {

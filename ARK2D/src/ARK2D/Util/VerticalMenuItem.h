@@ -9,7 +9,7 @@
 #define VERTICALMENUITEM_H_
 
 #include <string>
-#include "../Event.h"
+#include "../Namespaces.h"
 
 /*!
  * @deprecated

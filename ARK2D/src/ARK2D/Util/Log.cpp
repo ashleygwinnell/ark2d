@@ -8,9 +8,9 @@
 #include "Log.h"
 
 #include "../ARK2D.h"
-#include "../GameContainer.h"
-#include "../Graphics.h"
-#include "../ARKString.h"
+#include "../Core/GameContainer.h"
+#include "../Core/String.h"
+#include "../Graphics/Renderer.h"
 
 namespace ARK {
 	namespace Util {
@@ -65,16 +65,16 @@ namespace ARK {
 		void Log::g(string s) {
 			message(s, TYPE_GAME);
 		}
-		void Log::e(ARKString s) {
+		void Log::e(String s) {
 			message(s.get(), TYPE_ERROR);
 		}
-		void Log::w(ARKString s) {
+		void Log::w(String s) {
 			message(s.get(), TYPE_WARNING);
 		}
-		void Log::i(ARKString s) {
+		void Log::i(String s) {
 			message(s.get(), TYPE_INFORMATION);
 		}
-		void Log::g(ARKString s) {
+		void Log::g(String s) {
 			message(s.get(), TYPE_GAME);
 		}
 		void Log::update() {
@@ -98,7 +98,7 @@ namespace ARK {
 			}
 
 			GameContainer* container = ARK2D::getContainer();
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			ARK::Font::Font* oldFont = g->getFont();
 			const Color& oldColor = g->getDrawColor();
 

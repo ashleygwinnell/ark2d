@@ -26,11 +26,10 @@
 #include "SoundStore.h"
 
 #include "../ARK2D.h"
-#include "../ARK2D_AL.h"
-#include "../Resource.h"
+#include "../Includes.h"
+#include "../Core/Resource.h"
 
-class GameContainer;
-class GameContainerPlatform;
+#include "../Namespaces.h"
 
 namespace ARK {
 	namespace Audio {
@@ -42,9 +41,9 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class Sound : public ARK::Resource {
-			friend class GameContainer;
-			friend class GameContainerPlatform;
+		class Sound : public ARK::Core::Resource {
+			friend class ARK::Core::GameContainer;
+			friend class ARK::Core::GameContainerPlatform;
 
 			public:
 				Sound(const std::string& filename);

@@ -34,7 +34,7 @@ namespace ARK {
 				int newHeight = m_height;
 				for(unsigned int i = 0; i < m_items.size(); i++) {
 					ComboBoxItem* item = m_items.at(i);
-					item->setSize(m_width, ARK2D::getGraphics()->getFont()->getLineHeight());
+					item->setSize(m_width, ARK2D::getRenderer()->getFont()->getLineHeight());
 					item->m_parent = m_parent;
 					newHeight += item->getHeight();
 				}
@@ -102,7 +102,7 @@ namespace ARK {
 			renderArrow();
 			renderOverlay();
 
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			if (m_selected != NULL) {
 				g->drawString(m_selected->m_text, m_x, m_y);
 			}
@@ -117,12 +117,12 @@ namespace ARK {
 			}
 		}
 		void ComboBox::renderBackground() {
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::black_50a);
 			g->fillRect(m_x, m_y, m_width, m_height);
 		}
 		void ComboBox::renderArrow() {
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white_50a);
 			if (m_open) {
 				g->fillTriangle(m_x + m_width - 20, m_y+10, 10, 10);
@@ -135,7 +135,7 @@ namespace ARK {
 
 		}
 		void ComboBox::renderOverlay() {
-			Graphics* g = ARK2D::getGraphics();
+			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white);
 			if (m_state == Button::STATE_OVER) {
 				g->setDrawColor(Color::white_50a);

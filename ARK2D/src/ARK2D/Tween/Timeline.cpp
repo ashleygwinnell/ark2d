@@ -9,7 +9,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
-#include "../GameTimer.h"
+#include "../Core/GameTimer.h"
 #include "../UI/ErrorDialog.h"
 
 #include "Timeline.h"

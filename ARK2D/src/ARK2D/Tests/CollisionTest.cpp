@@ -80,7 +80,7 @@ namespace ARK {
 			else if (i->isKeyPressed(Input::KEY_7)) { current = shapes.at(7); }
 
 		}
-		void CollisionTestGameState::render(GameContainer* container, StateBasedGame* game, Graphics* g) {
+		void CollisionTestGameState::render(GameContainer* container, StateBasedGame* game, Renderer* g) {
 			g->setDrawColor(Color::darker_grey);
 			g->fillRect(0,0,container->getWidth(), container->getHeight());
 
@@ -132,7 +132,7 @@ namespace ARK {
 		void CollisionTest::update(GameContainer* container, GameTimer* timer) {
 			StateBasedGame::update(container, timer);
 		}
-		void CollisionTest::render(GameContainer* container, Graphics* g) {
+		void CollisionTest::render(GameContainer* container, Renderer* g) {
 			StateBasedGame::render(container, g);
 		}
 		void CollisionTest::resize(GameContainer* container, int width, int height) {
