@@ -24,16 +24,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
+-- Using This Project -- 
 
--- Building --
+Tutorials are available on http://www.indieark.com/
 
-To build ARK2D, there is a Python 3.0 build script included named "build.py". 
-
-On Windows, you should run this using the included "build.bat" file.
-
-
--- Using --
-
-To use ARK2D, simply link in the libARK2d.dll that is built in the IDE of your choice.
-
-If you're awesome you may use the Python 3.0 script "build-game.py".
