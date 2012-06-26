@@ -4,7 +4,7 @@
 		"python_executable": "C:\\Python31\\python.exe",
 		"ark2d_dir": "C:\\Dropbox\\ARK2D\\ark2d"
 	},
-	"mac": {
+	"osx": {
 		"python_executable": "/usr/local/bin/python3.1",
 		"ark2d_dir": "/Users/ashleygwinnell/Dropbox/ark2d/ARK2D",
         "android": {
@@ -19,7 +19,7 @@
 		"windows": [
 		
 		],
-		"mac": [
+		"osx": [
 		
 		],
 		"android": [
@@ -38,8 +38,9 @@
 			"lib\\windows\\winmm.dll",
 			"lib\\windows\\freetype6.dll"
 		],
-		"mac": [
-			"/usr/X11/lib/libfreetype.6.dylib "
+		"osx": [
+			"/usr/X11/lib/libfreetype.6.dylib"
+			
 		]
 	},
 	"static_libraries": {
@@ -50,8 +51,11 @@
 			"mingw32",
 			"freetype"
 		],
-		"mac": [
-		
+		"osx": [
+			"curl"
+		],
+		"iphone": [
+			"freetype"
 		]
 	},
 	"src_files": {
@@ -154,7 +158,8 @@
 			"src/ARK2D/Util/LocalHighscores.cpp",
 			"src/ARK2D/Util/RSSL.cpp",
 			"src/ARK2D/Util/Vector4.cpp",
-			"src/ARK2D/Util/Matrix44.cpp",
+			"src/ARK2D/Util/Matrix44.cpp", 
+			"src/ARK2D/Util/URLRequest.cpp",
 			"src/ARK2D/Util/Containers/Pool.cpp",
 			"src/ARK2D/Util/Containers/Vector.cpp",
 			"src/ARK2D/vendor/FileInterface.cpp",
@@ -221,13 +226,18 @@
 			"src/ARK2D/vendor/glew.c",
 			"src/ARK2D/Windres.rc"
 		],
-		"mac": [
+		"osx": [
 			"src/ARK2D/Core/Platform/GameContainerMac.mm",
 			"src/ARK2D/Core/Platform/GameContainerMacAppDelegate.mm",
 			"src/ARK2D/Core/Platform/GameContainerMacWindowListener.mm"
 		],
 		"android": [
 			"src/ARK2D/Core/Platform/GameContainerAndroid.cpp"
+		],
+		"iphone": [ 
+			"src/ARK2D/Core/Platform/GameContainerIPhoneAppDelegate.mm",
+			"src/ARK2D/Core/Platform/GameContainerIPhoneGLView.mm",
+			"src/ARK2D/Core/Platform/GameContainerIPhone.mm"
 		]	
 	}
 }

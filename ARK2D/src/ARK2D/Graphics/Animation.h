@@ -42,6 +42,8 @@ namespace ARK {
 				void drawFlipped(int x, int y, bool fx, bool fy);
 				void drawCenteredFlipped(int x, int y, bool fx, bool fy);
 
+				void clear();
+
 				virtual ~Animation();
 
 			private:

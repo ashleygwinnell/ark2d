@@ -23,12 +23,16 @@ namespace ARK {
 			return 0;
 		}
 
+		void itemChangedEvent();
 		void itemChangedEvent() {
 			ErrorDialog::createAndShow("Item changed");
 		}
+
+		void buttonClickEvent();
 		void buttonClickEvent() {
 			ErrorDialog::createAndShow("Button clicked");
 		}
+		void stateChangedEvent();
 		void stateChangedEvent() {
 			ErrorDialog::createAndShow("Checkbox changed");
 		}

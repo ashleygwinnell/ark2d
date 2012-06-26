@@ -203,15 +203,19 @@ namespace ARK {
 		}*/
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
+		size_t ark_ov_read (void* ptr, size_t size, size_t nmemb, void* datasource);
 		size_t ark_ov_read (void* ptr, size_t size, size_t nmemb, void* datasource) {
 			return (size_t) fi_fread(ptr, (unsigned long int) size, (unsigned long int) nmemb, (FILE_INTERFACE*) datasource);
 		}
+		int ark_ov_seek (void *datasource, ogg_int64_t offset, int whence);
 		int ark_ov_seek (void *datasource, ogg_int64_t offset, int whence) {
 			return fi_fseek((FILE_INTERFACE*) datasource, offset, whence);
 		}
+		long ark_ov_tell (void *datasource);
 		long ark_ov_tell (void *datasource) {
 			return fi_ftell((FILE_INTERFACE*) datasource);
 		}
+		int ark_ov_close (void *datasource);
 		int ark_ov_close (void *datasource) {
 			fi_fclose((FILE_INTERFACE*) datasource);
 			return 0;
@@ -465,7 +469,7 @@ namespace ARK {
 			//#endif
 		}
 		bool Sound::loadWAV(bool loop) {
-			#if defined(ARK2D_ANDROID)
+			#if ( defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE) )
 				ARK2D::getLog()->e("Wav not supported on Android");
 				return false;
 			#elif ( defined(ARK2D_WINDOWS) || defined(ARK2D_UBUNTU_LINUX) )

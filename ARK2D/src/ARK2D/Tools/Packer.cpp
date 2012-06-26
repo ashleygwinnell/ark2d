@@ -7,11 +7,13 @@
 
 #include "Packer.h"
 
+string getExtension(string s);
 string getExtension(string s) { 
 	unsigned int pos = s.find_last_of('.') + 1;  
 	return s.substr(pos);
 }
 
+bool is_big_endian();
 bool is_big_endian() {
 	static unsigned long x(1);
 	static bool result(reinterpret_cast<unsigned char*>(&x)[0] == 0);
@@ -23,6 +25,7 @@ const string base64_chars =
 					 "abcdefghijklmnopqrstuvwxyz"
 					 "0123456789+/";
 
+string encodeBase64(const unsigned char* bytes_to_encode, unsigned int in_len);
 string encodeBase64(const unsigned char* bytes_to_encode, unsigned int in_len) {
 	string ret;
 	int i = 0;
@@ -63,6 +66,7 @@ string encodeBase64(const unsigned char* bytes_to_encode, unsigned int in_len) {
 	return ret;
 }
 
+char* file_get_contents(const char* fileName);
 char* file_get_contents(const char* fileName) {
     if (fileName != NULL) {
 
@@ -104,6 +108,7 @@ char* file_get_contents(const char* fileName) {
 
 }
 
+void compress_memory(void *in_data, size_t in_data_size, std::vector<uint8_t> &out_data);
 void compress_memory(void *in_data, size_t in_data_size, std::vector<uint8_t> &out_data)
 {
  std::vector<uint8_t> buffer;

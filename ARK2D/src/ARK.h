@@ -86,6 +86,7 @@
 #include "ARK2D/Util/Matrix44.h"
 #include "ARK2D/Util/Range.h"
 #include "ARK2D/Util/StringStore.h"
+#include "ARK2D/Util/URLRequest.h"
 
 // JSON Implementation
 #include "ARK2D/Includes.h"

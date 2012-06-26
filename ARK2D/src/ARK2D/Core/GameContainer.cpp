@@ -92,7 +92,7 @@ namespace ARK {
 		}
 
 		void GameContainer::enable2D() {
-			#if defined(ARK2D_ANDROID)
+			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 
 			#else
 				glMatrixMode(GL_PROJECTION) ;

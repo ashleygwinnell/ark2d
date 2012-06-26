@@ -11,12 +11,14 @@
 #include "../Util/Log.h"
 #include "../ARK2D.h"
 
-namespace ARK {
+namespace ARK { 
 	namespace Threading {
 
 		#if defined(ARK2D_WINDOWS)
 
-			Thread::Thread() {
+			Thread::Thread():
+				m_functionPointer(NULL)
+				{
 
 			}
 
@@ -56,17 +58,43 @@ namespace ARK {
 		#else
 
 
-			Thread::Thread():m_functionPointer(NULL), m_thread() {
+			Thread::Thread():
+				m_functionPointer(NULL),
+				m_classPointer(NULL),
+				m_thread() {
 
 			}
 			void Thread::init(void* functionPointer) {
 				m_functionPointer = functionPointer;
 			}
+			void Thread::init(void* functionPointer, void* classPointer) {
+				m_functionPointer = functionPointer;
+				m_classPointer = classPointer; 
+			}
+
+			void* myLauncher(void* obj)	{
+				Thread* myLauncher = reinterpret_cast<Thread*>(obj);
+   				return myLauncher->doInternal();
+			}
+
 			void Thread::start() {
-				int rc = pthread_create(&m_thread, NULL, (void* (*)(void*)) m_functionPointer, (void*) NULL);
+				int rc = 0;
+				rc = pthread_create(&m_thread, NULL, (void* (*)(void*)) myLauncher, (void*) this);
 				if (rc) {
 					ErrorDialog::createAndShow(StringUtil::append("Error creating thread: ", rc));
 				}
+			}
+			void* Thread::doInternal() {
+				if (m_functionPointer != NULL) {
+					if (m_classPointer == NULL) {
+						void (*pt)() = (void(*)()) m_functionPointer;
+						pt();
+					} else {
+						void (*pt)(void*) = (void(*)(void*)) m_functionPointer;
+						pt(m_classPointer);
+					}
+				}
+				return NULL;
 			}
 			void Thread::pause() {
 				ARK2D::getLog()->w("no thread pausing on non-windows platforms.");

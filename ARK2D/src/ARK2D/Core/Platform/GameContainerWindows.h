@@ -18,7 +18,7 @@
 		#define MAPVK_VK_TO_CHAR 2
 		#define MAPVK_VSC_TO_VK_EX 3
 
-		class GameContainer;
+		
 
 			#include "../../Windres.h"
 			#include "../../Includes.h"
@@ -32,6 +32,7 @@
 
 			namespace ARK {
 				namespace Core {
+				class GameContainer;
 
 					struct GameContainerDisplayMode {
 						unsigned int width;

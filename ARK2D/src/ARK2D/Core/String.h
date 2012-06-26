@@ -51,7 +51,7 @@ namespace ARK {
 					m_string = StringUtil::append(m_string, i);
 				}
 				void operator+=(float f) {
-					m_string = Cast::toString<float>(f);
+					m_string.append(Cast::toString<float>(f));
 				}
 
 

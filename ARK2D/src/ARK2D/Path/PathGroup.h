@@ -16,6 +16,7 @@
 #include <vector>
 
 #include "Path.h"
+ #include "../Core/Resource.h"
 
 using namespace std;
 
@@ -27,7 +28,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinell.co.uk>
 		 */
-		class PathGroup {
+		class PathGroup : public ARK::Core::Resource {
 			private:
 				vector<Path*> paths;
 				Vector2<float> currentLocation;

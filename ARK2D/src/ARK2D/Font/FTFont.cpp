@@ -83,7 +83,7 @@ namespace ARK {
 			float y = (float) bitmap.rows / (float) height;
 
 
-			#if defined(ARK2D_ANDROID)
+			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 
 			#else
 				// create the display list...
@@ -179,7 +179,8 @@ namespace ARK {
 			// so to make a font H pixels high, we need to make it h*64 or h << 6.
 			FT_Set_Char_Size(face, h << 6, h << 6, 96, 96);
 
-			#if defined(ARK2D_ANDROID)
+			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
+			
 			#else
 
 				// here we ask opengl to allocate resources for all the
@@ -201,7 +202,7 @@ namespace ARK {
 		}
 
 		void FTFontData::clean() {
-			#if defined(ARK2D_ANDROID)
+			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 			#else
 				glDeleteLists(list_base, 128);
 			#endif
@@ -218,7 +219,7 @@ namespace ARK {
 		}
 
 		void FTFont::drawString(const string& str, int x, int y) {
-			#if defined(ARK2D_ANDROID)
+			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 			#else
 				//GLuint font = m_data->list_base;
 				glEnable(GL_TEXTURE_2D);

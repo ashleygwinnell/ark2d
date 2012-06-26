@@ -12,6 +12,7 @@
 #include <set>
 
 #include "../Namespaces.h"
+#include "../Includes.h"
 
 #include "Input.h"
 #include "Gamepad.h"
@@ -374,7 +375,7 @@ namespace ARK {
 		int Input::getMouseY() const {
 			return mouse_y;
 		}
-		void Input::setGameContainer(const GameContainer* c) {
+		void Input::setGameContainer(const ARK::Core::GameContainer* c) {
 			m_container = c;
 		}
 

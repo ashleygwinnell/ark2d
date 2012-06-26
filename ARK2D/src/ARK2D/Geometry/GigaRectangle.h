@@ -274,7 +274,7 @@ class GigaRectangle {
 		}
 
 		static bool s_isOffscreen(GigaRectangle* obj) {
-			GameContainer* container = ARK2D::getContainer();
+			ARK::Core::GameContainer* container = ARK2D::getContainer();
 			if (	(signed int)(obj->getY() + obj->getHeight()) <= 0
 				|| 	(signed int)(obj->getX() + obj->getWidth()) <= 0
 				|| 	(signed int)(obj->getX()) >= (signed int) container->getWidth()
@@ -285,7 +285,7 @@ class GigaRectangle {
 		}
 
 		static bool s_isPartlyOffscreen(GigaRectangle* obj) {
-			GameContainer* container = ARK2D::getContainer();
+			ARK::Core::GameContainer* container = ARK2D::getContainer();
 			if (	(signed int)(obj->getX()) <= 0
 				|| 	(signed int)(obj->getX()) <= 0
 				|| 	(signed int)(obj->getX() + obj->getWidth()) >= (signed int) container->getWidth()

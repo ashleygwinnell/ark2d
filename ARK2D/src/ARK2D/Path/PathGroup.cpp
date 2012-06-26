@@ -12,6 +12,7 @@ namespace ARK {
 	namespace Path {
 
 		PathGroup::PathGroup():
+			ARK::Core::Resource(), 
 			paths(), currentLocation(), centerLocation(), calcVector(), current(0), timer(0.0f),
 			relative(false),
 			m_isFlippedH(false),

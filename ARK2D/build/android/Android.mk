@@ -12,45 +12,40 @@ LOCAL_CFLAGS := -DARK2D_ANDROID -DDISABLE_IMPORTGL -fno-exceptions -fno-rtti -Wn
 LOCAL_DEFAULT_CPP_EXTENSION := cpp
 
 LOCAL_SRC_FILES := \
-	src/ARK2D/GameContainerAndroid.cpp \
+	src/ARK2D/Core/Platform/GameContainerAndroid.cpp \
 	src/main.cpp \
 	src/ARK2D/ARK2D.cpp \
-	src/ARK2D/ARKException.cpp \
-	src/ARK2D/ARKGameObject.cpp \
-	src/ARK2D/ARKString.cpp \
-	src/ARK2D/Easing.cpp \
-	src/ARK2D/Event.cpp \
-	src/ARK2D/Game.cpp \
-	src/ARK2D/GameContainer.cpp \
-	src/ARK2D/GameContainerLinux.cpp \
-	src/ARK2D/GameContainerWindows.cpp \
-	src/ARK2D/Gamepad.cpp \
-	src/ARK2D/GameTimer.cpp \
-	src/ARK2D/Graphics.cpp \
-	src/ARK2D/Input.cpp \
-	src/ARK2D/Resource.cpp \
-	src/ARK2D/Sort.cpp \
-	src/ARK2D/StringStore.cpp \
-	src/ARK2D/Timeline.cpp \
 	src/ARK2D/Audio/Sound.cpp \
 	src/ARK2D/Audio/SoundStore.cpp \
+	src/ARK2D/Controls/Input.cpp \
+	src/ARK2D/Controls/Gamepad.cpp \
+	src/ARK2D/Core/Game.cpp \
+	src/ARK2D/Core/Event.cpp \
+	src/ARK2D/Core/Exception.cpp \
+	src/ARK2D/Core/GameObject.cpp \
+	src/ARK2D/Core/GameContainer.cpp \
+	src/ARK2D/Core/GameTimer.cpp \
+	src/ARK2D/Core/Resource.cpp \
+	src/ARK2D/Core/Sort.cpp \
+	src/ARK2D/Core/String.cpp \
+	src/ARK2D/Core/Platform/GameContainerLinux.cpp \
+	src/ARK2D/Core/Platform/GameContainerWindows.cpp \
 	src/ARK2D/Font/Font.cpp \
 	src/ARK2D/Font/FTFont.cpp \
 	src/ARK2D/Font/BMFont.cpp \
 	src/ARK2D/Graphics/Animation.cpp \
 	src/ARK2D/Graphics/Color.cpp \
+	src/ARK2D/Graphics/Renderer.cpp \
 	src/ARK2D/Graphics/Shader.cpp \
 	src/ARK2D/Graphics/SpriteSheetDescription.cpp \
 	src/ARK2D/Graphics/SpriteSheetDescriptionItem.cpp \
-	src/ARK2D/Graphics/Image/Image.cpp \
-	src/ARK2D/Graphics/Image/BMPImage.cpp \
-	src/ARK2D/Graphics/Image/PNGImage.cpp \
-	src/ARK2D/Graphics/Image/TargaImage.cpp \
-	src/ARK2D/Graphics/Image/Texture.cpp \
+	src/ARK2D/Graphics/Image.cpp \
+	src/ARK2D/Graphics/Texture.cpp \
+	src/ARK2D/Graphics/ImageIO/BMPImage.cpp \
+	src/ARK2D/Graphics/ImageIO/PNGImage.cpp \
+	src/ARK2D/Graphics/ImageIO/TargaImage.cpp \
 	src/ARK2D/Geometry/GigaRectangle.cpp \
 	src/ARK2D/Geometry/Vector2.cpp \
-	src/ARK2D/Geometry/Vector4.cpp \
-	src/ARK2D/Geometry/Matrix44.cpp \
 	src/ARK2D/Geometry/Shape.cpp \
 	src/ARK2D/Geometry/Rectangle.cpp \
 	src/ARK2D/Geometry/Circle.cpp \
@@ -76,8 +71,12 @@ LOCAL_SRC_FILES := \
 	src/ARK2D/State/Transition/SlideRectanglesAcrossTransition.cpp \
 	src/ARK2D/State/Transition/Transition.cpp \
 	src/ARK2D/State/Transition/TranslateOutInTransition.cpp \
-	src/ARK2D/Threading/ARKThread.cpp \
-	src/ARK2D/Threading/ARKMutex.cpp \
+	src/ARK2D/Tests/CollisionTest.cpp \
+	src/ARK2D/Tests/TransitionTest.cpp \
+	src/ARK2D/Tests/ParticlesTest.cpp \
+	src/ARK2D/Tests/UITest.cpp \
+	src/ARK2D/Threading/Thread.cpp \
+	src/ARK2D/Threading/Mutex.cpp \
 	src/ARK2D/Tiled/TiledMap.cpp \
 	src/ARK2D/Tiled/TiledMapLayer.cpp \
 	src/ARK2D/Tiled/TiledMapObject.cpp \
@@ -86,6 +85,8 @@ LOCAL_SRC_FILES := \
 	src/ARK2D/Tiled/TiledMapTile.cpp \
 	src/ARK2D/Tiled/TiledMapTileset.cpp \
 	src/ARK2D/Tools/Packer.cpp \
+	src/ARK2D/Tween/Timeline.cpp \
+	src/ARK2D/Tween/Easing.cpp \
 	src/ARK2D/UI/UIComponent.cpp \
 	src/ARK2D/UI/AbstractUIComponent.cpp \
 	src/ARK2D/UI/Panel.cpp \
@@ -98,15 +99,21 @@ LOCAL_SRC_FILES := \
 	src/ARK2D/UI/ComboBox.cpp \
 	src/ARK2D/UI/ComboBoxItem.cpp \
 	src/ARK2D/UI/ErrorDialog.cpp \
+	src/ARK2D/Util/ArcadeHighscoreInput.cpp \
 	src/ARK2D/Util/FileUtil.cpp \
 	src/ARK2D/Util/MathUtil.cpp \
 	src/ARK2D/Util/StringUtil.cpp \
-	src/ARK2D/Util/ARKLog.cpp \
+	src/ARK2D/Util/StringStore.cpp \
+	src/ARK2D/Util/Log.cpp \
 	src/ARK2D/Util/VerticalMenu.cpp \
 	src/ARK2D/Util/VerticalMenuItem.cpp \
 	src/ARK2D/Util/CameraShake.cpp \
 	src/ARK2D/Util/LocalHighscores.cpp \
 	src/ARK2D/Util/RSSL.cpp \
+	src/ARK2D/Util/Vector4.cpp \
+	src/ARK2D/Util/Matrix44.cpp \
+	src/ARK2D/Util/Containers/Pool.cpp \
+	src/ARK2D/Util/Containers/Vector.cpp \
 	src/ARK2D/vendor/FileInterface.cpp \
 	src/ARK2D/vendor/libJSON/JSON_Worker.cpp \
 	src/ARK2D/vendor/libJSON/jsonmain.cpp \

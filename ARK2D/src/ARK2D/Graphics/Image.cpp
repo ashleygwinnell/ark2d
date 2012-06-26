@@ -655,7 +655,7 @@ namespace ARK {
 			m_colors[1] = g;
 			m_colors[2] = b;
 			m_colors[3] = a;
-
+ 
 			m_colors[4] = r;
 			m_colors[5] = g;
 			m_colors[6] = b;
@@ -675,7 +675,7 @@ namespace ARK {
 		}
 
 
-		void Image::drawFlipped(int x, int y, bool flipx, bool flipy) {
+		void Image::drawFlipped(float x, float y, bool flipx, bool flipy) {
 
 			float previous_texture_offset_x = texture_offset_x;
 			float previous_texture_width = texture_width;
@@ -736,7 +736,7 @@ namespace ARK {
 			if (m_dirty) {
 				clean();
 			}
-
+ 
 			if (this->texture == 0) { return; }
 			glColor4f(1.0f, 1.0f, 1.0f, m_alpha);
 
@@ -756,7 +756,7 @@ namespace ARK {
 			glPushMatrix();
 			glTranslatef(x, y, 0);
 
-			#if defined(ARK2D_ANDROID)
+			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 
 
 
@@ -849,7 +849,7 @@ namespace ARK {
 		void Image::drawCentered(float x, float y) {
 			this->draw(x - (this->m_Width/2), y - (this->m_Height/2));
 		}
-		void Image::drawCenteredFlipped(int x, int y, bool flipx, bool flipy) {
+		void Image::drawCenteredFlipped(float x, float y, bool flipx, bool flipy) {
 			this->drawFlipped(x - (this->m_Width/2), y - (this->m_Height/2), flipx, flipy);
 		}
 

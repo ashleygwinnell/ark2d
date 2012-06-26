@@ -17,6 +17,7 @@
 #include <cstring>
 #include <map>
 
+#include "../Core/Resource.h"
 #include "SpriteSheetDescriptionItem.h"
 
 using namespace std;
@@ -30,15 +31,16 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class SpriteSheetDescription {
+		class SpriteSheetDescription : public ARK::Core::Resource {
 			public:
-				SpriteSheetDescription(const char* path);
 				SpriteSheetDescription(string path);
+				SpriteSheetDescription(string path, void* rawData);
 				const SpriteSheetDescriptionItem& getItemByName(const char* name);
 				~SpriteSheetDescription();
 
 			private:
 				string m_path;
+				string m_data;
 				map<string, SpriteSheetDescriptionItem> m_items;
 				void load();
 		};

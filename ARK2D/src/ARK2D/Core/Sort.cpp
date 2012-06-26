@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string>
 
+void selectionSortAscending(int anArray[]);
 void selectionSortAscending(int anArray[])
 {
 	int nSize = sizeof(anArray) / sizeof(anArray[0]);

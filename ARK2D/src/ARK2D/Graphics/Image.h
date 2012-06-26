@@ -101,8 +101,8 @@ namespace ARK {
 				void draw(float x, float y, unsigned int w, unsigned int h);
 				void drawCentered(int x, int y);
 				void drawCentered(float x, float y);
-				void drawCenteredFlipped(int x, int y, bool flipx, bool flipy);
-				void drawFlipped(int x, int y, bool flipx, bool flipy); // not const as modifies inner variables
+				void drawCenteredFlipped(float x, float y, bool flipx, bool flipy);
+				void drawFlipped(float x, float y, bool flipx, bool flipy); // not const as modifies inner variables
 				void drawSubImageStart();
 				void drawSubImage(int x1, int y1, int x2, int y2, int w1, int h1, int w2, int h2);
 				void drawSubImageEnd();

@@ -209,7 +209,7 @@ namespace ARK {
 
 				for (j = 0; (j < i - 1); j++) ret += char_array_3[j];
 			}
-
+  
 			return ret;
 		}
 
@@ -229,14 +229,25 @@ namespace ARK {
 			return false;
 		}
 
+		string StringUtil::internalOSAppends(string strFileName) {
+			#if defined(ARK2D_ANDROID)
+				strFileName = ARK2D::getContainer()->m_platformSpecific.m_externalDataStr + strFileName;
+			#else
+				if (strFileName.substr(1,1).compare(":") == 0 || strFileName.substr(0,1).compare("/") == 0) {
+
+				} else {
+					strFileName = ARK2D::getContainer()->getResourcePath() + strFileName;
+				}
+			#endif
+			return strFileName;
+		}
+
 		string StringUtil::file_get_contents(const char* fileName) {
 			if (fileName != NULL) {
 				string strFileName(fileName);
-				#if defined(ARK2D_ANDROID)
-					strFileName = ARK2D::getContainer()->m_platformSpecific.m_externalDataStr + strFileName;
-				#else
-					strFileName = ARK2D::getContainer()->getResourcePath() + strFileName;
-				#endif
+				
+				// Prepend shit for each OS.
+				strFileName = internalOSAppends(strFileName);
 
 				ARK2D::getLog()->i(StringUtil::append("Opening file: ", strFileName));
 				std::fstream f(strFileName.c_str(), std::ios::in);

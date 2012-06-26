@@ -9,7 +9,7 @@
 #include "Mutex.h"
 #include "../UI/ErrorDialog.h"
 #include "../Util/StringUtil.h"
-
+ 
 namespace ARK {
 
 	namespace Threading {

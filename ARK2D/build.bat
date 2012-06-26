@@ -1,2 +1,2 @@
-python build.py library 1>stdout.txt 2>stderr.txt
+build.py library
 pause

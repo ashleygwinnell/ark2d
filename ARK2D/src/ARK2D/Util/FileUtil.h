@@ -12,6 +12,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "../Includes.h"
 
 using namespace std;
 
@@ -26,6 +27,7 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
 		class FileUtil {
+			private:
 			public:
 				static bool file_put_contents(string filename, string contents);
 				static string getCurrentDirectory();

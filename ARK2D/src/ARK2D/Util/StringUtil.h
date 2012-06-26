@@ -22,6 +22,7 @@
 #include "../UI/ErrorDialog.h"
 #include "../Core/ToString.h"
 #include "../Namespaces.h"
+#include "../Graphics/SpriteSheetDescription.h"
 
 using namespace std;
 
@@ -35,6 +36,7 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
 		class StringUtil {
+			friend class ARK::Graphics::SpriteSheetDescription;
 			public:
 
 				static string prepend(string str, int i);
@@ -63,6 +65,9 @@ namespace ARK {
 
 				static vector<string> split(string s, const char* delimiter);
 				static string getExtension(string s);
+
+			private: 
+				static string internalOSAppends(string strFilename);
 		};
 	}
 }

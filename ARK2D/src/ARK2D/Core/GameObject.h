@@ -9,6 +9,8 @@
 #define ARKGAMEOBJECT_H_
 
 #include "../Namespaces.h"
+#include <string>
+using namespace std;
 
 namespace ARK {
 	namespace Core {
@@ -34,6 +36,8 @@ namespace ARK {
 
 				virtual void update(GameContainer* container, GameTimer* timer) = 0;
 				virtual void render(GameContainer* container, Renderer* g) = 0;
+
+				virtual string toString();
 
 				virtual ~GameObject();
 		};

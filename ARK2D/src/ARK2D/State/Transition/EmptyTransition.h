@@ -9,6 +9,7 @@
 #define EMPTYTRANSITION_H_
 
 #include "Transition.h"
+#include "../../Tween/Timeline.h"
 
 namespace ARK {
 	namespace State {

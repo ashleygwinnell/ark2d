@@ -13,6 +13,10 @@
 #include <stdlib.h>
 #include "../Util/Log.h"
 #include "../ARK2D.h"
+#include <string>
+#include "../Core/String.h"
+
+using namespace std;
 
 namespace ARK {
 	namespace Geometry {
@@ -45,13 +49,22 @@ namespace ARK {
 					return m_y;
 				}
 
+				// Set
 				void setX(T x) {
 					m_x = x;
 				}
 				void setY(T y) {
 					m_y = y;
 				}
+				void set(Vector2<T>* v) {
+					set(v->getX(), v->getY());
+				}
+				void set(T x, T y) {
+					m_x = x;
+					m_y = y;
+				}
 
+				// Add 
 				Vector2* add(Vector2<T>* v) {
 					return add(v->getX(), v->getY());
 				}
@@ -61,15 +74,23 @@ namespace ARK {
 					return this;
 				}
 
-				void set(Vector2<T>* v) {
-					set(v->getX(), v->getY());
+				// Multiply
+				Vector2* multiply(Vector2<T>* v) {
+					return multiply(v->getX(), v->getY());
+				}
+				Vector2* multiply(T x, T y) {
+					m_x *= x;
+					m_y *= y;
+					return this;
+				}
+				void multiplyX(T x) {
+					m_x *= x;
+				}
+				void multiplyY(T y) {
+					m_y *= y;
 				}
 
-				void set(T x, T y) {
-					m_x = x;
-					m_y = y;
-				}
-
+				// Subtract
 				Vector2* subtract(Vector2<T>* v) {
 					return subtract(v->getX(), v->getY());
 				}
@@ -79,6 +100,7 @@ namespace ARK {
 					return this;
 				}
 
+				// Distance
 				Vector2* distance(Vector2<T>* v) {
 					ARK2D::getLog()->w("Vector2* Vector2::distance(Vector2* v) is inefficient, use other method.");
 					Vector2<T>* result = new Vector2<T>();
@@ -98,6 +120,7 @@ namespace ARK {
 					result->set(abs(m_x - x), abs(m_y - y));
 				}
 
+				// Friction
 				Vector2* friction(T x, T y) {
 					frictionX(x);
 					frictionY(y);
@@ -124,6 +147,19 @@ namespace ARK {
 					return this;
 				}
 
+				// Restrict
+				void restrictMax(Vector2<T>* max) {
+					restrictMax(max->getX(), max->getY());
+				}
+				void restrictMax(T x, T y) {
+					if (m_x > x) {
+						m_x = x;
+					}
+					if (m_y > y) {
+						m_y = y;
+					}
+				}
+
 				T dot(Vector2* v) {
 					return dot(v->getX(), v->getY());
 				}
@@ -136,6 +172,17 @@ namespace ARK {
 				}
 				T length() {
 					return sqrt(lengthSquared());
+				}
+
+				string toString() {
+					ARK::Core::String s;
+					s += "{";
+					s += "\"x\":";
+					s += m_x;
+					s += ", \"y\":";
+					s += m_y;
+					s += "}";
+					return s.get();
 				}
 
 				~Vector2() {

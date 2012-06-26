@@ -3,20 +3,27 @@
  *
  *  Created on: 27 Feb 2011
  *      Author: ashley
- */
-
-
+ */ 
+  
 #include "GameContainerWindows.h"
-#include "../GameContainer.h"
+#include "../GameContainer.h" 
 #include "../../ARK2D.h"
+
+#include "../../Namespaces.h"
+#include "../../Includes.h"
+
+#include "../../Geometry/Shape.h"
+#include "../../Geometry/Circle.h"
+#include "../../Geometry/Line.h"
+#include "../../Geometry/Rectangle.h"
+
 
 #if defined(ARK2D_WINDOWS)
 
 	#include "../../Geometry/GigaRectangle.h"
 
 	#include "../../Windres.h"
-	#include "../../Graphics/Image.h"
- 
+	#include "../../Graphics/Image.h" 
 	#include "../../Util/Log.h"
 
 	namespace ARK {
@@ -583,8 +590,8 @@
 				ptDiff.y = (rcWind.bottom - rcWind.top) - rcClient.bottom;
 				MoveWindow(m_platformSpecific.m_hWindow ,rcWind.left, rcWind.top, m_width + ptDiff.x, m_height + ptDiff.y, TRUE);
 
-				m_window_rectangle = new ARK::Geometry::Rectangle<int>(	rcWind.top,
-																rcWind.left,
+				m_window_rectangle = new ARK::Geometry::Rectangle<int>(	(int) rcWind.top,
+																(int) rcWind.left,
 																(int) m_width,
 																(int) m_height); // My Rectangle...
 			}
@@ -850,7 +857,7 @@
 				// Load default Font - relies on Image so must be done after OpenGL is initted.
 				//BMFont* fnt = new BMFont("data/fonts/default.fnt", "data/fonts/default.png");
 				//Image* fntImg = new Image((unsigned int) ARK2D_FONT_PNG, ARK2D_RESOURCE_TYPE_PNG);
-				BMFont* fnt = new BMFont(ARK2D_FONT_FNT, ARK2D_FONT_PNG, ARK2D_RESOURCE_TYPE_PNG);
+				ARK::Font::BMFont* fnt = new ARK::Font::BMFont(ARK2D_FONT_FNT, ARK2D_FONT_PNG, ARK2D_RESOURCE_TYPE_PNG);
 				m_graphics.m_DefaultFont = fnt;
 				m_graphics.m_Font = fnt;
 
@@ -1067,7 +1074,7 @@
 			}
 
 			string GameContainerPlatform::getResourcePath() const {
-				return "./";
+				return "./data/";
 			}
 		}
 	}

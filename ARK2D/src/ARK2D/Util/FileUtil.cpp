@@ -12,6 +12,7 @@
 #include "StringUtil.h"
 #include "Log.h"
 #include "../Core/GameContainer.h"
+#include "../Core/String.h"
 
 #ifdef ARK2D_WINDOWS
 	#include <direct.h>
@@ -24,6 +25,8 @@
 	#define DIRECTORY_SEPARATOR "/"
 #endif
 
+
+
 namespace ARK {
 	namespace Util {
 
@@ -32,7 +35,11 @@ namespace ARK {
 			#if defined(ARK2D_ANDROID)
 				filename = ARK2D::getContainer()->m_platformSpecific.m_externalDataStr + filename;
 			#else
-				filename = ARK2D::getContainer()->getResourcePath() + filename;
+				if (filename.substr(1,1).compare(":") == 0 || filename.substr(0,1).compare("/") == 0) { 
+
+				} else {
+					filename = ARK2D::getContainer()->getResourcePath() + filename;
+				}
 			#endif
 
 			ARK2D::getLog()->i(StringUtil::append("Making file: ", filename));
@@ -80,6 +87,8 @@ namespace ARK {
 			#endif
 			return "whoops?";
 		}
+
+
 
 	}
 }

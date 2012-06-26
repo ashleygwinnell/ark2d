@@ -186,6 +186,8 @@
 			    	m_width = width;
 			    	m_height = height;
 			    	ARK2D::s_game->resize(this, width, height);
+			    	//ARK2D::getRenderer()->setScissorTestEnabled(false);
+			    	//ARK2D::getRenderer()->scissor(0,0,width,height);
 			    }
 			     [[window contentView] setFrame: windowViewRect];
 			     [window setFrame: windowFrame

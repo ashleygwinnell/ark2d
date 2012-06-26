@@ -47,8 +47,15 @@ namespace ARK {
 	//! Contains classes for Geometry including collision detection and resolution.
 	namespace Geometry {
 
-		template <class T>
+		template <class T=int>
 		class Rectangle;
+		
+		template <class T=int>
+		class Circle;
+		
+		template <class T=int>
+		class Line;
+		
 
 	}
 	//! Contains classes for Rendering and Animation.
@@ -141,6 +148,7 @@ namespace ARK {
 		class MathUtil;
 		class RSSL;
 		class StringUtil;
+		class URLRequest;
 
 		template <class T>
 		class Matrix44;
@@ -172,6 +180,7 @@ using namespace ARK::Graphics;
 using namespace ARK::Graphics::ImageIO;
 using namespace ARK::Tiled;
 using namespace ARK::Tween;
+using namespace ARK::Threading;
 using namespace ARK::Path;
 using namespace ARK::Particles;
 using namespace ARK::State;

@@ -28,13 +28,13 @@ namespace ARK {
 				Timeline* getTimeline();
 				virtual void init(GameContainer* container) = 0;
 
-				virtual void preUpdate(GameContainer* container, GameTimer* timer) = 0;
+				virtual void preUpdate(GameContainer* container, GameTimer* timer);
 				virtual void update(GameContainer* container, GameTimer* timer) = 0;
-				virtual void postUpdate(GameContainer* container, GameTimer* timer) = 0;
+				virtual void postUpdate(GameContainer* container, GameTimer* timer);
 
-				virtual void preRender(GameContainer* container, Renderer* g) = 0;
+				virtual void preRender(GameContainer* container, Renderer* g);
 				virtual void render(GameContainer* container, Renderer* g) = 0;
-				virtual void postRender(GameContainer* container, Renderer* g) = 0;
+				virtual void postRender(GameContainer* container, Renderer* g);
 
 				virtual void resize(GameContainer* container, int width, int height);
 				virtual void keyPressed(unsigned int key);

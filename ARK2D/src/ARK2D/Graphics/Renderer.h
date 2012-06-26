@@ -30,9 +30,21 @@ namespace ARK {
 		class Renderer
 		{
 			friend class ARK::Core::GameContainer;
+			friend class ARK::Core::GameContainerPlatform;
 
 			private:
 				static const int DEFAULT_SEGMENTS = 50;
+
+			/*
+			public:
+				static const int RENDER_MODE = 0;
+				static const int RENDER_MODE_RECTS = 0;
+				static const int RENDER_MODE_LINES = 0;
+				static const int RENDER_MODE_POINTS = 0;
+				static const int RENDER_MODE_LINES = 0;
+				static const int RENDER_MODE_TEXTURE = 0;
+				static int RENDER_MODE_TEXTURE_ID = 0;
+			*/
 
 			public:
 				Renderer();

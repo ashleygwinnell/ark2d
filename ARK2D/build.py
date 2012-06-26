@@ -21,6 +21,15 @@ import shutil
 # Mac requires you do not install OpenAL from their website 
 #  - i.e. you should not have Library/Frameworks/OpenAL.framework
 #
+class ARK2DGame:
+	def __init__(self):
+		self.name = "";
+		self.name_safe = "";
+		self.name_class = "";
+		self.dir = "";
+		self.dir_resources = "";
+		# TODO:
+
 
 class ARK2DBuildSystem:
 
@@ -30,28 +39,38 @@ class ARK2DBuildSystem:
 		self.building_game = True;
 		
 		self.ark2d_dir = "";
+
+		#self.game = ARK2DGame();
 		self.game_dir = "";
 		self.game_name = "";
 		self.game_short_name = "";
 		self.game_resources_dir = "";
 		#self.mac_game_icns = "";
-		
+
 		self.build_folder = "build";
 		self.arch = platform.machine();
 		
-		if (len(sys.argv)==3 and sys.argv[2] == "android"):
+		if ((len(sys.argv)==3 and sys.argv[2] == "android") or (len(sys.argv)==2 and sys.argv[1] == "android")):
 			self.platform = "android";
 			if (sys.platform == "win32"):
 				self.ds = "\\";
 			elif(sys.platform == "darwin"):
 				self.ds = "/";
 			pass;
-		elif (len(sys.argv)==2 and sys.argv[1] == "android"):
-			self.platform = "android";
-			if (sys.platform == "win32"):
-				self.ds = "\\";
-			elif(sys.platform == "darwin"):
-				self.ds = "/";
+
+		elif ((len(sys.argv)==3 and sys.argv[2] == "iphone") or (len(sys.argv)==2 and sys.argv[1] == "iphone")):
+			self.platform = "iphone";
+			self.ds = "/";
+
+			self.varPLATFORM = "iPhoneSimulator"; #"iPhoneSimulator"; #iPhoneOS
+			self.varPLATFORMsml = "iphoneos"; #"iphonesimulator"; #iphoneos
+
+			self.gccCompiler = "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/gcc-4.2"; #i686-apple-darwin11-llvm-gcc-4.2 ";
+			self.gppCompiler = "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/g++-4.2"; #i686-apple-darwin11-llvm-g++-4.2 ";
+			self.objcCompiler = "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/g++-4.2";# i686-apple-darwin11-llvm-g++-4.2 ";
+			self.build_artifact = self.build_folder + self.ds + self.platform + self.ds + "libARK2D.dylib";
+
+
 			pass;
 		elif (sys.platform == "win32"):
 			self.ds = "\\";
@@ -86,7 +105,18 @@ class ARK2DBuildSystem:
 		self.dll_files = [];
 		self.static_libraries = [];
 		self.linkingFlags = "";
-		
+	
+	def getTargetPlatform(self):
+		if ((len(sys.argv)==3 and sys.argv[2] == "android") or (len(sys.argv)==2 and sys.argv[1] == "android")):
+			return "android";
+		elif ((len(sys.argv)==3 and sys.argv[2] == "iphone") or (len(sys.argv)==2 and sys.argv[1] == "iphone")):
+			return "iphone";
+		elif (sys.platform == "win32"):
+			return "windows";
+		elif(sys.platform == "darwin"):
+			return "osx";
+		return "error";
+
 	def dllInit(self):
 		
 		f = open("config.json", "r");
@@ -96,8 +126,7 @@ class ARK2DBuildSystem:
 		
 		self.building_library = True;
 		self.building_game = False;
-	
-	
+		
 		""" TODO: put this in config."""
 		self.mkdirs.extend([
 			self.build_folder,
@@ -140,6 +169,11 @@ class ARK2DBuildSystem:
 		
 		if (self.platform == "android"):
 			self.src_files.extend(config['src_files']['android']);
+		elif (self.platform == "iphone"):
+			self.src_files.extend(config['src_files']['iphone']);
+			self.ark2d_dir = config["osx"]['ark2d_dir'];
+
+			self.static_libraries.extend(config['static_libraries']['iphone']);
 		elif (self.platform == "windows"):
 		
 			self.src_files.extend(config['src_files']['windows']);
@@ -151,9 +185,9 @@ class ARK2DBuildSystem:
 			
 			self.build_artifact = self.build_folder + self.ds + self.platform + self.ds + "libARK2D.dylib";
 			
-			self.src_files.extend(config['src_files']['mac']);
-			self.dll_files.extend(config['dynamic_libraries']['mac']);
-			self.static_libraries.extend(config['static_libraries']['mac']);
+			self.src_files.extend(config['src_files']['osx']);
+			self.dll_files.extend(config['dynamic_libraries']['osx']);
+			self.static_libraries.extend(config['static_libraries']['osx']);
 			self.linkingFlags = "";
 			
 		self.src_files.extend(config['src_files']['all']);
@@ -254,7 +288,7 @@ class ARK2DBuildSystem:
 		fjson = json.loads(fcontents);
 		fchanged = False;
 		
-		
+
 		
 		print("loaded build cache file: ");
 		print(cachefilename);
@@ -385,6 +419,9 @@ class ARK2DBuildSystem:
 						shutil.copy(one, self.game_dir.replace('\\\\','\\') + '\\' + self.build_folder + '\\' + self.platform);
 				except:
 					pass;
+
+				#generate spritesheets
+				self.generateSpriteSheets();
 			
 				if (self.game_resources_dir != ''):
 					print("copying game resources in to project:");
@@ -448,6 +485,9 @@ class ARK2DBuildSystem:
 				print(cpyark2dres);
 				subprocess.call([cpyark2dres], shell=True);
 				
+				#generate game spritesheets
+				self.generateSpriteSheets();
+
 				#copy game resources in to .app
 				if (self.game_resources_dir != ''):
 					print("copying game resources in to project:");
@@ -574,7 +614,208 @@ class ARK2DBuildSystem:
 		#subprocess.call([], shell=True);
 		print(cm);
 		os.system(cm);
+
+	def generateSpriteSheets(self):
+		if ("resources" in self.config and "spritesheets" in self.config["resources"]):
+
+			#load cache file
+			cacheJSON = self.openCache("spritesheets");
+			cacheChanged = False;
+
+			#generate sheets
+			print("Generating SpriteSheets...");
+			for spritesheet in self.config["resources"]["spritesheets"]:
+
+				spritesheetName = spritesheet["name"];
+				generateThisSheet = False;
+				for imageFile in spritesheet["files"]:
+					if (not spritesheetName in cacheJSON or not imageFile in cacheJSON[spritesheetName] or cacheJSON[spritesheetName][imageFile]['date_modified'] < os.stat(imageFile).st_mtime):
+						generateThisSheet = True;
+						break;
+
+				#only generate this sheets if it has a change in one of it's files.
+				if (generateThisSheet == True):
+					print("Generating SpriteSheet: " + spritesheet["output"]);
+					spritesheet['game_dir'] = self.game_dir;
+					spritesheet['game_preproduction_dir'] = self.config[self.platform]['game_preproduction_dir'];
+					spritesheetJSON = str(json.dumps(spritesheet, separators=(',',':'))).replace("\"", "\\\"");
+					compileLine = "java -jar " + self.ark2d_dir + "/../Tools/ImagePacker/build/jar/ImagePacker.jar \"" + spritesheetJSON + "\"";
+					subprocess.call([compileLine], shell=True); # player 
+
+					#redocache
+					cacheChanged = True;
+					cacheJSON[spritesheetName] = {};
+					for imageFile in spritesheet["files"]:
+						cacheJSON[spritesheetName][imageFile] = {"date_modified": os.stat(imageFile).st_mtime };
+
+				pass;
+
+			if (cacheChanged == True):
+				self.saveCache("spritesheets", cacheJSON);
+			
+		pass;
+
+	def openCache(self, filename):
+		cachefilename = "";		
+		cachefilename += self.build_folder + self.ds + self.platform + self.ds + "build-cache" + self.ds  + filename + ".json";
+		self.createCacheFile(cachefilename);
+		f = open(cachefilename, "r")
+		fcontents = f.read();
+		f.close();
+		fjson = json.loads(fcontents);
+		return fjson;
+
+	def saveCache(self, filename, data):
+		f = open(self.build_folder + self.ds + self.platform + self.ds + "build-cache" + self.ds + filename + ".json", "w")
+		f.write(json.dumps(data, sort_keys=True, indent=4));
+		f.close();
+		return;
+	
+	def startIPhone(self):	
+		print("Building iPhone");
+
+		# open config
+		f = open("config.json", "r");
+		fcontents = f.read();
+		f.close();
+		config = json.loads(fcontents);
+
+		# mkdirs
+		print("Making Directories...");
+		for h in self.mkdirs:
+			#h = "'" + h + "'";
+			#print("mkdir " + h);
+			#subprocess.call(['mkdir C:\\' + h], shell=True);
+			try:
+				os.makedirs(h);
+			except OSError as exc: 
+				if exc.errno == errno.EEXIST:
+					pass
+				else: raise
 		
+		# compile cache thing
+		cachefilename = "";		
+		cachefilename += self.build_folder + self.ds + self.platform + self.ds + "build-cache" + self.ds  + "compiled.json";
+		self.createCacheFile(cachefilename);
+		f = open(cachefilename, "r")
+		fcontents = f.read();
+		f.close();
+		fjson = json.loads(fcontents);
+		fchanged = False;
+		
+
+		# Compile files
+		varROOTDIR = "/Developer";
+		varARCH = "-arch i386";
+		varMINVERSION = "3.2";
+		varMAXVERSION = "4.3";
+		varDEVROOT = varROOTDIR + "/Platforms/" + self.varPLATFORM + ".platform/Developer";
+		varSDKROOT = varDEVROOT + "/SDKs/" + self.varPLATFORM + varMAXVERSION + ".sdk";
+
+		#"""
+		print("-------------------------");
+		print("Compiling Source Files...");
+		print("-------------------------");
+		lala = 0;
+		for srcFile in self.src_files:
+			#if (lala == 4): break;
+			compileStr = "";
+
+			srcFileIndex = srcFile.rfind('.');
+			srcFileExtension = srcFile[srcFileIndex+1:len(srcFile)];
+			srcFileNew = srcFile[0:srcFileIndex] + ".o";
+
+			
+			if srcFileExtension == 'c':
+				compileStr += self.gccCompiler;
+			elif srcFileExtension == 'cpp':
+				compileStr += self.gppCompiler;
+			elif srcFileExtension == 'mm':
+				compileStr += self.objcCompiler;	
+
+			#compileStr += "i686-apple-darwin11-llvm-g++-4.2 ";
+
+			
+			compileStr += " -DARK2D_IPHONE -c -fmessage-length=0 ";
+			# -mmacosx-version-min=10.5
+			if ("vendor" not in srcFile):
+				compileStr += " -O3 -march=i386 -pipe -gdwarf-2 -no-cpp-precomp -mthumb -isysroot " + varSDKROOT + " -m" + self.varPLATFORMsml + "-version-min=" + varMINVERSION + "  ";
+				compileStr += " -x objective-c++ ";
+				compileStr += "  -Wno-trigraphs -fpascal-strings -Wmissing-prototypes -Wreturn-type -Wunused-variable -DDEBUG=1 -fexceptions -fasm-blocks -fobjc-abi-version=2 -fobjc-legacy-dispatch ";
+			else:
+				compileStr += " -arch i386 ";
+			compileStr += " -I " + self.ark2d_dir + "/src/ARK2D/vendor/iphone ";
+			#compileStr += " -I /Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin:/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/include:/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin ";
+			#compileStr += " -framework Kernel "; 
+			#compileStr += " -platform iphoneos4.3 ";
+			#compileStr += " -D__IPHONE_OS_VERSION_MIN_REQUIRED=40300 ";
+			#compileStr += " -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk ";
+			#  
+			
+			#compileStr += " -I /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/UIKit.framework/Headers "; 
+			#compileStr += " -framework /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/OpenGLES.framework "; 
+			#compileStr += " -framework Foundation -framework CoreGraphics -framework QuartzCore -framework OpenGLES -framework Kernel";
+			compileStr += " -o \"" + self.build_folder + self.ds + self.platform + self.ds + srcFileNew + "\"  \"" + srcFile + "\" ";
+			#compileStr += " -framework OpenGL -framework OpenAL -framework Foundation -framework Cocoa -lobjc ";
+
+			lala += 1; 
+
+			if (not srcFile in fjson or fjson[srcFile]['date_modified'] < os.stat(srcFile).st_mtime):
+				
+				processThisFile = True;
+		
+				print(compileStr);
+				print("-------------------------");
+				os.system(compileStr);
+
+				fjson[srcFile] = {"date_modified": os.stat(srcFile).st_mtime };
+				fchanged = True;
+		
+			pass;
+
+		#
+		#"""
+
+		# update compile cache thing
+		if (fchanged == True):
+			f = open(self.build_folder + self.ds + self.platform + self.ds + "build-cache" + self.ds + "compiled.json", "w")
+			f.write(json.dumps(fjson, sort_keys=True, indent=4));
+			f.close();
+
+		print("-------------------------");
+		print("Linking in to Library...");
+		print("-------------------------");
+		linkingStr = "";
+		linkingStr += "/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/g++-4.2" + " -arch i386 -isysroot " + varSDKROOT + " -framework QuartzCore  -framework OpenGLES -framework OpenAL -framework Foundation -framework CoreGraphics -framework UIKit -m" + self.varPLATFORMsml + "-version-min=" + varMINVERSION + "   -lobjc -dynamiclib -o " + self.build_artifact;
+		linkingStr += " -L" + self.ark2d_dir + "/lib/iphone -L" + self.ark2d_dir + "/lib/osx -L/usr/lib ";
+		# -framework CoreGraphics
+		# -framework Kernel
+		#linkingStr += " -march=i386 ";
+		linkingStr += " -Wl,-no_pie ";
+		linkingStr += " -Wl,-no_compact_unwind ";
+		linkingStr += " -lbz2 -lcurl -lz ";
+
+	
+		for h in self.src_files:
+			findex = h. rfind('.');
+			newf = h[0:findex] + ".o";
+			linkingStr += " " + self.build_folder + self.ds + self.platform + self.ds + newf;
+		
+		for f in self.dll_files:
+			linkingStr += " " + f;
+			
+		for f in self.static_libraries:
+			linkingStr += " -l" + f;
+			
+		print(linkingStr);
+		
+		subprocess.call([linkingStr], shell=True);	
+		print("Done!");
+
+		#copy files...
+		# TODO: 
+
+
 	def startAndroid(self):
 		print("Building Android");
 		
@@ -594,7 +835,7 @@ class ARK2DBuildSystem:
 		ndkappplatform = "android-" + str(ndkappplatformno);
 		
 		
-		ndkdir = config['mac']['android']['ndk_dir'];
+		ndkdir = config['osx']['android']['ndk_dir'];
 		
 		if (self.building_game):
 			#game specific vars
@@ -602,15 +843,15 @@ class ARK2DBuildSystem:
 			game_name_safe = config['game_name_safe'];
 			game_short_name = config['game_short_name'];
 			game_description = config['game_description'];
-			game_resources_dir = config['mac']['game_resources_dir'];
+			game_resources_dir = config['osx']['game_resources_dir'];
 			company_name = config['company_name'];
 			company_name_safe = config['company_name_safe'];
 			javaPackageName = "org."+company_name_safe+"."+game_short_name;
 			
 			audio_quality = config['android']['audio_quality'];
 			
-			ark2ddir = config['mac']['ark2d_dir'];
-			rootPath = config['mac']['game_dir'];
+			ark2ddir = config['osx']['ark2d_dir'];
+			rootPath = config['osx']['game_dir'];
 			ndkprojectpath = rootPath;
 			thisCreateDirs = [rootPath + "/build"];
 			thisCreateDirs.extend([rootPath+"/build/android/build-cache"]);
@@ -632,7 +873,7 @@ class ARK2DBuildSystem:
 			thisCreateDirs.extend([rootPath+"/build/android/project/src/org/" + company_name_safe + "/" + game_short_name]);
 			pass;
 		else:
-			rootPath = config['mac']['ark2d_dir'];
+			rootPath = config['osx']['ark2d_dir'];
 			ndkprojectpath = rootPath;
 			thisCreateDirs = [ndkprojectpath + "/build"];
 			pass;
@@ -716,6 +957,9 @@ class ARK2DBuildSystem:
 				self.makeDirectories([rootPath + "/build/android/project/assets/" + dir]);
 			#self.makeDirectories(directoriesToCreate);
 			
+			#generate game spritesheets
+			self.generateSpriteSheets();
+
 			print("Creating/opening assets cache file...");
 			assetsCache = rootPath + "/build/android/build-cache/assets.json";
 			assetsJson = self.openCacheFile(assetsCache);
@@ -794,7 +1038,7 @@ class ARK2DBuildSystem:
 			print("do androidy-javay bits...");
 			try:
 				print("using custom AndroidManifest.xml");
-				androidManifestPath = config['mac']['android_manifest'];
+				androidManifestPath = config['osx']['android_manifest'];
 				#todo: copy this to rootPath+"/build/android/project/AndroidManifest.xml";
 			except:
 				print("generating default AndroidManifest.xml");
@@ -833,8 +1077,8 @@ class ARK2DBuildSystem:
 				
 			print("copying icon in to project: ");
 			print("TODO: resizing for different DPIs");
-			if (config['mac']['android']['icon'] != ''):
-				subprocess.call(['cp ' + config['mac']['android']['icon'] + " " + rootPath+"/build/android/project/res/drawable/ic_launcher.png"], shell=True);
+			if (config['osx']['android']['icon'] != ''):
+				subprocess.call(['cp ' + config['osx']['android']['icon'] + " " + rootPath+"/build/android/project/res/drawable/ic_launcher.png"], shell=True);
 			else:
 				subprocess.call(['cp ' + ark2ddir + "/__preproduction/icon/512.png " + rootPath+"/build/android/project/res/drawable/ic_launcher.png"], shell=True);
 				
@@ -1019,6 +1263,8 @@ class ARK2DBuildSystem:
 	
 		if (self.platform == "android"):
 			self.startAndroid();
+		elif (self.platform == "iphone"):
+			self.startIPhone();
 		elif (self.platform == "windows"):
 			self.startWindows();
 		elif(self.platform == "osx"):
@@ -1056,7 +1302,7 @@ if __name__ == "__main__":
 		if (sys.platform == "win32"):
 			arkPlatform = "windows";
 		elif(sys.platform == "darwin"):
-			arkPlatform = "mac";
+			arkPlatform = "osx";
 		
 		f = open("config.json", "r");
 		fcontents = f.read();
@@ -1080,6 +1326,7 @@ if __name__ == "__main__":
 		a.src_files.extend(j["game_src_files"]);
 		a.game_mkdirs = j['game_mkdirs'];
 		a.build_artifact = "";
+		a.config = j;
 		
 		if (j['clean'] == True):
 			a.clean();

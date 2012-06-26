@@ -37,6 +37,8 @@ unsigned int ARK2D::getPlatform() {
 		return PLATFORM_WINDOWS;
 	#elif defined(ARK2D_MACINTOSH)
 		return PLATFORM_OSX;
+	#elif defined(ARK2D_IPHONE)
+		return PLATFORM_IPHONE;
 	#elif defined(ARK2D_ANDROID)
 		return PLATFORM_ANDROID;
 	#endif

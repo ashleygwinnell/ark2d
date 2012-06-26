@@ -34,6 +34,7 @@ class ARK2D {
 		static const unsigned int PLATFORM_WINDOWS = 0;
 		static const unsigned int PLATFORM_OSX = 1;
 		static const unsigned int PLATFORM_ANDROID = 2;
+		static const unsigned int PLATFORM_IPHONE = 3;
 
 	private:
 		static GameContainer* s_container;

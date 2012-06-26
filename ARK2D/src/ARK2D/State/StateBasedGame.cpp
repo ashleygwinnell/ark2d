@@ -210,18 +210,20 @@ namespace ARK {
 				g->setDrawColor(cc.getRed(), cc.getGreen(), cc.getBlue(), cc.getAlpha());
 
 				// left edge
-				g->fillRect(0,0, container->getTranslateX(), container->getHeight() * container->getScaleY());
+				g->fillRect(0,0, container->getTranslateX(), container->getDynamicHeight());// * container->getScaleY());
 
 				// right edge
 				g->fillRect(container->getTranslateX() + container->getWidth() * container->getScaleX(), 0,
-							container->getTranslateX(), container->getHeight() * container->getScaleY());
+							container->getTranslateX(), container->getDynamicHeight());// * container->getScaleY());
 
 				// top edge
-				g->fillRect(0,0, container->getWidth() * container->getScaleX(), container->getTranslateY());
+				//g->fillRect(0,0, container->getWidth() * container->getScaleX(), container->getTranslateY());
+				g->fillRect(0,0, container->getDynamicWidth(), container->getTranslateY());
 
 				// bottom edge
 				g->fillRect(0, container->getTranslateY() + container->getHeight() * container->getScaleY(),
-							container->getWidth() * container->getScaleX(), container->getTranslateY());
+							container->getDynamicWidth(), container->getTranslateY());
+							//container->getWidth() * container->getScaleX(), container->getTranslateY());
 
 			#endif
 		}

@@ -36,6 +36,30 @@
 		#include <AL/AL.h>
 		#include <AL/ALc.h>
 		#include <AL/ALext.h>
+	#elif defined(ARK2D_IPHONE)
+
+ 		#define STL_AVAILABLE
+		#define EXCEPTIONS_AVAILABLE
+
+ 		#include <OpenAL/al.h>
+		#include <OpenAL/alc.h>
+
+		#include <OpenGLES/EAGL.h>
+		#include <QuartzCore/QuartzCore.h>
+
+		#include <OpenGLES/ES1/gl.h>
+		#include <OpenGLES/ES1/glext.h>
+		#include <OpenGLES/ES2/gl.h>
+		#include <OpenGLES/ES2/glext.h>
+
+ 		#include <string>
+ 		#include <vector>
+		#include <list>
+		#include <map>
+
+ 		#include <stdlib.h>
+		#include <sys/types.h>
+		#include <math.h>
 
 	#elif defined(_WIN32)
 
@@ -45,12 +69,15 @@
 		#include <windows.h>
 		#include <mmsystem.h>
 		#include <winbase.h>
+		
+		#include <vector>
+		#include <list>
+		#include <map>
 
 		#include <stdlib.h>
 		#include <string>
 		#include <time.h>
 		#include <sys/time.h>
-		#include <list>
 
 		#include <GL/GLew.h>
 		#include <GL/GL.h>
@@ -109,6 +136,8 @@
 		#include <OpenAL/al.h>
 		#include <OpenAL/alc.h>
 
+
+
 	#endif
 
 	#include <stdint.h>
@@ -121,6 +150,8 @@
 	#include "vendor/vorbis132/vorbisfile.h"
 
 	#include "vendor/lpng151/png.h"
+
+	#include "vendor/libcurl/curl.h"
 
 	#include "vendor/libJSON/JSON_Defs.h"
 	#include "vendor/libJSON/JSONNode.h"

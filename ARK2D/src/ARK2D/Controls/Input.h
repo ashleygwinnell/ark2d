@@ -16,11 +16,9 @@
 #include <string>
 
 #include "../Namespaces.h"
+#include "../Includes.h"
 
-using std::vector;
-using std::map;
-using std::set;
-using std::string;
+using namespace std;
 
 
 namespace ARK {

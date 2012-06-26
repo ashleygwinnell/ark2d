@@ -55,10 +55,17 @@ public class %GAME_CLASS_NAME%Activity extends Activity {
     	mGLView.onPause();
     }  
     
+    @Override
+    protected void onStart() {
+    	Log.i("game", "Activity Resume");
+    	super.onStart();    
+    	//mGLView.onStart();  
+    }
+    
     @Override   
     protected void onResume() {
     	Log.i("game", "Activity Resume");
-    	super.onResume();     
+    	super.onResume();    
     	mGLView.onResume();  
     } 
       
@@ -93,6 +100,12 @@ class %GAME_CLASS_NAME%View extends GLSurfaceView {
 		super.onPause();
 		%GAME_CLASS_NAME%Renderer.nativePause();
 	}
+	/*@Override
+	public void onStart() {
+		Log.i("game", "View Start");
+		super.onStart();
+		%GAME_CLASS_NAME%Renderer.nativeStart();
+	}*/
 	@Override
 	public void onResume() {
 		Log.i("game", "View Resume");
@@ -133,6 +146,7 @@ class %GAME_CLASS_NAME%View extends GLSurfaceView {
 }
  
 class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
+	//public static boolean s_initted = false;
 	public Context context;
 	public %GAME_CLASS_NAME%Renderer(Context context) {
 		this.context = context;
@@ -151,29 +165,33 @@ class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
 	@Override  
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 	//	nativeInit();   
-		Log.i("game", "Surface Created");
-	 
-		String apkFilePath = null; 
-		ApplicationInfo appInfo = null;
-		String externalDataPath = null; 
-		PackageManager packMgmr = context.getPackageManager();  
-		try {  
-            appInfo = packMgmr.getApplicationInfo("%PACKAGE_DOT_NOTATION%", 0);
-            externalDataPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/%PACKAGE_DOT_NOTATION%/files/"; // does not include trailing slash.
-        } catch (NameNotFoundException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Unable to locate assets, aborting...");
-        }
-		apkFilePath = appInfo.sourceDir;
-		Log.i("game", "APK File Path:" + apkFilePath);
-		Log.i("game", "Save File Path:" + externalDataPath);
-	
-		createDir(externalDataPath);
-		createDir(externalDataPath+"assets/"); 
-		
-		
-		nativeInit(apkFilePath, externalDataPath);
+		//if (s_initted) {
+		//	Log.i("game", "Surface Already Created");
+		//} else {
+			Log.i("game", "Surface Created");
+			//s_initted = true;
 		 
+			String apkFilePath = null; 
+			ApplicationInfo appInfo = null;
+			String externalDataPath = null; 
+			PackageManager packMgmr = context.getPackageManager();  
+			try {  
+	            appInfo = packMgmr.getApplicationInfo("%PACKAGE_DOT_NOTATION%", 0);
+	            externalDataPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/%PACKAGE_DOT_NOTATION%/files/"; // does not include trailing slash.
+	        } catch (NameNotFoundException e) {
+	            e.printStackTrace();
+	            throw new RuntimeException("Unable to locate assets, aborting...");
+	        }
+			apkFilePath = appInfo.sourceDir;
+			Log.i("game", "APK File Path:" + apkFilePath);
+			Log.i("game", "Save File Path:" + externalDataPath);
+		
+			createDir(externalDataPath);
+			createDir(externalDataPath+"assets/"); 
+			
+			
+			nativeInit(apkFilePath, externalDataPath);
+		//}
 	}
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {
@@ -208,6 +226,7 @@ class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
 	public static native void nativeTouchMove(int x, int y);
 	public static native void nativeTouchUp(int x, int y);
 	
+	public static native void nativeStart();
 	public static native void nativePause();
 	public static native void nativeResume();
 	public static native void nativeBackPressed();

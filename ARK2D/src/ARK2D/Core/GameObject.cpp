@@ -33,6 +33,10 @@ namespace ARK {
 			m_renderingLayer = i;
 		}
 
+		string GameObject::toString() {
+			return "";
+		}
+
 		GameObject::~GameObject() {
 
 		}

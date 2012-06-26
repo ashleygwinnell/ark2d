@@ -245,7 +245,7 @@ static int darwin_scancode_table[] = {
 	NSPoint v = [theEvent locationInWindow];
 	//NSPoint v = [NSView convertPoint:[NSEvent mouseLocation] fromView:nil];
 	
-	int ch = ARK2D::getContainer()->getHeight();
+	int ch = ARK2D::getContainer()->getDynamicHeight();
 	if (v.y > ch/2) { 
 		int diff = v.y - (ch/2);
 		v.y -= 2 * diff; 

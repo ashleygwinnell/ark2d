@@ -58,7 +58,7 @@ namespace ARK {
 			}
 			void FadeTransition::postRender(GameContainer* container, StateBasedGame* game, Renderer* g) {
 
-				#if defined(ARK2D_ANDROID)
+				#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 					// ...
 				#else
 

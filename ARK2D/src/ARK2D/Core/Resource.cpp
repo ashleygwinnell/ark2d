@@ -10,10 +10,13 @@
 #include "Resource.h"
 
 #include "../Graphics/Image.h"
+#include "../Graphics/SpriteSheetDescription.h"
 #include "../Audio/Sound.h"
 #include "../Font/FTFont.h"
 #include "../Font/BMFont.h"
 #include "../Font/Font.h"
+#include "../Path/PathGroup.h"
+#include "../Path/PathIO.h"
 #include "../Util/LocalHighscores.h"
 #include "../Tiled/TiledMap.h"
 #include "GameContainer.h"
@@ -42,6 +45,8 @@ namespace ARK {
 
 			GameContainer* container = ARK2D::getContainer();
 			string oldref = ref;
+
+			if (ref.substr(1,1).compare(":") == 0 || ref.substr(0,1).compare("/") == 0) { appendPath = false; }
 			if (appendPath) {
 				ref = container->getResourcePath() + ref;
 			}
@@ -87,6 +92,17 @@ namespace ARK {
 				#endif
 				resource = scores;
 			}
+			else if (extension == "spritesheetdescription")
+			{
+				SpriteSheetDescription* desc = NULL;
+				#if defined(ARK2D_ANDROID)
+					RawDataReturns* rt = getRawData(ref);
+					desc = new SpriteSheetDescription(ref, rt->data);
+				#else
+					desc = new SpriteSheetDescription(oldref);
+				#endif
+				resource = desc;
+			}
 			else if (extension == "png" || extension == "bmp" || extension == "tga")
 			{ // Image
 				#if defined(ARK2D_ANDROID)
@@ -111,6 +127,14 @@ namespace ARK {
 					delete rt;
 				#else
 					resource = new Sound(ref);
+				#endif
+			}
+			else if (extension == "path") 
+			{
+				#if defined(ARK2D_ANDROID)
+					ErrorDialog::createAndShow("Path implementation not on Android.");
+				#else
+					resource = PathIO::createFromFile(ref);
 				#endif
 			}
 			else
@@ -217,6 +241,8 @@ namespace ARK {
 				return ARK2D_RESOURCE_TYPE_LOCAL_HIGHSCORES;
 			} else if (extension == "tmx") {
 				return ARK2D_RESOURCE_TYPE_TILED_MAP;
+			} else if (extension == "spritesheetdescription") {
+				return ARK2D_RESOURCE_TYPE_SPRITESHEET_DESCRIPTION;
 			} else if (extension == "txt") {
 				return ARK2D_RESOURCE_TYPE_TXT;
 			}
@@ -239,8 +265,14 @@ namespace ARK {
 		LocalHighscores* Resource::asLocalHighscores() {
 			return dynamic_cast<ARK::Util::LocalHighscores*>(this);
 		}
+		PathGroup* Resource::asPathGroup() {
+			return dynamic_cast<ARK::Path::PathGroup*>(this);
+		}
 		TiledMap* Resource::asTiledMap() {
 			return dynamic_cast<ARK::Tiled::TiledMap*>(this);
+		}
+		SpriteSheetDescription* Resource::asSpriteSheetDescription() {
+			return dynamic_cast<ARK::Graphics::SpriteSheetDescription*>(this);
 		}
 		String* Resource::asString() {
 			return dynamic_cast<String*>(this);

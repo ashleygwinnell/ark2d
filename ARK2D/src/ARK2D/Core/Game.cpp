@@ -29,9 +29,13 @@ namespace ARK {
 		}
 
 		//void Game::init(GameContainer& container) = 0;
+		void Game::preUpdate(GameContainer* container, GameTimer* timer) { }
+		void Game::postUpdate(GameContainer* container, GameTimer* timer) { }
 		void Game::update(GameContainer* container, GameTimer* timer) {
 			m_timeline->update(timer->getDelta());
 		}
+		void Game::preRender(GameContainer* container, Renderer* timer) { }
+		void Game::postRender(GameContainer* container, Renderer* timer) { }
 		//void Game::render(GameContainer& container, const Graphics& g) = 0;
 		//void Game::resize(GameContainer& container, int width, int height) = 0;
 		void Game::resize(GameContainer* container, int width, int height) {
@@ -74,7 +78,7 @@ namespace ARK {
 					glPushMatrix();
 					glLoadIdentity();
 
-					#if defined(ARK2D_ANDROID)
+					#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 						glOrthof(0, width, height, 0, -1, 1);
 					#else
 						glOrtho(0, width, height, 0, -1, 1);

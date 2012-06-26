@@ -21,6 +21,13 @@ namespace ARK {
 
 		}
 
+		void Animation::clear() {
+			m_frames.clear();
+			m_timer = 0;
+			m_currentFrameIndex = 0;
+			m_nextFrameModifier = 1;
+		}
+
 		void Animation::addImage(Image* image) {
 			m_frames.add(image);
 		}

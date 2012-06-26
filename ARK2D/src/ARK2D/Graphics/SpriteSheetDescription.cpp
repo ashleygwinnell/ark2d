@@ -6,37 +6,37 @@
  */
 
 #include "SpriteSheetDescription.h"
-#include "../Util/StringUtil.h"
+#include "../Util/StringUtil.h" 
 #include "../Util/Cast.h"
 #include "../Includes.h"
-#include "../UI/ErrorDialog.h"
+#include "../UI/ErrorDialog.h" 
 
 namespace ARK {
 	namespace Graphics {
 
-		SpriteSheetDescription::SpriteSheetDescription(const char* path): m_path(path) {
-			//std::cout << "Loading Spritesheet Description: " << path;
-			load();
-			//std::cout << "... done!" << std::endl;
-		}
-
-		SpriteSheetDescription::SpriteSheetDescription(string path): m_path(path) {
+		SpriteSheetDescription::SpriteSheetDescription(string path): ARK::Core::Resource(), m_path(path) {
+			m_data = StringUtil::file_get_contents(path.c_str());
 			load();
 		}
+		SpriteSheetDescription::SpriteSheetDescription(string path, void* rawData): ARK::Core::Resource(), m_path(path) {
+			m_data = string((const char*) rawData);
+			load();
+		}
 
-		void SpriteSheetDescription::load() {
-			if (StringUtil::getExtension(m_path).compare("json") == 0) {
-				string c = StringUtil::file_get_contents(m_path.c_str());
-				if (c.length()==0) {
-					ErrorDialog::createAndShow("Could not open spritesheet description.");
-					exit(0);
-				}
-				string s(c);
+		void SpriteSheetDescription::load() { 
+			std::cout << "Loading Spritesheet Description: " << m_path.c_str() << std::endl;
+			if (m_data.length()==0) {
+				ErrorDialog::createAndShow("Could not open spritesheet description.");
+				exit(0);
+			}
+
+			if (StringUtil::getExtension(m_path).compare("spritesheetdescription") == 0) {
+				string s(m_data);
 				JSONNode* root = libJSON::Parse(s);
 
 				JSONNode* sheet = root->GetNode("sheet");
 				JSONNode* items = sheet->GetNode("items");
-
+ 
 				for (unsigned int i = 0; i < items->NodeSize(); i++) {
 					SpriteSheetDescriptionItem* it = new SpriteSheetDescriptionItem();
 
@@ -52,7 +52,15 @@ namespace ARK {
 
 
 				libJSON::Delete(root);
-			} else if (StringUtil::getExtension(m_path).compare("txt") == 0) {
+			} else { 	//if (StringUtil::getExtension(m_path).compare("txt") == 0) {
+						//if (StringUtil::getExtension(m_path).compare("json") == 0 || {
+				ErrorDialog::createAndShow("Use Resource loader. .txt and .json deprecated. Please use .spritesheetdescription");
+				exit(0);
+/*
+				// get proper file path :|
+				// TODO: Resource handling for spritesheets
+				m_path = StringUtil::internalOSAppends(m_path); 
+				std::cout << "txt spritesheet: " << m_path << std::endl;
 
 				filebuf FileBuffer;
 				FileBuffer.open(m_path.c_str(), ios::in);
@@ -121,12 +129,11 @@ namespace ARK {
 					//std::cout << string(item->getName()) << std::endl;
 					m_items[string(item->getName())] = (*item);
 
-
 				}
-
-
 				FileBuffer.close();
+				*/
 			}
+			std::cout << "Loaded Spritesheet Description" << std::endl;
 		}
 
 		const SpriteSheetDescriptionItem& SpriteSheetDescription::getItemByName(const char* name) {

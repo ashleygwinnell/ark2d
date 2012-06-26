@@ -11,7 +11,6 @@
 #include "../Namespaces.h"
 #include "../ARK2D.h"
 #include "../Includes.h"
-#include "../Includes.h"
 
 #include "Game.h"
 #include "../Controls/Gamepad.h"
@@ -37,6 +36,8 @@
 
 #if defined(ARK2D_ANDROID)
 	#include "Platform/GameContainerAndroid.h"
+#elif defined(ARK2D_IPHONE)
+	#include "Platform/GameContainerIPhone.h"
 #elif defined(ARK2D_WINDOWS)
 	#include "Platform/GameContainerWindows.h"
 #elif defined(ARK2D_UBUNTU_LINUX)

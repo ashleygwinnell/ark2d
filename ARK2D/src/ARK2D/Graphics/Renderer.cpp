@@ -64,7 +64,8 @@ namespace ARK {
 		}
 		void Renderer::scissor(int x, int y, int w, int h) const {
 			//glScissor(x, y - (signed int) ARK2D::getContainer()->getHeight(), w, h * -1);
-			glScissor(x, ARK2D::getContainer()->getHeight() - (y + h), w, h);
+			//glScissor(x, ARK2D::getContainer()->getHeight() - (y + h), w, h);
+			glScissor(x, ARK2D::getContainer()->getDynamicHeight() - (y + h), w, h);
 		}
 		void Renderer::viewport(int x, int y, int w, int h) const {
 			glViewport(x, y, w, h);
@@ -116,7 +117,7 @@ namespace ARK {
 		}
 
 		void Renderer::drawLine(int x1, int y1, int x2, int y2) const {
-			#if defined(ARK2D_ANDROID)
+			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 
 			#else
 				glBegin(GL_LINES);
@@ -130,7 +131,7 @@ namespace ARK {
 			fillArc(cx, cy, width, height, startAngle, endAngle, DEFAULT_SEGMENTS);
 		}
 		void Renderer::fillArc(int cx, int cy, int width, int height, float startAngle, float endAngle, int segs) const {
-			#if defined(ARK2D_ANDROID)
+			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 			#else
 
 				int halfwidth = width/2;
@@ -225,7 +226,7 @@ namespace ARK {
 				glColorPointer(4, GL_UNSIGNED_INT, 0, &colors);
 			}
 
-			#if defined(ARK2D_ANDROID)
+			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 				glVertexPointer(2, GL_FIXED, 0, rects);
 			#else
 				glVertexPointer(2, GL_INT, 0, rects);
@@ -266,7 +267,7 @@ namespace ARK {
 		}
 
 		void Renderer::fillTriangle(int x, int y, int width, int height) const {
-			#if defined(ARK2D_ANDROID)
+			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 			#else
 				glBegin(GL_TRIANGLES);
 					glVertex2i(x + (width/2), y);
@@ -277,7 +278,7 @@ namespace ARK {
 		}
 
 		void Renderer::drawPoint(int x, int y) const {
-			#if defined(ARK2D_ANDROID)
+			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 			#else
 				glEnable(GL_POINT_SMOOTH);
 				glBegin(GL_POINTS);
@@ -287,7 +288,7 @@ namespace ARK {
 			#endif
 		}
 		void Renderer::drawPoint(float x, float y) const {
-			#if defined(ARK2D_ANDROID)
+			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 			#else
 				glEnable(GL_POINT_SMOOTH);
 				glBegin(GL_POINTS);
@@ -375,7 +376,7 @@ namespace ARK {
 		}
 
 		void Renderer::drawCircleSpikey(int x, int y, int radius, int points) const {
-			#if defined(ARK2D_ANDROID)
+			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 
 			#else
 				float each = 360.0f / float(points);
@@ -387,7 +388,7 @@ namespace ARK {
 			#endif
 		}
 		void Renderer::fillCircleSpikey(int x, int y, int radius, int points) const {
-			#if defined(ARK2D_ANDROID)
+			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 			#else
 				float each = 360.0f / float(points);
 				glBegin(GL_TRIANGLE_FAN);

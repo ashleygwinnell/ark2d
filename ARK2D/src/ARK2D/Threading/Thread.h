@@ -9,6 +9,7 @@
 #define ARKTHREAD_H_
 
 #include "../Core/Event.h"
+#include "../Includes.h"
 
 #if defined (ARK2D_WINDOWS)
 	#include <windows.h>
@@ -19,6 +20,7 @@
 namespace ARK {
 	namespace Threading {
 
+		
 		/*!
 		 * \brief Yay, multiple threading.
 		 *
@@ -28,7 +30,9 @@ namespace ARK {
 			public:
 				Thread();
 				void init(void* functionPointer);
+				void init(void* functionPointer, void* classPointer);
 				void start();
+				void* doInternal();
 				void pause();
 				void end();
 				void terminate();
@@ -39,6 +43,7 @@ namespace ARK {
 			#if defined (ARK2D_WINDOWS)
 				private:
 					void* m_functionPointer;
+					void* m_classPointer;
 
 					// win32
 					DWORD m_id;
@@ -51,12 +56,16 @@ namespace ARK {
 
 				private:
 					void* m_functionPointer;
+					void* m_classPointer;
 					pthread_t m_thread;
 
 			#endif
 		};
 	}
 }
+
+
+
 
 
 #endif /* ARKTHREAD_H_ */

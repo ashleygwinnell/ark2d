@@ -8,8 +8,7 @@
 #ifndef SUBPATH_H_
 #define SUBPATH_H_
 
-class PathGroup;
-class Path;
+
 
 #include <vector>
 #include "../Geometry/Vector2.h"
@@ -17,6 +16,9 @@ using namespace std;
 
 namespace ARK {
 	namespace Path {
+
+		class PathGroup;
+		class Path;
 
 		/*
 		 * \brief Used internally to support path functionality. You shouldn't need to use this.

@@ -10,7 +10,7 @@
 
 #include "Shape.h"
 #include "Vector2.h"
-
+ 
 namespace ARK {
 	namespace Geometry {
 
@@ -75,6 +75,13 @@ namespace ARK {
 				virtual void setLocationByCenter(T x, T y) {
 					m_x = x - (m_width/2);
 					m_y = y - (m_height/2);
+				}
+
+				virtual void adjustX(T x) {
+					m_x += x;
+				}
+				virtual void adjustY(T y) {
+					m_y += y;
 				}
 
 				virtual void setWidth(T w) {

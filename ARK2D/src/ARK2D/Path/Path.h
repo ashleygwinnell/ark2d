@@ -31,7 +31,7 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
 		class Path {
-			friend class PathGroup;
+			friend class ARK::Path::PathGroup;
 
 			private:
 				vector<SubPath*> subpaths;

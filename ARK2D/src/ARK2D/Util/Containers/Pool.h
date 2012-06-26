@@ -12,6 +12,7 @@
 #include "../../Core/GameObject.h"
 #include "../MathUtil.h"
 #include "../../Namespaces.h"
+#include "../../UI/ErrorDialog.h"
 
 using namespace std;
 
@@ -41,6 +42,13 @@ namespace ARK {
 						Pool(): m_inactive(), m_active(),it(NULL) {
 							m_inactive.setUsingList(true);
 							m_active.setUsingList(true);
+						}
+						Pool(unsigned int amount): m_inactive(), m_active(),it(NULL) {
+							ErrorDialog::createAndShow("Pool(int) is broken. Please populate yourself or fix it. :|");
+							m_inactive.setUsingList(true);
+							m_active.setUsingList(true);
+							for(unsigned int i = 0; i < amount; ++i) { T obj; add(obj); }
+
 						}
 						void add(T object) {
 							add(object, false);

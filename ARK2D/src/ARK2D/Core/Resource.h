@@ -64,6 +64,8 @@ namespace ARK {
 				LocalHighscores* asLocalHighscores();
 				TiledMap* asTiledMap();
 				String* asString();
+				PathGroup* asPathGroup();
+				SpriteSheetDescription* asSpriteSheetDescription();
 				virtual ~Resource();
 
 

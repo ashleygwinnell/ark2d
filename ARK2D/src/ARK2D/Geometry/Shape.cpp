@@ -6,3 +6,6 @@
  */
 
 #include "Shape.h"
+#include "Rectangle.h"
+#include "Circle.h"
+#include "Line.h"

@@ -10,10 +10,10 @@
 #include "%GAME_CLASS_NAME%.h"
 
 GameContainer* container = NULL;
-Graphics* g = NULL;
+Renderer* r = NULL;
 GameTimer* timer = NULL;
 %GAME_CLASS_NAME%* game = NULL;
-ARKLog* arklog = NULL;
+Log* arklog = NULL;
 
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeInit(JNIEnv* env, jclass cls, jstring apkPath, jstring externalDataPath) {
 	//__android_log_print(ANDROID_LOG_INFO, "%GAME_CLASS_NAME%Activity", "native init");
@@ -22,12 +22,12 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	const char* apkstr;
 	jboolean isCopy;
 	apkstr = env->GetStringUTFChars(apkPath, &isCopy);
-	ARK::Resource::apkZipName = string(apkstr);
+	Resource::apkZipName = string(apkstr);
 
 	// init game stuff
 	game = new %GAME_CLASS_NAME%("%GAME_CLASS_NAME%");
 	container = new GameContainer(*game, %GAME_WIDTH%, %GAME_HEIGHT%, 32, false);
-	g = ARK2D::getGraphics();
+	r = ARK2D::getRenderer();
 	timer = container->getTimer();
 	arklog = ARK2D::getLog();
 	arklog->i("native init (ark2d) done");
@@ -48,9 +48,9 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 
 
 	arklog->i("init fonts");
-	ARK::Font::BMFont* fnt = ARK::Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont(); //new BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
-	g->setDefaultFont(fnt);
-	g->setFont(fnt);
+	ARK::Font::BMFont* fnt = Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont(); //new BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
+	r->setDefaultFont(fnt);
+	r->setFont(fnt);
 	// TODO: init default font.
 
 	arklog->i("init openal");
@@ -58,7 +58,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	bool b = container->m_platformSpecific.initOpenAL();
 	if (!b) {
 		arklog->i("openal init failed");
-		exit(0);
+		//exit(0);
 	}
 
 	arklog->i("init game class");
@@ -134,13 +134,13 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		game->preUpdate(container, timer);
 		game->update(container, timer);
 		game->postUpdate(container, timer);
-
+		ARK2D::getInput()->clearKeyPressedRecord();
 
 		//arklog->i("native render");
 		//fillRect(100,100,10,10);
-		game->preRender(container, g);
-		game->render(container, g);
-		game->postRender(container, g);
+		game->preRender(container, r);
+		game->render(container, r);
+		game->postRender(container, r);
 		if (container->isShowingFPS()) { container->renderFPS(); }
 
 		//fillRect(200,200,10,10);
