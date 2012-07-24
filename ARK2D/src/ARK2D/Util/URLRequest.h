@@ -22,8 +22,11 @@
 #include "../Threading/Mutex.h"
 #include "../Core/String.h"
 
+ #include "../Core/GameContainer.h"
 
-using namespace std;
+
+
+using namespace std; 
 
 namespace ARK {
 	namespace Util {
@@ -43,7 +46,7 @@ namespace ARK {
 				void* m_callback;
 				void* m_callbackObj;
 			
-			public:
+			public: 
 				URLRequest();
 				void setUrl(string url);
 				void addPostArg(string key, string value);
@@ -55,10 +58,12 @@ namespace ARK {
 
 			private:
 				size_t writeFunction(void *ptr, size_t size, size_t nmemb);
-
+				void reset();
 			private:
 				static bool s_curlInitted;
-				static CURL* s_curl;
+				#ifndef ARK2D_ANDROID
+					static CURL* s_curl;
+				#endif
 				static size_t s_curlWriteDataFunction(void *ptr, size_t size, size_t nmemb, void* cls);
 				static void s_startThreaded(void* obj);
 		};

@@ -49,6 +49,8 @@ namespace ARK {
 		 * Includes the lower, but excludes the upper.
 		 */
 		int MathUtil::randBetween(int lower, int upper) {
+			if (lower == upper) { return upper; }
+			if (lower > upper) { int teacup = lower; lower = upper; upper = teacup; }
 			return lower + (rand() % (upper-lower));
 		}
 

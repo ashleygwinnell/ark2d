@@ -22,24 +22,27 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
 		class SoundStore {
-			private:
-				static SoundStore s_soundStore;
+			private: 
+				static SoundStore* s_soundStore;
 
 			public:
-				static SoundStore& getInstance();
+				static SoundStore* getInstance();
 
 			public:
 				SoundStore();
+				void setCurrentGroupId(unsigned int groupId);
 				void addSound(string s, Sound* sound);
-				Sound* getSound(string s);
+				Sound* getSound(string s); 
 				map<string, Sound*> getMap();
 				void setVolumeByGroupId(unsigned int groupId, float volume);
 				void setPanningByGroupId(unsigned int groupId, float panning);
 				void setPitchByGroupId(unsigned int groupId, float pitch);
-				~SoundStore();
+
+				virtual ~SoundStore();
 
 			private:
 				map<string, Sound*> m_map;
+				unsigned int m_currentGroupId;
 		};
 	}
 }

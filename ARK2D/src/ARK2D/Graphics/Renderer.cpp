@@ -7,15 +7,52 @@
 #include "Renderer.h"
 #include "Color.h"
 #include "../Font/Font.h"
-#include "../Font/BMFont.h"
+#include "../Font/BMFont.h" 
 #include "../Font/FTFont.h"
 
 #include "../Includes.h"
 #include "../ARK2D.h"
 #include "../Core/GameContainer.h"
 
-namespace ARK {
+#include "../Geometry/Rectangle.h"
+
+namespace ARK { 
 	namespace Graphics {
+
+		int RendererState::s_renderMode = -1;
+		int RendererState::s_textureId = 0;
+
+		void RendererState::start(int renderMode) {
+			start(renderMode, 0);
+		}
+		void RendererState::start(int renderMode, int textureId) 
+		{
+			if (renderMode == GEOMETRY && (renderMode != s_renderMode || s_renderMode == 0)) { startGeometry(); } 
+			else if (renderMode == TEXTURE && (textureId != s_textureId || s_textureId == 0)) { startTexture(textureId); }
+
+			s_renderMode = renderMode;
+		} 
+
+		void RendererState::startGeometry() {
+
+			s_textureId = 0;
+			glBindTexture(GL_TEXTURE_2D, 0);
+			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+			glDisable(GL_TEXTURE_2D);
+
+			glEnableClientState(GL_VERTEX_ARRAY);
+		}
+		void RendererState::startTexture(int textureId) {
+			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, textureId);
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glEnableClientState(GL_VERTEX_ARRAY);
+			
+			s_textureId = textureId;
+		}
+
+
+
 
 		Renderer::Renderer():
 			m_DefaultFont(NULL),
@@ -31,7 +68,7 @@ namespace ARK {
 
 		void Renderer::setFont(ARK::Font::Font* f) {
 			m_Font = f;
-		}
+		} 
 		void Renderer::setDefaultFont(ARK::Font::Font* f) {
 			m_DefaultFont = f;
 		}
@@ -41,15 +78,15 @@ namespace ARK {
 		}
 		ARK::Font::Font* Renderer::getDefaultFont() const {
 			return m_DefaultFont;
-		}
+		} 
 
 		void Renderer::translate(int x, int y) const {
 			glTranslatef(x,y,0);
-		}
+		} 
 		void Renderer::translate(float x, float y) const {
 			glTranslatef(x,y,0);
 		}
-		void Renderer::rotate(int angle) const {
+		void Renderer::rotate(int angle) const { 
 			glRotatef(angle, 0, 0, 1);
 		}
 		void Renderer::scale(float x, float y) const {
@@ -183,16 +220,22 @@ namespace ARK {
 		 * ...what ever happened to vertex arrays?
 		 * ...or maybe even OpenGL 3.0: hello deprecation model!
 		 */
-		void Renderer::drawRect(int x, int y, int width, int height) const {
+		void Renderer::drawRect(ARK::Geometry::Rectangle<int>* rect) const { 
+		 	drawRect(rect->getMinX(), rect->getMinY(), rect->getWidth(), rect->getHeight());
+		}
+		void Renderer::drawRect(ARK::Geometry::Rectangle<float>* rect) const { 
+		 	drawRect(rect->getMinX(), rect->getMinY(), (int) rect->getWidth(), (int) rect->getHeight());
+		}
+		void Renderer::drawRect(float x, float y, int width, int height) const {
 			//#if defined(ARK2D_ANDROID)
 				float verts[] = {
 					0, 0,//tl
 					width, 0,// tr
-					width, height,// br
+					width, height,// br 
 					0, height//lr
 				};
-				glDisable(GL_TEXTURE_2D);
-				glEnableClientState(GL_VERTEX_ARRAY);
+				
+				RendererState::start(RendererState::GEOMETRY);
 				glPushMatrix();
 				glTranslatef(x, y, 0);
 
@@ -201,8 +244,8 @@ namespace ARK {
 
 				glTranslatef(x * -1, y * -1, 0);
 				glPopMatrix();
-				glDisableClientState(GL_VERTEX_ARRAY);
-				glEnable(GL_TEXTURE_2D);
+				//glDisableClientState(GL_VERTEX_ARRAY); 
+				//glEnable(GL_TEXTURE_2D);
 			/*#else
 				glBegin(GL_LINE_LOOP);
 					glVertex2i(x, y);
@@ -215,12 +258,15 @@ namespace ARK {
 		//! @todo: drawRects is broken.
 		// rects must be [[x1,y1,x2,y2,x3,y3,x4,y4], etc].
 		// colors must be [[r,g,b,a, r,g,b,a, r,g,b,a, r,g,b,a], etc], or NULL
-		void Renderer::drawRects(int rects[], int colors[]) const {
+		void Renderer::drawRects(float rects[], int colors[]) const {
 			return;
 
 			int total = (sizeof(rects) / sizeof(int))/8;
-			glDisable(GL_TEXTURE_2D);
-			glEnableClientState(GL_VERTEX_ARRAY);
+			
+			//glDisable(GL_TEXTURE_2D);
+			//glEnableClientState(GL_VERTEX_ARRAY);
+			RendererState::start(RendererState::GEOMETRY);
+			
 			if (colors != NULL) {
 				glEnableClientState(GL_COLOR_ARRAY);
 				glColorPointer(4, GL_UNSIGNED_INT, 0, &colors);
@@ -236,13 +282,14 @@ namespace ARK {
 				glDrawArrays(GL_LINE_LOOP, i*4, 4);
 			}
 
-			glDisableClientState(GL_VERTEX_ARRAY);
-			glEnable(GL_TEXTURE_2D);
+			//glDisableClientState(GL_VERTEX_ARRAY);
+			//glEnable(GL_TEXTURE_2D);
 		}
 		void Renderer::fillRect(int x, int y, int width, int height) const {
 			//#if defined(ARK2D_ANDROID)
-				glDisable(GL_TEXTURE_2D);
-				glEnableClientState(GL_VERTEX_ARRAY);
+				//glDisable(GL_TEXTURE_2D);
+				//glEnableClientState(GL_VERTEX_ARRAY);
+				RendererState::start(RendererState::GEOMETRY);
 
 				float rawVertices[] = {
 					0,		0,		  // tl
@@ -259,8 +306,8 @@ namespace ARK {
 				glTranslatef(x * -1, y * -1, 0);
 				glPopMatrix();
 
-				glDisableClientState(GL_VERTEX_ARRAY);
-				glEnable(GL_TEXTURE_2D);
+				//glDisableClientState(GL_VERTEX_ARRAY);
+				//glEnable(GL_TEXTURE_2D);
 			/*#else
 				glRecti(x, y, x + width, y + height);
 			#endif*/
@@ -310,8 +357,9 @@ namespace ARK {
 					verts[j+1] = float(0 + sin(angle) * radius);
 					j+=2;
 				}
-				glDisable(GL_TEXTURE_2D);
-				glEnableClientState(GL_VERTEX_ARRAY);
+				//glDisable(GL_TEXTURE_2D);
+				//glEnableClientState(GL_VERTEX_ARRAY);
+				RendererState::start(RendererState::GEOMETRY);
 				glPushMatrix();
 				glTranslatef(x, y, 0);
 
@@ -320,8 +368,10 @@ namespace ARK {
 
 				glTranslatef(x * -1, y * -1, 0);
 				glPopMatrix();
-				glDisableClientState(GL_VERTEX_ARRAY);
-				glEnable(GL_TEXTURE_2D);
+				//glDisableClientState(GL_VERTEX_ARRAY);
+				//glEnable(GL_TEXTURE_2D);
+			
+
 			/*#else
 				float each = 360.0f / float(points);
 				glBegin(GL_LINE_LOOP);
@@ -348,8 +398,9 @@ namespace ARK {
 			}
 			verts[j] = 0;
 			verts[j+1] = 0;
-			glDisable(GL_TEXTURE_2D);
-			glEnableClientState(GL_VERTEX_ARRAY);
+			//glDisable(GL_TEXTURE_2D);
+			//glEnableClientState(GL_VERTEX_ARRAY);
+			RendererState::start(RendererState::GEOMETRY);
 			glPushMatrix();
 			glTranslatef(x, y, 0);
 
@@ -358,8 +409,8 @@ namespace ARK {
 
 			glTranslatef(x * -1, y * -1, 0);
 			glPopMatrix();
-			glDisableClientState(GL_VERTEX_ARRAY);
-			glEnable(GL_TEXTURE_2D);
+			//glDisableClientState(GL_VERTEX_ARRAY);
+			//glEnable(GL_TEXTURE_2D);
 
 			/*#if defined(ARK2D_ANDROID)
 
@@ -404,15 +455,15 @@ namespace ARK {
 			m_DrawColor.setRed(r);
 			m_DrawColor.setGreen(g);
 			m_DrawColor.setBlue(b);
-			m_DrawColor.setAlpha(a);
+			m_DrawColor.setAlpha(a); 
 
 			glColor4f(m_DrawColor.getRed()/255.f, m_DrawColor.getGreen()/255.f, m_DrawColor.getBlue()/255.f, m_DrawColor.getAlpha()/255.f);
 		}
 		void Renderer::setDrawColorf(float r, float g, float b, float a) {
-			m_DrawColor.setRed(int(r * 255));
-			m_DrawColor.setGreen(int(g * 255));
-			m_DrawColor.setBlue(int(b * 255));
-			m_DrawColor.setAlpha(int(a * 255));
+			m_DrawColor.setRed(r);
+			m_DrawColor.setGreen(g); 
+			m_DrawColor.setBlue(b);
+			m_DrawColor.setAlpha(a);
 			glColor4f(r, g, b, a);
 		}
 		void Renderer::setDrawColor(const Color& c) {
@@ -437,7 +488,7 @@ namespace ARK {
 		}
 		float Renderer::getPointSize() {
 			return m_pointSize;
-		}
+		} 
 		void Renderer::setLineWidth(unsigned int i) {
 			glLineWidth(i);
 			m_LineWidth = i;

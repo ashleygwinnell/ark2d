@@ -158,6 +158,11 @@ namespace ARK {
 					static const int KEY_LMENU = 0xA4;
 					static const int KEY_RMENU = 0xA5;
 
+					static const int KEY_AT = 2000;
+					static const int KEY_HASH = 2001;
+					static const int KEY_LEFT_SQUARE_BRACKET = 2002;
+					static const int KEY_RIGHT_SQUARE_BRACKET = 2003;
+
 					static const char* s_keyboardState;
 				//#endif
 
@@ -343,6 +348,8 @@ namespace ARK {
 				int getMouseY() const;
 
 				vector<Gamepad*> getGamepads() const;
+
+				static void setSoftwareKeyboardOpen(bool b);
 
 				~Input();
 			public:

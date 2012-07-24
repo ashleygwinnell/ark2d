@@ -29,6 +29,7 @@
 					public:
 						GameContainer* m_container;
 						NSWindow* m_window;
+						GameContainerMacWindowListener* m_listener;
 						string m_resourcePath;
 						NSOpenGLContext* m_context;
 

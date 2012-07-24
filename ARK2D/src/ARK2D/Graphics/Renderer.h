@@ -16,9 +16,36 @@
 #include "../Font/Font.h"
 
 #include "../Includes.h"
+#include "../Namespaces.h"
+
+
 
 namespace ARK {
 	namespace Graphics {
+
+		class RendererState {
+			public:
+				static const int NONE = 0;
+				static const int GEOMETRY = 1;
+				static const int TEXTURE = 2;
+
+				static int s_renderMode;
+				static int s_textureId;
+
+				static void start(int renderMode);
+				static void start(int renderMode, int textureId);
+
+				static void startGeometry();
+				static void startTexture(int textureId);
+
+				static void internalBindTexture(int textureId) {
+					glEnable(GL_TEXTURE_2D);
+					glBindTexture(GL_TEXTURE_2D, textureId);
+					
+					s_textureId = textureId;
+				}
+				
+		};
 
 		/*!
 		 * \brief Contains rendering methods.
@@ -35,8 +62,7 @@ namespace ARK {
 			private:
 				static const int DEFAULT_SEGMENTS = 50;
 
-			/*
-			public:
+			/*public:
 				static const int RENDER_MODE = 0;
 				static const int RENDER_MODE_RECTS = 0;
 				static const int RENDER_MODE_LINES = 0;
@@ -89,8 +115,12 @@ namespace ARK {
 				void fillArc(int cx, int cy, int width, int height, float startAngle, float endAngle, int segs) const;
 
 				void drawLine(int x1, int y1, int x2, int y2) const;
-				void drawRect(int x, int y, int width, int height) const;
-				void drawRects(int rects[], int colors[] = NULL) const;
+
+				void drawRect(ARK::Geometry::Rectangle<int>* rect) const;
+				void drawRect(ARK::Geometry::Rectangle<float>* rect) const;
+				void drawRect(float x, float y, int width, int height) const;
+				void drawRects(float rects[], int colors[] = NULL) const;
+				
 				void fillRect(int x, int y, int width, int height) const;
 				void fillRoundedRect(int x, int y, int width, int height, int radius) const;
 				void fillRoundedRect(int x, int y, int width, int height, int radius, int segs) const;

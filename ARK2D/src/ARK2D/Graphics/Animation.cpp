@@ -49,12 +49,12 @@ namespace ARK {
 			return m_pingPong;
 		}
 		unsigned int Animation::getFrameTime() {
-			return m_frameTime;
+			return (unsigned int) m_frameTime;
 		}
 
 		void Animation::update(GameTimer* timer) {
 			if (m_frames.size() == 0) { return; }
-			m_timer += (unsigned int) (timer->getDelta() * 1000);
+			m_timer += (float) (timer->getDelta() * 1000);
 			if (m_timer > m_frameTime) {
 				m_timer -= m_frameTime;
 

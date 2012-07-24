@@ -33,6 +33,7 @@ namespace ARK {
 				static string getCurrentDirectory();
 				static string getSeparator();
 				static string getOSDirectory();
+				static void openBrowserToURL(string url);
 		};
 	}
 }

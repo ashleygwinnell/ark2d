@@ -206,7 +206,16 @@ namespace ARK {
 			}
 			return string("");*/
 
-			#ifdef __WIN32
+			#if defined(ARK2D_ANDROID)
+
+				if (key == (unsigned int) KEY_ENTER) {
+					return "\n";
+				}  
+
+				return ARK2D::getContainer()->m_platformSpecific.m_pluggable->m_keyChar;
+
+
+			#elif defined( __WIN32 )
 
 				if (key == (unsigned int) MOUSE_BUTTON_LEFT // left mouse
 					|| key == (unsigned int) MOUSE_BUTTON_RIGHT // right mouse
@@ -274,16 +283,25 @@ namespace ARK {
 							return "\"";
 					}
 				}
-
+ 
 				if (key == (unsigned int) KEY_ENTER) {
 					return "\n";
+				}  
+ 
+				NSEvent* e = ARK2D::getContainer()->m_platformSpecific.m_listener->m_latestKeyUpEvent;
+				if (e != NULL) {
+					NSString* characterNSString = [e charactersIgnoringModifiers];
+					
+					const char* ptr = [characterNSString cStringUsingEncoding:NSUTF8StringEncoding];
+					return string(ptr);
+				} else {
+					map<int, string>::iterator it = keyChars.find(key);
+					if (it != keyChars.end()) {
+						return keyChars[key];
+					}
 				}
 
-				map<int, string>::iterator it = keyChars.find(key);
-				if (it != keyChars.end()) {
-					return keyChars[key];
-				}
-				return string("");
+				//return string("");
 
 				//! @todo: get this from the OS.
 
@@ -343,6 +361,7 @@ namespace ARK {
 				}
 				return string(str[0]);*/
 
+			
 			#endif
 
 			return "";
@@ -374,13 +393,23 @@ namespace ARK {
 		}
 		int Input::getMouseY() const {
 			return mouse_y;
-		}
+		} 
 		void Input::setGameContainer(const ARK::Core::GameContainer* c) {
 			m_container = c;
 		}
 
 		vector<Gamepad*> Input::getGamepads() const {
 			return m_container->getGamepads();
+		}
+
+		void Input::setSoftwareKeyboardOpen(bool b) {
+			#if defined( ARK2D_ANDROID )
+				if (b) {
+					ARK2D::getContainer()->m_platformSpecific.m_pluggable->openSoftwareKeyboard();
+				} else {
+					ARK2D::getContainer()->m_platformSpecific.m_pluggable->closeSoftwareKeyboard();
+				}
+    		#endif
 		}
 
 

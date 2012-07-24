@@ -26,7 +26,7 @@
 		#include <zip.h>
 		#include <sys/stat.h>
 		#include <sys/types.h>
-		#include <math.h>
+		#include <math.h> 
 		#define STL_AVAILABLE
 
 		#include <GLES/gl.h>
@@ -69,6 +69,10 @@
 		#include <windows.h>
 		#include <mmsystem.h>
 		#include <winbase.h>
+ 		#include <wininet.h>
+
+ 		//#include <winsock.h>
+		//#include <winsock2.h>
 		
 		#include <vector>
 		#include <list>
@@ -87,6 +91,8 @@
 		#include <AL/ALext.h>
 		#include <AL/ALut.h>
 
+ 		#include "vendor/libcurl-windows/curl.h"
+
 	#elif defined(__linux__)
 		#define ARK2D_UBUNTU_LINUX
 		#define STL_AVAILABLE
@@ -104,12 +110,16 @@
 		#include <AL/alext.h>
 		#include <AL/alut.h>
 
+ 		#include "vendor/libcurl/curl.h"
+
 	#elif (defined(__MACH__) || defined(__APPLE__))
 
 		#define ARK2D_MACINTOSH
 		#define STL_AVAILABLE
 		#define EXCEPTIONS_AVAILABLE
 		#include <Cocoa/Cocoa.h>
+		#include <CoreFoundation/CFBundle.h>
+		#include <ApplicationServices/ApplicationServices.h>
 
 		#include <stdlib.h>
 		#include <string>
@@ -136,7 +146,7 @@
 		#include <OpenAL/al.h>
 		#include <OpenAL/alc.h>
 
-
+ 		#include "vendor/libcurl/curl.h"
 
 	#endif
 
@@ -151,7 +161,7 @@
 
 	#include "vendor/lpng151/png.h"
 
-	#include "vendor/libcurl/curl.h"
+	
 
 	#include "vendor/libJSON/JSON_Defs.h"
 	#include "vendor/libJSON/JSONNode.h"

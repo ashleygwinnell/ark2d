@@ -12,9 +12,12 @@ using namespace ARK::Core;
 
 @interface GameContainerMacWindowListener : NSResponder <NSWindowDelegate> {
 	NSWindow* m_window;
+	@public NSEvent* m_latestKeyUpEvent;
+	
 }
 
--(void)init:(NSWindow* )window;
+
+-(void)init:(NSWindow* )window; 
 
 -(BOOL)windowShouldClose:(id)sender;
 -(void)windowWillClose:(NSNotification *)notification;
@@ -27,5 +30,6 @@ using namespace ARK::Core;
 -(void)mouseDown:(NSEvent *)theEvent;
 -(void)mouseUp:(NSEvent *)theEvent;
 -(void)mouseMoved:(NSEvent *)theEvent;
+
 
 @end

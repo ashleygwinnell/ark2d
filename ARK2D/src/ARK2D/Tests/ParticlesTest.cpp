@@ -21,7 +21,7 @@ namespace ARK {
 
 			// Create default image.
 			defaultParticle = Resource::get("ark2d/particle.png")->asImage();
-
+ 
 			// Create Particle System
 			system = new ParticleSystem(defaultParticle);
 			system->setBlendingMode(ParticleSystem::BLEND_ADDITIVE);
@@ -56,7 +56,7 @@ namespace ARK {
 			//emitter->setScaleY(scale_y);
 			emitter->addColorPoint(0.0f, new Color(Color::cyan));
 
-			Color* thisRed = new Color(Color::red); thisRed->setAlpha(0);
+			Color* thisRed = new Color(Color::red); thisRed->setAlpha(0.0f);
 			emitter->addColorPoint(1.0f, thisRed);
 			emitter->replay();
 			system->addEmitter(emitter);

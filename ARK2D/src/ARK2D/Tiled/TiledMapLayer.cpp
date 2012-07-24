@@ -81,7 +81,7 @@ namespace ARK {
 			if (x >= m_data.size()) {
 				return 0;
 			} else if (y >= m_data.at(x).size()) {
-				return NULL;
+				return 0; // return NULL;
 			}
 
 			return m_data.at(x).at(y);

@@ -7,6 +7,8 @@
 
 #include "FileUtil.h"
 
+#include "../Includes.h"
+
 #include <stdio.h>
 #include "../ARK2D.h"
 #include "StringUtil.h"
@@ -86,6 +88,24 @@ namespace ARK {
 
 			#endif
 			return "whoops?";
+		}
+
+		void FileUtil::openBrowserToURL(string url_str) {
+			#if defined(ARK2D_WINDOWS)
+				ShellExecute(ARK2D::getContainer()->m_platformSpecific.m_hWindow, "open", url_str.c_str(), NULL, NULL, SW_SHOWDEFAULT);
+			#elif defined(ARK2D_ANDROID)
+
+			#elif defined(ARK2D_MACINTOSH)
+				CFURLRef url = CFURLCreateWithBytes (
+					NULL,                        // allocator
+					(UInt8*)url_str.c_str(),     // URLBytes
+					url_str.length(),            // length
+					kCFStringEncodingASCII,      // encoding
+					NULL                         // baseURL
+				);
+				LSOpenCFURLRef(url, 0);
+				CFRelease(url);
+			#endif
 		}
 
 

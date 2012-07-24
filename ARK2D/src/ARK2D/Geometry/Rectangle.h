@@ -128,8 +128,7 @@ namespace ARK {
 
 				}
 				virtual void render() {
-					Renderer* g = ARK2D::getRenderer();
-					g->drawRect((int)m_x, (int)m_y, (int)m_width, (int)m_height);
+					ARK2D::getRenderer()->drawRect(this);
 				}
 
 

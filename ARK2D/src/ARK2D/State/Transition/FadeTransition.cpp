@@ -26,7 +26,7 @@ namespace ARK {
 				int width = container->getWidth();
 				int height = container->getHeight();
 
-				m_time_current = 0.0f;
+				m_time_current = 0;
 				m_alpha = 1.0f;
 
 				// Generate one texture (we're creating only one).

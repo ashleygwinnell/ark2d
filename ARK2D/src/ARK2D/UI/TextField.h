@@ -56,6 +56,13 @@ namespace ARK {
 				static const signed int ALIGN_BOTTOM = 1;
 				static const signed int ALIGN_END = 1;
 
+				unsigned int m_restrictCharacters;
+				static const unsigned int RESTRICT_NONE = 0;
+				static const unsigned int RESTRICT_ALPHA = 1;
+				static const unsigned int RESTRICT_NUMERIC = 2;
+				static const unsigned int RESTRICT_ALPHANUMERIC = 3;
+				static const unsigned int RESTRICT_ALPHANUMERIC_SPACES = 4;
+
 				TextField();
 				void setText(string s);
 				void setText(int i);
@@ -65,11 +72,14 @@ namespace ARK {
 				void setMultiline(bool b);
 				void setTextAlignY(signed int align);
 
-				void render();
+				void setRestrictedCharacterSet(unsigned int r);
+
+				virtual void render();
 				void renderBackground();
 				void renderSelectedArea(int x, int y, int w, int h);
 				void renderText(int x, int y);
-				void renderCaret(int x1, int y1, int x2, int y2);
+				void renderCaret();
+				virtual void renderCaret(int x1, int y1, int x2, int y2);
 				void renderOverlay();
 
 				bool hasSelection();
@@ -78,8 +88,11 @@ namespace ARK {
 				void clearSelection();
 				void cursorLeft();
 				void cursorRight();
+
+				virtual void setFocussed(bool b);
 				virtual ~TextField();
 		};
+
 	}
 }
 

@@ -1,6 +1,11 @@
 package org.%COMPANY_NAME%.%GAME_SHORT_NAME%;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -19,9 +24,14 @@ import android.opengl.GLU;
 import android.os.Bundle; 
 import android.os.Environment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 public class %GAME_CLASS_NAME%Activity extends Activity {
+    
+	public static %GAME_CLASS_NAME%Activity s_activity;
     /** Called when the activity is first created. */
     @Override 
     public void onCreate(Bundle savedInstanceState) {
@@ -39,7 +49,7 @@ public class %GAME_CLASS_NAME%Activity extends Activity {
         mGLView = new %GAME_CLASS_NAME%View(this);
         setContentView(mGLView);
         
-        
+        s_activity = this;
     } 
     
     @Override
@@ -68,7 +78,62 @@ public class %GAME_CLASS_NAME%Activity extends Activity {
     	super.onResume();    
     	mGLView.onResume();  
     } 
-      
+
+   	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    Log.i("game", "Key Down: " + keyCode);
+	    /*switch (keyCode) {
+	    	case KeyEvent.KEYCODE_BACK:
+				// Sample for handling the Menu button globally
+				return true;
+	    }*/
+	    %GAME_CLASS_NAME%Renderer.nativeKeyDown(keyCode, new String(Character.toString((char)event.getUnicodeChar())));
+	    return false;
+	}
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+ 		Log.i("game", "Key Up: " + keyCode);
+ 		%GAME_CLASS_NAME%Renderer.nativeKeyUp(keyCode, new String(Character.toString((char)event.getUnicodeChar())));
+ 		return false;
+	}
+
+	public static void openSoftwareKeyboard() {
+		Log.i("game", "keyboard open java");
+		InputMethodManager imm = (InputMethodManager) s_activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.toggleSoftInputFromWindow(s_activity.mGLView.getApplicationWindowToken(), InputMethodManager.SHOW_FORCED, 0);
+	}
+	public static void closeSoftwareKeyboard() {
+		Log.i("game", "keyboard close java");
+		InputMethodManager imm = (InputMethodManager) s_activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(s_activity.mGLView.getApplicationWindowToken(), 0);
+	}
+	public static String urlRequest(String urlString) {
+		Log.i("game", "url request java: " + urlString);
+		String response = new String("");
+		try {
+			URL url = new URL(urlString);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.connect();
+			InputStream stream = connection.getInputStream();
+			BufferedInputStream buff = new BufferedInputStream(stream);
+			int character = -1;
+			while ((character = buff.read()) != -1) {
+				response += (char) character;
+			}
+			stream.close();
+			return response;
+		} catch (IOException e) {
+			Log.i("game", "IO Exception: " + e.getMessage());
+			Log.i("game", "Have you added \"INTERNET\" to {'android':{'permissions':[]}} to the ARK2D configuration?");
+			
+			s_activity.runOnUiThread(new Runnable() {
+				public void run() {
+					Toast.makeText(s_activity, "No Internet Connection", Toast.LENGTH_SHORT).show();
+				}
+			});
+		}
+		return response;
+	}
     private %GAME_CLASS_NAME%View mGLView;
     
     static {
@@ -225,6 +290,9 @@ class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
 	public static native void nativeTouchDown(int x, int y); 
 	public static native void nativeTouchMove(int x, int y);
 	public static native void nativeTouchUp(int x, int y);
+
+	public static native void nativeKeyDown(int key, String keyChar);
+	public static native void nativeKeyUp(int key, String keyChar);
 	
 	public static native void nativeStart();
 	public static native void nativePause();
@@ -233,3 +301,7 @@ class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
 	
 	
 }
+
+
+
+

@@ -6,6 +6,7 @@
  */
 
 #include "FTFont.h"
+#include "../Graphics/Renderer.h"
 
 namespace ARK {
 	namespace Font {
@@ -56,11 +57,12 @@ namespace ARK {
 						(i >= bitmap.width || j >= bitmap.rows)
 							?0
 							:bitmap.buffer[i + bitmap.width*j];
-				}
+				} 
 			}
 
 			// do some texture shizzle.
-			glBindTexture(GL_TEXTURE_2D, tex_base[ch]);
+			//glBindTexture(GL_TEXTURE_2D, tex_base[ch]);
+			RendererState::start(RendererState::TEXTURE, tex_base[ch]);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
@@ -88,7 +90,8 @@ namespace ARK {
 			#else
 				// create the display list...
 				glNewList(list_base+ch, GL_COMPILE);
-				glBindTexture(GL_TEXTURE_2D, tex_base[ch]);
+				//glBindTexture(GL_TEXTURE_2D, tex_base[ch]);
+				RendererState::start(RendererState::TEXTURE, tex_base[ch]);
 
 				glPushMatrix();
 
@@ -222,7 +225,8 @@ namespace ARK {
 			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 			#else
 				//GLuint font = m_data->list_base;
-				glEnable(GL_TEXTURE_2D);
+				//glEnable(GL_TEXTURE_2D);
+				
 				//glListBase(font);
 				for( unsigned int i = 0; i < str.size(); ++i ) {
 					unsigned char in = (unsigned char) str[i];
@@ -234,7 +238,8 @@ namespace ARK {
 						0
 					);
 					// glCallLists(1, GL_UNSIGNED_BYTE, (GLvoid*) &in);
-					glBindTexture(GL_TEXTURE_2D, d.tid);
+					//glBindTexture(GL_TEXTURE_2D, d.tid);
+					RendererState::start(RendererState::TEXTURE, d.tid);
 					glBegin(GL_QUADS);
 						glTexCoord2d(0,0);       glVertex2f(0,0);
 						glTexCoord2d(0,d.th);    glVertex2f(0,d.height);
@@ -247,7 +252,7 @@ namespace ARK {
 					x += m_data->characterDatas[in].advancex;
 
 				}
-				glBindTexture(GL_TEXTURE_2D, 0);
+				//glBindTexture(GL_TEXTURE_2D, 0);
 			#endif
 		}
 		unsigned int FTFont::getStringWidth(const string& Str) const {

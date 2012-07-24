@@ -8,6 +8,7 @@
 #ifndef EMPTYTRANSITION_H_
 #define EMPTYTRANSITION_H_
 
+#include "../../ARK2D.h"
 #include "Transition.h"
 #include "../../Tween/Timeline.h"
 

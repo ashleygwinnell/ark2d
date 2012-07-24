@@ -14,9 +14,13 @@ Renderer* r = NULL;
 GameTimer* timer = NULL;
 %GAME_CLASS_NAME%* game = NULL;
 Log* arklog = NULL;
+JNIEnv* s_env = NULL;
 
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeInit(JNIEnv* env, jclass cls, jstring apkPath, jstring externalDataPath) {
 	//__android_log_print(ANDROID_LOG_INFO, "%GAME_CLASS_NAME%Activity", "native init");
+
+	// set globals?
+	s_env = env;
 
 	// set apk name
 	const char* apkstr;
@@ -41,6 +45,10 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	// random init.
 	arklog->i("seed random");
 	MathUtil::seedRandom();
+
+	// init pluggable?
+	//delete container->m_platformSpecific.m_pluggable;
+	container->m_platformSpecific.m_pluggable = new MyAndroidPluggable();
 
 	// init opengl
 	container->m_platformSpecific.initGL("%GAME_CLEAR_COLOR%", %GAME_WIDTH%, %GAME_HEIGHT%);
@@ -225,3 +233,174 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		i->releaseKey(Input::MOUSE_BUTTON_LEFT);
 	}
 }
+
+string getCharacter(jstring ch);
+string getCharacter(jstring ch) {
+	const char* keyCharacter;
+	jboolean isCopy;
+	keyCharacter = s_env->GetStringUTFChars(ch, &isCopy);
+	return string(keyCharacter);
+}
+
+static int android_key_table[] = {
+	/* 00 */ 0,
+	/* 01 */ 0,
+	/* 02 */ 0,
+	/* 03 */ 0,
+	/* 04 */ Input::ANDROID_BACK,
+	/* 05 */ 0,
+	/* 06 */ 0,
+	/* 07 */ Input::KEY_0,
+	/* 08 */ Input::KEY_1,
+	/* 09 */ Input::KEY_2,
+	/* 10 */ Input::KEY_3,
+	/* 11 */ Input::KEY_4,
+	/* 12 */ Input::KEY_5,
+	/* 13 */ Input::KEY_6,
+	/* 14 */ Input::KEY_7,
+	/* 15 */ Input::KEY_8,
+	/* 16 */ Input::KEY_9,
+	/* 17 */ Input::KEY_NUMPAD_MULTIPLY,
+	/* 18 */ Input::KEY_HASH,
+	/* 19 */ Input::KEY_UP,
+	/* 20 */ Input::KEY_DOWN,
+	/* 21 */ Input::KEY_LEFT,
+	/* 22 */ Input::KEY_RIGHT,
+	/* 23 */ 0,
+	/* 24 */ 0,
+	/* 25 */ 0,
+	/* 26 */ 0,
+	/* 27 */ 0,
+	/* 28 */ 0,
+	/* 29 */ Input::KEY_A,
+	/* 30 */ Input::KEY_B,
+	/* 31 */ Input::KEY_C,
+	/* 32 */ Input::KEY_D,
+	/* 33 */ Input::KEY_E,
+	/* 34 */ Input::KEY_F,
+	/* 35 */ Input::KEY_G,
+	/* 36 */ Input::KEY_H,
+	/* 37 */ Input::KEY_I,
+	/* 38 */ Input::KEY_J,
+	/* 39 */ Input::KEY_K,
+	/* 40 */ Input::KEY_L,
+	/* 41 */ Input::KEY_M,
+	/* 42 */ Input::KEY_N,
+	/* 43 */ Input::KEY_O,
+	/* 44 */ Input::KEY_P,
+	/* 45 */ Input::KEY_Q,
+	/* 46 */ Input::KEY_R,
+	/* 47 */ Input::KEY_S,
+	/* 48 */ Input::KEY_T,
+	/* 49 */ Input::KEY_U,
+	/* 50 */ Input::KEY_V,
+	/* 51 */ Input::KEY_W,
+	/* 52 */ Input::KEY_X,
+	/* 53 */ Input::KEY_Y,
+	/* 54 */ Input::KEY_Z,
+	/* 55 */ Input::KEY_COMMA,
+	/* 56 */ Input::KEY_PERIOD,
+	/* 57 */ 0,
+	/* 58 */ 0,
+	/* 59 */ Input::KEY_LSHIFT,
+	/* 60 */ 0,
+	/* 61 */ 0,
+	/* 62 */ Input::KEY_SPACE,
+	/* 63 */ 0,
+	/* 64 */ 0,
+	/* 65 */ 0,
+	/* 66 */ Input::KEY_ENTER,
+	/* 67 */ Input::KEY_BACKSPACE,
+	/* 68 */ 0,
+	/* 69 */ Input::KEY_HYPHEN,
+	/* 70 */ Input::KEY_EQUALS,
+	/* 71 */ Input::KEY_LEFT_SQUARE_BRACKET,
+	/* 72 */ Input::KEY_RIGHT_SQUARE_BRACKET,
+	/* 73 */ Input::KEY_BACK_SLASH,
+	/* 74 */ Input::KEY_SEMICOLON,
+	/* 75 */ Input::KEY_APOSTROPHE,
+	/* 75 */ Input::KEY_FORWARD_SLASH,
+	/* 77 */ Input::KEY_AT,
+	/* 78 */ 0,
+	/* 79 */ 0,
+	/* 80 */ 0,
+	/* 81 */ Input::KEY_NUMPAD_ADD,
+	/* 82 */ Input::ANDROID_MENU,
+	/* 83 */ 0,
+	/* 84 */ Input::ANDROID_SEARCH
+};
+
+JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeKeyDown(JNIEnv* env, jclass thiz, jint keyCode, jstring ch) { 
+	if(container != NULL) {
+		ARK2D::getLog()->i("key down: ");
+		
+		string str = getCharacter(ch);
+		ARK2D::getLog()->i(str);
+
+		if (keyCode < 0 || keyCode > 84) {
+			ARK2D::getLog()->e("invalid key. english only supported. ");
+			return;
+		}
+
+		container->m_platformSpecific.m_pluggable->m_keyChar = str;
+		ARK2D::getInput()->pressKey(android_key_table[keyCode]);
+	}
+}
+JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeKeyUp(JNIEnv* env, jclass thiz, jint keyCode, jstring ch) { 
+	if(container != NULL) {
+		ARK2D::getLog()->i("key up: ");
+		//ARK2D::getLog()->i(keyCode);
+
+		string str = getCharacter(ch);
+		ARK2D::getLog()->i(str);
+
+		if (keyCode < 0 || keyCode > 84) {
+			ARK2D::getLog()->e("invalid key. english only supported. ");
+			return;
+		}
+
+		ARK2D::getInput()->releaseKey(android_key_table[keyCode]);
+		container->m_platformSpecific.m_pluggable->m_keyChar = "";
+	}
+}
+
+string MyAndroidPluggable::urlRequest(string url) {
+	ARK2D::getLog()->i("starting url request");
+
+	jstring jstr = s_env->NewStringUTF(url.c_str());
+	ARK2D::getLog()->i("herp");
+	jclass clazz = s_env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
+	ARK2D::getLog()->i("derp");
+	jmethodID messageMe = s_env->GetStaticMethodID(clazz, "urlRequest", "(Ljava/lang/String;)Ljava/lang/String;"); // Get the method that you want to call
+	ARK2D::getLog()->i("gerp");
+    jobject result = s_env->CallStaticObjectMethod(clazz, messageMe, jstr); // Call the method on the object
+	ARK2D::getLog()->i("zerp");
+    const char* str = s_env->GetStringUTFChars((jstring) result, NULL);
+    string returnStr(str);
+    s_env->ReleaseStringUTFChars(jstr, str); 
+	ARK2D::getLog()->i(returnStr);
+    ARK2D::getLog()->i("done url request");
+     
+    return returnStr;
+}
+void MyAndroidPluggable::openSoftwareKeyboard() {
+	ARK2D::getLog()->i("Opening software keyboard");
+
+	jclass clazz = s_env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
+
+	ARK2D::getLog()->i("herp");
+	jmethodID messageMe = s_env->GetStaticMethodID(clazz, "openSoftwareKeyboard", "()V"); // Get the method that you want to call
+	ARK2D::getLog()->i("derp");
+   	s_env->CallStaticVoidMethod(clazz, messageMe); // Call the method on the object
+    
+    ARK2D::getLog()->i("Opened software keyboard");
+}
+void MyAndroidPluggable::closeSoftwareKeyboard() { 
+
+}
+
+
+
+
+
+

@@ -27,8 +27,6 @@ namespace ARK {
 		class Image : public ARK::Core::Resource {
 			private:
 
-				static unsigned int s_current_texture_id;
-
 				void* m_data; // only used by one constructor.
 				unsigned int m_resourceType; // ARK2D_RESOURCE_TYPE_PNG only supported.
 
@@ -81,6 +79,8 @@ namespace ARK {
 				void setColor(Color* c); // color overrides alpha;
 				Color* getColor() const;
 
+				inline unsigned int getTextureId() { return texture; };
+
 				void clean();
 
 				void setCenterOfRotation(int x, int y);
@@ -93,8 +93,8 @@ namespace ARK {
 				void setSize(int x, int y);
 				void setWidth(int w);
 				void setHeight(int h);
-				void bind() const;
-				void unbind() const;
+				//void bind() const;
+				//void unbind() const;
 				void draw();
 				void draw(int x, int y);
 				void draw(float x, float y);
@@ -109,6 +109,10 @@ namespace ARK {
 				//void setCornerColor(unsigned int corner, Color c) const;
 				//void copyAreaToImage(const Image& image, unsigned int dest_x, unsigned int dest_y,
 				//						unsigned int x, unsigned int y, unsigned int width, unsigned int height);
+
+				static string getGlErrorString(int error);
+				static void showAnyGlErrorAndExit();
+
 				virtual ~Image();
 		};
 	}

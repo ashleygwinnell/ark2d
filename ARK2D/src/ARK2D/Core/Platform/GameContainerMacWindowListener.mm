@@ -16,6 +16,8 @@
 
 using namespace ARK::Core;
 
+
+
 // see url:
 // http://classicteck.com/rbarticles/mackeyboard.php
 // there is a nice image and table
@@ -153,6 +155,8 @@ static int darwin_scancode_table[] = {
 
 @implementation GameContainerMacWindowListener 
 
+//@synthesize m_latestKeyUpEvent;
+
 -(void) init:(NSWindow* )window {
    	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
    
@@ -187,30 +191,38 @@ static int darwin_scancode_table[] = {
 }
 -(void)windowWillClose:(NSNotification *)notification {
     // printf("window delegate window will close now.\r");
-    // [m_window close];
+    // [m_window close]; 
     //  [NSApp terminate];
-}
-
+}   
+ 
 -(void)keyDown:(NSEvent *)theEvent {
-	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+	m_latestKeyUpEvent = NULL;
 	
-  	unsigned short scancode = [theEvent keyCode];
-    std::cout << "key pressed: " << scancode << std::endl;
+	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+	unsigned short scancode = [theEvent keyCode];
+    //std::cout << "key pressed: " << scancode << std::endl;
     if (scancode < 128) {
+    	m_latestKeyUpEvent = theEvent;
     	unsigned int key = darwin_scancode_table[scancode];
     	ARK2D::getInput()->pressKey(key);
+    	m_latestKeyUpEvent = NULL;
     }
     
     [pool release];
 }
+
 -(void)keyUp:(NSEvent *)theEvent {
+	m_latestKeyUpEvent = NULL;
+	
 	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    
     unsigned short scancode = [theEvent keyCode];
-    std::cout << "key released: " << scancode << std::endl;
+    //std::cout << "key released: " << scancode << std::endl;
     if (scancode < 128) {
+    	m_latestKeyUpEvent = theEvent;
     	unsigned int key = darwin_scancode_table[scancode];
     	ARK2D::getInput()->releaseKey(key);
+
+    	m_latestKeyUpEvent = NULL;
     }
     [pool release];
 }

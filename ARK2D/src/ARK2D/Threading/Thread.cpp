@@ -8,7 +8,7 @@
 #include "Thread.h"
 #include "../UI/ErrorDialog.h"
 #include "../Util/StringUtil.h"
-#include "../Util/Log.h"
+#include "../Util/Log.h" 
 #include "../ARK2D.h"
 
 namespace ARK { 
@@ -17,11 +17,16 @@ namespace ARK {
 		#if defined(ARK2D_WINDOWS)
 
 			Thread::Thread():
-				m_functionPointer(NULL)
+				m_functionPointer(NULL),
+				m_classPointer(NULL)
 				{
 
 			}
 
+			void Thread::init(void* functionPointer, void* classPointer) {
+				m_functionPointer = functionPointer;
+				m_classPointer = classPointer; 
+			}
 			void Thread::init(void* functionPointer) {
 				m_functionPointer = functionPointer;
 				m_handle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) functionPointer, NULL, CREATE_SUSPENDED, &m_id);

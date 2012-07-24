@@ -18,7 +18,8 @@ namespace ARK {
 			m_selectedTo(-1),
 			m_textAlignY(0),
 			m_multiline(false),
-			m_wrap(false)
+			m_wrap(false),
+			m_restrictCharacters(RESTRICT_NONE)
 			{
 
 		}
@@ -51,6 +52,10 @@ namespace ARK {
 		void TextField::setMultiline(bool b) {
 			m_multiline = b;
 		}
+		void TextField::setRestrictedCharacterSet(unsigned int r) {
+			m_restrictCharacters = r;
+		}
+
 		void TextField::render() {
 
 			//AbstractUIComponent::preRender();
@@ -171,6 +176,16 @@ namespace ARK {
 				}
 			}
 		}
+		
+		void TextField::renderCaret() {
+			int sw = ARK2D::getRenderer()->getFont()->getStringWidth(m_text.substring(0, m_cursorPosition).get());
+			renderCaret(  
+				m_x + getPaddingLeft() + sw,
+				m_y + getPaddingTop(),
+				m_x + getPaddingLeft() + sw,
+				m_y + m_height - getPaddingBottom()
+			);
+		}
 		void TextField::renderCaret(int x1, int y1, int x2, int y2) {
 			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white_50a);
@@ -197,11 +212,11 @@ namespace ARK {
 			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT) {
 				//if (GigaRectangle<int>::s_contains(m_x, m_y, m_width, m_height, i->getMouseX(), i->getMouseY())) {
 				if (GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), m_width, m_height, i->getMouseX(), i->getMouseY())) {
-					if (UIComponent::s_currentFocus != NULL) {
-						UIComponent::s_currentFocus->setFocussed(false);
-					}
-
-					UIComponent::s_currentFocus = this;
+					//if (UIComponent::s_currentFocus != NULL) {
+					//	UIComponent::s_currentFocus->setFocussed(false);
+					//}
+					//
+					//UIComponent::s_currentFocus = this;
 					setFocussed(true);
 				} else {
 					setFocussed(false);
@@ -290,6 +305,16 @@ namespace ARK {
 					cursorRight();
 					clearSelection();
 				} else if (k.length() > 0) {
+
+					// do restrictions
+
+					if (m_restrictCharacters == RESTRICT_ALPHANUMERIC) {
+						string allowedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+						if (allowedCharacters.find(k) == string::npos) {
+							return;
+						}
+					}
+
 					m_text.insert(k, m_cursorPosition);
 					cursorRight();
 					clearSelection();
@@ -317,6 +342,16 @@ namespace ARK {
 				m_cursorPosition = m_text.length();
 			}
 		}
+
+		void TextField::setFocussed(bool b) {
+			UIComponent::setFocussed(b);
+			if (b) {
+				Input::setSoftwareKeyboardOpen(true);
+			} else {
+				Input::setSoftwareKeyboardOpen(false);
+			}
+		}
+
 		TextField::~TextField() {
 
 		}

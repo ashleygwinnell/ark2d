@@ -43,7 +43,7 @@ namespace ARK {
 			}
 			void FadeFromColourTransition::postRender(GameContainer* container, StateBasedGame* game, Renderer* g) {
 
-				m_color->setAlpha(int(m_alpha*255));
+				m_color->setAlpha(m_alpha);
 				g->setDrawColor(m_color->getRed(), m_color->getGreen(), m_color->getBlue(), m_color->getAlpha());
 
 				//g->setDrawColor(Color::white);
@@ -51,7 +51,7 @@ namespace ARK {
 			}
 			bool FadeFromColourTransition::isComplete() {
 				if (m_time_current >= m_time) {
-					m_color->setAlpha(m_colorOriginalAlpha*255);
+					m_color->setAlpha(m_colorOriginalAlpha);
 					return true;
 				}
 				return false;

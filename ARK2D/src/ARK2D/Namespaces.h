@@ -58,6 +58,16 @@ namespace ARK {
 		
 
 	}
+	//! Classes for Game Jolt APIs.
+	namespace GJ {
+		class PropertyItem;
+		class DataStore;
+		class Highscore;
+		class Trophy;
+		class User;
+		class GameJolt;
+	}
+
 	//! Contains classes for Rendering and Animation.
 	namespace Graphics {
 		class Renderer;
@@ -176,6 +186,7 @@ using namespace ARK::Controls;
 using namespace ARK::Core;
 using namespace ARK::Font;
 using namespace ARK::Geometry;
+using namespace ARK::GJ;
 using namespace ARK::Graphics;
 using namespace ARK::Graphics::ImageIO;
 using namespace ARK::Tiled;

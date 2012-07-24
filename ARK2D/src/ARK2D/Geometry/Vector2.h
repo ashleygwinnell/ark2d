@@ -171,7 +171,7 @@ namespace ARK {
 					return (m_x*m_x) + (m_y * m_y);
 				}
 				T length() {
-					return sqrt(lengthSquared());
+					return (T) sqrt((double) lengthSquared());
 				}
 
 				string toString() {

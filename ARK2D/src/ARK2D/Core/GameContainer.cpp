@@ -7,13 +7,13 @@
 
 #include "GameContainer.h"
 //#include "../Geometry/GigaRectangle.h"
-#include "../ARK2D.h"
+#include "../ARK2D.h" 
 
 #if defined(ARK2D_ANDROID)
 	#include "Platform/GameContainerAndroid.h"
 #elif defined(ARK2D_WINDOWS)
 	#include "Platform/GameContainerWindows.h"
-#elif defined(ARK2D_UBUNTU_LINUX)
+#elif defined(ARK2D_UBUNTU_LINUX) 
 	#include "Platform/GameContainerLinux.h"
 #elif defined(ARK2D_MACINTOSH)
 	#include "Platform/GameContainerMac.h"
@@ -178,7 +178,7 @@ namespace ARK {
 		}
 
 		bool GameContainer::isTouchMode() {
-			return m_touchMode;
+			return m_touchMode; 
 		}
 		void GameContainer::setTouchMode(bool tm) {
 			m_touchMode = tm;

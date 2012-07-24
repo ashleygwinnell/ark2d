@@ -12,21 +12,31 @@
 
 namespace ARK {
 	namespace Audio {
-		SoundStore SoundStore::s_soundStore;
-		SoundStore& SoundStore::getInstance() {
+		SoundStore* SoundStore::s_soundStore = NULL;
+		SoundStore* SoundStore::getInstance() { 
+			if (s_soundStore == NULL) {
+				s_soundStore = new SoundStore();
+			}
 			return s_soundStore;
 		}
 
-		SoundStore::SoundStore(): m_map() {
+		SoundStore::SoundStore(): 
+			m_map(),
+			m_currentGroupId(0)
+			{
 
+		}
+		void SoundStore::setCurrentGroupId(unsigned int groupId) {
+			m_currentGroupId = groupId;
 		}
 		void SoundStore::addSound(string ref, Sound* sound) {
 			m_map[ref] = sound;
+			sound->setGroupId(m_currentGroupId);
 		}
 		Sound* SoundStore::getSound(string ref) {
 			return m_map[ref];
 		}
-		map<string, Sound*> SoundStore::getMap() {
+		map<string, Sound*> SoundStore::getMap() { 
 			return m_map;
 		}
 		void SoundStore::setVolumeByGroupId(unsigned int groupId, float volume) {

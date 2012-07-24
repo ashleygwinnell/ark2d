@@ -159,10 +159,11 @@ namespace ARK {
 				if (image == NULL && !emitter->usePoints()) {// && (!usePoints)) {
 					//image = sprite;
 					//emitter->u
-					sprite->bind(); // we need to cancel this out if we're rendering points.
+					RendererState::start(RendererState::TEXTURE, sprite->getTextureId());
+					//sprite->bind(); // we need to cancel this out if we're rendering points.
 				}
 
-				//if (!emitter->isOriented() && !emitter->usePoints(this)) {
+				//if (!emitter->isOriented() && !emitter->usePoints(this)) { 
 				//	image->startUse();
 				//}
 

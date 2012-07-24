@@ -16,10 +16,10 @@ namespace ARK {
 		}
 
 		void GameState::enter(GameContainer* container, StateBasedGame* game, GameState* from) {
-
+			ARK2D::getLog()->v("GameState::enter");
 		}
 		void GameState::leave(GameContainer* container, StateBasedGame* game, GameState* to) {
-
+			ARK2D::getLog()->v("GameState::leave");
 		}
 
 		void GameState::keyPressed(unsigned int key) {

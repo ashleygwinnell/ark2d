@@ -21,12 +21,9 @@
 
 namespace ARK {
 	namespace Graphics {
-
-		// Currently bound Image texture;
-		unsigned int Image::s_current_texture_id = 0;
-
+ 
 		GLuint Image::load(const Color& mask) {
-
+ 
 			unsigned int thisDataType = 0;
 			if (m_data != NULL) {
 				thisDataType = m_resourceType;
@@ -51,9 +48,11 @@ namespace ARK {
 				// Generate one texture (we're creating only one).
 				unsigned Object(0);
 				glGenTextures(1, &Object);
+				showAnyGlErrorAndExit();
 
 				// bind?
-				glBindTexture(GL_TEXTURE_2D, Object);
+				RendererState::internalBindTexture(Object);
+				//glBindTexture(GL_TEXTURE_2D, Object);
 				// You can use these values to specify mipmaps if you want to, such as 'GL_LINEAR_MIPMAP_LINEAR'.
 				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -66,7 +65,9 @@ namespace ARK {
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->getWidth(), this->getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, tga->getImageData());
 
 				// don't forget to unbind the texture now.
-				glBindTexture(GL_TEXTURE_2D, 0);
+				//glBindTexture(GL_TEXTURE_2D, 0);
+				RendererState::internalBindTexture(0);
+				showAnyGlErrorAndExit();
 
 				// Free TGA memory.
 				delete(tga);
@@ -82,6 +83,7 @@ namespace ARK {
 				// Generate one texture (we're creating only one).
 				unsigned Object(0);
 				glGenTextures(1, &Object);
+				showAnyGlErrorAndExit();
 
 				//for (unsigned int i = 0; i < sizeof(&bmp->Raster); i++) {
 				//	byte pixel = byte(&bmp->Raster[i]);
@@ -111,14 +113,15 @@ namespace ARK {
 					// apply mask
 					if (r == mask.getRed() && g == mask.getGreen() && b == mask.getBlue()) {
 						NewRaster[NewRasterIndex + 3] = (unsigned char) 0;
-					}
+					} 
 					NewRasterIndex += 4;
 				}
 
 				//std::cout << "Width: " << m_Width << ". Height: " << m_Width << std::endl;
 
 				// bind?
-				glBindTexture(GL_TEXTURE_2D, Object);
+				//glBindTexture(GL_TEXTURE_2D, Object);
+				RendererState::internalBindTexture(Object);
 
 				// You can use these values to specify mipmaps if you want to, such as 'GL_LINEAR_MIPMAP_LINEAR'.
 				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -146,8 +149,11 @@ namespace ARK {
 				//}
 
 				// don't forget to unbind the texture now.
-				glBindTexture(GL_TEXTURE_2D, 0);
+				//glBindTexture(GL_TEXTURE_2D, 0);
+				RendererState::internalBindTexture(0);
+				texture = Object;
 
+				showAnyGlErrorAndExit();
 
 				// Free BMP memory.
 				delete(bmp);
@@ -254,13 +260,20 @@ namespace ARK {
 					//Now generate the OpenGL texture object
 					unsigned Object(0);
 					glGenTextures(1, &Object);
-					glBindTexture(GL_TEXTURE_2D, Object);
+					showAnyGlErrorAndExit();
+					
+					//glBindTexture(GL_TEXTURE_2D, Object);
+					RendererState::internalBindTexture(Object);
+
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 					//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
 					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tempTextureWidth, tempTextureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, newdata);
-					glBindTexture(GL_TEXTURE_2D, 0);
+					//glBindTexture(GL_TEXTURE_2D, 0);
+					RendererState::internalBindTexture(0);
 					texture = Object;
+
+					showAnyGlErrorAndExit();
 
 					delete png;
 					free(newdata);
@@ -309,22 +322,63 @@ namespace ARK {
 					//Now generate the OpenGL texture object
 					unsigned Object(0);
 					glGenTextures(1, &Object);
-					glBindTexture(GL_TEXTURE_2D, Object);
+					showAnyGlErrorAndExit();
+					//glBindTexture(GL_TEXTURE_2D, Object);
+					RendererState::internalBindTexture(Object);
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 					//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
 					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tempTextureWidth, tempTextureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, newdata);
-					glBindTexture(GL_TEXTURE_2D, 0);
+					//glBindTexture(GL_TEXTURE_2D, 0);
+					RendererState::internalBindTexture(0);
 					texture = Object;
+
+					showAnyGlErrorAndExit();
 
 					delete png;
 					free(newdata);
 					return Object;
 				}
 
-				return NULL;
+				return 0;
 			}
 			return 0;
+		}
+		void Image::showAnyGlErrorAndExit() {
+			int e = glGetError();
+			if (e != GL_NO_ERROR) { 
+				ErrorDialog::createAndShow(getGlErrorString(e)); 
+				exit(0);
+			} 
+		}
+		string Image::getGlErrorString(int error) {
+			switch(error) {
+				case GL_INVALID_ENUM:
+					return "GL_INVALID_ENUM";
+					break;
+				case GL_INVALID_VALUE:
+					return "GL_INVALID_VALUE";
+					break;
+				case GL_INVALID_OPERATION:
+					return "GL_INVALID_OPERATION";
+					break;
+				case GL_OUT_OF_MEMORY:
+					return "GL_OUT_OF_MEMORY";
+					break;
+				case GL_INVALID_FRAMEBUFFER_OPERATION:
+					return "GL_INVALID_FRAMEBUFFER_OPERATION";
+					break;
+				/*case GL_STACK_OVERFLOW:
+					return "GL_STACK_OVERFLOW";
+					break;
+				case GL_STACK_UNDERFLOW:
+					return "GL_STACK_UNDERFLOW";
+					break;
+				case GL_TABLE_TOO_LARGE:
+					return "GL_TABLE_TOO_LARGE";
+					break;*/
+			}
+			return "GL_UNKNOWN_ERROR";
 		}
 
 		GLuint Image::load() {
@@ -428,6 +482,7 @@ namespace ARK {
 			std::cout << "Loading Image from resource. " << std::endl;
 			m_data = GameContainerPlatform::getARK2DResource(resource, resourceType);
 			this->texture = this->load();
+			std::cout << "texture id " << (this->texture) << std::endl;
 			clean();
 		}
 
@@ -473,7 +528,7 @@ namespace ARK {
 			m_dirty(false)
 		{
 			this->texture = this->load(); // this sets the width and height too! :)
-			std::cout << "Loaded Image: " << this->filename << std::endl; //  BMP must be 24bit unrestricted bmp!
+			std::cout << "Loaded Image: " << this->filename << " tex id: " << (this->texture) << std::endl; //  BMP must be 24bit unrestricted bmp!
 			clean();
 		}
 
@@ -496,7 +551,7 @@ namespace ARK {
 			m_dirty(false)
 		{
 			this->texture = this->load(mask); // this sets the width and height too! :)
-			std::cout << "Loaded Image: " << this->filename << std::endl; //  BMP must be 24bit unrestricted bmp!
+			std::cout << "Loaded Image: " << this->filename << " tex id: " << (this->texture) << std::endl; //  BMP must be 24bit unrestricted bmp!
 			clean();
 		}
 
@@ -744,7 +799,7 @@ namespace ARK {
 				glColor4f(m_color->getRedf(), m_color->getGreenf(), m_color->getBluef(), m_color->getAlphaf());
 			}
 
-			this->bind();
+			RendererState::start(RendererState::TEXTURE, this->texture);
 
 			// rotation
 			if (m_Rotation != 0) {
@@ -756,7 +811,7 @@ namespace ARK {
 			glPushMatrix();
 			glTranslatef(x, y, 0);
 
-			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
+//			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 
 
 
@@ -771,17 +826,17 @@ namespace ARK {
 					0 + this->m_Width,	0,					0,	// tr
 					0,					0 + this->m_Height,	0,  // bl
 					0 + this->m_Width,	0 + this->m_Height,	0	// br
-				};*/
+				};*/ 
 
-				if (m_color != NULL) {
+				//if (m_color != NULL) {
 
-					glEnableClientState(GL_COLOR_ARRAY);
+				//	glEnableClientState(GL_COLOR_ARRAY);
 					//glColorPointer(4, GL_FLOAT, 0, colors);
-					glColorPointer(4, GL_FLOAT, 0, m_colors);
-				}
+				//	glColorPointer(4, GL_FLOAT, 0, m_colors);
+				//}
 
-				glEnableClientState(GL_VERTEX_ARRAY);
-				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+				//glEnableClientState(GL_VERTEX_ARRAY);
+				//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 				//glVertexPointer(3, GL_FLOAT, 0, verts);
 				glVertexPointer(3, GL_FLOAT, 0, m_verts);
@@ -790,15 +845,15 @@ namespace ARK {
 
 				glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
-				glDisableClientState(GL_VERTEX_ARRAY);
-				glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+				//glDisableClientState(GL_VERTEX_ARRAY);
+				//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-				if (m_color != NULL) {
-					glDisableClientState(GL_COLOR_ARRAY);
-				}
+				//if (m_color != NULL) {
+				//	glDisableClientState(GL_COLOR_ARRAY);
+				//}
 
 
-			#else
+			/*#else
 				glBegin( GL_QUADS );
 					//Top-left vertex (corner)
 					//glTexCoord2f( 0, 0 );
@@ -824,7 +879,7 @@ namespace ARK {
 					glTexCoord2f( this->texture_offset_x + this->texture_width, this->texture_offset_y );
 					glVertex2f(0 + this->m_Width, 0);
 				glEnd();
-			#endif
+			#endif*/
 
 			glTranslatef(x * -1, y * -1, 0);
 			glPopMatrix();
@@ -837,7 +892,7 @@ namespace ARK {
 			}
 
 
-			this->unbind();
+			//this->unbind();
 			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
 		}
@@ -853,20 +908,20 @@ namespace ARK {
 			this->drawFlipped(x - (this->m_Width/2), y - (this->m_Height/2), flipx, flipy);
 		}
 
-		void Image::bind() const {
-			if (texture == s_current_texture_id) { return; }
+		//void Image::bind() const {
+			//if (texture == s_current_texture_id) { return; }
 
-			glEnable(GL_TEXTURE_2D);
-			glBindTexture( GL_TEXTURE_2D, this->texture );
-			s_current_texture_id = texture;
-		}
-		void Image::unbind() const {
+			//glEnable(GL_TEXTURE_2D);
+			//glBindTexture( GL_TEXTURE_2D, this->texture );
+			//s_current_texture_id = texture;
+		//}
+		//void Image::unbind() const {
 			//if (texture == s_current_texture_id) { return; }
 			//if (s_current_texture_id == 0) { return; }
-			glBindTexture(GL_TEXTURE_2D, 0);
-			s_current_texture_id = 0;
-			glDisable(GL_TEXTURE_2D);
-		}
+			//glBindTexture(GL_TEXTURE_2D, 0);
+			//s_current_texture_id = 0;
+			//glDisable(GL_TEXTURE_2D);
+		//}
 
 		/* void Image::copyAreaToImage(const Image& image, unsigned int dest_x, unsigned int dest_y, unsigned int x, unsigned int y, unsigned int width, unsigned int height) {
 			bind();
@@ -876,26 +931,29 @@ namespace ARK {
 		/*
 		void Image::setCornerColor(unsigned int corner, Color c) const {
 			switch (corner) {
-				case 0:
+				case 0: 
 					m_tl_corner_color = Color(c); break;
-				case 1:
+				case 1: 
 					m_tr_corner_color = Color(c); break;
 			}
 		}*/
 
 
 		void Image::drawSubImageStart() {
-			bind();
+
+
+			RendererState::start(RendererState::TEXTURE, this->texture);
+			//bind();
 			glColor4f(1.0f, 1.0f, 1.0f, m_alpha);
-			if (m_color != NULL) { glEnableClientState(GL_COLOR_ARRAY); }
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			//if (m_color != NULL) { glEnableClientState(GL_COLOR_ARRAY); }
+			//glEnableClientState(GL_VERTEX_ARRAY);
+			//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		}
 		void Image::drawSubImageEnd() {
-			glDisableClientState(GL_VERTEX_ARRAY);
-			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-			if (m_color != NULL) { glDisableClientState(GL_COLOR_ARRAY); }
-			unbind();
+			//glDisableClientState(GL_VERTEX_ARRAY);
+			//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+			//if (m_color != NULL) { glDisableClientState(GL_COLOR_ARRAY); }
+			//unbind();
 		}
 
 		/**

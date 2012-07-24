@@ -16,11 +16,20 @@ namespace ARK {
 		class GameContainer;
 		using namespace std;
 
+		class AndroidPluggable {
+			public:
+				string m_keyChar;
+				virtual string urlRequest(string url);
+				virtual void openSoftwareKeyboard();
+				virtual void closeSoftwareKeyboard();
+		};
+
 		class GameContainerPlatform {
 			friend class GameContainer;
 
 			public:
 				GameContainer* m_container;
+				AndroidPluggable* m_pluggable;
 				string m_externalDataStr;
 
 			public:
@@ -36,6 +45,8 @@ namespace ARK {
 
 				static void* getARK2DResource(int resourceId, int resourceType);
 		};
+
+		
 
 	}
 }

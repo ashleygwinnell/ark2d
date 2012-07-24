@@ -110,7 +110,7 @@ namespace ARK {
 				 *            The point from which we want the distance
 				 * @return The distance squared from the line to the point
 				 */
-				float distanceSquared(Vector2<T>* point) {
+				T distanceSquared(Vector2<T>* point) {
 					Vector2<T> closest;
 					getClosestPoint(point, &closest);
 					closest.subtract(point);

@@ -18,7 +18,7 @@
 				SInt32 MacVersionMinor;
 				if (Gestalt(gestaltSystemVersionMajor, &MacVersionMajor) == noErr 
 					&& Gestalt(gestaltSystemVersionMinor, &MacVersionMinor) == noErr
-					) {
+					) { 
 					if (MacVersionMajor >= 10 
 						&& MacVersionMinor >= 7) {
 						return true;
@@ -118,6 +118,8 @@
 					GameContainerMacWindowListener* listener = [GameContainerMacWindowListener alloc];
 					[listener init:window];
 					[window setDelegate:listener];
+
+					m_platformSpecific.m_listener = listener;
 					
 					//if (isLionPlus()) {
 					//	[window setRestorable:NO]; 

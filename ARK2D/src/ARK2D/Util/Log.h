@@ -45,7 +45,8 @@ namespace ARK {
 			friend class ARK::Core::GameContainer;
 
 			public:
-				static const unsigned int TYPE_GAME = 3;
+				static const unsigned int TYPE_GAME = 4;
+				static const unsigned int TYPE_VERBOSE = 3;
 				static const unsigned int TYPE_INFORMATION = 2;
 				static const unsigned int TYPE_WARNING = 1;
 				static const unsigned int TYPE_ERROR = 0;
@@ -60,18 +61,25 @@ namespace ARK {
 			public:
 				Log();
 				void message(string s, unsigned int type);
+				
 				void e(const char* s);
 				void w(const char* s);
 				void i(const char* s);
+				void v(const char* s);
 				void g(const char* s);
+				
 				void e(string s);
 				void w(string s);
 				void i(string s);
+				void v(string s);
 				void g(string s);
+				
 				void e(String s);
 				void w(String s);
 				void i(String s);
+				void v(String s);
 				void g(String s);
+				
 				void update();
 				void render();
 				virtual ~Log();

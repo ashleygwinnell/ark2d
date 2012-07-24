@@ -51,8 +51,8 @@ namespace ARK {
 				unsigned int m_currentFrameIndex;
 				signed int m_nextFrameModifier;
 
-				unsigned int m_timer;
-				unsigned int m_frameTime;
+				float m_timer;
+				float m_frameTime;
 
 				bool m_pingPong;
 		};

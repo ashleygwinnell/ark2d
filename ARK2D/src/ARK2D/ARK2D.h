@@ -27,6 +27,7 @@ class ARK2D {
 		static Input* getInput();
 		static Log* getLog();
 		static unsigned int getPlatform();
+		static string getPlatformString();
 
 		static bool is64BitArchitecture();
 		static bool isBigEndian();

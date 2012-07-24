@@ -5,7 +5,7 @@
  *      Author: Ashley
  */
 
-#include <vector>
+#include <vector> 
 #include "StateBasedGame.h"
 #include "GameState.h"
 #include "LoadingState.h"
@@ -35,7 +35,7 @@ namespace ARK {
 		}
 		void StateBasedGame::addState(GameState* state) {
 			m_states.push_back(state);
-			//m_from_state = state;
+			m_from_state = state;
 			m_current_state = state;
 		}
 		void StateBasedGame::setLoadingState(LoadingState* state) {
@@ -77,11 +77,11 @@ namespace ARK {
 			m_current_state = state;
 
 			if (leave == NULL) { // || m_leaveTransition == NULL) {
-				//std::cout << "leave was null :(" << std::endl;
+				ARK2D::getLog()->v("StateBasedGame::enterState - enter was null");
 				leave = new EmptyTransition();
 			}
 			if (enter == NULL) { // || m_enterTransition == NULL) {
-				//std::cout << "enter was null :(" << std::endl;
+				ARK2D::getLog()->v("StateBasedGame::enterState - leave was null");
 				enter = new EmptyTransition();
 			}
 
@@ -239,7 +239,10 @@ namespace ARK {
 			}
 
 			// Render Current State.
-			m_current_state->render(container, this, g);
+			if (m_current_state != NULL) {
+				ARK2D::getLog()->v("StateBasedGame::render - render current state");
+				m_current_state->render(container, this, g);
+			}
 
 			// Render post-enter transition
 			if (m_leaveTransition != NULL) {

@@ -835,7 +835,7 @@
 				}
 
 			//	SetWindowPos(m_hWindow, HWND_TOP, 0, 0, 400,400, 0);
-
+ 
 				resizeWindowToFitViewport();
 
 
@@ -858,8 +858,9 @@
 				//BMFont* fnt = new BMFont("data/fonts/default.fnt", "data/fonts/default.png");
 				//Image* fntImg = new Image((unsigned int) ARK2D_FONT_PNG, ARK2D_RESOURCE_TYPE_PNG);
 				ARK::Font::BMFont* fnt = new ARK::Font::BMFont(ARK2D_FONT_FNT, ARK2D_FONT_PNG, ARK2D_RESOURCE_TYPE_PNG);
+				//ARK::Font::BMFont* fnt = Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont();
 				m_graphics.m_DefaultFont = fnt;
-				m_graphics.m_Font = fnt;
+				m_graphics.m_Font = fnt; 
 
 				// Enable OpenAL
 				ARK2D::getLog()->i("Initialising OpenAL... ");
@@ -994,6 +995,7 @@
 					for (unsigned int i = 0; i < m_gamepads.size(); i++) {
 						m_gamepads.at(i)->clearButtonPressedRecord();
 					}
+					Image::showAnyGlErrorAndExit();
 					//this->m_game->update(this, myAverageDelta); // fix at 60 fps. bug.
 					//this->m_game->update(this, 0.017); // fix at 60 fps. bug.
 
@@ -1012,6 +1014,7 @@
 					if (m_showingFPS) { renderFPS(); }
 
 					ARK2D::getLog()->render();
+					Image::showAnyGlErrorAndExit();
 					//myLastRenderTime = this->time();
 
 					swapBuffers();

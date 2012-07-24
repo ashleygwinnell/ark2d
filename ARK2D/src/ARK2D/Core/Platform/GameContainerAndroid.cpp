@@ -95,20 +95,21 @@ namespace ARK {
 		}
 		void GameContainer::setCursorVisible(bool b) {
 
-		}
+		} 
 
 		void GameContainer::start() {
 
-		}
+		}  
 
 		void GameContainer::close() const {
 			exit(0);
 		}
 
 		GameContainerPlatform::GameContainerPlatform():
-			m_container(NULL)
+			m_container(NULL),
+			m_pluggable(NULL)
 			{
-
+			m_pluggable = new ARK::Core::AndroidPluggable();
 		}
 
 		void GameContainerPlatform::setTitle(string t) {
@@ -230,6 +231,17 @@ namespace ARK {
 		}
 
 		GameContainerPlatform::~GameContainerPlatform() {
+
+		}
+
+		// Android pluggable.
+		string AndroidPluggable::urlRequest(string url) {
+			return "";
+		}
+		void AndroidPluggable::openSoftwareKeyboard(){
+
+		}
+		void AndroidPluggable::closeSoftwareKeyboard() {
 
 		}
 

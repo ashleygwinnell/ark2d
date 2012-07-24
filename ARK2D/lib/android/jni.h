@@ -1,9 +1,20 @@
 
 #include <jni.h>
+#include "ARK.h"
 	
 #ifndef INCLUDED_TEST_PROJECT_H
 #define INCLUDED_TEST_PROJECT_H
 	
+	#include <string>
+	using namespace std;
+	class MyAndroidPluggable : public ARK::Core::AndroidPluggable {
+		public:
+			virtual string urlRequest(string url);
+			virtual void openSoftwareKeyboard();
+			virtual void closeSoftwareKeyboard();
+	};
+
+
 	#ifdef __cplusplus
 		extern "C" {
 	#endif
@@ -78,8 +89,28 @@
 		 */
 		JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeTouchUp
 		  (JNIEnv *, jclass, jint, jint);
+
+		/*
+		 * Class:     org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer
+		 * Method:    nativeKeyDown
+		 * Signature: (I)V
+		 */
+		JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeKeyDown
+		  (JNIEnv *, jclass, jint, jstring);
+
+		/*
+		 * Class:     org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer
+		 * Method:    nativeKeyUp
+		 * Signature: (I)V
+		 */
+		JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeKeyUp
+		  (JNIEnv *, jclass, jint, jstring);
+
 		
 	#ifdef __cplusplus
 		}
 	#endif
+
+
+
 #endif

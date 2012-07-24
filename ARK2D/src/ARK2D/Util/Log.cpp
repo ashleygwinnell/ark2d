@@ -49,10 +49,15 @@ namespace ARK {
 			string str(s);
 			message(str, TYPE_INFORMATION);
 		}
+		void Log::v(const char* s) {
+			string str(s);
+			message(str, TYPE_VERBOSE);
+		}
 		void Log::g(const char* s) {
 			string str(s);
 			message(str, TYPE_GAME);
 		}
+		
 		void Log::e(string s) {
 			message(s, TYPE_ERROR);
 		}
@@ -62,9 +67,13 @@ namespace ARK {
 		void Log::i(string s) {
 			message(s, TYPE_INFORMATION);
 		}
+		void Log::v(string s) {
+			message(s, TYPE_VERBOSE);
+		}
 		void Log::g(string s) {
 			message(s, TYPE_GAME);
 		}
+		
 		void Log::e(String s) {
 			message(s.get(), TYPE_ERROR);
 		}
@@ -74,9 +83,13 @@ namespace ARK {
 		void Log::i(String s) {
 			message(s.get(), TYPE_INFORMATION);
 		}
+		void Log::v(String s) {
+			message(s.get(), TYPE_VERBOSE);
+		}
 		void Log::g(String s) {
 			message(s.get(), TYPE_GAME);
 		}
+		
 		void Log::update() {
 			Input* i = ARK2D::getInput();
 			if (i->isKeyPressed(Input::KEY_D) && i->isKeyDown(Input::KEY_LSHIFT)) {

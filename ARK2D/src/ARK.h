@@ -28,6 +28,14 @@
 #include "ARK2D/Geometry/Circle.h"
 #include "ARK2D/Geometry/Line.h"
 
+// Game Jolt
+#include "ARK2D/GJ/GameJolt.h"
+#include "ARK2D/GJ/PropertyItem.h"
+#include "ARK2D/GJ/User.h"
+#include "ARK2D/GJ/DataStore.h"
+#include "ARK2D/GJ/Highscore.h"
+#include "ARK2D/GJ/Trophy.h"
+
 // State Based Game / Finite State Machine
 #include "ARK2D/State/StateBasedGame.h"
 #include "ARK2D/State/GameState.h"

@@ -32,6 +32,8 @@ Input* ARK2D::getInput() {
 Log* ARK2D::getLog() {
 	return s_log;
 }
+
+		
 unsigned int ARK2D::getPlatform() {
 	#if defined(ARK2D_WINDOWS)
 		return PLATFORM_WINDOWS;
@@ -41,6 +43,17 @@ unsigned int ARK2D::getPlatform() {
 		return PLATFORM_IPHONE;
 	#elif defined(ARK2D_ANDROID)
 		return PLATFORM_ANDROID;
+	#endif
+}
+string ARK2D::getPlatformString() {
+	#if defined(ARK2D_WINDOWS)
+		return "windows";
+	#elif defined(ARK2D_MACINTOSH)
+		return "osx";
+	#elif defined(ARK2D_IPHONE)
+		return "iphone";
+	#elif defined(ARK2D_ANDROID)
+		return "android";
 	#endif
 }
 
