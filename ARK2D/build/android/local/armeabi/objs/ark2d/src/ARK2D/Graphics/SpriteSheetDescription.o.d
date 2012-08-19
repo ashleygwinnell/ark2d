@@ -154,6 +154,10 @@
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_tree.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_tree.c \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_relops_cont.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Graphics/../Core/Resource.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Graphics/../Core/../Windres.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Graphics/../Core/../Namespaces.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/vendor/android/libzip/jni/zip.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Graphics/SpriteSheetDescriptionItem.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Graphics/../Util/StringUtil.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Graphics/../Util/../ARK2D.h \
@@ -169,7 +173,6 @@
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_carray.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/jni.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/android/log.h \
- /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/vendor/android/libzip/jni/zip.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/stat.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/linux/stat.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/endian.h \
@@ -540,6 +543,14 @@
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_relops_cont.h:
 
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Graphics/../Core/Resource.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Graphics/../Core/../Windres.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Graphics/../Core/../Namespaces.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/vendor/android/libzip/jni/zip.h:
+
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Graphics/SpriteSheetDescriptionItem.h:
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Graphics/../Util/StringUtil.h:
@@ -569,8 +580,6 @@
 /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/jni.h:
 
 /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/android/log.h:
-
-/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/vendor/android/libzip/jni/zip.h:
 
 /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/stat.h:
 

@@ -121,93 +121,94 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00004"></a>00004 <span class="preprocessor">#include &quot;../../ARK2D.h&quot;</span>
 <a name="l00005"></a>00005 <span class="preprocessor">#include &quot;../../Includes.h&quot;</span>
 <a name="l00006"></a>00006 
-<a name="l00007"></a>00007 <span class="keyword">using namespace </span>std;
-<a name="l00008"></a>00008 
-<a name="l00009"></a>00009 <span class="keyword">namespace </span>ARK {
-<a name="l00010"></a>00010         <span class="keyword">namespace </span>Graphics {
-<a name="l00011"></a>00011                 <span class="keyword">namespace </span>ImageIO {
-<a name="l00012"></a>00012 
-<a name="l00013"></a>00013                         <span class="comment">// These masks are AND&#39;d with the imageDesc in the TGA header,</span>
-<a name="l00014"></a>00014                         <span class="comment">// bit 4 is left-to-right ordering</span>
-<a name="l00015"></a>00015                         <span class="comment">// bit 5 is top-to-bottom</span>
-<a name="l00016"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#af37cda43ad7ffd184328d44cd51b9160">00016</a>                         <span class="keyword">enum</span> <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#af37cda43ad7ffd184328d44cd51b9160">IMAGE_ORIENTATIONS</a> {
-<a name="l00017"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#af37cda43ad7ffd184328d44cd51b9160ab471bc5bcfac26265772e13447a13535">00017</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#af37cda43ad7ffd184328d44cd51b9160ab471bc5bcfac26265772e13447a13535">BOTTOM_LEFT</a> = 0x00,     <span class="comment">// first pixel is bottom left corner</span>
-<a name="l00018"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#af37cda43ad7ffd184328d44cd51b9160afd5086fc4eaecc8792756e583d7f1b79">00018</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#af37cda43ad7ffd184328d44cd51b9160afd5086fc4eaecc8792756e583d7f1b79">BOTTOM_RIGHT</a> = 0x10,    <span class="comment">// first pixel is bottom right corner</span>
-<a name="l00019"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#af37cda43ad7ffd184328d44cd51b9160a98298ad6fe4b4e76863eb5f94274df46">00019</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#af37cda43ad7ffd184328d44cd51b9160a98298ad6fe4b4e76863eb5f94274df46">TOP_LEFT</a> = 0x20,        <span class="comment">// first pixel is top left corner</span>
-<a name="l00020"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#af37cda43ad7ffd184328d44cd51b9160a9ebdd9eb8e492fc41ee26a7651d06ed7">00020</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#af37cda43ad7ffd184328d44cd51b9160a9ebdd9eb8e492fc41ee26a7651d06ed7">TOP_RIGHT</a> = 0x30        <span class="comment">// first pixel is top right corner</span>
-<a name="l00021"></a>00021                         };
-<a name="l00022"></a>00022 
-<a name="l00023"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html">00023</a>                         <span class="keyword">struct </span><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html">TargaHeader</a>
-<a name="l00024"></a>00024                         {
-<a name="l00025"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a50189e61ff63d51fe03d7e3f5b01c832">00025</a>                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a50189e61ff63d51fe03d7e3f5b01c832">idLength</a>;
-<a name="l00026"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#aec07b5378f6af0fd554aff1edae5044d">00026</a>                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#aec07b5378f6af0fd554aff1edae5044d">colorMapType</a>;
-<a name="l00027"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a8e5ea4ad33a979794d20581969b643f9">00027</a>                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a8e5ea4ad33a979794d20581969b643f9">imageTypeCode</a>;
-<a name="l00028"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a96c6ca0b63ac13cb8ee6d5d210720345">00028</a>                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> colorMapSpec[5];
-<a name="l00029"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#ac0a9bbf0183b7a2161377a131ab43df9">00029</a>                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#ac0a9bbf0183b7a2161377a131ab43df9">xOrigin</a>;
-<a name="l00030"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a04a3859608dcf65b3f82ad50dc103961">00030</a>                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a04a3859608dcf65b3f82ad50dc103961">yOrigin</a>;
-<a name="l00031"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a76556896d3d68283176664f311d4973e">00031</a>                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a76556896d3d68283176664f311d4973e">width</a>;
-<a name="l00032"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a23b2cc7884b75f6ae5c89c4ff9cb1814">00032</a>                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a23b2cc7884b75f6ae5c89c4ff9cb1814">height</a>;
-<a name="l00033"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a870c4bbd7722f6134fa0c3aad27cd46f">00033</a>                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a870c4bbd7722f6134fa0c3aad27cd46f">bpp</a>;
-<a name="l00034"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#acb356a2f88c3d756fee00eea7f512971">00034</a>                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#acb356a2f88c3d756fee00eea7f512971">imageDesc</a>;
-<a name="l00035"></a>00035                         };
-<a name="l00036"></a>00036 
-<a name="l00037"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5">00037</a>                         <span class="keyword">enum</span> <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5">TargaFileTypes</a>
-<a name="l00038"></a>00038                         {
-<a name="l00039"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5a86bd156ff6ce43bef830bc15fca7a513">00039</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5a86bd156ff6ce43bef830bc15fca7a513">TFT_NO_DATA</a> = 0,
-<a name="l00040"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5aa32f1b3a47199a13c0bf7d7c2592a852">00040</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5aa32f1b3a47199a13c0bf7d7c2592a852">TFT_INDEXED</a> = 1,
-<a name="l00041"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5a879ac12322c4f7c600fae050d5413ab9">00041</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5a879ac12322c4f7c600fae050d5413ab9">TFT_RGB</a> = 2,
-<a name="l00042"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5a87913915df3fbe5e92af1effefc6da80">00042</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5a87913915df3fbe5e92af1effefc6da80">TFT_GRAYSCALE</a> = 3,
-<a name="l00043"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5a5f62a557edd882781610f97693b9ba31">00043</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5a5f62a557edd882781610f97693b9ba31">TFT_RLE_INDEXED</a> = 9,
-<a name="l00044"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5adcae10a8a77f5403a00dcd4a1a985abf">00044</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5adcae10a8a77f5403a00dcd4a1a985abf">TFT_RLE_RGB</a> = 10,
-<a name="l00045"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5a9ff9fdf8a4eedbacc95ee0ccce0a52ea">00045</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5a9ff9fdf8a4eedbacc95ee0ccce0a52ea">TFT_RLE_GRAYSCALE</a> = 11
-<a name="l00046"></a>00046                         };
-<a name="l00047"></a>00047 
-<a name="l00048"></a><a class="code" href="class_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_image.html">00048</a>                         <span class="keyword">class </span><a class="code" href="class_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_image.html">TargaImage</a>
-<a name="l00049"></a>00049                         {
-<a name="l00050"></a>00050                         <span class="keyword">public</span>:
-<a name="l00051"></a>00051                                 <a class="code" href="class_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_image.html">TargaImage</a>();
-<a name="l00052"></a>00052                                 <span class="keyword">virtual</span> ~<a class="code" href="class_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_image.html">TargaImage</a>();
-<a name="l00053"></a>00053 
-<a name="l00054"></a>00054                                 <span class="keywordtype">int</span> load(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; filename);
-<a name="l00055"></a>00055                                 <span class="keywordtype">void</span> unload();
-<a name="l00056"></a>00056 
-<a name="l00057"></a>00057                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> getWidth() <span class="keyword">const</span>;
-<a name="l00058"></a>00058                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> getHeight() <span class="keyword">const</span>;
-<a name="l00059"></a>00059                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> getBitsPerPixel() <span class="keyword">const</span>;
-<a name="l00060"></a>00060                                 <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>* getImageData() <span class="keyword">const</span>;
-<a name="l00061"></a>00061 
-<a name="l00062"></a>00062                                 <a class="code" href="_includes_8h.html#a7efd7809e1632cdae75603fd1fee61c0">GLenum</a> getType() <span class="keyword">const</span>;
-<a name="l00063"></a>00063 
-<a name="l00064"></a>00064                         <span class="keyword">private</span>:
-<a name="l00065"></a>00065                                 <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html">TargaHeader</a> m_header;
-<a name="l00066"></a>00066                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> m_width;
-<a name="l00067"></a>00067                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> m_height;
-<a name="l00068"></a>00068                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> m_bitsPerPixel;
-<a name="l00069"></a>00069                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> m_bytesPerPixel;
-<a name="l00070"></a>00070 
-<a name="l00071"></a>00071                                 std::vector&lt;unsigned char&gt; m_imageData;
-<a name="l00072"></a>00072 
-<a name="l00073"></a>00073                                 <span class="keywordtype">bool</span> loadUncompressedTarga(std::istream&amp; fileIn);
-<a name="l00074"></a>00074                                 <span class="keywordtype">bool</span> loadCompressedTarga(std::istream&amp; fileIn);
-<a name="l00075"></a>00075 
-<a name="l00076"></a>00076                                 <span class="keywordtype">bool</span> isImageTypeSupported(<span class="keyword">const</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html">TargaHeader</a>&amp; header);
-<a name="l00077"></a>00077                                 <span class="keywordtype">bool</span> isCompressedTarga(<span class="keyword">const</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html">TargaHeader</a>&amp; header);
-<a name="l00078"></a>00078                                 <span class="keywordtype">bool</span> isUncompressedTarga(<span class="keyword">const</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html">TargaHeader</a>&amp; header);
-<a name="l00079"></a>00079 
-<a name="l00080"></a>00080                                 <span class="keywordtype">void</span> flipImageVertically();
-<a name="l00081"></a>00081                         };
-<a name="l00082"></a>00082                 }
-<a name="l00083"></a>00083         }
-<a name="l00084"></a>00084 }
-<a name="l00085"></a>00085 
-<a name="l00086"></a>00086 <span class="preprocessor">#endif</span>
+<a name="l00007"></a>00007 
+<a name="l00008"></a>00008 <span class="keyword">using namespace </span>std;
+<a name="l00009"></a>00009 
+<a name="l00010"></a>00010 <span class="keyword">namespace </span>ARK {
+<a name="l00011"></a>00011         <span class="keyword">namespace </span>Graphics {
+<a name="l00012"></a>00012                 <span class="keyword">namespace </span>ImageIO {
+<a name="l00013"></a>00013 
+<a name="l00014"></a>00014                         <span class="comment">// These masks are AND&#39;d with the imageDesc in the TGA header,</span>
+<a name="l00015"></a>00015                         <span class="comment">// bit 4 is left-to-right ordering</span>
+<a name="l00016"></a>00016                         <span class="comment">// bit 5 is top-to-bottom</span>
+<a name="l00017"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#af37cda43ad7ffd184328d44cd51b9160">00017</a>                         <span class="keyword">enum</span> <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#af37cda43ad7ffd184328d44cd51b9160">IMAGE_ORIENTATIONS</a> {
+<a name="l00018"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#af37cda43ad7ffd184328d44cd51b9160ab471bc5bcfac26265772e13447a13535">00018</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#af37cda43ad7ffd184328d44cd51b9160ab471bc5bcfac26265772e13447a13535">BOTTOM_LEFT</a> = 0x00,     <span class="comment">// first pixel is bottom left corner</span>
+<a name="l00019"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#af37cda43ad7ffd184328d44cd51b9160afd5086fc4eaecc8792756e583d7f1b79">00019</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#af37cda43ad7ffd184328d44cd51b9160afd5086fc4eaecc8792756e583d7f1b79">BOTTOM_RIGHT</a> = 0x10,    <span class="comment">// first pixel is bottom right corner</span>
+<a name="l00020"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#af37cda43ad7ffd184328d44cd51b9160a98298ad6fe4b4e76863eb5f94274df46">00020</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#af37cda43ad7ffd184328d44cd51b9160a98298ad6fe4b4e76863eb5f94274df46">TOP_LEFT</a> = 0x20,        <span class="comment">// first pixel is top left corner</span>
+<a name="l00021"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#af37cda43ad7ffd184328d44cd51b9160a9ebdd9eb8e492fc41ee26a7651d06ed7">00021</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#af37cda43ad7ffd184328d44cd51b9160a9ebdd9eb8e492fc41ee26a7651d06ed7">TOP_RIGHT</a> = 0x30        <span class="comment">// first pixel is top right corner</span>
+<a name="l00022"></a>00022                         };
+<a name="l00023"></a>00023 
+<a name="l00024"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html">00024</a>                         <span class="keyword">struct </span><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html">TargaHeader</a>
+<a name="l00025"></a>00025                         {
+<a name="l00026"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a50189e61ff63d51fe03d7e3f5b01c832">00026</a>                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a50189e61ff63d51fe03d7e3f5b01c832">idLength</a>;
+<a name="l00027"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#aec07b5378f6af0fd554aff1edae5044d">00027</a>                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#aec07b5378f6af0fd554aff1edae5044d">colorMapType</a>;
+<a name="l00028"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a8e5ea4ad33a979794d20581969b643f9">00028</a>                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a8e5ea4ad33a979794d20581969b643f9">imageTypeCode</a>;
+<a name="l00029"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a96c6ca0b63ac13cb8ee6d5d210720345">00029</a>                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> colorMapSpec[5];
+<a name="l00030"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#ac0a9bbf0183b7a2161377a131ab43df9">00030</a>                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#ac0a9bbf0183b7a2161377a131ab43df9">xOrigin</a>;
+<a name="l00031"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a04a3859608dcf65b3f82ad50dc103961">00031</a>                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a04a3859608dcf65b3f82ad50dc103961">yOrigin</a>;
+<a name="l00032"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a76556896d3d68283176664f311d4973e">00032</a>                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a76556896d3d68283176664f311d4973e">width</a>;
+<a name="l00033"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a23b2cc7884b75f6ae5c89c4ff9cb1814">00033</a>                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">short</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a23b2cc7884b75f6ae5c89c4ff9cb1814">height</a>;
+<a name="l00034"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a870c4bbd7722f6134fa0c3aad27cd46f">00034</a>                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#a870c4bbd7722f6134fa0c3aad27cd46f">bpp</a>;
+<a name="l00035"></a><a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#acb356a2f88c3d756fee00eea7f512971">00035</a>                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html#acb356a2f88c3d756fee00eea7f512971">imageDesc</a>;
+<a name="l00036"></a>00036                         };
+<a name="l00037"></a>00037 
+<a name="l00038"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5">00038</a>                         <span class="keyword">enum</span> <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5">TargaFileTypes</a>
+<a name="l00039"></a>00039                         {
+<a name="l00040"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5a86bd156ff6ce43bef830bc15fca7a513">00040</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5a86bd156ff6ce43bef830bc15fca7a513">TFT_NO_DATA</a> = 0,
+<a name="l00041"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5aa32f1b3a47199a13c0bf7d7c2592a852">00041</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5aa32f1b3a47199a13c0bf7d7c2592a852">TFT_INDEXED</a> = 1,
+<a name="l00042"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5a879ac12322c4f7c600fae050d5413ab9">00042</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5a879ac12322c4f7c600fae050d5413ab9">TFT_RGB</a> = 2,
+<a name="l00043"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5a87913915df3fbe5e92af1effefc6da80">00043</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5a87913915df3fbe5e92af1effefc6da80">TFT_GRAYSCALE</a> = 3,
+<a name="l00044"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5a5f62a557edd882781610f97693b9ba31">00044</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5a5f62a557edd882781610f97693b9ba31">TFT_RLE_INDEXED</a> = 9,
+<a name="l00045"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5adcae10a8a77f5403a00dcd4a1a985abf">00045</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5adcae10a8a77f5403a00dcd4a1a985abf">TFT_RLE_RGB</a> = 10,
+<a name="l00046"></a><a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5a9ff9fdf8a4eedbacc95ee0ccce0a52ea">00046</a>                                 <a class="code" href="namespace_a_r_k_1_1_graphics_1_1_image_i_o.html#a5759c97d37476efc0c00e91684e46aa5a9ff9fdf8a4eedbacc95ee0ccce0a52ea">TFT_RLE_GRAYSCALE</a> = 11
+<a name="l00047"></a>00047                         };
+<a name="l00048"></a>00048 
+<a name="l00049"></a><a class="code" href="class_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_image.html">00049</a>                         <span class="keyword">class </span><a class="code" href="class_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_image.html">TargaImage</a>
+<a name="l00050"></a>00050                         {
+<a name="l00051"></a>00051                         <span class="keyword">public</span>:
+<a name="l00052"></a>00052                                 <a class="code" href="class_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_image.html">TargaImage</a>();
+<a name="l00053"></a>00053                                 <span class="keyword">virtual</span> ~<a class="code" href="class_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_image.html">TargaImage</a>();
+<a name="l00054"></a>00054 
+<a name="l00055"></a>00055                                 <span class="keywordtype">int</span> load(<span class="keyword">const</span> <span class="keywordtype">string</span>&amp; filename);
+<a name="l00056"></a>00056                                 <span class="keywordtype">void</span> unload();
+<a name="l00057"></a>00057 
+<a name="l00058"></a>00058                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> getWidth() <span class="keyword">const</span>;
+<a name="l00059"></a>00059                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> getHeight() <span class="keyword">const</span>;
+<a name="l00060"></a>00060                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> getBitsPerPixel() <span class="keyword">const</span>;
+<a name="l00061"></a>00061                                 <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>* getImageData() <span class="keyword">const</span>;
+<a name="l00062"></a>00062 
+<a name="l00063"></a>00063                                 <a class="code" href="_includes_8h.html#a7efd7809e1632cdae75603fd1fee61c0">GLenum</a> getType() <span class="keyword">const</span>;
+<a name="l00064"></a>00064 
+<a name="l00065"></a>00065                         <span class="keyword">private</span>:
+<a name="l00066"></a>00066                                 <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html">TargaHeader</a> m_header;
+<a name="l00067"></a>00067                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> m_width;
+<a name="l00068"></a>00068                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> m_height;
+<a name="l00069"></a>00069                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> m_bitsPerPixel;
+<a name="l00070"></a>00070                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> m_bytesPerPixel;
+<a name="l00071"></a>00071 
+<a name="l00072"></a>00072                                 std::vector&lt;unsigned char&gt; m_imageData;
+<a name="l00073"></a>00073 
+<a name="l00074"></a>00074                                 <span class="keywordtype">bool</span> loadUncompressedTarga(std::istream&amp; fileIn);
+<a name="l00075"></a>00075                                 <span class="keywordtype">bool</span> loadCompressedTarga(std::istream&amp; fileIn);
+<a name="l00076"></a>00076 
+<a name="l00077"></a>00077                                 <span class="keywordtype">bool</span> isImageTypeSupported(<span class="keyword">const</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html">TargaHeader</a>&amp; header);
+<a name="l00078"></a>00078                                 <span class="keywordtype">bool</span> isCompressedTarga(<span class="keyword">const</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html">TargaHeader</a>&amp; header);
+<a name="l00079"></a>00079                                 <span class="keywordtype">bool</span> isUncompressedTarga(<span class="keyword">const</span> <a class="code" href="struct_a_r_k_1_1_graphics_1_1_image_i_o_1_1_targa_header.html">TargaHeader</a>&amp; header);
+<a name="l00080"></a>00080 
+<a name="l00081"></a>00081                                 <span class="keywordtype">void</span> flipImageVertically();
+<a name="l00082"></a>00082                         };
+<a name="l00083"></a>00083                 }
+<a name="l00084"></a>00084         }
+<a name="l00085"></a>00085 }
+<a name="l00086"></a>00086 
+<a name="l00087"></a>00087 <span class="preprocessor">#endif</span>
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="_targa_image_8h.html">TargaImage.h</a>      </li>
 
-    <li class="footer">Generated on Thu Apr 12 2012 15:01:57 for ARK2D by
+    <li class="footer">Generated on Thu May 3 2012 16:35:29 for ARK2D by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

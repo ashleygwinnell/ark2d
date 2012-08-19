@@ -525,7 +525,7 @@ namespace ARK {
 				}
 			}
 			output += "]";
-			cout << output << endl;
+			ARK2D::getLog()->i(output); //cout << output << endl;
 		}
 
 		void TiledMap::draw() {

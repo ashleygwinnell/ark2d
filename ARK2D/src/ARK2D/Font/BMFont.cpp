@@ -128,13 +128,13 @@ namespace ARK {
 					stringstream LineStream;
 					std::getline( Stream, Line );
 
-					bool skippingLine = false;
+					bool skippingLine = false; 
 					//std::cout << Line << std::endl;
 
 					if (Line.length() == 0) { break; }
 					//if (Line == -1) {
 					//	return false;
-					//}
+					//} 
 					//if (*ret == -1) { break; }
 					LineStream << Line;
 

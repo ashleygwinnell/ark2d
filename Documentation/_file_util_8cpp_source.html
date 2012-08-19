@@ -149,64 +149,68 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00032"></a>00032 <span class="preprocessor">                        #if defined(ARK2D_ANDROID)</span>
 <a name="l00033"></a>00033 <span class="preprocessor"></span>                                filename = <a class="code" href="class_a_r_k2_d.html#aa84cd71f5ce9b66b65e223de99ecdf7f">ARK2D::getContainer</a>()-&gt;<a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html#a5a2388f249b1c4a1882aa5b66f27b57b">m_platformSpecific</a>.<a class="code" href="class_a_r_k_1_1_core_1_1_game_container_platform.html#affe2a583a6ff5b45f341f020a5f68fa6">m_externalDataStr</a> + filename;
 <a name="l00034"></a>00034 <span class="preprocessor">                        #else</span>
-<a name="l00035"></a>00035 <span class="preprocessor"></span>                                filename = <a class="code" href="class_a_r_k2_d.html#aa84cd71f5ce9b66b65e223de99ecdf7f">ARK2D::getContainer</a>()-&gt;<a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html#a5aa9179cb86b9edb2d50c54b628d8949">getResourcePath</a>() + filename;
-<a name="l00036"></a>00036 <span class="preprocessor">                        #endif</span>
-<a name="l00037"></a>00037 <span class="preprocessor"></span>
-<a name="l00038"></a>00038                         <a class="code" href="class_a_r_k2_d.html#a0fc71246e83aa775b05f83d297976c9c">ARK2D::getLog</a>()-&gt;<a class="code" href="class_a_r_k_1_1_util_1_1_log.html#a29b424377e66b2b46ebcc8a06919b9e9">i</a>(<a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#abbb29e052f4802bf9c3926c3794c83b2">StringUtil::append</a>(<span class="stringliteral">&quot;Making file: &quot;</span>, filename));
-<a name="l00039"></a>00039 
-<a name="l00040"></a>00040                         <span class="comment">// yarp</span>
-<a name="l00041"></a>00041                         fstream File;
-<a name="l00042"></a>00042                         File.open(filename.c_str(), ios::out);
-<a name="l00043"></a>00043                         <span class="keywordflow">if</span> (File.is_open()) {
-<a name="l00044"></a>00044                                 File &lt;&lt; contents;
-<a name="l00045"></a>00045                                 File.close();
-<a name="l00046"></a>00046                                 <span class="keywordflow">return</span> <span class="keyword">true</span>;
-<a name="l00047"></a>00047                         }
-<a name="l00048"></a>00048                         <a class="code" href="class_a_r_k2_d.html#a0fc71246e83aa775b05f83d297976c9c">ARK2D::getLog</a>()-&gt;<a class="code" href="class_a_r_k_1_1_util_1_1_log.html#a5a3f62863e5cf452ab5aefd2cb2d35c3">e</a>(<a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#abbb29e052f4802bf9c3926c3794c83b2">StringUtil::append</a>(<span class="stringliteral">&quot;Making file failed. :( &quot;</span>, filename));
-<a name="l00049"></a>00049                         <span class="keywordflow">return</span> <span class="keyword">false</span>;
-<a name="l00050"></a>00050                 }
-<a name="l00051"></a>00051 
-<a name="l00052"></a><a class="code" href="class_a_r_k_1_1_util_1_1_file_util.html#a75642b70c4e8bcb3f4cf1f20d7ec6023">00052</a>                 <span class="keywordtype">string</span> <a class="code" href="class_a_r_k_1_1_util_1_1_file_util.html#a75642b70c4e8bcb3f4cf1f20d7ec6023">FileUtil::getCurrentDirectory</a>() {
-<a name="l00053"></a>00053                         <span class="keywordtype">char</span> currentPath[FILENAME_MAX];
-<a name="l00054"></a>00054                         <span class="keywordflow">if</span>(!<a class="code" href="_file_util_8cpp.html#a96073f1c6d58bc29c142a96f472a5274">GetCurrentDirectoryMacro</a>(currentPath, <span class="keyword">sizeof</span>(currentPath))) {
-<a name="l00055"></a>00055                                 <span class="keywordflow">return</span> <span class="stringliteral">&quot;&quot;</span>;
-<a name="l00056"></a>00056                         }
-<a name="l00057"></a>00057                         currentPath[<span class="keyword">sizeof</span>(currentPath)-1] = <span class="charliteral">&#39;\0&#39;</span>;
-<a name="l00058"></a>00058                         <span class="keywordflow">return</span> string(currentPath);
-<a name="l00059"></a>00059                 }
-<a name="l00060"></a><a class="code" href="class_a_r_k_1_1_util_1_1_file_util.html#ad87121801592fa050be6bf11ceaeddc0">00060</a>                 <span class="keywordtype">string</span> <a class="code" href="class_a_r_k_1_1_util_1_1_file_util.html#ad87121801592fa050be6bf11ceaeddc0">FileUtil::getSeparator</a>() {
-<a name="l00061"></a>00061                         <span class="keywordflow">return</span> <a class="code" href="_file_util_8cpp.html#af1e88bb4b1ff9546e6803eec85e0684c">DIRECTORY_SEPARATOR</a>;
-<a name="l00062"></a>00062                 }
-<a name="l00063"></a>00063 
-<a name="l00064"></a><a class="code" href="class_a_r_k_1_1_util_1_1_file_util.html#aa86599c624a86d3dee2c12ddb9b095f1">00064</a>                 <span class="keywordtype">string</span> <a class="code" href="class_a_r_k_1_1_util_1_1_file_util.html#aa86599c624a86d3dee2c12ddb9b095f1">FileUtil::getOSDirectory</a>() {
-<a name="l00065"></a>00065 <span class="preprocessor">                        #if defined(ARK2D_WINDOWS)</span>
-<a name="l00066"></a>00066 <span class="preprocessor"></span>                                <span class="keywordtype">char</span> dir[MAX_PATH];
-<a name="l00067"></a>00067                                 dir[MAX_PATH-1] = <span class="charliteral">&#39;\0&#39;</span>;
-<a name="l00068"></a>00068                                 GetWindowsDirectory((LPSTR) &amp;dir, MAX_PATH);
-<a name="l00069"></a>00069 
-<a name="l00070"></a>00070                                 <span class="comment">// never add a backslash.</span>
-<a name="l00071"></a>00071                                 <span class="comment">// if windows is installed to C:\ then it returns C:</span>
-<a name="l00072"></a>00072                                 <span class="keywordtype">string</span> ret(dir);
-<a name="l00073"></a>00073                                 <span class="keywordflow">if</span> (ret.substr(ret.size()-1, 1) == <a class="code" href="_file_util_8cpp.html#af1e88bb4b1ff9546e6803eec85e0684c">DIRECTORY_SEPARATOR</a>) {
-<a name="l00074"></a>00074                                         ret = ret.substr(0, ret.size()-1);
-<a name="l00075"></a>00075                                 }
-<a name="l00076"></a>00076                                 <span class="keywordflow">return</span> ret;
-<a name="l00077"></a>00077 
-<a name="l00078"></a>00078 <span class="preprocessor">                        #elif defined(ARK2D_UBUNTU_LINUX)</span>
-<a name="l00079"></a>00079 <span class="preprocessor"></span>
-<a name="l00080"></a>00080 <span class="preprocessor">                        #endif</span>
-<a name="l00081"></a>00081 <span class="preprocessor"></span>                        <span class="keywordflow">return</span> <span class="stringliteral">&quot;whoops?&quot;</span>;
-<a name="l00082"></a>00082                 }
-<a name="l00083"></a>00083 
-<a name="l00084"></a>00084         }
-<a name="l00085"></a>00085 }
+<a name="l00035"></a>00035 <span class="preprocessor"></span>                                <span class="keywordflow">if</span> (filename.substr(1,1).compare(<span class="stringliteral">&quot;:&quot;</span>) == 0 || filename.substr(0,1).compare(<span class="stringliteral">&quot;/&quot;</span>) == 0) { 
+<a name="l00036"></a>00036 
+<a name="l00037"></a>00037                                 } <span class="keywordflow">else</span> {
+<a name="l00038"></a>00038                                         filename = <a class="code" href="class_a_r_k2_d.html#aa84cd71f5ce9b66b65e223de99ecdf7f">ARK2D::getContainer</a>()-&gt;<a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html#a5aa9179cb86b9edb2d50c54b628d8949">getResourcePath</a>() + filename;
+<a name="l00039"></a>00039                                 }
+<a name="l00040"></a>00040 <span class="preprocessor">                        #endif</span>
+<a name="l00041"></a>00041 <span class="preprocessor"></span>
+<a name="l00042"></a>00042                         <a class="code" href="class_a_r_k2_d.html#a0fc71246e83aa775b05f83d297976c9c">ARK2D::getLog</a>()-&gt;<a class="code" href="class_a_r_k_1_1_util_1_1_log.html#a29b424377e66b2b46ebcc8a06919b9e9">i</a>(<a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#abbb29e052f4802bf9c3926c3794c83b2">StringUtil::append</a>(<span class="stringliteral">&quot;Making file: &quot;</span>, filename));
+<a name="l00043"></a>00043 
+<a name="l00044"></a>00044                         <span class="comment">// yarp</span>
+<a name="l00045"></a>00045                         fstream File;
+<a name="l00046"></a>00046                         File.open(filename.c_str(), ios::out);
+<a name="l00047"></a>00047                         <span class="keywordflow">if</span> (File.is_open()) {
+<a name="l00048"></a>00048                                 File &lt;&lt; contents;
+<a name="l00049"></a>00049                                 File.close();
+<a name="l00050"></a>00050                                 <span class="keywordflow">return</span> <span class="keyword">true</span>;
+<a name="l00051"></a>00051                         }
+<a name="l00052"></a>00052                         <a class="code" href="class_a_r_k2_d.html#a0fc71246e83aa775b05f83d297976c9c">ARK2D::getLog</a>()-&gt;<a class="code" href="class_a_r_k_1_1_util_1_1_log.html#a5a3f62863e5cf452ab5aefd2cb2d35c3">e</a>(<a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#abbb29e052f4802bf9c3926c3794c83b2">StringUtil::append</a>(<span class="stringliteral">&quot;Making file failed. :( &quot;</span>, filename));
+<a name="l00053"></a>00053                         <span class="keywordflow">return</span> <span class="keyword">false</span>;
+<a name="l00054"></a>00054                 }
+<a name="l00055"></a>00055 
+<a name="l00056"></a><a class="code" href="class_a_r_k_1_1_util_1_1_file_util.html#a75642b70c4e8bcb3f4cf1f20d7ec6023">00056</a>                 <span class="keywordtype">string</span> <a class="code" href="class_a_r_k_1_1_util_1_1_file_util.html#a75642b70c4e8bcb3f4cf1f20d7ec6023">FileUtil::getCurrentDirectory</a>() {
+<a name="l00057"></a>00057                         <span class="keywordtype">char</span> currentPath[FILENAME_MAX];
+<a name="l00058"></a>00058                         <span class="keywordflow">if</span>(!<a class="code" href="_file_util_8cpp.html#a96073f1c6d58bc29c142a96f472a5274">GetCurrentDirectoryMacro</a>(currentPath, <span class="keyword">sizeof</span>(currentPath))) {
+<a name="l00059"></a>00059                                 <span class="keywordflow">return</span> <span class="stringliteral">&quot;&quot;</span>;
+<a name="l00060"></a>00060                         }
+<a name="l00061"></a>00061                         currentPath[<span class="keyword">sizeof</span>(currentPath)-1] = <span class="charliteral">&#39;\0&#39;</span>;
+<a name="l00062"></a>00062                         <span class="keywordflow">return</span> string(currentPath);
+<a name="l00063"></a>00063                 }
+<a name="l00064"></a><a class="code" href="class_a_r_k_1_1_util_1_1_file_util.html#ad87121801592fa050be6bf11ceaeddc0">00064</a>                 <span class="keywordtype">string</span> <a class="code" href="class_a_r_k_1_1_util_1_1_file_util.html#ad87121801592fa050be6bf11ceaeddc0">FileUtil::getSeparator</a>() {
+<a name="l00065"></a>00065                         <span class="keywordflow">return</span> <a class="code" href="_file_util_8cpp.html#af1e88bb4b1ff9546e6803eec85e0684c">DIRECTORY_SEPARATOR</a>;
+<a name="l00066"></a>00066                 }
+<a name="l00067"></a>00067 
+<a name="l00068"></a><a class="code" href="class_a_r_k_1_1_util_1_1_file_util.html#aa86599c624a86d3dee2c12ddb9b095f1">00068</a>                 <span class="keywordtype">string</span> <a class="code" href="class_a_r_k_1_1_util_1_1_file_util.html#aa86599c624a86d3dee2c12ddb9b095f1">FileUtil::getOSDirectory</a>() {
+<a name="l00069"></a>00069 <span class="preprocessor">                        #if defined(ARK2D_WINDOWS)</span>
+<a name="l00070"></a>00070 <span class="preprocessor"></span>                                <span class="keywordtype">char</span> dir[MAX_PATH];
+<a name="l00071"></a>00071                                 dir[MAX_PATH-1] = <span class="charliteral">&#39;\0&#39;</span>;
+<a name="l00072"></a>00072                                 GetWindowsDirectory((LPSTR) &amp;dir, MAX_PATH);
+<a name="l00073"></a>00073 
+<a name="l00074"></a>00074                                 <span class="comment">// never add a backslash.</span>
+<a name="l00075"></a>00075                                 <span class="comment">// if windows is installed to C:\ then it returns C:</span>
+<a name="l00076"></a>00076                                 <span class="keywordtype">string</span> ret(dir);
+<a name="l00077"></a>00077                                 <span class="keywordflow">if</span> (ret.substr(ret.size()-1, 1) == <a class="code" href="_file_util_8cpp.html#af1e88bb4b1ff9546e6803eec85e0684c">DIRECTORY_SEPARATOR</a>) {
+<a name="l00078"></a>00078                                         ret = ret.substr(0, ret.size()-1);
+<a name="l00079"></a>00079                                 }
+<a name="l00080"></a>00080                                 <span class="keywordflow">return</span> ret;
+<a name="l00081"></a>00081 
+<a name="l00082"></a>00082 <span class="preprocessor">                        #elif defined(ARK2D_UBUNTU_LINUX)</span>
+<a name="l00083"></a>00083 <span class="preprocessor"></span>
+<a name="l00084"></a>00084 <span class="preprocessor">                        #endif</span>
+<a name="l00085"></a>00085 <span class="preprocessor"></span>                        <span class="keywordflow">return</span> <span class="stringliteral">&quot;whoops?&quot;</span>;
+<a name="l00086"></a>00086                 }
+<a name="l00087"></a>00087 
+<a name="l00088"></a>00088         }
+<a name="l00089"></a>00089 }
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="_file_util_8cpp.html">FileUtil.cpp</a>      </li>
 
-    <li class="footer">Generated on Thu Apr 12 2012 15:01:57 for ARK2D by
+    <li class="footer">Generated on Thu May 3 2012 16:35:29 for ARK2D by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

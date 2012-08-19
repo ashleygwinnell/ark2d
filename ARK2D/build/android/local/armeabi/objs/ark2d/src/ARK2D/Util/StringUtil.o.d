@@ -226,16 +226,18 @@
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/ToString.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Namespaces.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Graphics/SpriteSheetDescription.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Graphics/../Core/Resource.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Graphics/../Core/../Windres.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Graphics/../Core/../Namespaces.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Graphics/SpriteSheetDescriptionItem.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/String.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/Resource.h \
- /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Windres.h \
- /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Namespaces.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Util/StringUtil.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Util/Cast.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Util/../ARK2D.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Util/../UI/ErrorDialog.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/GameContainer.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Namespaces.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../ARK2D.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Includes.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/Game.h \
@@ -268,6 +270,7 @@
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Graphics/../Font/../Graphics/../Util/../Geometry/../Util/../ARK2D.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Graphics/../Font/../Graphics/../Util/../Geometry/../Util/../Namespaces.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Graphics/../Font/../Graphics/../Util/../Geometry/../ARK2D.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Graphics/../Font/../Graphics/../Util/../Geometry/../Core/String.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Graphics/../Font/../Graphics/../Util/Cast.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Graphics/../Font/../Graphics/SpriteSheetDescriptionItem.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Graphics/../Font/../Graphics/../Core/Resource.h \
@@ -283,6 +286,7 @@
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Graphics/../Util/Vector4.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Graphics/../Font/Font.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Graphics/../Includes.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Graphics/../Namespaces.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Font/BMFont.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Graphics/Image.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../UI/ErrorDialog.h \
@@ -751,15 +755,17 @@
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Graphics/SpriteSheetDescription.h:
 
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Graphics/../Core/Resource.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Graphics/../Core/../Windres.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Graphics/../Core/../Namespaces.h:
+
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Graphics/SpriteSheetDescriptionItem.h:
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/String.h:
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/Resource.h:
-
-/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Windres.h:
-
-/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Namespaces.h:
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Util/StringUtil.h:
 
@@ -770,6 +776,8 @@
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Util/../UI/ErrorDialog.h:
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/GameContainer.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Namespaces.h:
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../ARK2D.h:
 
@@ -835,6 +843,8 @@
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Graphics/../Font/../Graphics/../Util/../Geometry/../ARK2D.h:
 
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Graphics/../Font/../Graphics/../Util/../Geometry/../Core/String.h:
+
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Graphics/../Font/../Graphics/../Util/Cast.h:
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Graphics/../Font/../Graphics/SpriteSheetDescriptionItem.h:
@@ -864,6 +874,8 @@
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Graphics/../Font/Font.h:
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Graphics/../Includes.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Graphics/../Namespaces.h:
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Util/../Core/../Font/BMFont.h:
 

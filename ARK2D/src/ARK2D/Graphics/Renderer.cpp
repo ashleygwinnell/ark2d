@@ -321,7 +321,7 @@ namespace ARK {
 					glVertex2i(x, y + height);
 					glVertex2i(x + width, y + height);
 				glEnd();
-			#endif
+			#endif 
 		}
 
 		void Renderer::drawPoint(int x, int y) const {
@@ -348,8 +348,10 @@ namespace ARK {
 
 		void Renderer::drawCircle(int x, int y, int radius, int points) const {
 			//#if defined(ARK2D_ANDROID)
+				//ARK2D::getLog()->i("drawCircle - preparation");
+
 				float each = 360.0f / float(points);
-				float verts[points*2];
+				float verts[(points+1)*2];
 				int j = 0;
 				for(float i = 0; i <= 360; i += each) {
 					double angle = 2 * PI * i / 360;
@@ -357,6 +359,8 @@ namespace ARK {
 					verts[j+1] = float(0 + sin(angle) * radius);
 					j+=2;
 				}
+
+				//ARK2D::getLog()->i("drawCircle - render");
 				//glDisable(GL_TEXTURE_2D);
 				//glEnableClientState(GL_VERTEX_ARRAY);
 				RendererState::start(RendererState::GEOMETRY);
@@ -364,7 +368,7 @@ namespace ARK {
 				glTranslatef(x, y, 0);
 
 				glVertexPointer(2, GL_FLOAT, 0, verts);
-				glDrawArrays(GL_LINE_LOOP, 0, points);
+				glDrawArrays(GL_LINE_LOOP, 0, points+1);
 
 				glTranslatef(x * -1, y * -1, 0);
 				glPopMatrix();
@@ -385,10 +389,12 @@ namespace ARK {
 
 		void Renderer::fillCircle(int x, int y, int radius, int points) const {
 
+			//ARK2D::getLog()->i("fillCircle - preparation");
+
 			float each = 360.0f / float(points);
-			float verts[(points+2)*2];
+			float verts[(points+3)*2];
 			verts[0] = 0;
-			verts[1] = 0;
+			verts[1] = 0; 
 			int j = 2;
 			for(float i = 0; i <= 360; i += each) {
 				double angle = 2 * PI * i / 360;
@@ -400,6 +406,9 @@ namespace ARK {
 			verts[j+1] = 0;
 			//glDisable(GL_TEXTURE_2D);
 			//glEnableClientState(GL_VERTEX_ARRAY);
+
+			//ARK2D::getLog()->i("fillCircle - render");
+
 			RendererState::start(RendererState::GEOMETRY);
 			glPushMatrix();
 			glTranslatef(x, y, 0);

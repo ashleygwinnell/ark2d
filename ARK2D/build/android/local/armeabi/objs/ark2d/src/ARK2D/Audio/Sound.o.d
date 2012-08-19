@@ -235,6 +235,7 @@
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Audio/../Util/../Core/ToString.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Audio/../Util/../Namespaces.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Audio/../Util/../Graphics/SpriteSheetDescription.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Audio/../Util/../Graphics/../Core/Resource.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Audio/../Util/../Graphics/SpriteSheetDescriptionItem.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Audio/../Util/Log.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Audio/../vendor/FileInterface.h
@@ -708,6 +709,8 @@
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Audio/../Util/../Namespaces.h:
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Audio/../Util/../Graphics/SpriteSheetDescription.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Audio/../Util/../Graphics/../Core/Resource.h:
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Audio/../Util/../Graphics/SpriteSheetDescriptionItem.h:
 

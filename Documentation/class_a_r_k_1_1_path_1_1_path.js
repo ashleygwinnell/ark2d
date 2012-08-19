@@ -12,5 +12,5 @@ var class_a_r_k_1_1_path_1_1_path =
     [ "removePoint", "class_a_r_k_1_1_path_1_1_path.html#af052a691cfe79969175ff3a12c08d6d9", null ],
     [ "setDuration", "class_a_r_k_1_1_path_1_1_path.html#a9b57776f51e9feac00b414af84774278", null ],
     [ "setEasing", "class_a_r_k_1_1_path_1_1_path.html#a493cba9128f0cd706efdc78efd97b827", null ],
-    [ "PathGroup", "class_a_r_k_1_1_path_1_1_path.html#a4493d9f6fe56c253b0e490935aace9f1", null ]
+    [ "ARK::Path::PathGroup", "class_a_r_k_1_1_path_1_1_path.html#a649719178d4091a6d3415c8c34176cc5", null ]
 ];

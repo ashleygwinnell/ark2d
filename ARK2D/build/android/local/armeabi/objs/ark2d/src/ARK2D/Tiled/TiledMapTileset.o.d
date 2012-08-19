@@ -238,13 +238,23 @@
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Util/../ARK2D.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Util/../Namespaces.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../ARK2D.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/String.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/Resource.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Windres.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Namespaces.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Util/StringUtil.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Util/../ARK2D.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Util/../UI/ErrorDialog.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Util/../UI/../ARK2D.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Util/../Core/ToString.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Util/../Namespaces.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Util/../Graphics/SpriteSheetDescription.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Util/../Graphics/../Core/Resource.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Util/../Graphics/SpriteSheetDescriptionItem.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Util/Cast.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/Cast.h \
- /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../UI/ErrorDialog.h \
- /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../UI/../ARK2D.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/SpriteSheetDescriptionItem.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Core/Resource.h \
- /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Core/../Windres.h \
- /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Core/../Namespaces.h \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/TiledMapTileset.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stdexcept \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_stdexcept.h
@@ -725,19 +735,39 @@
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../ARK2D.h:
 
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/String.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/Resource.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Windres.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Namespaces.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Util/StringUtil.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Util/../ARK2D.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Util/../UI/ErrorDialog.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Util/../UI/../ARK2D.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Util/../Core/ToString.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Util/../Namespaces.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Util/../Graphics/SpriteSheetDescription.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Util/../Graphics/../Core/Resource.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Util/../Graphics/SpriteSheetDescriptionItem.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../Geometry/../Core/../Util/Cast.h:
+
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/Cast.h:
-
-/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../UI/ErrorDialog.h:
-
-/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Util/../UI/../ARK2D.h:
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/SpriteSheetDescriptionItem.h:
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Core/Resource.h:
-
-/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Core/../Windres.h:
-
-/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/../Graphics/../Core/../Namespaces.h:
 
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Tiled/TiledMapTileset.h:
 

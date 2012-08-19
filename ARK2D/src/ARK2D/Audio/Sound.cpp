@@ -32,8 +32,8 @@ namespace ARK {
 
 			bool suc = this->load(false); // AL_TRUE on success - false (no looping)
 			if (suc == true) {
-				SoundStore& ss = SoundStore::getInstance();
-				ss.addSound(filename, this);
+				SoundStore* ss = SoundStore::getInstance();
+				ss->addSound(filename, this);
 				ARK2D::getLog()->i(StringUtil::append("Loaded Sound: ", filename));
 			} else {
 				ARK2D::getLog()->e(StringUtil::append("Did not load sound: ", filename));
@@ -54,8 +54,8 @@ namespace ARK {
 
 			bool suc = this->load(false);
 			if (suc == true) {
-				SoundStore& ss = SoundStore::getInstance();
-				ss.addSound(filename, this);
+				SoundStore* ss = SoundStore::getInstance();
+				ss->addSound(filename, this);
 				ARK2D::getLog()->i(StringUtil::append("Loaded Sound: ", filename));
 			} else {
 				ARK2D::getLog()->e(StringUtil::append("Did not load sound: ", filename));

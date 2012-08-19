@@ -1,16 +1,16 @@
 /*
  * GameContainerMac.cpp
  *
- *  Created on: Aug 9, 2011
- *      Author: ashleygwinnell
+ *  Created on: Aug 9, 2011 
+ *      Author: ashleygwinnell 
  */
-
+ 
 #include "../GameContainer.h"
-#include "GameContainerMac.h"
-#include "../../Util/Log.h" 
+#include "GameContainerMac.h"  
+#include "../../Util/Log.h"   
 
-#ifdef ARK2D_MACINTOSH
-
+#ifdef ARK2D_MACINTOSH  
+ 
 	
 
 			bool isLionPlus() { 
@@ -23,7 +23,7 @@
 						&& MacVersionMinor >= 7) {
 						return true;
 					} 
-					return false;
+					return false; 
 				}
 				return false;
 			}
@@ -34,17 +34,17 @@
 			
 		
 			ARK::Core::GameContainer::GameContainer(Game& g, int width, int height, int bpp, bool fullscreen):
-				m_timer(),
+				m_timer(), 
 				m_game(g),
 				m_input(),
 				m_graphics(),
-				m_gamepads(),
-				m_originalWidth(width),
+				m_gamepads(), 
+				m_originalWidth(width),    
 				m_originalHeight(height),
 				m_width(width),
 				m_height(height),
 				m_screenWidth(0),
-				m_screenHeight(0),
+				m_screenHeight(0), 
 				m_scale(1.0f),
 				m_scaleX(1.0f),
 				m_scaleY(1.0f),
@@ -82,7 +82,7 @@
 					// Get location of current app bundle and make sure there's a resources path.
 					m_platformSpecific.m_resourcePath = [[[NSBundle mainBundle] resourcePath] fileSystemRepresentation];
 					m_platformSpecific.m_resourcePath += "/data/";
-					std::cout << "Resource path: " << m_platformSpecific.m_resourcePath << std::endl;
+					ARK2D::getLog()->i(StringUtil::append("Resource Path: ", m_platformSpecific.m_resourcePath));
 					
 					if (NSApp == nil) {
 						[NSApplication sharedApplication];

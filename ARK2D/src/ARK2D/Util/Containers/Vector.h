@@ -307,9 +307,37 @@ namespace ARK {
 								//if (obj == NULL) { continue; }
 								obj->update(container, timer);
 								++it;
+							} 
+						#endif
+					}
+					void updateSelection(void* selectionFunction) {
+						#if !defined(STL_AVAILABLE)
+							
+						#else
+							GameContainer* container = ARK2D::getContainer();
+							GameTimer* timer = container->getTimer();
+							bool (*pt)(T) = (bool(*)(T)) selectionFunction;
+
+							if (!usingList) {
+								for(unsigned int i = 0; i < vec.size(); i++) {
+									T obj = vec.at(i);
+									if (pt(obj)) {
+										obj->update(container, timer);
+									}
+								}
+								return;
+							}
+							typename list<T>::iterator it = lst.begin();
+							while (it != lst.end()) {
+								if (pt(*it)) {
+									T obj = (*it);
+									obj->update(container, timer);
+								}
+								++it;
 							}
 						#endif
 					}
+
 					/**
 					 * only use with ARKGameObject
 					 * careful not to prune in any update functions!!
@@ -331,6 +359,37 @@ namespace ARK {
 								T obj = (*it);
 								//if (obj == NULL) { continue; }
 								obj->render(container, g);
+								++it;
+							}
+						#endif
+					}
+					// function definition example
+					// bool hasNoWave(LMTEnemy* enemy) { 
+					// 		return (enemy->getWave() == NULL); 
+					// }
+					void renderSelection(void* selectionFunction) {
+						#if !defined(STL_AVAILABLE)
+
+						#else
+							GameContainer* container = ARK2D::getContainer();
+							Renderer* g = ARK2D::getRenderer();
+							bool (*pt)(T) = (bool(*)(T)) selectionFunction;
+
+							if (!usingList) {
+								for(unsigned int i = 0; i < vec.size(); i++) {
+									T obj = vec.at(i);
+									if (pt(obj)) {
+										obj->render(container, g);
+									}
+								}
+								return;
+							}
+							typename list<T>::iterator it = lst.begin();
+							while (it != lst.end()) {
+								if (pt(*it)) {
+									T obj = (*it);
+									obj->render(container, g);
+								}
 								++it;
 							}
 						#endif

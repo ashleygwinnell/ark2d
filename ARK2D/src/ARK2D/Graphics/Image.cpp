@@ -479,10 +479,11 @@ namespace ARK {
 			m_Rotation(0),
 			m_dirty(false)
 		{
-			std::cout << "Loading Image from resource. " << std::endl;
+			ARK2D::getLog()->i("Loading Image from resource. "); //std::cout << "Loading Image from resource. " << std::endl;
 			m_data = GameContainerPlatform::getARK2DResource(resource, resourceType);
 			this->texture = this->load();
-			std::cout << "texture id " << (this->texture) << std::endl;
+			//std::cout << "texture id " << (this->texture) << std::endl;
+			ARK2D::getLog()->i(StringUtil::append("Texture id: ", this->texture));
 			clean();
 		}
 
@@ -504,7 +505,7 @@ namespace ARK {
 			m_Rotation(0),
 			m_dirty(false)
 		{
-			std::cout << "Loading Image from data. " << std::endl;
+			ARK2D::getLog()->i("Loading Image from data. ");
 			this->texture = this->load();
 			clean();
 		}
@@ -528,21 +529,22 @@ namespace ARK {
 			m_dirty(false)
 		{
 			this->texture = this->load(); // this sets the width and height too! :)
-			std::cout << "Loaded Image: " << this->filename << " tex id: " << (this->texture) << std::endl; //  BMP must be 24bit unrestricted bmp!
+			//std::cout << "Loaded Image: " << this->filename << " tex id: " << (this->texture) << std::endl; //  BMP must be 24bit unrestricted bmp!
+			ARK2D::getLog()->i(String("Loaded Image: ").append(this->filename).append(" tex id: ").append((unsigned int) this->texture).get());
 			clean();
 		}
 
 		Image::Image(const std::string& fname, const Color& mask) :
 			ARK::Core::Resource(),
-			m_data(NULL),
-			m_resourceType(0),
+			m_data(NULL), 
+			m_resourceType(0), 
 			filename(fname),
 			texture_width(1),
 			texture_height(1),
 			texture_offset_x(0),
 			texture_offset_y(0),
 			m_CenterX(0),
-			m_CenterY(0),
+			m_CenterY(0), 
 			m_tl_corner_color(),
 			m_tr_corner_color(),
 			m_alpha(1.0f),
@@ -551,7 +553,8 @@ namespace ARK {
 			m_dirty(false)
 		{
 			this->texture = this->load(mask); // this sets the width and height too! :)
-			std::cout << "Loaded Image: " << this->filename << " tex id: " << (this->texture) << std::endl; //  BMP must be 24bit unrestricted bmp!
+			//std::cout << "Loaded Image: " << this->filename << " tex id: " << (this->texture) << std::endl; //  BMP must be 24bit unrestricted bmp!
+			ARK2D::getLog()->i(String("Loaded Image: ").append(this->filename).append(" tex id: ").append((unsigned int) this->texture).get());
 			clean();
 		}
 

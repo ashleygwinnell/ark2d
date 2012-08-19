@@ -1,0 +1,91 @@
+{
+	"ark2d": {
+		"dir": {
+			"windows": "C:\\Dropbox\\ark2d\\ARK2D",
+			"osx": "/Users/ashleygwinnell/Dropbox/ark2d/ARK2D"
+		},
+		"icon": "/__preproduction/icon/32.png"
+	},
+	"python": {
+		"executable": {
+			"windows": "C:\\Python31\\python.exe",
+			"osx": "/usr/local/bin/python3.1"
+		}
+	},
+	"developer": {
+		"name": "Ashley Gwinnell",
+		"name_safe": "ashleygwinnell",
+		"website": "http://www.ashleygwinnell.co.uk/"
+	},
+	"project_groups": [
+		{
+			"name": "Projects",
+			"projects": [
+				{
+					"name": "Toast Time",
+					"dir": {
+						"windows": "C:\\Dropbox\\Projects\\C++\\Toaster",
+						"osx": "/Users/ashleygwinnell/Dropbox/Projects/C++/Toaster"
+					},
+					"icon": "/__preproduction/icon/royal-tea-32.png"
+				},
+				{
+					"name": "Mirrornaut",
+					"dir": {
+						"windows": "/Users/ashleygwinnell/Dropbox/Mirrornaut",
+						"osx": "/Users/ashleygwinnell/Dropbox/Mirrornaut"
+					},
+					"icon": "/__preproduction/icon/icon32.png"
+				},
+				{
+					"name": "Omnivium",
+					"dir": {
+						"windows": "/Users/ashleygwinnell/Dropbox/Omnivium/codebase",
+						"osx": "/Users/ashleygwinnell/Dropbox/Omnivium/codebase"
+					},
+					"icon": "/__preproduction/icon/icon-32.png"
+				},
+				{
+					"name": "Spectranaut",
+					"dir": {
+						"windows": "/Users/ashleygwinnell/Dropbox/Spectranaut/codebase",
+						"osx": "/Users/ashleygwinnell/Dropbox/Spectranaut/codebase"
+					},
+					"icon": "/__preproduction/icon/icon32.png"
+				},
+				{
+					"name": "Black Santa",
+					"dir": {
+						"windows": "/Users/ashleygwinnell/Dropbox/ark2d-examples/BlackSanta",
+						"osx": "/Users/ashleygwinnell/Dropbox/ark2d-examples/BlackSanta"
+					},
+					"icon": "/__preproduction/icon/32.png"
+				},
+				{
+					"name": "Gun Of Thunder",
+					"dir": {
+						"windows": "/Users/ashleygwinnell/Dropbox/ark2d-examples/GunOfThunder",
+						"osx": "/Users/ashleygwinnell/Dropbox/ark2d-examples/GunOfThunder"
+					},
+					"icon": "/__preproduction/32.png"
+				},
+				{
+					"name": "Royal Tea",
+					"dir": {
+						"windows": "/Users/ashleygwinnell/Dropbox/ark2d-examples/RoyalTea",
+						"osx": "/Users/ashleygwinnell/Dropbox/ark2d-examples/RoyalTea"
+					},
+					"icon": "/__preproduction/icon/royal-tea-32.png"
+				},
+				{
+					"name": "LOVE ME, TOO!",
+					"dir": {
+						"windows": "/Users/ashleygwinnell/Dropbox/Projects/C++/LOVE ME, TOO!",
+						"osx": "/Users/ashleygwinnell/Dropbox/Projects/C++/LOVE ME, TOO!"
+					},
+					"icon": "/__preproduction/icon/icon_32.png"
+				}
+			]
+		}
+	 ]
+}

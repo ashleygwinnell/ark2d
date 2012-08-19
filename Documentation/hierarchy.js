@@ -66,7 +66,6 @@ var hierarchy =
     [ "ARK::Tests::ParticlesTestGameState", "class_a_r_k_1_1_tests_1_1_particles_test_game_state.html", null ],
     [ "ARK::Particles::ParticleSystem", "class_a_r_k_1_1_particles_1_1_particle_system.html", null ],
     [ "ARK::Path::Path", "class_a_r_k_1_1_path_1_1_path.html", null ],
-    [ "ARK::Path::PathGroup", "class_a_r_k_1_1_path_1_1_path_group.html", null ],
     [ "ARK::Path::PathIO", "class_a_r_k_1_1_path_1_1_path_i_o.html", null ],
     [ "ARK::Graphics::ImageIO::PNGImage", "class_a_r_k_1_1_graphics_1_1_image_i_o_1_1_p_n_g_image.html", null ],
     [ "ARK::Graphics::ImageIO::PNGImagestream", "class_a_r_k_1_1_graphics_1_1_image_i_o_1_1_p_n_g_imagestream.html", null ],
@@ -83,6 +82,7 @@ var hierarchy =
         [ "ARK::Font::FTFont", "class_a_r_k_1_1_font_1_1_f_t_font.html", null ]
       ] ],
       [ "ARK::Graphics::Image", "class_a_r_k_1_1_graphics_1_1_image.html", null ],
+      [ "ARK::Path::PathGroup", "class_a_r_k_1_1_path_1_1_path_group.html", null ],
       [ "ARK::Tiled::TiledMap", "class_a_r_k_1_1_tiled_1_1_tiled_map.html", null ],
       [ "ARK::Util::LocalHighscores", "class_a_r_k_1_1_util_1_1_local_highscores.html", null ]
     ] ],

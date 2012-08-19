@@ -33,6 +33,13 @@ LOCAL_SRC_FILES := \
 	src/ARK2D/Font/Font.cpp \
 	src/ARK2D/Font/FTFont.cpp \
 	src/ARK2D/Font/BMFont.cpp \
+	src/ARK2D/GJ/GameJolt.cpp \
+	src/ARK2D/GJ/PropertyItem.cpp \
+	src/ARK2D/GJ/DataStore.cpp \
+	src/ARK2D/GJ/Highscore.cpp \
+	src/ARK2D/GJ/MD5.cpp \
+	src/ARK2D/GJ/Trophy.cpp \
+	src/ARK2D/GJ/User.cpp \
 	src/ARK2D/Graphics/Animation.cpp \
 	src/ARK2D/Graphics/Color.cpp \
 	src/ARK2D/Graphics/Renderer.cpp \
@@ -112,6 +119,7 @@ LOCAL_SRC_FILES := \
 	src/ARK2D/Util/RSSL.cpp \
 	src/ARK2D/Util/Vector4.cpp \
 	src/ARK2D/Util/Matrix44.cpp \
+	src/ARK2D/Util/URLRequest.cpp \
 	src/ARK2D/Util/Containers/Pool.cpp \
 	src/ARK2D/Util/Containers/Vector.cpp \
 	src/ARK2D/vendor/FileInterface.cpp \

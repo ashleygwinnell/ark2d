@@ -336,7 +336,7 @@ namespace ARK {
 		void PathGroup::renderPoint(float x, float y, bool linkPoint) {
 			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white);
-			if (linkPoint) {
+			if (linkPoint) {  
 				g->fillCircle(int(x), int(y), 10, 10);
 			} else {
 				g->fillCircle(int(x), int(y), 5, 10);

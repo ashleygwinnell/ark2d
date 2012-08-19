@@ -5,6 +5,7 @@ var class_a_r_k_1_1_core_1_1_resource =
     [ "asFont", "class_a_r_k_1_1_core_1_1_resource.html#a521966106fdb42247951167abb8a0119", null ],
     [ "asImage", "class_a_r_k_1_1_core_1_1_resource.html#afe637eb440ed2dba901fb4e190ea2dfb", null ],
     [ "asLocalHighscores", "class_a_r_k_1_1_core_1_1_resource.html#a85ed27f9dc428f691ad9e3dc3c5bc18f", null ],
+    [ "asPathGroup", "class_a_r_k_1_1_core_1_1_resource.html#afbb7b1b91018f8c29ce5aa8415c5089c", null ],
     [ "asSound", "class_a_r_k_1_1_core_1_1_resource.html#ac432341009b22ca37f2373c27a5d0cf0", null ],
     [ "asString", "class_a_r_k_1_1_core_1_1_resource.html#a41b9db631a4d4776337012af76d743f2", null ],
     [ "asTiledMap", "class_a_r_k_1_1_core_1_1_resource.html#a802c4bd0d25e30ab3a7e52ebce405b5d", null ],

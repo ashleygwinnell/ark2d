@@ -133,92 +133,93 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00016"></a>00016 <span class="preprocessor">#include &lt;vector&gt;</span>
 <a name="l00017"></a>00017 
 <a name="l00018"></a>00018 <span class="preprocessor">#include &quot;<a class="code" href="_path_8h.html">Path.h</a>&quot;</span>
-<a name="l00019"></a>00019 
-<a name="l00020"></a>00020 <span class="keyword">using namespace </span>std;
-<a name="l00021"></a>00021 
-<a name="l00022"></a>00022 <span class="keyword">namespace </span>ARK {
-<a name="l00023"></a>00023         <span class="keyword">namespace </span><a class="code" href="class_a_r_k_1_1_path_1_1_path.html" title="Used internally by PathGroup.">Path</a> {
-<a name="l00024"></a>00024 
-<a name="l00030"></a><a class="code" href="class_a_r_k_1_1_path_1_1_path_group.html">00030</a>                 <span class="keyword">class </span><a class="code" href="class_a_r_k_1_1_path_1_1_path_group.html" title="The PathGroup strings many Paths together to enable longer and more fluid paths.">PathGroup</a> {
-<a name="l00031"></a>00031                         <span class="keyword">private</span>:
-<a name="l00032"></a>00032                                 vector&lt;Path*&gt; paths;
-<a name="l00033"></a>00033                                 <a class="code" href="class_a_r_k_1_1_geometry_1_1_vector2.html">Vector2&lt;float&gt;</a> currentLocation;
-<a name="l00034"></a>00034                                 <a class="code" href="class_a_r_k_1_1_geometry_1_1_vector2.html">Vector2&lt;float&gt;</a> centerLocation;
-<a name="l00035"></a>00035                                 <a class="code" href="class_a_r_k_1_1_geometry_1_1_vector2.html">Vector2&lt;float&gt;</a> calcVector;
-<a name="l00036"></a>00036                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> current;
-<a name="l00037"></a>00037                                 <span class="keywordtype">float</span> timer;
-<a name="l00038"></a>00038                                 <span class="keywordtype">bool</span> relative;
-<a name="l00039"></a>00039 
-<a name="l00040"></a>00040                                 <span class="keywordtype">string</span> name;
-<a name="l00041"></a>00041                                 <span class="keywordtype">string</span> description;
-<a name="l00042"></a>00042 
-<a name="l00043"></a>00043                                 <span class="keywordtype">bool</span> m_isFlippedH;
-<a name="l00044"></a>00044                                 <span class="keywordtype">bool</span> m_isFlippedV;
-<a name="l00045"></a>00045                                 <span class="keywordtype">float</span> m_rotatedAngle;
-<a name="l00046"></a>00046 
-<a name="l00047"></a>00047                         <span class="keyword">public</span>:
-<a name="l00048"></a>00048                                 <a class="code" href="class_a_r_k_1_1_path_1_1_path_group.html" title="The PathGroup strings many Paths together to enable longer and more fluid paths.">PathGroup</a>();
-<a name="l00049"></a>00049                                 <span class="keywordtype">void</span> setRelative(<span class="keywordtype">bool</span> b);
-<a name="l00050"></a>00050                                 <span class="keywordtype">bool</span> isRelative();
-<a name="l00051"></a>00051                                 <span class="keywordtype">void</span> addPath(<a class="code" href="class_a_r_k_1_1_path_1_1_path.html" title="Used internally by PathGroup.">Path</a>* p);
-<a name="l00052"></a>00052                                 <span class="keywordtype">void</span> addPath(<a class="code" href="class_a_r_k_1_1_path_1_1_path.html" title="Used internally by PathGroup.">Path</a>* p, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index);
-<a name="l00053"></a>00053                                 <span class="keywordtype">void</span> removePath(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index);
-<a name="l00054"></a>00054                                 vector&lt;Path*&gt; getPaths();
-<a name="l00055"></a>00055                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> getNumPaths();
-<a name="l00056"></a>00056                                 <span class="keywordtype">void</span> clear();
-<a name="l00057"></a>00057                                 <a class="code" href="class_a_r_k_1_1_path_1_1_path.html" title="Used internally by PathGroup.">Path</a>* getPath(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index);
-<a name="l00058"></a>00058 
-<a name="l00059"></a>00059                                 <span class="keywordtype">void</span> setName(<span class="keywordtype">string</span> n);
-<a name="l00060"></a>00060                                 <span class="keywordtype">void</span> setDescription(<span class="keywordtype">string</span> d);
-<a name="l00061"></a>00061 
-<a name="l00062"></a>00062                                 <span class="keywordtype">string</span> getName();
-<a name="l00063"></a>00063                                 <span class="keywordtype">string</span> getDescription();
-<a name="l00064"></a>00064 
-<a name="l00065"></a>00065                                 <span class="keywordtype">void</span> setTimer(<span class="keywordtype">float</span> t);
-<a name="l00066"></a>00066                                 <span class="keywordtype">float</span> getTimer();
-<a name="l00067"></a>00067                                 <span class="keywordtype">void</span> incrementTimer(<span class="keywordtype">float</span> t);
-<a name="l00068"></a>00068 
-<a name="l00069"></a>00069                                 <span class="keywordtype">float</span> getDuration();
-<a name="l00070"></a>00070 
-<a name="l00071"></a>00071                                 <span class="keywordtype">void</span> update(<a class="code" href="class_a_r_k_1_1_core_1_1_game_timer.html" title="Controls the main game loop.">GameTimer</a>* gt);
-<a name="l00072"></a>00072                                 <span class="keywordtype">void</span> updateCurrent();
-<a name="l00073"></a>00073 
-<a name="l00074"></a>00074                                 <span class="comment">/*float getStartTime(unsigned int index);*/</span>
-<a name="l00075"></a>00075                                 <a class="code" href="class_a_r_k_1_1_geometry_1_1_vector2.html">Vector2&lt;float&gt;</a>* getLocation();
-<a name="l00076"></a>00076                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> getIndex();
-<a name="l00077"></a>00077 
-<a name="l00078"></a>00078                                 <a class="code" href="class_a_r_k_1_1_geometry_1_1_vector2.html">Vector2&lt;float&gt;</a>* getCenter();
-<a name="l00079"></a>00079                                 <span class="keywordtype">void</span> updateCenter();
-<a name="l00080"></a>00080 
-<a name="l00081"></a>00081                                 <span class="keywordtype">void</span> flip(<span class="keywordtype">bool</span> hf, <span class="keywordtype">bool</span> vf);
-<a name="l00082"></a>00082                                 <span class="keywordtype">void</span> flip(<span class="keywordtype">bool</span> hf, <span class="keywordtype">bool</span> vf, <span class="keywordtype">int</span> cx, <span class="keywordtype">int</span> cy);
-<a name="l00083"></a>00083                                 <span class="keywordtype">void</span> setFlip(<span class="keywordtype">bool</span> hf, <span class="keywordtype">bool</span> vf);
-<a name="l00084"></a>00084                                 <span class="keywordtype">bool</span> isFlippedH();
-<a name="l00085"></a>00085                                 <span class="keywordtype">bool</span> isFlippedV();
-<a name="l00086"></a>00086 
-<a name="l00087"></a>00087                                 <span class="keywordtype">void</span> rotate(<span class="keywordtype">float</span> degrees);
-<a name="l00088"></a>00088                                 <span class="keywordtype">void</span> rotate(<span class="keywordtype">float</span> degrees, <span class="keywordtype">int</span> cx, <span class="keywordtype">int</span> cy);
-<a name="l00089"></a>00089                                 <span class="keywordtype">void</span> setRotation(<span class="keywordtype">float</span> f);
-<a name="l00090"></a>00090                                 <span class="keywordtype">float</span> getRotation();
-<a name="l00091"></a>00091 
+<a name="l00019"></a>00019 <span class="preprocessor"> #include &quot;../Core/Resource.h&quot;</span>
+<a name="l00020"></a>00020 
+<a name="l00021"></a>00021 <span class="keyword">using namespace </span>std;
+<a name="l00022"></a>00022 
+<a name="l00023"></a>00023 <span class="keyword">namespace </span>ARK {
+<a name="l00024"></a>00024         <span class="keyword">namespace </span><a class="code" href="class_a_r_k_1_1_path_1_1_path.html" title="Used internally by PathGroup.">Path</a> {
+<a name="l00025"></a>00025 
+<a name="l00031"></a><a class="code" href="class_a_r_k_1_1_path_1_1_path_group.html">00031</a>                 <span class="keyword">class </span><a class="code" href="class_a_r_k_1_1_path_1_1_path_group.html" title="The PathGroup strings many Paths together to enable longer and more fluid paths.">PathGroup</a> : <span class="keyword">public</span> <a class="code" href="class_a_r_k_1_1_core_1_1_resource.html" title="Load assets in to game. Images, Sounds, TiledMaps, LocalHighscores, Text files, Fonts, etc.">ARK::Core::Resource</a> {
+<a name="l00032"></a>00032                         <span class="keyword">private</span>:
+<a name="l00033"></a>00033                                 vector&lt;Path*&gt; paths;
+<a name="l00034"></a>00034                                 <a class="code" href="class_a_r_k_1_1_geometry_1_1_vector2.html">Vector2&lt;float&gt;</a> currentLocation;
+<a name="l00035"></a>00035                                 <a class="code" href="class_a_r_k_1_1_geometry_1_1_vector2.html">Vector2&lt;float&gt;</a> centerLocation;
+<a name="l00036"></a>00036                                 <a class="code" href="class_a_r_k_1_1_geometry_1_1_vector2.html">Vector2&lt;float&gt;</a> calcVector;
+<a name="l00037"></a>00037                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> current;
+<a name="l00038"></a>00038                                 <span class="keywordtype">float</span> timer;
+<a name="l00039"></a>00039                                 <span class="keywordtype">bool</span> relative;
+<a name="l00040"></a>00040 
+<a name="l00041"></a>00041                                 <span class="keywordtype">string</span> name;
+<a name="l00042"></a>00042                                 <span class="keywordtype">string</span> description;
+<a name="l00043"></a>00043 
+<a name="l00044"></a>00044                                 <span class="keywordtype">bool</span> m_isFlippedH;
+<a name="l00045"></a>00045                                 <span class="keywordtype">bool</span> m_isFlippedV;
+<a name="l00046"></a>00046                                 <span class="keywordtype">float</span> m_rotatedAngle;
+<a name="l00047"></a>00047 
+<a name="l00048"></a>00048                         <span class="keyword">public</span>:
+<a name="l00049"></a>00049                                 <a class="code" href="class_a_r_k_1_1_path_1_1_path_group.html" title="The PathGroup strings many Paths together to enable longer and more fluid paths.">PathGroup</a>();
+<a name="l00050"></a>00050                                 <span class="keywordtype">void</span> setRelative(<span class="keywordtype">bool</span> b);
+<a name="l00051"></a>00051                                 <span class="keywordtype">bool</span> isRelative();
+<a name="l00052"></a>00052                                 <span class="keywordtype">void</span> addPath(<a class="code" href="class_a_r_k_1_1_path_1_1_path.html" title="Used internally by PathGroup.">Path</a>* p);
+<a name="l00053"></a>00053                                 <span class="keywordtype">void</span> addPath(<a class="code" href="class_a_r_k_1_1_path_1_1_path.html" title="Used internally by PathGroup.">Path</a>* p, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index);
+<a name="l00054"></a>00054                                 <span class="keywordtype">void</span> removePath(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index);
+<a name="l00055"></a>00055                                 vector&lt;Path*&gt; getPaths();
+<a name="l00056"></a>00056                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> getNumPaths();
+<a name="l00057"></a>00057                                 <span class="keywordtype">void</span> clear();
+<a name="l00058"></a>00058                                 <a class="code" href="class_a_r_k_1_1_path_1_1_path.html" title="Used internally by PathGroup.">Path</a>* getPath(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> index);
+<a name="l00059"></a>00059 
+<a name="l00060"></a>00060                                 <span class="keywordtype">void</span> setName(<span class="keywordtype">string</span> n);
+<a name="l00061"></a>00061                                 <span class="keywordtype">void</span> setDescription(<span class="keywordtype">string</span> d);
+<a name="l00062"></a>00062 
+<a name="l00063"></a>00063                                 <span class="keywordtype">string</span> getName();
+<a name="l00064"></a>00064                                 <span class="keywordtype">string</span> getDescription();
+<a name="l00065"></a>00065 
+<a name="l00066"></a>00066                                 <span class="keywordtype">void</span> setTimer(<span class="keywordtype">float</span> t);
+<a name="l00067"></a>00067                                 <span class="keywordtype">float</span> getTimer();
+<a name="l00068"></a>00068                                 <span class="keywordtype">void</span> incrementTimer(<span class="keywordtype">float</span> t);
+<a name="l00069"></a>00069 
+<a name="l00070"></a>00070                                 <span class="keywordtype">float</span> getDuration();
+<a name="l00071"></a>00071 
+<a name="l00072"></a>00072                                 <span class="keywordtype">void</span> update(<a class="code" href="class_a_r_k_1_1_core_1_1_game_timer.html" title="Controls the main game loop.">GameTimer</a>* gt);
+<a name="l00073"></a>00073                                 <span class="keywordtype">void</span> updateCurrent();
+<a name="l00074"></a>00074 
+<a name="l00075"></a>00075                                 <span class="comment">/*float getStartTime(unsigned int index);*/</span>
+<a name="l00076"></a>00076                                 <a class="code" href="class_a_r_k_1_1_geometry_1_1_vector2.html">Vector2&lt;float&gt;</a>* getLocation();
+<a name="l00077"></a>00077                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> getIndex();
+<a name="l00078"></a>00078 
+<a name="l00079"></a>00079                                 <a class="code" href="class_a_r_k_1_1_geometry_1_1_vector2.html">Vector2&lt;float&gt;</a>* getCenter();
+<a name="l00080"></a>00080                                 <span class="keywordtype">void</span> updateCenter();
+<a name="l00081"></a>00081 
+<a name="l00082"></a>00082                                 <span class="keywordtype">void</span> flip(<span class="keywordtype">bool</span> hf, <span class="keywordtype">bool</span> vf);
+<a name="l00083"></a>00083                                 <span class="keywordtype">void</span> flip(<span class="keywordtype">bool</span> hf, <span class="keywordtype">bool</span> vf, <span class="keywordtype">int</span> cx, <span class="keywordtype">int</span> cy);
+<a name="l00084"></a>00084                                 <span class="keywordtype">void</span> setFlip(<span class="keywordtype">bool</span> hf, <span class="keywordtype">bool</span> vf);
+<a name="l00085"></a>00085                                 <span class="keywordtype">bool</span> isFlippedH();
+<a name="l00086"></a>00086                                 <span class="keywordtype">bool</span> isFlippedV();
+<a name="l00087"></a>00087 
+<a name="l00088"></a>00088                                 <span class="keywordtype">void</span> rotate(<span class="keywordtype">float</span> degrees);
+<a name="l00089"></a>00089                                 <span class="keywordtype">void</span> rotate(<span class="keywordtype">float</span> degrees, <span class="keywordtype">int</span> cx, <span class="keywordtype">int</span> cy);
+<a name="l00090"></a>00090                                 <span class="keywordtype">void</span> setRotation(<span class="keywordtype">float</span> f);
+<a name="l00091"></a>00091                                 <span class="keywordtype">float</span> getRotation();
 <a name="l00092"></a>00092 
-<a name="l00093"></a>00093                                 <span class="keyword">virtual</span> <span class="keywordtype">void</span> render();
-<a name="l00094"></a>00094                                 <span class="keyword">virtual</span> <span class="keywordtype">void</span> renderCurve();
-<a name="l00095"></a>00095                                 <span class="keyword">virtual</span> <span class="keywordtype">void</span> renderCurve(<span class="keyword">const</span> <a class="code" href="class_a_r_k_1_1_graphics_1_1_color.html" title="RGBA colour class.">Color</a>&amp; c);
-<a name="l00096"></a>00096                                 <span class="keyword">virtual</span> <span class="keywordtype">void</span> renderPoint(<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">bool</span> linkPoint);
-<a name="l00097"></a>00097                                 <span class="keyword">virtual</span> <span class="keywordtype">void</span> renderLine(<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> x2, <span class="keywordtype">float</span> y2);
-<a name="l00098"></a>00098                                 <span class="keyword">virtual</span> ~<a class="code" href="class_a_r_k_1_1_path_1_1_path_group.html" title="The PathGroup strings many Paths together to enable longer and more fluid paths.">PathGroup</a>();
-<a name="l00099"></a>00099                 };
-<a name="l00100"></a>00100         }
-<a name="l00101"></a>00101 }
-<a name="l00102"></a>00102 <span class="preprocessor">#endif </span><span class="comment">/* PATHGROUP_H_ */</span>
+<a name="l00093"></a>00093 
+<a name="l00094"></a>00094                                 <span class="keyword">virtual</span> <span class="keywordtype">void</span> render();
+<a name="l00095"></a>00095                                 <span class="keyword">virtual</span> <span class="keywordtype">void</span> renderCurve();
+<a name="l00096"></a>00096                                 <span class="keyword">virtual</span> <span class="keywordtype">void</span> renderCurve(<span class="keyword">const</span> <a class="code" href="class_a_r_k_1_1_graphics_1_1_color.html" title="RGBA colour class.">Color</a>&amp; c);
+<a name="l00097"></a>00097                                 <span class="keyword">virtual</span> <span class="keywordtype">void</span> renderPoint(<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">bool</span> linkPoint);
+<a name="l00098"></a>00098                                 <span class="keyword">virtual</span> <span class="keywordtype">void</span> renderLine(<span class="keywordtype">float</span> x, <span class="keywordtype">float</span> y, <span class="keywordtype">float</span> x2, <span class="keywordtype">float</span> y2);
+<a name="l00099"></a>00099                                 <span class="keyword">virtual</span> ~<a class="code" href="class_a_r_k_1_1_path_1_1_path_group.html" title="The PathGroup strings many Paths together to enable longer and more fluid paths.">PathGroup</a>();
+<a name="l00100"></a>00100                 };
+<a name="l00101"></a>00101         }
+<a name="l00102"></a>00102 }
+<a name="l00103"></a>00103 <span class="preprocessor">#endif </span><span class="comment">/* PATHGROUP_H_ */</span>
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="_path_group_8h.html">PathGroup.h</a>      </li>
 
-    <li class="footer">Generated on Thu Apr 12 2012 15:01:57 for ARK2D by
+    <li class="footer">Generated on Thu May 3 2012 16:35:29 for ARK2D by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

@@ -126,41 +126,45 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00009"></a>00009 <span class="preprocessor"></span><span class="preprocessor">#define ARKGAMEOBJECT_H_</span>
 <a name="l00010"></a>00010 <span class="preprocessor"></span>
 <a name="l00011"></a>00011 <span class="preprocessor">#include &quot;../Namespaces.h&quot;</span>
-<a name="l00012"></a>00012 
-<a name="l00013"></a>00013 <span class="keyword">namespace </span>ARK {
-<a name="l00014"></a>00014         <span class="keyword">namespace </span>Core {
-<a name="l00015"></a>00015 
-<a name="l00020"></a><a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html">00020</a>                 <span class="keyword">class </span><a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html" title="A default game object for use in Vector and Pool Containers.">GameObject</a> {
-<a name="l00021"></a>00021                         <span class="keyword">protected</span>:
-<a name="l00022"></a><a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html#a26ecb7db070c7a4211c36c11dba5cf9c">00022</a>                                 <span class="keywordtype">bool</span> <a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html#a26ecb7db070c7a4211c36c11dba5cf9c">m_pendingRemoval</a>;
-<a name="l00023"></a><a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html#abfde82cf8e6b643ad52e6fe4792da36d">00023</a>                                 <span class="keywordtype">int</span> <a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html#abfde82cf8e6b643ad52e6fe4792da36d">m_renderingLayer</a>;
-<a name="l00024"></a>00024 
-<a name="l00025"></a>00025                         <span class="keyword">public</span>:
-<a name="l00026"></a>00026                                 <a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html#a249aa13bc69e6b6141fa33de5b44f140">GameObject</a>();
-<a name="l00027"></a>00027 
-<a name="l00028"></a>00028                                 <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html#ad9f23852435a523dcee758a1c935ea7d">isPendingRemoval</a>();
-<a name="l00029"></a>00029                                 <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html#af39f658927542752b5bc711da076e27c">setPendingRemoval</a>(<span class="keywordtype">bool</span> b);
-<a name="l00030"></a>00030                                 <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html#a39d3792876b7ad0b8c7d924fd746a5fa">onPrune</a>(); <span class="comment">/* This even fires when removed from an ARK::Util::Container::Vector and when made inactive in a ARKPool */</span>
-<a name="l00031"></a>00031 
-<a name="l00032"></a>00032                                 <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html#ab9b04ad552ef5737c0287b1d2e7ae51f">getRenderingLayer</a>();
-<a name="l00033"></a>00033                                 <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html#abb74a7c48361e4eeba4f3cb1214eaf48">setRenderingLayer</a>(<span class="keywordtype">int</span> i);
-<a name="l00034"></a>00034 
-<a name="l00035"></a>00035                                 <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html#ad91fea74baf4a800a0c8d42f6caf38b6">update</a>(<a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html" title="Create this class in your main method. It is the main entry point for the library.">GameContainer</a>* container, <a class="code" href="class_a_r_k_1_1_core_1_1_game_timer.html" title="Controls the main game loop.">GameTimer</a>* timer) = 0;
-<a name="l00036"></a>00036                                 <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html#a07205c56cd50949d201d56bd7cd93a36">render</a>(<a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html" title="Create this class in your main method. It is the main entry point for the library.">GameContainer</a>* container, <a class="code" href="class_a_r_k_1_1_graphics_1_1_renderer.html" title="Contains rendering methods.">Renderer</a>* g) = 0;
-<a name="l00037"></a>00037 
-<a name="l00038"></a>00038                                 <span class="keyword">virtual</span> <a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html#a47a2c1393bcdab4ac8e30afd4b7dd1a6">~GameObject</a>();
-<a name="l00039"></a>00039                 };
-<a name="l00040"></a>00040         }
-<a name="l00041"></a>00041 }
-<a name="l00042"></a>00042 
-<a name="l00043"></a>00043 <span class="preprocessor">#endif </span><span class="comment">/* ARKGAMEOBJECT_H_ */</span>
+<a name="l00012"></a>00012 <span class="preprocessor">#include &lt;string&gt;</span>
+<a name="l00013"></a>00013 <span class="keyword">using namespace </span>std;
+<a name="l00014"></a>00014 
+<a name="l00015"></a>00015 <span class="keyword">namespace </span>ARK {
+<a name="l00016"></a>00016         <span class="keyword">namespace </span>Core {
+<a name="l00017"></a>00017 
+<a name="l00022"></a><a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html">00022</a>                 <span class="keyword">class </span><a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html" title="A default game object for use in Vector and Pool Containers.">GameObject</a> {
+<a name="l00023"></a>00023                         <span class="keyword">protected</span>:
+<a name="l00024"></a><a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html#a26ecb7db070c7a4211c36c11dba5cf9c">00024</a>                                 <span class="keywordtype">bool</span> <a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html#a26ecb7db070c7a4211c36c11dba5cf9c">m_pendingRemoval</a>;
+<a name="l00025"></a><a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html#abfde82cf8e6b643ad52e6fe4792da36d">00025</a>                                 <span class="keywordtype">int</span> <a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html#abfde82cf8e6b643ad52e6fe4792da36d">m_renderingLayer</a>;
+<a name="l00026"></a>00026 
+<a name="l00027"></a>00027                         <span class="keyword">public</span>:
+<a name="l00028"></a>00028                                 <a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html" title="A default game object for use in Vector and Pool Containers.">GameObject</a>();
+<a name="l00029"></a>00029 
+<a name="l00030"></a>00030                                 <span class="keyword">virtual</span> <span class="keywordtype">bool</span> isPendingRemoval();
+<a name="l00031"></a>00031                                 <span class="keyword">virtual</span> <span class="keywordtype">void</span> setPendingRemoval(<span class="keywordtype">bool</span> b);
+<a name="l00032"></a>00032                                 <span class="keyword">virtual</span> <span class="keywordtype">void</span> onPrune(); <span class="comment">/* This even fires when removed from an ARK::Util::Container::Vector and when made inactive in a ARKPool */</span>
+<a name="l00033"></a>00033 
+<a name="l00034"></a>00034                                 <span class="keyword">virtual</span> <span class="keywordtype">int</span> getRenderingLayer();
+<a name="l00035"></a>00035                                 <span class="keyword">virtual</span> <span class="keywordtype">void</span> setRenderingLayer(<span class="keywordtype">int</span> i);
+<a name="l00036"></a>00036 
+<a name="l00037"></a>00037                                 <span class="keyword">virtual</span> <span class="keywordtype">void</span> update(<a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html" title="Create this class in your main method. It is the main entry point for the library.">GameContainer</a>* container, <a class="code" href="class_a_r_k_1_1_core_1_1_game_timer.html" title="Controls the main game loop.">GameTimer</a>* timer) = 0;
+<a name="l00038"></a>00038                                 <span class="keyword">virtual</span> <span class="keywordtype">void</span> render(<a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html" title="Create this class in your main method. It is the main entry point for the library.">GameContainer</a>* container, <a class="code" href="class_a_r_k_1_1_graphics_1_1_renderer.html" title="Contains rendering methods.">Renderer</a>* g) = 0;
+<a name="l00039"></a>00039 
+<a name="l00040"></a>00040                                 <span class="keyword">virtual</span> <span class="keywordtype">string</span> toString();
+<a name="l00041"></a>00041 
+<a name="l00042"></a>00042                                 <span class="keyword">virtual</span> ~<a class="code" href="class_a_r_k_1_1_core_1_1_game_object.html" title="A default game object for use in Vector and Pool Containers.">GameObject</a>();
+<a name="l00043"></a>00043                 };
+<a name="l00044"></a>00044         }
+<a name="l00045"></a>00045 }
+<a name="l00046"></a>00046 
+<a name="l00047"></a>00047 <span class="preprocessor">#endif </span><span class="comment">/* ARKGAMEOBJECT_H_ */</span>
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="_game_object_8h.html">GameObject.h</a>      </li>
 
-    <li class="footer">Generated on Thu Apr 12 2012 15:01:56 for ARK2D by
+    <li class="footer">Generated on Thu May 3 2012 16:35:28 for ARK2D by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

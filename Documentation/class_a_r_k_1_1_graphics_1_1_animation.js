@@ -3,6 +3,7 @@ var class_a_r_k_1_1_graphics_1_1_animation =
     [ "Animation", "class_a_r_k_1_1_graphics_1_1_animation.html#aa29c4af46a1fe954e8979fb9a97a4020", null ],
     [ "~Animation", "class_a_r_k_1_1_graphics_1_1_animation.html#a302f32b942552af3185409228fe394ad", null ],
     [ "addImage", "class_a_r_k_1_1_graphics_1_1_animation.html#a27269b762dd49655d89108b623d6eb59", null ],
+    [ "clear", "class_a_r_k_1_1_graphics_1_1_animation.html#a9ced7c3d09387a99ca0af1abde1d45ae", null ],
     [ "draw", "class_a_r_k_1_1_graphics_1_1_animation.html#af3ec0687c06ee0f00d431fdb6e6abfc0", null ],
     [ "drawCentered", "class_a_r_k_1_1_graphics_1_1_animation.html#a89708cafed5ce7dacdcabfe100a7d338", null ],
     [ "drawCenteredFlipped", "class_a_r_k_1_1_graphics_1_1_animation.html#a979ccb04ae528697c1bd69bbd1d7f0f8", null ],

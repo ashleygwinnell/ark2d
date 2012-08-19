@@ -47,9 +47,10 @@ namespace ARK {
 
 			map<string, TweenedEvent*>::const_iterator it = keyedTweenedEvents.begin();
 			while(it != keyedTweenedEvents.end() ) {
-				cout << "key: " << it->first;
-				cout << " val:" << it->second;
-				cout << endl;
+				//cout << "key: " << it->first;
+				//cout << " val:" << it->second;
+				//cout << endl;
+				ARK2D::getLog()->i(String("key: ").append(it->first).get()); //.append(" val:").append(it->second).get());
 				it++; //make the iterator point to the next pair in the map
 			}
 		}

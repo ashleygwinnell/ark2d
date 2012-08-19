@@ -41,6 +41,7 @@ namespace ARK {
 			while(it != m_map.end() ) {
 				std::cout << it->first;
 				std::cout << ", ";
+				//ARK2D::getLog()->i(String(it->first).append(", ").get());
 				it++; //make the iterator point to the next pair in the map
 			}
 			std::cout << std::endl;

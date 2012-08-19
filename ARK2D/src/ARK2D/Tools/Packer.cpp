@@ -71,7 +71,7 @@ char* file_get_contents(const char* fileName) {
     if (fileName != NULL) {
 
     	std::cout << "Opening file: " << fileName << std::endl;
-    	std::fstream f(fileName, std::ios::in);
+    	std::fstream f(fileName, std::ios::in); 
     	if (!f.is_open()) {
     		//std::cout << "File does not exist." << std::endl;
     		string str = "Could not open file ["; str += fileName; str += "] as it does not exist.";

@@ -71,8 +71,13 @@ namespace ARK {
 					m_string = Cast::toString<float>(f);
 				}
 
-				void append(string s) {
+				String& append(string s) {
 					m_string.append(s);
+					return *this;
+				}
+				String& append(unsigned int s) {
+					m_string.append(Cast::toString<unsigned int>(s));
+					return *this;
 				}
 				void insert(const String& str, int at) {
 					insert(str.get(), at);

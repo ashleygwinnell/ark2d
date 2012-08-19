@@ -38,6 +38,7 @@ var searchData=
   ['asimage',['asImage',['../class_a_r_k_1_1_core_1_1_resource.html#afe637eb440ed2dba901fb4e190ea2dfb',1,'ARK::Core::Resource']]],
   ['asinteger',['asInteger',['../class_a_r_k_1_1_util_1_1_r_s_s_l_argument.html#a63cb0f2550da3e40ac6cfed16db85d84',1,'ARK::Util::RSSLArgument']]],
   ['aslocalhighscores',['asLocalHighscores',['../class_a_r_k_1_1_core_1_1_resource.html#a85ed27f9dc428f691ad9e3dc3c5bc18f',1,'ARK::Core::Resource']]],
+  ['aspathgroup',['asPathGroup',['../class_a_r_k_1_1_core_1_1_resource.html#afbb7b1b91018f8c29ce5aa8415c5089c',1,'ARK::Core::Resource']]],
   ['aspolygon',['asPolygon',['../class_a_r_k_1_1_geometry_1_1_shape.html#aef82e7d099182a3764f1a14fe441a264',1,'ARK::Geometry::Shape']]],
   ['asrectangle',['asRectangle',['../class_a_r_k_1_1_geometry_1_1_shape.html#a78d6805fde4841b08f96b4f1203b2ea6',1,'ARK::Geometry::Shape']]],
   ['assound',['asSound',['../class_a_r_k_1_1_core_1_1_resource.html#ac432341009b22ca37f2373c27a5d0cf0',1,'ARK::Core::Resource']]],

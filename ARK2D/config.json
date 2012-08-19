@@ -36,10 +36,11 @@
 			"lib\\windows\\OpenAL32.dll", 
 			"lib\\windows\\alut.dll", 
 			"lib\\windows\\winmm.dll",
-			"lib\\windows\\freetype6.dll"
+			"lib\\windows\\freetype6.dll",
+			"lib\\windows\\libcurl.dll"
 		],
 		"osx": [
-			"/usr/X11/lib/libfreetype.6.dylib"
+			
 			
 		]
 	},
@@ -52,7 +53,9 @@
 			"freetype"
 		],
 		"osx": [
-			"curl"
+			"curl",
+			"freetype",
+			"bz2"
 		],
 		"iphone": [
 			"freetype"
@@ -80,6 +83,13 @@
 			"src/ARK2D/Font/Font.cpp",
 			"src/ARK2D/Font/FTFont.cpp",
 			"src/ARK2D/Font/BMFont.cpp",
+			"src/ARK2D/GJ/GameJolt.cpp",
+			"src/ARK2D/GJ/PropertyItem.cpp",
+			"src/ARK2D/GJ/DataStore.cpp",
+			"src/ARK2D/GJ/Highscore.cpp",
+			"src/ARK2D/GJ/MD5.cpp", 
+			"src/ARK2D/GJ/Trophy.cpp",
+			"src/ARK2D/GJ/User.cpp",
 			"src/ARK2D/Graphics/Animation.cpp",
 			"src/ARK2D/Graphics/Color.cpp",
 			"src/ARK2D/Graphics/Renderer.cpp",

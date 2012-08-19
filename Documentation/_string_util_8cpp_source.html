@@ -352,145 +352,149 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00235"></a>00235 <span class="preprocessor">                                #if defined(ARK2D_ANDROID)</span>
 <a name="l00236"></a>00236 <span class="preprocessor"></span>                                        strFileName = <a class="code" href="class_a_r_k2_d.html#aa84cd71f5ce9b66b65e223de99ecdf7f">ARK2D::getContainer</a>()-&gt;<a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html#a5a2388f249b1c4a1882aa5b66f27b57b">m_platformSpecific</a>.<a class="code" href="class_a_r_k_1_1_core_1_1_game_container_platform.html#affe2a583a6ff5b45f341f020a5f68fa6">m_externalDataStr</a> + strFileName;
 <a name="l00237"></a>00237 <span class="preprocessor">                                #else</span>
-<a name="l00238"></a>00238 <span class="preprocessor"></span>                                        strFileName = <a class="code" href="class_a_r_k2_d.html#aa84cd71f5ce9b66b65e223de99ecdf7f">ARK2D::getContainer</a>()-&gt;<a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html#a5aa9179cb86b9edb2d50c54b628d8949">getResourcePath</a>() + strFileName;
-<a name="l00239"></a>00239 <span class="preprocessor">                                #endif</span>
-<a name="l00240"></a>00240 <span class="preprocessor"></span>
-<a name="l00241"></a>00241                                 <a class="code" href="class_a_r_k2_d.html#a0fc71246e83aa775b05f83d297976c9c">ARK2D::getLog</a>()-&gt;<a class="code" href="class_a_r_k_1_1_util_1_1_log.html#a29b424377e66b2b46ebcc8a06919b9e9">i</a>(<a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#abbb29e052f4802bf9c3926c3794c83b2">StringUtil::append</a>(<span class="stringliteral">&quot;Opening file: &quot;</span>, strFileName));
-<a name="l00242"></a>00242                                 std::fstream f(strFileName.c_str(), std::ios::in);
-<a name="l00243"></a>00243                                 <span class="keywordflow">if</span> (!f.is_open()) {
-<a name="l00244"></a>00244                                         <span class="comment">//std::cout &lt;&lt; &quot;File does not exist.&quot; &lt;&lt; std::endl;</span>
-<a name="l00245"></a>00245                                         <span class="keywordtype">string</span> str = <span class="stringliteral">&quot;Could not open file [&quot;</span>; str += strFileName; str += <span class="stringliteral">&quot;] as it does not exist.&quot;</span>;
-<a name="l00246"></a>00246                                         <a class="code" href="class_a_r_k2_d.html#a0fc71246e83aa775b05f83d297976c9c">ARK2D::getLog</a>()-&gt;<a class="code" href="class_a_r_k_1_1_util_1_1_log.html#a5a3f62863e5cf452ab5aefd2cb2d35c3">e</a>(str);
-<a name="l00247"></a>00247                                         <span class="comment">//ErrorDialog::createAndShow(str);</span>
-<a name="l00248"></a>00248                                         <span class="comment">//std::cout &lt;&lt; str &lt;&lt; std::endl;</span>
-<a name="l00249"></a>00249                                         <span class="keywordflow">return</span> string(<span class="stringliteral">&quot;&quot;</span>);
-<a name="l00250"></a>00250                                 } <span class="keywordflow">else</span> {
-<a name="l00251"></a>00251                                         f.close();
-<a name="l00252"></a>00252 
-<a name="l00253"></a>00253                                         <span class="keywordtype">char</span>* text = NULL;
-<a name="l00254"></a>00254 
-<a name="l00255"></a>00255                                         FILE* file = fopen(strFileName.c_str(), <span class="stringliteral">&quot;rt&quot;</span>);
-<a name="l00256"></a>00256                                         <span class="keywordflow">if</span> (file == NULL) {
-<a name="l00257"></a>00257                                                 <span class="keywordtype">string</span> str = <span class="stringliteral">&quot;Could not open file [&quot;</span>; str += strFileName; str += <span class="stringliteral">&quot;] as it does not exist.&quot;</span>;
-<a name="l00258"></a>00258                                                 <a class="code" href="class_a_r_k2_d.html#a0fc71246e83aa775b05f83d297976c9c">ARK2D::getLog</a>()-&gt;<a class="code" href="class_a_r_k_1_1_util_1_1_log.html#a5a3f62863e5cf452ab5aefd2cb2d35c3">e</a>(str);
-<a name="l00259"></a>00259                                                 <span class="keywordflow">return</span> string(<span class="stringliteral">&quot;&quot;</span>); 
-<a name="l00260"></a>00260                                         }
-<a name="l00261"></a>00261 
-<a name="l00262"></a>00262                                         fseek(file, 0, SEEK_END);
-<a name="l00263"></a>00263                                         <span class="keywordtype">int</span> count = ftell(file);
-<a name="l00264"></a>00264                                         rewind(file);
+<a name="l00238"></a>00238 <span class="preprocessor"></span>                                        <span class="keywordflow">if</span> (strFileName.substr(1,1).compare(<span class="stringliteral">&quot;:&quot;</span>) == 0 || strFileName.substr(0,1).compare(<span class="stringliteral">&quot;/&quot;</span>) == 0) {
+<a name="l00239"></a>00239 
+<a name="l00240"></a>00240                                         } <span class="keywordflow">else</span> {
+<a name="l00241"></a>00241                                                 strFileName = <a class="code" href="class_a_r_k2_d.html#aa84cd71f5ce9b66b65e223de99ecdf7f">ARK2D::getContainer</a>()-&gt;<a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html#a5aa9179cb86b9edb2d50c54b628d8949">getResourcePath</a>() + strFileName;
+<a name="l00242"></a>00242                                         }
+<a name="l00243"></a>00243 <span class="preprocessor">                                #endif</span>
+<a name="l00244"></a>00244 <span class="preprocessor"></span>
+<a name="l00245"></a>00245                                 <a class="code" href="class_a_r_k2_d.html#a0fc71246e83aa775b05f83d297976c9c">ARK2D::getLog</a>()-&gt;<a class="code" href="class_a_r_k_1_1_util_1_1_log.html#a29b424377e66b2b46ebcc8a06919b9e9">i</a>(<a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#abbb29e052f4802bf9c3926c3794c83b2">StringUtil::append</a>(<span class="stringliteral">&quot;Opening file: &quot;</span>, strFileName));
+<a name="l00246"></a>00246                                 std::fstream f(strFileName.c_str(), std::ios::in);
+<a name="l00247"></a>00247                                 <span class="keywordflow">if</span> (!f.is_open()) {
+<a name="l00248"></a>00248                                         <span class="comment">//std::cout &lt;&lt; &quot;File does not exist.&quot; &lt;&lt; std::endl;</span>
+<a name="l00249"></a>00249                                         <span class="keywordtype">string</span> str = <span class="stringliteral">&quot;Could not open file [&quot;</span>; str += strFileName; str += <span class="stringliteral">&quot;] as it does not exist.&quot;</span>;
+<a name="l00250"></a>00250                                         <a class="code" href="class_a_r_k2_d.html#a0fc71246e83aa775b05f83d297976c9c">ARK2D::getLog</a>()-&gt;<a class="code" href="class_a_r_k_1_1_util_1_1_log.html#a5a3f62863e5cf452ab5aefd2cb2d35c3">e</a>(str);
+<a name="l00251"></a>00251                                         <span class="comment">//ErrorDialog::createAndShow(str);</span>
+<a name="l00252"></a>00252                                         <span class="comment">//std::cout &lt;&lt; str &lt;&lt; std::endl;</span>
+<a name="l00253"></a>00253                                         <span class="keywordflow">return</span> string(<span class="stringliteral">&quot;&quot;</span>);
+<a name="l00254"></a>00254                                 } <span class="keywordflow">else</span> {
+<a name="l00255"></a>00255                                         f.close();
+<a name="l00256"></a>00256 
+<a name="l00257"></a>00257                                         <span class="keywordtype">char</span>* text = NULL;
+<a name="l00258"></a>00258 
+<a name="l00259"></a>00259                                         FILE* file = fopen(strFileName.c_str(), <span class="stringliteral">&quot;rt&quot;</span>);
+<a name="l00260"></a>00260                                         <span class="keywordflow">if</span> (file == NULL) {
+<a name="l00261"></a>00261                                                 <span class="keywordtype">string</span> str = <span class="stringliteral">&quot;Could not open file [&quot;</span>; str += strFileName; str += <span class="stringliteral">&quot;] as it does not exist.&quot;</span>;
+<a name="l00262"></a>00262                                                 <a class="code" href="class_a_r_k2_d.html#a0fc71246e83aa775b05f83d297976c9c">ARK2D::getLog</a>()-&gt;<a class="code" href="class_a_r_k_1_1_util_1_1_log.html#a5a3f62863e5cf452ab5aefd2cb2d35c3">e</a>(str);
+<a name="l00263"></a>00263                                                 <span class="keywordflow">return</span> string(<span class="stringliteral">&quot;&quot;</span>); 
+<a name="l00264"></a>00264                                         }
 <a name="l00265"></a>00265 
-<a name="l00266"></a>00266                                         <span class="comment">// ***********************</span>
-<a name="l00268"></a>00268 <span class="comment"></span>                                        <span class="comment">// *************************</span>
+<a name="l00266"></a>00266                                         fseek(file, 0, SEEK_END);
+<a name="l00267"></a>00267                                         <span class="keywordtype">int</span> count = ftell(file);
+<a name="l00268"></a>00268                                         rewind(file);
 <a name="l00269"></a>00269 
-<a name="l00270"></a>00270                                         <span class="keywordflow">if</span> (count &gt; 0) {
-<a name="l00271"></a>00271                                                 text = (<span class="keywordtype">char</span>*)malloc(<span class="keyword">sizeof</span>(<span class="keywordtype">char</span>) * (count + 1));
-<a name="l00272"></a>00272                                                 count = fread(text, <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>), count, file);
-<a name="l00273"></a>00273                                                 text[count] = <span class="charliteral">&#39;\0&#39;</span>;
-<a name="l00274"></a>00274                                         }
-<a name="l00275"></a>00275                                         fclose(file);
-<a name="l00276"></a>00276 
-<a name="l00277"></a>00277                                         <span class="keywordtype">string</span> returnStr = (text == NULL)?<span class="keywordtype">string</span>(<span class="stringliteral">&quot;&quot;</span>):string(text);
-<a name="l00278"></a>00278                                         free(text);
-<a name="l00279"></a>00279                                         <span class="keywordflow">return</span> returnStr;
+<a name="l00270"></a>00270                                         <span class="comment">// ***********************</span>
+<a name="l00272"></a>00272 <span class="comment"></span>                                        <span class="comment">// *************************</span>
+<a name="l00273"></a>00273 
+<a name="l00274"></a>00274                                         <span class="keywordflow">if</span> (count &gt; 0) {
+<a name="l00275"></a>00275                                                 text = (<span class="keywordtype">char</span>*)malloc(<span class="keyword">sizeof</span>(<span class="keywordtype">char</span>) * (count + 1));
+<a name="l00276"></a>00276                                                 count = fread(text, <span class="keyword">sizeof</span>(<span class="keywordtype">char</span>), count, file);
+<a name="l00277"></a>00277                                                 text[count] = <span class="charliteral">&#39;\0&#39;</span>;
+<a name="l00278"></a>00278                                         }
+<a name="l00279"></a>00279                                         fclose(file);
 <a name="l00280"></a>00280 
-<a name="l00281"></a>00281                                         <span class="comment">//return text;</span>
-<a name="l00282"></a>00282                                 }
-<a name="l00283"></a>00283                         }
-<a name="l00284"></a>00284                         <span class="keywordflow">return</span> string(<span class="stringliteral">&quot;&quot;</span>);
-<a name="l00285"></a>00285 
-<a name="l00286"></a>00286                 }
-<a name="l00287"></a>00287 
-<a name="l00288"></a><a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#ac0c8b0cca68ee20dada27e234fa7d83c">00288</a>                 <span class="keywordtype">void</span> <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#ac0c8b0cca68ee20dada27e234fa7d83c">StringUtil::toUpper</a>(<span class="keywordtype">string</span>&amp; str) {
-<a name="l00289"></a>00289                         <span class="comment">//transform(str.begin(), str.end(), str.begin(), toupper);</span>
-<a name="l00290"></a>00290 
-<a name="l00291"></a>00291                         <span class="comment">//int leng=str.length();</span>
-<a name="l00292"></a>00292                         <span class="comment">//for(int i=0; i&lt;leng; i++) {</span>
-<a name="l00293"></a>00293                         <span class="comment">//      if (97&lt;=str[i]&amp;&amp;str[i]&lt;=122) {//a-z</span>
-<a name="l00294"></a>00294                         <span class="comment">//              str[i]-=32;</span>
-<a name="l00295"></a>00295                         <span class="comment">//      }</span>
-<a name="l00296"></a>00296                         <span class="comment">//}</span>
-<a name="l00297"></a>00297                 }
-<a name="l00298"></a>00298 
-<a name="l00299"></a><a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#a475375a0edf19f1b76e213dd7d707dbf">00299</a>                 <span class="keywordtype">void</span> <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#a475375a0edf19f1b76e213dd7d707dbf">StringUtil::toLower</a>(<span class="keywordtype">string</span>&amp; str) {
-<a name="l00300"></a>00300                         <span class="comment">//std::transform(str.begin(), str.end(), str.begin(), tolower);</span>
-<a name="l00301"></a>00301 
-<a name="l00303"></a>00303                         <span class="comment">//for(int i=0; i&lt;leng; i++) {</span>
-<a name="l00304"></a>00304                         <span class="comment">//      if (65&lt;=str[i]&amp;&amp;str[i]&lt;=90) { //A-Z</span>
-<a name="l00305"></a>00305                         <span class="comment">//              str[i]+=32;</span>
-<a name="l00306"></a>00306                         <span class="comment">//      }</span>
-<a name="l00307"></a>00307                         <span class="comment">//}</span>
-<a name="l00308"></a>00308 
-<a name="l00309"></a>00309                         <span class="comment">/*for (int i=0;i&lt;strlen(str.c_str());i++)  {</span>
-<a name="l00310"></a>00310 <span class="comment">                                if (str[i] &gt;= 0x41 &amp;&amp; str[i] &lt;= 0x5A) {</span>
-<a name="l00311"></a>00311 <span class="comment">                                        str[i] = str[i] + 0x20;</span>
-<a name="l00312"></a>00312 <span class="comment">                                }</span>
-<a name="l00313"></a>00313 <span class="comment">                        }*/</span>
-<a name="l00314"></a>00314 
-<a name="l00315"></a>00315 <span class="preprocessor">                        #if defined(ARK2D_ANDROID)</span>
-<a name="l00316"></a>00316 <span class="preprocessor"></span>                                <span class="comment">//ErrorDialog::createAndShow(&quot;not implemented&quot;);</span>
-<a name="l00317"></a>00317 <span class="preprocessor">                        #else</span>
-<a name="l00318"></a>00318 <span class="preprocessor"></span>                                <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> q = 0; q &lt; str.length(); q++) {
-<a name="l00319"></a>00319                                         str[q] = tolower(str[q]);
-<a name="l00320"></a>00320                                 }
-<a name="l00321"></a>00321 <span class="preprocessor">                        #endif</span>
-<a name="l00322"></a>00322 <span class="preprocessor"></span>
-<a name="l00323"></a>00323                 }
-<a name="l00324"></a>00324 
-<a name="l00325"></a>00325 
-<a name="l00326"></a><a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#a0b6847b3028819a02278b8621338363e">00326</a>                 <span class="keywordtype">void</span> <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#a0b6847b3028819a02278b8621338363e">StringUtil::trimLeft</a>(<span class="keywordtype">string</span>&amp; str, <span class="keyword">const</span> <span class="keywordtype">char</span>* chars2remove) {
-<a name="l00327"></a>00327                         <span class="keywordflow">if</span> (!str.empty()) {
-<a name="l00328"></a>00328                                 string::size_type pos = str.find_first_not_of(chars2remove);
+<a name="l00281"></a>00281                                         <span class="keywordtype">string</span> returnStr = (text == NULL)?<span class="keywordtype">string</span>(<span class="stringliteral">&quot;&quot;</span>):string(text);
+<a name="l00282"></a>00282                                         free(text);
+<a name="l00283"></a>00283                                         <span class="keywordflow">return</span> returnStr;
+<a name="l00284"></a>00284 
+<a name="l00285"></a>00285                                         <span class="comment">//return text;</span>
+<a name="l00286"></a>00286                                 }
+<a name="l00287"></a>00287                         }
+<a name="l00288"></a>00288                         <span class="keywordflow">return</span> string(<span class="stringliteral">&quot;&quot;</span>);
+<a name="l00289"></a>00289 
+<a name="l00290"></a>00290                 }
+<a name="l00291"></a>00291 
+<a name="l00292"></a><a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#ac0c8b0cca68ee20dada27e234fa7d83c">00292</a>                 <span class="keywordtype">void</span> <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#ac0c8b0cca68ee20dada27e234fa7d83c">StringUtil::toUpper</a>(<span class="keywordtype">string</span>&amp; str) {
+<a name="l00293"></a>00293                         <span class="comment">//transform(str.begin(), str.end(), str.begin(), toupper);</span>
+<a name="l00294"></a>00294 
+<a name="l00295"></a>00295                         <span class="comment">//int leng=str.length();</span>
+<a name="l00296"></a>00296                         <span class="comment">//for(int i=0; i&lt;leng; i++) {</span>
+<a name="l00297"></a>00297                         <span class="comment">//      if (97&lt;=str[i]&amp;&amp;str[i]&lt;=122) {//a-z</span>
+<a name="l00298"></a>00298                         <span class="comment">//              str[i]-=32;</span>
+<a name="l00299"></a>00299                         <span class="comment">//      }</span>
+<a name="l00300"></a>00300                         <span class="comment">//}</span>
+<a name="l00301"></a>00301                 }
+<a name="l00302"></a>00302 
+<a name="l00303"></a><a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#a475375a0edf19f1b76e213dd7d707dbf">00303</a>                 <span class="keywordtype">void</span> <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#a475375a0edf19f1b76e213dd7d707dbf">StringUtil::toLower</a>(<span class="keywordtype">string</span>&amp; str) {
+<a name="l00304"></a>00304                         <span class="comment">//std::transform(str.begin(), str.end(), str.begin(), tolower);</span>
+<a name="l00305"></a>00305 
+<a name="l00307"></a>00307                         <span class="comment">//for(int i=0; i&lt;leng; i++) {</span>
+<a name="l00308"></a>00308                         <span class="comment">//      if (65&lt;=str[i]&amp;&amp;str[i]&lt;=90) { //A-Z</span>
+<a name="l00309"></a>00309                         <span class="comment">//              str[i]+=32;</span>
+<a name="l00310"></a>00310                         <span class="comment">//      }</span>
+<a name="l00311"></a>00311                         <span class="comment">//}</span>
+<a name="l00312"></a>00312 
+<a name="l00313"></a>00313                         <span class="comment">/*for (int i=0;i&lt;strlen(str.c_str());i++)  {</span>
+<a name="l00314"></a>00314 <span class="comment">                                if (str[i] &gt;= 0x41 &amp;&amp; str[i] &lt;= 0x5A) {</span>
+<a name="l00315"></a>00315 <span class="comment">                                        str[i] = str[i] + 0x20;</span>
+<a name="l00316"></a>00316 <span class="comment">                                }</span>
+<a name="l00317"></a>00317 <span class="comment">                        }*/</span>
+<a name="l00318"></a>00318 
+<a name="l00319"></a>00319 <span class="preprocessor">                        #if defined(ARK2D_ANDROID)</span>
+<a name="l00320"></a>00320 <span class="preprocessor"></span>                                <span class="comment">//ErrorDialog::createAndShow(&quot;not implemented&quot;);</span>
+<a name="l00321"></a>00321 <span class="preprocessor">                        #else</span>
+<a name="l00322"></a>00322 <span class="preprocessor"></span>                                <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> q = 0; q &lt; str.length(); q++) {
+<a name="l00323"></a>00323                                         str[q] = tolower(str[q]);
+<a name="l00324"></a>00324                                 }
+<a name="l00325"></a>00325 <span class="preprocessor">                        #endif</span>
+<a name="l00326"></a>00326 <span class="preprocessor"></span>
+<a name="l00327"></a>00327                 }
+<a name="l00328"></a>00328 
 <a name="l00329"></a>00329 
-<a name="l00330"></a>00330                                 <span class="keywordflow">if</span> (pos != string::npos)
-<a name="l00331"></a>00331                                         str.erase(0,pos);
-<a name="l00332"></a>00332                                 <span class="keywordflow">else</span>
-<a name="l00333"></a>00333                                         str.erase( str.begin() , str.end() ); <span class="comment">// make empty</span>
-<a name="l00334"></a>00334                         }
-<a name="l00335"></a>00335                 }
-<a name="l00336"></a>00336 
-<a name="l00337"></a><a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#adb0a71c92187e7b3dda8234f2c1a014e">00337</a>                 <span class="keywordtype">void</span> <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#adb0a71c92187e7b3dda8234f2c1a014e">StringUtil::trimRight</a>(<span class="keywordtype">string</span>&amp; str, <span class="keyword">const</span> <span class="keywordtype">char</span>* chars2remove) {
-<a name="l00338"></a>00338                         <span class="keywordflow">if</span> (!str.empty())
-<a name="l00339"></a>00339                         {
-<a name="l00340"></a>00340                                 string::size_type pos = str.find_last_not_of(chars2remove);
-<a name="l00341"></a>00341 
-<a name="l00342"></a>00342                                 <span class="keywordflow">if</span> (pos != string::npos)
-<a name="l00343"></a>00343                                         str.erase(pos+1);
-<a name="l00344"></a>00344                                 <span class="keywordflow">else</span>
-<a name="l00345"></a>00345                                         str.erase( str.begin() , str.end() ); <span class="comment">// make empty</span>
-<a name="l00346"></a>00346                         }
-<a name="l00347"></a>00347                 }
-<a name="l00348"></a>00348 
-<a name="l00349"></a><a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#acf814d520c4813928a5e48ae228d903f">00349</a>                 <span class="keywordtype">void</span> <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#acf814d520c4813928a5e48ae228d903f">StringUtil::trim</a>(<span class="keywordtype">string</span>&amp; str, <span class="keyword">const</span> <span class="keywordtype">char</span>* chars2remove) {
-<a name="l00350"></a>00350                         <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#a0b6847b3028819a02278b8621338363e">StringUtil::trimLeft</a>(str, chars2remove);
-<a name="l00351"></a>00351                         <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#adb0a71c92187e7b3dda8234f2c1a014e">StringUtil::trimRight</a>(str, chars2remove);
-<a name="l00352"></a>00352                 }
-<a name="l00353"></a><a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#a44dbbca5c17402e82755d255c533c3d6">00353</a>                 <span class="keywordtype">string</span> <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#a44dbbca5c17402e82755d255c533c3d6">StringUtil::trimret</a>(<span class="keywordtype">string</span> str, <span class="keywordtype">string</span> charsToRemove) {
-<a name="l00354"></a>00354                         <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#acf814d520c4813928a5e48ae228d903f">StringUtil::trim</a>(str, charsToRemove.c_str());
-<a name="l00355"></a>00355                         <span class="keywordflow">return</span> str;
+<a name="l00330"></a><a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#a0b6847b3028819a02278b8621338363e">00330</a>                 <span class="keywordtype">void</span> <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#a0b6847b3028819a02278b8621338363e">StringUtil::trimLeft</a>(<span class="keywordtype">string</span>&amp; str, <span class="keyword">const</span> <span class="keywordtype">char</span>* chars2remove) {
+<a name="l00331"></a>00331                         <span class="keywordflow">if</span> (!str.empty()) {
+<a name="l00332"></a>00332                                 string::size_type pos = str.find_first_not_of(chars2remove);
+<a name="l00333"></a>00333 
+<a name="l00334"></a>00334                                 <span class="keywordflow">if</span> (pos != string::npos)
+<a name="l00335"></a>00335                                         str.erase(0,pos);
+<a name="l00336"></a>00336                                 <span class="keywordflow">else</span>
+<a name="l00337"></a>00337                                         str.erase( str.begin() , str.end() ); <span class="comment">// make empty</span>
+<a name="l00338"></a>00338                         }
+<a name="l00339"></a>00339                 }
+<a name="l00340"></a>00340 
+<a name="l00341"></a><a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#adb0a71c92187e7b3dda8234f2c1a014e">00341</a>                 <span class="keywordtype">void</span> <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#adb0a71c92187e7b3dda8234f2c1a014e">StringUtil::trimRight</a>(<span class="keywordtype">string</span>&amp; str, <span class="keyword">const</span> <span class="keywordtype">char</span>* chars2remove) {
+<a name="l00342"></a>00342                         <span class="keywordflow">if</span> (!str.empty())
+<a name="l00343"></a>00343                         {
+<a name="l00344"></a>00344                                 string::size_type pos = str.find_last_not_of(chars2remove);
+<a name="l00345"></a>00345 
+<a name="l00346"></a>00346                                 <span class="keywordflow">if</span> (pos != string::npos)
+<a name="l00347"></a>00347                                         str.erase(pos+1);
+<a name="l00348"></a>00348                                 <span class="keywordflow">else</span>
+<a name="l00349"></a>00349                                         str.erase( str.begin() , str.end() ); <span class="comment">// make empty</span>
+<a name="l00350"></a>00350                         }
+<a name="l00351"></a>00351                 }
+<a name="l00352"></a>00352 
+<a name="l00353"></a><a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#acf814d520c4813928a5e48ae228d903f">00353</a>                 <span class="keywordtype">void</span> <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#acf814d520c4813928a5e48ae228d903f">StringUtil::trim</a>(<span class="keywordtype">string</span>&amp; str, <span class="keyword">const</span> <span class="keywordtype">char</span>* chars2remove) {
+<a name="l00354"></a>00354                         <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#a0b6847b3028819a02278b8621338363e">StringUtil::trimLeft</a>(str, chars2remove);
+<a name="l00355"></a>00355                         <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#adb0a71c92187e7b3dda8234f2c1a014e">StringUtil::trimRight</a>(str, chars2remove);
 <a name="l00356"></a>00356                 }
-<a name="l00357"></a><a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#af730a44cd26c551cc8124bfd20bceb0d">00357</a>                 <span class="keywordtype">void</span> <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#af730a44cd26c551cc8124bfd20bceb0d">StringUtil::trimAll</a>(vector&lt;String&gt;&amp; strings, <span class="keywordtype">string</span> chars2remove) {
-<a name="l00358"></a>00358                         <span class="comment">//for(unsigned int i = 0; i &lt; strings.size(); i++) {</span>
-<a name="l00359"></a>00359                         <span class="comment">//      const string&amp; s = strings[i].get();</span>
-<a name="l00360"></a>00360                         <span class="comment">//      StringUtil::trim(s, chars2remove.c_str());</span>
-<a name="l00361"></a>00361                         <span class="comment">//}</span>
-<a name="l00362"></a>00362                 }
-<a name="l00363"></a>00363 
-<a name="l00364"></a><a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#adcff7e1b9d2bedf5b91c34334da8eff9">00364</a>                 <span class="keywordtype">string</span> <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#adcff7e1b9d2bedf5b91c34334da8eff9">StringUtil::getExtension</a>(<span class="keywordtype">string</span> s) {
-<a name="l00365"></a>00365                         <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> pos = s.find_last_of(<span class="charliteral">&#39;.&#39;</span>) + 1;
-<a name="l00366"></a>00366                         <span class="keywordflow">return</span> s.substr(pos);
-<a name="l00367"></a>00367                 }
-<a name="l00368"></a>00368 
-<a name="l00369"></a>00369 
-<a name="l00370"></a>00370         }
-<a name="l00371"></a>00371 }
+<a name="l00357"></a><a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#a44dbbca5c17402e82755d255c533c3d6">00357</a>                 <span class="keywordtype">string</span> <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#a44dbbca5c17402e82755d255c533c3d6">StringUtil::trimret</a>(<span class="keywordtype">string</span> str, <span class="keywordtype">string</span> charsToRemove) {
+<a name="l00358"></a>00358                         <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#acf814d520c4813928a5e48ae228d903f">StringUtil::trim</a>(str, charsToRemove.c_str());
+<a name="l00359"></a>00359                         <span class="keywordflow">return</span> str;
+<a name="l00360"></a>00360                 }
+<a name="l00361"></a><a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#af730a44cd26c551cc8124bfd20bceb0d">00361</a>                 <span class="keywordtype">void</span> <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#af730a44cd26c551cc8124bfd20bceb0d">StringUtil::trimAll</a>(vector&lt;String&gt;&amp; strings, <span class="keywordtype">string</span> chars2remove) {
+<a name="l00362"></a>00362                         <span class="comment">//for(unsigned int i = 0; i &lt; strings.size(); i++) {</span>
+<a name="l00363"></a>00363                         <span class="comment">//      const string&amp; s = strings[i].get();</span>
+<a name="l00364"></a>00364                         <span class="comment">//      StringUtil::trim(s, chars2remove.c_str());</span>
+<a name="l00365"></a>00365                         <span class="comment">//}</span>
+<a name="l00366"></a>00366                 }
+<a name="l00367"></a>00367 
+<a name="l00368"></a><a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#adcff7e1b9d2bedf5b91c34334da8eff9">00368</a>                 <span class="keywordtype">string</span> <a class="code" href="class_a_r_k_1_1_util_1_1_string_util.html#adcff7e1b9d2bedf5b91c34334da8eff9">StringUtil::getExtension</a>(<span class="keywordtype">string</span> s) {
+<a name="l00369"></a>00369                         <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> pos = s.find_last_of(<span class="charliteral">&#39;.&#39;</span>) + 1;
+<a name="l00370"></a>00370                         <span class="keywordflow">return</span> s.substr(pos);
+<a name="l00371"></a>00371                 }
+<a name="l00372"></a>00372 
+<a name="l00373"></a>00373 
+<a name="l00374"></a>00374         }
+<a name="l00375"></a>00375 }
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="_string_util_8cpp.html">StringUtil.cpp</a>      </li>
 
-    <li class="footer">Generated on Thu Apr 12 2012 15:01:57 for ARK2D by
+    <li class="footer">Generated on Thu May 3 2012 16:35:29 for ARK2D by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

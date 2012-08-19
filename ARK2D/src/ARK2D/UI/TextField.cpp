@@ -207,7 +207,7 @@ namespace ARK {
 			Input* i = ARK2D::getInput();
 
 			string k = i->getKeyChar(key);
-			std::cout << k << std::endl;
+			ARK2D::getLog()->i(k); //std::cout << k << std::endl;
 
 			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT) {
 				//if (GigaRectangle<int>::s_contains(m_x, m_y, m_width, m_height, i->getMouseX(), i->getMouseY())) {

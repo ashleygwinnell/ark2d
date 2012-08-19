@@ -391,7 +391,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00274"></a>00274                 }
 <a name="l00275"></a>00275 
 <a name="l00276"></a><a class="code" href="class_giga_rectangle.html#a9e057b5d2e0dee9dbd62241880c40993">00276</a>                 <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="class_giga_rectangle.html#a9e057b5d2e0dee9dbd62241880c40993">s_isOffscreen</a>(<a class="code" href="class_giga_rectangle.html">GigaRectangle</a>* obj) {
-<a name="l00277"></a>00277                         <a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html" title="Create this class in your main method. It is the main entry point for the library.">GameContainer</a>* container = <a class="code" href="class_a_r_k2_d.html#aa84cd71f5ce9b66b65e223de99ecdf7f">ARK2D::getContainer</a>();
+<a name="l00277"></a>00277                         <a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html" title="Create this class in your main method. It is the main entry point for the library.">ARK::Core::GameContainer</a>* container = <a class="code" href="class_a_r_k2_d.html#aa84cd71f5ce9b66b65e223de99ecdf7f">ARK2D::getContainer</a>();
 <a name="l00278"></a>00278                         <span class="keywordflow">if</span> (    (<span class="keywordtype">signed</span> <span class="keywordtype">int</span>)(obj-&gt;<a class="code" href="class_giga_rectangle.html#a12930c944b441241fad0ac2a079407f8">getY</a>() + obj-&gt;<a class="code" href="class_giga_rectangle.html#a7b69b473ce9ffe7959462af15a913ac1">getHeight</a>()) &lt;= 0
 <a name="l00279"></a>00279                                 ||      (<span class="keywordtype">signed</span> <span class="keywordtype">int</span>)(obj-&gt;<a class="code" href="class_giga_rectangle.html#ad479a7214402412ce97d8e4934a3db0c">getX</a>() + obj-&gt;<a class="code" href="class_giga_rectangle.html#a3f254b12b32b268d01389194fb346b19">getWidth</a>()) &lt;= 0
 <a name="l00280"></a>00280                                 ||      (<span class="keywordtype">signed</span> <span class="keywordtype">int</span>)(obj-&gt;<a class="code" href="class_giga_rectangle.html#ad479a7214402412ce97d8e4934a3db0c">getX</a>()) &gt;= (<span class="keywordtype">signed</span> <span class="keywordtype">int</span>) container-&gt;<a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html#a68b7eca56b058ca2626699b92aeb65cf">getWidth</a>()
@@ -402,7 +402,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00285"></a>00285                 }
 <a name="l00286"></a>00286 
 <a name="l00287"></a><a class="code" href="class_giga_rectangle.html#a8c7c35fbb7322c46af39d1961c0c449f">00287</a>                 <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="class_giga_rectangle.html#a8c7c35fbb7322c46af39d1961c0c449f">s_isPartlyOffscreen</a>(<a class="code" href="class_giga_rectangle.html">GigaRectangle</a>* obj) {
-<a name="l00288"></a>00288                         <a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html" title="Create this class in your main method. It is the main entry point for the library.">GameContainer</a>* container = <a class="code" href="class_a_r_k2_d.html#aa84cd71f5ce9b66b65e223de99ecdf7f">ARK2D::getContainer</a>();
+<a name="l00288"></a>00288                         <a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html" title="Create this class in your main method. It is the main entry point for the library.">ARK::Core::GameContainer</a>* container = <a class="code" href="class_a_r_k2_d.html#aa84cd71f5ce9b66b65e223de99ecdf7f">ARK2D::getContainer</a>();
 <a name="l00289"></a>00289                         <span class="keywordflow">if</span> (    (<span class="keywordtype">signed</span> <span class="keywordtype">int</span>)(obj-&gt;<a class="code" href="class_giga_rectangle.html#ad479a7214402412ce97d8e4934a3db0c">getX</a>()) &lt;= 0
 <a name="l00290"></a>00290                                 ||      (<span class="keywordtype">signed</span> <span class="keywordtype">int</span>)(obj-&gt;<a class="code" href="class_giga_rectangle.html#ad479a7214402412ce97d8e4934a3db0c">getX</a>()) &lt;= 0
 <a name="l00291"></a>00291                                 ||      (<span class="keywordtype">signed</span> <span class="keywordtype">int</span>)(obj-&gt;<a class="code" href="class_giga_rectangle.html#ad479a7214402412ce97d8e4934a3db0c">getX</a>() + obj-&gt;<a class="code" href="class_giga_rectangle.html#a3f254b12b32b268d01389194fb346b19">getWidth</a>()) &gt;= (<span class="keywordtype">signed</span> <span class="keywordtype">int</span>) container-&gt;<a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html#a68b7eca56b058ca2626699b92aeb65cf">getWidth</a>()
@@ -430,7 +430,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
     <ul>
       <li class="navelem"><a class="el" href="_giga_rectangle_8h.html">GigaRectangle.h</a>      </li>
 
-    <li class="footer">Generated on Thu Apr 12 2012 15:01:57 for ARK2D by
+    <li class="footer">Generated on Thu May 3 2012 16:35:28 for ARK2D by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

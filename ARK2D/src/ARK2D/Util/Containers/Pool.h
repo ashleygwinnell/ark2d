@@ -155,11 +155,19 @@ namespace ARK {
 						unsigned int sizeActive() {
 							return m_active.size();
 						}
+						
 						void updateAll(ARK::Core::GameContainer* container, GameTimer* timer) {
 							m_active.updateAll(container, timer);
 						}
+						void updateSelection(void* selectionFunction) {
+							m_active.updateSelection(selectionFunction);
+						}
+
 						void renderAll(ARK::Core::GameContainer* container, Renderer* graphics) {
 							m_active.renderAll(container, graphics);
+						}
+						void renderSelection(void* selectionFunction) {
+							m_active.renderSelection(selectionFunction);
 						}
 						virtual ~Pool() {
 

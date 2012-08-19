@@ -135,7 +135,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00018"></a>00018 <span class="preprocessor"></span><span class="preprocessor">                #define MAPVK_VK_TO_CHAR 2</span>
 <a name="l00019"></a>00019 <span class="preprocessor"></span><span class="preprocessor">                #define MAPVK_VSC_TO_VK_EX 3</span>
 <a name="l00020"></a>00020 <span class="preprocessor"></span>
-<a name="l00021"></a>00021                 <span class="keyword">class </span><a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html" title="Create this class in your main method. It is the main entry point for the library.">GameContainer</a>;
+<a name="l00021"></a>00021                 
 <a name="l00022"></a>00022 
 <a name="l00023"></a>00023 <span class="preprocessor">                        #include &quot;../../Windres.h&quot;</span>
 <a name="l00024"></a>00024 <span class="preprocessor">                        #include &quot;../../Includes.h&quot;</span>
@@ -149,69 +149,70 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00032"></a>00032 
 <a name="l00033"></a>00033                         <span class="keyword">namespace </span>ARK {
 <a name="l00034"></a>00034                                 <span class="keyword">namespace </span>Core {
-<a name="l00035"></a>00035 
-<a name="l00036"></a>00036                                         <span class="keyword">struct </span>GameContainerDisplayMode {
-<a name="l00037"></a>00037                                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> width;
-<a name="l00038"></a>00038                                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> height;
-<a name="l00039"></a>00039                                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> bpp;
-<a name="l00040"></a>00040                                         };
-<a name="l00041"></a>00041 
-<a name="l00042"></a>00042                                         <span class="keyword">class </span><a class="code" href="class_a_r_k_1_1_core_1_1_game_container_platform.html">GameContainerPlatform</a> {
-<a name="l00043"></a>00043                                                         <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html" title="Create this class in your main method. It is the main entry point for the library.">GameContainer</a>;
-<a name="l00044"></a>00044                                         <span class="keyword">public</span>:
-<a name="l00045"></a>00045                                                 <a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html" title="Create this class in your main method. It is the main entry point for the library.">GameContainer</a>* m_container;
-<a name="l00046"></a>00046                                                 HINSTANCE m_hInstance;
-<a name="l00047"></a>00047                                                 WNDCLASSEX m_windowClass;
-<a name="l00048"></a>00048                                                 RECT m_windowRect;
-<a name="l00049"></a>00049                                                 RECT m_screenResolutionRect; <span class="comment">// the size of the user&#39;s screen.</span>
-<a name="l00050"></a>00050                                                 HDC m_hDeviceContext;
-<a name="l00051"></a>00051                                                 HWND m_hWindow;
-<a name="l00052"></a>00052                                                 HGLRC m_hRenderingContext;
-<a name="l00053"></a>00053 
+<a name="l00035"></a>00035                                 <span class="keyword">class </span><a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html" title="Create this class in your main method. It is the main entry point for the library.">GameContainer</a>;
+<a name="l00036"></a>00036 
+<a name="l00037"></a>00037                                         <span class="keyword">struct </span>GameContainerDisplayMode {
+<a name="l00038"></a>00038                                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> width;
+<a name="l00039"></a>00039                                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> height;
+<a name="l00040"></a>00040                                                 <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> bpp;
+<a name="l00041"></a>00041                                         };
+<a name="l00042"></a>00042 
+<a name="l00043"></a>00043                                         <span class="keyword">class </span><a class="code" href="class_a_r_k_1_1_core_1_1_game_container_platform.html">GameContainerPlatform</a> {
+<a name="l00044"></a>00044                                                         <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html" title="Create this class in your main method. It is the main entry point for the library.">GameContainer</a>;
+<a name="l00045"></a>00045                                         <span class="keyword">public</span>:
+<a name="l00046"></a>00046                                                 <a class="code" href="class_a_r_k_1_1_core_1_1_game_container.html" title="Create this class in your main method. It is the main entry point for the library.">GameContainer</a>* m_container;
+<a name="l00047"></a>00047                                                 HINSTANCE m_hInstance;
+<a name="l00048"></a>00048                                                 WNDCLASSEX m_windowClass;
+<a name="l00049"></a>00049                                                 RECT m_windowRect;
+<a name="l00050"></a>00050                                                 RECT m_screenResolutionRect; <span class="comment">// the size of the user&#39;s screen.</span>
+<a name="l00051"></a>00051                                                 HDC m_hDeviceContext;
+<a name="l00052"></a>00052                                                 HWND m_hWindow;
+<a name="l00053"></a>00053                                                 HGLRC m_hRenderingContext;
 <a name="l00054"></a>00054 
-<a name="l00055"></a>00055                                                 <span class="keywordtype">float</span> m_lastTime;
-<a name="l00056"></a>00056 
-<a name="l00057"></a>00057                                                 DEVMODE m_dmScreenSettings; <span class="comment">// device mode contains fullscreen, bitmode. something else...</span>
-<a name="l00058"></a>00058                                                 <span class="keywordtype">string</span> m_iconpath;
-<a name="l00059"></a>00059                                                 BOOL perf_flag;        <span class="comment">// Timer Selection Flag</span>
-<a name="l00060"></a>00060                                                 <span class="keywordtype">double</span> time_factor;    <span class="comment">// Time Scaling Factor</span>
-<a name="l00061"></a>00061                                                 LONGLONG last_time;    <span class="comment">// Previous timer value</span>
-<a name="l00062"></a>00062 
-<a name="l00063"></a>00063                                                 vector&lt;GameContainerDisplayMode&gt; m_availableDisplayModes;
-<a name="l00064"></a>00064                                                 GameContainerDisplayMode* findDisplayMode(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> w, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> h, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> bpp);
-<a name="l00065"></a>00065 
-<a name="l00066"></a>00066                                                 LRESULT CALLBACK WndProc(HWND hWindow, UINT msg, WPARAM wParam, LPARAM lParam);
-<a name="l00067"></a>00067 
-<a name="l00068"></a>00068                                                 <span class="keywordtype">void</span> getWindowFlags(DWORD* windowflags_return, DWORD* exstyle_return, <span class="keywordtype">bool</span> undecorated, <span class="keywordtype">bool</span> child_window);
-<a name="l00069"></a>00069 
-<a name="l00070"></a>00070                                                 <span class="keywordtype">void</span> setTitle(std::string title);
-<a name="l00071"></a>00071                                                 <span class="keywordtype">string</span> getResourcePath() <span class="keyword">const</span>;
-<a name="l00072"></a>00072 
-<a name="l00073"></a>00073                                                 <span class="keywordtype">void</span> enableOpenGL(HWND hWnd, HDC* hDC, HGLRC* hRC);
-<a name="l00074"></a>00074                                                 <span class="keywordtype">void</span> disableOpenGL(HWND hWnd, HDC hDC, HGLRC hRC);
-<a name="l00075"></a>00075 
-<a name="l00076"></a>00076                                                 <span class="keywordtype">bool</span> initOpenAL();
-<a name="l00077"></a>00077                                                 <span class="keywordtype">bool</span> deinitOpenAL();
-<a name="l00078"></a>00078 
-<a name="l00079"></a>00079                                                 <span class="keyword">static</span> <span class="keywordtype">void</span>* getARK2DResource(<span class="keywordtype">int</span> resourceId, <span class="keywordtype">int</span> resourceType);
-<a name="l00080"></a>00080 
-<a name="l00081"></a>00081                                         };
-<a name="l00082"></a>00082 
-<a name="l00083"></a>00083                                 }
-<a name="l00084"></a>00084                         }
-<a name="l00085"></a>00085 
-<a name="l00086"></a>00086 <span class="preprocessor">        #endif</span>
-<a name="l00087"></a>00087 <span class="preprocessor"></span>
-<a name="l00088"></a>00088 <span class="preprocessor">#endif </span><span class="comment">/* GAMECONTAINERWINDOWS_H_ */</span>
-<a name="l00089"></a>00089 
+<a name="l00055"></a>00055 
+<a name="l00056"></a>00056                                                 <span class="keywordtype">float</span> m_lastTime;
+<a name="l00057"></a>00057 
+<a name="l00058"></a>00058                                                 DEVMODE m_dmScreenSettings; <span class="comment">// device mode contains fullscreen, bitmode. something else...</span>
+<a name="l00059"></a>00059                                                 <span class="keywordtype">string</span> m_iconpath;
+<a name="l00060"></a>00060                                                 BOOL perf_flag;        <span class="comment">// Timer Selection Flag</span>
+<a name="l00061"></a>00061                                                 <span class="keywordtype">double</span> time_factor;    <span class="comment">// Time Scaling Factor</span>
+<a name="l00062"></a>00062                                                 LONGLONG last_time;    <span class="comment">// Previous timer value</span>
+<a name="l00063"></a>00063 
+<a name="l00064"></a>00064                                                 vector&lt;GameContainerDisplayMode&gt; m_availableDisplayModes;
+<a name="l00065"></a>00065                                                 GameContainerDisplayMode* findDisplayMode(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> w, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> h, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> bpp);
+<a name="l00066"></a>00066 
+<a name="l00067"></a>00067                                                 LRESULT CALLBACK WndProc(HWND hWindow, UINT msg, WPARAM wParam, LPARAM lParam);
+<a name="l00068"></a>00068 
+<a name="l00069"></a>00069                                                 <span class="keywordtype">void</span> getWindowFlags(DWORD* windowflags_return, DWORD* exstyle_return, <span class="keywordtype">bool</span> undecorated, <span class="keywordtype">bool</span> child_window);
+<a name="l00070"></a>00070 
+<a name="l00071"></a>00071                                                 <span class="keywordtype">void</span> setTitle(std::string title);
+<a name="l00072"></a>00072                                                 <span class="keywordtype">string</span> getResourcePath() <span class="keyword">const</span>;
+<a name="l00073"></a>00073 
+<a name="l00074"></a>00074                                                 <span class="keywordtype">void</span> enableOpenGL(HWND hWnd, HDC* hDC, HGLRC* hRC);
+<a name="l00075"></a>00075                                                 <span class="keywordtype">void</span> disableOpenGL(HWND hWnd, HDC hDC, HGLRC hRC);
+<a name="l00076"></a>00076 
+<a name="l00077"></a>00077                                                 <span class="keywordtype">bool</span> initOpenAL();
+<a name="l00078"></a>00078                                                 <span class="keywordtype">bool</span> deinitOpenAL();
+<a name="l00079"></a>00079 
+<a name="l00080"></a>00080                                                 <span class="keyword">static</span> <span class="keywordtype">void</span>* getARK2DResource(<span class="keywordtype">int</span> resourceId, <span class="keywordtype">int</span> resourceType);
+<a name="l00081"></a>00081 
+<a name="l00082"></a>00082                                         };
+<a name="l00083"></a>00083 
+<a name="l00084"></a>00084                                 }
+<a name="l00085"></a>00085                         }
+<a name="l00086"></a>00086 
+<a name="l00087"></a>00087 <span class="preprocessor">        #endif</span>
+<a name="l00088"></a>00088 <span class="preprocessor"></span>
+<a name="l00089"></a>00089 <span class="preprocessor">#endif </span><span class="comment">/* GAMECONTAINERWINDOWS_H_ */</span>
 <a name="l00090"></a>00090 
+<a name="l00091"></a>00091 
 </pre></div></div><!-- contents -->
 </div>
   <div id="nav-path" class="navpath">
     <ul>
       <li class="navelem"><a class="el" href="_game_container_windows_8h.html">GameContainerWindows.h</a>      </li>
 
-    <li class="footer">Generated on Thu Apr 12 2012 15:01:56 for ARK2D by
+    <li class="footer">Generated on Thu May 3 2012 16:35:28 for ARK2D by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.0 </li>
    </ul>

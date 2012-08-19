@@ -53,8 +53,10 @@ class ARK2DBuildSystem:
 		if ((len(sys.argv)==3 and sys.argv[2] == "android") or (len(sys.argv)==2 and sys.argv[1] == "android")):
 			self.platform = "android";
 			if (sys.platform == "win32"):
+				self.platformOn = "windows";
 				self.ds = "\\";
 			elif(sys.platform == "darwin"):
+				self.platformOn = "osx";
 				self.ds = "/";
 			pass;
 
@@ -70,6 +72,7 @@ class ARK2DBuildSystem:
 			self.objcCompiler = "/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/g++-4.2";# i686-apple-darwin11-llvm-g++-4.2 ";
 			self.build_artifact = self.build_folder + self.ds + self.platform + self.ds + "libARK2D.dylib";
 
+			self.platformOn = "osx";
 
 			pass;
 		elif (sys.platform == "win32"):
@@ -82,18 +85,39 @@ class ARK2DBuildSystem:
 			self.objcCompiler = "g++";
 			self.build_artifact = self.build_folder + self.ds + self.platform + self.ds + "libARK2D.dll";
 			
+			self.platformOn = "windows";
+
 		elif(sys.platform == "darwin"):
 			self.ds = "/";
 			self.platform = "osx";
 			self.mingw_dir = ""; #/usr";
 			self.mingw_link = ""; #-L" + self.mingw_dir + self.ds + "lib"
+			
+			# lion
 			self.gccCompiler = "i686-apple-darwin11-llvm-gcc-4.2 ";
 			self.gppCompiler = "i686-apple-darwin11-llvm-g++-4.2 ";
 			self.objcCompiler = "i686-apple-darwin11-llvm-g++-4.2 ";
+
+			# mountain lion
+			#self.gccCompiler = "/Developer/usr/llvm-gcc-4.2/bin/i686-apple-darwin11-llvm-gcc-4.2 ";
+			#self.gppCompiler = "/Developer/usr/llvm-gcc-4.2/bin/i686-apple-darwin11-llvm-g++-4.2 ";
+			#self.objcCompiler = "/Developer/usr/llvm-gcc-4.2/bin/i686-apple-darwin11-llvm-g++-4.2 ";
+			
+			#self.gccCompiler = "/Developer/usr/bin/i686-apple-darwin11-gcc-4.2.1 ";
+			#self.gppCompiler = "/Developer/usr/bin/i686-apple-darwin11-g++-4.2.1 ";
+			#self.objcCompiler = "/Developer/usr/bin/i686-apple-darwin11-g++-4.2.1 ";
+
+			# apple break things every release. run this if 
+			# sudo ln -s /Developer/SDKs/MacOSX10.6.sdk/usr/lib/crt1.10.6.o /Developer/usr/llvm-gcc-4.2/lib
+			
+
 			#self.gccCompiler = "llvm-gcc-4.2";
 			#self.gppCompiler = "llvm-g++-4.2";
 			#self.gccCompiler = "gcc";
 			#self.gppCompiler = "g++";
+
+			self.platformOn = "osx";
+
 			self.build_artifact = self.build_folder + self.ds + self.platform + self.ds + "libARK2D.dylib";
 			self.mac_game_icns = '';
 		
@@ -140,6 +164,7 @@ class ARK2DBuildSystem:
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Core" + self.ds + "Platform",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Font",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Geometry",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "GJ",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Graphics",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Graphics" + self.ds + "ImageIO",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Particles",
@@ -189,6 +214,8 @@ class ARK2DBuildSystem:
 			self.dll_files.extend(config['dynamic_libraries']['osx']);
 			self.static_libraries.extend(config['static_libraries']['osx']);
 			self.linkingFlags = "";
+
+			self.ark2d_dir = config["osx"]['ark2d_dir'];
 			
 		self.src_files.extend(config['src_files']['all']);
 		
@@ -217,6 +244,24 @@ class ARK2DBuildSystem:
 			self.build_artifact = self.build_folder + self.ds + self.platform + self.ds + self.game_name.replace(" ", "_") + ".exe";
 		elif(sys.platform == "darwin"):
 			self.build_artifact = self.build_folder + self.ds + self.game_name.replace(" ", "_");
+
+		# open config
+		f = open("config.json", "r");
+		fcontents = f.read();
+		f.close();
+		config = json.loads(fcontents);
+
+		#create ARK.h file
+		nl = "\r\n";
+		arkh  = "";
+		arkh += "#ifdef ARK2D_WINDOWS" + nl;
+		arkh += "	#include \"" + self.str_replace(config["windows"]['ark2d_dir'], [("\\", "\\\\")]) + "\\src\\ARK.h\"" + nl;
+		arkh += "#else" + nl;
+		arkh += "	#include \"" + config["osx"]['ark2d_dir'] + "/src/ARK.h\"" + nl;
+		arkh += "#endif" + nl;
+		f = open("src/ARK.h", "w");
+		f.write(arkh);
+		f.close();
 			
 			
 	def createCacheFile(self, path):
@@ -323,9 +368,22 @@ class ARK2DBuildSystem:
 					compileStr += " -O3 -Wall -c -fmessage-length=0 ";
 					if (sys.platform == "darwin"): #compiling on mac
 						if not "vendor" in newf:
-							compileStr += " -mmacosx-version-min=10.5 -DMAC_OS_X_VERSION_MIN_REQUIRED=1050 -x objective-c++ ";
-							compileStr += "-I /usr/X11/include "; 
-						
+							compileStr += " -mmacosx-version-min=10.6 -DMAC_OS_X_VERSION_MIN_REQUIRED=1060 -x objective-c++ ";
+							#compileStr += "-I /usr/X11/include "; 
+							#compileStr += "-I /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/usr/include ";
+							compileStr += "-I /usr/include ";
+							compileStr += "-I " + self.ark2d_dir + "/lib/includes";
+							#compileStr += "-I /Developer/SDKs/MacOSX10.7.sdk/usr/include ";
+							#compileStr += "-I /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1 ";
+							#compileStr += "-I /Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/Foundation.framework/Headers ";
+							#compileStr += "-I /Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/ApplicationServices.framework/Headers ";
+							#compileStr += "-I /Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/Cocoa.framework/Headers ";
+							#compileStr += "-I /Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/OpenAL.framework/Headers ";
+							#compileStr += "-I /Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/OpenGL.framework/Headers ";
+							#compileStr += " -framework Foundation -framework ApplicationServices -framework Cocoa -framework OpenGL -framework OpenAL  ";
+							#compileStr += " -stdlib=libc++ ";
+
+ 
 						#  compileStr += " -march=i386 ";
 						# compileStr += " -march=i386 ";
 						#-march=i386 "; # i386
@@ -413,7 +471,7 @@ class ARK2DBuildSystem:
 					
 				#copying other dlls in to project.
 				try:
-					otherdlls = ['alut.dll', 'freetype6.dll', 'glew32.dll', 'OpenAL32.dll', 'wrap_oal.dll', 'zlib1.dll'];
+					otherdlls = ['alut.dll', 'freetype6.dll', 'glew32.dll', 'OpenAL32.dll', 'wrap_oal.dll', 'zlib1.dll', 'libcurl.dll'];
 					for one in otherdlls:
 						one = self.ark2d_dir + self.ds + 'lib' + self.ds + self.platform + self.ds + one;
 						shutil.copy(one, self.game_dir.replace('\\\\','\\') + '\\' + self.build_folder + '\\' + self.platform);
@@ -439,9 +497,10 @@ class ARK2DBuildSystem:
 			
 		elif(sys.platform=="darwin"):
 			
+			
 			if (self.building_library):
-				linkingStr = "";
-				linkingStr += self.gppCompiler + " -framework OpenGL -framework OpenAL -framework Foundation -framework Cocoa -lobjc -install_name @executable_path/../Frameworks/libARK2D.dylib " + self.linkingFlags + "  -dynamiclib -o " + self.build_artifact;
+				linkingStr = ""; 
+				linkingStr += self.gppCompiler + " -L lib/osx/freetype -L /Developer/SDKs/MacOSX10.6.sdk/usr/lib -framework OpenGL -framework OpenAL -framework Foundation -framework Cocoa -framework ApplicationServices -lobjc -install_name @executable_path/../Frameworks/libARK2D.dylib " + self.linkingFlags + "  -dynamiclib -o " + self.build_artifact;
 				#linkingStr += " -march=i386 ";
 			
 				for h in self.src_files:
@@ -516,6 +575,10 @@ class ARK2DBuildSystem:
 				infoplistcontents += "		<string>" + self.game_name + "</string>" + cr;
 				infoplistcontents += "		<key>CFBundleIdentifier</key>" + cr;
 				infoplistcontents += "		<string>com.ark2d." + self.game_short_name + "</string>" + cr;
+				infoplistcontents += "		<key>CFBundleGetInfoString</key>" + cr;
+				infoplistcontents += "		<string>" + self.config['game_name'] + " \xc2 " + self.config['company_name'] + "</string>" + cr;
+				#infoplistcontents += "		<key>NSHumanReadableCopyright</key>" + cr;
+				#infoplistcontents += "		<string>Copyright YEAR Thoname</string>" + cr;
 				infoplistcontents += "		<key>CFBundleIconFile</key>" + cr;
 				infoplistcontents += "		<string>" + self.game_name + "</string>" + cr;
 				infoplistcontents += "	</dict>" + cr;
@@ -637,9 +700,9 @@ class ARK2DBuildSystem:
 				if (generateThisSheet == True):
 					print("Generating SpriteSheet: " + spritesheet["output"]);
 					spritesheet['game_dir'] = self.game_dir;
-					spritesheet['game_preproduction_dir'] = self.config[self.platform]['game_preproduction_dir'];
+					spritesheet['game_preproduction_dir'] = self.config[self.platformOn]['game_preproduction_dir'];
 					spritesheetJSON = str(json.dumps(spritesheet, separators=(',',':'))).replace("\"", "\\\"");
-					compileLine = "java -jar " + self.ark2d_dir + "/../Tools/ImagePacker/build/jar/ImagePacker.jar \"" + spritesheetJSON + "\"";
+					compileLine = "java -jar " + self.ark2d_dir + "/../Tools/Image\ Packer/build/jar/ImagePacker.jar \"" + spritesheetJSON + "\"";
 					subprocess.call([compileLine], shell=True); # player 
 
 					#redocache
@@ -1053,6 +1116,8 @@ class ARK2DBuildSystem:
 				androidManifestContents += "	android:versionCode=\"1\" " + nl;
 				androidManifestContents += "	android:versionName=\"1.0\"> " + nl;
 				androidManifestContents += "	<uses-sdk android:minSdkVersion=\"" + str(appplatformno) + "\" />" + nl;
+				for permission in config['android']['permissions']:
+					androidManifestContents += "	<uses-permission android:name=\"android.permission." + permission + "\" />" + nl;
 				androidManifestContents += "	<application" + nl;
 				androidManifestContents += "		android:icon=\"@drawable/ic_launcher\" " + nl;
 				androidManifestContents += "		android:label=\"@string/application_name\" android:debuggable=\"true\"> " + nl;
@@ -1067,8 +1132,6 @@ class ARK2DBuildSystem:
 				androidManifestContents += "			</intent-filter>" + nl;
 				androidManifestContents += "		</activity>" + nl;
 				androidManifestContents += "	</application>" + nl;
-				for permission in config['android']['permissions']:
-					androidManifestContents += "	<uses-permission android:name=\"android.permission." + permission + "\" />" + nl;
 				androidManifestContents += "</manifest>" + nl;
 				f = open(rootPath+"/build/android/project/AndroidManifest.xml", "w");
 				f.write(androidManifestContents);
@@ -1195,7 +1258,13 @@ class ARK2DBuildSystem:
 			subprocess.call([compilelibzip1], shell=True);
 			subprocess.call(['cp -r ' + libzipdir + "/libs/armeabi/libzip.so " + ndkdir + "/platforms/"+ndkappplatform+"/arch-arm/usr/lib"], shell=True);
 			
-			
+			#libcurl
+			#print("Compiling vendor sources (libcurl)");
+			#libcurldir = ndkprojectpath + "/src/ARK2D/vendor/android/curl-android";
+			#compilelibcurl1 = ndkdir + "/ndk-build NDK_PROJECT_PATH=" + libcurldir +" APP_PROJECT_PATH=" + libcurldir + " APP_BUILD_SCRIPT=" + libcurldir + "/Android.mk APP_PLATFORM=" + ndkappplatform;  
+			#print(compilelibcurl1);
+			#subprocess.call([compilelibcurl1], shell=True);
+			#subprocess.call(['cp -r ' + libcurldir + "/libs/armeabi/libcurl.so " + ndkdir + "/platforms/"+ndkappplatform+"/arch-arm/usr/lib"], shell=True);
 			
 			
 			#make android.mk
