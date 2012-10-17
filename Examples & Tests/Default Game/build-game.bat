@@ -1,2 +1,0 @@
-build-game.py
-pause

@@ -1,2 +1,0 @@
-build_release\\ARK2D_Path_Editor.exe
-pause
