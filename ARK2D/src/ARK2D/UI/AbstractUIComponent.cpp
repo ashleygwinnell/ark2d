@@ -27,6 +27,18 @@ namespace ARK {
 		int AbstractUIComponent::getY() {
 			return m_y;
 		}
+		int AbstractUIComponent::getCenterX() {
+			return m_x + (m_width/2);
+		}
+		int AbstractUIComponent::getCenterY() {
+			return m_y + (m_height/2);
+		}
+		int AbstractUIComponent::getMaxX() {
+			return m_x + m_width;
+		}
+		int AbstractUIComponent::getMaxY() {
+			return m_y + m_height;
+		}
 		unsigned int AbstractUIComponent::getWidth() {
 			return m_width;
 		}
@@ -42,6 +54,10 @@ namespace ARK {
 		void AbstractUIComponent::setLocation(int x, int y) {
 			m_x = x;
 			m_y = y;
+		} 
+		void AbstractUIComponent::setLocationByCenter(int x, int y) {
+			m_x = x - (m_width/2);
+			m_y = y - (m_height/2);
 		}
 		void AbstractUIComponent::setSize(unsigned int w, unsigned int h) {
 			m_width = w;

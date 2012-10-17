@@ -8,9 +8,7 @@
 #ifndef SOUNDSTORE_H_
 #define SOUNDSTORE_H_
 
-#include <map>
-#include <string>
-using namespace std;
+#include "../Includes.h"
 
 namespace ARK {
 	namespace Audio {
@@ -37,6 +35,8 @@ namespace ARK {
 				void setVolumeByGroupId(unsigned int groupId, float volume);
 				void setPanningByGroupId(unsigned int groupId, float panning);
 				void setPitchByGroupId(unsigned int groupId, float pitch);
+
+				float getVolumeByGroupId(unsigned int groupId);
 
 				virtual ~SoundStore();
 

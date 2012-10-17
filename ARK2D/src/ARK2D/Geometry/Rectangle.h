@@ -19,6 +19,9 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
+        
+       
+        
 		template <class T>
 		class Rectangle: public Shape<T> {
 			private:
@@ -110,11 +113,13 @@ namespace ARK {
 						return Shape<T>::collision_rectangleRectangle(m_x, m_y, m_width, m_height, rect->getMinX(), rect->getMinY(), rect->getWidth(), rect->getHeight());
 					}
 
+                    // circle 
 					Circle<T>* circle = NULL;
 					circle = dynamic_cast<Circle<T>* >(s);
 					if (circle != NULL) {
 						return Shape<T>::collision_circleRectangle(circle->getCenterX(), circle->getCenterY(), circle->getRadius(), m_x, m_y, m_width, m_height);
 					}
+
 
 					Line<T>* line = NULL;
 					line = dynamic_cast<Line<T>* >(s);
@@ -129,6 +134,18 @@ namespace ARK {
 				}
 				virtual void render() {
 					ARK2D::getRenderer()->drawRect(this);
+				}
+
+				// this polygon should have four points on it! 
+				// OR ELSE FAILLLL!!
+				Polygon<T>* asPolygon(Polygon<T>* polygon, float rotation) 
+				{
+					polygon->getPoint(0)->set(getMinX(), getMinY());
+					polygon->getPoint(1)->set(getMinX(), getMaxY());
+					polygon->getPoint(2)->set(getMaxX(), getMaxY());
+					polygon->getPoint(3)->set(getMaxX(), getMinY()); 
+					polygon->rotate(rotation);
+					return polygon;
 				}
 
 

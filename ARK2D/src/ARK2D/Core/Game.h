@@ -7,9 +7,8 @@
 #ifndef GAME_H_
 #define GAME_H_
 
-#include <string>
-using namespace std;
 
+#include "../Includes.h"
 #include "../Namespaces.h"
 
 namespace ARK {

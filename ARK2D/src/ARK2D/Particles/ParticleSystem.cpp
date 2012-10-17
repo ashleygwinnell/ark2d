@@ -137,7 +137,7 @@ namespace ARK {
 
 			g->pushMatrix();
 			g->translate(x, y);
-			if (blendingMode == BLEND_ADDITIVE) {
+			if (blendingMode == BLEND_ADDITIVE) { // TODO: g->setBlendMode(Renderer::BLEND_ADDITIVE);
 				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 			}
 			//if (isUsePoints()) {

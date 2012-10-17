@@ -140,17 +140,8 @@
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 					glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		
-					
-					// enable 2d
-					glMatrixMode(GL_PROJECTION) ;
-					glPushMatrix();
-					glLoadIdentity();
-					
-					glOrtho(0, width, height, 0, -1, 1);
-					
-					glMatrixMode(GL_MODELVIEW);
-					glPushMatrix();
-					glLoadIdentity();
+					// enable 2d!
+					enable2D();
 					
 					[pool release];
 					
@@ -158,7 +149,38 @@
 		
 			} 
 			
+			void ARK::Core::GameContainer::resizeBehaviour(int width, int height) {
+				if (m_resizeBehaviour == RESIZE_BEHAVIOUR_SCALE) 
+			    {
+			    	m_scaleX = (float) width / (float) m_originalWidth;
+					m_scaleY = (float) height / (float) m_originalHeight;
+					if (m_scaleX > m_scaleY) {
+						m_scale = m_scaleY;
+						m_scaleX = m_scaleY;
+						m_scaleY = 1.0f;
+					} else { // y > x
+						m_scale = m_scaleX;
+						m_scaleY = m_scaleX;
+						m_scaleX = 1.0f;
+					}
+					m_width = width;
+					m_height = height;
+
+			   		
+			    } else if (m_resizeBehaviour == RESIZE_BEHAVIOUR_NOSCALE) {
+			    	m_width = width; 
+			    	m_height = height;
+			    	//ARK2D::s_game->resize(this, width, height);
+			    	//ARK2D::getRenderer()->setScissorTestEnabled(false);
+			    	//ARK2D::getRenderer()->scissor(0,0,width,height);
+			    }
+			    ARK2D::s_game->resize(this, width, height);
+			}
+
 			void ARK::Core::GameContainer::setSize(int width, int height) {
+
+				if (width == (signed int) m_width && height == (signed int) m_height) { return; }
+
 				NSWindow* window = m_platformSpecific.m_window;
 				NSRect windowFrame = [window frame];
 				
@@ -177,33 +199,166 @@
 				// need to resize opengl NSView
 				//NSView* windowView = (NSView*) [window contentView];
 				//NSRect windowViewRect = [windowView frame];
-				NSRect windowViewRect = [[window contentView] frame];
+				NSRect windowViewRect = [[window contentView] frame]; 
 				windowViewRect.size = desiredContentSize;
 				
-				
+
 			
-			    if (m_resizeBehaviour == RESIZE_BEHAVIOUR_SCALE) {
-			   		ARK2D::s_game->resize(this, width, height);
-			    } else if (m_resizeBehaviour == RESIZE_BEHAVIOUR_NOSCALE) {
-			    	m_width = width;
-			    	m_height = height;
-			    	ARK2D::s_game->resize(this, width, height);
-			    	//ARK2D::getRenderer()->setScissorTestEnabled(false);
-			    	//ARK2D::getRenderer()->scissor(0,0,width,height);
-			    }
-			     [[window contentView] setFrame: windowViewRect];
-			     [window setFrame: windowFrame
+			    resizeBehaviour(width, height);
+
+			    [[window contentView] setFrame: windowViewRect];
+			    [window setFrame: windowFrame
 			           display: YES
 			           animate: YES];
 			           
-			           [m_platformSpecific.m_context update];
+			    [m_platformSpecific.m_context update];
 			}
 		
 			void ARK::Core::GameContainer::setFullscreen(bool fullscreen) {
+				
+				//if (m_fullscreen == fullscreen) { return; }
+				
+				NSRect testDisplayRect = [[NSScreen mainScreen] frame];
+				if (fullscreen && 
+					testDisplayRect.size.width == (signed int) m_width && 
+					testDisplayRect.size.height == (signed int) m_height) 
+					{ 
+					return; 
+				}
+
+				if (fullscreen) {
+					NSRect mainDisplayRect = [[NSScreen mainScreen] frame];
+					
+					NSWindow* window = m_platformSpecific.m_window;			
+					[window setStyleMask:NSBorderlessWindowMask];
+
+					 [[window contentView] setFrame: mainDisplayRect];
+			   		 [window setFrame: mainDisplayRect
+			           display: YES
+			           animate: NO];
+
+			   		[window setLevel:NSMainMenuWindowLevel+1];
+
+			   		[window setOpaque:YES];
+					[window setHidesOnDeactivate:YES];
+
+					[window makeKeyAndOrderFront:nil];
+			           
+			        [m_platformSpecific.m_context update];
+					m_fullscreen = fullscreen;
+
+					resizeBehaviour((int) mainDisplayRect.size.width, (int) mainDisplayRect.size.height);
+
+				} else {
+					
+					NSWindow* window = m_platformSpecific.m_window;	
+					NSRect windowFrame = [window frame];
+
+					//setSize();
+					resizeBehaviour((int) m_originalWidth, (int) m_originalHeight);
+					
+
+		    		
+
+					int width = (signed int) getWidth();
+					int height = (signed int) getHeight();
+
+					NSRect contentRect;
+
+			    	contentRect = [NSWindow contentRectForFrameRect: windowFrame
+											styleMask: NSTitledWindowMask];
+
+					//int diffy = (windowFrame.size.height - contentRect.size.height);
+			
+					// need to shift origin (bottomleft) so window stays in same place
+					NSSize desiredContentSize = NSMakeSize (width, height); 	
+					windowFrame.origin.x += (windowFrame.size.width - desiredContentSize.width)/2;
+				    windowFrame.origin.y += ((windowFrame.size.height - desiredContentSize.height)/2)+ 25;
+				    windowFrame.size = desiredContentSize;
+				    contentRect.size = desiredContentSize;
+				
+					// need to resize opengl NSView
+					//NSView* windowView = (NSView*) [window contentView];
+					//NSRect windowViewRect = [windowView frame];
+					NSRect windowViewRect = [[window contentView] frame];
+					windowViewRect.size = desiredContentSize;
+
+
+				
+
+
+				 	[[window contentView] setFrame: windowViewRect];
+
+
+				
+
+
+				     [window setFrame: windowFrame
+				           display: YES
+				           animate: NO];
+
+				     unsigned int style = (NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask);
+			    	[window setStyleMask:style];
+
+			    	[window setTitle:[NSString stringWithCString:m_game.getTitle().c_str() encoding:NSUTF8StringEncoding]];
+
+					/*NSRect mainDisplayRect;
+					mainDisplayRect.origin.x = 0;
+					mainDisplayRect.origin.y = 0;
+					mainDisplayRect.size.width = width;
+					mainDisplayRect.size.height = height;
+					mainDisplayRect.origin.x = (CGDisplayPixelsWide(kCGDirectMainDisplay)/2) - (mainDisplayRect.size.width/2);
+					mainDisplayRect.origin.y = (CGDisplayPixelsHigh(kCGDirectMainDisplay)/2)- (mainDisplayRect.size.height/2);
+					
+					
+
+					NSSize desiredContentSize = NSMakeSize (width, height); 
+					mainDisplayRect.size = desiredContentSize;
+
+					NSRect contentRect;
+					contentRect.origin.x = 0;
+					contentRect.origin.y = 0;
+					contentRect.size = desiredContentSize;
+					//contentRect.size.width = 100;
+					//contentRect.size.height = 100;
+					[[window contentView] setFrame: contentRect];
+			   		 // [m_platformSpecific.m_context setFrame: contentRect];
+
+					[window setFrame: mainDisplayRect
+			           display: YES
+			           animate: NO];*/
+
+			   		  [window setLevel:NSMainMenuWindowLevel-1];
+
+			   		 [window setOpaque:NO];
+					[window setHidesOnDeactivate:YES];
+
+					[window makeKeyAndOrderFront:nil];
+			           
+			        [m_platformSpecific.m_context update];
+
+					m_fullscreen = fullscreen;
+					
+
+					
+					
+					
+				}
+
+
+			    // if (m_resizeBehaviour == RESIZE_BEHAVIOUR_SCALE) {
+			   	// 	ARK2D::s_game->resize(this, width, height);
+			    // } else if (m_resizeBehaviour == RESIZE_BEHAVIOUR_NOSCALE) {
+			    // 	m_width = width;
+			    // 	m_height = height;
+			    // 	ARK2D::s_game->resize(this, width, height);
+			    // }
+				
+
 				return;
 				
 				// just some kinks to iron out.
-				if (m_fullscreen == fullscreen) { return; }
+				/*if (m_fullscreen == fullscreen) { return; }
 			
 				if (isLionPlus()) { 
 		    		NSWindow* window = m_platformSpecific.m_window;
@@ -217,7 +372,7 @@
 		    			[window setStyleMask:style];
 		    		}
 		    		m_fullscreen = !m_fullscreen;
-				}
+				}*/
 			
 			}
 		
@@ -274,6 +429,10 @@
 				ARK2D::getLog()->i("Initialised "); 
 				ARK2D::getLog()->i(m_game.getTitle());
 				ARK2D::getLog()->i("...");
+
+				if (m_fullscreen) {
+					setFullscreen(true);
+				}
 				 
 				while(m_bRunning) {
 					m_timer.tick();
@@ -502,7 +661,7 @@
 				// discard context and device
 				return true;
 			}
-			
+			 
 			int ARK::Core::GameContainer::getGlobalMouseX() const {
 				NSPoint mouseLoc = [NSEvent mouseLocation];
 				return mouseLoc.x;

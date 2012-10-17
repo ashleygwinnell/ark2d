@@ -77,6 +77,7 @@
 						bool initOpenAL();
 						bool deinitOpenAL();
 
+
 						static void* getARK2DResource(int resourceId, int resourceType);
 
 					};

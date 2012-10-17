@@ -119,6 +119,10 @@ namespace ARK {
 				int getResizeBehaviour();
 				void setResizeBehaviour(int b);
 
+				static const unsigned int ORIENTATION_PORTRAIT = 0;
+				static const unsigned int ORIENTATION_LANDSCAPE = 1;
+				unsigned int getOrientation();
+
 				void saveScreenshot(string filename);
 
 				bool isShowingFPS();
@@ -131,14 +135,20 @@ namespace ARK {
 			public:
 		#endif
 
+		#if (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS))
+				void resizeBehaviour(int width, int height);
+		#endif
+
 				void close() const;
-				~GameContainer();
+				virtual ~GameContainer();
+
+				void enable2D();
+				void disable2D();
 
 			private:
 
 				void resize(int w, int h);
-				void enable2D();
-				void disable2D();
+				
 				void enableOpenAL();
 				void disableOpenAL();
 				void swapBuffers();
@@ -156,7 +166,7 @@ namespace ARK {
 				int getGlobalMouseX() const;
 				int getGlobalMouseY() const;
 			private:
-				ARK::Geometry::Rectangle<int>* m_window_rectangle;
+				//ARK::Geometry::Rectangle<int>* m_window_rectangle;
 
 
 			// Generic items.

@@ -76,6 +76,7 @@ namespace ARK {
 				vector<GameState*> m_states;
 				GameState* m_from_state;
 				GameState* m_current_state;
+				GameState* m_next_state;
 				GameContainer* m_container;
 
 				LoadingState* m_loading_state;

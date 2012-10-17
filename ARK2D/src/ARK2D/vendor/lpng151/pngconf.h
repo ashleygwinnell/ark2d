@@ -37,7 +37,7 @@
 #ifdef BSD
 #  include <strings.h>
 #else
-#  include <string.h>
+//#  include <string.h>
 #endif
 
 /* For png_FILE_p - this provides the standard definition of a

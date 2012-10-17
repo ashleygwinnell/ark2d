@@ -1,10 +1,9 @@
 #ifndef JSONCHILDREN_H
 #define JSONCHILDREN_H
 
-//#ifdef ARK2D_UBUNTU_LINUX
-    #include <cstdlib> //for malloc, realloc, and free
-    #include <cstring> //for memmove
-//#endif
+
+#include <cstdlib> //for malloc, realloc, and free
+#include <cstring> //for memmove
 
 #include "Debug.h"  //for libJSON_ASSERT macro
 

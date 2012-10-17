@@ -8,11 +8,12 @@
 #ifndef RESOURCE_H_
 #define RESOURCE_H_
 
-#include <string>
-using namespace std;
 
+ 
 #include "../Windres.h"
+#include "../Includes.h"
 #include "../Namespaces.h"
+
 
 #if defined(ARK2D_ANDROID)
 	#include <zip.h>
@@ -21,6 +22,8 @@ using namespace std;
 
 namespace ARK {
 	namespace Core {
+
+
 
 		class RawDataReturns {
 			friend class TiledMap;
@@ -57,13 +60,13 @@ namespace ARK {
 				#endif
 
 
-				Resource();
+				Resource(); 
 				Image* asImage();
 				Sound* asSound();
 				ARK::Font::Font* asFont();
 				LocalHighscores* asLocalHighscores();
 				TiledMap* asTiledMap();
-				String* asString();
+				ARK::Core::String* asString();
 				PathGroup* asPathGroup();
 				SpriteSheetDescription* asSpriteSheetDescription();
 				virtual ~Resource();

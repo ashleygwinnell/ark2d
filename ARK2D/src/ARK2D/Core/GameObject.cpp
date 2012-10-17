@@ -40,5 +40,6 @@ namespace ARK {
 		GameObject::~GameObject() {
 
 		}
+
 	}
 }

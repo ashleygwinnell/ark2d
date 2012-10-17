@@ -12,10 +12,12 @@
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
-#include <iostream>
+#include <iostream> 
 
 namespace ARK {
 	namespace Graphics {
+
+
 
 		const Color Color::black = Color(0, 0, 0, 255);
 		const Color Color::white = Color(255, 255, 255, 255);
@@ -25,9 +27,13 @@ namespace ARK {
 		const Color Color::cyan = Color(0, 255, 255);
 		const Color Color::blue = Color(0, 0, 255);
 		const Color Color::magenta = Color(255, 0, 255);
+		const Color Color::yellow = Color(255, 255, 0);
 
 		const Color Color::black_50a = Color(0, 0, 0, 127);
+		const Color Color::black_0a = Color(0, 0, 0, 0);
+
 		const Color Color::white_50a = Color(255, 255, 255, 127);
+		const Color Color::white_0a = Color(255, 255, 255, 0);
 
 		const Color Color::darker_grey = Color(32, 32, 32, 255);
 		const Color Color::dark_grey = Color(63, 63, 63, 255);
@@ -110,16 +116,16 @@ namespace ARK {
 		}
 
 		void Color::setRed(float r) {
-			m_r = (unsigned int) r * 255;
+			m_r = (unsigned int) (r * 255.0f);
 		}
 		void Color::setGreen(float g) {
-			m_g = (unsigned int) g * 255;
+			m_g = (unsigned int) (g * 255.0f);
 		}
 		void Color::setBlue(float b) {
-			m_b = (unsigned int) b * 255;
+			m_b = (unsigned int) (b * 255.0f);
 		}
 		void Color::setAlpha(float a) {
-			m_a = (unsigned int) a * 255;
+			m_a = (unsigned int) (a * 255.0f);
 		}
 
 		unsigned int Color::getRed() const {

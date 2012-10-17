@@ -7,7 +7,7 @@
 
 #ifndef STRINGSTORE_H_
 #define STRINGSTORE_H_
-
+ 
 #include <map>
 #include <string>
 #include <iostream>

@@ -8,7 +8,7 @@
 #include "ARK2D.h"
 
 GameContainer* ARK2D::s_container = 0;
-Game* ARK2D::s_game = 0;
+Game* ARK2D::s_game = 0; 
 Renderer* ARK2D::s_graphics = 0;
 Input* ARK2D::s_input = 0;
 Log* ARK2D::s_log = 0;
@@ -17,7 +17,7 @@ GameContainer* ARK2D::getContainer() {
 	return s_container;
 }
 
-Game* ARK2D::getGame() {
+Game* ARK2D::getGame() {  
 	return s_game;
 }
 
@@ -43,9 +43,9 @@ unsigned int ARK2D::getPlatform() {
 		return PLATFORM_IPHONE;
 	#elif defined(ARK2D_ANDROID)
 		return PLATFORM_ANDROID;
-	#endif
+	#endif 
 }
-string ARK2D::getPlatformString() {
+std::string ARK2D::getPlatformString() {
 	#if defined(ARK2D_WINDOWS)
 		return "windows";
 	#elif defined(ARK2D_MACINTOSH)

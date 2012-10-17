@@ -70,6 +70,8 @@
 					}
 					case WM_SIZE:
 					{
+						//m_container->resizeBehaviour((int) LOWORD(lParam), (int) HIWORD(lParam));
+
 						m_container->m_width =  LOWORD(lParam);
 						m_container->m_height = HIWORD(lParam);
 						if (m_container->m_scaleToWindow) {
@@ -79,6 +81,7 @@
 							m_container->enable2D();
 							glViewport(0, 0, LOWORD(lParam), HIWORD(lParam));
 						}
+
 						m_container->m_game.resize(m_container, LOWORD(lParam), HIWORD(lParam));
 						return 0;
 					}
@@ -107,12 +110,31 @@
 					}
 					case WM_MOUSEMOVE:
 					{
-						POINTS mouseXY = MAKEPOINTS(lParam);
-
+						
+/*
 						ARK2D::getGame()->mouseMoved(mouseXY.x, mouseXY.y, m_container->m_input.mouse_x, m_container->m_input.mouse_y);
 
 						m_container->m_input.mouse_x = mouseXY.x;
 						m_container->m_input.mouse_y = mouseXY.y;
+						break;*/
+
+						POINTS mouseXY = MAKEPOINTS(lParam);
+
+						float thisx = mouseXY.x;
+					    float thisy = mouseXY.y;
+
+					    thisx -= m_container->getTranslateX();
+					    thisy -= m_container->getTranslateY();
+
+					    thisx /= m_container->getScale();
+					    thisy /= m_container->getScale();
+
+						Input* i = ARK2D::getInput();
+						ARK2D::getGame()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
+
+						i->mouse_x = (int) thisx;
+						i->mouse_y = (int) thisy;
+
 						break;
 					}
 					case WM_LBUTTONDOWN:
@@ -236,8 +258,42 @@
 				return NULL;
 			}
 
-			void GameContainer::setSize(int width, int height) {
+			void ARK::Core::GameContainer::resizeBehaviour(int width, int height) {
+				if (m_resizeBehaviour == RESIZE_BEHAVIOUR_SCALE) 
+			    {
+			    	m_scaleX = (float) width / (float) m_originalWidth;
+					m_scaleY = (float) height / (float) m_originalHeight;
+					if (m_scaleX > m_scaleY) {
+						m_scale = m_scaleY;
+						m_scaleX = m_scaleY;
+						m_scaleY = 1.0f;
+					} else { // y > x
+						m_scale = m_scaleX;
+						m_scaleY = m_scaleX;
+						m_scaleX = 1.0f;
+					}
+					m_width = width;
+					m_height = height;
 
+			   		
+			    } else if (m_resizeBehaviour == RESIZE_BEHAVIOUR_NOSCALE) {
+			    	m_width = width; 
+			    	m_height = height;
+			    	//ARK2D::s_game->resize(this, width, height);
+			    	//ARK2D::getRenderer()->setScissorTestEnabled(false);
+			    	//ARK2D::getRenderer()->scissor(0,0,width,height);
+			    }
+			    ARK2D::s_game->resize(this, width, height);
+			}
+
+
+			void GameContainer::setSize(int width, int height) {
+				
+				if (width == (signed int) m_width && height == (signed int) m_height) { return; }
+
+				resizeBehaviour(width, height);
+
+				resizeWindowToFitViewport();
 			}
 
 			void GameContainer::setFullscreen(bool fullscreen) {
@@ -293,7 +349,10 @@
 
 							MoveWindow(m_platformSpecific.m_hWindow,0 , 0, dm->width, dm->height, TRUE);
 							//glViewport(0, 0, m_width, m_height);
-							glViewport(0, 0, dm->width, dm->height);
+							//glViewport(0, 0, dm->width, dm->height);
+
+							resizeBehaviour((int) dm->width, (int) dm->height);
+
 
 							std::cout << "setting fullscreen: " << m_width << " : " << m_height << std::endl;
 
@@ -320,7 +379,9 @@
 						ErrorDialog::createAndShow("could not SetWindowPos windowed");
 					}
 
-					glViewport(0, 0, m_width, m_height);
+					//glViewport(0, 0, m_width, m_height);
+					resizeBehaviour((int) m_width, (int) m_height); 
+					
 					resizeWindowToFitViewport();
 
 					//return;
@@ -584,16 +645,23 @@
 				// This bit resizes the window so that the GL viewport can fit in properly!
 				RECT rcClient, rcWind;
 				POINT ptDiff;
+				
+				/*rcClient.left=0;
+				rcClient.right=m_width;
+				rcClient.top=0;
+				rcClient.bottom=m_height;*/
 				GetClientRect(m_platformSpecific.m_hWindow, &rcClient);
 				GetWindowRect(m_platformSpecific.m_hWindow, &rcWind);
+
 				ptDiff.x = (rcWind.right - rcWind.left) - rcClient.right;
 				ptDiff.y = (rcWind.bottom - rcWind.top) - rcClient.bottom;
 				MoveWindow(m_platformSpecific.m_hWindow ,rcWind.left, rcWind.top, m_width + ptDiff.x, m_height + ptDiff.y, TRUE);
-
-				m_window_rectangle = new ARK::Geometry::Rectangle<int>(	(int) rcWind.top,
+				 
+				//(GetSystemMetrics(SM_CYBORDER)/2);
+				/*m_window_rectangle = new ARK::Geometry::Rectangle<int>(	(int) rcWind.top,
 																(int) rcWind.left,
 																(int) m_width,
-																(int) m_height); // My Rectangle...
+																(int) m_height); // My Rectangle...*/
 			}
 			// Enable OpenGL
 			void GameContainerPlatform::enableOpenGL(HWND hWnd, HDC* hDC, HGLRC* hRC)
@@ -908,6 +976,7 @@
 
 				while (this->m_bRunning == true)
 				{
+					
 					m_timer.tick();
 
 					MSG msg;
@@ -996,6 +1065,8 @@
 						m_gamepads.at(i)->clearButtonPressedRecord();
 					}
 					Image::showAnyGlErrorAndExit();
+					
+
 					//this->m_game->update(this, myAverageDelta); // fix at 60 fps. bug.
 					//this->m_game->update(this, 0.017); // fix at 60 fps. bug.
 
@@ -1017,9 +1088,15 @@
 					Image::showAnyGlErrorAndExit();
 					//myLastRenderTime = this->time();
 
+					glFlush();
+					glFinish(); 
+
 					swapBuffers();
 
-					Sleep(delta/2);
+					//Sleep(delta/2);
+				//	Sleep(10);
+					m_timer.limit(60);
+					//m_timer.sleep(10);
 				}
 
 				// shutdown OpenGL

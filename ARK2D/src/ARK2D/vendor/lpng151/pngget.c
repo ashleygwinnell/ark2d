@@ -9,7 +9,7 @@
  * This code is released under the libpng license.
  * For conditions of distribution and use, see the disclaimer
  * and license in png.h
- *
+ * 
  */
 
 #include "pngpriv.h"

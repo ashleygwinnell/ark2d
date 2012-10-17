@@ -20,8 +20,10 @@
 
  ********************************************************************/
 
-#include <stdlib.h>
-#include <string.h>
+#ifndef ARK2D_IPHONE
+    #include <stdlib.h>
+    #include <string.h>
+#endif
 #include "ogg.h"
 
 /* A complete description of Ogg framing exists in docs/framing.html */

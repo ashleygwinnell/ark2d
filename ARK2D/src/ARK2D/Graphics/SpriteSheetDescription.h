@@ -8,14 +8,15 @@
 #ifndef SPRITESHEETDESCRIPTION_H_
 #define SPRITESHEETDESCRIPTION_H_
 
-#include <stdlib.h>
+/*#include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <cstring>
-#include <map>
+#include <map>*/
+#include "../Includes.h"
 
 #include "../Core/Resource.h"
 #include "SpriteSheetDescriptionItem.h"

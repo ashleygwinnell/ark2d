@@ -22,6 +22,8 @@ namespace ARK {
 				ARK::Geometry::Rectangle<float>* rectangleTwo;
 				ARK::Geometry::Line<float>* lineOne;
 				ARK::Geometry::Line<float>* lineTwo;
+				ARK::Geometry::Line<float>* lineThree;
+				ARK::Geometry::Line<float>* lineFour;
 				ARK::Geometry::Polygon<float>* polygonOne;
 				ARK::Geometry::Polygon<float>* polygonTwo;
 

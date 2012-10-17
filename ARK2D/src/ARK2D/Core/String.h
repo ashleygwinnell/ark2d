@@ -8,12 +8,12 @@
 #ifndef ARK_CORE_STRING_H_
 #define ARK_CORE_STRING_H_
 
+#include "../Includes.h"
 #include "Resource.h"
 #include "../Util/StringUtil.h"
 #include "../Util/Cast.h"
 
-#include <string>
-using namespace std;
+
 
 namespace ARK {
 	namespace Core {
@@ -25,12 +25,12 @@ namespace ARK {
 		 */
 		class String : public ARK::Core::Resource {
 			private:
-				string m_string;
+				std::string m_string;
 			public:
 				String(): ARK::Core::Resource(), m_string("") {
 
 				}
-				String(string s): m_string(s) {
+				String(std::string s): m_string(s) {
 
 				}
 
@@ -41,7 +41,7 @@ namespace ARK {
 				void operator+=(const char* c) {
 					m_string.append(c);
 				}
-				void operator+=(string s) {
+				void operator+=(std::string s) {
 					m_string.append(s);
 				}
 				void operator+=(unsigned int i) {
@@ -71,7 +71,7 @@ namespace ARK {
 					m_string = Cast::toString<float>(f);
 				}
 
-				String& append(string s) {
+				String& append(std::string s) {
 					m_string.append(s);
 					return *this;
 				}
@@ -82,7 +82,7 @@ namespace ARK {
 				void insert(const String& str, int at) {
 					insert(str.get(), at);
 				}
-				void insert(const string& str, int at) {
+				void insert(const std::string& str, int at) {
 					if (at > (int) m_string.length()) { return; }
 					m_string.insert(at, str);
 				}
@@ -103,7 +103,7 @@ namespace ARK {
 				String substring(int from, int length) {
 					return String(m_string.substr(from, length));
 				}
-				const string& get() const {
+				const std::string& get() const {
 					return m_string;
 				}
 				int getAsInt() const {
@@ -121,15 +121,15 @@ namespace ARK {
 				bool contains(string c) {
 					return (m_string.find(c) != string::npos);
 				}
-				vector<String> split(string delim) {
-					string thisString = m_string;
+				vector<String> split(std::string delim) {
+					std::string thisString = m_string;
 
 					vector<String> pieces;
 					size_t cutIndex;
 
-					while ((cutIndex = thisString.find_first_of(delim)) != string::npos)
+					while ((cutIndex = thisString.find_first_of(delim)) != std::string::npos)
 					{
-						string piece = thisString.substr(0, cutIndex);
+						std::string piece = thisString.substr(0, cutIndex);
 						pieces.push_back(String(piece));
 
 						thisString = thisString.substr(cutIndex+delim.length());
@@ -139,14 +139,14 @@ namespace ARK {
 
 					return pieces;
 				}
-				unsigned int countOccurrences(string s) {
+				unsigned int countOccurrences(std::string s) {
 					// @TODO: do this better. it's -1 because split includes empty strings AFTER the delimter.
 					return split(s).size() - 1;
 				}
-				bool equals(string s) {
+				bool equals(std::string s) {
 					return (strcmp(m_string.c_str(), s.c_str()) == 0);
 				}
-				string lastChar() {
+				std::string lastChar() {
 					return m_string.substr(m_string.size()-1);
 				}
 		};

@@ -1,0 +1,33 @@
+dependencies: \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/Sound.cpp \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/Sound.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../Includes.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../vendor/ogg130/ogg.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../vendor/ogg130/os_types.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../vendor/vorbis132/vorbisfile.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../vendor/vorbis132/codec.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../vendor/lpng151/png.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../vendor/lpng151/pnglibconf.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../vendor/lpng151/pngconf.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../vendor/libJSON/JSON_Defs.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../vendor/libJSON/JSON_Strings.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../vendor/libJSON/JSONNode.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../vendor/libJSON/JSONChildren.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../vendor/libJSON/Debug.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../vendor/libJSON/JSON_Worker.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../vendor/libJSON/JSON_StringConv.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../vendor/libJSON/jsonmain.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../UI/ErrorDialog.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../UI/../ARK2D.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../Namespaces.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/SoundStore.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../Core/Resource.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../Core/../Windres.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../Util/StringUtil.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../Util/../Core/ToString.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../Util/../Graphics/SpriteSheetDescription.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../Util/../Graphics/SpriteSheetDescriptionItem.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../Util/Log.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../Util/../Core/String.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../Core/../Util/Cast.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Audio/../vendor/FileInterface.h

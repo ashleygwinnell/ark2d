@@ -4,12 +4,12 @@
  *  Created on: 12-Dec-2009
  *      Author: Ashley
  */
-
+ 
 #ifdef __WIN32
 	#include <windows.h>
 #endif
 
-#include <set>
+
 
 #include "../Namespaces.h"
 #include "../Includes.h"

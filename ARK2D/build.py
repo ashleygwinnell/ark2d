@@ -143,10 +143,7 @@ class ARK2DBuildSystem:
 
 	def dllInit(self):
 		
-		f = open("config.json", "r");
-		fcontents = f.read();
-		f.close();
-		config = json.loads(fcontents);
+		config = self.config;
 		
 		self.building_library = True;
 		self.building_game = False;
@@ -194,6 +191,9 @@ class ARK2DBuildSystem:
 		
 		if (self.platform == "android"):
 			self.src_files.extend(config['src_files']['android']);
+			self.ark2d_dir = config[self.platformOn]['ark2d_dir'];
+
+
 		elif (self.platform == "iphone"):
 			self.src_files.extend(config['src_files']['iphone']);
 			self.ark2d_dir = config["osx"]['ark2d_dir'];
@@ -206,6 +206,9 @@ class ARK2DBuildSystem:
 			self.static_libraries.extend(config['static_libraries']['windows']);
 			self.linkingFlags = " -mwindows -shared ";
 			
+			self.ark2d_dir = config["windows"]['ark2d_dir'];
+			self.ark2d_tmpdir = "C:\\ark2d\\l";
+				
 		elif (self.platform == "osx"):
 			
 			self.build_artifact = self.build_folder + self.ds + self.platform + self.ds + "libARK2D.dylib";
@@ -216,9 +219,12 @@ class ARK2DBuildSystem:
 			self.linkingFlags = "";
 
 			self.ark2d_dir = config["osx"]['ark2d_dir'];
+			self.ark2d_tmpdir = "/ark2d/lib";
 			
+		self.game_dir = self.ark2d_dir;
 		self.src_files.extend(config['src_files']['all']);
 		
+	
 		
 	def gamePreInit(self):
 	
@@ -229,6 +235,8 @@ class ARK2DBuildSystem:
 		self.dll_files[:] = [];
 		self.static_libraries[:] = [];
 		
+		#self.build_folder = self.game_dir + "/" + self.build_folder;
+
 		self.mkdirs.extend([
 			self.build_folder,
 			self.build_folder + self.ds + self.platform,
@@ -238,6 +246,11 @@ class ARK2DBuildSystem:
 		]);
 		self.mkdirs.extend(self.game_mkdirs);
 		
+		if (self.platform == "windows"):
+			self.ark2d_tmpdir = "C:\\ark2d\\gm";
+		else:
+			self.ark2d_tmpdir = "/ark2d/gm";
+		
 	def gamePostInit(self):
 	
 		if (sys.platform == "win32"):
@@ -246,7 +259,7 @@ class ARK2DBuildSystem:
 			self.build_artifact = self.build_folder + self.ds + self.game_name.replace(" ", "_");
 
 		# open config
-		f = open("config.json", "r");
+		f = open(self.game_dir + "/config.json", "r");
 		fcontents = f.read();
 		f.close();
 		config = json.loads(fcontents);
@@ -259,7 +272,7 @@ class ARK2DBuildSystem:
 		arkh += "#else" + nl;
 		arkh += "	#include \"" + config["osx"]['ark2d_dir'] + "/src/ARK.h\"" + nl;
 		arkh += "#endif" + nl;
-		f = open("src/ARK.h", "w");
+		f = open(self.game_dir + "/src/ARK.h", "w");
 		f.write(arkh);
 		f.close();
 			
@@ -302,21 +315,22 @@ class ARK2DBuildSystem:
 		return h_ext;
 		
 	def startWindows(self):
-		print("Hurray for windows");
-
+		print("Building for Current Platform (" + self.platform + ")");
+		
 		#prepare dirs
+		print("---");
+		print("Making Directories");
 		for h in self.mkdirs:
 			#h = "'" + h + "'";
-			print("mkdir " + h);
+			
 			#subprocess.call(['mkdir C:\\' + h], shell=True);
 			try:
-				os.makedirs(h);
+				print("mkdir " + self.game_dir + self.ds + h);
+				os.makedirs(self.game_dir + self.ds + h);
 			except OSError as exc: 
 				if exc.errno == errno.EEXIST:
 					pass
-				else: raise
-				
-		
+				else: raise	
 		
 		# make sure cache file exists
 		
@@ -325,7 +339,11 @@ class ARK2DBuildSystem:
 		#if (self.building_game):
 			#cachefilename += self.game_dir + self.ds;
 			
-		cachefilename += self.build_folder + self.ds + self.platform + self.ds + "build-cache" + self.ds  + "compiled.json";
+		cachefilename += self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + "build-cache" + self.ds  + "compiled.json";
+		
+		print("---");
+		print("Loading build cache file: " + cachefilename);
+		
 		self.createCacheFile(cachefilename);
 		f = open(cachefilename, "r")
 		fcontents = f.read();
@@ -333,12 +351,15 @@ class ARK2DBuildSystem:
 		fjson = json.loads(fcontents);
 		fchanged = False;
 		
-
+		# TODO: generate block
+		#if (sys.platform == "win32"):
 		
-		print("loaded build cache file: ");
-		print(cachefilename);
+		
+
+		print("Loaded build cache file: " + cachefilename);
 			
-		print("compiling");
+		print("---");
+		print("Compiling Source Files: ");
 		#print(self.src_files);
 		
 		#compile
@@ -360,15 +381,21 @@ class ARK2DBuildSystem:
 			elif h_ext == 'rc':
 				compileStr += "windres ";
 				
-			if (not h in fjson or fjson[h]['date_modified'] < os.stat(h).st_mtime):
+			if (not h in fjson or fjson[h]['date_modified'] < os.stat(self.game_dir + self.ds + h).st_mtime):
 				
 				processThisFile = True;
+
+				print(h);
 
 				if (h_ext == 'c' or h_ext == 'cpp' or h_ext == 'mm'):
 					compileStr += " -O3 -Wall -c -fmessage-length=0 ";
 					if (sys.platform == "darwin"): #compiling on mac
 						if not "vendor" in newf:
-							compileStr += " -mmacosx-version-min=10.6 -DMAC_OS_X_VERSION_MIN_REQUIRED=1060 -x objective-c++ ";
+							compileStr += " -mmacosx-version-min=10.6 -DARK2D_MACINTOSH -DMAC_OS_X_VERSION_MIN_REQUIRED=1060 -x objective-c++  ";
+
+							# warnings
+							compileStr += " -Wall -Winit-self -Woverloaded-virtual -Wuninitialized  "; #  -Wold-style-cast -Wmissing-declarations
+
 							#compileStr += "-I /usr/X11/include "; 
 							#compileStr += "-I /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk/usr/include ";
 							compileStr += "-I /usr/include ";
@@ -389,24 +416,27 @@ class ARK2DBuildSystem:
 						#-march=i386 "; # i386
 						#-arch i386
 						compileStr += " -o \"";
-						compileStr += self.build_folder + self.ds + self.platform + self.ds + newf + "\" \"" + h + "\" ";
+						compileStr += self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + newf + "\" \"" + self.game_dir + self.ds + h + "\" ";
 					elif (sys.platform == "win32"):
 						#compileStr += " -o \"" + self.build_folder + self.ds + self.platform + self.ds + newf + "\" \"" + h + "\" ";
 						#compileStr += " -Wno-strict-aliasing -Wno-unused-but-set-variable -fpermissive ";
-						compileStr += " -o " + self.build_folder + self.ds + self.platform + self.ds + newf + " " + h + " ";
+						#compileStr += " -o " + self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + newf + " " + self.game_dir + self.ds + h + " ";
+						compileStr += "-DARK2D_WINDOWS ";
+						compileStr += " -o " + self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + newf + " " + self.game_dir + self.ds + h + " ";
 					else:
-						compileStr += " -o " + self.build_folder + self.ds + self.platform + self.ds + newf + " " + h + " ";			
+						compileStr += " -o " + self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + newf + " " + self.game_dir + self.ds + h + " ";			
 					
 				elif h_ext == 'rc':
 					if (sys.platform == "win32"):
-						compileStr += h + " " + self.build_folder + self.ds + self.platform + self.ds + newf + " ";
+						#compileStr += self.game_dir + self.ds + h + " " + self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + newf + " ";
+						compileStr += self.game_dir + self.ds + h + " " +  self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + newf + " ";
 					else:
 						processThisFile = False; 
 			
 				if (processThisFile):
-					fjson[h] = {"date_modified": os.stat(h).st_mtime };
-	
-					print(compileStr);
+					fjson[h] = {"date_modified": os.stat(self.game_dir + self.ds + h).st_mtime };
+					
+					#print(compileStr);
 					#subprocess.call(["dir"], shell=True);
 					#subprocess.call([compileStr], shell=True);	 
 					
@@ -418,9 +448,11 @@ class ARK2DBuildSystem:
 	
 		# update compile cache thing
 		if (fchanged == True):
-			f = open(self.build_folder + self.ds + self.platform + self.ds + "build-cache" + self.ds + "compiled.json", "w")
+			f = open(self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + "build-cache" + self.ds + "compiled.json", "w")
 			f.write(json.dumps(fjson, sort_keys=True, indent=4));
 			f.close();
+		else:
+			print("...nothing to compile!");
 	
 		#link
 		self.doLink();
@@ -432,11 +464,26 @@ class ARK2DBuildSystem:
 		
 	def doLink(self):
 		
-		print("linking binary");
+		print("---")
+		print("Linking Binary");
 		if (sys.platform=="win32"):
 		 
+			# copy ark2d/build/windows in to tmpdir
+			builddirsorc = self.game_dir + self.ds + self.build_folder + self.ds+ self.platform;
+			builddirdest = self.ark2d_tmpdir;
+			try:
+				#os.system("rmdir /S " + builddirdest + self.ds + self.build_folder + self.ds + self.platform);
+				os.system("rmdir /S /Q " + builddirdest );
+				shutil.copytree(builddirsorc, builddirdest);
+			except:
+				print("could not copy sources [from:"+builddirsorc+",to:"+builddirdest);
+				return;
+				pass;
+				
+		
+		 
 			linkingStr = "";
-			linkingStr += self.gppCompiler + " " + self.mingw_link + " " + self.linkingFlags + " -o" + self.build_artifact + "";
+			linkingStr += self.gppCompiler + " " + self.mingw_link + " " + self.linkingFlags + " -o" + self.game_dir + self.ds + self.build_artifact + "";
 			#linkingStr += self.gppCompiler + " " + self.mingw_link + " -o" + self.build_artifact + "";
 		
 			for h in self.src_files:
@@ -444,29 +491,51 @@ class ARK2DBuildSystem:
 				newf = h[0:findex] + ".o";
 				#print(newf);
 				h_ext = h[findex+1:len(h)];
-				linkingStr += " " + self.build_folder + self.ds + self.platform + self.ds + newf;
+				linkingStr += " " + self.ark2d_tmpdir + self.ds + newf;
 			
 			for f in self.dll_files:
-				linkingStr += " " + f;
-				
+				if (self.building_library):
+					linkingStr += " " + self.game_dir + self.ds + f;
+				else:
+					linkingStr += " " + f;				
+
+					
 			for f in self.static_libraries:
 				linkingStr += " -l" + f;
 				#pass;
 				
-			print(linkingStr);
+			#print(linkingStr);
 			
 			#subprocess.call([linkingStr], shell=True);	
 			#print(len(linkingStr));
-			os.system(linkingStr);
+			#os.system(linkingStr);
+			#subprocess.call([ linkingStr ], shell=True);	
+					
+			editsStrReplace = [("\\", "\\")];
+			linkingStrClean = self.str_replace(linkingStr, editsStrReplace);
+					
+			linkbat = self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + "dolink.bat";
+			f = open(linkbat, "w")
+			f.write(linkingStrClean);
+			f.close();
+			
+			subprocess.call([ linkbat ], shell=True);	
+			
+			
+			
+			
+			
 			
 			#copy game resources in to .build
 			if(self.building_game):
 			
 				#copying dll in to project.
+				dll = self.ark2d_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + 'libARK2D.dll'
+				dlldest = self.game_dir.replace('\\\\','\\') + '\\' + self.build_folder + '\\' + self.platform;
 				try:
-					dll = self.ark2d_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + 'libARK2D.dll'
-					shutil.copy(dll, self.game_dir.replace('\\\\','\\') + '\\' + self.build_folder + '\\' + self.platform);
+					shutil.copy(dll, dlldest);
 				except:
+					print("could not copy " + dll + " into " + dlldest);
 					pass;
 					
 				#copying other dlls in to project.
@@ -489,6 +558,7 @@ class ARK2DBuildSystem:
 					thisgameresdir = self.game_resources_dir.replace('\\\\','\\');
 					thisgameresdir2 = self.game_dir.replace('\\\\','\\') + '\\' + self.build_folder + '\\' + self.platform + '\\data';
 					try:
+						os.system("rmdir /S /Q " + thisgameresdir2); 
 						shutil.copytree(thisgameresdir, thisgameresdir2);
 					except:
 						print("could not copy resources [from:"+thisgameresdir+",to:"+thisgameresdir2);
@@ -500,13 +570,13 @@ class ARK2DBuildSystem:
 			
 			if (self.building_library):
 				linkingStr = ""; 
-				linkingStr += self.gppCompiler + " -L lib/osx/freetype -L /Developer/SDKs/MacOSX10.6.sdk/usr/lib -framework OpenGL -framework OpenAL -framework Foundation -framework Cocoa -framework ApplicationServices -lobjc -install_name @executable_path/../Frameworks/libARK2D.dylib " + self.linkingFlags + "  -dynamiclib -o " + self.build_artifact;
+				linkingStr += self.gppCompiler + " -L " + self.game_dir + self.ds + "lib/osx/freetype -L /Developer/SDKs/MacOSX10.6.sdk/usr/lib -framework OpenGL -framework OpenAL -framework Foundation -framework Cocoa -framework ApplicationServices -lobjc -install_name @executable_path/../Frameworks/libARK2D.dylib " + self.linkingFlags + "  -dynamiclib -o " + self.game_dir + self.ds + self.build_artifact;
 				#linkingStr += " -march=i386 ";
 			
 				for h in self.src_files:
 					findex = h. rfind('.');
 					newf = h[0:findex] + ".o";
-					linkingStr += " " + self.build_folder + self.ds + self.platform + self.ds + newf;
+					linkingStr += " " + self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + newf;
 				
 				for f in self.dll_files:
 					linkingStr += " " + f;
@@ -522,7 +592,7 @@ class ARK2DBuildSystem:
 				
 				# we need to make the dirs for the .app file.
 				gn = self.game_name.replace(' ', '\ ');
-				app_folder = self.build_folder + self.ds + gn + ".app";
+				app_folder = self.game_dir + self.ds + self.build_folder + self.ds + gn + ".app";
 				contents_folder = app_folder + self.ds + "Contents";
 				frameworks_folder = app_folder + self.ds + "Contents" + self.ds + "Frameworks";
 				resources_folder = app_folder + self.ds + "Contents" + self.ds + "Resources";
@@ -539,7 +609,8 @@ class ARK2DBuildSystem:
 				
 				
 				#copy ark2d resources in to .app
-				print("copying ark2d resources in to project:");
+				print("---");
+				print("Copying ARK2D resources in to project:");
 				cpyark2dres = 'cp -r ' + self.ark2d_dir + self.ds + 'data ' + resources_folder + self.ds + 'data' + self.ds + 'ark2d';
 				print(cpyark2dres);
 				subprocess.call([cpyark2dres], shell=True);
@@ -549,7 +620,8 @@ class ARK2DBuildSystem:
 
 				#copy game resources in to .app
 				if (self.game_resources_dir != ''):
-					print("copying game resources in to project:");
+					print("---");
+					print("Copying game resources in to project:");
 					gme_rs_dir = self.game_resources_dir.replace(' ', '\ ').replace('&', '\&');
 					cpy_game_res = 'cp -r ' + gme_rs_dir + ' ' + resources_folder;
 					print(cpy_game_res);
@@ -562,7 +634,8 @@ class ARK2DBuildSystem:
 				else:
 					subprocess.call(['cp ' + resources_folder + self.ds + 'ark2d' + self.ds + 'icon.icns ' + resources_folder + self.ds + gn +'.icns'], shell=True);
 				
-				
+				print("---");
+				print("Generating plist file");
 				cr = "\r";
 				infoplistcontents  = "";
 				infoplistcontents += "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + cr;
@@ -576,7 +649,7 @@ class ARK2DBuildSystem:
 				infoplistcontents += "		<key>CFBundleIdentifier</key>" + cr;
 				infoplistcontents += "		<string>com.ark2d." + self.game_short_name + "</string>" + cr;
 				infoplistcontents += "		<key>CFBundleGetInfoString</key>" + cr;
-				infoplistcontents += "		<string>" + self.config['game_name'] + " \xc2 " + self.config['company_name'] + "</string>" + cr;
+				infoplistcontents += "		<string>" + self.config['game_name'] + ". Copyright " + self.config['company_name'] + "</string>" + cr;
 				#infoplistcontents += "		<key>NSHumanReadableCopyright</key>" + cr;
 				#infoplistcontents += "		<string>Copyright YEAR Thoname</string>" + cr;
 				infoplistcontents += "		<key>CFBundleIconFile</key>" + cr;
@@ -590,14 +663,17 @@ class ARK2DBuildSystem:
 				
 				self.build_artifact = app_folder + self.ds + "Contents" + self.ds + "MacOS" + self.ds + gn;
 				
+				print("---");
+				print("Creating Executable");
+
 				linkingStr = "";
 				linkingStr += self.gppCompiler + " -o " + self.build_artifact + " "; 
-				for h in self.src_files:
+				for h in self.src_files: 
 					findex = h.rfind('.');
 					newf = h[0:findex] + ".o";
 					h_ext = h[findex+1:len(h)];
 					if (h_ext != 'rc'):
-						linkingStr += " " + self.build_folder + self.ds + self.platform + self.ds + newf;
+						linkingStr += " " + self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + newf;
 				
 				for f in self.dll_files:
 					linkingStr += " " + f;
@@ -614,11 +690,14 @@ class ARK2DBuildSystem:
 				
 				#-march=i386 
 				#-framework OpenAL
+
+				print("---");
+				print("Build Complete");
+				print("---");
 			
 		
 		
 	def startMac(self):
-		print("Hurray for Mac");
 		self.startWindows();
 		
 	def listDirectories(self, dir, usefullname=True, appendStr = ""):
@@ -634,7 +713,7 @@ class ARK2DBuildSystem:
 					thelist.extend([appendStr + name]);
 					
 				#thelist.extend([full_name]); 
-				thelist.extend(self.listDirectories(full_name, usefullname, appendStr+name+"/"));
+				thelist.extend(self.listDirectories(full_name, usefullname, appendStr+name+self.ds));
 			#else:
 			#	os.remove(full_name);
 		return thelist;
@@ -649,7 +728,7 @@ class ARK2DBuildSystem:
 			#print(full_name);
 			
 			if os.path.isdir(full_name):
-				thelist.extend(self.listFiles(full_name, usefullname, appendStr+name+"/"));
+				thelist.extend(self.listFiles(full_name, usefullname, appendStr+name+self.ds));
 			else:
 				if usefullname==True:
 					thelist.extend([appendStr + full_name]);
@@ -669,14 +748,23 @@ class ARK2DBuildSystem:
 		pass;
 		
 	def clean(self):
+		print("---");
+		print("Cleaning Build");
 		if (sys.platform == "darwin"):
-			cm = "rm -r -d " + self.build_folder + self.ds + self.platform;
+			cm = "rm -r -d " + self.game_dir + self.ds + self.build_folder + self.ds + self.platform;
 		elif(sys.platform == "win32"):
-			cm = "rmdir /S /Q " + self.build_folder + self.ds + self.platform;
+			cm = "rmdir /S /Q " + self.game_dir + self.ds + self.build_folder + self.ds + self.platform;
 		
 		#subprocess.call([], shell=True);
 		print(cm);
-		os.system(cm);
+		try:
+			buildresp = os.system(cm);
+		except:
+			print("could not remove dir");
+
+
+
+
 
 	def generateSpriteSheets(self):
 		if ("resources" in self.config and "spritesheets" in self.config["resources"]):
@@ -738,11 +826,561 @@ class ARK2DBuildSystem:
 		print("Building iPhone");
 
 		# open config
-		f = open("config.json", "r");
+		f = open(self.game_dir + "/config.json", "r");
 		fcontents = f.read();
 		f.close();
 		config = json.loads(fcontents);
 
+
+		gyp_executable = "/Users/ashleygwinnell/Documents/gyp-read-only/gyp";
+
+		if (self.building_library):
+
+			#projectname ark2d
+			projectname = "ark2d";
+
+			# generate gyp file.
+			print("creating gyp file");
+			gypfilename = self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + projectname + ".gyp";
+
+			gypfile = {};
+			gypfile['defines'] = []; #'ARK2D_IPHONE'];
+			
+			gypfile['targets'] = [];
+
+			gypfiletarget = {};
+			gypfiletarget['target_name'] = "ark2d-iPhone";
+			gypfiletarget['type'] = "static_library";
+			gypfiletarget['include_dirs'] = [];
+			gypfiletarget['sources'] = [];
+
+			for srcfile in config['src_files']['iphone']:
+				gypfiletarget['sources'].extend(["../../"+srcfile]);
+
+			for srcfile in config['src_files']['all']:
+				gypfiletarget['sources'].extend(["../../"+srcfile]);
+
+			gypfiletarget['sources!'] = [];
+			gypfiletarget['dependencies'] = [];
+			gypfiletarget['conditions'] = [];
+			gypfiletargetcondition = {};
+			gypfiletargetcondition['defines'] = ['ARK2D_IPHONE']; #, 'CF_EXCLUDE_CSTD_HEADERS'];
+			gypfiletargetcondition['sources'] = [];
+			gypfiletargetcondition['sources!'] = [];
+			gypfiletargetcondition['link_settings'] = {};
+			gypfiletargetcondition['link_settings']['libraries'] = [
+				#'/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/CoreFoundation.framework',
+	          	'/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/CoreGraphics.framework',
+	          	#'/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/CoreText.framework',
+	          	#'/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/UIKit.framework',
+	          	"/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/System/Library/Frameworks/UIKit.framework",
+	          	'/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/Foundation.framework',
+	          	'/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/QuartzCore.framework',
+	          	'/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/OpenGLES.framework'
+					              ];
+					              #'../../lib/iphone/libfreetype.a
+			
+
+			gypfiletargetcondition['ldflags'] = [
+				"-lbz2",
+				"-lcurl",
+				"-lz",
+				"-L" + self.ark2d_dir + "/lib/iphone",
+				"-L" + self.ark2d_dir + "/lib/osx",
+				"-L/usr/lib"
+			];
+
+			gypfiletargetcondition['link_settings!'] = [
+				'$(SDKROOT)/System/Library/Frameworks/Cocoa.framework',
+	        	'$(SDKROOT)/System/Library/Frameworks/Foundation.framework',
+	        	'$(SDKROOT)/System/Library/Frameworks/QuartzCore.framework',
+	        	'$(SDKROOT)/System/Library/Frameworks/OpenGL.framework',
+	        	'$(SDKROOT)/System/Library/Frameworks/ApplicationServices.framework'];
+			gypfiletargetcondition['include_dirs'] = ['../../src/ARK2D/vendor/iphone'];
+			
+			gypfiletargetcondition['xcode_settings'] = {};
+			gypfiletargetcondition['xcode_settings']['ARCHS'] = "armv6 armv7";
+			gypfiletargetcondition['xcode_settings']['IPHONEOS_DEPLOYMENT_TARGET'] = '4.2';
+			gypfiletargetcondition['xcode_settings']['SDKROOT'] = "iphoneos";
+			gypfiletargetcondition['xcode_settings']['TARGETED_DEVICE_FAMILY'] = "1,2";
+			gypfiletargetcondition['xcode_settings']['GCC_PREPROCESSOR_DEFINITIONS'] = "ARK2D_IPHONE";
+			gypfiletargetcondition['xcode_settings']['GCC_OPTIMIZATION_LEVEL'] = "0";
+
+			#cflags -DNS_BLOCK_ASSERTIONS=1
+
+			#'xcode_settings': {
+	        #  'INFOPLIST_FILE' : '../experimental/iOSSampleApp/iOSSampleApp-Info.plist',
+	        #  'ARCHS' : 'armv6 armv7',
+	        #  'IPHONEOS_DEPLOYMENT_TARGET' : '4.2',
+	        #  'SDKROOT' : 'iphoneos',
+	        #  'TARGETED_DEVICE_FAMILY' : '1,2',
+	        #  'USER_HEADER_SEARCH_PATHS' : '../../gpu/include/** ../../include/**',
+	        #  'CODE_SIGN_IDENTITY' : 'iPhone Developer',
+	        #  'GCC_PREPROCESSOR_DEFINITIONS' : 'ARK2D_IPHONE',
+	        #  'GCC_OPTIMIZATION_LEVEL' : '0',
+			#},
+			#xcconfigfile = self.game_dir + self.ds + "lib/iphone/ARK2D-Base.xcconfig";
+			xcconfigfilesimple = projectname + ".xcconfig";
+			xcconfigfile = self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + xcconfigfilesimple;
+
+			gypfiletargetcondition['xcode_config_file'] = xcconfigfilesimple;
+			gypfiletargetcondition['mac_bundle_resources'] = [];
+
+			iphonecondition = [];
+			iphonecondition.extend(["OS == 'mac'"]);
+			iphonecondition.extend([gypfiletargetcondition]);
+			gypfiletarget['conditions'].extend([iphonecondition]);
+			
+			gypfile['targets'].extend([gypfiletarget]);
+
+			print("saving gyp file: " + gypfilename);
+			f = open(gypfilename, "w")
+			f.write(json.dumps(gypfile, sort_keys=True, indent=4));
+			f.close();
+
+			#exit(0);
+			#pchfilename = self.game_dir + self.ds + "lib/iphone/" + projectname + "-Prefix.pch";
+			pchfilename = self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + projectname + "-Prefix.pch";
+
+			#delete xcode project? 
+			try:
+				print("deleting xcode project");
+				os.system("rm -r -d " + pchfilename);
+				os.system("rm -r -d " + xcconfigfile);
+				os.system("rm -r -d " + self.build_folder + self.ds + self.platform + self.ds + "XcodeData");
+			except:
+				print("could not delete xcode project");
+
+			# run gyp file.
+			os.system("python " + gyp_executable + " " + gypfilename + " --depth=../../src");
+			
+			# add precompiled headers file
+			print("generating pch file");
+			
+			nl = "\r\n";
+			pcheaderfile = "";
+			#pcheaderfile += "#ifdef __OBJC__" + nl;
+			pcheaderfile += "	#import <Foundation/Foundation.h>" + nl;
+			pcheaderfile += "	#import <UIKit/UIKit.h>" + nl + nl;
+
+
+			pcheaderfile += "	#import <OpenAL/al.h>" + nl;
+			pcheaderfile += "	#import <OpenAL/alc.h>" + nl + nl
+
+			pcheaderfile += "	#import <OpenGLES/EAGL.h>" + nl;
+			pcheaderfile += "	#import <QuartzCore/QuartzCore.h>" + nl + nl;
+
+			pcheaderfile += "	#import <OpenGLES/ES1/gl.h>" + nl;
+			pcheaderfile += "	#import <OpenGLES/ES1/glext.h>" + nl;
+			pcheaderfile += "	#import <OpenGLES/ES2/gl.h>" + nl;
+			pcheaderfile += "	#import <OpenGLES/ES2/glext.h>" + nl;
+			pcheaderfile += "	#import <OpenGLES/EAGLDrawable.h>" + nl + nl;
+
+			pcheaderfile += "	#import <CoreFoundation/CFBundle.h>" + nl;
+			pcheaderfile += "	#import <CoreFoundation/CoreFoundation.h>" + nl;
+
+			#pcheaderfile += "#endif";
+
+			print("saving pch file: " + pchfilename);
+			f = open(pchfilename, "w")
+			f.write(pcheaderfile);
+			f.close();
+
+			#print("set the pch manually in xcode, under Apple LLVM compiler 4.1 - Language...");
+			#print("set YES and ../../lib/iphone/" + projectname + "-Prefx.pch");
+
+			#create xcconfig file
+			print("generating xcconfig file:");
+			xcconfigfilecontents = "";
+			xcconfigfilecontents += "GCC_PRECOMPILE_PREFIX_HEADER = YES;" + nl;
+			xcconfigfilecontents += "GCC_PREFIX_HEADER = " + pchfilename + ";" + nl;
+			xcconfigfilecontents += "SRCROOT = " + self.game_dir + self.ds + "src" + self.ds + "ARK2D" + nl;
+			xcconfigfilecontents += "HEADERMAP_INCLUDES_FLAT_ENTRIES_FOR_TARGET_BEING_BUILT = NO;" + nl;
+			xcconfigfilecontents += "HEADERMAP_INCLUDES_PROJECT_HEADERS = NO;" + nl;
+			xcconfigfilecontents += "HEADERMAP_INCLUDES_FRAMEWORK_ENTRIES_FOR_ALL_PRODUCT_TYPES = NO;" + nl;
+			xcconfigfilecontents += "ALWAYS_SEARCH_USER_PATHS = NO;" + nl;
+			xcconfigfilecontents += "OTHER_CFLAGS = -x objective-c;" + nl;
+			xcconfigfilecontents += "OTHER_CPLUSPLUSFLAGS = -x objective-c++;" + nl;
+			
+
+			
+			print("saving xcconfig file: " + xcconfigfile);
+			f = open(xcconfigfile, "w")
+			f.write(xcconfigfilecontents);
+			f.close();
+
+			print("done. now compile with the xcode project.");
+
+			exit(0);
+
+		else:
+			#building game.
+
+			#mkdirs
+			try:
+				os.makedirs(self.game_dir + self.ds + self.build_folder + self.ds + self.platform);
+			except OSError as exc: 
+				pass;
+
+			#projectname ark2d
+			projectname = config['game_short_name'];
+
+			# generate gyp file.
+			print("creating gyp file");
+			gypfilename = self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + projectname + ".gyp";
+
+			gypfile = {};
+			gypfile['defines'] = []; #'ARK2D_IPHONE'];
+			
+			gypfile['targets'] = [];
+
+			gypfiletarget = {};
+			gypfiletarget['target_name'] = projectname + "-iPhone";
+			gypfiletarget['type'] = "executable";
+			gypfiletarget['mac_bundle'] = 1;
+			#'mac_bundle': 1,
+			gypfiletarget['include_dirs'] = [];
+			gypfiletarget['sources'] = [];
+
+			for srcfile in config['game_src_files']:
+				gypfiletarget['sources'].extend(["../../"+srcfile]);
+
+			gypfiletarget['sources!'] = [];
+			gypfiletarget['dependencies'] = [];
+			gypfiletarget['conditions'] = [];
+			gypfiletargetcondition = {};
+			gypfiletargetcondition['defines'] = ['ARK2D_IPHONE']; #, 'CF_EXCLUDE_CSTD_HEADERS'];
+			gypfiletargetcondition['sources'] = [];
+			gypfiletargetcondition['sources!'] = [];
+			gypfiletargetcondition['link_settings'] = {};
+			gypfiletargetcondition['link_settings']['libraries'] = [
+				'/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/CoreFoundation.framework',
+	          	'/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/CoreGraphics.framework',
+	          	'/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/UIKit.framework',
+	          	'/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/Foundation.framework',
+	          	'/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/QuartzCore.framework',
+	          	'/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/OpenGLES.framework',
+	          	'/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS4.3.sdk/System/Library/Frameworks/OpenAL.framework',
+	          	#'../../lib/iphone/libfreetype.a'
+	          	config['osx']['ark2d_dir'] + '/lib/iphone/libfreetype.a',
+	          	config['osx']['ark2d_dir'] + '/lib/osx/libcurl.a',
+	          	
+	          	config['osx']['ark2d_dir'] + '/build/iphone/XcodeData/ark2d/Build/Products/Default-iphonesimulator/libark2d-iPhone.a'
+					              ];
+					              #'../../lib/iphone/libfreetype.a
+			
+
+			gypfiletargetcondition['ldflags'] = [ ];
+
+			gypfiletargetcondition['link_settings!'] = [];
+
+			ark2ddir = config['osx']['ark2d_dir'] + "/src/ARK2D";
+			gypfiletargetcondition['include_dirs'] = [ 
+				ark2ddir, 
+				ark2ddir + '/vendor/iphone' 
+			];
+			
+			gypfiletargetcondition['xcode_settings'] = {};
+			gypfiletargetcondition['xcode_settings']['ARCHS'] = "armv6 armv7";
+			gypfiletargetcondition['xcode_settings']['IPHONEOS_DEPLOYMENT_TARGET'] = '4.2';
+			gypfiletargetcondition['xcode_settings']['SDKROOT'] = "iphoneos";
+			gypfiletargetcondition['xcode_settings']['TARGETED_DEVICE_FAMILY'] = "1,2";
+			gypfiletargetcondition['xcode_settings']['GCC_PREPROCESSOR_DEFINITIONS'] = "ARK2D_IPHONE";
+			gypfiletargetcondition['xcode_settings']['GCC_OPTIMIZATION_LEVEL'] = "0";
+
+			
+			xcconfigfilesimple = projectname + ".xcconfig";
+			xcconfigfile = self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + xcconfigfilesimple;
+
+			gypfiletargetcondition['xcode_config_file'] = xcconfigfilesimple;
+			gypfiletargetcondition['mac_bundle_resources'] = [
+				"data/",				#ark2d and game data
+
+				"Icon.png",				#iphone
+				"Icon@2x.png",			#iphone-retina
+				"Icon-Small.png",		#iphone-spotlight
+				"Icon-Small@2x.png",	#iphone-spotlight-retina
+
+				"Icon-72.png",			#ipad
+				"Icon-72@2x.png",		#ipad-retina
+				"Icon-Small-50.png",	#ipad-spotlight
+				"Icon-Small-50@2x.png",	#ipad-spotlight-retina
+
+				"iTunesArtwork", 		#app-store-icon
+				"iTunesArtwork@2x", 	#app-store-icon-retina
+			];
+
+			iphonecondition = [];
+			iphonecondition.extend(["OS == 'mac'"]);
+			iphonecondition.extend([gypfiletargetcondition]);
+			gypfiletarget['conditions'].extend([iphonecondition]);
+			
+			gypfile['targets'].extend([gypfiletarget]);
+
+			print("saving gyp file: " + gypfilename);
+			f = open(gypfilename, "w")
+			f.write(json.dumps(gypfile, sort_keys=True, indent=4));
+			f.close();
+
+
+
+			#delete xcode project? 
+			pchfilename = self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + projectname + "-Prefix.pch";
+			info_plist_filename = self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + projectname + "-Info.plist";
+			try:
+				print("deleting xcode project");
+				os.system("rm -r -d " + pchfilename);
+				os.system("rm -r -d " + info_plist_filename);
+				os.system("rm -r -d " + xcconfigfile);
+				os.system("rm -r -d " + self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + "XcodeData");
+			except:
+				print("could not delete xcode project");
+
+			# run gyp file.
+			os.system("python " + gyp_executable + " " + gypfilename + " --depth=../../src");
+			
+			# add precompiled headers file
+			print("generating pch file");
+			
+			nl = "\r\n";
+			pcheaderfile = "";
+			#pcheaderfile += "#ifdef __OBJC__" + nl;
+			pcheaderfile += "	#import <Foundation/Foundation.h>" + nl;
+			pcheaderfile += "	#import <UIKit/UIKit.h>" + nl + nl;
+
+
+			pcheaderfile += "	#import <OpenAL/al.h>" + nl;
+			pcheaderfile += "	#import <OpenAL/alc.h>" + nl + nl
+
+			pcheaderfile += "	#import <OpenGLES/EAGL.h>" + nl;
+			pcheaderfile += "	#import <QuartzCore/QuartzCore.h>" + nl + nl;
+
+			pcheaderfile += "	#import <OpenGLES/ES1/gl.h>" + nl;
+			pcheaderfile += "	#import <OpenGLES/ES1/glext.h>" + nl;
+			pcheaderfile += "	#import <OpenGLES/ES2/gl.h>" + nl;
+			pcheaderfile += "	#import <OpenGLES/ES2/glext.h>" + nl;
+			pcheaderfile += "	#import <OpenGLES/EAGLDrawable.h>" + nl + nl;
+
+			pcheaderfile += "	#import <CoreFoundation/CFBundle.h>" + nl;
+			pcheaderfile += "	#import <CoreFoundation/CoreFoundation.h>" + nl;
+
+			#pcheaderfile += "#endif";
+
+			print("saving pch file: " + pchfilename);
+			f = open(pchfilename, "w")
+			f.write(pcheaderfile);
+			f.close();
+
+			print ("generating project-Info.plist file");
+			info_plist_contents = "";
+			info_plist_contents += '<?xml version="1.0" encoding="UTF-8"?>' + nl;
+			info_plist_contents += '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">' + nl;
+			info_plist_contents += '<plist version="1.0">' + nl;
+			info_plist_contents += '<dict>' + nl;
+			info_plist_contents += '	<key>CFBundleDevelopmentRegion</key>' + nl;
+			info_plist_contents += '	<string>en</string>' + nl;
+			info_plist_contents += '	<key>CFBundleDisplayName</key>' + nl;
+			info_plist_contents += '	<string>' + config['game_name'] + '</string>' + nl;
+			info_plist_contents += '	<key>CFBundleExecutable</key>' + nl;
+			info_plist_contents += '	<string>${EXECUTABLE_NAME}</string>' + nl;
+
+			info_plist_contents += '	<key>CFBundleIconFiles</key>' + nl;
+			info_plist_contents += '	<array>' + nl;
+			info_plist_contents += '		<string></string>' + nl;
+			info_plist_contents += '		<string>Icon.png</string>' + nl;					#iphone
+			info_plist_contents += '		<string>Icon@2x.png</string>' + nl;					#iphone-retina
+			info_plist_contents += '		<string>Icon-Small.png</string>' + nl;				#iphone-spotlight
+			info_plist_contents += '		<string>Icon-Small@2x.png</string>' + nl;			#iphone-spotlight-retina
+			info_plist_contents += '		<string>Icon-72.png</string>' + nl;					#ipad
+			info_plist_contents += '		<string>Icon-72@2x.png</string>' + nl;				#ipad-retina
+			info_plist_contents += '		<string>Icon-Small-50.png</string>' + nl;			#ipad-spotlight
+			info_plist_contents += '		<string>Icon-Small-50@2x.png</string>' + nl;		#ipad-spotlight-retina
+			info_plist_contents += '	</array>' + nl;
+
+			info_plist_contents += '	<key>CFBundleIcons</key>' + nl;
+			info_plist_contents += '	<dict>' + nl;
+			info_plist_contents += '		<key>CFBundlePrimaryIcon</key>' + nl;
+			info_plist_contents += '		<dict>' + nl;
+			info_plist_contents += '			<key>CFBundleIconFiles</key>' + nl;
+			info_plist_contents += '			<array>' + nl;
+			info_plist_contents += '				<string></string>' + nl;
+			info_plist_contents += '				<string>Icon.png</string>' + nl;				#iphone
+			info_plist_contents += '				<string>Icon@2x.png</string>' + nl;				#iphone-retina
+			info_plist_contents += '				<string>Icon-Small.png</string>' + nl;			#iphone-spotlight
+			info_plist_contents += '				<string>Icon-Small@2x.png</string>' + nl;		#iphone-spotlight-retina
+			info_plist_contents += '				<string>Icon-72.png</string>' + nl;				#ipad
+			info_plist_contents += '				<string>Icon-72@2x.png</string>' + nl;			#ipad-retina
+			info_plist_contents += '				<string>Icon-Small-50.png</string>' + nl;		#ipad-spotlight
+			info_plist_contents += '				<string>Icon-Small-50@2x.png</string>' + nl;	#ipad-spotlight-retina
+			info_plist_contents += '			</array>' + nl;
+			info_plist_contents += '		</dict>' + nl;
+			info_plist_contents += '	</dict>' + nl;
+
+			info_plist_contents += '	<key>CFBundleIconFile</key>' + nl;
+			info_plist_contents += '	<string></string>' + nl;
+			info_plist_contents += '	<key>CFBundleIdentifier</key>' + nl;
+			info_plist_contents += '	<string>org.ashleygwinnell.' + projectname + '</string>' + nl;
+			info_plist_contents += '	<key>CFBundleInfoDictionaryVersion</key>' + nl;
+			info_plist_contents += '	<string>6.0</string>' + nl;
+			info_plist_contents += '	<key>CFBundleName</key>' + nl;
+			info_plist_contents += '	<string>${PRODUCT_NAME}</string>' + nl;
+			info_plist_contents += '	<key>CFBundlePackageType</key>' + nl;
+			info_plist_contents += '	<string>APPL</string>' + nl;
+			info_plist_contents += '	<key>CFBundleShortVersionString</key>' + nl;
+			info_plist_contents += '	<string>1.0</string>' + nl;
+			info_plist_contents += '	<key>CFBundleSignature</key>' + nl;
+			info_plist_contents += '	<string>????</string>' + nl;
+			info_plist_contents += '	<key>CFBundleVersion</key>' + nl;
+			info_plist_contents += '	<string>1.0</string>' + nl;
+			info_plist_contents += '	<key>LSRequiresIPhoneOS</key>' + nl;
+			info_plist_contents += '	<true/>' + nl;
+			info_plist_contents += '	<key>UIStatusBarHidden</key>' + nl;
+			info_plist_contents += '	<true/>' + nl;
+			info_plist_contents += '	<key>UISupportedInterfaceOrientations</key>' + nl;
+			info_plist_contents += '	<array>' + nl;
+			if (config['game_orientation'] == "portrait"):
+				info_plist_contents += '	<string>UIInterfaceOrientationPortrait</string>' + nl;
+			elif(config['game_orientation'] == "landscape"):
+				info_plist_contents += '	<string>UIInterfaceOrientationLandscapeRight</string>' + nl;
+			
+			info_plist_contents += '	</array>' + nl;
+			info_plist_contents += '</dict>' + nl;
+			info_plist_contents += '</plist>';
+
+			print("saving project-Info.plist file");
+			f = open(info_plist_filename, "w")
+			f.write(info_plist_contents);
+			f.close();
+
+
+			#print("set the pch manually in xcode, under Apple LLVM compiler 4.1 - Language...");
+			#print("set YES and ../../lib/iphone/" + projectname + "-Prefx.pch");
+
+			#create xcconfig file
+			print("generating xcconfig file:");
+			xcconfigfilecontents = "";
+			xcconfigfilecontents += "GCC_PRECOMPILE_PREFIX_HEADER = YES;" + nl;
+			xcconfigfilecontents += "GCC_PREFIX_HEADER = " + pchfilename + ";" + nl;
+			xcconfigfilecontents += "SRCROOT = " + self.game_dir + self.ds + "src" + self.ds + "ARK2D" + nl;
+			xcconfigfilecontents += "HEADERMAP_INCLUDES_FLAT_ENTRIES_FOR_TARGET_BEING_BUILT = NO;" + nl;
+			xcconfigfilecontents += "HEADERMAP_INCLUDES_PROJECT_HEADERS = NO;" + nl;
+			xcconfigfilecontents += "HEADERMAP_INCLUDES_FRAMEWORK_ENTRIES_FOR_ALL_PRODUCT_TYPES = NO;" + nl;
+			xcconfigfilecontents += "ALWAYS_SEARCH_USER_PATHS = NO;" + nl;
+			xcconfigfilecontents += "OTHER_CFLAGS = -x objective-c;" + nl;
+			xcconfigfilecontents += "OTHER_CPLUSPLUSFLAGS = -x objective-c++;" + nl;
+			xcconfigfilecontents += "OTHER_LDFLAGS = -lbz2 -lcurl -lz;" + nl;
+			xcconfigfilecontents += "INFOPLIST_FILE = " + info_plist_filename;
+				
+			
+			print("saving xcconfig file: " + xcconfigfile);
+			f = open(xcconfigfile, "w")
+			f.write(xcconfigfilecontents);
+			f.close();
+
+			#copy ark2d resources in to project data folder.
+			subprocess.call(["cp -r " + config['osx']['game_resources_dir'] + " " + self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + "data/"], shell=True); #libark2d
+			subprocess.call(["cp -r " + config['osx']['ark2d_dir'] + "/data " + self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + "data/ark2d/"], shell=True); #libark2d
+			
+			#generate icons
+			if "iphone" in config:
+				if "master_icon" in config['iphone']:
+					if (config['iphone']['use_master_icon'] == True): 
+						iconinterpolation = config['iphone']['master_icon_interpolation'];
+						icongenarr = [];
+						icongenobj = {};
+						icongenobj['from'] = config['iphone']['master_icon'];
+						icongenobj['from'] = self.str_replace(icongenobj['from'], [("%PREPRODUCTION_DIR%", config['osx']['game_preproduction_dir'])]);
+						icongenobj['to'] = [
+							# iPhone Icon
+							{
+								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + "Icon.png",
+								"width" : 57,
+								"height": 57, 
+								"interpolation": iconinterpolation
+							},
+							{
+								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + "Icon@2x.png",
+								"width" : 114,
+								"height": 114, 
+								"interpolation": iconinterpolation
+							},
+							# iPhone Spotlight Icon
+							{
+								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + "Icon-Small.png",
+								"width" : 29,
+								"height": 29, 
+								"interpolation": iconinterpolation
+							},
+							{
+								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + "Icon-Small@2x.png",
+								"width" : 58,
+								"height": 58, 
+								"interpolation": iconinterpolation
+							},
+							# iPad Icon
+							{
+								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + "Icon-72.png",
+								"width" : 72,
+								"height": 72, 
+								"interpolation": iconinterpolation
+							},
+							{
+								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + "Icon-72@2x.png",
+								"width" : 144,
+								"height": 144, 
+								"interpolation": iconinterpolation
+							},
+							# iPad Spotlight Icon
+							{
+								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + "Icon-Small-50.png",
+								"width" : 50,
+								"height": 50, 
+								"interpolation": iconinterpolation
+							},
+							{
+								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + "Icon-Small-50@2x.png",
+								"width" : 100,
+								"height": 100, 
+								"interpolation": iconinterpolation
+							},
+							# app store icon
+							{
+								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + "iTunesArtwork",
+								"width" : 512,
+								"height": 512, 
+								"interpolation": iconinterpolation
+							},
+							{
+								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + "iTunesArtwork@2x",
+								"width" : 1024,
+								"height": 1024, 
+								"interpolation": iconinterpolation
+							}
+							
+							
+						];
+						icongenarr.extend([icongenobj]);
+						#icongenstr = json.dumps(icongenarr, sort_keys=True, indent=0, new);
+
+						
+						icongenstr = str(json.dumps(icongenarr, separators=(',',':'))).replace("\"", "\\\"");
+						icongenLINE = "java -jar " + self.ark2d_dir + "/../Tools/ARK2D\ Image\ Resizer/build/jar/Resizer.jar \"" + icongenstr + "\"";
+						print(icongenLINE);
+						subprocess.call([icongenLINE], shell=True); 
+
+
+						#os.system();
+						pass;
+					pass;
+				pass;
+
+
+			
+			exit(0);
+			pass;
+
+
+		"""
 		# mkdirs
 		print("Making Directories...");
 		for h in self.mkdirs:
@@ -775,7 +1413,7 @@ class ARK2DBuildSystem:
 		varDEVROOT = varROOTDIR + "/Platforms/" + self.varPLATFORM + ".platform/Developer";
 		varSDKROOT = varDEVROOT + "/SDKs/" + self.varPLATFORM + varMAXVERSION + ".sdk";
 
-		#"""
+		
 		print("-------------------------");
 		print("Compiling Source Files...");
 		print("-------------------------");
@@ -837,7 +1475,7 @@ class ARK2DBuildSystem:
 			pass;
 
 		#
-		#"""
+		
 
 		# update compile cache thing
 		if (fchanged == True):
@@ -877,13 +1515,13 @@ class ARK2DBuildSystem:
 
 		#copy files...
 		# TODO: 
-
+		"""
 
 	def startAndroid(self):
 		print("Building Android");
 		
 		# open config
-		f = open("config.json", "r");
+		f = open(self.game_dir + "/config.json", "r");
 		fcontents = f.read();
 		f.close();
 		config = json.loads(fcontents);
@@ -933,7 +1571,7 @@ class ARK2DBuildSystem:
 			thisCreateDirs.extend([rootPath+"/build/android/project/res/values"]);
 			thisCreateDirs.extend([rootPath+"/build/android/project/src/org"]);
 			thisCreateDirs.extend([rootPath+"/build/android/project/src/org/" + company_name_safe]);
-			thisCreateDirs.extend([rootPath+"/build/android/project/src/org/" + company_name_safe + "/" + game_short_name]);
+			thisCreateDirs.extend([rootPath+"/build/android/project/src/org/" + company_name_safe + self.ds + game_short_name]);
 			pass;
 		else:
 			rootPath = config['osx']['ark2d_dir'];
@@ -1032,7 +1670,7 @@ class ARK2DBuildSystem:
 			filesToCopy = self.listFiles(game_resources_dir, False);
 			print(filesToCopy);
 			for file in filesToCopy:
-				fromfile = game_resources_dir + "/" + file;
+				fromfile = game_resources_dir + self.ds + file;
 				tofile = rootPath + "/build/android/project/assets/" + file;
 				
 				#replace spaces in paths on max osx with slash-spaces
@@ -1185,7 +1823,7 @@ class ARK2DBuildSystem:
 			f.close();
 			fgamecontents = self.str_replace(fgamecontents, editsStrReplace);
 			
-			f = open(rootPath+"/build/android/project/src/org/" + company_name_safe + "/" + game_short_name + "/" + game_name_safe + "Activity.java", "w");
+			f = open(rootPath+"/build/android/project/src/org/" + company_name_safe + self.ds + game_short_name + self.ds + game_name_safe + "Activity.java", "w");
 			f.write(fgamecontents);
 			f.close();		
 			
@@ -1317,7 +1955,7 @@ class ARK2DBuildSystem:
 			
 			print("Moving output to build folder");
 			libsdir = ndkprojectpath + "/libs";
-			subprocess.call(["cp -r " + libsdir + " " + appbuilddir + "/" ], shell=True);
+			subprocess.call(["cp -r " + libsdir + " " + appbuilddir + self.ds ], shell=True);
 			
 			print("removing temp folders");
 			self.rmdir_recursive(libsdir);
@@ -1355,73 +1993,174 @@ class ARK2DBuildSystem:
 # 	copy/merge data directory
 # 2)
 # 	when compiling games, check to see if the library needs updating and compile that too (before the game).
+#
+#
+# 	params:
+#		NAME 		DESC 												OPTIONS 						REQUIRED
+#		type 		building a game or the framework?					library | game 					defaults to "game"
+#		target 		the platform to build for.							default | android | iphone 		defaults to "default"
+#		dir 		directory of the game. must not contain spaces. 	directory						defaults to cwd
+#
 ##	
 if __name__ == "__main__":
 	
+	print("---");
+	print("---");
 	print("Starting");
-	
-	if (len(sys.argv)>=2 and sys.argv[1] == "library"):
-		print("Building library");
-		a = ARK2DBuildSystem();
-		#a.clean();
-		a.dllInit();
-		a.start();	
-	else:
-		print("Building game");
-		if (sys.platform == "win32"):
-			arkPlatform = "windows";
-		elif(sys.platform == "darwin"):
-			arkPlatform = "osx";
+
+	type = "library";
+	target = "default";
+	dir = sys.path[0];
+	clean = False;
+
+	count = 0;
+	print("args: " + str(len(sys.argv)));
+	for item in sys.argv:
+		print("lol item: " + item);
+		if count == 0:
+			count += 1;
+			continue;
+
+		parts = item.split("=");
+		if len(parts) > 2:
+			print("item " + item + " is invalid");
+			continue;
+		if parts[0] == "type":
+			type = parts[1];
+		elif parts[0] == "target":
+			target = parts[1];
+		elif parts[0] == "dir":
+			dir = parts[1];
+		elif parts[0] == "clean":
+			if (parts[1]=="true"):
+				clean = True;
+
+		count += 1;
 		
-		f = open("config.json", "r");
+	print("---");
+	print("type: " + type);
+	print("target: " + target);
+	print("dir: " + dir);
+	print("clean: " + str(clean));
+	
+	if (sys.platform == "win32"):
+		arkPlatform = "windows";
+	elif(sys.platform == "darwin"):
+		arkPlatform = "osx";
+	else: 
+		exit(0);
+
+
+	
+	if (type == "library"):
+
+		print("---");
+		print("Building Library");
+		
+		a = ARK2DBuildSystem();
+
+		if (target=='iphone'):
+			a.platform = 'iphone';
+		elif (target=='android'):
+			a.platform = 'android';
+
+		print("---");
+		print("Opening config file: " + dir + "/config.json");
+		f = open(dir + "/config.json", "r");
+		fcontents = f.read();
+		f.close();
+		config = False; 
+		
+		try:
+			a.config = json.loads(fcontents);
+		except:
+			print("Config.json invalid.");
+			exit(1);
+
+		a.dllInit();
+
+		if (clean):
+			a.clean();
+			exit(0);
+
+		a.start();	
+
+	else:
+
+		print("---");
+		print("Building game");
+
+		
+		
+		print("---");
+		print("Opening config file: " + dir + "/config.json");
+		f = open(dir + "/config.json", "r");
 		fcontents = f.read();
 		f.close();
 		
 		#print(fcontents);
-		j = False; 
+		config = False; 
 		
 		try:
-			j = json.loads(fcontents);
-			blah = j["game_name"];
-		except:
+			config = json.loads(fcontents);
+			blah = config["game_name"];
+
+			if (config == False):
+				print("Config.json invalid or trying to build game from framework path.");
+				exit(1);
+
+			a = ARK2DBuildSystem();
+
+			if (target=='iphone'):
+				a.platform = 'iphone';
+			elif (target=='android'):
+				a.platform = 'android';
+
+			a.ark2d_dir = config[arkPlatform]["ark2d_dir"];
+			a.game_name = config["game_name"];
+			a.game_short_name = config['game_short_name'];
+			a.game_dir  = config[arkPlatform]["game_dir"];
+			a.src_files.extend(config["game_src_files"]);
+			a.game_mkdirs = config['game_mkdirs'];
+			a.build_artifact = "";
+			a.config = config;
+			
+			if (clean == True):
+				a.clean();
+				#exit(0);
+			
+			a.gamePreInit();
+			
+			a.mingw_link = "";
+			
+			if(sys.platform=="win32"):
+				a.dll_files.append(a.ark2d_dir + a.ds + a.build_folder + a.ds + a.platform + a.ds + 'libARK2D.dll');
+				a.linkingFlags += "-mwindows ";
+				#a.linkingFlags += "-static-libgcc -static-libstdc++ "; 
+				a.linkingFlags += "-enable-auto-import ";
+			elif(sys.platform=="darwin"):
+				a.dll_files.append(a.ark2d_dir + a.ds + a.build_folder + a.ds + a.platform + a.ds + 'libARK2D.dylib');
+				
+				if ('mac_game_icns' in config[arkPlatform]):
+					a.mac_game_icns = config[arkPlatform]['mac_game_icns'];
+					
+			
+			if ('game_resources_dir' in config[arkPlatform]):
+				a.game_resources_dir = config[arkPlatform]['game_resources_dir'];
+					
+			
+			a.gamePostInit();
+			a.start();
+
+		except Exception as exc: 
+			print(exc);
 			print("Config.json invalid or trying to build game from framework path.");
-			exit(0);
-			
-		a = ARK2DBuildSystem();
-		a.ark2d_dir = j[arkPlatform]["ark2d_dir"];
-		a.game_name = j["game_name"];
-		a.game_short_name = j['game_short_name'];
-		a.game_dir  = j[arkPlatform]["game_dir"];
-		a.src_files.extend(j["game_src_files"]);
-		a.game_mkdirs = j['game_mkdirs'];
-		a.build_artifact = "";
-		a.config = j;
+			exit(1);
+		except:
+			print("Done");
+			pass;
+
 		
-		if (j['clean'] == True):
-			a.clean();
-		
-		a.gamePreInit();
-		
-		a.mingw_link = "";
-		
-		if(sys.platform=="win32"):
-			a.dll_files.append(a.ark2d_dir + a.ds + a.build_folder + a.ds + a.platform + a.ds + 'libARK2D.dll');
-			a.linkingFlags += "-mwindows ";
-			#a.linkingFlags += "-static-libgcc -static-libstdc++ "; 
-			a.linkingFlags += "-enable-auto-import ";
-		elif(sys.platform=="darwin"):
-			a.dll_files.append(a.ark2d_dir + a.ds + a.build_folder + a.ds + a.platform + a.ds + 'libARK2D.dylib');
-			
-			if ('mac_game_icns' in j[arkPlatform]):
-				a.mac_game_icns = j[arkPlatform]['mac_game_icns'];
-				
-		
-		if ('game_resources_dir' in j[arkPlatform]):
-			a.game_resources_dir = j[arkPlatform]['game_resources_dir'];
-				
-		
-		a.gamePostInit();
-		a.start();
 		
 		
 

@@ -27,7 +27,7 @@ class ARK2D {
 		static Input* getInput();
 		static Log* getLog();
 		static unsigned int getPlatform();
-		static string getPlatformString();
+		static std::string getPlatformString();
 
 		static bool is64BitArchitecture();
 		static bool isBigEndian();
@@ -36,6 +36,7 @@ class ARK2D {
 		static const unsigned int PLATFORM_OSX = 1;
 		static const unsigned int PLATFORM_ANDROID = 2;
 		static const unsigned int PLATFORM_IPHONE = 3;
+		static const unsigned int PLATFORM_BROWSER_JS = 4;
 
 	private:
 		static GameContainer* s_container;

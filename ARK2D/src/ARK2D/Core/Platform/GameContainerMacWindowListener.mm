@@ -266,11 +266,24 @@ static int darwin_scancode_table[] = {
 		v.y += 2 * diff;
 	}
 	
-	Input* i = ARK2D::getInput();
-	ARK2D::getGame()->mouseMoved((int) v.x, (int) v.y, i->mouse_x, i->mouse_y);
+	GameContainer* container = ARK2D::getContainer();
 
-	i->mouse_x = (int) v.x;
-	i->mouse_y = (int) v.y;
+	float thisx = v.x;
+    float thisy = v.y;
+
+    thisx -= container->getTranslateX();
+    thisy -= container->getTranslateY();
+
+    thisx /= container->getScale();
+    thisy /= container->getScale();
+
+   
+	
+	Input* i = ARK2D::getInput();
+	ARK2D::getGame()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
+
+	i->mouse_x = (int) thisx;
+	i->mouse_y = (int) thisy;
 	
 	[pool release];
 }

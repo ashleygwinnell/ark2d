@@ -22,12 +22,15 @@ namespace ARK {
 
 			public:
 				GameTimer();
-				~GameTimer();
+				virtual ~GameTimer();
 				void tick();
 				unsigned int getFPS() const;
 				float getDelta() const;
 				void flush();
 				void sleep(int millis);
+				void limit(int fps);
+
+				long millis();
 
 			private:
 				unsigned int m_FrameCount;
@@ -38,7 +41,7 @@ namespace ARK {
 				unsigned int m_FrameRate;
 				float m_FrameSecondsElapsed;
 
-				long millis();
+				
 		};
 	}
 }

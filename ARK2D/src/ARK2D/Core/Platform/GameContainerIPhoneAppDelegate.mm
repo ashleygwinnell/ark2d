@@ -10,7 +10,9 @@
 
 #import "GameContainerIPhoneGLView.h"
 
-GameContainerIPhoneGLView* _glView;
+
+
+//GameContainerIPhoneGLView* _glView;
 
 @implementation GameContainerIPhoneAppDelegate
 
@@ -27,6 +29,7 @@ GameContainerIPhoneGLView* _glView;
 
     return YES;
 }
+
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {

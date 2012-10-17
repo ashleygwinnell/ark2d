@@ -7,7 +7,7 @@
 #include "Sound.h"
 #include "../Core/Resource.h"
 #include "../Util/StringUtil.h"
-#include "../Util/Log.h"
+#include "../Util/Log.h" 
 #include "../vendor/FileInterface.h"
 
 namespace ARK {
@@ -15,6 +15,11 @@ namespace ARK {
 		ALfloat Sound::ListenerPos[3] = { 0.0, 0.0, 0.0 };
 		ALfloat Sound::ListenerVel[3] = { 0.0, 0.0, 0.0 };
 		ALfloat Sound::ListenerOri[6] = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
+
+		//unsigned int Sound::DEFAULT_GROUP_ID = 0;
+		//void Sound::setDefaultGroupId(unsigned int id) {
+		//	DEFAULT_GROUP_ID = id;
+		//}
 
 		Sound::Sound(const std::string& filename):
 			ARK::Core::Resource(),
@@ -311,7 +316,7 @@ namespace ARK {
 				#endif
 
 
-				int r;
+				
 
 				//bool b = ov_fopen(const_cast<char*>(m_FileName.c_str()), &oggFile);
 				//if (b == false) {
@@ -385,6 +390,7 @@ namespace ARK {
 
 				// Now we are ready to decode the OGG file and put the raw audio data into the buffer.
 				// We use a fixed size buffer and keep on reading until there is no more data left, like this:
+				int r = 0;
 				ARK2D::getLog()->i("Decoding OGG Data");
 				do {
 					// Read up to a buffer's worth of decoded sound data

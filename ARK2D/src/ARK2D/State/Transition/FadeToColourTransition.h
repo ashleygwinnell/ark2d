@@ -38,7 +38,7 @@ namespace ARK {
 
 
 					float m_time;
-					float m_time_current;
+					float m_time_current; 
 
 					Color* m_color;
 					float m_colorOriginalAlpha;

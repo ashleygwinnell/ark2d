@@ -10,7 +10,7 @@
 namespace ARK {
 	namespace Graphics {
 
-		Animation::Animation():
+		Animation::Animation(): 
 			m_frames(),
 			m_currentFrameIndex(0),
 			m_nextFrameModifier(1),
@@ -26,6 +26,16 @@ namespace ARK {
 			m_timer = 0;
 			m_currentFrameIndex = 0;
 			m_nextFrameModifier = 1;
+		}
+
+		void Animation::setTime(float f) {
+			m_timer = f;
+		}
+
+		void Animation::setAlpha(float f) {
+			for(unsigned int i = 0 ; i < m_frames.size(); i++) {
+				m_frames.get(i)->setAlpha(f);
+			}
 		}
 
 		void Animation::addImage(Image* image) {
@@ -62,7 +72,7 @@ namespace ARK {
 				m_currentFrameIndex += m_nextFrameModifier;
 
 				if (m_pingPong) {
-					if (m_currentFrameIndex >= m_frames.size()) {
+					if (m_currentFrameIndex >= (signed int) m_frames.size()) {
 						m_currentFrameIndex = m_frames.size() - 1;
 						m_nextFrameModifier *= -1;
 					} else if (m_currentFrameIndex < 0) {
@@ -71,7 +81,7 @@ namespace ARK {
 					}
 
 				} else {
-					if (m_currentFrameIndex >= m_frames.size()) {
+					if (m_currentFrameIndex >= (signed int) m_frames.size()) {
 						m_currentFrameIndex = 0;
 					}
 				}

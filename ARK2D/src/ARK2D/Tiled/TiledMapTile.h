@@ -26,9 +26,10 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
 		class TiledMapTile {
-			public:
+			public: 
 				TiledMapTile();
 				Image* getImage() const;
+				TiledMapProperty* getPropertyByName(string name) const;
 				vector<TiledMapProperty*> getProperties() const;
 
 				virtual ~TiledMapTile();

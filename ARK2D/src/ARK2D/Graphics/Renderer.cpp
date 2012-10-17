@@ -15,6 +15,9 @@
 #include "../Core/GameContainer.h"
 
 #include "../Geometry/Rectangle.h"
+#include "../Geometry/Circle.h"
+#include "../Geometry/Polygon.h"
+#include "../Geometry/Line.h"
 
 namespace ARK { 
 	namespace Graphics {
@@ -52,6 +55,13 @@ namespace ARK {
 		}
 
 
+		void RendererState::internalBindTexture(int textureId) {
+			glEnable(GL_TEXTURE_2D);
+			glBindTexture(GL_TEXTURE_2D, textureId);
+			
+			s_textureId = textureId;
+		}
+
 
 
 		Renderer::Renderer():
@@ -60,7 +70,8 @@ namespace ARK {
 			m_DrawColor(255, 0, 255),
 			m_MaskColor(),
 			m_LineWidth(1),
-			m_pointSize(1)
+			m_pointSize(1),
+			m_blendMode(BLEND_NORMAL)
 		{
 			//m_DefaultFont = new BMFont("data/calibri.fnt", "data/calibri.bmp", Color::magenta);
 			//m_Font = m_DefaultFont;
@@ -120,6 +131,51 @@ namespace ARK {
 		void Renderer::drawString(const std::string str, int x, int y) const {
 			m_Font->drawString(str, x, y);
 		}
+		void Renderer::drawString(const std::string str, float x, float y, signed int alignX, signed int alignY, float rotation, float sc) 
+		{
+			float strWidth = float(m_Font->getStringWidth(str)) * sc;
+			float strHeight = float(m_Font->getLineHeight()) * sc;
+
+			// Alignment
+			if (alignX == ALIGN_CENTER) {
+				x -= strWidth/2;
+			} else if (alignX == ALIGN_RIGHT || alignX == ALIGN_END) {
+				x -= strWidth; 
+			}
+
+			if (alignY == ALIGN_CENTER) {
+				y -= strHeight/2;
+			} else if (alignY == ALIGN_END || alignY == ALIGN_BOTTOM) {
+				y -= strHeight;
+			} 
+
+
+			glPushMatrix();
+			glTranslatef(x, y, 0);
+
+			if (rotation != 0.0f)
+				rotate(rotation);
+			
+			glPushMatrix();
+			scale(sc, sc);
+
+
+			m_Font->drawString(str, 0, 0);
+
+			
+			scale(1.0f/sc, 1.0f/sc);
+			
+			glPopMatrix();
+
+			if (rotation != 0.0f)
+				rotate(rotation * -1);
+
+			glTranslatef(x * -1, y * -1, 0);
+			
+
+			glPopMatrix();
+
+		}
 		void Renderer::drawStringCenteredAt(const std::string str, int x, int y) const {
 			m_Font->drawStringCenteredAt(str, x, y);
 		}
@@ -157,17 +213,70 @@ namespace ARK {
 			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 
 			#else
+				RendererState::start(RendererState::GEOMETRY);
 				glBegin(GL_LINES);
 					glVertex2i(x1, y1);
 					glVertex2i(x2, y2);
 				glEnd();
 			#endif
 		}
+		// image, scale... line coordinates. image line subcoordinates.
+		void Renderer::texturedLineOverlay(
+			Image* img, 
+			float scale, 
+			float x1, float y1, 
+			float x2, float y2,
+			float startX, float startY, 
+			float endX, float endY)
+		{
+			
+			Vector2<float> tempVector(0, 0);
+			Vector2<float> tempVector2(0, 0);
 
-		void Renderer::fillArc(int cx, int cy, int width, int height, float startAngle, float endAngle) const {
+			float lineAngle = MathUtil::anglef(x1, y1, x2, y2);
+
+			// top left. 
+			tempVector.set( (startX * -1) * scale, (startY * -1) * scale);
+			MathUtil::rotatePointAroundPoint(&tempVector, &tempVector2, lineAngle);
+			float tl_x = x1 + tempVector.getX();
+			float tl_y = y1 + tempVector.getY();
+
+			// bottom left. 
+			tempVector.set( (startX * -1) * scale, (img->getHeight() - startY) * scale);
+			MathUtil::rotatePointAroundPoint(&tempVector, &tempVector2, lineAngle);
+			float bl_x = x1 + tempVector.getX();
+			float bl_y = y1 + tempVector.getY();
+
+			// top right. 
+			tempVector.set( (img->getWidth() - endX) * scale, (endY * -1) * scale);
+			MathUtil::rotatePointAroundPoint(&tempVector, &tempVector2, lineAngle);
+			float tr_x = x2 + tempVector.getX();
+			float tr_y = y2 + tempVector.getY();
+
+			// bottom right. 
+			tempVector.set( (img->getWidth() - endX) * scale, (img->getHeight() - endY) * scale);
+			MathUtil::rotatePointAroundPoint(&tempVector, &tempVector2, lineAngle);
+			float br_x = x2 + tempVector.getX();
+			float br_y = y2 + tempVector.getY();
+
+			glColor4f(1.0f, 1.0f, 1.0f, img->getAlpha());
+			texturedQuad(img->getTextureId(), 
+				tl_x, tl_y, 
+				bl_x, bl_y, 
+				br_x, br_y, 
+				tr_x, tr_y, 
+				img->getTextureX(), img->getTextureY(), 
+				img->getTextureX(), img->getTextureY() + img->getTextureH(),
+				img->getTextureX() + img->getTextureW(), img->getTextureY() + img->getTextureH(),
+				img->getTextureX() + img->getTextureW(), img->getTextureY()
+			);
+			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		}
+
+		void Renderer::fillArc(float cx, float cy, int width, int height, float startAngle, float endAngle) const {
 			fillArc(cx, cy, width, height, startAngle, endAngle, DEFAULT_SEGMENTS);
 		}
-		void Renderer::fillArc(int cx, int cy, int width, int height, float startAngle, float endAngle, int segs) const {
+		void Renderer::fillArc(float cx, float cy, int width, int height, float startAngle, float endAngle, int segs) const {
 			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 			#else
 
@@ -176,7 +285,7 @@ namespace ARK {
 
 				glBegin(GL_TRIANGLE_FAN);
 
-					glVertex2i(cx, cy);
+					glVertex2f(cx, cy);
 
 					int step = 360 / segs;
 
@@ -196,10 +305,10 @@ namespace ARK {
 			#endif
 		}
 
-		void Renderer::fillRoundedRect(int x, int y, int width, int height, int radius) const {
+		void Renderer::fillRoundedRect(float x, float y, int width, int height, int radius) const {
 			fillRoundedRect(x, y, width, height, radius, DEFAULT_SEGMENTS);
 		}
-		void Renderer::fillRoundedRect(int x, int y, int width, int height, int radius, int segs) const {
+		void Renderer::fillRoundedRect(float x, float y, int width, int height, int radius, int segs) const {
 			if (radius <= 0) {
 				fillRect(x, y, width, height);
 				return;
@@ -215,6 +324,7 @@ namespace ARK {
 			fillArc(x + width - radius, y + height - radius, 2*radius, 2*radius, 270, 360, segs);
 		}
 
+		
 		/*
 		 * Immediate Mode rendering! :(
 		 * ...what ever happened to vertex arrays?
@@ -261,7 +371,7 @@ namespace ARK {
 		void Renderer::drawRects(float rects[], int colors[]) const {
 			return;
 
-			int total = (sizeof(rects) / sizeof(int))/8;
+			int total = (sizeof(&rects) / sizeof(int))/8;
 			
 			//glDisable(GL_TEXTURE_2D);
 			//glEnableClientState(GL_VERTEX_ARRAY);
@@ -285,17 +395,46 @@ namespace ARK {
 			//glDisableClientState(GL_VERTEX_ARRAY);
 			//glEnable(GL_TEXTURE_2D);
 		}
-		void Renderer::fillRect(int x, int y, int width, int height) const {
+		void Renderer::fillGradientRect(float x, float y, float width, float height, Color* top, Color* bottom) const {
+			RendererState::start(RendererState::GEOMETRY);
+
+			float rawVertices[] = {
+				0.0f,			0.0f,		  // tl
+				(float) width,	0.0f,			// tr
+				0.0f,			(float)height,	  // bl
+				(float) width,	(float)height	// br
+			};
+
+			float rawColors[] = {
+				top->getRedf(), top->getGreenf(), top->getBluef(), top->getAlphaf(),	// tl
+				top->getRedf(), top->getGreenf(), top->getBluef(), top->getAlphaf(),	// tr
+				bottom->getRedf(), bottom->getGreenf(), bottom->getBluef(), bottom->getAlphaf(),	// bl
+				bottom->getRedf(), bottom->getGreenf(), bottom->getBluef(), bottom->getAlphaf()		// br
+			};
+
+			glPushMatrix();
+			glTranslatef(x, y, 0);
+			glEnableClientState(GL_COLOR_ARRAY);
+			
+			glColorPointer(4, GL_FLOAT, 0, rawColors);
+			glVertexPointer(2, GL_FLOAT, 0, rawVertices);
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+			glDisableClientState(GL_COLOR_ARRAY);
+			glTranslatef(x * -1, y * -1, 0);
+			glPopMatrix();
+		}
+		void Renderer::fillRect(float x, float y, int width, int height) const {
 			//#if defined(ARK2D_ANDROID)
 				//glDisable(GL_TEXTURE_2D);
 				//glEnableClientState(GL_VERTEX_ARRAY);
 				RendererState::start(RendererState::GEOMETRY);
 
 				float rawVertices[] = {
-					0,		0,		  // tl
-					width,	0,			// tr
-					0,		height,	  // bl
-					width,	height	// br
+					0.0f,			0.0f,		  // tl
+					(float) width,	0.0f,			// tr
+					0.0f,			(float)height,	  // bl
+					(float) width,	(float)height	// br
 				};
 				glPushMatrix();
 				glTranslatef(x, y, 0);
@@ -313,13 +452,106 @@ namespace ARK {
 			#endif*/
 		}
 
+		void Renderer::texturedRect(unsigned int texId, float x, float y, int width, int height) const {
+			RendererState::start(RendererState::TEXTURE, texId);
+
+			float rawVertices[] = {
+				0.0f,			0.0f,		  // tl
+				(float) width,	0.0f,			// tr
+				0.0f,			(float)height,	  // bl
+				(float) width,	(float)height	// br
+			};
+			float rawTextureCoords[] = {
+				0.0f,	0.0f,	// tl
+				1.0f,	0.0f,	// tr
+				0.0f,	1.0f,	// bl
+				1.0f,	1.0f	// br
+			};
+			glPushMatrix();
+			glTranslatef(x, y, 0);
+
+			glVertexPointer(2, GL_FLOAT, 0, rawVertices);
+			glTexCoordPointer(2, GL_FLOAT, 0, rawTextureCoords);
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+			glTranslatef(x * -1, y * -1, 0);
+			glPopMatrix();
+		}
+
+		// order: anti-clockwise. 
+		void Renderer::fillQuad(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) const 
+		{
+			RendererState::start(RendererState::GEOMETRY);
+
+				float rawVertices[] = {
+					x1,		y1,		// tl
+					x2,		y2,		// tr
+					x3,		y3,	  	// bl
+					x3,		y3,	  	// bl
+					x4,		y4,		// tr
+					x1, 	y1		// br
+				};
+				//glPushMatrix();
+				//glTranslatef(x1, y1, 0);
+
+				glVertexPointer(2, GL_FLOAT, 0, rawVertices);
+				glDrawArrays(GL_TRIANGLES, 0, 6);
+
+				//glTranslatef(x1 * -1, y1 * -1, 0);
+				//glPopMatrix();
+		}
+
+		void Renderer::texturedQuad(unsigned int texId, 
+			float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, 
+			float tx1, float ty1, float tx2, float ty2, float tx3, float ty3, float tx4, float ty4) 
+		{
+			RendererState::start(RendererState::TEXTURE, texId);
+
+			float rawVertices[] = {
+				x1,		y1,		// tl
+				x2,		y2,		// tr
+				x3,		y3,	  	// bl
+				x3,		y3,	  	// bl
+				x4,		y4,		// tr
+				x1, 	y1		// br
+			};
+			
+			float rawTextureCoords[] = {
+				tx1,	ty1,	// tl
+				tx2,	ty2,	// tr
+				tx3,	ty3,	// bl
+				tx3,	ty3,	// bl
+				tx4,	ty4,	// tr
+				tx1, 	ty1		// br
+			};
+			
+			glVertexPointer(2, GL_FLOAT, 0, rawVertices);
+			glTexCoordPointer(2, GL_FLOAT, 0, rawTextureCoords);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		}
+
 		void Renderer::fillTriangle(int x, int y, int width, int height) const {
+			RendererState::start(RendererState::GEOMETRY);
+
 			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 			#else
 				glBegin(GL_TRIANGLES);
 					glVertex2i(x + (width/2), y);
 					glVertex2i(x, y + height);
 					glVertex2i(x + width, y + height);
+				glEnd();
+			#endif 
+		}
+		void Renderer::fillTriangle(float x1, float y1, float x2, float y2, float x3, float y3) const {
+			RendererState::start(RendererState::GEOMETRY);
+			
+			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
+			#else
+				glBegin(GL_TRIANGLES);
+					glVertex2f(x1, y1);
+					glVertex2f(x2, y2);
+					glVertex2f(x3, y3);
 				glEnd();
 			#endif 
 		}
@@ -345,15 +577,20 @@ namespace ARK {
 			#endif
 		}
 
-
-		void Renderer::drawCircle(int x, int y, int radius, int points) const {
+		void Renderer::drawCircle(ARK::Geometry::Circle<int>* circle) const {
+			drawCircle(circle->getCenterX(), circle->getCenterY(), circle->getRadius(), DEFAULT_SEGMENTS);
+		}
+		void Renderer::drawCircle(ARK::Geometry::Circle<float>* circle) const {
+			drawCircle(circle->getCenterX(), circle->getCenterY(), circle->getRadius(), DEFAULT_SEGMENTS);
+		}
+		void Renderer::drawCircle(float x, float y, int radius, int points) const {
 			//#if defined(ARK2D_ANDROID)
 				//ARK2D::getLog()->i("drawCircle - preparation");
 
 				float each = 360.0f / float(points);
 				float verts[(points+1)*2];
 				int j = 0;
-				for(float i = 0; i <= 360; i += each) {
+				for(float i = 0; i <= 360; i += each) { 
 					double angle = 2 * PI * i / 360;
 					verts[j] = float(0 + cos(angle) * radius);
 					verts[j+1] = float(0 + sin(angle) * radius);
@@ -387,7 +624,7 @@ namespace ARK {
 			#endif*/
 		}
 
-		void Renderer::fillCircle(int x, int y, int radius, int points) const {
+		void Renderer::fillCircle(float x, float y, int radius, int points) const {
 
 			//ARK2D::getLog()->i("fillCircle - preparation");
 
@@ -435,7 +672,36 @@ namespace ARK {
 			#endif*/
 		}
 
-		void Renderer::drawCircleSpikey(int x, int y, int radius, int points) const {
+		void Renderer::fillEllipse(float x, float y, float rx, float ry) const 
+		{
+			int points = 30; 
+
+			float each = 360.0f / float(points);
+			float verts[(points+3)*2];
+			verts[0] = 0;
+			verts[1] = 0; 
+			int j = 2;
+			for(float i = 0; i <= 360; i += each) {
+				double angle = 2 * PI * i / 360;
+				verts[j] = float(0 + cos(angle) * rx);
+				verts[j+1] = float(0 + sin(angle) * ry);
+				j+=2;
+			}
+			verts[j] = 0;
+			verts[j+1] = 0;
+			
+			RendererState::start(RendererState::GEOMETRY);
+			glPushMatrix();
+			glTranslatef(x, y, 0);
+
+			glVertexPointer(2, GL_FLOAT, 0, verts);
+			glDrawArrays(GL_TRIANGLE_FAN, 0, points+2);
+
+			glTranslatef(x * -1, y * -1, 0);
+			glPopMatrix();
+		}
+
+		void Renderer::drawCircleSpikey(float x, float y, int radius, int points) const {
 			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 
 			#else
@@ -447,12 +713,12 @@ namespace ARK {
 				glEnd();
 			#endif
 		}
-		void Renderer::fillCircleSpikey(int x, int y, int radius, int points) const {
+		void Renderer::fillCircleSpikey(float x, float y, int radius, int points) const {
 			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 			#else
 				float each = 360.0f / float(points);
 				glBegin(GL_TRIANGLE_FAN);
-				glVertex2i(x, y);
+				glVertex2f(x, y);
 				for (float angle = 0; angle < 360; angle += each) {
 					glVertex2f(x + sin(angle) * radius, y + cos(angle) * radius);
 				}
@@ -469,10 +735,10 @@ namespace ARK {
 			glColor4f(m_DrawColor.getRed()/255.f, m_DrawColor.getGreen()/255.f, m_DrawColor.getBlue()/255.f, m_DrawColor.getAlpha()/255.f);
 		}
 		void Renderer::setDrawColorf(float r, float g, float b, float a) {
-			m_DrawColor.setRed(r);
-			m_DrawColor.setGreen(g); 
-			m_DrawColor.setBlue(b);
-			m_DrawColor.setAlpha(a);
+			m_DrawColor.setRed((float) r);
+			m_DrawColor.setGreen((float) g); 
+			m_DrawColor.setBlue((float) b);
+			m_DrawColor.setAlpha((float) a);
 			glColor4f(r, g, b, a);
 		}
 		void Renderer::setDrawColor(const Color& c) {
@@ -504,6 +770,57 @@ namespace ARK {
 		}
 		unsigned int Renderer::getLineWidth() {
 			return m_LineWidth;
+		}
+
+		void Renderer::setBlendMode(unsigned int blendMode) {
+			if (m_blendMode == blendMode) { return; }
+
+			if (blendMode == BLEND_NONE) {
+				glDisable(GL_BLEND);
+			} else {
+				if (m_blendMode == BLEND_NONE) { // it was disabled, enable it.
+					glEnable(GL_BLEND);	
+				}
+				
+				if (blendMode == BLEND_NORMAL) {
+					glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				} else if (blendMode == BLEND_ADDITIVE) {
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+				} else if (blendMode == BLEND_TEST) {
+					//glBlendFunc(GL_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA);
+					glBlendFunc(GL_DST_COLOR, GL_ZERO);
+					//glBlendFunc(GL_ZERO, GL_SRC_COLOR);
+					//glDepthFunc( GL_LEQUAL);
+					//glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_COLOR);
+				}
+			}
+			m_blendMode = blendMode;
+		}
+		unsigned int Renderer::getBlendMode() {
+			return m_blendMode;
+		}
+
+		void Renderer::drawScissorBoxes() {
+			GameContainer* container = ARK2D::getContainer();
+			// draw scissor boxes because glScissor does not work on some HTC phones.
+			Color cc = container->getClearColor();
+			setDrawColor(cc.getRed(), cc.getGreen(), cc.getBlue(), cc.getAlpha());
+
+			// left edge
+			fillRect(0,0, container->getTranslateX(), container->getDynamicHeight());// * container->getScaleY());
+
+			// right edge
+			fillRect(container->getTranslateX() + container->getWidth() * container->getScaleX(), 0,
+						container->getTranslateX(), container->getDynamicHeight());// * container->getScaleY());
+ 
+			// top edge
+			//g->fillRect(0,0, container->getWidth() * container->getScaleX(), container->getTranslateY());
+			fillRect(0,0, container->getDynamicWidth(), container->getTranslateY());
+
+			// bottom edge
+			fillRect(0, container->getTranslateY() + container->getHeight() * container->getScaleY(),
+						container->getDynamicWidth(), container->getTranslateY());
+						//container->getWidth() * container->getScaleX(), container->getTranslateY());
 		}
 
 		void Renderer::pushMatrix() const {

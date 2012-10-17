@@ -9,11 +9,12 @@
 #include <math.h>
 
 #include "../ARK2D.h"
+#include "../Includes.h"
 
 #ifdef _WIN32
 	#include <windows.h>
 	#include <mmsystem.h>
-	#include <winbase.h>
+	#include <winbase.h> 
 #endif
 
 namespace ARK {
@@ -31,7 +32,7 @@ namespace ARK {
 		}
 
 
-		GameTimer::~GameTimer() {
+		GameTimer::~GameTimer() { 
 
 		}
 
@@ -46,12 +47,16 @@ namespace ARK {
 
 				UInt64 counter = 0;
 				Microseconds((UnsignedWide*)&counter);
-				return (counter - start) / 1000000.0f;
+				return (counter - start) / 1000000.0f; 
 			#endif
 		*/
-
+ 
 		long GameTimer::millis() {
-			#if defined(ARK2D_ANDROID)
+			#if defined(ARK2D_IPHONE)
+				timeval now; 
+				gettimeofday(&now, NULL); 
+				return (now.tv_sec + now.tv_usec); 
+			#elif defined(ARK2D_ANDROID)
 				return clock();
 			#elif defined(ARK2D_WINDOWS)
 				return clock();
@@ -59,18 +64,36 @@ namespace ARK {
 				timeval now;
 				gettimeofday(&now, NULL);
 				return (now.tv_sec + now.tv_usec);
-			#endif
+			#endif 
 			return 0;
 		}
-
+ 
 		void GameTimer::sleep(int millis) {
 			#if defined(ARK2D_WINDOWS)
 				Sleep(millis);
 			#elif defined(ARK2D_MACINTOSH)
 				usleep(millis * 1000);
+			#elif defined(ARK2D_IPHONE)
+				//usleep(double(millis)/1000);
 			#else
 				// ... log not implemented
 			#endif
+		}
+
+		// call at the end of the rendering to sleep for the correct time. :O
+		void GameTimer::limit(int fps) {
+			/*float perframesecs = 1000.0f / float(fps);
+			if (m_TimeDelta < perframesecs) {
+				m_TimeDelta = perframesecs;
+				return;
+			}*/
+
+
+			int perframemax = (int) floor(1000.0f/float(fps));
+			int diffmillis = millis() - m_CurrentTicks;
+			if (diffmillis < perframemax) {
+				sleep(perframemax - diffmillis);
+			}
 		}
 
 		/*!

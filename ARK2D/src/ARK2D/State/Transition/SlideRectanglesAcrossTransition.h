@@ -47,6 +47,11 @@ namespace ARK {
 
 					bool m_doneHalfWayLogic;
 
+					static const unsigned int DIRECTION_UP = 0;
+					static const unsigned int DIRECTION_DOWN = 1;
+					static const unsigned int DIRECTION_LEFT = 2;
+					static const unsigned int DIRECTION_RIGHT = 3;
+
 					SlideRectanglesAcrossTransition(Color* color, unsigned int numrects, unsigned int dir, float time);
 					virtual void init(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to);
 					virtual void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);

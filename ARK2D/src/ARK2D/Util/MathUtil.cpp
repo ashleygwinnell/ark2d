@@ -10,13 +10,18 @@
 #include "Log.h"
 #include "../ARK2D.h"
 
+#include "../Core/GameContainer.h"
+
 namespace ARK {
 	namespace Util {
 
+		double MathUtil::PIE = 3.14159265;
+
 		void MathUtil::seedRandom() {
 			ARK2D::getLog()->i("Setting random seed.");
-			time_t t;
-			time(&t);
+			//time_t t;
+			//time(&t);
+			long t = ARK2D::getContainer()->getTimer()->millis();
 			srand(t);
 			ARK2D::getLog()->i(" ...done.");
 		}

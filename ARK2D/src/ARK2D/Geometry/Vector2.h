@@ -15,6 +15,7 @@
 #include "../ARK2D.h"
 #include <string>
 #include "../Core/String.h"
+//#include "../Util/MathUtil.h"
 
 using namespace std;
 
@@ -49,6 +50,15 @@ namespace ARK {
 					return m_y;
 				}
 
+				// copied from MathUtil::randBetween().
+				T rand() {
+					T lower = m_x;
+					T upper = m_y;
+					if (lower == upper) { return lower; }
+					if (lower > upper) { int teacup = lower; lower = upper; upper = teacup; }
+					return lower + (rand() % (upper-lower));
+				}
+
 				// Set
 				void setX(T x) {
 					m_x = x;
@@ -63,6 +73,10 @@ namespace ARK {
 					m_x = x;
 					m_y = y;
 				}
+
+				//float angle() {
+				//	return MathUtil::anglef(0, 0, m_x, m_y);
+				//}
 
 				// Add 
 				Vector2* add(Vector2<T>* v) {
@@ -88,6 +102,23 @@ namespace ARK {
 				}
 				void multiplyY(T y) {
 					m_y *= y;
+				}
+
+
+				// Divide
+				Vector2* divide(Vector2<T>* v) {
+					return divide(v->getX(), v->getY());
+				}
+				Vector2* divide(T x, T y) {
+					m_x /= x;
+					m_y /= y;
+					return this;
+				}
+				void divideX(T x) {
+					m_x /= x;
+				}
+				void divideY(T y) {
+					m_y /= y;
 				}
 
 				// Subtract
@@ -172,6 +203,10 @@ namespace ARK {
 				}
 				T length() {
 					return (T) sqrt((double) lengthSquared());
+				}
+
+				T diff() {
+					return m_y - m_x;
 				}
 
 				string toString() {

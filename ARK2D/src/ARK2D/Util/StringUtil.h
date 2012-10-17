@@ -10,7 +10,7 @@
 
 #include "../ARK2D.h"
 #ifndef ARK2D_ANDROID
-	#include <vector>
+	#include <vector> 
 	#include <string>
 	#include <fstream>
 	#include <iostream>
@@ -22,6 +22,7 @@
 #include "../UI/ErrorDialog.h"
 #include "../Core/ToString.h"
 #include "../Namespaces.h"
+#include "../Includes.h"
 #include "../Graphics/SpriteSheetDescription.h"
 
 using namespace std;
@@ -55,11 +56,13 @@ namespace ARK {
 				static void toUpper(string& str);
 				static void toLower(string& str);
 
+				static string zeropad(int number, int digits);
+
 				static void trimLeft(string& str, const char* chars2remove);
 				static void trimRight(string& str, const char* chars2remove);
 				static void trim(string& str, const char* chars2remove);
 				static string trimret(string str, string charsToRemove);
-				static void trimAll(vector<String>& strings, string chars2remove);
+				static void trimAll(vector<ARK::Core::String>& strings, std::string chars2remove);
 
 				static string& str_replace(const string& search, const string& replace, string& subject);
 

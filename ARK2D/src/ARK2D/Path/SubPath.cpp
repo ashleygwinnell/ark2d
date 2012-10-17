@@ -9,7 +9,7 @@
 
 namespace ARK {
 	namespace Path {
-
+ 
 		SubPath::SubPath(): points() {
 
 		}

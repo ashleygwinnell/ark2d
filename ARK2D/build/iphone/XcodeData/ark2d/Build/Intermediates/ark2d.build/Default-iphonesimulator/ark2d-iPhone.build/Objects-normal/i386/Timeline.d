@@ -1,0 +1,35 @@
+dependencies: \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/Timeline.cpp \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/GameTimer.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../ARK2D.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../Namespaces.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../Includes.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../vendor/ogg130/ogg.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../vendor/ogg130/os_types.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../vendor/vorbis132/vorbisfile.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../vendor/vorbis132/codec.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../vendor/lpng151/png.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../vendor/lpng151/pnglibconf.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../vendor/lpng151/pngconf.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../vendor/libJSON/JSON_Defs.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../vendor/libJSON/JSON_Strings.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../vendor/libJSON/JSONNode.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../vendor/libJSON/JSONChildren.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../vendor/libJSON/Debug.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../vendor/libJSON/JSON_Worker.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../vendor/libJSON/JSON_StringConv.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../vendor/libJSON/jsonmain.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../UI/ErrorDialog.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/Timeline.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/Easing.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Util/MathUtil.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Util/../Geometry/Vector2.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Util/../Geometry/../Util/Log.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Util/../Core/String.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/Resource.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../Windres.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../Util/StringUtil.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Util/../Core/ToString.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Util/../Graphics/SpriteSheetDescription.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Util/../Graphics/SpriteSheetDescriptionItem.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Tween/../Core/../Util/Cast.h

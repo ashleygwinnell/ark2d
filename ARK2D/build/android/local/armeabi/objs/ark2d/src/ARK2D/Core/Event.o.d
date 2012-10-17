@@ -1,5 +1,7 @@
 /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/local/armeabi/objs/ark2d/src/ARK2D/Core/Event.o: \
  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/Event.cpp \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/Event.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../Includes.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/string \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_prolog.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_cprolog.h \
@@ -138,9 +140,80 @@
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_string_io.c \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_epilog.h \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_config_compat_post.h \
- /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/Event.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/vector \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_vector.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_vector.c \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_bvector.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_relops_cont.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/list \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_list.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_list.c \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_carray.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/map \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_map.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_tree.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_tree.c \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/set \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_set.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/sstream \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_ioserr.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_sstream.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_sstream.c \
  /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/iostream \
- /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_ioserr.h
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/fstream \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_fstream.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_codecvt.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_fstream.c \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/jni.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/android/log.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/vendor/android/libzip/jni/zip.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/stat.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/linux/stat.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/endian.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/endian.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/GLES/gl.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/GLES/glplatform.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/KHR/khrplatform.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/GLES/glext.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/GLES2/gl2.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/GLES2/gl2platform.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/GLES2/gl2ext.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/AL/AL.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/AL/ALc.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/AL/ALext.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/AL/efx.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/ogg130/ogg.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/ogg130/os_types.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/ogg130/config_types.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/inttypes.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/vorbis132/vorbisfile.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/vorbis132/codec.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/vorbis132/../ogg130/ogg.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/lpng151/png.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/lpng151/pnglibconf.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/setjmp.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/setjmp.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/machine/setjmp.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/lpng151/pngconf.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/JSON_Defs.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/JSON_Strings.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/JSONNode.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/JSONChildren.h \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/cstdlib \
+ /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/cstring \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/Debug.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/JSONNode.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/JSONChildren.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/JSON_Worker.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/JSON_Strings.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/JSON_StringConv.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/jsonmain.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/JSON_Defs.h \
+ /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/Debug.h
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/Event.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../Includes.h:
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/string:
 
@@ -418,8 +491,142 @@
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_config_compat_post.h:
 
-/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/Event.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/vector:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_vector.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_vector.c:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_bvector.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_relops_cont.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/list:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_list.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_list.c:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_carray.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/map:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_map.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_tree.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_tree.c:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/set:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_set.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/sstream:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_ioserr.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_sstream.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_sstream.c:
 
 /Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/iostream:
 
-/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_ioserr.h:
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/fstream:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_fstream.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_codecvt.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/stl/_fstream.c:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/jni.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/android/log.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/vendor/android/libzip/jni/zip.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/stat.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/linux/stat.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/endian.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/sys/endian.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/GLES/gl.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/GLES/glplatform.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/KHR/khrplatform.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/GLES/glext.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/GLES2/gl2.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/GLES2/gl2platform.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/GLES2/gl2ext.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/AL/AL.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/AL/ALc.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/AL/ALext.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/AL/efx.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/ogg130/ogg.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/ogg130/os_types.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/ogg130/config_types.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/inttypes.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/vorbis132/vorbisfile.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/vorbis132/codec.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/vorbis132/../ogg130/ogg.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/lpng151/png.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/lpng151/pnglibconf.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/setjmp.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/../include/setjmp.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/platforms/android-5/arch-arm/usr/include/machine/setjmp.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/lpng151/pngconf.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/JSON_Defs.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/JSON_Strings.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/JSONNode.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/JSONChildren.h:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/cstdlib:
+
+/Users/ashleygwinnell/.android/android-ndk-r7/sources/cxx-stl/stlport/stlport/cstring:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/Debug.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/JSONNode.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/JSONChildren.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/JSON_Worker.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/JSON_Strings.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/JSON_StringConv.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/jsonmain.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/JSON_Defs.h:
+
+/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/android/../..//src/ARK2D/Core/../vendor/libJSON/Debug.h:

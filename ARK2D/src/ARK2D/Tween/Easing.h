@@ -25,6 +25,7 @@ namespace ARK {
 		 * @author Ashley Gwinnell
 		 * @author Robert Penner.
 		 * @see http://www.robertpenner.com/easing/easing_demo.html
+		 * @see http://www.dzone.com/snippets/robert-penner-easing-equations
 		 * @see file://C:\xampp\htdocs\C++\ARK2D\Docs\Easing.png
 		 */
 		class Easing {
@@ -48,7 +49,13 @@ namespace ARK {
 				static const unsigned int CIRCLE_IN = 16;
 				static const unsigned int CIRCLE_OUT = 17;
 				static const unsigned int CIRCLE_IN_OUT = 18;
-				static const unsigned int NONE = 19;
+				static const unsigned int ELASTIC_IN = 19;
+				static const unsigned int ELASTIC_OUT = 20;
+				static const unsigned int ELASTIC_IN_OUT = 21;
+				static const unsigned int BOUNCE_IN = 22;
+				static const unsigned int BOUNCE_OUT = 23;
+				static const unsigned int BOUNCE_IN_OUT = 24;
+				static const unsigned int NONE = 25;
 
 				static unsigned int getByString(string str);
 				static string getByInt(unsigned int str);

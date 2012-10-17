@@ -13,14 +13,15 @@
 
 #include "../vendor/zlib123/zlib.h"
 
-#include <vector>
+/*#include <vector>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <cstdlib>
 #include <cstring>
 #include <stdio.h>
-using namespace std;
+using namespace std;*/
+#include "../Includes.h"
 
 #define PACKER_AUDIO_MONO16   1
 #define PACKER_AUDIO_STEREO16 2

@@ -3,6 +3,7 @@ package org.ashleygwinnell.ark2dprojectmanager;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,8 +13,13 @@ import java.io.InputStreamReader;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 import org.json.JSONObject;
 
@@ -153,7 +159,49 @@ public class MyToolBar extends JPanel {
 			
 			
 			
-			
+			JButton tb_clean = new JButton(new ImageIcon(getClass().getClassLoader().getResource("files/Delete.png")));
+			tb_clean.setToolTipText("Clean Project");
+			tb_clean.setBounds(	(toolbar_item_num*toolbar_item_width) + 2 + (7*toolbar_separator_num), 
+								2,
+								toolbar_item_width, 
+								toolbar_item_width);
+			tb_clean.setMargin(new Insets(1,1,1,1));
+			tb_clean.addActionListener(new ActionListener() { 
+				public void actionPerformed(ActionEvent e) {
+					try { 
+						final String key = ProjectManager.osname();
+						final String ark2ddir = ProjectManager._instance.config.getJSONObject("ark2d").getJSONObject("dir").getString(key);
+						final String dir = ProjectManager._instance.selectedProject.data.getJSONObject("dir").getString(key);
+						final String pyscript = ark2ddir + System.getProperty("file.separator") + "build.py";
+						
+						
+						System.out.println("python " + pyscript);
+						ProcessBuilder pb = new ProcessBuilder("python", pyscript, "clean=true", "type=game", "dir="+dir);
+						System.out.println(pb.toString());
+						Process p = pb.start();
+						
+						
+						BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+		                String line=null;
+		                while((line=input.readLine()) != null) {
+		                	System.out.println(line);
+		                }
+						
+		                p.waitFor();
+						//int exitCode = p.waitFor();
+						//System.out.println("exit code: " + exitCode);
+						//if (exitCode != 0) {
+						//	JOptionPane.showMessageDialog(null, "Could not clean game. Check project path and settings.", "Error", JOptionPane.ERROR_MESSAGE );
+						//}
+						JOptionPane.showMessageDialog(null, "Project cleaned", "Success", JOptionPane.INFORMATION_MESSAGE );
+						
+					} catch (Exception ee) {
+						ee.printStackTrace();
+					}
+				}
+			}); 
+			add(tb_clean);
+			toolbar_item_num++;
 			
 			
 			// compile & run
@@ -167,11 +215,70 @@ public class MyToolBar extends JPanel {
 			tb_compile.addActionListener(new ActionListener() { 
 				public void actionPerformed(ActionEvent e) {
 					try { 
-						String key = ProjectManager.osname();
-						String dir = ProjectManager._instance.selectedProject.data.getJSONObject("dir").getString(key);
+						final String key = ProjectManager.osname();
+						final String ark2ddir = ProjectManager._instance.config.getJSONObject("ark2d").getJSONObject("dir").getString(key);
+						final String dir = ProjectManager._instance.selectedProject.data.getJSONObject("dir").getString(key);
 							
-						String cmd = "python " + dir + System.getProperty("file.separator") + "build-game.py";
-						System.out.println(cmd);
+						final String pyscript = ark2ddir + System.getProperty("file.separator") + "build.py";
+						//pyscript += " type=game";
+						//pyscript += " dir=" + dir;
+						
+						final JFrame frame = new JFrame("Compile Log");
+						frame.setSize(1024, 768);
+						frame.setLocationRelativeTo(ProjectManager._instance);
+						frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+						frame.setLayout(new GridLayout(2,1));
+						
+						final JTextArea stdout = new JTextArea(); 
+						final JScrollPane stdoutScroll = new JScrollPane(stdout);
+						frame.add(stdoutScroll);
+						
+						final JTextArea stderr = new JTextArea();
+						final JScrollPane stderrScroll = new JScrollPane(stderr);
+						frame.add(stderrScroll);
+						
+						Thread t = new Thread(new Runnable() {
+							public void run() {
+								try { 
+									System.out.println("python " + pyscript);
+									ProcessBuilder pb = new ProcessBuilder("python", pyscript, "type=game", "dir="+dir);
+									pb.redirectErrorStream(true);
+									System.out.println(pb.toString());
+									Process p = pb.start();
+									
+									
+									/*BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+					                String line=null;
+					                while((line=input.readLine()) != null) {
+					                	System.out.println(line);
+					                	stdout.setText(stdout.getText() + line + "\n");
+					                	stdout.setCaretPosition(stdout.getDocument().getLength());
+					                	frame.repaint();
+					                }
+					                
+					                input = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+					                line=null;
+					                while((line=input.readLine()) != null) { 
+					                	stderr.setText(stderr.getText() + line + "\n");
+					                	stderr.setCaretPosition(stderr.getDocument().getLength());
+					                	frame.repaint();
+					                }
+									*/
+									//int exitCode = p.waitFor();
+									//System.out.println("exit code: " + exitCode);
+									//if (exitCode != 0) {
+										JOptionPane.showMessageDialog(null, "Could not compile game. Check project path and settings.", "Error", JOptionPane.ERROR_MESSAGE );
+									//}
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+						t.start();
+						frame.setVisible(true);
+						
+						
+						
 					} catch (Exception ee){
 						ee.printStackTrace();
 					}
@@ -195,38 +302,28 @@ public class MyToolBar extends JPanel {
 						String dir = ProjectManager._instance.selectedProject.data.getJSONObject("dir").getString(key);
 								
 						String fs = System.getProperty("file.separator");
-						String cmd = "open -g -a " + dir.replace(" ", "\\ ") + fs + "build" + fs + name.replace(" ", "_") + ".app "; //1>/dev/null 2>&1";
+						String app = dir + fs + "build" + fs + name + ".app";
 						
-						String name2 = dir.replace(" ", "\\ ") + fs + "build" + fs + name.replace(" ", "\\ ") + ".app";
-						String name3 = dir.replace(" ", "\\ ") + fs + "build" + fs + name.replace(" ", "_") + ".app";
+						//
+						// http://stackoverflow.com/questions/7979234/java-command-runtime-getruntime-exec-in-mac-os
+						//
+						ProcessBuilder pb = new ProcessBuilder("open", app);
+						Process p = pb.start();
+						int exitCode = p.waitFor();
+						System.out.println("exit code: " + exitCode);
+						if (exitCode != 0) {
+							JOptionPane.showMessageDialog(null, "Could not run game. Check project path and settings.", "Error", JOptionPane.ERROR_MESSAGE );
+						}
 						
-						File file2 = new File(name2);
-						File file3 = new File(name3);
-						file2.renameTo(file3);
-						
-						
-						System.out.println(cmd);
-						Process pr2 = Runtime.getRuntime().exec(cmd);
-						
-						
+						/*
 						BufferedReader input = new BufferedReader(new InputStreamReader(pr2.getInputStream()));
-						 
 		                String line=null;
-		 
 		                while((line=input.readLine()) != null) {
 		                    System.out.println(line);
 		                }
-		 
 		                int exitVal = pr2.waitFor();
-		                System.out.println("Exited with error code "+exitVal);
+		                System.out.println("Exited with error code "+exitVal);*/
 						
-						/*String cd1 = "cd " + dir.replace(" ", "\\ ") + fs + "build";
-						System.out.println(cd1);
-						Process pr = Runtime.getRuntime().exec(cd1);
-						
-						String cd2 = "open " + name.replace(" ", "\\ ") + ".app";
-						System.out.println(cd2);
-						Process pr2 = Runtime.getRuntime().exec(cd2);*/
 						
 						
 					} catch (Exception ee) {

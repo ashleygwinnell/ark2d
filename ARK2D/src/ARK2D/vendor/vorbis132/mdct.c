@@ -37,9 +37,12 @@
    roundoff isn't done (so it's noisy).  Consider it functional, but
    only a starting point.  There's no point on a machine with an FPU */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#ifndef ARK2D_IPHONE
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
+#endif
+
 #include <math.h>
 #include "codec.h"
 #include "mdct.h"

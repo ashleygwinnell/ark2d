@@ -23,7 +23,7 @@ public class MyProjectList extends JPanel
 	{
 		//setLayout(null);
 		this.group = group;
-		
+		 
 		setBorder(BorderFactory.createTitledBorder(group));
 		setPreferredSize(new Dimension(200, -1));
 		

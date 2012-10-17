@@ -8,7 +8,7 @@
 #ifndef VERTICALMENUITEM_H_
 #define VERTICALMENUITEM_H_
 
-#include <string>
+#include "../Includes.h"
 #include "../Namespaces.h"
 
 /*!

@@ -17,6 +17,14 @@
 struct Graphics;
 #include "../Namespaces.h"
 
+
+#include "../Core/String.h"
+namespace ARK {
+	namespace Core {
+		class String;
+	}
+}
+
 using namespace std;
 
 namespace ARK {

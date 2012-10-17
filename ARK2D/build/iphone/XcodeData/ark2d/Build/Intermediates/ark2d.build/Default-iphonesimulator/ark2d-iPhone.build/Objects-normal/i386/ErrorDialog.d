@@ -1,0 +1,30 @@
+dependencies: \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/ErrorDialog.cpp \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/ErrorDialog.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../ARK2D.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../Namespaces.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../Includes.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../vendor/ogg130/ogg.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../vendor/ogg130/os_types.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../vendor/vorbis132/vorbisfile.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../vendor/vorbis132/codec.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../vendor/lpng151/png.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../vendor/lpng151/pnglibconf.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../vendor/lpng151/pngconf.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../vendor/libJSON/JSON_Defs.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../vendor/libJSON/JSON_Strings.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../vendor/libJSON/JSONNode.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../vendor/libJSON/JSONChildren.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../vendor/libJSON/Debug.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../vendor/libJSON/JSON_Worker.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../vendor/libJSON/JSON_StringConv.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../vendor/libJSON/jsonmain.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../Util/Log.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../Util/../Core/String.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../Util/../Core/Resource.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../Util/../Core/../Windres.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../Util/../Core/../Util/StringUtil.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../Util/../Core/ToString.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../Util/../Graphics/SpriteSheetDescription.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../Util/../Graphics/SpriteSheetDescriptionItem.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/UI/../Util/../Core/../Util/Cast.h

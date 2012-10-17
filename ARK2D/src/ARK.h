@@ -45,6 +45,8 @@
 #include "ARK2D/State/Transition/EmptyTransition.h"
 #include "ARK2D/State/Transition/TranslateOutInTransition.h"
 #include "ARK2D/State/Transition/SlideRectanglesAcrossTransition.h"
+#include "ARK2D/State/Transition/SquaresOutTransition.h"
+#include "ARK2D/State/Transition/SquaresInTransition.h"
 #include "ARK2D/State/Transition/FadeTransition.h"
 #include "ARK2D/State/Transition/FadeToColourTransition.h"
 #include "ARK2D/State/Transition/FadeFromColourTransition.h"
@@ -56,6 +58,7 @@
 #include "ARK2D/Graphics/Animation.h"
 #include "ARK2D/Graphics/SpriteSheetDescription.h"
 #include "ARK2D/Graphics/Shader.h"
+#include "ARK2D/Graphics/FBO.h"
 #include "ARK2D/Graphics/Image.h"
 #include "ARK2D/Graphics/Texture.h"
 
@@ -73,6 +76,7 @@
 // Tweening
 #include "ARK2D/Tween/Timeline.h"
 #include "ARK2D/Tween/Easing.h"
+#include "ARK2D/Tween/Timer.h"
 
 // Input / Controls
 #include "ARK2D/Controls/Input.h"

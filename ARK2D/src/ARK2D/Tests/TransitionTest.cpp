@@ -60,19 +60,20 @@ namespace ARK {
 		void TransitionTest::initStates(GameContainer* container) {
 
 			Color* myWhite = new Color("#ffffff");
-			Color* myWhite2 = myWhite->copy();
+			//Color* myWhite2 = myWhite->copy();
+			Color* myWhite3 = new Color(255,255,255,255);
 
-			leaveTransitions.add(new SlideRectanglesAcrossTransition(myWhite, 30, Constants::DIRECTION_LEFT, 1.0f));
+			leaveTransitions.add(new SlideRectanglesAcrossTransition(myWhite, 30, SlideRectanglesAcrossTransition::DIRECTION_LEFT, 1.0f));
 			entryTransitions.add(NULL);
 
-			leaveTransitions.add(new TranslateOutInTransition(Constants::DIRECTION_LEFT, 1.0f));
+			leaveTransitions.add(new TranslateOutInTransition(SlideRectanglesAcrossTransition::DIRECTION_LEFT, 1.0f));
 			entryTransitions.add(NULL);
 
-			leaveTransitions.add(new FadeToColourTransition(1.0f, myWhite2));
-			entryTransitions.add(new FadeFromColourTransition(1.0f, myWhite2));
+			leaveTransitions.add(new FadeToColourTransition(1.0f, myWhite3));
+			entryTransitions.add(new FadeFromColourTransition(1.0f, myWhite3));
 
 			//leaveTransitions.add(NULL);
-			//entryTransitions.add(NULL);
+			//entryTransitions.add(NULL); 
 
 			addState(new TransitionTestGameState(0, "State One"));
 			addState(new TransitionTestGameState(1, "State Two"));

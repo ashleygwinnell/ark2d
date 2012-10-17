@@ -33,8 +33,10 @@
    correct it. */
 
 #include <math.h>
+
 #include <string.h>
 #include <stdlib.h>
+
 #include "lsp.h"
 #include "os.h"
 #include "misc.h"

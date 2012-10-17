@@ -6,11 +6,16 @@
 //  Copyright 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 
-#include "GameContainerIPhoneGLView.h"
 
-@interface GameContainerIPhoneAppDelegate : NSObject <UIApplicationDelegate> 
+#include "../../Includes.h"
+#import "GameContainerIPhoneGLView.h"
+
+//#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+
+//GameContainerIPhoneGLView* glView;
+@interface GameContainerIPhoneAppDelegate : NSObject <UIApplicationDelegate>
 
 @property (nonatomic, retain) IBOutlet UIWindow* window;
 @property (nonatomic, retain) IBOutlet GameContainerIPhoneGLView* glView;

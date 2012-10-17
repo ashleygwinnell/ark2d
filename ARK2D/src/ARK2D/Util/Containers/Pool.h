@@ -16,6 +16,66 @@
 
 using namespace std;
 
+template <typename T>
+struct remove_const
+{
+    typedef T type;
+};
+
+template <typename T>
+struct remove_const<const T>
+{
+    typedef T type;
+};
+
+template <typename T>
+struct remove_volatile
+{
+    typedef T type;
+};
+
+template <typename T>
+struct remove_volatile<volatile T>
+{
+    typedef T type;
+};
+
+template <typename T>
+struct remove_cv : remove_const<typename remove_volatile<T>::type> {};
+
+template <typename T>
+struct is_unqualified_pointer
+{
+    enum { value = false };
+};
+
+template <typename T>
+struct is_unqualified_pointer<T*>
+{
+    enum { value = true };
+};
+
+template <typename T>
+struct is_pointer_type : is_unqualified_pointer<typename remove_cv<T>::type> {};
+
+template <typename T>
+bool is_pointer(const T&)
+{
+    return is_pointer_type<T>::value;
+}
+
+template<typename T>
+struct remove_pointer
+{
+    typedef T type;
+};
+
+template<typename T>
+struct remove_pointer<T*>
+{
+    typedef T type;
+};
+
 namespace ARK {
 	namespace Util {
 		namespace Containers {
@@ -27,7 +87,7 @@ namespace ARK {
 				/*!
 				 * \brief Standard pooling of GameObjects.
 				 *
-				 * Holds pointers to dynamically created objects to prevent allocation throughout game-playing.
+				 * Holds pointers to dynamically created objects to prevent allocation throughout game-playing. They must be pointer types! 
 				 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 				 */
 				template <class T=GameObject*>
@@ -39,15 +99,26 @@ namespace ARK {
 						PoolIterator<T>* it;
 
 					public:
-						Pool(): m_inactive(), m_active(),it(NULL) {
+						Pool(): m_inactive(), m_active(), it(NULL) {
 							m_inactive.setUsingList(true);
 							m_active.setUsingList(true);
 						}
-						Pool(unsigned int amount): m_inactive(), m_active(),it(NULL) {
-							ErrorDialog::createAndShow("Pool(int) is broken. Please populate yourself or fix it. :|");
+						Pool(unsigned int amount): m_inactive(), m_active(), it(NULL) {
 							m_inactive.setUsingList(true);
 							m_active.setUsingList(true);
-							for(unsigned int i = 0; i < amount; ++i) { T obj; add(obj); }
+							for(unsigned int i = 0; i < amount; ++i) { 
+								if (is_pointer_type<T>::value) {
+									typedef typename remove_pointer<T>::type type;
+									T obj = new type();
+									add(obj);
+									//ErrorDialog::createAndShow("Pool(int) is broken for pointer types. Please populate yourself or fix it. :|");
+									//break;
+								} else {
+									T obj;
+									add(obj); 	
+								}
+								
+							}
 
 						}
 						void add(T object) {
@@ -73,6 +144,11 @@ namespace ARK {
 							it->reset();
 							return it;
 						}
+						PoolIterator<T>* newiterator() { // make sure to delete afterwards.
+							PoolIterator<T>* it = new PoolIterator<T>(this);
+							it->reset();
+							return it;
+						}
 						void setUsingList(bool b) {
 							m_active.setUsingList(b);
 							m_inactive.setUsingList(b);
@@ -81,20 +157,18 @@ namespace ARK {
 							return m_active.isUsingList();
 						}
 						T get() {
-				#ifdef EXCEPTIONS_AVAILABLE
-							try {
-				#else
-								if (m_inactive.size() == 0) { ErrorDialog::createAndShow("Pool is empty"); return NULL; }
-				#endif
-								T obj = m_inactive.pop();
-								m_active.add(obj);
-								return obj;
-				#ifdef EXCEPTIONS_AVAILABLE
-							} catch(exception& e) {
-								throw e;
+							if (m_inactive.size() == 0 && m_active.size() ==0) {
+								ErrorDialog::createAndShow("Pool is not populated."); 
+								return NULL;
 							}
-				#endif
-							return NULL;
+							if (m_inactive.size() == 0) { 
+								ErrorDialog::createAndShow("Pool is empty"); 
+								return NULL; 
+							}
+							
+							T obj = m_inactive.pop();
+							m_active.add(obj);
+							return obj;
 						}
 						void prune(T obj) {
 							obj->setPendingRemoval(false);

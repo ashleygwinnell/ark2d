@@ -8,6 +8,7 @@
 #ifndef GAMECONTAINERIPHONE_H_
 #define GAMECONTAINERIPHONE_H_
 
+#include "../../Includes.h"
 #include "../../Namespaces.h"
 #include "../../ARK2D.h"
 
@@ -18,9 +19,7 @@
 
 		#import "GameContainerIPhoneAppDelegate.h"
 		#import "GameContainerIPhoneGLView.h"
-		#include <string>
-		#include <stdlib.h>
-
+		
 		namespace ARK {
 			namespace Core {
 
@@ -28,6 +27,7 @@
 					friend class GameContainer;
 					public:
 						GameContainer* m_container;
+                        GameContainerIPhoneGLView* m_glView;
 						string m_resourcePath;
 						
 						CAEAGLLayer* _eaglLayer;
@@ -42,6 +42,7 @@
 						static void* getARK2DResource(int resourceId, int resourceType);
 
 						void initOpenGL(GameContainerIPhoneGLView* view);
+						void initOpenGL2D(int width, int height);
 						void deinitOpenGL();
 
 						bool initOpenAL();
@@ -49,6 +50,8 @@
 
 						void initGame();
 						void deinitGame();
+
+						unsigned int getOrientation();
 
 						static GameContainerPlatform* getInstance();
 						void start();

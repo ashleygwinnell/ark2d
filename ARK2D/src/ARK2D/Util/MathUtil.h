@@ -27,7 +27,7 @@ namespace ARK {
 		 */
 		class MathUtil {
 			public:
-				static const double PIE = 3.14159265;
+                static double PIE;
 
 				static void seedRandom();
 				static int randBetween(int lower, int upper);

@@ -37,11 +37,16 @@ namespace ARK {
 				AbstractUIComponent();
 				virtual int getX();
 				virtual int getY();
+				virtual int getCenterX();
+				virtual int getCenterY();
+				virtual int getMaxX();
+				virtual int getMaxY();
 				virtual unsigned int getWidth();
 				virtual unsigned int getHeight();
 				virtual void setX(int x);
 				virtual void setY(int y);
 				virtual void setLocation(int x, int y);
+				virtual void setLocationByCenter(int x, int y);
 				virtual void setSize(unsigned int w, unsigned int h);
 
 				void setWidth(unsigned int w);

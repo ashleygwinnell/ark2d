@@ -31,11 +31,15 @@ namespace ARK {
 
 				void update(GameTimer* timer);
 
+				void setTime(float f);
+
 				void setFrameTime(unsigned int ft);
 				unsigned int getFrameTime();
 
 				void setPingPong(bool b);
 				bool isPingPong();
+
+				void setAlpha(float f);
 
 				void draw(int x, int y);
 				void drawCentered(int x, int y);
@@ -48,7 +52,7 @@ namespace ARK {
 
 			private:
 				Vector<Image*> m_frames;
-				unsigned int m_currentFrameIndex;
+				signed int m_currentFrameIndex;
 				signed int m_nextFrameModifier;
 
 				float m_timer;

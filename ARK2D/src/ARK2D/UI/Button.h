@@ -25,7 +25,7 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
 		class Button : public AbstractUIComponent {
-			private:
+			protected:
 				String m_text;
 				Image* m_image;
 				unsigned int m_state; // 0 for mouse-off, 1 for mouse-over, 2 for mouse-down.
@@ -39,6 +39,16 @@ namespace ARK {
 				Button():
 					AbstractUIComponent(),
 					m_text(""),
+					m_image(NULL),
+					m_state(0),
+					m_event(NULL),
+					m_eventObj(NULL)
+				{
+
+				}
+				Button(string text):
+					AbstractUIComponent(),
+					m_text(text),
 					m_image(NULL),
 					m_state(0),
 					m_event(NULL),
@@ -88,7 +98,10 @@ namespace ARK {
 				void doEvent() {
 					if (m_event != NULL) {
 						if (m_eventObj == NULL) {
+							
 							void (*pt)() = (void(*)()) m_event;
+							//typedef void fnct();
+							//fnct* pt = (fnct*) m_event;
 							pt();
 						} else {
 							void (*pt)(void*) = (void(*)(void*)) m_event;

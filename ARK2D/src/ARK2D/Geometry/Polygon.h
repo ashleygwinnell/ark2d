@@ -48,6 +48,25 @@ namespace ARK {
 				virtual vector<Vector2<T>* >* getPoints() {
 					return &m_points;
 				}
+				virtual Vector2<T>* getPoint(unsigned int i) {
+					return m_points.at(i);
+				}
+
+				virtual void add(T x, T y) {
+					for(unsigned int i = 0; i < m_points.size(); i++) {
+						m_points.at(i)->add(x, y);
+					}
+				}
+				virtual void rotate(float degrees) {
+					T cx = getCenterX();
+					T cy = getCenterY();
+					Vector2<T> center(cx, cy);
+
+					for(unsigned int i = 0; i < m_points.size(); i++) {
+						Vector2<T>* p = m_points.at(i);
+						MathUtil::rotatePointAroundPoint<T>(p, &center, degrees);
+					}
+				}
 
 				virtual T getMinX() {
 					T min = std::numeric_limits<T>::max();
@@ -127,6 +146,12 @@ namespace ARK {
 					polygon = dynamic_cast<Polygon<T>* >(s);
 					if (polygon != NULL) {
 						return Shape<T>::collision_polygonPolygon(this, polygon);
+					}
+
+					Rectangle<T>* rect = NULL;
+					rect = dynamic_cast<Rectangle<T>* >(s);
+					if (rect != NULL) {
+						return Shape<T>::collision_polygonRectangle(this, rect);
 					}
 
 					Circle<T>* circle = NULL;

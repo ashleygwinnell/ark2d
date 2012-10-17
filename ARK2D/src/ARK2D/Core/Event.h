@@ -8,8 +8,7 @@
 #ifndef EVENT_H_
 #define EVENT_H_
 
-#include <iostream>
-#include <stdlib.h>
+#include "../Includes.h"
 
 namespace ARK {
 	namespace Core {

@@ -1,0 +1,30 @@
+Contents of /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/ark2d-Prefix.pch
+4.1 (tags/Apple/clang-421.11.65) (based on LLVM 3.1svn)
+i386-apple-darwin12.0.0
+-x
+objective-c++
+-arch
+i386
+-fmessage-length=0
+-fpascal-strings
+-O0
+-DARK2D_IPHONE
+-isysroot
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator6.0.sdk
+-fexceptions
+-fasm-blocks
+-g
+-fobjc-abi-version=2
+-fobjc-legacy-dispatch
+-DIBOutlet=__attribute__((iboutlet))
+-DIBOutletCollection(ClassName)=__attribute__((iboutletcollection(ClassName)))
+-DIBAction=void)__attribute__((ibaction)
+-mios-simulator-version-min=4.2
+-iquote
+-iquote
+-I/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/XcodeData/ark2d/Build/Products/Default-iphonesimulator/include
+-I../../src/ARK2D/vendor/iphone
+-F/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/XcodeData/ark2d/Build/Products/Default-iphonesimulator
+-x
+objective-c++
+SDK_PRODUCT_BUILD_VERSION=10A403

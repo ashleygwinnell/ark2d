@@ -1,0 +1,30 @@
+dependencies: \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/Mutex.cpp \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/Mutex.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../Includes.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../vendor/ogg130/ogg.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../vendor/ogg130/os_types.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../vendor/vorbis132/vorbisfile.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../vendor/vorbis132/codec.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../vendor/lpng151/png.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../vendor/lpng151/pnglibconf.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../vendor/lpng151/pngconf.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../vendor/libJSON/JSON_Defs.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../vendor/libJSON/JSON_Strings.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../vendor/libJSON/JSONNode.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../vendor/libJSON/JSONChildren.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../vendor/libJSON/Debug.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../vendor/libJSON/JSON_Worker.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../vendor/libJSON/JSON_StringConv.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../vendor/libJSON/jsonmain.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/Thread.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../Core/Event.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../ARK2D.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../Namespaces.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../UI/ErrorDialog.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../Util/StringUtil.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../Util/../Core/ToString.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../Util/../Graphics/SpriteSheetDescription.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../Util/../Graphics/../Core/Resource.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../Core/../Windres.h \
+  /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/iphone/../../src/ARK2D/Threading/../Util/../Graphics/SpriteSheetDescriptionItem.h

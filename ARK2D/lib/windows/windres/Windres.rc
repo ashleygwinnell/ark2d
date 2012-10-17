@@ -1,0 +1,11 @@
+#include "Windres.h"
+ 
+ARK2D_ICON 			ICON 	"{$ARK2D_DIRECTORY}\\data\\icon.ico"
+
+ARK2D_FONT_PNG 	ARK2D_RESOURCE_TYPE_PNG 	"{$ARK2D_DIRECTORY}\\data\\fonts\\default.png"
+ARK2D_FONT_FNT 	ARK2D_RESOURCE_TYPE_FNT 	"{$ARK2D_DIRECTORY}\\data\\fonts\\default.fnt"
+ARK2D_PARTICLE 	ARK2D_RESOURCE_TYPE_PNG 	"{$ARK2D_DIRECTORY}\\data\\particle.png"
+
+
+
+

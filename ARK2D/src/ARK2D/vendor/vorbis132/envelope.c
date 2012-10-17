@@ -15,9 +15,13 @@
 
  ********************************************************************/
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
+#ifndef ARK2D_IPHONE
+    #include <stdlib.h>
+    #include <string.h>
+    #include <stdio.h>
+#endif
+
+
 #include <math.h>
 #include "../ogg130/ogg.h"
 #include "codec.h"

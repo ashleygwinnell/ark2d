@@ -18,6 +18,7 @@
 
 #include "../../Core/GameObject.h"
 #include "../MathUtil.h"
+ #include "../../Core/GameContainer.h"
 
 using namespace std;
 
@@ -78,6 +79,33 @@ namespace ARK {
 					bool isUsingList() {
 						return usingList;
 					}
+					bool contains(T val) {
+						#if !defined(STL_AVAILABLE)
+							return false;
+						#else 
+							if (!usingList) {
+								typename vector<T>::iterator it = vec.begin();
+								while (it != vec.end()) {
+									T obj = (*it);
+									if (obj == val) {
+										return true;
+									} 
+									++it;
+								}
+								return false;
+							}
+
+							typename list<T>::iterator it = lst.begin();
+							while (it != lst.end()) {
+								T obj = (*it);
+								if (obj == val) {
+									return true;
+								}
+								++it;
+							}
+							return false; 
+						#endif
+					}
 					void add(T o) {
 						#if !defined(STL_AVAILABLE)
 							m_sizeOccupied++;
@@ -94,6 +122,23 @@ namespace ARK {
 								return;
 							}
 							lst.push_back(o);
+						#endif
+					}
+					void set(unsigned int i, T item) {
+						#if !defined(STL_AVAILABLE)
+							return NULL;
+						#else
+
+							if (!usingList) {
+								vec[i] = item;
+							} else {
+								typename list<T>::iterator it;
+								it = lst.begin();
+								advance(it, i);
+								it = lst.erase(it);
+								lst.insert(it, item);
+							}
+
 						#endif
 					}
 					T get(unsigned int i) {
@@ -402,14 +447,13 @@ namespace ARK {
 							if (!usingList) {
 								for(unsigned int i = 0; i < vec.size(); i++) {
 									T obj = vec.at(i);
-									if (obj == NULL) { continue; }
 									s += obj->toString();
 									if (i != vec.size() - 1) {
 										s += ",";
 									}
 								}
 							} else {
-								for(unsigned int i = 0; i < lst.size(); i++) {
+								/*for(unsigned int i = 0; i < lst.size(); i++) {
 									typename list<T>::iterator it = lst.begin();
 									advance(it, i);
 									T obj = *it;
@@ -418,6 +462,18 @@ namespace ARK {
 									if (i != lst.size() - 1) {
 										s += ",";
 									}
+								}*/
+								unsigned int ii = 0;
+								typename list<T>::iterator it = lst.begin();
+								while (it != lst.end()) {
+									T obj = (*it);
+									s += obj->toString();
+									ARK2D::getLog()->i(s); 
+									if (ii != size() - 1) {
+										s += ",";
+									}
+									ii++;
+									++it;
 								}
 							}
 						#endif

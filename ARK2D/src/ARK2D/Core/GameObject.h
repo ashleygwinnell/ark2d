@@ -40,6 +40,7 @@ namespace ARK {
 				virtual string toString();
 
 				virtual ~GameObject();
+
 		};
 	}
 }

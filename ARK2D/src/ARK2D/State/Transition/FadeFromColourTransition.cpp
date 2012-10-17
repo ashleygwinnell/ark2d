@@ -43,8 +43,14 @@ namespace ARK {
 			}
 			void FadeFromColourTransition::postRender(GameContainer* container, StateBasedGame* game, Renderer* g) {
 
-				m_color->setAlpha(m_alpha);
-				g->setDrawColor(m_color->getRed(), m_color->getGreen(), m_color->getBlue(), m_color->getAlpha());
+
+
+				m_color->setAlpha((float) m_alpha);
+				g->setDrawColorf(m_color->getRedf(), m_color->getGreenf(), m_color->getBluef(), m_color->getAlphaf());
+
+				ARK2D::getLog()->i("alpha:");
+				ARK2D::getLog()->i(Cast::toString<float>(m_alpha));
+				ARK2D::getLog()->i(Cast::toString<float>(m_color->getAlphaf()));
 
 				//g->setDrawColor(Color::white);
 				g->fillRect(0,0, container->getWidth(), container->getHeight());

@@ -49,6 +49,18 @@ namespace ARK {
 				return CIRCLE_OUT;
 			} else if (str == "CIRCLE_IN_OUT") {
 				return CIRCLE_IN_OUT;
+			} else if (str == "ELASTIC_IN") {
+				return ELASTIC_IN;
+			} else if (str == "ELASTIC_OUT") {
+				return ELASTIC_OUT;
+			} else if (str == "ELASTIC_IN_OUT") {
+				return ELASTIC_IN_OUT;
+			} else if (str == "BOUNCE_IN") {
+				return BOUNCE_IN;
+			} else if (str == "BOUNCE_OUT") {
+				return BOUNCE_OUT;
+			} else if (str == "BOUNCE_IN_OUT") {
+				return BOUNCE_IN_OUT;
 			}
 			return LINEAR;
 		}
@@ -92,6 +104,18 @@ namespace ARK {
 				return "CIRCLE_OUT";
 			} else if (i == CIRCLE_IN_OUT) {
 				return "CIRCLE_IN_OUT";
+			} else if (i == ELASTIC_IN) {
+				return "ELASTIC_IN";
+			} else if (i == ELASTIC_OUT) {
+				return "ELASTIC_OUT";
+			} else if (i == ELASTIC_IN_OUT) {
+				return "ELASTIC_IN_OUT";
+			} else if (i == BOUNCE_IN) {
+				return "BOUNCE_IN";
+			} else if (i == BOUNCE_OUT) {
+				return "BOUNCE_OUT";
+			} else if (i == BOUNCE_IN_OUT) {
+				return "BOUNCE_IN_OUT";
 			}
 			return LINEAR;
 		}
@@ -173,6 +197,75 @@ namespace ARK {
 				case Easing::CIRCLE_IN_OUT:
 					if ((time/=duration/2) < 1) return -change/2 * ((float)sqrt(1 - time*time) - 1) + start;
 					return change/2 * ((float)sqrt(1 - (time-=2)*time) + 1) + start;
+				
+				case Easing::ELASTIC_IN: {
+					if (time==0) return start;  
+					if ((time/=duration)==1) return start+change;  
+					
+					double amplitude = 1.0;
+					double period = duration * 0.3; //if (!p) p=duration*.3;
+					double s = 0;
+					if (amplitude < abs(change)) { 
+						amplitude = change; 
+						s = period / 4; 
+					} else { 
+						s = period / (2 * MathUtil::PIE) * asin(change/amplitude); 
+					}
+					return -(amplitude * pow(2, 10 * (time-=1)) * sin( (time*duration-s)*(2* MathUtil::PIE)/period )) + start;
+				}
+				case Easing::ELASTIC_OUT: {
+					if (time==0) return start;  
+					if ((time/=duration)==1) return start+change;  
+					
+					double amplitude = 1.0;
+					double period = duration * 0.3; //if (!p) p=duration*.3;
+					double s = 0;
+					if (amplitude < abs(change)) { 
+						amplitude = change; 
+						s = period/4; 
+					} else { 
+						s = period/(2 * MathUtil::PIE) * asin (change/amplitude); 
+					}
+					return amplitude * pow(2,-10*time) * sin( (time*duration-s)*(2 * MathUtil::PIE)/period ) + change + start;
+				}
+				case Easing::ELASTIC_IN_OUT: {
+					if (time==0) return start;  
+					if ((time/=duration/2)==2) return start+change;  
+					//if (!p) p=d*(.3*1.5); 
+					double amplitude = 1.0;
+					double period = duration*(0.3*1.5);
+					double s = 0;
+
+					if (amplitude < abs(change)) { 
+						amplitude=change; 
+						s = period/4; 
+					} else { 
+						s = period/(2 * MathUtil::PIE) * asin (change/amplitude); 
+					}
+
+					if (time < 1) { 
+						return -0.5 * (amplitude * pow(2,10*(time-=1)) * sin( (time*duration-s)*(2*MathUtil::PIE)/period )) + start;
+					}
+					return amplitude * pow(2,-10*(time-=1)) * sin( (time*duration-s)*(2*MathUtil::PIE)/period )*.5 + change + start;
+				}
+				case Easing::BOUNCE_IN:
+					return change - Easing::ease(Easing::BOUNCE_OUT, duration - time, 0, change, duration) + start;
+				case Easing::BOUNCE_OUT:
+					if ((time/=duration) < (1/2.75)) {
+						return change*(7.5625*time*time) + start;
+					} else if (time < (2/2.75)) {
+						return change*(7.5625*(time-=(1.5/2.75))*time + .75) + start;
+					} else if (time < (2.5/2.75)) {
+						return change*(7.5625*(time-=(2.25/2.75))*time + .9375) + start;
+					} else {
+						return change*(7.5625*(time-=(2.625/2.75))*time + .984375) + start;
+					}
+					return start;
+
+				case Easing::BOUNCE_IN_OUT:
+					if (time < duration/2) { return Easing::ease(Easing::BOUNCE_IN, time*2, 0, change, duration) * 0.5 + start; }
+					return Easing::ease(Easing::BOUNCE_OUT, time*2-duration, 0, change, duration) * .5 + change * 0.5 + start;
+
 				case Easing::NONE:
 					return start;
 				default:

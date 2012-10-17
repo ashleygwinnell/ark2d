@@ -17,7 +17,7 @@
 void selectionSortAscending(int anArray[]);
 void selectionSortAscending(int anArray[])
 {
-	int nSize = sizeof(anArray) / sizeof(anArray[0]);
+	int nSize = sizeof(&anArray) / sizeof(anArray[0]);
 	// Step through each element of the array
 	for (int nStartIndex = 0; nStartIndex < nSize; nStartIndex++)
 	{

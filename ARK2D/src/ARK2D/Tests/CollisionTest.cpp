@@ -30,6 +30,8 @@ namespace ARK {
 			rectangleTwo = new ARK::Geometry::Rectangle<float>(50, 400, 100, 100);
 			lineOne = new Line<float>(300, 500, 350, 550);
 			lineTwo = new Line<float>(300, 200, 350, 150);
+			lineThree = new Line<float>(500, 200, 500, 300);
+			lineFour = new Line<float>(500, 200, 700, 200);
 
 			polygonOne = new ARK::Geometry::Polygon<float>();
 			polygonOne->addPoint(0,0);
@@ -49,6 +51,8 @@ namespace ARK {
 			shapes.push_back(rectangleTwo);
 			shapes.push_back(lineOne);
 			shapes.push_back(lineTwo);
+			shapes.push_back(lineThree);
+			shapes.push_back(lineFour);
 			shapes.push_back(polygonOne);
 			shapes.push_back(polygonTwo);
 		}
@@ -78,6 +82,8 @@ namespace ARK {
 			else if (i->isKeyPressed(Input::KEY_5)) { current = shapes.at(5); }
 			else if (i->isKeyPressed(Input::KEY_6)) { current = shapes.at(6); }
 			else if (i->isKeyPressed(Input::KEY_7)) { current = shapes.at(7); }
+			else if (i->isKeyPressed(Input::KEY_7)) { current = shapes.at(8); }
+			else if (i->isKeyPressed(Input::KEY_7)) { current = shapes.at(9); }
 
 		}
 		void CollisionTestGameState::render(GameContainer* container, StateBasedGame* game, Renderer* g) {

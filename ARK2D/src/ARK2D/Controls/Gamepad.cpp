@@ -5,12 +5,12 @@
  *      Author: Ashley
  */
 
-#include <stdlib.h>
-#include <iostream>
+
+#include "../Includes.h"
 
 #include "../ARK2D.h"
 #include "Gamepad.h"
-
+ 
 namespace ARK {
 	namespace Controls {
 
@@ -19,7 +19,7 @@ namespace ARK {
 			id(0),
 			productId(0),
 			vendorId(0),
-			name(""),
+			name(""), 
 			dpadPosition(DPAD_NONE),
 			numButtons(0),
 			buttonStates() {

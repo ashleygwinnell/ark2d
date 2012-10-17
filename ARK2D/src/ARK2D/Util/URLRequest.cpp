@@ -10,7 +10,7 @@
 namespace ARK {  
 	namespace Util {
 
-		#ifndef ARK2D_ANDROID
+		#if !defined(ARK2D_ANDROID) && !defined(ARK2D_IPHONE)
 			CURL* URLRequest::s_curl = NULL;
 		#endif
 		bool URLRequest::s_curlInitted = false;
@@ -25,7 +25,7 @@ namespace ARK {
 
 
 			if (s_curlInitted == false) {
-				#ifndef ARK2D_ANDROID
+				#if !defined(ARK2D_ANDROID) && !defined(ARK2D_IPHONE)
 					s_curl = curl_easy_init();
 					if (!s_curl) {
 						ErrorDialog::createAndShow("could not init libcurl");
@@ -193,7 +193,9 @@ namespace ARK {
 				//! todo: HTTP POST args on Android.
 				m_response = ARK2D::getContainer()->m_platformSpecific.m_pluggable->urlRequest(m_url);
 				return m_response;
-			#else
+            #elif defined(ARK2D_IPHONE) 
+                return "Not implemented";
+            #else
 
 				String returnString("");
 				CURLcode res;

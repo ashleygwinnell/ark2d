@@ -80,15 +80,23 @@ namespace ARK {
 				Color* getColor() const;
 
 				inline unsigned int getTextureId() { return texture; };
+				inline float getTextureX() { return texture_offset_x; };
+				inline float getTextureY() { return texture_offset_y; };
+				inline float getTextureW() { return texture_width; };
+				inline float getTextureH() { return texture_height; };
 
 				void clean();
 
 				void setCenterOfRotation(int x, int y);
 				void setRotation(double angle);
 				void rotate(double angle);
+
+				Image* scale(float x, float y); // returns self.
+
 				Image* getSubImage(const SpriteSheetDescriptionItem& desc);
 				Image* getSubImage(int x, int y, int width, int height) const;
 				Image* getScaledCopy(unsigned int x, unsigned int y);
+				Image* getScaledCopy(float x, float y);
 				Image* getFlippedCopy(bool horizontal_flip, bool vertical_flip);
 				void setSize(int x, int y);
 				void setWidth(int w);

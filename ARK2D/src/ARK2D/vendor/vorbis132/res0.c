@@ -20,8 +20,11 @@
    yet even a nagging little idea lurking in the shadows.  Oh and BTW,
    it's slow. */
 
-#include <stdlib.h>
-#include <string.h>
+#ifndef ARK2D_IPHONE
+    #include <stdlib.h>
+    #include <string.h>
+#endif
+
 #include <math.h>
 #include "../ogg130/ogg.h"
 #include "codec.h"

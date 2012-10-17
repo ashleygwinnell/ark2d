@@ -7,12 +7,49 @@
 
 #include "StringUtil.h"
 #include "../Core/ToString.h"
-#include "../Core/String.h"
+#include "../Core/String.h" 
 #include "../Core/GameContainer.h"
-#include "../Util/Log.h"
+#include "../Util/Log.h" 
 
 namespace ARK {
 	namespace Util {
+
+		int digitsInNumber(int number);
+		int digitsInNumber(int number) {
+			// todo: this, properly. 
+			if (number >= 1000000) { 
+				return 7; 
+			} else if (number >= 100000) {
+				return 6;
+			} else if (number >= 10000) {
+				return 5;
+			} else if (number >= 1000) {
+				return 4;
+			} else if (number >= 100) {
+				return 3;
+			} else if (number >= 10) {
+				return 2;
+			}
+			return 1;
+		}
+		std::string StringUtil::zeropad(int number, int digits) {
+			// how many digits in this number. 
+			int numdigits = digitsInNumber(number);
+
+			// diff between that and digits.
+			int diff = digits - numdigits; 
+
+			// padd if appropriate. 
+			string s = Cast::toString<int>(number);
+			while (diff > 0) {
+				s = "0" + s;
+				diff--;
+			}
+
+			// return string
+			return s;
+		}
+
 
 		std::string StringUtil::append(string str, int i) {
 			std::ostringstream os;
@@ -215,9 +252,12 @@ namespace ARK {
 
 		bool StringUtil::file_exists(const char * filename) {
 			string strFileName(filename);
-			#if defined(ARK2D_ANDROID)
-				strFileName = ARK2D::getContainer()->m_platformSpecific.m_externalDataStr + strFileName;
-			#endif
+			//#if defined(ARK2D_ANDROID)
+			//	strFileName = ARK2D::getContainer()->m_platformSpecific.m_externalDataStr + strFileName;
+			//#endif
+
+			strFileName = internalOSAppends(strFileName);
+			
 			ARK2D::getLog()->i(StringUtil::append("Does file exist: ", strFileName));
 			FILE* file = NULL;
 			file = fopen(strFileName.c_str(), "r");

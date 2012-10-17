@@ -12,7 +12,7 @@
 #include "../Core/String.h"
 #include "../Graphics/Renderer.h"
 
-namespace ARK {
+namespace ARK { 
 	namespace Util {
 
 		Log::Log():

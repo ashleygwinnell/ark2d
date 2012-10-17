@@ -170,6 +170,7 @@ namespace ARK {
 
 				std::cout << "w: " << m_Width << " h: " << m_Height << std::endl;
 
+				
 
 				// apply mask
 				unsigned int offset = 0;
@@ -215,6 +216,35 @@ namespace ARK {
 
 				ARK2D::getLog()->i(StringUtil::append("new width:", tempTextureWidth));
 				ARK2D::getLog()->i(StringUtil::append("new height:", tempTextureHeight));
+
+				// 
+				// check it can fit! and is compatible with hardware!
+				// 
+				// http://www.opengl.org/archives/resources/faq/technical/texture.htm
+				// 21.130 What's the maximum size texture map my device will render hardware accelerated?
+
+                
+                #if !defined(ARK2D_IPHONE) && !defined(ARK2D_ANDROID)
+                
+                    GLint loltexcompat_w = tempTextureWidth;
+                    GLint loltexcompat_h = tempTextureHeight;
+                    GLint compatibleTexSize;
+                    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &compatibleTexSize);
+                    glTexImage2D(GL_PROXY_TEXTURE_2D, 0, GL_RGBA, loltexcompat_w, loltexcompat_h, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+                    GLint textureIsCompatible;
+                    glGetTexLevelParameteriv(GL_PROXY_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &textureIsCompatible);
+                    if (textureIsCompatible == 0) {
+                        String errs("Texture of size: ");
+                        errs += (unsigned int) tempTextureWidth;
+                        errs += " could not be created. :( Max texture size is: ";
+                        errs += (unsigned int) compatibleTexSize;
+                        ErrorDialog::createAndShow(errs.get()); 
+                        exit(0);
+                    }
+                
+                #endif
+
 
 				float newTextureWidth =  float(m_Width) / float(tempTextureWidth);
 				float newTextureHeight =  float(m_Height) / float(tempTextureHeight);
@@ -359,15 +389,18 @@ namespace ARK {
 				case GL_INVALID_VALUE:
 					return "GL_INVALID_VALUE";
 					break;
+				#if !defined(ARK2D_ANDROID)
+					case GL_INVALID_FRAMEBUFFER_OPERATION:
+						return "GL_INVALID_FRAMEBUFFER_OPERATION";
+						break;
+				#endif
 				case GL_INVALID_OPERATION:
 					return "GL_INVALID_OPERATION";
 					break;
 				case GL_OUT_OF_MEMORY:
 					return "GL_OUT_OF_MEMORY";
 					break;
-				case GL_INVALID_FRAMEBUFFER_OPERATION:
-					return "GL_INVALID_FRAMEBUFFER_OPERATION";
-					break;
+
 				/*case GL_STACK_OVERFLOW:
 					return "GL_STACK_OVERFLOW";
 					break;
@@ -619,6 +652,14 @@ namespace ARK {
 			return sub;*/
 		}
 
+		Image* Image::scale(float x, float y) {
+			m_Width =  (unsigned int) (float(m_Width) * x);
+			m_Height = (unsigned int) (float(m_Height) * y);
+			clean();
+			
+			return this;
+		}
+
 		Image* Image::getScaledCopy(unsigned int x, unsigned int y) {
 
 			Image* sub = new Image();
@@ -629,6 +670,19 @@ namespace ARK {
 			sub->texture_offset_y = texture_offset_y;
 			sub->setWidth(m_Width * x);
 			sub->setHeight(m_Height * y);
+			sub->clean();
+			return sub;
+		}
+		Image* Image::getScaledCopy(float x, float y) {
+
+			Image* sub = new Image();
+			sub->texture = texture;
+			sub->texture_width = texture_width;
+			sub->texture_height = texture_height;
+			sub->texture_offset_x = texture_offset_x;
+			sub->texture_offset_y = texture_offset_y;
+			sub->setWidth((int)(m_Width * x));
+			sub->setHeight((int)(m_Height * y));
 			sub->clean();
 			return sub;
 		}
@@ -948,14 +1002,14 @@ namespace ARK {
 			RendererState::start(RendererState::TEXTURE, this->texture);
 			//bind();
 			glColor4f(1.0f, 1.0f, 1.0f, m_alpha);
-			//if (m_color != NULL) { glEnableClientState(GL_COLOR_ARRAY); }
+			if (m_color != NULL) { glEnableClientState(GL_COLOR_ARRAY); }
 			//glEnableClientState(GL_VERTEX_ARRAY);
 			//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 		}
 		void Image::drawSubImageEnd() {
 			//glDisableClientState(GL_VERTEX_ARRAY);
 			//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-			//if (m_color != NULL) { glDisableClientState(GL_COLOR_ARRAY); }
+			if (m_color != NULL) { glDisableClientState(GL_COLOR_ARRAY); }
 			//unbind();
 		}
 

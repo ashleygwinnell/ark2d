@@ -159,12 +159,13 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	if(container != NULL) {
 		float thisx = (float) x;
 		float thisy = (float) y;
-		thisx /= container->getScale();
-		thisy /= container->getScale();
-
 		thisx -= container->getTranslateX();
 		thisy -= container->getTranslateY();
 
+		thisx /= container->getScale();
+		thisy /= container->getScale();
+
+		
 		/*string logstr = "touch-down: ";
 		logstr += Cast::toString<int>((int) x);
 		logstr += ",";
@@ -174,6 +175,8 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		logstr += ",";
 		logstr += Cast::toString<int>((int) thisy);
 		arklog->i(logstr);*/
+
+
 
 		Input* i = ARK2D::getInput();
 		i->mouse_x = (int) thisx;
@@ -185,11 +188,14 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	if(container != NULL) {
 		float thisx = (float) x;
 		float thisy = (float) y;
+		
+		thisx -= container->getTranslateX();
+		thisy -= container->getTranslateY();
+
 		thisx /= container->getScale();
 		thisy /= container->getScale();
 
-		thisx -= container->getTranslateX();
-		thisy -= container->getTranslateY();
+		
 
 		/*string logstr = "touch-move: ";
 		logstr += Cast::toString<int>((int) x);
@@ -211,11 +217,13 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	if(container != NULL) {
 		float thisx = (float) x;
 		float thisy = (float) y;
+		thisx -= container->getTranslateX();
+		thisy -= container->getTranslateY();
+
 		thisx /= container->getScale();
 		thisy /= container->getScale();
 
-		thisx -= container->getTranslateX();
-		thisy -= container->getTranslateY();
+		
 
 		/*string logstr = "touch-up: ";
 		logstr += Cast::toString<int>((int) x);

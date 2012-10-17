@@ -44,6 +44,7 @@ LOCAL_SRC_FILES := \
 	src/ARK2D/Graphics/Color.cpp \
 	src/ARK2D/Graphics/Renderer.cpp \
 	src/ARK2D/Graphics/Shader.cpp \
+	src/ARK2D/Graphics/FBO.cpp \
 	src/ARK2D/Graphics/SpriteSheetDescription.cpp \
 	src/ARK2D/Graphics/SpriteSheetDescriptionItem.cpp \
 	src/ARK2D/Graphics/Image.cpp \
@@ -94,6 +95,7 @@ LOCAL_SRC_FILES := \
 	src/ARK2D/Tools/Packer.cpp \
 	src/ARK2D/Tween/Timeline.cpp \
 	src/ARK2D/Tween/Easing.cpp \
+	src/ARK2D/Tween/Timer.cpp \
 	src/ARK2D/UI/UIComponent.cpp \
 	src/ARK2D/UI/AbstractUIComponent.cpp \
 	src/ARK2D/UI/Panel.cpp \
@@ -106,6 +108,8 @@ LOCAL_SRC_FILES := \
 	src/ARK2D/UI/ComboBox.cpp \
 	src/ARK2D/UI/ComboBoxItem.cpp \
 	src/ARK2D/UI/ErrorDialog.cpp \
+	src/ARK2D/UI/Notification.cpp \
+	src/ARK2D/UI/NotificationSystem.cpp \
 	src/ARK2D/Util/ArcadeHighscoreInput.cpp \
 	src/ARK2D/Util/FileUtil.cpp \
 	src/ARK2D/Util/MathUtil.cpp \

@@ -87,6 +87,21 @@ namespace ARK {
 
 				}
 		};
+		class CameraShakeMagnitude2Y : public TweenedEvent {
+			public:
+				CameraShake * m_cameraShake;
+				CameraShakeMagnitude2Y(CameraShake* shake, float start_val, float end_val, int millis):
+										TweenedEvent(start_val, end_val, millis),
+										m_cameraShake(shake) {
+					m_easing = Easing::CUBIC_IN_OUT;
+				}
+				void invoke(Timeline* t, float current_val) {
+					m_cameraShake->setYOffset(current_val);
+				}
+				virtual ~CameraShakeMagnitude2Y() {
+
+				}
+		};
 
 	}
 }

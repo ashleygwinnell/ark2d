@@ -21,8 +21,9 @@ namespace ARK {
 			m_states(),
 			m_from_state(NULL),
 			m_current_state(NULL),
+			m_next_state(NULL), 
 			m_container(NULL),
-			m_loading_state(NULL),
+			m_loading_state(NULL), 
 			m_enterTransition(NULL),
 			m_leaveTransition(NULL),
 			m_initialised(false),
@@ -74,7 +75,8 @@ namespace ARK {
 		void StateBasedGame::enterState(GameState* state, ARK::State::Transition::Transition* leave, ARK::State::Transition::Transition* enter) {
 
 			m_from_state = m_current_state;
-			m_current_state = state;
+			//m_current_state = state;
+			m_next_state = state;
 
 			if (leave == NULL) { // || m_leaveTransition == NULL) {
 				ARK2D::getLog()->v("StateBasedGame::enterState - enter was null");
@@ -107,7 +109,9 @@ namespace ARK {
 			initStates(container);
 
 			for (unsigned int i = 0; i < m_states.size(); i++) {
-				m_states.at(i)->init(container, this);
+				GameState* s = m_states.at(i);
+				ARK2D::getLog()->i(StringUtil::append("initialising state: ", s->id()));
+				s->init(container, this);
 			}
 
 			m_initialised = true;
@@ -129,15 +133,17 @@ namespace ARK {
 				//std::cout << "leave wasn't null once! :(" << std::endl;
 				m_leaveTransition->update(container, this, timer);
 				if (m_leaveTransition->isComplete()) {
-					m_from_state->leave(container, this, m_current_state);
+					m_from_state->leave(container, this, m_next_state);
 
 					if (m_autoDeleteTransitions) { delete m_leaveTransition; }
 					m_leaveTransition = NULL;
 
 					if (m_enterTransition == NULL) {
+						m_current_state = m_next_state;
 						m_current_state->enter(container, this, m_from_state);
 					} else {
-						m_enterTransition->init(container, this, m_from_state, m_current_state);
+						m_current_state = m_next_state;
+						m_enterTransition->init(container, this, m_from_state, m_next_state);
 					}
 				} else {
 					return;
@@ -164,8 +170,7 @@ namespace ARK {
 		}
 
 		void StateBasedGame::preRender(GameContainer* container, Renderer* g) {
-			#if defined( ARK2D_ANDROID )
-
+			#if defined( ARK2D_ANDROID ) 
 
 				glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 				glLoadIdentity();
@@ -198,33 +203,56 @@ namespace ARK {
 				g->translate(container->getTranslateX(), container->getTranslateY());
 				g->pushMatrix();
 				g->scale(container->getScale(), container->getScale());
+            #elif defined(ARK2D_IPHONE)
+				if (container->getOrientation() == GameContainer::ORIENTATION_LANDSCAPE) {
+					glPushMatrix();
+					glTranslatef(container->m_platformSpecific.m_glView.bounds.size.width, 0.0f, 0.0f );
+					glRotatef(90.0, 0.0, 0.0, 1.0);
+				}
+				
+                g->pushMatrix();
+                g->translate(container->getTranslateX(), container->getTranslateY());
+                g->pushMatrix();
+                g->scale(container->getScale(), container->getScale());
+            #elif (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS))
+
+               	/*glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+				glLoadIdentity();
+				g->setScissorTestEnabled(true);
+               	g->scissor(
+					container->getTranslateX(),
+					container->getTranslateY(),
+					container->getWidth() * container->getScaleX(),
+					container->getHeight() * container->getScaleY()
+				)*/
+
+				g->pushMatrix();
+                g->translate(container->getTranslateX(), container->getTranslateY());
+                g->pushMatrix();
+                g->scale(container->getScale(), container->getScale());
+            #else
+                g->pushMatrix(); 
 			#endif
 		}
 		void StateBasedGame::postRender(GameContainer* container, Renderer* g) {
-			#if defined( ARK2D_ANDROID )
+			#if defined(ARK2D_IPHONE)
+				g->popMatrix(); // pop scale
+				g->popMatrix(); // pop translate
+				if (container->getOrientation() == GameContainer::ORIENTATION_LANDSCAPE) {
+					g->popMatrix(); // pop rotate
+				}
+			#elif (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS))
 				g->popMatrix(); // pop scale
 				g->popMatrix(); // pop translate
 
-				// draw scissor boxes because glScissor does not work on some HTC phones.
-				Color cc = container->getClearColor();
-				g->setDrawColor(cc.getRed(), cc.getGreen(), cc.getBlue(), cc.getAlpha());
+				g->drawScissorBoxes(); 
+			#elif defined( ARK2D_ANDROID )
+				g->popMatrix(); // pop scale
+				g->popMatrix(); // pop translate
 
-				// left edge
-				g->fillRect(0,0, container->getTranslateX(), container->getDynamicHeight());// * container->getScaleY());
-
-				// right edge
-				g->fillRect(container->getTranslateX() + container->getWidth() * container->getScaleX(), 0,
-							container->getTranslateX(), container->getDynamicHeight());// * container->getScaleY());
-
-				// top edge
-				//g->fillRect(0,0, container->getWidth() * container->getScaleX(), container->getTranslateY());
-				g->fillRect(0,0, container->getDynamicWidth(), container->getTranslateY());
-
-				// bottom edge
-				g->fillRect(0, container->getTranslateY() + container->getHeight() * container->getScaleY(),
-							container->getDynamicWidth(), container->getTranslateY());
-							//container->getWidth() * container->getScaleX(), container->getTranslateY());
-
+				g->drawScissorBoxes(); 
+			#else
+				g->popMatrix();
 			#endif
 		}
 		void StateBasedGame::render(GameContainer* container, Renderer* g) {
@@ -240,7 +268,7 @@ namespace ARK {
 
 			// Render Current State.
 			if (m_current_state != NULL) {
-				ARK2D::getLog()->v("StateBasedGame::render - render current state");
+				//ARK2D::getLog()->v("StateBasedGame::render - render current state");
 				m_current_state->render(container, this, g);
 			}
 

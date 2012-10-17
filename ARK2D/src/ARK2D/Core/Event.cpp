@@ -5,9 +5,6 @@
  *      Author: Ashley
  */
 
-#include <string>
-#include <stdlib.h>
-
 #include "Event.h"
 
 namespace ARK {

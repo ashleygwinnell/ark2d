@@ -5,9 +5,8 @@
  *      Author: Ashley
  */
 
-#include <iostream>
-#include <map>
-#include "Sound.h"
+#include "../Includes.h"
+#include "Sound.h" 
 #include "SoundStore.h"
 
 namespace ARK {
@@ -63,6 +62,18 @@ namespace ARK {
 				}
 			}
 		}
+
+
+		float SoundStore::getVolumeByGroupId(unsigned int groupId) {
+			map<string, Sound*>::iterator it;
+			for(it = m_map.begin(); it != m_map.end(); it++) {
+				if (it->second->getGroupId() == groupId) {
+					return it->second->getVolume();
+				}
+			}
+			return 0.0f;
+		}
+
 		SoundStore::~SoundStore() {
 
 		}

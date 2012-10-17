@@ -8,13 +8,14 @@
 #ifndef INTELLIGENTGAMESTATE_H_
 #define INTELLIGENTGAMESTATE_H_
 
-using namespace std;
 #include <map>
 #include <string>
 #include "GameState.h"
 
 #include "../Namespaces.h"
 #include "../Util/Containers/Vector.h"
+
+using namespace std;
 
 namespace ARK {
 	namespace State {

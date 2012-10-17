@@ -125,7 +125,7 @@ namespace ARK {
 				clearColor = &cc;
 			} else {
 				clearColor = &m_container->m_clearColor;
-			}
+			} 
 
 
 

@@ -43,8 +43,37 @@ namespace ARK {
 				virtual Vector2<T>* getEnd() {
 					return second;
 				}
+				virtual Vector2<T>* getVec() {
+					return vec;
+				}
+				virtual void set(T x1, T y1, T x2, T y2) {
+					first->set(x1, y1);
+					second->set(x2, y2);
+					dirty = true;
+					clean();
+				}
+				virtual void setStartX(T x) {
+					first->setX(x);
+					dirty = true;
+					clean();
+				}
+				virtual void setStartY(T y) {
+					first->setY(y);
+					dirty = true;
+					clean();
+				}
 				virtual void setStart(T x, T y) {
 					first->set(x, y);
+					dirty = true;
+					clean();
+				}
+				virtual void setEndX(T x) {
+					second->setX(x);
+					dirty = true;
+					clean();
+				}
+				virtual void setEndY(T y) {
+					second->setY(y);
 					dirty = true;
 					clean();
 				}
@@ -91,6 +120,7 @@ namespace ARK {
 				virtual T getHeight() {
 					return getMaxY() - getMinY();
 				}
+
 				virtual T getLength() {
 					return vec->length();
 				}
@@ -101,6 +131,12 @@ namespace ARK {
 					if (!dirty) { return; }
 					vec->set(second);
 					vec->subtract(first);
+				}
+
+				virtual void add(T x, T y)
+				{
+					first->add(x, y);
+					second->add(x, y);
 				}
 
 				/**
@@ -198,6 +234,21 @@ namespace ARK {
 				virtual void render() {
 					Renderer* g = ARK2D::getRenderer();
 					g->drawLine((int) first->getX(), (int) first->getY(), (int) second->getX(), (int) second->getY());
+				}
+				virtual string toString() {
+					string nl = "\r\n";
+					string str;
+					str += "{";
+					str += "	\"first\": ";
+					str += first->toString();
+					str += ",";
+					str += "	\"second\": ";
+					str += second->toString();
+					str += ",";
+					str += "	\"vec\": ";
+					str += vec->toString();
+					str += "}";
+					return str;
 				}
 
 				virtual ~Line() {

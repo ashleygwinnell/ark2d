@@ -12,14 +12,14 @@ string getExtension(string s) {
 	unsigned int pos = s.find_last_of('.') + 1;  
 	return s.substr(pos);
 }
-
+ 
 bool is_big_endian();
 bool is_big_endian() {
 	static unsigned long x(1);
 	static bool result(reinterpret_cast<unsigned char*>(&x)[0] == 0);
 	return result;
 }
-
+ 
 const string base64_chars =
 					 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 					 "abcdefghijklmnopqrstuvwxyz"

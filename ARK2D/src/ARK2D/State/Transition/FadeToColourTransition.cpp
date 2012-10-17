@@ -19,11 +19,11 @@ namespace ARK {
 				m_color(NULL),
 				m_alpha(1.0f)
 				{
-
+ 
 			}
 			FadeToColourTransition::FadeToColourTransition(float time, Color* c):
 				Transition(),
-				m_time(time),
+				m_time(time), 
 				m_time_current(0.0f),
 				m_color(c),
 				m_alpha(1.0f)
@@ -32,20 +32,31 @@ namespace ARK {
 			}
 			void FadeToColourTransition::init(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to) {
 				Transition::init(container, game, from, to);
+
 				m_time_current = 0.0f;
 				m_alpha = 0.0f;
 			}
 			void FadeToColourTransition::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {
-				m_alpha = (float) Easing::ease(m_easing, double(m_time_current), 0.0f, double(m_colorOriginalAlpha), double(m_time));
-				m_time_current += timer->getDelta();
+				m_alpha = (float) Easing::ease(m_easing, double(m_time_current), 0.0f, float(m_colorOriginalAlpha), float(m_time));
+				m_time_current += (float) timer->getDelta();
+				//ARK2D::getLog()->i("fade to colour tc:");
+				//ARK2D::getLog()->i(Cast::toString<float>(m_time_current));
+				//ARK2D::getLog()->i("alpha:");
+				//ARK2D::getLog()->i(Cast::toString<float>(m_alpha));
+				
 			}
 			void FadeToColourTransition::preRender(GameContainer* container, StateBasedGame* game, Renderer* g) {
 
 			}
 			void FadeToColourTransition::postRender(GameContainer* container, StateBasedGame* game, Renderer* g) {
 
-				m_color->setAlpha(m_alpha);
-				g->setDrawColor(m_color->getRed(), m_color->getGreen(), m_color->getBlue(), m_color->getAlpha());
+				m_color->setAlpha((float) m_alpha);
+				g->setDrawColorf(m_color->getRedf(), m_color->getGreenf(), m_color->getBluef(), m_color->getAlphaf());
+
+				
+				ARK2D::getLog()->i("alpha:");
+				ARK2D::getLog()->i(Cast::toString<float>(m_alpha));
+				ARK2D::getLog()->i(Cast::toString<float>(m_color->getAlphaf()));
 
 				//g->setDrawColor(Color::white);
 				g->fillRect(0,0, container->getWidth(), container->getHeight());

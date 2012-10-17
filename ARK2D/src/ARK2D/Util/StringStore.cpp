@@ -8,7 +8,7 @@
 #include "StringStore.h"
 
 namespace ARK {
-	namespace Util {
+	namespace Util { 
 
 		StringStore StringStore::s_stringStore;
 		StringStore& StringStore::getInstance() {

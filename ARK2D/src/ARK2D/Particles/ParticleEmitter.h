@@ -40,6 +40,8 @@ namespace ARK {
 			virtual bool isOriented() = 0;
 			virtual bool usePoints() = 0;
 			virtual void resetState() = 0;
+            
+            virtual ~ParticleEmitter() {};
 		};
 	}
 }

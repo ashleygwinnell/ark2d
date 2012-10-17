@@ -22,6 +22,16 @@ namespace ARK {
 			return m_image;
 		}
 
+		TiledMapProperty* TiledMapTile::getPropertyByName(string s) const {
+			for(unsigned int p = 0; p < m_properties.size(); p++) 
+			{
+				TiledMapProperty* property = m_properties.at(p);
+				if (property->getName() == s) {
+					return property;
+				}
+			}
+			return NULL;
+		}
 		vector<TiledMapProperty*> TiledMapTile::getProperties() const {
 			return m_properties;
 		}

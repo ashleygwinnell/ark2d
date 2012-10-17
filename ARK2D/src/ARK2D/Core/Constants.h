@@ -19,10 +19,10 @@ namespace ARK {
 		 */
 		class Constants {
 			public:
-				static const unsigned int DIRECTION_UP = 0;
-				static const unsigned int DIRECTION_DOWN = 1;
-				static const unsigned int DIRECTION_LEFT = 2;
-				static const unsigned int DIRECTION_RIGHT = 3;
+		//		static const unsigned int DIRECTION_UP = 0;
+		//		static const unsigned int DIRECTION_DOWN = 1;
+		//		static const unsigned int DIRECTION_LEFT = 2;
+		//		static const unsigned int DIRECTION_RIGHT = 3;
 		};
 
 	}

@@ -28,7 +28,7 @@ namespace ARK {
 				m_doneHalfWayLogic = false;
 				m_sliderects.clear();
 
-				//if (m_dir == Constants::DIRECTION_RIGHT) {
+				//if (m_dir == DIRECTION_RIGHT) {
 
 					int minspeed = (int) (float(container->getWidth()) / (m_time / 2)) ;
 					for (unsigned int i = 0; i < m_numrects; i++) {
@@ -48,7 +48,7 @@ namespace ARK {
 
 				m_current_time += timer->getDelta();
 
-				//if (m_dir == Constants::DIRECTION_RIGHT) {
+				//if (m_dir == DIRECTION_RIGHT) {
 				if (m_current_time < m_time/2) {
 					for (unsigned int i = 0; i < m_numrects; i++) {
 						m_sliderects[i].xoffset += (int) (m_sliderects[i].xoffsetSpeed * timer->getDelta());
@@ -65,7 +65,7 @@ namespace ARK {
 					}
 				}
 
-				//} else if (m_dir == Constants::DIRECTION_LEFT) {
+				//} else if (m_dir == DIRECTION_LEFT) {
 
 				//}
 
@@ -90,7 +90,7 @@ namespace ARK {
 				unsigned int current_y = 0;
 				unsigned int single_height = (int) ceil( float(container->getHeight()) / float(m_numrects) );
 
-				if (m_dir == Constants::DIRECTION_RIGHT) {
+				if (m_dir == DIRECTION_RIGHT) {
 
 					// play first half
 					if (m_current_time < m_time/2) {
@@ -120,7 +120,7 @@ namespace ARK {
 
 
 
-				} else if (m_dir == Constants::DIRECTION_LEFT) {
+				} else if (m_dir == DIRECTION_LEFT) {
 
 
 					// play first half

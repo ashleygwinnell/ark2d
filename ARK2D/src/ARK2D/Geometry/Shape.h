@@ -111,11 +111,83 @@ namespace ARK {
 					}
 					return false;
 				}
+				static Vector2<T> collision_rectangleRectangleVec(T x1, T y1, T w1, T h1, T x2, T y2, T w2, T h2) {
+					Vector2<T> adjustmentVector(0, 0);
+
+					if ((	x1 + w1) >= x2
+							&& x1 <= (x2 + w2)
+							&& (y1 + h1) >= y2
+							&& y1 <= (y2 + h2)
+					)  {
+
+						// Axis stores the value of X or Y.  X = 0, Y = 1.
+						// Side stores the value of left (-1) or right (+1).
+						int axis = 0;
+						int side = 0;
+
+						 // This stores the absolute minimum distance we'll need to separate our colliding object.
+						float minimumTranslationDistance = 0.0f;
+
+						 // This is re-used to calculate the difference in distance between sides.
+						float difference = 0.0f;
+
+						// left
+						difference = (x1 + w1) - x2; // left.getMaxX() - right.getMinX();
+						if (difference < 0.0f) {
+							return adjustmentVector;
+						} else {
+							minimumTranslationDistance = difference;
+							axis = 0;
+							side = -1;
+						}
+
+						//right
+						difference = (x2 + w2) - x1; //right.getMaxX() - left.getMinX();
+						if (difference < 0.0f) {
+							return adjustmentVector;
+						}
+						if (difference < minimumTranslationDistance) {
+							minimumTranslationDistance = difference;
+							axis = 0;
+							side = 1;
+						}
+
+						// bottom
+						difference = (y1 + h1) - y2;// left.getMaxY() - right.getMinY();
+						if (difference < 0.0f) {
+							return adjustmentVector;
+						}
+						if (difference < minimumTranslationDistance) {
+							minimumTranslationDistance = difference;
+							axis = 1;
+							side = -1;
+						}
+
+						// top
+						difference = (y2 + h2) - y1;// right.getMaxY() - left.getMinY();
+						if (difference < 0.0f) {
+							return adjustmentVector;
+						}
+						if (difference < minimumTranslationDistance) {
+							minimumTranslationDistance = difference;
+							axis = 1;
+							side = 1;
+						}
+
+						// collided with
+						if (axis == 1) { // Y Axis
+							adjustmentVector.setY(side * minimumTranslationDistance);
+						} else { // X Axis
+							adjustmentVector.setX(side * minimumTranslationDistance);
+						}
+					}
+					return adjustmentVector;
+				}
 				static bool collision_rectangleLine(T x1, T y1, T w1, T h1, T x2, T y2, T x3, T y3) {
 					if (collision_rectangleRectangle(x1,y1,w1,h1,x2,y2,0,0) || collision_rectangleRectangle(x1,y1,w1,h1,x3,y3,0,0)) {
 						return true;
 					}
-					T lines[] = {
+					T lines[16] = {
 						x1, 	y1,		x1+w1, 	y1,
 						x1+w1, 	y1, 	x1+w1, 	y1+h1,
 						x1+w1, 	y1+h1, 	x1, 	y1+h1,
@@ -179,6 +251,101 @@ namespace ARK {
 				}
 				static bool collision_polygonPolygon(Polygon<T>* one, Polygon<T>* two) { // convex polys only.
 
+					// ----------
+					// just check lines for now. SAT can come later 'cause i said so! >:O
+					// ----------
+					
+					vector<Vector2<T>* >* onePoints = one->getPoints();
+					vector<Vector2<T>* >* twoPoints = two->getPoints();
+
+					for(unsigned int i = 0; i < onePoints->size() - 1; i++) 
+					{
+						Line<T> oneLine(
+							onePoints->at(i)->getX(), onePoints->at(i)->getY(),
+							onePoints->at(i+1)->getX(), onePoints->at(i+1)->getY()
+						);
+
+						for(unsigned int j = 0; j < twoPoints->size() - 1; i++) 
+						{
+							Line<T> twoLine(
+								twoPoints->at(j)->getX(), twoPoints->at(j)->getY(),
+								twoPoints->at(j+1)->getX(), twoPoints->at(j+1)->getY()
+							);
+
+							//if (oneLine.collides(&twoLine)) { 
+							//	return true;
+							//}
+							if (
+								collision_lineLine
+								(
+									onePoints->at(i)->getX(), onePoints->at(i)->getY(), onePoints->at(i+1)->getX(), onePoints->at(i+1)->getY(),
+									twoPoints->at(j)->getX(), twoPoints->at(j)->getY(),	twoPoints->at(j+1)->getX(), twoPoints->at(j+1)->getY()
+								)
+							) 
+							{
+								return true;
+							}
+						}
+					}			
+
+					return false;
+				}
+				static bool collision_polygonRectangle(Polygon<T>* one, Rectangle<T>* rect) { // convex polys only.
+
+					// ----------
+					// just check lines for now. SAT can come later 'cause i said so! >:O
+					// ----------
+
+					// check the rect against polygon lines :|
+					vector<Vector2<T>* >* onePoints = one->getPoints();
+					for(unsigned int i = 0; i < onePoints->size(); i++) 
+					{
+						int thisIndex = i;
+						int nextIndex = ((i+1) == onePoints->size()) ? 0 : (i+1);
+
+						bool collision = collision_rectangleLine(
+							rect->getMinX(), rect->getMinY(), rect->getWidth(), rect->getHeight(), 
+							onePoints->at(thisIndex)->getX(), onePoints->at(thisIndex)->getY(), 
+							onePoints->at(nextIndex)->getX(), onePoints->at(nextIndex)->getY()
+						);
+						if (collision) { return true; }
+					}
+
+					
+					
+					/*vector<Vector2<T>* >* onePoints = one->getPoints();
+					
+					// TODO auto_ptr;
+					Polygon<T>* two = new Polygon<T>(); 
+					two->addPoint(0,0); 
+					two->addPoint(0,10); 
+					two->addPoint(10,10); 
+					two->addPoint(10,0);
+					rect->asPolygon(two, 0);
+					vector<Vector2<T>* >* twoPoints = two->getPoints();
+
+					// TODO polygon destruction?
+
+					for(unsigned int i = 0; i < onePoints->size() - 1; i++) 
+					{
+						Line<T> oneLine(
+							onePoints->at(i)->getX(), onePoints->at(i)->getY(),
+							onePoints->at(i+1)->getX(), onePoints->at(i+1)->getY()
+						);
+
+						for(unsigned int j = 0; j < twoPoints->size() - 1; i++) 
+						{
+							Line<T> twoLine(
+								twoPoints->at(j)->getX(), twoPoints->at(j)->getY(),
+								twoPoints->at(j+1)->getX(), twoPoints->at(j+1)->getY()
+							);
+
+							if (oneLine.collides(&twoLine)) { 
+								return true;
+							}
+						}
+					}	*/
+
 
 					return false;
 				}
@@ -186,13 +353,15 @@ namespace ARK {
 					vector<Vector2<T>* >* points = one->getPoints();
 
 					//! @todo: Contains check here.
-
-					Line<T> lines[points->size()];
+                    vector<Line<T> > lines;
+					//Line<T> lines[points->size()];
 					for(unsigned int i = 0; i < points->size(); i++) {
-						unsigned int nextIndex = i+1;
+                        unsigned int nextIndex = i+1;
 						if (nextIndex == points->size()) { nextIndex = 0; }
-						lines[i].setStart(points->at(i)->getX(), points->at(i)->getY());
-						lines[i].setEnd(points->at(nextIndex)->getX(), points->at(nextIndex)->getY());
+                        Line<T> thisLine;
+						/*lines[i]*/ thisLine.setStart(points->at(i)->getX(), points->at(i)->getY());
+						/*lines[i]*/ thisLine.setEnd(points->at(nextIndex)->getX(), points->at(nextIndex)->getY());
+                        lines.push_back(thisLine);
 					}
 
 					T r2 = (r1 * r1);
@@ -206,6 +375,8 @@ namespace ARK {
 					return false;
 				}
 		};
+
+		
 	}
 }
 #endif /* SHAPE_H_ */

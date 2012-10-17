@@ -9,9 +9,7 @@
 #define ARK_CORE_EXCEPTION_H_
 
 #include "../ARK2D.h"
-
-using namespace std;
-
+ 
 /*!
  * @deprecated
  * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>

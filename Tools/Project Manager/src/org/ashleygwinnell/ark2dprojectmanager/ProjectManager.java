@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -198,7 +199,74 @@ public class ProjectManager extends JFrame {
 	}
 	
 	public void newProject() {
-		
+		try {
+			JSONObject obj = new JSONObject();
+			obj.put("game_short_name", "defaultgame");
+			obj.put("game_name", "Default Game");
+			obj.put("game_name_safe", "DefaultGame");
+			obj.put("game_description", "A long description of a game. Huzzah!");
+			obj.put("game_orientation", Project.Orientation.LANDSCAPE.toString().toLowerCase());
+			obj.put("game_clear_color", "#333333");
+			obj.put("company_name", "My Company Name");
+			obj.put("company_name_safe", "mycompanyname");
+			obj.put("clean", false);
+			
+			JSONObject windows = new JSONObject();
+			windows.put("python_executable", "C:\\Python31\\python.exe");
+			windows.put("ark2d_dir", "C:\\Dropbox\\ARK2D\\ark2d");
+			windows.put("game_dir", "");
+			windows.put("game_resources_dir", windows.get("game_dir") + "\\data");
+			
+			JSONObject windowsAndroid = new JSONObject();
+			windowsAndroid.put("ndk_dir", "");
+			windowsAndroid.put("icon", "");
+			windows.put("windows", windowsAndroid);
+			
+			JSONObject osx = new JSONObject(); 
+			osx.put("python_executable", "/usr/local/bin/python3.1");
+			osx.put("ark2d_dir", "/Users/ashleygwinnell/Dropbox/ark2d/ARK2D");
+			osx.put("game_dir", "");
+			osx.put("game_resources_dir", osx.get("game_dir") + "/data");
+			osx.put("mac_game_icns", osx.get("game_dir") + "/data/icon.icns");
+			
+			JSONObject osxAndroid = new JSONObject();
+			osxAndroid.put("ndk_dir", "/Users/ashleygwinnell/.android/android-ndk-r7");
+			osxAndroid.put("icon", "");
+			osx.put("osx", osxAndroid);
+			
+			JSONObject android = new JSONObject();
+			android.put("game_width", 800);
+			android.put("game_height", 480);
+			android.put("ndk_version", 5);
+			android.put("sdk_version", 8);
+			android.put("app_to_sd", true);
+			android.put("audio_quality", 1);
+			
+			JSONArray androidPermissions = new JSONArray();
+			androidPermissions.put("WRITE_EXTERNAL_STORAGE");
+			androidPermissions.put("INTERNET");
+			android.put("permissions", androidPermissions);
+			
+			JSONArray srcFiles = new JSONArray();
+			srcFiles.put("src/main.cpp");
+			srcFiles.put("src/DefaultGame.cpp");
+			srcFiles.put("src/Resources.rc");
+			obj.put("game_src_files", srcFiles);
+			
+			JSONArray mkdirs = new JSONArray();
+			obj.put("game_mkdirs", mkdirs);
+			
+			JSONArray preScripts = new JSONArray();
+			obj.put("pre_build_scripts", preScripts);
+			
+			JSONArray postScripts = new JSONArray();
+			obj.put("post_build_scripts", postScripts);
+			
+			System.out.println(obj.toString());
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	public void addProject() {
 		

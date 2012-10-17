@@ -61,7 +61,7 @@ namespace ARK {
 				void reset();
 			private:
 				static bool s_curlInitted;
-				#ifndef ARK2D_ANDROID
+				#if !defined(ARK2D_ANDROID) && !defined(ARK2D_IPHONE)
 					static CURL* s_curl;
 				#endif
 				static size_t s_curlWriteDataFunction(void *ptr, size_t size, size_t nmemb, void* cls);

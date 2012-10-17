@@ -15,9 +15,9 @@
 #include "../Font/FTFont.h"
 #include "../Font/BMFont.h"
 #include "../Font/Font.h"
-#include "../Path/PathGroup.h"
+#include "../Path/PathGroup.h"  
 #include "../Path/PathIO.h"
-#include "../Util/LocalHighscores.h"
+#include "../Util/LocalHighscores.h"   
 #include "../Tiled/TiledMap.h"
 #include "GameContainer.h"
 #include "../Util/StringUtil.h"
@@ -133,6 +133,8 @@ namespace ARK {
 			{
 				#if defined(ARK2D_ANDROID)
 					ErrorDialog::createAndShow("Path implementation not on Android.");
+				#elif defined(ARK2D_WINDOWS)
+					resource = PathIO::createFromFile(oldref);
 				#else
 					resource = PathIO::createFromFile(ref);
 				#endif

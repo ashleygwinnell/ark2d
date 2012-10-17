@@ -1,3 +1,4 @@
+
 /*
  * GameContainer.cpp
  *
@@ -7,7 +8,7 @@
 
 #include "GameContainer.h"
 //#include "../Geometry/GigaRectangle.h"
-#include "../ARK2D.h" 
+#include "../ARK2D.h"  
 
 #if defined(ARK2D_ANDROID)
 	#include "Platform/GameContainerAndroid.h"
@@ -32,10 +33,10 @@ namespace ARK {
 		bool GameContainer::isFullscreen() {
 			return m_fullscreen;
 		}
-
-		const ARK::Geometry::Rectangle<int>& GameContainer::getWindowRectangle() const {
-			return *m_window_rectangle;
-		}
+ 
+		//const ARK::Geometry::Rectangle<int>& GameContainer::getWindowRectangle() const {
+		//	return *m_window_rectangle;
+		//}
 		const Game& GameContainer::getGame() const {
 			return m_game;
 		}
@@ -134,7 +135,7 @@ namespace ARK {
 		}
 		void GameContainer::renderFPS() {
 			string fps = string("FPS: ") + Cast::toString<unsigned int>(m_timer.getFPS());
-			m_graphics.drawString(fps, getWidth() - 10 - m_graphics.getFont()->getStringWidth(fps), 10);
+			m_graphics.drawString(fps, getDynamicWidth() - 10 - m_graphics.getFont()->getStringWidth(fps), 10);
 		}
 
 
@@ -175,6 +176,18 @@ namespace ARK {
 		}
 		void GameContainer::setResizeBehaviour(int b) {
 			m_resizeBehaviour = b;
+		}
+		unsigned int GameContainer::getOrientation() {
+			#if defined(ARK2D_WINDOWS) || defined(ARK2D_MACINTOSH) || defined(ARK2D_UBUNTU_LINUX) || defined(ARK2D_ANDROID)
+				if (m_originalWidth > m_originalHeight) { 
+					return ORIENTATION_LANDSCAPE;
+				} else {
+					return ORIENTATION_PORTRAIT;
+				}
+			#elif defined(ARK2D_IPHONE)
+				return m_platformSpecific.getOrientation();
+			#endif
+			return ORIENTATION_PORTRAIT;
 		}
 
 		bool GameContainer::isTouchMode() {

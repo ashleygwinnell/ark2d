@@ -8,8 +8,9 @@
 #ifndef ARKMUTEX_H_
 #define ARKMUTEX_H_
 
-#include <iostream>
-#include <stdlib.h>
+//#include <iostream>
+//#include <stdlib.h>
+#include "../Includes.h"
 
 #if defined(ARK2D_WINDOWS)
 	#include <windows.h>

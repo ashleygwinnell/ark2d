@@ -8,11 +8,15 @@
 #ifndef INCLUDES_H_
 #define INCLUDES_H_
 
+
 	#if defined(ARK2D_ANDROID)
+ 		#define STL_AVAILABLE
+
 		#include <string>
 		#include <vector>
 		#include <list>
 		#include <map>
+ 		#include <set>
 		#include <sstream>
 		#include <iostream>
 		#include <fstream>
@@ -27,19 +31,45 @@
 		#include <sys/stat.h>
 		#include <sys/types.h>
 		#include <math.h> 
-		#define STL_AVAILABLE
-
+		
 		#include <GLES/gl.h>
 		#include <GLES/glext.h>
 		#include <GLES/glplatform.h>
 
+ 		#include <GLES2/gl2.h>
+ 		#include <GLES2/gl2ext.h>
+
 		#include <AL/AL.h>
 		#include <AL/ALc.h>
 		#include <AL/ALext.h>
+
+ 		
+
+	 	using namespace std;
+
 	#elif defined(ARK2D_IPHONE)
 
  		#define STL_AVAILABLE
 		#define EXCEPTIONS_AVAILABLE
+
+ 		#include <stdio.h>
+		#include <stdlib.h>
+		#include <sys/types.h>
+ 		#include <sys/time.h>
+
+		#include <iostream>
+ 		#include <sstream>
+ 		#include <fstream>
+ 		#include <string>
+
+ 		#include <vector>
+		#include <list>
+		#include <map>
+ 		#include <set>
+
+ 		#include <math.h>
+
+ 		using namespace std;
 
  		#include <OpenAL/al.h>
 		#include <OpenAL/alc.h>
@@ -51,19 +81,19 @@
 		#include <OpenGLES/ES1/glext.h>
 		#include <OpenGLES/ES2/gl.h>
 		#include <OpenGLES/ES2/glext.h>
+		#include <OpenGLES/EAGLDrawable.h>
 
- 		#include <string>
- 		#include <vector>
-		#include <list>
-		#include <map>
+        //typedef unsigned int ALuint;
+        //typedef unsigned int ALenum;
+        //typedef float ALfloat;
 
- 		#include <stdlib.h>
-		#include <sys/types.h>
-		#include <math.h>
+
 
 	#elif defined(_WIN32)
 
-		#define ARK2D_WINDOWS
+		#ifndef ARK2D_WINDOWS
+			#define ARK2D_WINDOWS
+		#endif
 		#define STL_AVAILABLE
 		#define EXCEPTIONS_AVAILABLE
 		#include <windows.h>
@@ -77,11 +107,17 @@
 		#include <vector>
 		#include <list>
 		#include <map>
+		#include <set>
 
 		#include <stdlib.h>
 		#include <string>
 		#include <time.h>
 		#include <sys/time.h>
+
+ 		#include <cstdlib>
+		#include <cstring>
+		#include <fstream>
+		#include <iostream>
 
 		#include <GL/GLew.h>
 		#include <GL/GL.h>
@@ -92,6 +128,11 @@
 		#include <AL/ALut.h>
 
  		#include "vendor/libcurl-windows/curl.h"
+
+ 		using namespace std;
+
+
+
 
 	#elif defined(__linux__)
 		#define ARK2D_UBUNTU_LINUX
@@ -112,9 +153,9 @@
 
  		#include "vendor/libcurl/curl.h"
 
-	#elif (defined(__MACH__) || defined(__APPLE__))
+	#elif (defined(ARK2D_MACINTOSH)) // defined(__MACH__) || defined(__APPLE__)
 
-		#define ARK2D_MACINTOSH
+		//#define ARK2D_MACINTOSH
 		#define STL_AVAILABLE
 		#define EXCEPTIONS_AVAILABLE
 		#include <Cocoa/Cocoa.h>
@@ -127,6 +168,7 @@
 		#include <vector>
 		#include <list>
 		#include <map>
+ 		#include <set>
 		#include <fstream>
 		#include <iostream>
 		#include <cstdio>
@@ -156,6 +198,24 @@
 	typedef unsigned int GLenum;
 	typedef void GLvoid;
 
+	#ifndef FBO_SUPPORT
+		#if (defined(ARK2D_WINDOWS)  || defined(ARK2D_ANDROID))
+			//#define FBO_SUPPORT false
+		#else
+			#define FBO_SUPPORT true
+		#endif
+	#endif
+
+	#ifndef SHADER_SUPPORT
+		#if (defined(ARK2D_WINDOWS)  || defined(ARK2D_ANDROID))
+			//#define SHADER_SUPPORT false
+		#else
+			#define SHADER_SUPPORT true
+		#endif
+	#endif
+
+    
+
 	#include "vendor/ogg130/ogg.h"
 	#include "vendor/vorbis132/vorbisfile.h"
 
@@ -171,5 +231,20 @@
 	#include "vendor/libJSON/JSON_StringConv.h"
 	#include "vendor/libJSON/jsonmain.h"
 	#include "vendor/libJSON/Debug.h"
+
+	//#ifndef STDSTRDEF
+	//	typedef std::string stdstring; 
+	//	#define STDSTRDEF
+	//#endif
+
+	/*
+
+
+	using std::vector;
+	using std::map;
+	using std::set;
+
+	*/
+
 
 #endif /* INCLUDES_H_ */

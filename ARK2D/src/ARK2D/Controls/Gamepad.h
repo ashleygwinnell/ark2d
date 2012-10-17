@@ -8,21 +8,15 @@
 #ifndef GAMEPAD_H_
 #define GAMEPAD_H_
 
-#include <vector>
-#include <set>
-#include <map>
+
 
 #ifdef ARK2D_WINDOWS
 	#include <windows.h>
 	#include <regstr.h>
 #endif
 
-#include <stdlib.h>
-#include <stdio.h>
-
-using std::vector;
-using std::map;
-using std::set;
+#include "../Includes.h"
+#include "../Namespaces.h"
 
 namespace ARK {
 	namespace Controls {

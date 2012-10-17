@@ -5,7 +5,7 @@
  *      Author: Ashley
  */
 #include "Game.h"
-#include "GameContainer.h"
+#include "GameContainer.h" 
 #include "../ARK2D.h"
 #include "../Tween/Timeline.h"
 
@@ -59,9 +59,35 @@ namespace ARK {
 					container->m_platformSpecific.initGL2D(width, height);
 				}
 				else
-				{
+				{ 
 
 				}
+			#elif defined(ARK2D_IPHONE)
+				if (container->getResizeBehaviour() == GameContainer::RESIZE_BEHAVIOUR_SCALE) {
+					if (container->getOrientation() == GameContainer::ORIENTATION_PORTRAIT)
+                    {
+                        float tx = float(container->getDynamicWidth() - (float(container->getWidth())*container->getScale()))/2;
+                        float ty = float(container->getDynamicHeight() - (float(container->getHeight())*container->getScale()))/2;
+                        container->m_translateX = tx;
+                        container->m_translateY = ty;
+                    } else {
+                        float tx = float(container->getDynamicHeight() - (float(container->getWidth())*container->getScale()))/2;
+                        float ty = float(container->getDynamicWidth() - (float(container->getHeight())*container->getScale()))/2;
+                        container->m_translateX = tx;
+                        container->m_translateY = ty;
+                    }
+                //    container->m_platformSpecific.initOpenGL2D(width, height);
+				}
+			#elif (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS))
+				float tx = float(container->getDynamicWidth() - (float(container->getWidth())*container->getScale()))/2;
+                float ty = float(container->getDynamicHeight() - (float(container->getHeight())*container->getScale()))/2;
+                container->m_translateX = tx;
+                container->m_translateY = ty;
+
+                glLoadIdentity();
+				glViewport(0, 0, width, height);
+
+				container->enable2D();
 			#else
 				if (container->getResizeBehaviour() == GameContainer::RESIZE_BEHAVIOUR_SCALE)
 				{

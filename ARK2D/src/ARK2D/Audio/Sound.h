@@ -16,11 +16,7 @@
 // http://www.devmaster.net/articles/openal-tutorials/lesson4.php
 //
 
-#include <stdlib.h>
-#include <string>
-#include <stdio.h>
-#include <iostream>
-#include <vector>
+#include "../Includes.h"
 
 #include "../UI/ErrorDialog.h"
 #include "SoundStore.h"
@@ -44,6 +40,10 @@ namespace ARK {
 		class Sound : public ARK::Core::Resource {
 			friend class ARK::Core::GameContainer;
 			friend class ARK::Core::GameContainerPlatform;
+
+			public:
+				static unsigned int DEFAULT_GROUP_ID;
+				static void setDefaultGroupId(unsigned int id);
 
 			public:
 				Sound(const std::string& filename);

@@ -12,7 +12,12 @@ namespace ARK {
 	namespace State {
 		namespace Transition {
 
-			Transition::Transition() {
+			Transition::Transition(): 
+				m_container(NULL), 
+				m_from(NULL),
+				m_to(NULL),
+				m_easing(Easing::LINEAR)  
+				{
 
 			}
 

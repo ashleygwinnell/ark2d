@@ -48,6 +48,9 @@ namespace ARK {
 	namespace Geometry {
 
 		template <class T=int>
+		class Shape;
+
+		template <class T=int>
 		class Rectangle;
 		
 		template <class T=int>
@@ -132,6 +135,7 @@ namespace ARK {
 	namespace Tween {
 		class Easing;
 		class Timeline;
+		class Timer;
 	}
 	//! Contains classes for building and showing User Interfaces.
 	namespace UI {
