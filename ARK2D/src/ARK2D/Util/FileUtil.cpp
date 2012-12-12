@@ -86,7 +86,7 @@ namespace ARK {
 
 			#elif defined(ARK2D_UBUNTU_LINUX)
 
-			#endif
+			#endif 
 			return "whoops?";
 		}
 
@@ -94,6 +94,11 @@ namespace ARK {
 			#if defined(ARK2D_WINDOWS)
 				ShellExecute(ARK2D::getContainer()->m_platformSpecific.m_hWindow, "open", url_str.c_str(), NULL, NULL, SW_SHOWDEFAULT);
 			#elif defined(ARK2D_ANDROID)
+
+				return;
+
+				// the game activity gets reloaded on resume and it breaks. can't enable this until that is fixed.
+				ARK2D::getContainer()->m_platformSpecific.m_pluggable->openBrowserToUrl(url_str);
 
 			#elif defined(ARK2D_MACINTOSH)
 				CFURLRef url = CFURLCreateWithBytes (

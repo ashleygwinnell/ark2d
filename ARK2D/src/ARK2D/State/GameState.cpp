@@ -22,6 +22,14 @@ namespace ARK {
 			ARK2D::getLog()->v("GameState::leave");
 		}
 
+		void GameState::pause() { 
+			ARK2D::getLog()->v("GameState::pause");
+		}
+		void GameState::resume() { 
+			ARK2D::getLog()->v("GameState::resume");
+		}
+
+
 		void GameState::keyPressed(unsigned int key) {
 			if (m_rootUIComponent != NULL) { m_rootUIComponent->keyPressed(key); }
 		}

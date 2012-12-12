@@ -18,10 +18,29 @@
 #include "../Geometry/Circle.h"
 #include "../Geometry/Polygon.h"
 #include "../Geometry/Line.h"
-
-namespace ARK { 
+ 
+namespace ARK {  
 	namespace Graphics {
 
+		// renderer statistics
+		unsigned int RendererStats::s_lines = 0;
+		unsigned int RendererStats::s_tris = 0;
+		unsigned int RendererStats::s_textureSwaps = 0;	
+
+		RendererStats::RendererStats() {
+
+		}
+		void RendererStats::reset() {
+			s_lines = 0;
+			s_tris = 0;
+			s_textureSwaps = 0;
+		}
+		RendererStats::~RendererStats() {
+ 
+		}
+
+
+		// renderer state
 		int RendererState::s_renderMode = -1;
 		int RendererState::s_textureId = 0;
 
@@ -39,6 +58,8 @@ namespace ARK {
 		void RendererState::startGeometry() {
 
 			s_textureId = 0;
+			RendererStats::s_textureSwaps++;
+
 			glBindTexture(GL_TEXTURE_2D, 0);
 			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 			glDisable(GL_TEXTURE_2D);
@@ -52,6 +73,7 @@ namespace ARK {
 			glEnableClientState(GL_VERTEX_ARRAY);
 			
 			s_textureId = textureId;
+			RendererStats::s_textureSwaps++;
 		}
 
 
@@ -62,8 +84,16 @@ namespace ARK {
 			s_textureId = textureId;
 		}
 
+		signed int Renderer::s_interpolation = Renderer::INTERPOLATION_NEAREST;
+		signed int Renderer::getInterpolation() {
+			return s_interpolation;
+		} 
+		void Renderer::setInterpolation(signed int i) {
+			s_interpolation = i;
+		}
 
 
+		// renderer
 		Renderer::Renderer():
 			m_DefaultFont(NULL),
 			m_Font(NULL),
@@ -71,11 +101,14 @@ namespace ARK {
 			m_MaskColor(),
 			m_LineWidth(1),
 			m_pointSize(1),
-			m_blendMode(BLEND_NORMAL)
+			m_blendMode(BLEND_NORMAL), 
+			m_ScissorBoxColors()
 		{
 			//m_DefaultFont = new BMFont("data/calibri.fnt", "data/calibri.bmp", Color::magenta);
 			//m_Font = m_DefaultFont;
 		}
+
+
 
 		void Renderer::setFont(ARK::Font::Font* f) {
 			m_Font = f;
@@ -98,6 +131,9 @@ namespace ARK {
 			glTranslatef(x,y,0);
 		}
 		void Renderer::rotate(int angle) const { 
+			glRotatef(angle, 0, 0, 1); 
+		}
+		void Renderer::rotate(float angle) const { 
 			glRotatef(angle, 0, 0, 1);
 		}
 		void Renderer::scale(float x, float y) const {
@@ -136,6 +172,34 @@ namespace ARK {
 			float strWidth = float(m_Font->getStringWidth(str)) * sc;
 			float strHeight = float(m_Font->getLineHeight()) * sc;
 
+			//if (rotation != 0 && alignY == ALIGN_CENTER) // there's gotta be a better way of calculating height of rotated rectangle.
+			//{ 
+				/*float cx = x + (strWidth/2);
+				float cy = y + (strHeight/2);
+				Vector2<float> tl(x, y);
+				Vector2<float> bl(x, y + strHeight);
+				Vector2<float> br(x + strWidth, y + strHeight);
+				Vector2<float> tr(x + strWidth, y);
+				Vector2<float> c(cx, cy);
+
+				MathUtil::rotatePointAroundPoint<float>(&tl, &c, rotation);
+				MathUtil::rotatePointAroundPoint<float>(&bl, &c, rotation);
+				MathUtil::rotatePointAroundPoint<float>(&br, &c, rotation);
+				MathUtil::rotatePointAroundPoint<float>(&tr, &c, rotation);
+				
+				vector<Vector2<float>* > coords();
+				coords.push_back(&tl);  
+				coords.push_back(&bl); 
+				coords.push_back(&br);  
+				coords.push_back(&tr);
+
+				Vector2<float> mincoord = *(MathUtil::minY<float>(coords));
+				Vector2<float> maxcoord = *(MathUtil::maxY<float>(coords));
+
+				strHeight = maxcoord.getY() - mincoord.getY();*/
+				//strHeight = strHeight * (abs(rotation)*0.1f);
+			//}
+
 			// Alignment
 			if (alignX == ALIGN_CENTER) {
 				x -= strWidth/2;
@@ -157,13 +221,15 @@ namespace ARK {
 				rotate(rotation);
 			
 			glPushMatrix();
-			scale(sc, sc);
+
+			if (sc != 1.0f) 
+				scale(sc, sc);
 
 
 			m_Font->drawString(str, 0, 0);
 
-			
-			scale(1.0f/sc, 1.0f/sc);
+			if (sc != 1.0f) 
+				scale(1.0f/sc, 1.0f/sc);
 			
 			glPopMatrix();
 
@@ -218,6 +284,8 @@ namespace ARK {
 					glVertex2i(x1, y1);
 					glVertex2i(x2, y2);
 				glEnd();
+
+				RendererStats::s_lines++;
 			#endif
 		}
 		// image, scale... line coordinates. image line subcoordinates.
@@ -227,7 +295,7 @@ namespace ARK {
 			float x1, float y1, 
 			float x2, float y2,
 			float startX, float startY, 
-			float endX, float endY)
+			float endX, float endY) 
 		{
 			
 			Vector2<float> tempVector(0, 0);
@@ -302,6 +370,8 @@ namespace ARK {
 
 				glEnd();
 
+				RendererStats::s_tris += segs;
+
 			#endif
 		}
 
@@ -354,6 +424,8 @@ namespace ARK {
 
 				glTranslatef(x * -1, y * -1, 0);
 				glPopMatrix();
+
+				RendererStats::s_lines += 4;
 				//glDisableClientState(GL_VERTEX_ARRAY); 
 				//glEnable(GL_TEXTURE_2D);
 			/*#else
@@ -423,6 +495,8 @@ namespace ARK {
 			glDisableClientState(GL_COLOR_ARRAY);
 			glTranslatef(x * -1, y * -1, 0);
 			glPopMatrix();
+
+			RendererStats::s_tris += 2;
 		}
 		void Renderer::fillRect(float x, float y, int width, int height) const {
 			//#if defined(ARK2D_ANDROID)
@@ -444,6 +518,8 @@ namespace ARK {
 
 				glTranslatef(x * -1, y * -1, 0);
 				glPopMatrix();
+
+				RendererStats::s_tris += 2;
 
 				//glDisableClientState(GL_VERTEX_ARRAY);
 				//glEnable(GL_TEXTURE_2D);
@@ -476,6 +552,8 @@ namespace ARK {
 
 			glTranslatef(x * -1, y * -1, 0);
 			glPopMatrix();
+
+			RendererStats::s_tris += 2;
 		}
 
 		// order: anti-clockwise. 
@@ -496,6 +574,8 @@ namespace ARK {
 
 				glVertexPointer(2, GL_FLOAT, 0, rawVertices);
 				glDrawArrays(GL_TRIANGLES, 0, 6);
+
+				RendererStats::s_tris += 2;
 
 				//glTranslatef(x1 * -1, y1 * -1, 0);
 				//glPopMatrix();
@@ -529,6 +609,8 @@ namespace ARK {
 			glTexCoordPointer(2, GL_FLOAT, 0, rawTextureCoords);
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 
+			RendererStats::s_tris += 2;
+
 		}
 
 		void Renderer::fillTriangle(int x, int y, int width, int height) const {
@@ -541,6 +623,8 @@ namespace ARK {
 					glVertex2i(x, y + height);
 					glVertex2i(x + width, y + height);
 				glEnd();
+
+				RendererStats::s_tris += 1;
 			#endif 
 		}
 		void Renderer::fillTriangle(float x1, float y1, float x2, float y2, float x3, float y3) const {
@@ -553,6 +637,8 @@ namespace ARK {
 					glVertex2f(x2, y2);
 					glVertex2f(x3, y3);
 				glEnd();
+
+				RendererStats::s_tris += 1;
 			#endif 
 		}
 
@@ -578,10 +664,13 @@ namespace ARK {
 		}
 
 		void Renderer::drawCircle(ARK::Geometry::Circle<int>* circle) const {
-			drawCircle(circle->getCenterX(), circle->getCenterY(), circle->getRadius(), DEFAULT_SEGMENTS);
+			drawCircle(circle->getCenterX(), circle->getCenterY(), (int) circle->getRadius(), DEFAULT_SEGMENTS);
 		}
 		void Renderer::drawCircle(ARK::Geometry::Circle<float>* circle) const {
-			drawCircle(circle->getCenterX(), circle->getCenterY(), circle->getRadius(), DEFAULT_SEGMENTS);
+			drawCircle(circle->getCenterX(), circle->getCenterY(), (int) circle->getRadius(), DEFAULT_SEGMENTS);
+		}
+		void Renderer::drawCircle(float x, float y, int radius) const {
+			drawCircle(x, y, radius, DEFAULT_SEGMENTS);
 		}
 		void Renderer::drawCircle(float x, float y, int radius, int points) const {
 			//#if defined(ARK2D_ANDROID)
@@ -609,6 +698,9 @@ namespace ARK {
 
 				glTranslatef(x * -1, y * -1, 0);
 				glPopMatrix();
+
+				RendererStats::s_lines += points;
+
 				//glDisableClientState(GL_VERTEX_ARRAY);
 				//glEnable(GL_TEXTURE_2D);
 			
@@ -655,6 +747,9 @@ namespace ARK {
 
 			glTranslatef(x * -1, y * -1, 0);
 			glPopMatrix();
+
+			RendererStats::s_tris += points;
+
 			//glDisableClientState(GL_VERTEX_ARRAY);
 			//glEnable(GL_TEXTURE_2D);
 
@@ -699,6 +794,8 @@ namespace ARK {
 
 			glTranslatef(x * -1, y * -1, 0);
 			glPopMatrix();
+
+			RendererStats::s_tris += points;
 		}
 
 		void Renderer::drawCircleSpikey(float x, float y, int radius, int points) const {
@@ -711,6 +808,8 @@ namespace ARK {
 					glVertex2f(x + sin(angle) * radius, y + cos(angle) * radius);
 				}
 				glEnd();
+
+				RendererStats::s_lines += points;
 			#endif
 		}
 		void Renderer::fillCircleSpikey(float x, float y, int radius, int points) const {
@@ -723,6 +822,8 @@ namespace ARK {
 					glVertex2f(x + sin(angle) * radius, y + cos(angle) * radius);
 				}
 				glEnd();
+
+				RendererStats::s_tris += points;
 			#endif
 		}
 
@@ -746,6 +847,9 @@ namespace ARK {
 			c.bind();
 			//glColor4b(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
 			//glColor4f(c.getRed()/255.f, c.getGreen()/255.f, c.getBlue()/255.f, c.getAlpha()/255.f);
+		}
+		void Renderer::setDrawColor(Color* c) {
+			setDrawColor(c->getRed(), c->getGreen(), c->getBlue(), c->getAlpha());
 		}
 		const Color& Renderer::getDrawColor() const {
 			return m_DrawColor;
@@ -800,27 +904,38 @@ namespace ARK {
 			return m_blendMode;
 		}
 
+		void Renderer::setScissorBoxColors(const Color& top, const Color& left, const Color& bottom, const Color& right) {
+			m_ScissorBoxColors[0] = top;
+			m_ScissorBoxColors[1] = left;
+			m_ScissorBoxColors[2] = bottom;
+			m_ScissorBoxColors[3] = right;
+		}
 		void Renderer::drawScissorBoxes() {
 			GameContainer* container = ARK2D::getContainer();
 			// draw scissor boxes because glScissor does not work on some HTC phones.
-			Color cc = container->getClearColor();
-			setDrawColor(cc.getRed(), cc.getGreen(), cc.getBlue(), cc.getAlpha());
+			//Color cc = container->getClearColor();
+			//setDrawColor(cc.getRed(), cc.getGreen(), cc.getBlue(), cc.getAlpha());
 
 			// left edge
-			fillRect(0,0, container->getTranslateX(), container->getDynamicHeight());// * container->getScaleY());
+			setDrawColor(m_ScissorBoxColors[1].getRed(), m_ScissorBoxColors[1].getGreen(), m_ScissorBoxColors[1].getBlue(), m_ScissorBoxColors[1].getAlpha());
+			fillRect(0,0, (int) container->getTranslateX(), container->getDynamicHeight());// * container->getScaleY());
 
 			// right edge
+			setDrawColor(m_ScissorBoxColors[3].getRed(), m_ScissorBoxColors[3].getGreen(), m_ScissorBoxColors[3].getBlue(), m_ScissorBoxColors[3].getAlpha());
 			fillRect(container->getTranslateX() + container->getWidth() * container->getScaleX(), 0,
-						container->getTranslateX(), container->getDynamicHeight());// * container->getScaleY());
+						(int) container->getTranslateX(), container->getDynamicHeight());// * container->getScaleY());
  
 			// top edge
-			//g->fillRect(0,0, container->getWidth() * container->getScaleX(), container->getTranslateY());
-			fillRect(0,0, container->getDynamicWidth(), container->getTranslateY());
+			setDrawColor(m_ScissorBoxColors[0].getRed(), m_ScissorBoxColors[0].getGreen(), m_ScissorBoxColors[0].getBlue(), m_ScissorBoxColors[0].getAlpha());
+			fillRect(0,0, container->getDynamicWidth(), (int) container->getTranslateY());
 
 			// bottom edge
+			setDrawColor(m_ScissorBoxColors[2].getRed(), m_ScissorBoxColors[2].getGreen(), m_ScissorBoxColors[2].getBlue(), m_ScissorBoxColors[2].getAlpha());
 			fillRect(0, container->getTranslateY() + container->getHeight() * container->getScaleY(),
-						container->getDynamicWidth(), container->getTranslateY());
+						container->getDynamicWidth(), (int) container->getTranslateY());
 						//container->getWidth() * container->getScaleX(), container->getTranslateY());
+
+			setDrawColor(Color::white);
 		}
 
 		void Renderer::pushMatrix() const {

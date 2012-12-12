@@ -81,8 +81,8 @@ namespace ARK {
 			#elif (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS))
 				float tx = float(container->getDynamicWidth() - (float(container->getWidth())*container->getScale()))/2;
                 float ty = float(container->getDynamicHeight() - (float(container->getHeight())*container->getScale()))/2;
-                container->m_translateX = tx;
-                container->m_translateY = ty;
+                container->m_translateX = (int) tx;
+                container->m_translateY = (int) ty;
 
                 glLoadIdentity();
 				glViewport(0, 0, width, height);
@@ -115,6 +115,16 @@ namespace ARK {
 					glLoadIdentity();
 				}
 			#endif
+		}
+
+		void Game::pause() 
+		{
+
+		}
+		
+		void Game::resume() 
+		{
+
 		}
 
 		void Game::keyPressed(unsigned int key) {

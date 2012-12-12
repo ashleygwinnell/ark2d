@@ -159,8 +159,9 @@ namespace ARK {
 
 		bool GameContainerPlatform::initOpenAL() {
 			if (alcGetCurrentContext() != NULL) {
-				ErrorDialog::createAndShow("OpenAL is already initialised. Exiting program.");
-				exit(0);
+				ErrorDialog::createAndShow("OpenAL is already initialised. "); //Exiting program.");
+				//exit(0);
+				return true;
 			}
 
 			// Load OpenAL.
@@ -238,12 +239,16 @@ namespace ARK {
 		string AndroidPluggable::urlRequest(string url) {
 			return "";
 		}
+		void AndroidPluggable::openBrowserToUrl(string url) {
+			
+		}
 		void AndroidPluggable::openSoftwareKeyboard(){
 
 		}
 		void AndroidPluggable::closeSoftwareKeyboard() {
 
 		}
+
 
 	}
 }

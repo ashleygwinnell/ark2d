@@ -7,7 +7,7 @@
 
 #ifndef FONT_H_
 #define FONT_H_
-
+ 
 #include <string>
 using namespace std;
 
@@ -33,6 +33,9 @@ namespace ARK {
 				virtual unsigned int getStringWidth(const string& Str) const = 0;
 				virtual unsigned int getStringHeight(const string& Str) const = 0;
 				virtual unsigned int getLineHeight() const = 0;
+
+				virtual void scale(float f) = 0;
+
 				ARK::Font::BMFont* asBMFont();
 				ARK::Font::FTFont* asFTFont();
 				virtual ~Font();

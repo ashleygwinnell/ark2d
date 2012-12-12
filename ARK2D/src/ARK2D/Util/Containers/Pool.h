@@ -97,15 +97,24 @@ namespace ARK {
 						Vector<T> m_inactive;
 						Vector<T> m_active;
 						PoolIterator<T>* it;
+						unsigned int m_increaseAmount;
 
 					public:
-						Pool(): m_inactive(), m_active(), it(NULL) {
+						Pool(): m_inactive(), m_active(), it(NULL), m_increaseAmount(1) {
 							m_inactive.setUsingList(true);
 							m_active.setUsingList(true);
 						}
-						Pool(unsigned int amount): m_inactive(), m_active(), it(NULL) {
+						Pool(unsigned int amount): m_inactive(), m_active(), it(NULL), m_increaseAmount(2) {
 							m_inactive.setUsingList(true);
 							m_active.setUsingList(true);
+							
+							increase(amount);
+						}
+						void increase() {
+							increase(m_increaseAmount);
+							m_increaseAmount *= 2;
+						}
+						void increase(unsigned int amount) {
 							for(unsigned int i = 0; i < amount; ++i) { 
 								if (is_pointer_type<T>::value) {
 									typedef typename remove_pointer<T>::type type;
@@ -117,7 +126,6 @@ namespace ARK {
 									T obj;
 									add(obj); 	
 								}
-								
 							}
 
 						}
@@ -158,12 +166,14 @@ namespace ARK {
 						}
 						T get() {
 							if (m_inactive.size() == 0 && m_active.size() ==0) {
-								ErrorDialog::createAndShow("Pool is not populated."); 
-								return NULL;
+								increase();
+								//ErrorDialog::createAndShow("Pool is not populated."); 
+								//return NULL;
 							}
 							if (m_inactive.size() == 0) { 
-								ErrorDialog::createAndShow("Pool is empty"); 
-								return NULL; 
+								increase();
+								//ErrorDialog::createAndShow("Pool is empty"); 
+								//return NULL; 
 							}
 							
 							T obj = m_inactive.pop();

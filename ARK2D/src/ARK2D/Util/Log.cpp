@@ -123,19 +123,31 @@ namespace ARK {
 			g->setFont(defaultFont);
 
 
+			// draw renderer stats
+			unsigned int rendererLines = RendererStats::s_lines;
+			unsigned int rendererTris = RendererStats::s_tris;
+			unsigned int rendererTextureSwaps = RendererStats::s_textureSwaps;
+			g->drawString(StringUtil::append("lines: ", rendererLines), container->getWidth() - 10, 10, Renderer::ALIGN_RIGHT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+			g->drawString(StringUtil::append("tris: ", rendererTris), container->getWidth() - 10, 20, Renderer::ALIGN_RIGHT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+			g->drawString(StringUtil::append("texture swaps: ", rendererTextureSwaps), container->getWidth() - 10, 30, Renderer::ALIGN_RIGHT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+			
 
+			// render log.
 			list<LogMessage>::iterator it;
 			int actualHeight = 0;
 			for(it = m_messages.begin(); it != m_messages.end(); it++) {
-				actualHeight += defaultFont->getLineHeight();
+				actualHeight += defaultFont->getLineHeight() * 0.5f;
 			}
 			int y = 0;
 			if (actualHeight > (signed int) container->getHeight()) { y -= (actualHeight - container->getHeight()); }
 			for(it = m_messages.begin(); it != m_messages.end(); it++) {
 				LogMessage m = (*it);
-				g->drawString(m.message, 0, y);
-				y += defaultFont->getLineHeight();
+				g->drawString(m.message, 0, y, Renderer::ALIGN_LEFT, Renderer::ALIGN_LEFT, 0.0f, 0.5f);
+				y += defaultFont->getLineHeight() * 0.5f;
 			}
+
+
+
 
 			g->setDrawColor(oldColor);
 			g->setFont(oldFont);

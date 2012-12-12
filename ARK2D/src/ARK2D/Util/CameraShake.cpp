@@ -28,22 +28,26 @@ namespace ARK {
 			//	m_timeline->removeKeyedIndependentEvent("CAMERA_SHAKE_X");
 			//}
 			//magnitude = 20;
-			int mt = 20;
-			CameraShakeMagnitude2* one   = new CameraShakeMagnitude2(this, 0.0f, magnitude, mt); 		one->m_easing = Easing::CUBIC_OUT;
-			CameraShakeMagnitude2* two   = new CameraShakeMagnitude2(this, magnitude, 0.0f, mt);		two->m_easing = Easing::CUBIC_IN;
-			CameraShakeMagnitude2* three = new CameraShakeMagnitude2(this, 0.0f, magnitude * -1, mt);	three->m_easing = Easing::CUBIC_OUT;
-			CameraShakeMagnitude2* four  = new CameraShakeMagnitude2(this, magnitude * -1, 0.0f, mt);	four->m_easing = Easing::CUBIC_IN;
+			int mt = MathUtil::randBetween(30, 50);
+			CameraShakeMagnitude2* one   = new CameraShakeMagnitude2(this, 0.0f, magnitude, mt); 		one->m_easing = Easing::QUADRATIC_OUT; // CUBIC_OUT
+			CameraShakeMagnitude2* two   = new CameraShakeMagnitude2(this, magnitude, 0.0f, mt);		two->m_easing = Easing::QUADRATIC_OUT; // CUBIC_IN;
+			CameraShakeMagnitude2* three = new CameraShakeMagnitude2(this, 0.0f, magnitude * -1, mt);	three->m_easing = Easing::QUADRATIC_OUT; // CUBIC_OUT;
+			CameraShakeMagnitude2* four  = new CameraShakeMagnitude2(this, magnitude * -1, 0.0f, mt);	four->m_easing = Easing::QUADRATIC_OUT; //CUBIC_IN;
 
 			m_timeline->addKeyedIndependentEvent("CAMERA_SHAKE_X_1", one);
 			m_timeline->addKeyedIndependentEvent("CAMERA_SHAKE_X_2", two, mt);
 			m_timeline->addKeyedIndependentEvent("CAMERA_SHAKE_X_3", three, mt*2);
 			m_timeline->addKeyedIndependentEvent("CAMERA_SHAKE_X_4", four, mt*3);
 
-			mt = 20;
-			CameraShakeMagnitude2Y* yone   = new CameraShakeMagnitude2Y(this, 0.0f, magnitude, mt); 		yone->m_easing = Easing::CUBIC_OUT;
-			CameraShakeMagnitude2Y* ytwo   = new CameraShakeMagnitude2Y(this, magnitude, 0.0f, mt);			ytwo->m_easing = Easing::CUBIC_IN;
-			CameraShakeMagnitude2Y* ythree = new CameraShakeMagnitude2Y(this, 0.0f, magnitude * -1, mt);	ythree->m_easing = Easing::CUBIC_OUT;
-			CameraShakeMagnitude2Y* yfour  = new CameraShakeMagnitude2Y(this, magnitude * -1, 0.0f, mt);	yfour->m_easing = Easing::CUBIC_IN;
+			int oldmt = mt;
+			mt = MathUtil::randBetween(30, 50);
+			if (oldmt == mt) {
+				mt += 1;
+			}
+			CameraShakeMagnitude2Y* yone   = new CameraShakeMagnitude2Y(this, 0.0f, magnitude, mt); 		yone->m_easing = Easing::QUADRATIC_OUT; // CUBIC_OUT;
+			CameraShakeMagnitude2Y* ytwo   = new CameraShakeMagnitude2Y(this, magnitude, 0.0f, mt);			ytwo->m_easing = Easing::QUADRATIC_OUT; //CUBIC_IN;
+			CameraShakeMagnitude2Y* ythree = new CameraShakeMagnitude2Y(this, 0.0f, magnitude * -1, mt);	ythree->m_easing = Easing::QUADRATIC_OUT; //CUBIC_OUT;
+			CameraShakeMagnitude2Y* yfour  = new CameraShakeMagnitude2Y(this, magnitude * -1, 0.0f, mt);	yfour->m_easing = Easing::QUADRATIC_OUT; //CUBIC_IN;
 
 			m_timeline->addKeyedIndependentEvent("CAMERA_SHAKE_Y_1", yone, 1);
 			m_timeline->addKeyedIndependentEvent("CAMERA_SHAKE_Y_2", ytwo, mt+1);
@@ -55,7 +59,7 @@ namespace ARK {
 			m_offset_x = x;
 		}
 		float CameraShake::getXOffset() {
-			return m_offset_x;
+			return m_offset_x; 
 		}
 
 		void CameraShake::setYOffset(float y) {
@@ -81,7 +85,7 @@ namespace ARK {
 			return true;
 		}
 		void CameraShake::update(GameContainer* container, GameTimer* timer) {
-			m_timeline->update(timer);
+//				m_timeline->update(timer);
 
 			if (!isShaking()) {
 				m_offset_x = 0;

@@ -72,6 +72,8 @@ namespace ARK {
 					m_image = i;
 				}
 				void keyPressed(unsigned int key) {
+					if (!m_enabled) { return; } 
+
 					Input* i = ARK2D::getInput();
 					if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT
 						&& GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), (signed int) (m_width), (signed int) (m_height), (signed int) (i->getMouseX()), (signed int) (i->getMouseY()))) {
@@ -81,6 +83,8 @@ namespace ARK {
 				}
 
 				void keyReleased(unsigned int key) {
+					if (!m_enabled) { return; } 
+
 					Input* i = ARK2D::getInput();
 					if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT) {
 						if (GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), (signed int) (m_width), (signed int)(m_height), (signed int) (i->getMouseX()), (signed int) (i->getMouseY()))) {
@@ -112,6 +116,8 @@ namespace ARK {
 
 
 				void mouseMoved(int x, int y, int oldx, int oldy) {
+					if (!m_enabled) { return; } 
+					
 					if (m_state == STATE_DOWN) { return; }
 					if (GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), m_width, m_height, x, y)) {
 						m_state = STATE_OVER;

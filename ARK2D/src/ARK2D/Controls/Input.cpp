@@ -8,7 +8,7 @@
 #ifdef __WIN32
 	#include <windows.h>
 #endif
-
+ 
 
 
 #include "../Namespaces.h"
@@ -129,6 +129,13 @@ namespace ARK {
 
 		}
 
+		// --------
+		// Game pads!!!
+		// --------
+		vector<Gamepad*> Input::getGamepads() const {
+			return m_container->getGamepads();
+		}
+
 		bool Input::isGamepadButtonDown(unsigned int button) {
 			vector<Gamepad*> gamepads = getGamepads();
 			for (unsigned int i = 0; i < gamepads.size(); i++) {
@@ -150,6 +157,7 @@ namespace ARK {
 			}
 			return false;
 		}
+
 
 		bool Input::isGamepadButtonDown(Gamepad* gamepad, unsigned int button) {
 			return gamepad->isButtonDown(button);
@@ -396,10 +404,6 @@ namespace ARK {
 		} 
 		void Input::setGameContainer(const ARK::Core::GameContainer* c) {
 			m_container = c;
-		}
-
-		vector<Gamepad*> Input::getGamepads() const {
-			return m_container->getGamepads();
 		}
 
 		void Input::setSoftwareKeyboardOpen(bool b) {

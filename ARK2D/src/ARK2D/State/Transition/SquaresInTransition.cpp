@@ -21,7 +21,9 @@ namespace ARK {
 				m_squaresFilled(),
 				m_squaresEmptied(0),
 				m_squaresTotal(0),
-				m_color(NULL)
+				m_color(NULL),
+				m_squaresX(5),
+				m_squaresY(5)
 				{
  				m_color = const_cast<Color*>(&Color::black);
 			}
@@ -34,20 +36,22 @@ namespace ARK {
 				m_squaresFilled(),
 				m_squaresEmptied(0),
 				m_squaresTotal(0),
-				m_color(c)
+				m_color(c),
+				m_squaresX(5),
+				m_squaresY(5)
 				{
 		
 			}
 			void SquaresInTransition::init(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to) {
 				Transition::init(container, game, from, to);
 
-				m_timer = 0.0f;
+				m_timer = 0.0f; 
 
-				int squaresX = float(container->getDynamicWidth()) / m_squareSize;
-				int squaresY = float(container->getDynamicHeight()) / m_squareSize;
+				m_squaresX = (int) (float(container->getDynamicWidth()) / m_squareSize);
+				m_squaresY = (int) (float(container->getDynamicHeight()) / m_squareSize);
 
-				for(int i = 0; i < squaresX; i++) {
-					for(int j = 0; j < squaresY; j++) {
+				for(int i = 0; i < m_squaresX; i++) {
+					for(int j = 0; j < m_squaresY; j++) {
 						m_squares.push_back(true);
 					}
 				}
@@ -58,7 +62,7 @@ namespace ARK {
 				std::random_shuffle(m_squaresFilled.begin(), m_squaresFilled.end());
 
 				m_squaresEmptied = 0;
-				m_squaresTotal = squaresX * squaresY;
+				m_squaresTotal = m_squaresX * m_squaresY;
 				
 			}
 			void SquaresInTransition::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) 
@@ -82,18 +86,15 @@ namespace ARK {
 			}
 			void SquaresInTransition::postRender(GameContainer* container, StateBasedGame* game, Renderer* g) 
 			{
-				int squaresX = float(container->getDynamicWidth()) / m_squareSize;
-				int squaresY = float(container->getDynamicHeight()) / m_squareSize;
-
 				g->setDrawColorf(m_color->getRedf(), m_color->getGreenf(), m_color->getBluef(), m_color->getAlphaf());
 
-				for(signed int x = 0; x < squaresX; x++) 
+				for(signed int x = 0; x < m_squaresX; x++) 
 				{
-					for(signed int y = 0; y < squaresY; y++) 
+					for(signed int y = 0; y < m_squaresY; y++) 
 					{
-						unsigned int gid = (y * squaresX) + x;
+						unsigned int gid = (y * m_squaresX) + x;
 						if (m_squares.at(gid)) {
-							g->fillRect(x*m_squareSize, y*m_squareSize, m_squareSize, m_squareSize);
+							g->fillRect(x*m_squareSize, y*m_squareSize, (int) m_squareSize, (int) m_squareSize);
 						}
 					}
 					

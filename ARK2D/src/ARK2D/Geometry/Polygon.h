@@ -51,6 +51,9 @@ namespace ARK {
 				virtual Vector2<T>* getPoint(unsigned int i) {
 					return m_points.at(i);
 				}
+				virtual void setPoint(unsigned int i, T x, T y) {
+					m_points.at(i)->set(x, y);
+				}
 
 				virtual void add(T x, T y) {
 					for(unsigned int i = 0; i < m_points.size(); i++) {

@@ -451,7 +451,7 @@
 						m_gamepads.at(i)->clearButtonPressedRecord();
 					}
 					
-					
+					RendererStats::reset();
 					glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 					m_game.preRender(this, &m_graphics);
 					m_game.render(this, &m_graphics);

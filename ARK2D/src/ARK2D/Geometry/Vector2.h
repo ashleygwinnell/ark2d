@@ -87,6 +87,14 @@ namespace ARK {
 					m_y += y;
 					return this;
 				}
+				Vector2* addX(T x) {
+					m_x += x;
+					return this;
+				}
+				Vector2* addY(T y) {
+					m_y += y;
+					return this;
+				}
 
 				// Multiply
 				Vector2* multiply(Vector2<T>* v) {
@@ -127,6 +135,14 @@ namespace ARK {
 				}
 				Vector2* subtract(T x, T y) {
 					m_x -= x;
+					m_y -= y;
+					return this;
+				}
+				Vector2* subtractX(T x) {
+					m_x -= x;
+					return this;
+				}
+				Vector2* subtractY(T y) {
 					m_y -= y;
 					return this;
 				}

@@ -30,6 +30,7 @@ namespace ARK {
 				SoundStore();
 				void setCurrentGroupId(unsigned int groupId);
 				void addSound(string s, Sound* sound);
+				void removeSound(string s); 
 				Sound* getSound(string s); 
 				map<string, Sound*> getMap();
 				void setVolumeByGroupId(unsigned int groupId, float volume);

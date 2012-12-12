@@ -254,7 +254,7 @@
 			m_container->m_gamepads.at(i)->clearButtonPressedRecord();
 		}
 		
-		
+		RendererStats::reset();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		m_game->preRender(m_container, m_graphics);
 		m_game->render(m_container, m_graphics);

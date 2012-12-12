@@ -54,8 +54,8 @@ namespace ARK {
 				RendererState::internalBindTexture(Object);
 				//glBindTexture(GL_TEXTURE_2D, Object);
 				// You can use these values to specify mipmaps if you want to, such as 'GL_LINEAR_MIPMAP_LINEAR'.
-				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Renderer::getInterpolationGL());
+				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Renderer::getInterpolationGL());
 
 				//for (int i = 0; i < tga->getImageData().size(); i++) {
 				//	data = tga->getImageData().at(i);
@@ -124,8 +124,8 @@ namespace ARK {
 				RendererState::internalBindTexture(Object);
 
 				// You can use these values to specify mipmaps if you want to, such as 'GL_LINEAR_MIPMAP_LINEAR'.
-				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Renderer::getInterpolationGL());
+				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Renderer::getInterpolationGL());
 
 				// Create the actual texture object.
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NewRaster);
@@ -295,8 +295,8 @@ namespace ARK {
 					//glBindTexture(GL_TEXTURE_2D, Object);
 					RendererState::internalBindTexture(Object);
 
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Renderer::getInterpolationGL());
+					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Renderer::getInterpolationGL());
 					//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
 					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tempTextureWidth, tempTextureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, newdata);
 					//glBindTexture(GL_TEXTURE_2D, 0);
@@ -355,8 +355,8 @@ namespace ARK {
 					showAnyGlErrorAndExit();
 					//glBindTexture(GL_TEXTURE_2D, Object);
 					RendererState::internalBindTexture(Object);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Renderer::getInterpolationGL());
+					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Renderer::getInterpolationGL());
 					//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
 					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tempTextureWidth, tempTextureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, newdata);
 					//glBindTexture(GL_TEXTURE_2D, 0);
@@ -603,8 +603,9 @@ namespace ARK {
 		void Image::setRotation(double angle) {
 			m_Rotation = angle;
 		}
-		void Image::rotate(double angle) {
+		Image* Image::rotate(double angle) {
 			m_Rotation += angle;
+			return this;
 		}
 		void Image::setCenterOfRotation(int x, int y) {
 			m_CenterX = x;
@@ -653,8 +654,8 @@ namespace ARK {
 		}
 
 		Image* Image::scale(float x, float y) {
-			m_Width =  (unsigned int) (float(m_Width) * x);
-			m_Height = (unsigned int) (float(m_Height) * y);
+			m_Width = (float(m_Width) * x);
+			m_Height = (float(m_Height) * y);
 			clean();
 			
 			return this;
@@ -668,8 +669,8 @@ namespace ARK {
 			sub->texture_height = texture_height;
 			sub->texture_offset_x = texture_offset_x;
 			sub->texture_offset_y = texture_offset_y;
-			sub->setWidth(m_Width * x);
-			sub->setHeight(m_Height * y);
+			sub->setWidth((int) m_Width * x);
+			sub->setHeight((int) m_Height * y);
 			sub->clean();
 			return sub;
 		}
@@ -686,6 +687,21 @@ namespace ARK {
 			sub->clean();
 			return sub;
 		}
+
+		Image* Image::flip(bool flipx, bool flipy) 
+		{
+			if (flipx) { 
+				texture_offset_x = texture_offset_x + texture_width;
+				texture_width = -texture_width;
+			}
+			if (flipy) {
+				texture_offset_y = texture_offset_y + texture_height;
+				texture_height = -texture_height;
+			}
+			clean();
+			return this;
+		}
+		
 		Image* Image::getFlippedCopy(bool horizontal_flip, bool vertical_flip) {
 			Image* sub = new Image();
 			sub->texture = texture;
@@ -693,8 +709,8 @@ namespace ARK {
 			sub->texture_height = texture_height;
 			sub->texture_offset_x = texture_offset_x;
 			sub->texture_offset_y = texture_offset_y;
-			sub->setWidth(m_Width);
-			sub->setHeight(m_Height);
+			sub->setWidth((int) m_Width);
+			sub->setHeight((int) m_Height);
 
 			if (horizontal_flip) {
 				sub->texture_offset_x = texture_offset_x + texture_width;
@@ -832,8 +848,8 @@ namespace ARK {
 		void Image::draw(float x, float y, unsigned int w, unsigned int h) {
 			m_dirty = true;
 
-			unsigned int w2 = m_Width;
-			unsigned int h2 = m_Height;
+			float w2 = m_Width;
+			float h2 = m_Height;
 
 			m_Width = w;
 			m_Height = h;
@@ -948,6 +964,7 @@ namespace ARK {
 				glTranslatef((x + m_CenterX) * -1, (y + m_CenterY) * -1, 0);
 			}
 
+			RendererStats::s_tris += 2;
 
 			//this->unbind();
 			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -957,12 +974,39 @@ namespace ARK {
 		void Image::drawCentered(int x, int y) {
 			this->drawCentered((float)x, (float) y);
 		}
-
+ 
 		void Image::drawCentered(float x, float y) {
 			this->draw(x - (this->m_Width/2), y - (this->m_Height/2));
 		}
 		void Image::drawCenteredFlipped(float x, float y, bool flipx, bool flipy) {
 			this->drawFlipped(x - (this->m_Width/2), y - (this->m_Height/2), flipx, flipy);
+		}
+
+		void Image::drawCenteredScaled(float x, float y, float scalex, float scaley) {
+			float oldw = m_Width;
+			float oldh = m_Height;
+			m_Width *= scalex;
+			m_Height *= scaley; 
+
+			float oldCenterX = m_CenterX;
+			float oldCenterY = m_CenterY;
+
+			float oldCenterXpercentage = m_CenterX / oldw;
+			float oldCenterYpercentage = m_CenterY / oldh;
+			m_CenterX = m_Width * oldCenterXpercentage;
+			m_CenterY = m_Height * oldCenterYpercentage;
+
+			m_dirty = true;
+
+			drawCentered(x, y);
+
+			m_Width = oldw;
+			m_Height = oldh; 
+
+			m_CenterX = oldCenterX;
+			m_CenterY = oldCenterY;
+
+			clean();
 		}
 
 		//void Image::bind() const {
@@ -1013,7 +1057,7 @@ namespace ARK {
 			//unbind();
 		}
 
-		/**
+		/** 
 		 * the 1s: the texture sub-image
 		 * the 2s: the location and width/height to draw at.
 		 */
@@ -1039,8 +1083,8 @@ namespace ARK {
 			texture_height = newTextureHeight;
 			texture_offset_x = newTextureOffsetX;
 			texture_offset_y = newTextureOffsetY;
-			m_Width = w1;
-			m_Height = h1;
+			m_Width = w2;
+			m_Height = h2;
 			clean();
 
 
@@ -1063,6 +1107,8 @@ namespace ARK {
 			m_Width = oldWidth;
 			m_Height = oldHeight;
 			clean();
+
+			RendererStats::s_tris += 2;
 
 		}
 

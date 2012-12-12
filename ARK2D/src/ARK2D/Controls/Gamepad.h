@@ -39,7 +39,7 @@ namespace ARK {
 				static const unsigned int BUTTON_RBUMPER = 5;
 				static const unsigned int BUTTON_BACK = 6;
 				static const unsigned int BUTTON_START = 7;
-				static const unsigned int BUTTON_L3 = 8;
+				static const unsigned int BUTTON_L3 = 8; 
 				static const unsigned int BUTTON_R3 = 9;
 
 				static const unsigned int DPAD_NONE = 100;

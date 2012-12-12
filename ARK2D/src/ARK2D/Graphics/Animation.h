@@ -27,6 +27,7 @@ namespace ARK {
 
 				void addImage(Image* image);
 				Image* getCurrentFrame();
+				Image* getNextFrame(unsigned int i = 1);
 				Image* getFrame(unsigned int i);
 
 				void update(GameTimer* timer);
@@ -34,7 +35,10 @@ namespace ARK {
 				void setTime(float f);
 
 				void setFrameTime(unsigned int ft);
-				unsigned int getFrameTime();
+				void setFrameTime(float ft);
+				float getFrameTime();
+
+				unsigned int size();
 
 				void setPingPong(bool b);
 				bool isPingPong();

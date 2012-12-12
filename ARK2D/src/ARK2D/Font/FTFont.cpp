@@ -221,6 +221,11 @@ namespace ARK {
 			m_data->init(filename.c_str(), height);
 		}
 
+		void FTFont::scale(float f) {
+			ARK2D::getLog()->e("FTFont scale not implemented.");
+			exit(0);
+		}
+ 
 		void FTFont::drawString(const string& str, int x, int y) {
 			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 			#else

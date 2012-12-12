@@ -14,8 +14,8 @@ namespace ARK {
 			m_frames(),
 			m_currentFrameIndex(0),
 			m_nextFrameModifier(1),
-			m_timer(0),
-			m_frameTime(0),
+			m_timer(0.0f),
+			m_frameTime(0.0f),
 			m_pingPong(false)
 			{
 
@@ -28,6 +28,10 @@ namespace ARK {
 			m_nextFrameModifier = 1;
 		}
 
+		unsigned int Animation::size() {
+			return m_frames.size(); 
+		}
+
 		void Animation::setTime(float f) {
 			m_timer = f;
 		}
@@ -35,12 +39,12 @@ namespace ARK {
 		void Animation::setAlpha(float f) {
 			for(unsigned int i = 0 ; i < m_frames.size(); i++) {
 				m_frames.get(i)->setAlpha(f);
-			}
+			} 
 		}
 
 		void Animation::addImage(Image* image) {
 			m_frames.add(image);
-		}
+		} 
 		Image* Animation::getCurrentFrame() {
 			return m_frames.get(m_currentFrameIndex);
 		}
@@ -48,7 +52,20 @@ namespace ARK {
 			return m_frames.get(i);
 		}
 
+		Image* Animation::getNextFrame(unsigned int i) {
+			i += m_currentFrameIndex;
+			if (!m_pingPong) {
+				while (i >= m_frames.size()) {
+					i -= m_frames.size();
+				}
+			}
+			return m_frames.get(i);
+		}
+
 		void Animation::setFrameTime(unsigned int ft) {
+			m_frameTime = (ft / 1000.0f);
+		}
+		void Animation::setFrameTime(float ft) {
 			m_frameTime = ft;
 		}
 		void Animation::setPingPong(bool b) {
@@ -58,13 +75,13 @@ namespace ARK {
 		bool Animation::isPingPong() {
 			return m_pingPong;
 		}
-		unsigned int Animation::getFrameTime() {
-			return (unsigned int) m_frameTime;
+		float Animation::getFrameTime() {
+			return m_frameTime;
 		}
 
 		void Animation::update(GameTimer* timer) {
 			if (m_frames.size() == 0) { return; }
-			m_timer += (float) (timer->getDelta() * 1000);
+			m_timer += timer->getDelta();
 			if (m_timer > m_frameTime) {
 				m_timer -= m_frameTime;
 

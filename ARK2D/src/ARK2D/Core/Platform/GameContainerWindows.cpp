@@ -1056,7 +1056,7 @@
 					//}
 					ARK2D::getLog()->update();
 
-					int delta = (int) (m_timer.getDelta() * 1000);
+					//int delta = (int) (m_timer.getDelta() * 1000);
 					m_game.preUpdate(this, &m_timer);
 					m_game.update(this, &m_timer);
 					m_game.postUpdate(this, &m_timer);
@@ -1078,6 +1078,9 @@
 					//this->m_game->update(this, (17 / 1000.f)); // fix at 60 fps. bug.
 					//this->m_game->update(this, (float) (1.f / 60.f)); // fix at 60 fps. bug.
 					//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+					
+					RendererStats::reset();
+
 					glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 					m_game.preRender(this, &m_graphics);
 					m_game.render(this, &m_graphics);

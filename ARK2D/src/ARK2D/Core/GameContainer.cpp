@@ -148,6 +148,7 @@ namespace ARK {
 
 		void GameContainer::setClearColor(const Color& color) {
 			m_clearColor = color;
+			m_graphics.setScissorBoxColors(color, color, color, color);
 		}
 		const Color& GameContainer::getClearColor() {
 			return m_clearColor;

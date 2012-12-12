@@ -45,12 +45,17 @@ namespace ARK {
 
 			public:
 				static Resource* get(string ref);
+				static bool exists(string ref);
 				static string latestName();
 			protected:
 				static Resource* get(string ref, bool appendPath);
+				static bool exists(string ref, bool appendPath);
 				static RawDataReturns* getRawData(string ref); // remember to free() this data.
 				static unsigned int getResourceTypeByExtension(string extension);
 				static string s_latestName;
+
+			protected:
+				static void init();
 
 			public:
 

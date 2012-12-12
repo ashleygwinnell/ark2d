@@ -23,6 +23,18 @@
 namespace ARK {
 	namespace Graphics {
 
+		class RendererStats 
+		{
+			public: 
+				static unsigned int s_lines;
+				static unsigned int s_tris;
+				static unsigned int s_textureSwaps;	
+				static void reset();
+
+				RendererStats();
+				virtual ~RendererStats();
+		};
+
 		class RendererState {
 			public:
 				static const int NONE = 0;
@@ -67,6 +79,8 @@ namespace ARK {
 				static int RENDER_MODE_TEXTURE_ID = 0;
 			*/
 
+				static signed int s_interpolation;
+
 			public:
 
 				static const signed int ALIGN_START = -1;
@@ -76,9 +90,13 @@ namespace ARK {
 				static const signed int ALIGN_CENTER = 0;
 
 				static const signed int ALIGN_END = 1;
-				static const signed int ALIGN_RIGHT = -1;
-				static const signed int ALIGN_BOTTOM = -1;
-				
+				static const signed int ALIGN_RIGHT = 1;
+				static const signed int ALIGN_BOTTOM = 1;
+
+				static const signed int INTERPOLATION_NEAREST = 0;
+				static const signed int INTERPOLATION_LINEAR = 1;
+				static const signed int INTERPOLATION_BICUBIC = 2;
+			
 
 				Renderer();
 
@@ -92,10 +110,22 @@ namespace ARK {
 				void drawStringCenteredAt(const std::string str, int x, int y) const;
 				void drawStringWordWrap(const std::string str, int x, int y, int maxWidth, int ySpacing) const;
 
+				static signed int getInterpolation();
+				static void setInterpolation(signed int i);
+				static unsigned int getInterpolationGL() {
+					switch(s_interpolation) {
+						case INTERPOLATION_NEAREST:
+							return GL_NEAREST;
+						case INTERPOLATION_LINEAR:
+							return GL_LINEAR;
+					}
+					return GL_NEAREST;
+				}
 
 				void setDrawColor(unsigned int r, unsigned int g, unsigned int b, unsigned int a);
 				void setDrawColorf(float r, float g, float b, float a);
 				void setDrawColor(const Color& c);
+				void setDrawColor(Color* c);
 				const Color& getDrawColor() const;
 
 				void setMaskColor(const Color& c);
@@ -105,6 +135,7 @@ namespace ARK {
 				void translate(float x, float y) const;
 
 				void rotate(int angle) const;
+				void rotate(float angle) const;
 
 				void scale(float x, float y) const;
 
@@ -152,6 +183,7 @@ namespace ARK {
 
 				void drawCircle(ARK::Geometry::Circle<int>* circle) const;
 				void drawCircle(ARK::Geometry::Circle<float>* circle) const;
+				void drawCircle(float x, float y, int radius) const;
 				void drawCircle(float x, float y, int radius, int points) const;
 				void fillCircle(float x, float y, int radius, int points) const;
 
@@ -167,6 +199,7 @@ namespace ARK {
 				float getPointSize();
 
 				void drawScissorBoxes();
+				void setScissorBoxColors(const Color& top, const Color& left, const Color& bottom, const Color& right);
 
 				static const unsigned int BLEND_NONE = 0;
 				static const unsigned int BLEND_NORMAL = 1;
@@ -187,6 +220,8 @@ namespace ARK {
 				unsigned int m_LineWidth;
 				float m_pointSize;
 				unsigned int m_blendMode;
+
+				Color m_ScissorBoxColors[4]; // top, left, bottom, right;
 		};
 
 

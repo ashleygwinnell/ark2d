@@ -50,6 +50,10 @@ namespace ARK {
 				return (counter - start) / 1000000.0f; 
 			#endif
 		*/
+
+		unsigned long GameTimer::unixTimestamp() const {
+			return (unsigned long) std::time(NULL);
+		}
  
 		long GameTimer::millis() {
 			#if defined(ARK2D_IPHONE)

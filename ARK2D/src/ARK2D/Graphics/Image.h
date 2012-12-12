@@ -31,10 +31,10 @@ namespace ARK {
 				unsigned int m_resourceType; // ARK2D_RESOURCE_TYPE_PNG only supported.
 
 				std::string filename;
-				unsigned int m_Width;
-				unsigned int m_Height;
+				float m_Width;
+				float m_Height;
 
-				GLuint texture;
+				GLuint texture; 
 				float texture_width;
 				float texture_height;
 				float texture_offset_x;
@@ -89,9 +89,10 @@ namespace ARK {
 
 				void setCenterOfRotation(int x, int y);
 				void setRotation(double angle);
-				void rotate(double angle);
+				Image* rotate(double angle); // return reference to self
 
 				Image* scale(float x, float y); // returns self.
+				Image* flip(bool flipx, bool flipy); // return self.
 
 				Image* getSubImage(const SpriteSheetDescriptionItem& desc);
 				Image* getSubImage(int x, int y, int width, int height) const;
@@ -110,6 +111,7 @@ namespace ARK {
 				void drawCentered(int x, int y);
 				void drawCentered(float x, float y);
 				void drawCenteredFlipped(float x, float y, bool flipx, bool flipy);
+				void drawCenteredScaled(float x, float y, float scalex, float scaley);
 				void drawFlipped(float x, float y, bool flipx, bool flipy); // not const as modifies inner variables
 				void drawSubImageStart();
 				void drawSubImage(int x1, int y1, int x2, int y2, int w1, int h1, int w2, int h2);

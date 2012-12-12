@@ -66,6 +66,9 @@ namespace ARK {
 				virtual void initStates(GameContainer* container) = 0;
 				virtual void resize(GameContainer* container, int width, int height);
 
+				virtual void pause(); // android events
+				virtual void resume();
+
 				virtual void keyPressed(unsigned int key);
 				virtual void keyReleased(unsigned int key);
 				virtual void mouseMoved(int x, int y, int oldx, int oldy);

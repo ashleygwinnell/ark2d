@@ -30,6 +30,8 @@ namespace ARK {
 				void sleep(int millis);
 				void limit(int fps);
 
+				unsigned long unixTimestamp() const;
+
 				long millis();
 
 			private:

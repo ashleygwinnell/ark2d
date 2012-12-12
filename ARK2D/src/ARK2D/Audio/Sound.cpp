@@ -706,7 +706,10 @@ namespace ARK {
 					return false;
 				}
 
-
+				// do we free the buffer manually now or does std::vector do it?
+				// http://stackoverflow.com/questions/2035975/how-do-you-completely-remove-and-release-memory-of-an-openal-sound-file
+				// free(data); 
+				data.clear();
 
 				return true;
 
@@ -837,6 +840,10 @@ namespace ARK {
 
 		Sound::~Sound() {
 			deinit();
+
+			// remove from sound store.
+			SoundStore* ss = SoundStore::getInstance();
+			ss->removeSound(m_FileName);
 		}
 	}
 }

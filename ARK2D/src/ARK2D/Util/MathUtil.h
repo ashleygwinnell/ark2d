@@ -32,6 +32,8 @@ namespace ARK {
 				static void seedRandom();
 				static int randBetween(int lower, int upper);
 
+				static float randBetweenf(float lower, float upper);
+
 				static double distance(float x1, float y1, float x2, float y2);
 				static double angle(int x1, int y1, int x2, int y2);
 				static double anglef(float x1, float y1, float x2, float y2);
@@ -42,6 +44,60 @@ namespace ARK {
 
 				static int nextPowerOfTwo(int val);
 
+				static unsigned long unixTimestamp();
+
+
+				/*
+					**  Usage:
+					**      bias(b,t)
+					**
+					**  Arguments:
+					**      b       bais, real
+					**      t       value, real
+					**
+					**  Returns:
+					**      If (t) varies over the [0,1] interval, then
+					**      the result also varies over that interval.
+					**      The zero and one endpoints of the interval
+					**      are mapped onto themselves. Other values
+					**      are shifted upward toward one if (b) is
+					**      greater than one, and shifted downward
+					**      toward zero if (b) is between zero and one.
+					**
+					**  GMLscripts.com
+					*/
+					static float bias(float b, float t)
+					{
+					    //return power(argument1,ln(argument0)/ln(0.5));
+					    return 1.0f;
+					}
+
+
+				template <class T> 
+				static Vector2<T>* minY(vector< Vector2<T>* > vecs) {
+					Vector2<T>* minObj = NULL;
+					T min = std::numeric_limits<T>::max();
+					for(unsigned int i = 0; i < vecs.size(); i++) {
+						if (vecs.at(i)->getY() < min) {
+							min = vecs.at(i)->getY();
+							minObj = vecs.at(i);
+						}
+					}
+					return minObj;
+				}
+
+				template <class T> 
+				static Vector2<T>* maxY(vector< Vector2<T>* > vecs) {
+					Vector2<T>* maxObj = NULL;
+					T max = std::numeric_limits<T>::min();
+					for(unsigned int i = 0; i < vecs.size(); i++) {
+						if (vecs.at(i)->getY() > max) {
+							max = vecs.at(i)->getY();
+							maxObj = vecs.at(i);
+						}
+					}
+					return maxObj;
+				}
 
 				template <class T>
 				static Vector2<T>* findCenter() {
@@ -90,7 +146,7 @@ namespace ARK {
 				template <class T>
 				static void moveAngle(Vector2<T>* vector, double angleDegrees, float distance)  {
 					double angleRadians = toRadians(angleDegrees);
-					vector->add((int) (distance * double(cos(angleRadians))), (int) (distance * double(sin(angleRadians))));
+					vector->add(distance * double(cos(angleRadians)), distance * double(sin(angleRadians)));
 					//vector->x += distance * double(cos(angleRadians));
 					//vector->y +=
 				}

@@ -67,6 +67,7 @@ namespace ARK {
 				static const Color yellow;
 				static const Color cyan;
 				static const Color magenta;
+				static const Color orange;
 				static const Color black_50a;
 				static const Color black_0a;
 				static const Color white_50a;

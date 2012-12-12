@@ -43,8 +43,13 @@ namespace ARK {
 					 stream << t;
 					 return stream.str();
 				}
-				static string toString(bool b) {
-					return (b)?"true":"false";
+
+				//template <class T>
+				//static string toString(bool b) {
+				//	return (b) ? string("true") : string("false");
+				//}
+				static string boolToString(bool b) {
+					return (b) ? string("true") : string("false");	
 				}
 
 				template<class T>

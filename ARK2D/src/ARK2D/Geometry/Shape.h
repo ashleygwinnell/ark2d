@@ -55,6 +55,7 @@ namespace ARK {
 				virtual void setLocationByCenter(T x, T y) = 0;
 
 				virtual bool contains(T x, T y) = 0;
+				//virtual bool contains(Vector2<T>* vec) { return contains(vec->getX(), vec->getY()); }
 				virtual bool collides(Shape<T>* s) = 0;
 				virtual void resolve(Shape<T>* s) = 0;
 
@@ -236,6 +237,9 @@ namespace ARK {
 
 				}
 				static bool collision_lineLine(T x1, T y1, T x2, T y2, T x3, T y3, T x4, T y4) {
+					x1 = int(x1); x2 = int(x2); x3 = int(x3); x4 = int(x4);
+					y1 = int(y1); y2 = int(y2); y3 = int(y3); y4 = int(y4);
+
 					T d = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
 					if (d == 0) {
 						return false;
@@ -249,6 +253,23 @@ namespace ARK {
 					if (y < min<T>(y1, y2) || y > max<T>(y1, y2) || y < min<T>(y3, y4) || y > max<T>(y3, y4)) { return false; }
 					return true;
 				}
+				/*static bool collision_lineLine(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4) {
+					//x1 = int(x1); x2 = int(x2); x3 = int(x3); x4 = int(x4);
+					//y1 = int(y1); y2 = int(y2); y3 = int(y3); y4 = int(y4);
+
+					int d = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+					if (d == 0) {
+						return false;
+					}
+					int pre = (x1*y2 - y1*x2);
+					int post = (x3*y4 - y3*x4);
+					int x = (pre * (x3 - x4) - (x1 - x2) * post) / d;
+					int y = (pre * (y3 - y4) - (y1 - y2) * post) / d;
+
+					if (x < min<int>(x1, x2) || x > max<int>(x1, x2) || x < min<int>(x3, x4) || x > max<int>(x3, x4)) { return false; }
+					if (y < min<int>(y1, y2) || y > max<int>(y1, y2) || y < min<int>(y3, y4) || y > max<int>(y3, y4)) { return false; }
+					return true;
+				}*/
 				static bool collision_polygonPolygon(Polygon<T>* one, Polygon<T>* two) { // convex polys only.
 
 					// ----------
@@ -304,9 +325,9 @@ namespace ARK {
 						int nextIndex = ((i+1) == onePoints->size()) ? 0 : (i+1);
 
 						bool collision = collision_rectangleLine(
-							rect->getMinX(), rect->getMinY(), rect->getWidth(), rect->getHeight(), 
-							onePoints->at(thisIndex)->getX(), onePoints->at(thisIndex)->getY(), 
-							onePoints->at(nextIndex)->getX(), onePoints->at(nextIndex)->getY()
+							(int) rect->getMinX(), (int)rect->getMinY(), (int)rect->getWidth(), (int)rect->getHeight(), 
+							(int)onePoints->at(thisIndex)->getX(), (int)onePoints->at(thisIndex)->getY(), 
+							(int)onePoints->at(nextIndex)->getX(), (int)onePoints->at(nextIndex)->getY()
 						);
 						if (collision) { return true; }
 					}

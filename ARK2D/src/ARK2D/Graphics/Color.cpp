@@ -27,6 +27,7 @@ namespace ARK {
 		const Color Color::cyan = Color(0, 255, 255);
 		const Color Color::blue = Color(0, 0, 255);
 		const Color Color::magenta = Color(255, 0, 255);
+		const Color Color::orange = Color(255, 127, 0);
 		const Color Color::yellow = Color(255, 255, 0);
 
 		const Color Color::black_50a = Color(0, 0, 0, 127);

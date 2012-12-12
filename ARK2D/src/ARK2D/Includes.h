@@ -31,7 +31,8 @@
 		#include <sys/stat.h>
 		#include <sys/types.h>
 		#include <math.h> 
-		
+		#include <algorithm>
+
 		#include <GLES/gl.h>
 		#include <GLES/glext.h>
 		#include <GLES/glplatform.h>

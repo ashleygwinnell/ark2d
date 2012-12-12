@@ -31,6 +31,9 @@ namespace ARK {
 				virtual void update(GameContainer* container, StateBasedGame* game, GameTimer* timer) = 0;
 				virtual void render(GameContainer* container, StateBasedGame* game, Renderer* g) = 0;
 
+				virtual void pause(); // android events
+				virtual void resume();
+
 				virtual void keyPressed(unsigned int key);
 				virtual void keyReleased(unsigned int key);
 				virtual void mouseMoved(int x, int y, int oldx, int oldy);

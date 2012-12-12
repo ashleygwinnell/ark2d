@@ -33,12 +33,15 @@ namespace ARK {
 				Vector4<int> m_margin; // left, top, right, bottom.
 				bool m_clipping;
 				bool m_visible;
+				bool m_enabled;
 
 				AbstractUIComponent();
 				virtual int getX();
 				virtual int getY();
 				virtual int getCenterX();
 				virtual int getCenterY();
+				virtual int getMinX();
+				virtual int getMinY();
 				virtual int getMaxX();
 				virtual int getMaxY();
 				virtual unsigned int getWidth();
@@ -81,6 +84,9 @@ namespace ARK {
 
 				void setVisible(bool b);
 				bool isVisible();
+
+				void setEnabled(bool b);
+				bool isEnabled();
 
 				virtual void render() = 0;
 				virtual void preRender();

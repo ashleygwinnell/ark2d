@@ -85,6 +85,7 @@ namespace ARK {
 				unsigned int getStringWidth(const string& Str) const;
 				unsigned int getStringHeight(const string& Str) const;
 				unsigned int getLineHeight() const;
+				void scale(float f);
 				virtual ~FTFont();
 		};
 	}

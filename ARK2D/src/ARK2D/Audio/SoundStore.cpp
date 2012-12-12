@@ -23,7 +23,7 @@ namespace ARK {
 			m_map(),
 			m_currentGroupId(0)
 			{
-
+ 
 		}
 		void SoundStore::setCurrentGroupId(unsigned int groupId) {
 			m_currentGroupId = groupId;
@@ -31,6 +31,11 @@ namespace ARK {
 		void SoundStore::addSound(string ref, Sound* sound) {
 			m_map[ref] = sound;
 			sound->setGroupId(m_currentGroupId);
+		}
+		void SoundStore::removeSound(string s) {
+			map<string, Sound*>::iterator it;
+			it = m_map.find(s);
+			m_map.erase(it);
 		}
 		Sound* SoundStore::getSound(string ref) {
 			return m_map[ref];

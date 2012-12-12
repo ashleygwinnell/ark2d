@@ -193,14 +193,16 @@ namespace ARK {
 							return endObj;
 						#endif
 					}
-					T random(unsigned int i) {
+					T random() {
 						#if !defined(STL_AVAILABLE)
 							return NULL;
 						#else
 							if (!usingList) {
-								return vec.at(MathUtil::randBetween(0, vec.size()));
+								return vec.at( MathUtil::randBetween(0, vec.size()) );
 							}
-							return lst.begin() + MathUtil::randBetween(0, lst.size());
+							typename list<T>::iterator it = lst.begin();
+							advance(it, MathUtil::randBetween(0, lst.size()));
+							return (*it);
 						#endif
 					}
 					void* getData() {
@@ -242,6 +244,9 @@ namespace ARK {
 						#endif
 					}
 					void remove(unsigned int i) {
+						removeByIndex(i);
+					}
+					void removeByIndex(unsigned int i) {
 						#if !defined(STL_AVAILABLE)
 
 						#else
@@ -255,6 +260,9 @@ namespace ARK {
 						#endif
 					}
 					void remove(T o) {
+						removeByValue(o);
+					}
+					void removeByValue(T o) {
 						#if !defined(STL_AVAILABLE)
 						#else
 							if (!usingList) {

@@ -8,6 +8,7 @@
 #ifndef ARK_STATE_TRANSITION_SQUARESINTRANSITION_H_
 #define ARK_STATE_TRANSITION_SQUARESINTRANSITION_H_
 
+#include "../../Includes.h"
 #include "Transition.h"
 #include "../../Tween/Timeline.h"
 
@@ -41,12 +42,15 @@ namespace ARK {
 					int m_squaresTotal;
 					Color* m_color;
 
+					int m_squaresX;
+					int m_squaresY;
+
 					// TODO: optimise.
 					// 		 - maintain a list of indices that are not filled and use that data to select a new index to fill.
 
 			};
 		}
-	}
+	} 
 }
 
 #endif /* ARK_STATE_TRANSITION_SQUARESOUTTRANSITION_H_ */

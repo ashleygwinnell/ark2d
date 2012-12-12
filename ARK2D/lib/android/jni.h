@@ -10,6 +10,7 @@
 	class MyAndroidPluggable : public ARK::Core::AndroidPluggable {
 		public:
 			virtual string urlRequest(string url);
+			virtual void openBrowserToUrl(string url);
 			virtual void openSoftwareKeyboard();
 			virtual void closeSoftwareKeyboard();
 	};

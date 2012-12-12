@@ -10,6 +10,7 @@
 
 #include "Transition.h"
 #include "../../Tween/Timeline.h"
+#include "../../Includes.h"
 
 namespace ARK {
 	namespace State {
@@ -40,6 +41,9 @@ namespace ARK {
 					int m_squaresFilled;
 					int m_squaresTotal;
 					Color* m_color;
+
+					int m_squaresX;
+					int m_squaresY;
 
 					// TODO: optimise.
 					// 		 - maintain a list of indices that are not filled and use that data to select a new index to fill.

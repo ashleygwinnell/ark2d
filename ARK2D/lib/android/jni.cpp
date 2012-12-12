@@ -16,6 +16,8 @@ GameTimer* timer = NULL;
 Log* arklog = NULL;
 JNIEnv* s_env = NULL;
 
+bool s_initted = false;
+
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeInit(JNIEnv* env, jclass cls, jstring apkPath, jstring externalDataPath) {
 	//__android_log_print(ANDROID_LOG_INFO, "%GAME_CLASS_NAME%Activity", "native init");
 
@@ -48,6 +50,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 
 	// init pluggable?
 	//delete container->m_platformSpecific.m_pluggable;
+	container->setClearColor(Color::darker_grey);
 	container->m_platformSpecific.m_pluggable = new MyAndroidPluggable();
 
 	// init opengl
@@ -72,6 +75,8 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	arklog->i("init game class");
 	game->init(container);
 	arklog->i("game class initialised!");
+
+	s_initted = true;
 }
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeResize(JNIEnv* env, jclass  thiz, jint w, jint h) {
 	//__android_log_print(ANDROID_LOG_INFO, "%GAME_CLASS_NAME%Activity", "resize w=%d h=%d", w, h);
@@ -89,18 +94,22 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativePause(JNIEnv* env,  jclass cls) {
 	// stop...
 	if (arklog != NULL) {
-		arklog->i("native pause");
+		arklog->i("native pause start");
+		game->pause();
+		arklog->i("native pause end");
 	}
 }
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeResume(JNIEnv* env,  jclass cls) {
 	// stop...
 	if (arklog != NULL) {
-		arklog->i("native resume");
+		arklog->i("native resume start");
+		game->resume();
+		arklog->i("native resume end");
 	}
 }
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeBackPressed(JNIEnv* env,  jclass cls) {
 	// stop...
-	if (container != NULL) {
+	if (container != NULL && s_initted) {
 		Input* i = ARK2D::getInput();
 		i->pressKey(Input::ANDROID_BACK);
 		i->releaseKey(Input::ANDROID_BACK);
@@ -146,6 +155,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 
 		//arklog->i("native render");
 		//fillRect(100,100,10,10);
+		RendererStats::reset();
 		game->preRender(container, r);
 		game->render(container, r);
 		game->postRender(container, r);
@@ -156,7 +166,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 }
 
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeTouchDown(JNIEnv* env, jclass thiz, jint x, jint y) {
-	if(container != NULL) {
+	if(container != NULL && s_initted) {
 		float thisx = (float) x;
 		float thisy = (float) y;
 		thisx -= container->getTranslateX();
@@ -185,7 +195,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	}
 }
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeTouchMove(JNIEnv* env, jclass thiz, jint x, jint y) {
-	if(container != NULL) {
+	if(container != NULL && s_initted) {
 		float thisx = (float) x;
 		float thisy = (float) y;
 		
@@ -214,7 +224,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	}
 }
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeTouchUp(JNIEnv* env, jclass thiz, jint x, jint y) {
-	if(container != NULL) {
+	if(container != NULL && s_initted) {
 		float thisx = (float) x;
 		float thisy = (float) y;
 		thisx -= container->getTranslateX();
@@ -390,6 +400,25 @@ string MyAndroidPluggable::urlRequest(string url) {
     ARK2D::getLog()->i("done url request");
      
     return returnStr;
+}
+void MyAndroidPluggable::openBrowserToUrl(string url) {
+	ARK2D::getLog()->i("opening browser to url");
+
+	jstring jstr = s_env->NewStringUTF(url.c_str());
+	//ARK2D::getLog()->i("herp");
+	jclass clazz = s_env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
+	//ARK2D::getLog()->i("derp");
+	jmethodID messageMe = s_env->GetStaticMethodID(clazz, "openBrowserToUrl", "(Ljava/lang/String;)V"); // Get the method that you want to call
+	//ARK2D::getLog()->i("gerp");
+    jobject result = s_env->CallStaticObjectMethod(clazz, messageMe, jstr); // Call the method on the object
+	//ARK2D::getLog()->i("zerp");
+   // const char* str = s_env->GetStringUTFChars((jstring) result, NULL);
+    //string returnStr(str);
+    //s_env->ReleaseStringUTFChars(jstr); 
+	//ARK2D::getLog()->i(returnStr);
+    ARK2D::getLog()->i("done opening browser to url");
+     
+    
 }
 void MyAndroidPluggable::openSoftwareKeyboard() {
 	ARK2D::getLog()->i("Opening software keyboard");

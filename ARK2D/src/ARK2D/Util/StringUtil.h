@@ -56,6 +56,9 @@ namespace ARK {
 				static void toUpper(string& str);
 				static void toLower(string& str);
 
+				static string urlencode(const string& s);
+				static string char2hex( char dec );
+
 				static string zeropad(int number, int digits);
 
 				static void trimLeft(string& str, const char* chars2remove);
@@ -69,7 +72,7 @@ namespace ARK {
 				static vector<string> split(string s, const char* delimiter);
 				static string getExtension(string s);
 
-			private: 
+			public: 
 				static string internalOSAppends(string strFilename);
 		};
 	}

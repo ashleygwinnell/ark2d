@@ -37,6 +37,12 @@ namespace ARK {
 				Rectangle(T x, T y, int width, int height):Shape<T>(), m_x(x), m_y(y), m_width(width), m_height(height) {
 
 				}
+				virtual void set(T x, T y, T width, T height) {
+					m_x = x;
+					m_y = y;
+					m_width = width;
+					m_height = height;
+				}
 
 				virtual T getMinX() {
 					return m_x;
@@ -107,6 +113,7 @@ namespace ARK {
 				virtual bool collides(Shape<T>* s) {
 					if (s == NULL) { ErrorDialog::createAndShow("A Shape was NULL"); }
 
+					// rectangle
 					Rectangle<T>* rect = NULL;
 					rect = dynamic_cast<Rectangle<T>*>(s);
 					if (rect != NULL) {
@@ -120,11 +127,18 @@ namespace ARK {
 						return Shape<T>::collision_circleRectangle(circle->getCenterX(), circle->getCenterY(), circle->getRadius(), m_x, m_y, m_width, m_height);
 					}
 
-
+					// line
 					Line<T>* line = NULL;
 					line = dynamic_cast<Line<T>* >(s);
 					if (line != NULL) {
 						return Shape<T>::collision_rectangleLine(m_x, m_y, m_width, m_height, line->getStart()->getX(), line->getStart()->getY(), line->getEnd()->getX(), line->getEnd()->getY());
+					}
+
+					// Polygon
+					Polygon<T>* poly = NULL;
+					poly = dynamic_cast<Polygon<T>* >(s);
+					if (poly != NULL) {
+						return Shape<T>::collision_polygonRectangle(poly, this);
 					}
 
 					return false;

@@ -11,9 +11,9 @@
 #include "../ARK2D.h"
 
 #include "../Core/GameContainer.h"
-
+ 
 namespace ARK {
-	namespace Util {
+	namespace Util { 
 
 		double MathUtil::PIE = 3.14159265;
 
@@ -24,6 +24,10 @@ namespace ARK {
 			long t = ARK2D::getContainer()->getTimer()->millis();
 			srand(t);
 			ARK2D::getLog()->i(" ...done.");
+		}
+
+		unsigned long MathUtil::unixTimestamp() {
+			return ARK2D::getContainer()->getTimer()->unixTimestamp();
 		}
 
 		void MathUtil::snap(int& snap, int& x, int& y) {
@@ -57,6 +61,15 @@ namespace ARK {
 			if (lower == upper) { return upper; }
 			if (lower > upper) { int teacup = lower; lower = upper; upper = teacup; }
 			return lower + (rand() % (upper-lower));
+		}
+
+		float MathUtil::randBetweenf(float lower, float upper) {
+			if (lower == upper) { return upper; }
+			if (lower > upper) { int teacup = lower; lower = upper; upper = teacup; }
+
+			float r = float(randBetween(0, 101)) / 100.0f;
+			float diff = upper - lower;
+			return lower + (r * diff);
 		}
 
 

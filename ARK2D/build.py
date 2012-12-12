@@ -1637,6 +1637,10 @@ class ARK2DBuildSystem:
 			application_make_file += "NDK_PROJECT_PATH=" + ndkprojectpath + nl;
 			#application_make_file += "APP_ABI := all" + nl;
 			#application_make_file += "APP_ABI := armeabi"; # armeabi-v7a x86" + nl;
+			
+			#next 7 fix
+			application_make_file += "APP_ABI := armeabi armeabi-v7a " + nl; 
+			
 			application_make_file += "APP_STL := stlport_static" + nl; 
 			f = open(appbuildscript3, "w");
 			f.write(application_make_file);
@@ -1723,6 +1727,10 @@ class ARK2DBuildSystem:
 			buildline += " APP_PROJECT_PATH=" + ndkprojectpath;
 			buildline += " APP_BUILD_SCRIPT=" + appbuildscript;
 			buildline += " APP_PLATFORM=" + ndkappplatform;
+
+			#nexus-7 fix.
+			#application_make_file += "APP_ABI := armeabi armeabi-v7a " + nl; #x86" + nl;
+
 			#buildline += " NDK_LOG=1";
 			print("Building library");
 			print(buildline);
@@ -1831,21 +1839,31 @@ class ARK2DBuildSystem:
 			print("Copying ark2d and game.so in to project.");
 			subprocess.call(["cp -r " +ark2ddir + "/src/ARK2D/vendor/android/freetype/obj/local/armeabi/ " + rootPath+"/build/android/project/libs/armeabi"], shell=True); #libfreetype
 			subprocess.call(["cp -r " +ark2ddir + "/src/ARK2D/vendor/android/freetype/obj/local/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi"], shell=True);
+			subprocess.call(["cp -r " +ark2ddir + "/src/ARK2D/vendor/android/freetype/obj/local/armeabi/ " + rootPath+"/build/android/project/libs/armeabi-v7a"], shell=True); #libfreetype
+			subprocess.call(["cp -r " +ark2ddir + "/src/ARK2D/vendor/android/freetype/obj/local/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi-v7a"], shell=True);
 			
 			subprocess.call(["cp -r " +ark2ddir + "/src/ARK2D/vendor/android/openal/libs/armeabi/ " + rootPath+"/build/android/project/libs/armeabi"], shell=True); #libfreetype
 			subprocess.call(["cp -r " +ark2ddir + "/src/ARK2D/vendor/android/openal/libs/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi"], shell=True);
+			subprocess.call(["cp -r " +ark2ddir + "/src/ARK2D/vendor/android/openal/libs/armeabi-v7a/ " + rootPath+"/build/android/project/libs/armeabi-v7a"], shell=True); #libfreetype
+			subprocess.call(["cp -r " +ark2ddir + "/src/ARK2D/vendor/android/openal/libs/armeabi-v7a/ " + rootPath+"/build/android/project/obj/local/armeabi-v7a"], shell=True);
 			
 			subprocess.call(["cp -r " +ark2ddir + "/src/ARK2D/vendor/android/libzip/libs/armeabi/ " + rootPath+"/build/android/project/libs/armeabi"], shell=True); #libzip
 			subprocess.call(["cp -r " +ark2ddir + "/src/ARK2D/vendor/android/libzip/libs/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi"], shell=True);
+			subprocess.call(["cp -r " +ark2ddir + "/src/ARK2D/vendor/android/libzip/libs/armeabi/ " + rootPath+"/build/android/project/libs/armeabi-v7a"], shell=True); #libzip
+			subprocess.call(["cp -r " +ark2ddir + "/src/ARK2D/vendor/android/libzip/libs/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi-v7a"], shell=True);
 			
 			#subprocess.call(["cp -r " +ark2ddir + "/build/android/local/armeabi/ " + rootPath+"/build/android/project/libs/armeabi"], shell=True); #libark2d
 			#subprocess.call(["cp -r " +ark2ddir + "/build/android/local/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi"], shell=True);
 			
 			subprocess.call(["cp -r " +ark2ddir + "/build/android/libs/armeabi/ " + rootPath+"/build/android/project/libs/armeabi"], shell=True); #libark2d
 			subprocess.call(["cp -r " +ark2ddir + "/build/android/libs/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi"], shell=True);
-			
+			subprocess.call(["cp -r " +ark2ddir + "/build/android/libs/armeabi-v7a/ " + rootPath+"/build/android/project/libs/armeabi-v7a"], shell=True); #libark2d
+			subprocess.call(["cp -r " +ark2ddir + "/build/android/libs/armeabi-v7a/ " + rootPath+"/build/android/project/obj/local/armeabi-v7a"], shell=True);
+
 			subprocess.call(["cp -r " +rootPath + "/build/android/local/armeabi/ " + rootPath+"/build/android/project/libs/armeabi"], shell=True); #libgamename
 			subprocess.call(["cp -r " +rootPath + "/build/android/local/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi"], shell=True);
+			subprocess.call(["cp -r " +rootPath + "/build/android/local/armeabi-v7a/ " + rootPath+"/build/android/project/libs/armeabi-v7a"], shell=True); #libgamename
+			subprocess.call(["cp -r " +rootPath + "/build/android/local/armeabi-v7a/ " + rootPath+"/build/android/project/obj/local/armeabi-v7a"], shell=True);
 			
 			#copying ark2d resources in to assets folder.
 			subprocess.call(["cp -r " +ark2ddir + "/data/ " + rootPath+"/build/android/project/assets/ark2d"], shell=True);
@@ -1880,6 +1898,7 @@ class ARK2DBuildSystem:
 			print(compileopenal1);
 			subprocess.call([compileopenal1], shell=True);
 			subprocess.call(['cp -r ' + libopenaldir + "/libs/armeabi/libopenal.so " + ndkdir + "/platforms/"+ndkappplatform+"/arch-arm/usr/lib"], shell=True);
+			#nexus7update subprocess.call(['cp -r ' + libopenaldir + "/libs/armeabi-v7a/libopenal.so " + ndkdir + "/platforms/"+ndkappplatform+"/arch-arm/usr/lib"], shell=True);
 			
 			#openal
 			#print("copying vendor headers (libzip)");
@@ -1935,8 +1954,14 @@ class ARK2DBuildSystem:
 			application_make_file += "APP_BUILD_SCRIPT := " + appbuildscript + nl;
 			application_make_file += "NDK_APP_OUT=" + appbuilddir + nl;
 			application_make_file += "NDK_PROJECT_PATH=" + ndkprojectpath + nl;
+			
+
+			# nexus7 fixes?! 
 			#application_make_file += "APP_ABI := all" + nl;
-			#application_make_file += "APP_ABI := armeabi"; # armeabi-v7a x86" + nl;
+			application_make_file += "APP_ABI := armeabi armeabi-v7a " + nl; #x86" + nl;
+			
+
+
 			application_make_file += "APP_STL := stlport_static" + nl; 
 			f = open(appbuildscript3, "w");
 			f.write(application_make_file);

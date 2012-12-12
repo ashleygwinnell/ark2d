@@ -278,7 +278,7 @@ namespace ARK {
 			} else if (m_enterTransition != NULL) {
 				m_enterTransition->postRender(container, this, g);
 			}
-
+ 
 			//postRender(container, g);
 		}
 
@@ -293,8 +293,18 @@ namespace ARK {
 			return m_container;
 		}
 
-		void StateBasedGame::resize(GameContainer* container, int width, int height) {
+		void StateBasedGame::resize(GameContainer* container, int width, int height) 
+		{
 			Game::resize(container, width, height);
+		}
+
+		void StateBasedGame::pause() 
+		{
+			Game::pause();
+		}
+		void StateBasedGame::resume()
+		{
+			Game::resume();
 		}
 
 		void StateBasedGame::keyPressed(unsigned int key) {

@@ -20,6 +20,7 @@ namespace ARK {
 			public:
 				string m_keyChar;
 				virtual string urlRequest(string url);
+				virtual void openBrowserToUrl(string url);
 				virtual void openSoftwareKeyboard();
 				virtual void closeSoftwareKeyboard();
 		};

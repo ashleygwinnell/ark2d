@@ -15,10 +15,12 @@ import javax.microedition.khronos.opengles.GL10;
  
 import android.app.Activity;
 import android.content.Context; 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.opengl.GLSurfaceView; 
 import android.opengl.GLU;
 import android.os.Bundle; 
@@ -134,6 +136,17 @@ public class %GAME_CLASS_NAME%Activity extends Activity {
 		}
 		return response;
 	}
+	
+	public static void openBrowserToUrl(String url)
+	{
+		if (!url.startsWith("http://") && !url.startsWith("https://")) {
+			url = "http://" + url;
+		}
+
+		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse( url ));
+		s_activity.startActivity(browserIntent);
+	}
+
     private %GAME_CLASS_NAME%View mGLView;
     
     static {
@@ -156,6 +169,7 @@ class %GAME_CLASS_NAME%View extends GLSurfaceView {
 	public %GAME_CLASS_NAME%View(Context context) {
 		super(context);
 		mRenderer = new %GAME_CLASS_NAME%Renderer(context);
+		setEGLConfigChooser(8, 8, 8, 8, 16, 0);
         setRenderer(mRenderer); 
 	}
 	

@@ -70,6 +70,18 @@ namespace ARK {
 					resource = new ARK::Font::BMFont(ref, pngref);
 				#endif
 			}
+			/*else if (extension == "ttf") 
+			{
+				#if defined(ARK2D_ANDROID)
+					RawDataReturns* rt = getRawData(ref);
+
+					resource = new ARK::Font::FTFont(rt->data);
+
+					delete rt;
+				#else
+					resource = new ARK::Font::FTFont(ref);
+				#endif
+			}*/
 			else if (extension == "tmx")
 			{
 				ARK::Tiled::TiledMap* map = NULL;
@@ -162,13 +174,75 @@ namespace ARK {
 
 			return resource;
 		}
-		RawDataReturns* Resource::getRawData(string ref) {
+
+		bool Resource::exists(string ref) {
+			return exists(ref, true);
+		}
+		bool Resource::exists(string ref, bool appendPath) {
+
+			
+			string oldref = string(ref);
+			if (ref.substr(1,1).compare(":") == 0 || ref.substr(0,1).compare("/") == 0) { appendPath = false; }
+			if (appendPath) {
+				
+				#if defined(ARK2D_ANDROID)
+					GameContainer* container = ARK2D::getContainer();
+					ref = container->getResourcePath() + ref;
+				#else 
+					ref = StringUtil::internalOSAppends(ref);
+				#endif
+			}
+
+			ARK2D::getLog()->i(StringUtil::append("Does Resource Exist: ", ref));
+
+			#if defined(ARK2D_ANDROID)
+				if (apkZip == NULL) {
+					init();
+				} 
+
+				string anotherref = string(oldref); //StringUtil::internalOSAppends(oldref);
+				bool rawFileExists = StringUtil::file_exists(anotherref.c_str());
+				if (rawFileExists) { 
+					return true; 
+				}
+				
+				//Just for debug, print APK contents
+				int numFiles = zip_get_num_files(apkZip);
+				for (int i=0; i<numFiles; i++)
+				{
+					const char* name = zip_get_name(apkZip, i, 0);
+					if (name == NULL)
+					{
+						String thisErr("Error reading zip file name at index ");
+						thisErr += i;
+						thisErr += " : ";
+						thisErr += zip_strerror(apkZip);
+						ARK2D::getLog()->i(thisErr.get());
+						return false;
+					}
+					if (string(name) == ref) { 
+						return true;
+					}
+				}
+
+				return false;
+				
+				
+			#else
+				return StringUtil::file_exists(oldref.c_str());
+			#endif
+		}
+
+		void Resource::init() {
 			#if defined(ARK2D_ANDROID)
 				if (apkZip == NULL) {
 					apkZip = zip_open(apkZipName.c_str(), 0, NULL);
 					if (apkZip == NULL) {
-						ARK2D::getLog()->i(StringUtil::append("Error Loading APK: ", apkZipName));
-						return NULL;
+						string errorMessage = StringUtil::append("Error Loading APK: ", apkZipName);
+						ARK2D::getLog()->i(errorMessage);
+						//return NULL;
+						ErrorDialog::createAndShow(errorMessage);
+						exit(0);
 					}
 					//Just for debug, print APK contents
 					int numFiles = zip_get_num_files(apkZip);
@@ -182,7 +256,9 @@ namespace ARK {
 							thisErr += " : ";
 							thisErr += zip_strerror(apkZip);
 							ARK2D::getLog()->i(thisErr.get());
-							return NULL;
+							ErrorDialog::createAndShow(thisErr.get());
+							//return NULL;
+							exit(0);
 						}
 						String thisErr("File ");
 						thisErr += i;
@@ -191,6 +267,30 @@ namespace ARK {
 						ARK2D::getLog()->i(thisErr.get());
 					}
 				}
+			#endif
+		}
+
+		RawDataReturns* Resource::getRawData(string ref) {
+			#if defined(ARK2D_ANDROID)
+				if (apkZip == NULL) {
+					init();
+				}
+
+				bool useoldref = (ref.substr(0,7).compare("assets/") == 0);
+				string oldref = ref.substr(7, string::npos);
+				bool rawFileExists = StringUtil::file_exists(oldref.c_str());
+				if (rawFileExists) { 
+					string contents = StringUtil::file_get_contents(oldref.c_str());
+					
+					char* newData = (char*) malloc((int) contents.size()+1);
+					strcpy(newData, contents.c_str());
+
+					RawDataReturns* rt = new RawDataReturns();
+					rt->data = (void*) newData;
+					rt->size = (int) contents.length();
+					return rt;
+				}
+
 				zip_file* file;
 				file = zip_fopen(apkZip, ref.c_str(), 0); // ref = filename
 				if (!file) {

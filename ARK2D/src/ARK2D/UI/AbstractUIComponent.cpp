@@ -17,9 +17,10 @@ namespace ARK {
 			m_padding(0,0,0,0),
 			m_margin(0,0,0,0),
 			m_clipping(true),
-			m_visible(true)
+			m_visible(true),
+			m_enabled(true)
 			{
-
+ 
 		}
 		int AbstractUIComponent::getX() {
 			return m_x;
@@ -38,6 +39,12 @@ namespace ARK {
 		}
 		int AbstractUIComponent::getMaxY() {
 			return m_y + m_height;
+		}
+		int AbstractUIComponent::getMinX() {
+			return m_x; 
+		}
+		int AbstractUIComponent::getMinY() {
+			return m_y;
 		}
 		unsigned int AbstractUIComponent::getWidth() {
 			return m_width;
@@ -111,6 +118,13 @@ namespace ARK {
 		}
 		bool AbstractUIComponent::isVisible() {
 			return m_visible;
+		}
+
+		void AbstractUIComponent::setEnabled(bool b) {
+			m_enabled = b;
+		}
+		bool AbstractUIComponent::isEnabled() {
+			return m_enabled;
 		}
 
 		int AbstractUIComponent::getOnScreenY() {

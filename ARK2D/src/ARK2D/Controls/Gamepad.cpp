@@ -17,7 +17,7 @@ namespace ARK {
 		Gamepad::Gamepad():
 			initted(false),
 			id(0),
-			productId(0),
+			productId(0), 
 			vendorId(0),
 			name(""), 
 			dpadPosition(DPAD_NONE),
