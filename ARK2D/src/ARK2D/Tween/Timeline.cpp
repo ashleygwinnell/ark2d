@@ -227,7 +227,9 @@ namespace ARK {
 			staticEvents.clear();
 			tweenedEvents.clear();
 		}
-
+		Timeline::~Timeline() {
+			
+		}
 
 		/**
 		 * TWEENED EVENT

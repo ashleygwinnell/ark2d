@@ -23,7 +23,7 @@ import shutil
 #
 class ARK2DGame:
 	def __init__(self):
-		self.name = "";
+		self.name = ""; 
 		self.name_safe = "";
 		self.name_class = "";
 		self.dir = "";
@@ -189,10 +189,13 @@ class ARK2DBuildSystem:
 		
 		#self.src_files.extend(config['src_files']['all']);
 		
-		if (self.platform == "android"):
-			self.src_files.extend(config['src_files']['android']);
+		if (self.platform == "flascc"):
+			self.src_files.extend(config['src_files']['flascc']);
 			self.ark2d_dir = config[self.platformOn]['ark2d_dir'];
 
+		elif (self.platform == "android"):
+			self.src_files.extend(config['src_files']['android']);
+			self.ark2d_dir = config[self.platformOn]['ark2d_dir'];
 
 		elif (self.platform == "iphone"):
 			self.src_files.extend(config['src_files']['iphone']);
@@ -353,8 +356,7 @@ class ARK2DBuildSystem:
 		
 		# TODO: generate block
 		#if (sys.platform == "win32"):
-		
-		
+			
 
 		print("Loaded build cache file: " + cachefilename);
 			
@@ -699,6 +701,419 @@ class ARK2DBuildSystem:
 		
 	def startMac(self):
 		self.startWindows();
+
+	def startFlascc(self):
+		print("flascc build");
+
+		# open config
+		print("opening config");
+		f = open(self.game_dir + "/config.json", "r");
+		fcontents = f.read();
+		f.close();
+		config = json.loads(fcontents);
+
+		print("assigning vars");
+		ark2d_dir = config['osx']['ark2d_dir'];
+		flascc_dir = "/Users/ashleygwinnell/flascc/sdk";
+		flexsdk_dir = "/Users/ashleygwinnell/flex_sdk";
+		gsl3d_dir = "/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/lib/flascc/GLS3D";
+
+		if (self.building_library):
+
+			print("making directories");
+			flascc_folder = config['osx']['ark2d_dir'] + "/build/flascc";
+			mkdirs = [];
+			mkdirs.extend(self.mkdirs);
+			self.makeDirectories(mkdirs);
+
+			print("sorting out cache thing")
+			cacheJSON = self.openCache("compiled");
+			cacheChanged = False;
+
+			#subprocess.call(["cp -r " + config['osx']['ark2d_dir'] + "/lib/flascc/Makefile " + flascc_folder+"/Makefile"], shell=True);
+
+			#flascc_dir = "~/flascc/sdk";
+			#flexsdk_dir = "~/flex_sdk";
+
+			
+
+			
+			#LOCAL_C_INCLUDES := /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/src/ARK2D/vendor/libcurl;
+			print("generating makefile");
+			#-Werror  
+			makefileStr = "";
+			makefileStr += """ 
+
+ARK2D:=""" + ark2d_dir + """
+FLASCC:=""" + flascc_dir + """
+GLS3D:=""" + gsl3d_dir + """
+
+BASE_CFLAGS:= -Wall -Wno-write-strings -Wno-trigraphs
+
+build: 
+	echo "Compile for flascc!"
+	 
+	echo "Now compile a SWC"
+
+	# compiling ark2d src files...\r\n""";
+
+			thissourcefiles = [];
+			thissourcefiles.extend(config['src_files']['flascc']);
+			thissourcefiles.extend(config['src_files']['all']);
+
+			
+			srcindex = 0;
+			srccount = len(thissourcefiles);
+			for srcfile in thissourcefiles:
+				findex = srcfile.rfind('.');
+				h_ext = srcfile[findex+1:len(srcfile)];
+				newf = srcfile[0:findex] + ".o";
+
+				if (not srcfile in cacheJSON or cacheJSON[srcfile]['date_modified'] < os.stat(ark2d_dir + self.ds + srcfile).st_mtime):
+
+					compiler = "g++";
+					if (h_ext == "c"):
+						compiler = "gcc";
+					#makefileStr += "	@echo \"---\"\r\n";
+					makefileStr += "	@echo " + str(srcindex+1) + " of " + str(srccount) + ": \""+ srcfile + " \"\r\n";
+					makefileStr += "	@\"$(FLASCC)/usr/bin/" + compiler + "\" $(BASE_CFLAGS) -O4 -DARK2D_FLASCC ";
+					makefileStr += "-I$(GLS3D)/install/usr/include ";
+					makefileStr += "-I$(ARK2D)/src/ARK2D/vendor/libcurl ";
+					makefileStr += "-I$(ARK2D)/src/ARK2D/vendor/android/freetype/jni/include "
+					makefileStr += "$(ARK2D)/" + srcfile + " ";
+					makefileStr += "-c -o $(ARK2D)/build/flascc/" + newf + "";
+					makefileStr += "\r\n";
+
+					cacheJSON[srcfile] = {"date_modified": os.stat(ark2d_dir + self.ds + srcfile).st_mtime };
+					cacheChanged = True;
+
+				else:
+					#print("skipping. no changes in this file. ");
+					pass;
+
+				srcindex += 1;
+				pass;
+			
+			
+			"""
+			makefileStr += "	# linking (swc)...\r\n";
+			linkingStr = "	@\"$(FLASCC)/usr/bin/g++\" $(BASE_CFLAGS) -O4 -DARK2D_FLASCC -o $(ARK2D)/build/flascc/libark2d.a ";
+			for srcfile in thissourcefiles:
+				findex = srcfile.rfind('.');
+				h_ext = srcfile[findex+1:len(srcfile)];
+				newf = srcfile[0:findex] + ".o";
+				linkingStr += " $(ARK2D)/build/flascc/" + newf + " ";
+				pass; 
+
+			#linkingStr += " --enable-static --disable-shared ";
+			linkingStr += " --disable-static --enable-shared -dynamiclib ";
+			linkingStr += " -L$(GLS3D)/install/usr/lib/ -L$(ARK2D)/lib/flascc/install/usr/lib/";
+			linkingStr += " -lGL -lfreetype ";
+			#linkingStr += " -emit-swc=org.ashleygwinnell.ark2d  ";
+			makefileStr += linkingStr;
+			"""
+
+			staticlibStr = "";
+			staticlibStr += "	$(FLASCC)/usr/bin/ar cr $(ARK2D)/build/flascc/libark2d.a "; 
+			for srcfile in thissourcefiles:
+				findex = srcfile.rfind('.');
+				h_ext = srcfile[findex+1:len(srcfile)];
+				newf = srcfile[0:findex] + ".o";
+				staticlibStr += " $(ARK2D)/build/flascc/" + newf + " ";
+				pass;
+			makefileStr += staticlibStr;
+			#
+			#	makefileStr += "/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/" + srcfile + " \\";
+			#	makefileStr += "\r\n";
+			
+
+			makefileStr += """ \
+			
+
+clean:
+	#rm -f *.swf *.swc *.bc *.exe
+
+""";
+
+			f = open(flascc_folder+"/Makefile", "w");
+			f.write(makefileStr);
+			f.close();
+
+			makeCmd = "make --directory=/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/ -f /Users/ashleygwinnell/Dropbox/ark2d/ARK2D/build/flascc/Makefile";
+			print("running makefile");
+			print(makeCmd);
+			subprocess.call([makeCmd], shell=True);	
+
+			# update compile cache thing
+			print("saving cache file");
+			if (cacheChanged == True):
+				self.saveCache("compiled", cacheJSON);
+			else:
+				print("...nothing to compile!");
+			
+			pass;
+		elif (self.building_game):
+			print("----------");
+			print("building game ");
+			print("----------");
+
+			game_dir = config['osx']['game_dir'];
+			flascc_folder = game_dir + "/build/flascc";
+
+			print("----------");
+			print("making directories");
+			print("----------");
+			mkdirs = [];
+			mkdirs.extend(self.mkdirs);
+			mkdirs.extend([ flascc_folder+"/gamevfs" ]);
+			mkdirs.extend([ flascc_folder+"/data" ]);
+			mkdirs.extend([ flascc_folder+"/data/ark2d" ]);
+			mkdirs.extend([ flascc_folder+"/data/ark2d/fonts" ]);
+			#mkdirs.extend([ flascc_folder+"/gamevfs/compiled" ]);
+			self.makeDirectories(mkdirs);
+
+			directoriesToCreate = self.listDirectories(game_dir+"/data", False);
+			for dir in directoriesToCreate:
+				self.makeDirectories([game_dir + "/build/flascc/data/" + dir]);
+
+			print("----------");
+			print("copying Preloader and Console files");
+			print("----------");
+			subprocess.call(["cp -r " + ark2d_dir + "/lib/flascc/PreLoader.as " + game_dir + "/build/flascc/PreLoader.as"], shell=True);
+			subprocess.call(["cp -r " + ark2d_dir + "/lib/flascc/Console.as " + game_dir + "/build/flascc/Console.as"], shell=True);
+
+			print("----------");
+			print("copying Flascc .C file glue");
+			print("----------");
+			subprocess.call(["cp -r " + ark2d_dir + "/lib/flascc/flascc.cpp " + game_dir + "/src/flascc.cpp"], shell=True);
+ 
+			#print("copying game files to build dir");
+			#subprocess.call(["cp -r " + game_dir + "/data/ " + game_dir + "/build/flascc/data"], shell=True);
+
+			print("----------");
+			print("Creating/opening assets cache file...");
+			print("----------");
+			assetsCache = flascc_folder + "/build-cache/assets.json";
+			assetsJson = self.openCacheFile(assetsCache);
+			assetsChanged = False;
+
+			#print("make mp3s and replace the oggs...");
+			game_resources_dir = game_dir + "/data";
+			print("----------");
+			print("Cool, now copying (game) files");
+			print("----------");
+			filesToCopy = self.listFiles(game_resources_dir, False);
+			print(filesToCopy);
+			for file in filesToCopy:
+				fromfile = game_resources_dir + self.ds + file;
+				tofile = game_dir + "/build/flascc/data/" + file;
+				
+				#replace spaces in paths on max osx with slash-spaces
+				#fromfile = fromfile.replace(" ", "\ ");
+				#tofile = tofile.replace(" ", "\ ");
+				
+				if (not fromfile in assetsJson or assetsJson[fromfile]['date_modified'] < os.stat(fromfile).st_mtime):
+					file_ext = self.get_str_extension(file);
+					if (file_ext == "ogg"): # resample
+						print("resampling audio file from: " + fromfile + " to: " + tofile); 
+						#% cat inputfile | lame [options] - - > output
+						subprocess.call(["oggdec "+fromfile+" --quiet --output=- | lame --quiet -h - - > "+tofile+""], shell=True);
+					else: # standard copy
+						print("copying file from: " + fromfile + " to: " + tofile);
+						subprocess.call(["cp -r " + fromfile + " " + tofile], shell=True);
+						
+					assetsJson[fromfile] = {"date_modified": os.stat(fromfile).st_mtime };
+					assetsChanged = True;
+					
+			if (assetsChanged == True):
+				f = open(assetsCache, "w")
+				f.write(json.dumps(assetsJson, sort_keys=True, indent=4));
+				f.close();
+
+
+			print("----------");
+			print("Cool, now copy in ARK2D files...");
+			subprocess.call(["cp -r " + ark2d_dir + "/data/ " + game_dir + "/build/flascc/data/ark2d"], shell=True);
+
+			print("----------");
+			print("generating index.html"); 
+			game_width = config['flascc']['game_width'];
+			game_height = config['flascc']['game_height'];
+			indexpagestr = "";
+			editsStrReplace = [("%GAME_NAME%", config['game_name']), ("%GAME_DESCRIPTION%", config['game_description']), ("%GAME_WIDTH%", str(game_width)), ("%GAME_HEIGHT%", str(game_height)), ("%COMPANY_NAME%", config['company_name']) ];
+			f = open(ark2d_dir+"/lib/flascc/index.html", "r");
+			indexpagestr = f.read();
+			f.close();
+			indexpagestr = self.str_replace(indexpagestr, editsStrReplace);
+			f = open(flascc_folder+"/index.html", "w");
+			f.write(indexpagestr);
+			f.close();	
+
+			print("----------");
+			print("generating makefile");
+			print("----------");
+			makefileStr = "";  
+			makefileStr += """ 
+
+ARK2D:=""" + ark2d_dir + """
+GAMEDIR:=""" + game_dir + """
+FLASCC:=""" + flascc_dir + """
+GLS3D:=""" + gsl3d_dir + """
+
+BASE_CFLAGS:= -Wall -Wno-write-strings -Wno-trigraphs
+
+build: 
+	@echo "----------"
+	@echo "Compile for flascc!"
+	@echo "----------"
+	@echo "Generate Virtual FileSystem"
+	$(FLASCC)/usr/bin/genfs --type=embed --name=gamevfs $(GAMEDIR)/build/flascc/data/ $(GAMEDIR)/build/flascc/gamevfs/gamevfs
+	@echo "----------"
+	@echo "Compile Virtual FileSystem"
+	java -jar $(FLASCC)/usr/lib/asc2.jar -merge -md -AS3 -strict -optimize \
+		-import $(FLASCC)/usr/lib/builtin.abc \
+		-import $(FLASCC)/usr/lib/playerglobal.abc \
+		-import $(FLASCC)/usr/lib/BinaryData.abc \
+		-import $(FLASCC)/usr/lib/ISpecialFile.abc \
+		-import $(FLASCC)/usr/lib/IBackingStore.aBC \
+		-import $(FLASCC)/usr/lib/IVFS.abc \
+		-import $(FLASCC)/usr/lib/InMemoryBackingStore.abc \
+		-import $(FLASCC)/usr/lib/PlayerKernel.abc \
+		$(GAMEDIR)/build/flascc/gamevfs/gamevfs*.as -outdir $(GAMEDIR)/build/flascc/ -out gamevfs
+
+	@echo "----------"
+	@echo "Compile Console and Preloader"
+	java -jar $(FLASCC)/usr/lib/asc2.jar -merge -md -AS3 -strict -optimize \
+		-import $(FLASCC)/usr/lib/builtin.abc \
+		-import $(FLASCC)/usr/lib/playerglobal.abc \
+		-import $(GLS3D)/install/usr/lib/libGL.abc \
+		-import $(FLASCC)/usr/lib/ISpecialFile.abc \
+		-import $(FLASCC)/usr/lib/IBackingStore.abc \
+		-import $(FLASCC)/usr/lib/IVFS.abc \
+		-import $(FLASCC)/usr/lib/InMemoryBackingStore.abc \
+		-import $(FLASCC)/usr/lib/AlcVFSZip.abc \
+		-import $(FLASCC)/usr/lib/CModule.abc \
+		-import $(FLASCC)/usr/lib/C_Run.abc \
+		-import $(FLASCC)/usr/lib/BinaryData.abc \
+		-import $(FLASCC)/usr/lib/PlayerKernel.abc \
+		-import $(GAMEDIR)/build/flascc/gamevfs.abc \
+		$(GAMEDIR)/build/flascc/Console.as -outdir $(GAMEDIR)/build/flascc -out Console
+
+	java -jar $(FLASCC)/usr/lib/asc2.jar -merge -md -AS3 -strict -optimize \
+		-import $(FLASCC)/usr/lib/builtin.abc \
+		-import $(FLASCC)/usr/lib/playerglobal.abc \
+		-import $(GLS3D)/install/usr/lib/libGL.abc \
+		-import $(FLASCC)/usr/lib/ISpecialFile.abc \
+		-import $(FLASCC)/usr/lib/IBackingStore.abc \
+		-import $(FLASCC)/usr/lib/IVFS.abc \
+		-import $(FLASCC)/usr/lib/CModule.abc \
+		-import $(FLASCC)/usr/lib/C_Run.abc \
+		-import $(FLASCC)/usr/lib/BinaryData.abc \
+		-import $(FLASCC)/usr/lib/PlayerKernel.abc \
+		-import $(GAMEDIR)/build/flascc/Console.abc \
+		-import $(GAMEDIR)/build/flascc/gamevfs.abc \
+		$(GAMEDIR)/build/flascc/PreLoader.as -swf com.adobe.flascc.preloader.PreLoader,640,480,60 -outdir $(GAMEDIR)/build/flascc -out PreLoader
+
+	@echo "----------"
+""";
+			
+			thissourcefiles = [];
+			thissourcefiles.extend(config['game_src_files']);
+			thissourcefiles.extend([ "src/flascc.cpp" ]);
+			
+			srcindex = 0;
+			srccount = len(thissourcefiles);
+			for srcfile in thissourcefiles:
+				findex = srcfile.rfind('.');
+				h_ext = srcfile[findex+1:len(srcfile)];
+				newf = srcfile[0:findex] + ".o";
+
+				compiler = "g++";
+				if (h_ext == "c"):
+					compiler = "gcc";
+				elif (h_ext == "rc"):
+					continue;
+
+				makefileStr += "	@echo " + str(srcindex+1) + " of " + str(srccount) + ": \""+ srcfile + " \"\r\n";
+				makefileStr += "	@\"$(FLASCC)/usr/bin/" + compiler + "\" $(BASE_CFLAGS) -O4 -DARK2D_FLASCC ";
+				makefileStr += "-I$(GLS3D)/install/usr/include ";
+				makefileStr += "-I$(ARK2D)/src/ARK2D/vendor/libcurl ";
+				makefileStr += "-I$(ARK2D)/src/ARK2D/vendor/android/freetype/jni/include "
+				makefileStr += "$(GAMEDIR)/" + srcfile + " ";
+				makefileStr += "-c -o $(GAMEDIR)/build/flascc/" + newf;
+				makefileStr += "\r\n";
+
+				srcindex += 1;
+				pass;
+
+			makefileStr += "	# linking...\r\n";
+			linkingStr = "";
+			#linkingStr += "\"" + flexsdk_dir + "/bin/mxmlc\" -static-link-runtime-shared-libraries -compiler.omit-trace-statements=false -library-path=MurmurHash.swc -debug=false swcdemo.as -o swcdemo.swf
+			linkingStr += "	@\"$(FLASCC)/usr/bin/g++\" $(BASE_CFLAGS) -O4 -DARK2D_FLASCC ";
+			for srcfile in thissourcefiles:
+				findex = srcfile.rfind('.');
+				h_ext = srcfile[findex+1:len(srcfile)];
+				newf = srcfile[0:findex] + ".o";
+
+				if (h_ext == "rc"):
+					continue;
+
+				linkingStr += " $(GAMEDIR)/build/flascc/" + newf + " ";
+				pass;
+
+			
+			print("opening config");
+			f2 = open(self.ark2d_dir + "/config.json", "r");
+			f2contents = f2.read();
+			f2.close();
+			arkconfig = json.loads(f2contents);
+			arksrcfiles = []
+			arksrcfiles.extend(arkconfig['src_files']['flascc']);
+			arksrcfiles.extend(arkconfig['src_files']['all']);
+			for srcfile in arksrcfiles:
+				findex = srcfile.rfind('.');
+				h_ext = srcfile[findex+1:len(srcfile)];
+				newf = srcfile[0:findex] + ".o";
+				if ("src/main" in srcfile[0:findex]): 
+					continue;
+				else:
+					linkingStr += " $(ARK2D)/build/flascc/" + newf + " ";
+				pass;
+
+			
+
+			linkingStr += " -L$(GLS3D)/install/usr/lib/ ";
+			linkingStr += " -L/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/lib/flascc/install/usr/lib/ ";
+			#linkingStr += " -L$(ARK2D)/build/flascc ";
+			#linkingStr += " -lark2d ";
+			linkingStr += " -lGL -lfreetype -lAS3++ -lFlash++ ";
+			#-emit-swf=org.ashleygwinnell.defaultgame
+
+
+
+			linkingStr += " $(FLASCC)/usr/lib/AlcVFSZip.abc $(GAMEDIR)/build/flascc/gamevfs.abc -swf-preloader=$(GAMEDIR)/build/flascc/PreLoader.swf -swf-version=17 -symbol-abc=$(GAMEDIR)/build/flascc/Console.abc -jvmopt=-Xmx4G ";
+			linkingStr += " -swf-size=640x480 -emit-swf -o $(GAMEDIR)/build/flascc/game.swf -j8 ";
+			makefileStr += linkingStr;
+ 
+ 
+			f = open(flascc_folder+"/Makefile", "w");
+			f.write(makefileStr);
+			f.close(); 
+
+			makeCmd = "make --directory=" + game_dir + "/build/ -f " + game_dir + "/build/flascc/Makefile";
+			print("----------");
+			print("running makefile");
+			print("----------");
+			print(makeCmd);
+			subprocess.call([makeCmd], shell=True);	
+
+			print("----------");
+			print("DONE! >:D");
+			print("----------");
+
+			pass;
+ 
+		pass;
 		
 	def listDirectories(self, dir, usefullname=True, appendStr = ""):
 		thelist = [];
@@ -2001,6 +2416,8 @@ class ARK2DBuildSystem:
 			self.startWindows();
 		elif(self.platform == "osx"):
 			self.startMac();
+		elif(self.platform == "flascc"):
+			self.startFlascc();
 		else:
 			print(sys.platform); 
 			print("platform " + sys.platform + " is not supported yet");
@@ -2088,6 +2505,8 @@ if __name__ == "__main__":
 			a.platform = 'iphone';
 		elif (target=='android'):
 			a.platform = 'android';
+		elif (target=='flascc'):
+			a.platform = 'flascc';
 
 		print("---");
 		print("Opening config file: " + dir + "/config.json");
@@ -2140,6 +2559,8 @@ if __name__ == "__main__":
 				a.platform = 'iphone';
 			elif (target=='android'):
 				a.platform = 'android';
+			elif (target=='flascc'):
+				a.platform = 'flascc';
 
 			a.ark2d_dir = config[arkPlatform]["ark2d_dir"];
 			a.game_name = config["game_name"];

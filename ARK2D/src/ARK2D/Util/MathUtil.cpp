@@ -100,7 +100,7 @@ namespace ARK {
 			double xDifference = x2 - x1;
 			double yDifference = y2 - y1;
 
-			double angle = atan2(yDifference,xDifference) *(180/PI);
+			double angle = atan2(yDifference,xDifference) *(180/MY_PI);
 			return angle;
 		}
 
@@ -108,7 +108,7 @@ namespace ARK {
 
 
 		double MathUtil::toRadians(double angle) {
-			return angle * (PI/180);
+			return angle * (MY_PI/180);
 		}
 
 		double MathUtil::getPercentage(int top, int denominator) {
@@ -119,12 +119,12 @@ namespace ARK {
 			std::string str = Cast::toString<int>(pc).append(&"%"[0]);
 			return str.c_str();
 		}
-		#if defined(ARK2D_ANDROID)
+		#if (defined(ARK2D_ANDROID) || defined(ARK2D_FLASCC))
 			unsigned int util_androidlog2( unsigned int x )
 			{
 			  unsigned int ans = 0 ;
 			  while( x>>=1 ) ans++;
-			  return ans ;
+			  return ans ; 
 			}
 			// http://weseetips.com/2008/09/10/how-to-calculate-log2-of-any-number/
 			double Log2AndroidTwo( double n )
@@ -135,7 +135,7 @@ namespace ARK {
 		#endif
 
 		int MathUtil::nextPowerOfTwo(int val) {
-			#if defined(ARK2D_ANDROID)
+			#if (defined(ARK2D_ANDROID) || defined(ARK2D_FLASCC))
 				return (1 << (int) ceil(Log2AndroidTwo((double)val)));
 			#else
 				return (1 << (int) ceil(log2((double)val)));

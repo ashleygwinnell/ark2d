@@ -14,6 +14,7 @@
 	#include <vector>
 	#include <list>
 	#include <iterator>
+ 	#include <algorithm>
 #endif
 
 #include "../../Core/GameObject.h"
@@ -205,6 +206,18 @@ namespace ARK {
 							return (*it);
 						#endif
 					}
+					void shuffle() {
+						//random_shuffle(vec.begin(). vec.end());
+						/*#if !defined(STL_AVAILABLE)
+							return NULL; 
+						#else
+							if (!usingList) {
+								std::random_shuffle(vec.begin(). vec.end());
+								return;
+							}
+							std::random_shuffle(lst.begin(). lst.end());
+						#endif*/
+					}
 					void* getData() {
 						#if !defined(STL_AVAILABLE)
 							return (void*) NULL;
@@ -215,6 +228,7 @@ namespace ARK {
 							return (void*) lst;
 						#endif
 					}
+					vector<T>& getDataVec() { return vec; }
 					void setData(void* data) {
 						#if !defined(STL_AVAILABLE)
 						#else

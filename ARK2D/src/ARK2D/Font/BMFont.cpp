@@ -33,6 +33,7 @@ namespace ARK {
 		}
 
 		BMFont::BMFont(unsigned int fntResource, unsigned int imgResource, unsigned int imgResourceType):
+			Font::Font(),
 			m_loaded(false),
 			m_data(NULL),
 			m_FontFile(""),
@@ -45,11 +46,15 @@ namespace ARK {
 			ARK2D::getLog()->i("Loading BMFont from raw data.");
 			m_data = (char*) GameContainerPlatform::getARK2DResource(fntResource, ARK2D_RESOURCE_TYPE_FNT);
 			m_Image = new Image(imgResource, imgResourceType);
-			Parse();
+			bool success = Parse();
+			if (!success) {
+				ARK2D::getLog()->w("Did not load fnt data successfully...");
+			}
 			ARK2D::getLog()->i("Done");
 		}
 
 		BMFont::BMFont(void* data, Image* i):
+			Font::Font(),
 			m_loaded(false),
 			m_data(NULL),
 			m_FontFile(""),
@@ -62,11 +67,15 @@ namespace ARK {
 			ARK2D::getLog()->i("Loading BMFont from raw data.");
 			m_data = (char*) data;
 			m_Image = i;
-			Parse();
+			bool success = Parse();
+			if (!success) {
+				ARK2D::getLog()->w("Did not load fnt data successfully...");
+			}
 			ARK2D::getLog()->i("Done");
 		}
 
 		BMFont::BMFont(const string& f, const string& i):
+			Font::Font(),
 			m_loaded(false),
 			m_data(NULL),
 			m_FontFile(f),
@@ -76,29 +85,40 @@ namespace ARK {
 			m_letterImages(),
 			m_kerning(0)
 		{
-			ARK2D::getLog()->i(StringUtil::append("Loading BMFont: ", f));
+			ARK2D::getLog()->i("Loading BMFont: ");
+			ARK2D::getLog()->i(f);
+			
 			m_Image = ARK::Core::Resource::get(i)->asImage();
-			Parse();
+			bool success = Parse();
+			if (!success) {
+				ARK2D::getLog()->w("Did not load fnt data successfully...");
+			}
 			ARK2D::getLog()->i("Done");
 		}
 
 		BMFont::BMFont(const string& f, const string& i, const Color& mask):
+			Font::Font(),
 			m_loaded(false),
 			m_data(NULL),
 			m_FontFile(f),
 			m_ImageFile(i),
 			m_Charset(),
-			m_Image(NULL),
+			m_Image(NULL), 
 			m_letterImages(),
 			m_kerning(0)
-		{
-			ARK2D::getLog()->i(StringUtil::append("Loading BMFont: ", f));
+		{ 
+			ARK2D::getLog()->i("Loading BMFont: ");
+			ARK2D::getLog()->i(f);
 
 			m_Image = new Image(i, mask);
-			Parse();
+			bool success = Parse();
+			if (!success) {
+				ARK2D::getLog()->w("Did not load fnt data successfully...");
+			}
 		}
 
 		BMFont::~BMFont() {
+			ARK2D::getLog()->i("Deleting BMFont");
 			delete m_data;
 
 			// @todo memory mangement: loop through m_letterImages and delete them.
@@ -163,10 +183,13 @@ namespace ARK {
 					stringstream LineStream;
 					std::getline( Stream, Line );
 
-					bool skippingLine = false; 
-					//std::cout << Line << std::endl;
+					bool skippingLine = false;  
 
-					if (Line.length() == 0) { break; }
+					//#ifdef ARK2D_FLASCC
+						//std::cout << Line << std::endl;
+					//#endif
+
+					if (Line.length() == 0) { break; } 
 					//if (Line == -1) {
 					//	return false;
 					//} 
@@ -174,7 +197,7 @@ namespace ARK {
 					LineStream << Line;
 
 					//read the line's type
-					LineStream >> Read;
+					LineStream >> Read; 
 					if( Read == "common" )
 					{
 						//this holds common data
@@ -252,7 +275,7 @@ namespace ARK {
 				} else {
 				//	((stringbuf*)fb)->close();
 				}
-
+ 
 				for(unsigned int i = 0; i <= 255; ++i) { //m_Charset.Chars.length
 					m_Charset.Chars[i].WidthOriginal = m_Charset.Chars[i].Width;
 					m_Charset.Chars[i].HeightOriginal = m_Charset.Chars[i].Height;
@@ -265,6 +288,7 @@ namespace ARK {
 				return false;
 			}
 		#endif 
+			ARK2D::getLog()->i("Loaded fnt data.");
 			return true;
 		}
 
@@ -277,6 +301,8 @@ namespace ARK {
 		void BMFont::drawString(const string& Str, int drawx, int drawy) 
 		{
 			if (m_loaded == false) { return; }
+			ARK2D::getLog()->i("BMFont:: drawing string: ");
+			ARK2D::getLog()->i(Str);
 
 			int CharX, CharY, Width, WidthOriginal, Height, HeightOriginal, OffsetX, OffsetY, XAdvance;
 			//m_Image.getSubImage(10, 10, 10, 10).draw(drawx, drawy);

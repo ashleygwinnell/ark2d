@@ -29,6 +29,7 @@ namespace ARK {
 				void setDuration(float duration);
 				float getDuration();
 				bool update();
+				bool update(float modifier);
 				void loop();
 				void reset();
 				string toString();

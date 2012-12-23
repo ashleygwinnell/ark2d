@@ -10,12 +10,14 @@
 #include "Resource.h"
 
 #include "../Graphics/Image.h"
+#include "../Graphics/Texture.h"
+#include "../Graphics/TextureStore.h"
 #include "../Graphics/SpriteSheetDescription.h"
 #include "../Audio/Sound.h"
 #include "../Font/FTFont.h"
 #include "../Font/BMFont.h"
 #include "../Font/Font.h"
-#include "../Path/PathGroup.h"  
+#include "../Path/PathGroup.h"    
 #include "../Path/PathIO.h"
 #include "../Util/LocalHighscores.h"   
 #include "../Tiled/TiledMap.h"
@@ -123,15 +125,16 @@ namespace ARK {
 					void* fileData = rt->data;
 
 					ARK2D::getLog()->i("Creating resource type from data... ");
-					resource = new Image(fileData, getResourceTypeByExtension(extension));
+					resource = new Image(fileData, getResourceTypeByExtension(extension), ref);
+					//resource->asImage()->filename = ref;
 
 					ARK2D::getLog()->i("Freeing raw resource data... ");
-					delete rt;
+					delete rt; 
 				#else
 					resource = new Image(ref);
 				#endif
-			}
-			else if (extension == "wav" || extension == "ogg")
+			} 
+			else if (extension == "wav" || extension == "ogg" || extension == "mp3")
 			{ // Sound
 				#if defined(ARK2D_ANDROID)
 					RawDataReturns* rt = getRawData(ref);
@@ -150,7 +153,7 @@ namespace ARK {
 				#else
 					resource = PathIO::createFromFile(ref);
 				#endif
-			}
+			} 
 			else
 			{ // Assume plain text.
 				String* arkstr = new String();

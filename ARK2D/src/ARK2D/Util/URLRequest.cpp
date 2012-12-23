@@ -25,7 +25,7 @@ namespace ARK {
 
 
 			if (s_curlInitted == false) {
-				#if !defined(ARK2D_ANDROID) && !defined(ARK2D_IPHONE)
+				#if !defined(ARK2D_ANDROID) && !defined(ARK2D_IPHONE) && !defined(ARK2D_FLASCC)
 					s_curl = curl_easy_init();
 					if (!s_curl) {
 						ErrorDialog::createAndShow("could not init libcurl");
@@ -195,8 +195,10 @@ namespace ARK {
 				return m_response;
             #elif defined(ARK2D_IPHONE) 
                 return "Not implemented";
+            #elif defined(ARK2D_FLASCC)
+                return "Not implemented";
             #else
-
+ 
 				String returnString("");
 				CURLcode res;
 

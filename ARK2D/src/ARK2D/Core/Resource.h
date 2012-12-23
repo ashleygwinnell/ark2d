@@ -42,7 +42,7 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
 		class Resource {
-
+			friend class ARK::Graphics::TextureStore;
 			public:
 				static Resource* get(string ref);
 				static bool exists(string ref);

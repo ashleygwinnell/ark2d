@@ -80,8 +80,11 @@ namespace ARK {
 		}
 
 		void Animation::update(GameTimer* timer) {
+			update(timer->getDelta());
+		}
+		void Animation::update(float delta) {
 			if (m_frames.size() == 0) { return; }
-			m_timer += timer->getDelta();
+			m_timer += delta;
 			if (m_timer > m_frameTime) {
 				m_timer -= m_frameTime;
 

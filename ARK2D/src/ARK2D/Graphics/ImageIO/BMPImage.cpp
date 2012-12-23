@@ -47,7 +47,11 @@ namespace ARK {
 				bmpfile.read ((char*)&bmih, sizeof (ARK2D_BITMAPINFOHEADER));
 
 				// Check filetype signature
-				if (bmfh.bfType != 'MB') return 2;		// File is not BMP
+				//if (bmfh.bfType != 'MB') return 2;		// File is not BMP
+
+				char* first = (char*) &bmfh.bfType;
+				if ((*first) != 'M') return 2;	// File is not BMP
+				if ((*first+1) != 'B') return 2;	// File is not BMP
 
 				// Assign some short variables:
 				BPP = bmih.biBitCount;

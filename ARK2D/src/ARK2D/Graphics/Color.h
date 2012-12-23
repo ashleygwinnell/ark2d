@@ -39,6 +39,7 @@ namespace ARK {
 				void setGreen(float g);
 				void setBlue(float b);
 				void setAlpha(float a);
+				void set(float r, float g, float b, float a);
 				unsigned int getRed() const;
 				unsigned int getGreen() const;
 				unsigned int getBlue() const;

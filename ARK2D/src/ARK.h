@@ -61,6 +61,7 @@
 #include "ARK2D/Graphics/FBO.h"
 #include "ARK2D/Graphics/Image.h"
 #include "ARK2D/Graphics/Texture.h"
+#include "ARK2D/Graphics/TextureStore.h"
 
 // Audio
 #include "ARK2D/Audio/Sound.h"

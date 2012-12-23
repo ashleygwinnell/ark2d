@@ -1,4 +1,4 @@
-/*
+ /*
  * Renderer.cpp
  *  Created on: 16-Oct-2009
  *      Author: Ashley Gwinnell
@@ -18,6 +18,9 @@
 #include "../Geometry/Circle.h"
 #include "../Geometry/Polygon.h"
 #include "../Geometry/Line.h"
+
+#include "Texture.h"
+#include "TextureStore.h"
  
 namespace ARK {  
 	namespace Graphics {
@@ -49,8 +52,13 @@ namespace ARK {
 		}
 		void RendererState::start(int renderMode, int textureId) 
 		{
-			if (renderMode == GEOMETRY && (renderMode != s_renderMode || s_renderMode == 0)) { startGeometry(); } 
-			else if (renderMode == TEXTURE && (textureId != s_textureId || s_textureId == 0)) { startTexture(textureId); }
+			#if defined(ARK2D_FLASCC)
+				if (renderMode == GEOMETRY) { startGeometry(); }
+				else if (renderMode == TEXTURE) { startTexture(textureId); }
+			#else 
+				if (renderMode == GEOMETRY && (renderMode != s_renderMode || s_renderMode == 0)) { startGeometry(); } 
+				else if (renderMode == TEXTURE && (textureId != s_textureId || s_textureId == 0)) { startTexture(textureId); }
+			#endif
 
 			s_renderMode = renderMode;
 		} 
@@ -96,8 +104,8 @@ namespace ARK {
 		// renderer
 		Renderer::Renderer():
 			m_DefaultFont(NULL),
-			m_Font(NULL),
-			m_DrawColor(255, 0, 255),
+			m_Font(NULL), 
+			m_DrawColor(255, 255, 255, 255),
 			m_MaskColor(),
 			m_LineWidth(1),
 			m_pointSize(1),
@@ -165,6 +173,9 @@ namespace ARK {
 		}
 
 		void Renderer::drawString(const std::string str, int x, int y) const {
+			if (m_Font == NULL) { ARK2D::getLog()->e("Renderer::m_Font is NULL..."); return; }
+			ARK2D::getLog()->i("draw string"); 
+			//m_Font->asBMFont()->getImage()->draw(x, y);
 			m_Font->drawString(str, x, y);
 		}
 		void Renderer::drawString(const std::string str, float x, float y, signed int alignX, signed int alignY, float rotation, float sc) 
@@ -328,7 +339,7 @@ namespace ARK {
 			float br_y = y2 + tempVector.getY();
 
 			glColor4f(1.0f, 1.0f, 1.0f, img->getAlpha());
-			texturedQuad(img->getTextureId(), 
+			texturedQuad(img->getTexture()->getId(), 
 				tl_x, tl_y, 
 				bl_x, bl_y, 
 				br_x, br_y, 
@@ -502,6 +513,48 @@ namespace ARK {
 			//#if defined(ARK2D_ANDROID)
 				//glDisable(GL_TEXTURE_2D);
 				//glEnableClientState(GL_VERTEX_ARRAY);
+
+
+			#if defined(ARK2D_FLASCC)
+				RendererState::start(RendererState::GEOMETRY);
+
+				/*char rawColors[] = {
+					255,255,255,255,
+					255,255,255,255,
+					255,255,255,255,
+					255,255,255,255
+				};*/
+
+				float rawVertices[] = {
+					0.0f,			0.0f,		// tl
+					(float) width,	0.0f,		// tr
+					0.0f,			(float)height,	  	// bl
+					0.0f,			(float)height,	  	// bl
+					(float) width,	0.0f,		// tr
+					(float) width,	(float)height		// br
+				};
+				/*float rawVertices[] = {
+					x,					y,		// tl
+					x + (float) width,	y,		// tr
+					x,					y + (float)height,	  	// bl
+					x,					y + (float)height,	  	// bl
+					x + (float) width,	y,		// tr
+					x + (float) width,	y + (float)height		// br
+				};*/
+				glPushMatrix();
+				glTranslatef(x, y, 0);
+				//glEnableClientState(GL_COLOR_ARRAY);
+			 
+				//glColorPointer(4, GL_UNSIGNED_BYTE, 0, rawColors);
+				glVertexPointer(2, GL_FLOAT, 0, rawVertices);
+				glDrawArrays(GL_TRIANGLES, 0, 6);
+
+				//glDisableClientState(GL_COLOR_ARRAY);
+				glTranslatef(x * -1, y * -1, 0);
+				glPopMatrix();
+
+				RendererStats::s_tris += 2;
+			#else
 				RendererState::start(RendererState::GEOMETRY);
 
 				float rawVertices[] = {
@@ -520,6 +573,7 @@ namespace ARK {
 				glPopMatrix();
 
 				RendererStats::s_tris += 2;
+			#endif
 
 				//glDisableClientState(GL_VERTEX_ARRAY);
 				//glEnable(GL_TEXTURE_2D);
@@ -627,6 +681,7 @@ namespace ARK {
 				RendererStats::s_tris += 1;
 			#endif 
 		}
+		
 		void Renderer::fillTriangle(float x1, float y1, float x2, float y2, float x3, float y3) const {
 			RendererState::start(RendererState::GEOMETRY);
 			
@@ -680,7 +735,7 @@ namespace ARK {
 				float verts[(points+1)*2];
 				int j = 0;
 				for(float i = 0; i <= 360; i += each) { 
-					double angle = 2 * PI * i / 360;
+					double angle = 2 * MY_PI * i / 360;
 					verts[j] = float(0 + cos(angle) * radius);
 					verts[j+1] = float(0 + sin(angle) * radius);
 					j+=2;
@@ -709,7 +764,7 @@ namespace ARK {
 				float each = 360.0f / float(points);
 				glBegin(GL_LINE_LOOP);
 				for(float i = 0; i <= 360; i += each){
-					double angle = 2 * PI * i / 360;
+					double angle = 2 * MY_PI * i / 360;
 					glVertex2d(x + cos(angle) * radius, y + sin(angle) * radius);
 				}
 				glEnd();
@@ -726,7 +781,7 @@ namespace ARK {
 			verts[1] = 0; 
 			int j = 2;
 			for(float i = 0; i <= 360; i += each) {
-				double angle = 2 * PI * i / 360;
+				double angle = 2 * MY_PI * i / 360;
 				verts[j] = float(0 + cos(angle) * radius);
 				verts[j+1] = float(0 + sin(angle) * radius);
 				j+=2;
@@ -760,7 +815,7 @@ namespace ARK {
 				glBegin(GL_TRIANGLE_FAN);
 				glVertex2i(x, y);
 				for(float i = 0; i <= 360; i += each){
-					double angle = 2 * PI * i / 360;
+					double angle = 2 * MY_PI * i / 360;
 					glVertex2d(x + cos(angle) * radius, y + sin(angle) * radius);
 				}
 				glEnd();
@@ -777,7 +832,7 @@ namespace ARK {
 			verts[1] = 0; 
 			int j = 2;
 			for(float i = 0; i <= 360; i += each) {
-				double angle = 2 * PI * i / 360;
+				double angle = 2 * MY_PI * i / 360;
 				verts[j] = float(0 + cos(angle) * rx);
 				verts[j+1] = float(0 + sin(angle) * ry);
 				j+=2;

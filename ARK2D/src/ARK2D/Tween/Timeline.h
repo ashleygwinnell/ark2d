@@ -5,8 +5,8 @@
  *      Author: Ashley
  */
 
-#ifndef PI
-#define PI 3.14159265
+#ifndef MY_PI
+	#define MY_PI 3.14159265
 #endif
 
 #ifndef TIMELINE_H_
@@ -119,7 +119,7 @@ namespace ARK {
 
 				AnimationEvent* getKeyedIndependentEvent(string key);
 
-				~Timeline();
+				virtual ~Timeline();
 			private:
 
 		};

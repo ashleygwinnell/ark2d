@@ -15,7 +15,7 @@
 
 namespace ARK {
 	namespace Graphics {
-
+ 
 		Shader::Shader():
 			m_programId(0),
 			m_vertexShaders(),

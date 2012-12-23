@@ -13,11 +13,11 @@
 #include "../Geometry/Vector2.h"
 #include "Cast.h"
 
-#ifndef PI
-	#define PI 3.14159265
+#ifndef MY_PI
+	#define MY_PI 3.14159265
 #endif
 
-namespace ARK {
+namespace ARK { 
 	namespace Util {
 
 		/*!

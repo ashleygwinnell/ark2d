@@ -38,8 +38,11 @@ namespace ARK {
 			return m_duration;
 		}
 		bool Timer::update() {
+			return update(1.0f);
+		}
+		bool Timer::update(float modifier) {
 			GameTimer* t = ARK2D::getContainer()->getTimer();
-			m_timer += t->getDelta();
+			m_timer += (t->getDelta() * modifier);
 			if (m_timer >= m_duration) {
 				return true;
 			}

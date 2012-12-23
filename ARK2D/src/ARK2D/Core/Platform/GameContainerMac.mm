@@ -23,7 +23,7 @@
 						&& MacVersionMinor >= 7) {
 						return true;
 					} 
-					return false; 
+					return false;  
 				}
 				return false;
 			}
@@ -38,7 +38,7 @@
 				m_game(g),
 				m_input(),
 				m_graphics(),
-				m_gamepads(), 
+				m_gamepads(),  
 				m_originalWidth(width),    
 				m_originalHeight(height),
 				m_width(width),
@@ -465,10 +465,18 @@
 				}
 				
 				disableOpenAL();
+
+				close();
 				
 			}
 		
 			void ARK::Core::GameContainer::close() const {
+				ARK2D::getLog()->i("GameContainer::close"); 
+				ARK2D::getLog()->i("Deleting Game object "); 
+				delete &m_game;
+
+				ARK2D::getLog()->i("Closing Window at last "); 
+				[m_platformSpecific.m_window close];
 				exit(0);
 			}
 			

@@ -5,14 +5,6 @@
 #include "../ARK2D.h"
 #include "../Core/GameContainer.h"
  
-#ifndef FBO_SUPPORT
-	#if (defined(ARK2D_WINDOWS)  || defined(ARK2D_ANDROID))
-		//#define FBO_SUPPORT false
-	#else
-		#define FBO_SUPPORT true
-	#endif
-#endif
-
 namespace ARK { 
 	namespace Graphics {
 

@@ -116,6 +116,12 @@ namespace ARK {
 			m_a = a;
 		}
 
+		void Color::set(float r, float g, float b, float a) {
+			m_r = (unsigned int) (r * 255.0f);
+			m_g = (unsigned int) (g * 255.0f);
+			m_b = (unsigned int) (b * 255.0f);
+			m_a = (unsigned int) (a * 255.0f);
+		}
 		void Color::setRed(float r) {
 			m_r = (unsigned int) (r * 255.0f);
 		}

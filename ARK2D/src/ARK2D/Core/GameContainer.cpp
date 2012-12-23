@@ -10,7 +10,9 @@
 //#include "../Geometry/GigaRectangle.h"
 #include "../ARK2D.h"  
 
-#if defined(ARK2D_ANDROID)
+#if defined(ARK2D_FLASCC)
+ 	#include "Platform/GameContainerFlascc.h"
+#elif defined(ARK2D_ANDROID)
 	#include "Platform/GameContainerAndroid.h"
 #elif defined(ARK2D_WINDOWS)
 	#include "Platform/GameContainerWindows.h"
@@ -29,7 +31,7 @@ namespace ARK {
 		void GameContainer::setVerbose(bool v) {
 			m_verbose = v;
 		}
-
+ 
 		bool GameContainer::isFullscreen() {
 			return m_fullscreen;
 		}
@@ -93,7 +95,7 @@ namespace ARK {
 		}
 
 		void GameContainer::enable2D() {
-			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
+			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))// || defined(ARK2D_FLASCC))
 
 			#else
 				glMatrixMode(GL_PROJECTION) ;

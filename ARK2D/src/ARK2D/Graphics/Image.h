@@ -25,6 +25,8 @@ namespace ARK {
 	namespace Graphics {
 
 		class Image : public ARK::Core::Resource {
+			friend class TextureStore;
+			friend class ARK::Core::Resource;
 			private:
 
 				void* m_data; // only used by one constructor.
@@ -34,7 +36,8 @@ namespace ARK {
 				float m_Width;
 				float m_Height;
 
-				GLuint texture; 
+				Texture* m_texture;
+				unsigned int texture_temp;
 				float texture_width;
 				float texture_height;
 				float texture_offset_x;
@@ -56,17 +59,19 @@ namespace ARK {
 				float m_texCoords[8];
 				float m_colors[16];
 
+			public:
 				GLuint load();
 				GLuint load(const Color& mask);
 				TargaImage* loadTGA();
 				BMPImage* loadBMP();
 				PNGImage* loadPNG();
 
+				void addTexture();
 
 			public:
 				Image();
 				Image(unsigned int resource, unsigned int resourceType);
-				Image(void* data, unsigned int resourceType);
+				Image(void* data, unsigned int resourceType, string file);
 				Image(const std::string& fname);
 				Image(const std::string& fname, const Color& mask);
 				unsigned int getWidth() const;
@@ -79,7 +84,7 @@ namespace ARK {
 				void setColor(Color* c); // color overrides alpha;
 				Color* getColor() const;
 
-				inline unsigned int getTextureId() { return texture; };
+				inline Texture* getTexture() { return m_texture; };
 				inline float getTextureX() { return texture_offset_x; };
 				inline float getTextureY() { return texture_offset_y; };
 				inline float getTextureW() { return texture_width; };
@@ -108,6 +113,7 @@ namespace ARK {
 				void draw(int x, int y);
 				void draw(float x, float y);
 				void draw(float x, float y, unsigned int w, unsigned int h);
+				void drawAligned(float x, float y, signed int alignX, signed int alignY, float scale);
 				void drawCentered(int x, int y);
 				void drawCentered(float x, float y);
 				void drawCenteredFlipped(float x, float y, bool flipx, bool flipy);

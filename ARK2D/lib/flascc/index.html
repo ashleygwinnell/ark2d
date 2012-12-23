@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>%GAME_NAME%</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="%GAME_DESCRIPTION%">
+    <meta name="author" content="%COMPANY_NAME%">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- 
+      Vars:
+        %GAME_NAME%
+        %GAME_WIDTH%
+        %GAME_HEIGHT%
+    -->
+
+     <style>
+      body { font-family:sans-serif; background-color:#333; color:white;}
+      .container { margin: 0px auto; text-align:center;}
+      h1 { font-size:20pt; }
+      p { font-size:9pt; font-weight:normal;}
+      a { color: white; }
+    </style>
+
+    <script type="text/javascript" src="swfobject.js"></script>
+    <script type="text/javascript">
+    swfobject.registerObject("gameswf", "11.4.0", "expressInstall.swf");
+ </script>
+</head>
+  <body data-spy="scroll" data-target=".subnav" data-offset="50">
+    <div class="container">
+      <section id="content">
+        <div class="page-header">
+          <h1>%GAME_NAME%</h1>
+          <p>%GAME_DESCRIPTION%</p>
+        </div>
+        <div>
+          
+            <object id="gameswf" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="%GAME_WIDTH%" height="%GAME_HEIGHT%">
+              <param name="movie" value="game.swf" />
+              <!--[if !IE]>-->
+              <object type="application/x-shockwave-flash" data="game.swf" width="%GAME_WIDTH%" height="%GAME_HEIGHT%">
+              <!--<![endif]-->
+                <param name="wmode" value="direct" />
+                <param name="allowScriptAccess" value="sameDomain" />
+                <param name="bgcolor" value="CCCCCC" /> 
+                <div>
+                  <h1>You need to update flash:</h1>
+                  <p><a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a></p>
+                </div>
+              <!--[if !IE]>-->
+              </object>
+              <!--<![endif]-->
+            </object>
+          
+            <p>Written in C++ &amp; OpenGL and compiled to Flash with <a href='http://gaming.adobe.com/technologies/flascc/'>Adobe FlasCC</a> &amp; <a href='https://github.com/adobe/GLS3D'>GLS3D</a>.</p>
+            <p>&copy; %COMPANY_NAME%.</p> 
+
+        </div>
+      </section>
+    </div>
+
+  
+  </body>
+</html>

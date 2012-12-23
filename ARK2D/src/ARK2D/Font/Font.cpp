@@ -11,7 +11,9 @@
 
 namespace ARK {
 	namespace Font {
-		Font::Font() {
+		Font::Font(): 
+			ARK::Core::Resource() 
+			{
  
 		}
 

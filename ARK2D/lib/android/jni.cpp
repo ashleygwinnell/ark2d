@@ -16,6 +16,8 @@ GameTimer* timer = NULL;
 Log* arklog = NULL;
 JNIEnv* s_env = NULL;
 
+bool gamePaused = false;
+
 bool s_initted = false;
 
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeInit(JNIEnv* env, jclass cls, jstring apkPath, jstring externalDataPath) {
@@ -76,13 +78,24 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	game->init(container);
 	arklog->i("game class initialised!");
 
-	s_initted = true;
+	s_initted = true;	
 }
+
+
+
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeResize(JNIEnv* env, jclass  thiz, jint w, jint h) {
 	//__android_log_print(ANDROID_LOG_INFO, "%GAME_CLASS_NAME%Activity", "resize w=%d h=%d", w, h);
 	if (container != NULL) {
 		container->setSize((int) w, (int) h);
 		//game->resize(container, (int) w, (int) h);
+
+		// have we just come from a resume? 
+		if (gamePaused == true) 
+		{ 
+			// do this after the context is created otherwise it won't work. 
+			TextureStore::getInstance()->reloadTextures();
+			gamePaused = false;
+		}
 	}
 }
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeDone(JNIEnv* env) {
@@ -91,20 +104,30 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		container->close();
 	}
 }
+
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativePause(JNIEnv* env,  jclass cls) {
 	// stop...
 	if (arklog != NULL) {
-		arklog->i("native pause start");
-		game->pause();
-		arklog->i("native pause end");
+		if (!gamePaused) { 
+			arklog->i("native pause start");
+			game->pause(); 
+			gamePaused = true;
+			arklog->i("native pause end");
+		} else {
+			arklog->i("native pause: game paused when already paused?");
+		}
 	}
 }
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeResume(JNIEnv* env,  jclass cls) {
 	// stop...
 	if (arklog != NULL) {
-		arklog->i("native resume start");
-		game->resume();
-		arklog->i("native resume end");
+		if (gamePaused == true) { 
+			arklog->i("native resume start");
+			game->resume();			
+			arklog->i("native resume end");
+		} else {
+			arklog->i("native resume: game resumed when already running?");
+		}
 	}
 }
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeBackPressed(JNIEnv* env,  jclass cls) {

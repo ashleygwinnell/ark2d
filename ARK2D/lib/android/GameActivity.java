@@ -225,7 +225,8 @@ class %GAME_CLASS_NAME%View extends GLSurfaceView {
 }
  
 class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
-	//public static boolean s_initted = false;
+	public static boolean s_initted = false;
+
 	public Context context;
 	public %GAME_CLASS_NAME%Renderer(Context context) {
 		this.context = context;
@@ -244,12 +245,11 @@ class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
 	@Override  
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
 	//	nativeInit();   
-		//if (s_initted) {
-		//	Log.i("game", "Surface Already Created");
-		//} else {
+		if (s_initted) {
+			Log.i("game", "Surface Already Created");
+		} else {
 			Log.i("game", "Surface Created");
-			//s_initted = true;
-		 
+			
 			String apkFilePath = null; 
 			ApplicationInfo appInfo = null;
 			String externalDataPath = null; 
@@ -267,10 +267,13 @@ class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
 		
 			createDir(externalDataPath);
 			createDir(externalDataPath+"assets/"); 
-			
+
+			// TODO: create other resource directories for project.
 			
 			nativeInit(apkFilePath, externalDataPath);
-		//}
+
+			s_initted = true;
+		}
 	}
 	@Override
 	public void onSurfaceChanged(GL10 gl, int width, int height) {

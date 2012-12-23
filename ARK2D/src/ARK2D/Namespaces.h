@@ -81,6 +81,9 @@ namespace ARK {
 		class SpriteSheetDescriptionItem;
 		class Image;
 
+		class Texture;
+		class TextureStore;
+
 		//! Classes for loading different images types in to pixel buffers.
 		namespace ImageIO {
 			class BMPImage;

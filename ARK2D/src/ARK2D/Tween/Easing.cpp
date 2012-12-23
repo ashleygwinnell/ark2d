@@ -168,13 +168,13 @@ namespace ARK {
 
 				case Easing::SINE_IN:
 
-					return -change * (float) cos(time / duration * (PI / 2)) + change + start;
+					return -change * (float) cos(time / duration * (MY_PI / 2)) + change + start;
 
 				case Easing::SINE_OUT:
-					return change * (float) sin(time / duration * (PI / 2)) + start;
+					return change * (float) sin(time / duration * (MY_PI / 2)) + start;
 
 				case Easing::SINE_IN_OUT:
-					return -change / 2 * ((float) cos(PI * time / duration) - 1) + start;
+					return -change / 2 * ((float) cos(MY_PI * time / duration) - 1) + start;
 
 				case Easing::EXPONENTIAL_IN:
 					return (time==0) ? start : change * (float)pow(2, 10 * (time/duration - 1)) + start;

@@ -15,7 +15,7 @@ Log* ARK2D::s_log = 0;
 
 GameContainer* ARK2D::getContainer() {
 	return s_container;
-}
+} 
 
 Game* ARK2D::getGame() {  
 	return s_game;
@@ -35,7 +35,9 @@ Log* ARK2D::getLog() {
 
 		
 unsigned int ARK2D::getPlatform() {
-	#if defined(ARK2D_WINDOWS)
+	#if defined(ARK2D_FLASCC)
+		return PLATFORM_BROWSER_FLASCC;
+	#elif defined(ARK2D_WINDOWS)
 		return PLATFORM_WINDOWS;
 	#elif defined(ARK2D_MACINTOSH)
 		return PLATFORM_OSX;
@@ -44,9 +46,12 @@ unsigned int ARK2D::getPlatform() {
 	#elif defined(ARK2D_ANDROID)
 		return PLATFORM_ANDROID;
 	#endif 
+		
 }
 std::string ARK2D::getPlatformString() {
-	#if defined(ARK2D_WINDOWS)
+	#if defined(ARK2D_FLASCC)
+		return "flascc";
+	#elif defined(ARK2D_WINDOWS)
 		return "windows";
 	#elif defined(ARK2D_MACINTOSH)
 		return "osx";

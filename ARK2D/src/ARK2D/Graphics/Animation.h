@@ -31,6 +31,7 @@ namespace ARK {
 				Image* getFrame(unsigned int i);
 
 				void update(GameTimer* timer);
+				void update(float delta);
 
 				void setTime(float f);
 

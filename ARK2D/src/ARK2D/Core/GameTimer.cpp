@@ -62,6 +62,8 @@ namespace ARK {
 				return (now.tv_sec + now.tv_usec); 
 			#elif defined(ARK2D_ANDROID)
 				return clock();
+			#elif defined(ARK2D_FLASCC)
+				return clock();
 			#elif defined(ARK2D_WINDOWS)
 				return clock();
 			#elif defined(ARK2D_MACINTOSH)
@@ -104,6 +106,10 @@ namespace ARK {
 		 * Signifies a new frame in the game.
 		 */
 		void GameTimer::tick() {
+
+			#ifdef ARK2D_FLASCC
+				return;
+			#endif
 
 			// Get the number of ticks passed since program launch.
 			m_CurrentTicks = millis(); //clock();

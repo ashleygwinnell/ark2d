@@ -33,8 +33,9 @@
 
 //template <class T>
 //class GigaRectangle;
-
-#if defined(ARK2D_ANDROID)
+#if defined(ARK2D_FLASCC)
+ 	#include "Platform/GameContainerFlascc.h"
+#elif defined(ARK2D_ANDROID)
 	#include "Platform/GameContainerAndroid.h"
 #elif defined(ARK2D_IPHONE)
 	#include "Platform/GameContainerIPhone.h"
@@ -127,7 +128,7 @@ namespace ARK {
 
 				bool isShowingFPS();
 				void setShowingFPS(bool b);
-		#if defined(ARK2D_ANDROID)
+		#if defined(ARK2D_ANDROID) || defined(ARK2D_FLASCC)
 				void renderFPS();
 		#else
 			private:
@@ -145,7 +146,12 @@ namespace ARK {
 				void enable2D();
 				void disable2D();
 
-			private:
+			#ifdef ARK2D_FLASCC
+				public:
+			#else 
+				private:
+			#endif
+
 
 				void resize(int w, int h);
 				
@@ -199,10 +205,12 @@ namespace ARK {
 
 				Color m_clearColor;
 
+			public:
 				bool m_bRunning;
-
+			private:
 				int m_resizeBehaviour;
 				bool m_showingFPS;
+
 
 
 			// Platform Specific

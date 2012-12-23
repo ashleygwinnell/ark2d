@@ -10,6 +10,10 @@
 #include "../Util/Log.h" 
 #include "../vendor/FileInterface.h"
 
+#include "../Includes.h"
+
+
+
 namespace ARK {
 	namespace Audio {
 		ALfloat Sound::ListenerPos[3] = { 0.0, 0.0, 0.0 };
@@ -86,100 +90,149 @@ namespace ARK {
 		}
 
 
+		/*AS3::ui::var soundEventHandler(void *arg, AS3::ui::var as3Args){
+		    AS3::ui::flash::events::Event event = (AS3::ui::flash::events::Event) as3Args[0];
+		    AS3::ui::String type = event->type;
+		    
+		    // convert to std::string
+		    std::string typeStr = AS3::sz2stringAndFree(AS3::ui::internal::utf8_toString(type));
 
+		    printf("Event [%s]\n", typeStr.c_str());
+		    
+		    return AS3::ui::internal::_undefined;
+		}*/
 
 		// returns true on success.
 		bool Sound::load(bool loop) {
 
-		//	#if defined(ARK2D_ANDROID)
-		//		return false;
-		//	#else
+			#if defined(ARK2D_FLASCC)
 
-				// Discard previous errors:
-				alGetError();
+				//string ext = StringUtil::getExtension(m_FileName);
+				//if (ext != "mp3") {
+				//	ARK2D::getLog()->e("Can only load mp3s in flascc export.");
+				//	return false;
+				//}
 
-				// Generate an open buffer.
-				alGenBuffers(1, &Buffer);
-				ALenum bufferGenError = alGetError();
-				if (bufferGenError != AL_NO_ERROR || Buffer == AL_NONE) {
-					ErrorDialog::createAndShow("Error creating OpenAL Buffers.");
-					deinit();
-					return false; //alutGetErrorString(bufferGenError);
-				}
+				const char* str = m_FileName.c_str();
 
-				// Load Sound contents!
-				bool b = false;
-				string ext = StringUtil::getExtension(m_FileName);
-				if (ext == "wav") {
-					b = loadWAV(loop);
-				} else if (ext == "ogg") {
-					b = loadOGG(loop);
-				} else {
-					string errStr = "Can only load WAV and OGG (1): ";
-					errStr += m_FileName;
-					ErrorDialog::createAndShow(errStr);
-					deinit();
-					return false;
-				}
+				inline_as3(
+					"import com.adobe.flascc.Console;\n"\
+					"Console.loadSound(CModule.readString(%0, %1));\n" 
+					: : "r"(str), "r"(strlen(str))
+				);
 
-				if (b == false) {
-					deinit();
-					//std::cout << "Did not load sound " << m_FileName << std::endl;
-					return false;
-				}
+				/*AS3::ui::String url(m_FileName.c_str());
+				AS3::ui::flash::net::URLRequest request = AS3::ui::flash::net::URLRequest::_new(url);
+    			AS3::ui::flash::media::Sound soundFactory = AS3::ui::flash::media::Sound::_new();
+    			AS3::ui::flash::media::SoundChannel song = AS3::ui::flash::media::SoundChannel::_new();
 
-				// By now, the file is loaded and copied into the Buffer.
-				// So, bind the Buffer with a Source.
-				// (clear error first)
-				/*ALenum derpError = alGetError();
-				if (derpError != AL_NO_ERROR) {
-					string str = "pre gen sources error in load() OpenAL: ";
-					str += getALErrorString(derpError);
-					ErrorDialog::createAndShow(str);
-					deinit();
-					return false;
-				}*/
+    			soundFactory->addEventListener(AS3::ui::flash::events::Event::COMPLETE,
+                                   			   AS3::ui::Function::_new(soundEventHandler, NULL));
+			    soundFactory->addEventListener(AS3::ui::flash::events::Event::ID3,
+			                                   AS3::ui::Function::_new(soundEventHandler, NULL));
+			    soundFactory->addEventListener(AS3::ui::flash::events::IOErrorEvent::IO_ERROR,
+			                                   AS3::ui::Function::_new(soundEventHandler, NULL));
+			    soundFactory->addEventListener(AS3::ui::flash::events::ProgressEvent::PROGRESS,
+			                                   AS3::ui::Function::_new(soundEventHandler, NULL));
+			    
+			    soundFactory->load(request);
+			    
+			    song = soundFactory->play();*/ 
 
-				alGetError();
-				alGenSources(1, &Source);
-
-			/*	ALenum sourceGenError = alGetError();
-				if (sourceGenError != AL_NO_ERROR || Source == AL_NONE) {
-					string errStr = "Error creating OpenAL Sources for file:\r\n ";
-					errStr += m_FileName + "\r\n";
-					errStr += getALErrorString(sourceGenError);
-					ErrorDialog::createAndShow(errStr);
-					deinit();
-					return false; //alutGetErrorString(sourceGenError);
-				}*/
-
-
-				// Source Location details
-				alSourcef (Source, AL_PITCH,    1.0     ); //miscerror("pitch");
-				alSourcef (Source, AL_GAIN,     1.0     ); //miscerror("gain");
-				alSourcefv(Source, AL_POSITION, SourcePos); //miscerror("pos");
-				alSourcefv(Source, AL_VELOCITY, SourceVel); //miscerror("vel");
-				alSourcei (Source, AL_BUFFER,   Buffer   ); //miscerror("buf");
-				alSourcei (Source, AL_LOOPING,  AL_FALSE ); //miscerror("loop");
-
-				miscerror("source");
-
-				// Do another error check and return.
-				/*ALenum s = alGetError();
-				if (s != AL_NO_ERROR) {
-					string str = "Miscellaneous error in load() OpenAL: ";
-					str += getALErrorString(s);
-					ErrorDialog::createAndShow(str);
-					deinit();
-					return false; //alutGetErrorString(s);
-				}*/
 				return true;
-		//	#endif
+			#else
+
+					//	#if defined(ARK2D_ANDROID)
+					//		return false;
+					//	#else
+
+					// Discard previous errors:
+					alGetError();
+
+					// Generate an open buffer.
+					alGenBuffers(1, &Buffer);
+					ALenum bufferGenError = alGetError();
+					if (bufferGenError != AL_NO_ERROR || Buffer == AL_NONE) {
+						ErrorDialog::createAndShow("Error creating OpenAL Buffers.");
+						deinit();
+						return false; //alutGetErrorString(bufferGenError);
+					}
+
+					// Load Sound contents!
+					bool b = false;
+					string ext = StringUtil::getExtension(m_FileName);
+					if (ext == "wav") {
+						b = loadWAV(loop);
+					} else if (ext == "ogg") {
+						b = loadOGG(loop);
+					} else {
+						string errStr = "Can only load WAV and OGG (1): ";
+						errStr += m_FileName;
+						ErrorDialog::createAndShow(errStr);
+						deinit();
+						return false;
+					}
+
+					if (b == false) {
+						deinit();
+						//std::cout << "Did not load sound " << m_FileName << std::endl;
+						return false;
+					}
+
+					// By now, the file is loaded and copied into the Buffer.
+					// So, bind the Buffer with a Source.
+					// (clear error first)
+					/*ALenum derpError = alGetError();
+					if (derpError != AL_NO_ERROR) {
+						string str = "pre gen sources error in load() OpenAL: ";
+						str += getALErrorString(derpError);
+						ErrorDialog::createAndShow(str);
+						deinit();
+						return false;
+					}*/
+
+					alGetError();
+					alGenSources(1, &Source);
+
+				/*	ALenum sourceGenError = alGetError();
+					if (sourceGenError != AL_NO_ERROR || Source == AL_NONE) {
+						string errStr = "Error creating OpenAL Sources for file:\r\n ";
+						errStr += m_FileName + "\r\n";
+						errStr += getALErrorString(sourceGenError);
+						ErrorDialog::createAndShow(errStr);
+						deinit();
+						return false; //alutGetErrorString(sourceGenError);
+					}*/
+
+
+					// Source Location details
+					alSourcef (Source, AL_PITCH,    1.0     ); //miscerror("pitch");
+					alSourcef (Source, AL_GAIN,     1.0     ); //miscerror("gain");
+					alSourcefv(Source, AL_POSITION, SourcePos); //miscerror("pos");
+					alSourcefv(Source, AL_VELOCITY, SourceVel); //miscerror("vel");
+					alSourcei (Source, AL_BUFFER,   Buffer   ); //miscerror("buf");
+					alSourcei (Source, AL_LOOPING,  AL_FALSE ); //miscerror("loop");
+
+					miscerror("source");
+
+					// Do another error check and return.
+					/*ALenum s = alGetError();
+					if (s != AL_NO_ERROR) {
+						string str = "Miscellaneous error in load() OpenAL: ";
+						str += getALErrorString(s);
+						ErrorDialog::createAndShow(str);
+						deinit();
+						return false; //alutGetErrorString(s);
+					}*/
+					return true;
+			//	#endif
+			#endif
 		}
 
 		void Sound::miscerror(string ss) {
-		//	#if defined(ARK2D_ANDROID)
-		//	#else
+			#if defined(ARK2D_FLASCC)
+
+			#else
 				ALenum s = alGetError();
 				if (s != AL_NO_ERROR) {
 					string str = "Miscellaneous error in load() OpenAL: ";
@@ -189,7 +242,7 @@ namespace ARK {
 					deinit();
 					//exit(0);
 				}
-		//	#endif
+			#endif
 		}
 
 
@@ -229,9 +282,9 @@ namespace ARK {
 
 		bool Sound::loadOGG(bool loop) {
 
-			//#if defined(ARK2D_ANDROID)
-			//	return false;
-			//#else
+			#if defined(ARK2D_FLASCC)
+				return false;
+			#else
 
 				// references
 				// http://www.ogre3d.org/tikiwiki/OpenAl+Soundmanager
@@ -472,10 +525,10 @@ namespace ARK {
 
 				//return true;
 				return true;
-			//#endif
+			#endif
 		}
 		bool Sound::loadWAV(bool loop) {
-			#if ( defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE) )
+			#if ( defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE)  || defined(ARK2D_FLASCC))
 				ARK2D::getLog()->e("Wav not supported on Android");
 				return false;
 			#elif ( defined(ARK2D_WINDOWS) || defined(ARK2D_UBUNTU_LINUX) )
@@ -721,25 +774,78 @@ namespace ARK {
 		// alDopplerVelocity( 343.0f ); // m/s this may need to be scaled at some point
 
 		void Sound::play() {
-			alSourcePlay(Source);
+			#if defined(ARK2D_FLASCC) 
+				const char* str = m_FileName.c_str();
+				inline_as3(
+					"import com.adobe.flascc.Console;\n"\
+					"Console.playSound(CModule.readString(%0, %1));\n" 
+					: : "r"(str), "r"(strlen(str))
+				);
+			#else 
+				alSourcePlay(Source);
+			#endif
 		}
 		bool Sound::isPlaying() {
-			ALint state;
-			alGetSourcei(Source, AL_SOURCE_STATE, &state);
-			return (state == AL_PLAYING);
+			#if defined(ARK2D_FLASCC) 
+				
+
+				// Use AS3 to negate a 32bit int!
+			   /* int someint = 123;
+			    int intresult = 0;
+			    inline_as3(
+			        "%0 = -%1;\n"
+			        : "=r"(intresult) : "r"(someint)
+			    );*/
+
+			    int playing = 0; // 0 for false, 1 for true.
+			    const char* str = m_FileName.c_str();
+				inline_as3(
+					"import com.adobe.flascc.Console;\n"\
+					"%0 = Console.isPlayingSound(CModule.readString(%1, %2));\n" 
+					: "=r"(playing) : "r"(str), "r"(strlen(str))
+				);
+
+				return (playing == 1);
+			#else 
+				ALint state;
+				alGetSourcei(Source, AL_SOURCE_STATE, &state);
+				return (state == AL_PLAYING);
+			#endif
 		}
 		void Sound::stop() {
-			alSourceStop(Source);
+			#if defined(ARK2D_FLASCC) 
+				const char* str = m_FileName.c_str();
+				inline_as3(
+					"import com.adobe.flascc.Console;\n"\
+					"Console.stopSound(CModule.readString(%0, %1));\n" 
+					: : "r"(str), "r"(strlen(str))
+				);
+			#else 
+				alSourceStop(Source);
+			#endif
 		}
 		void Sound::pause() {
-			alSourcePause(Source);
+			#if defined(ARK2D_FLASCC) 
+				const char* str = m_FileName.c_str();
+				inline_as3(
+					"import com.adobe.flascc.Console;\n"\
+					"Console.pauseSound(CModule.readString(%0, %1));\n" 
+					: : "r"(str), "r"(strlen(str))
+				);
+			#else 
+				alSourcePause(Source);
+			#endif
 		}
 		float Sound::getVolume() {
 			return m_volume;
 		}
 		void Sound::setVolume(float volume) {
 			m_volume = volume;
-			alSourcef(Source, AL_GAIN, volume);
+			#if defined(ARK2D_FLASCC) 
+			
+			#else 
+				alSourcef(Source, AL_GAIN, volume);
+			#endif
 		}
 
 		float Sound::getPitch() {
@@ -747,12 +853,19 @@ namespace ARK {
 		}
 		void Sound::setPitch(float pitch) {
 			m_pitch = pitch;
-			alSourcef(Source, AL_PITCH, pitch);
+
+			#if defined(ARK2D_FLASCC) 
+			#else 
+				alSourcef(Source, AL_PITCH, pitch);
+			#endif
 		}
 
 		void Sound::setPanning(float pan) {
 			SourcePos[0] = pan;
-			alSourcefv(Source, AL_POSITION, SourcePos);
+			#if defined(ARK2D_FLASCC) 
+			#else 
+				alSourcefv(Source, AL_POSITION, SourcePos);
+			#endif
 			//std::cerr << "OpenAL is broken -- seek alternative." << std::endl;
 		}
 
@@ -764,53 +877,62 @@ namespace ARK {
 		}
 
 		string Sound::getALErrorString(ALenum err) {
-			switch(err)
-			{
-				case AL_NO_ERROR:
-					return string("AL_NO_ERROR");
-					break;
-				case AL_INVALID_NAME:
-					return string("AL_INVALID_NAME");
-					break;
-				case AL_INVALID_ENUM:
-					return string("AL_INVALID_ENUM");
-					break;
-				case AL_INVALID_VALUE:
-					return string("AL_INVALID_VALUE");
-					break;
-				case AL_INVALID_OPERATION:
-					return string("AL_INVALID_OPERATION");
-					break;
-				case AL_OUT_OF_MEMORY:
-					return string("AL_OUT_OF_MEMORY");
-					break;
-			};
-			//return "AL_UNKNOWN_ERROR";
-			//const char* ch = (const char*) alGetString(err);
-			//if (ch == NULL) {
-			//	std::cout << "errorstr: " << err << std::endl;
+			#if defined(ARK2D_FLASCC) 
+				return string("UNKNOWN_ERROR");
+			#else 
+				switch(err)
+				{
+					case AL_NO_ERROR:
+						return string("AL_NO_ERROR");
+						break;
+					case AL_INVALID_NAME:
+						return string("AL_INVALID_NAME");
+						break;
+					case AL_INVALID_ENUM:
+						return string("AL_INVALID_ENUM");
+						break;
+					case AL_INVALID_VALUE:
+						return string("AL_INVALID_VALUE");
+						break;
+					case AL_INVALID_OPERATION:
+						return string("AL_INVALID_OPERATION");
+						break;
+					case AL_OUT_OF_MEMORY:
+						return string("AL_OUT_OF_MEMORY");
+						break;
+				};
+				//return "AL_UNKNOWN_ERROR";
+				//const char* ch = (const char*) alGetString(err);
+				//if (ch == NULL) {
+				//	std::cout << "errorstr: " << err << std::endl;
 
-			return string("AL_UNKNOWN_ERROR");
+				return string("AL_UNKNOWN_ERROR");
+			#endif
 			//} else {
 			//	return string(ch);
 			//}
 		}
 		string Sound::getOggErrorString(int code) {
-			switch(code) {
-				case OV_EREAD:
-					return string("Read from media.");
-				case OV_ENOTVORBIS:
-					return string("Not Vorbis data.");
-				case OV_EVERSION:
-					return string("Vorbis version mismatch.");
-				case OV_EBADHEADER:
-					return string("Invalid Vorbis header.");
-				case OV_EFAULT:
-					return string("Internal logic fault (bug or heap/stack corruption.");
-				default:
-					return string("Unknown Ogg error.");
-			}
+			#if defined(ARK2D_FLASCC) 
+				return "";
+			#else 
+				switch(code) {
+					case OV_EREAD:
+						return string("Read from media.");
+					case OV_ENOTVORBIS:
+						return string("Not Vorbis data.");
+					case OV_EVERSION:
+						return string("Vorbis version mismatch.");
+					case OV_EBADHEADER:
+						return string("Invalid Vorbis header.");
+					case OV_EFAULT:
+						return string("Internal logic fault (bug or heap/stack corruption.");
+					default:
+						return string("Unknown Ogg error.");
+				}
+			#endif
 		}
+
 		unsigned short Sound::wav_readByte16(const unsigned char buffer[2]) {
 			if (ARK2D::isBigEndian()) {
 				return (buffer[0] << 8) + buffer[1];
@@ -827,15 +949,18 @@ namespace ARK {
 		}
 
 		void Sound::deinit() {
+			#if defined(ARK2D_FLASCC) 
 
-			// make sure source and buffer ids are valid before trying to delete.
-			if (alIsSource(Source)) {
-				alSourceStop(Source);
-				alDeleteSources(1, &Source);
-			}
-			if (alIsBuffer(Buffer)) {
-				alDeleteBuffers(1, &Buffer);
-			}
+			#else 
+				// make sure source and buffer ids are valid before trying to delete.
+				if (alIsSource(Source)) {
+					alSourceStop(Source);
+					alDeleteSources(1, &Source);
+				}
+				if (alIsBuffer(Buffer)) {
+					alDeleteBuffers(1, &Buffer);
+				}
+			#endif
 		}
 
 		Sound::~Sound() {

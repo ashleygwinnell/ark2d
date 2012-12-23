@@ -181,9 +181,16 @@ static int darwin_scancode_table[] = {
 {
     //Monocle::Game::Quit();
 	//Cocoa_DestroyWindow(_data);
-    printf("closed windowlsitener\r\n");
-    [m_window close];
-    exit(0);
+ 
+	//printf("closing windowlistener...\r\n");
+	//ARK2D::getContainer()->close();
+
+    //printf("closed windowlistener\r\n");
+    //[m_window close];
+
+	printf("setting gamecontainer as not running...\r\n");
+    ARK2D::getContainer()->m_bRunning = false;
+    
     //[NSApp close:sender];
    // [NSApp close];
    // [m_window release];

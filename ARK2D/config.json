@@ -99,6 +99,7 @@
 			"src/ARK2D/Graphics/SpriteSheetDescriptionItem.cpp",
 			"src/ARK2D/Graphics/Image.cpp",
 			"src/ARK2D/Graphics/Texture.cpp",
+			"src/ARK2D/Graphics/TextureStore.cpp",
 			"src/ARK2D/Graphics/ImageIO/BMPImage.cpp",
 			"src/ARK2D/Graphics/ImageIO/PNGImage.cpp",
 			"src/ARK2D/Graphics/ImageIO/TargaImage.cpp",
@@ -254,6 +255,9 @@
 			"src/ARK2D/Core/Platform/GameContainerIPhoneAppDelegate.mm",
 			"src/ARK2D/Core/Platform/GameContainerIPhoneGLView.mm",
 			"src/ARK2D/Core/Platform/GameContainerIPhone.mm"
-		]	
+		],
+		"flascc": [
+			"src/ARK2D/Core/Platform/GameContainerFlascc.cpp"
+		]
 	}
 }

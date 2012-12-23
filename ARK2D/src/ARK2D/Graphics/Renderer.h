@@ -20,7 +20,7 @@
 
 
 
-namespace ARK {
+namespace ARK { 
 	namespace Graphics {
 
 		class RendererStats 

@@ -11,6 +11,7 @@
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Image.h"
 #include "../Graphics/Color.h"
+#include "../Graphics/Texture.h"
 #include "../Util/Log.h"
 
 #include "ParticleSystem.h"
@@ -159,7 +160,7 @@ namespace ARK {
 				if (image == NULL && !emitter->usePoints()) {// && (!usePoints)) {
 					//image = sprite;
 					//emitter->u
-					RendererState::start(RendererState::TEXTURE, sprite->getTextureId());
+					RendererState::start(RendererState::TEXTURE, sprite->getTexture()->getId());
 					//sprite->bind(); // we need to cancel this out if we're rendering points.
 				}
 

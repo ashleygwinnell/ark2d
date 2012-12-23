@@ -117,7 +117,7 @@ namespace ARK {
 				BMFont(void* data, Image* i);
 				BMFont(const string& f, const string& i);
 				BMFont(const string& f, const string& i, const Color& mask);
-				void drawString(const string& Str, int drawx, int drawy);
+				virtual void drawString(const string& Str, int drawx, int drawy);
 				void drawString(const std::string str, float x, float y, signed int alignX, signed int alignY, float rotation=0.0f, float scale=1.0f);
 				unsigned int getStringWidth(const string& Str) const;
 				unsigned int getStringHeight(const string& Str) const;

@@ -11,7 +11,7 @@
 #include "../ARK2D.h"
 
 // FreeType Headers
-#if (defined(ARK2D_IPHONE) || defined(ARK2D_ANDROID) || defined(ARK2D_WINDOWS) || defined(ARK2D_MACINTOSH))
+#if (defined(ARK2D_IPHONE) || defined(ARK2D_ANDROID) || defined(ARK2D_WINDOWS) || defined(ARK2D_MACINTOSH) || defined(ARK2D_FLASCC))
 	#include <ft2build.h>
 	#include <freetype/freetype.h>
 	#include <freetype/ftglyph.h>

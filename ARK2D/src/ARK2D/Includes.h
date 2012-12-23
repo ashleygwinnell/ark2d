@@ -8,8 +8,59 @@
 #ifndef INCLUDES_H_
 #define INCLUDES_H_
 
+ 	#if defined(__AVM2__) 
+ 
+ 		#ifndef ARK2D_FLASCC
+			#define ARK2D_FLASCC
+		#endif
 
-	#if defined(ARK2D_ANDROID)
+		#define STL_AVAILABLE
+		#define EXCEPTIONS_AVAILABLE
+ 		#include <AS3/AS3.h>
+ 		#include <Flash++.h>
+
+ 		#include <string>
+		#include <vector>
+		#include <list>
+		#include <map>
+ 		#include <set>
+		#include <sstream>
+		#include <iostream>
+		#include <fstream>
+		#include <sys/time.h> 
+		#include <time.h>
+		#include <stdint.h>
+		#include <stdio.h>
+		#include <stdlib.h>
+		#include <sys/stat.h>
+		#include <sys/types.h>
+		#include <math.h> 
+		#include <algorithm>
+
+ 		//#include <inttypes.h>
+
+ 		#include <GL/gl.h>
+ 		#include <GL/glext.h>
+ 		#include <GL/glu.h>
+ 		//#include <GL/glxext.h>
+
+ 		/*#include <GLES/gl.h>
+		#include <GLES/glext.h>
+		#include <GLES/glplatform.h>
+
+ 		#include <GLES2/gl2.h>
+ 		#include <GLES2/gl2ext.h>*/
+
+ 		using namespace std;
+
+ 		typedef unsigned int ALenum;
+ 		typedef unsigned int ALuint;
+ 		typedef float ALfloat;
+
+ 		#include "vendor/libcurl/curl.h"
+
+
+	#elif defined(ARK2D_ANDROID)
  		#define STL_AVAILABLE
 
 		#include <string>
@@ -200,7 +251,7 @@
 	typedef void GLvoid;
 
 	#ifndef FBO_SUPPORT
-		#if (defined(ARK2D_WINDOWS)  || defined(ARK2D_ANDROID))
+		#if (defined(ARK2D_WINDOWS)  || defined(ARK2D_ANDROID) || defined(ARK2D_FLASCC))
 			//#define FBO_SUPPORT false
 		#else
 			#define FBO_SUPPORT true
@@ -208,7 +259,7 @@
 	#endif
 
 	#ifndef SHADER_SUPPORT
-		#if (defined(ARK2D_WINDOWS)  || defined(ARK2D_ANDROID))
+		#if (defined(ARK2D_WINDOWS)  || defined(ARK2D_ANDROID) || defined(ARK2D_FLASCC))
 			//#define SHADER_SUPPORT false
 		#else
 			#define SHADER_SUPPORT true

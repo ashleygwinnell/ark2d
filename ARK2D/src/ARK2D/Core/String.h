@@ -30,7 +30,7 @@ namespace ARK {
 				String(): ARK::Core::Resource(), m_string("") {
 
 				}
-				String(std::string s): m_string(s) {
+				String(std::string s): ARK::Core::Resource(), m_string(s) {
 
 				}
 

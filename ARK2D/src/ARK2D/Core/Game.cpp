@@ -26,6 +26,7 @@ namespace ARK {
 
 		Game::~Game() {
 			// delete &m_strTitle; std::strings clean themselves up!
+			delete m_timeline;
 		}
 
 		//void Game::init(GameContainer& container) = 0;
@@ -121,11 +122,12 @@ namespace ARK {
 		{
 
 		}
-		
+
 		void Game::resume() 
 		{
 
 		}
+
 
 		void Game::keyPressed(unsigned int key) {
 
