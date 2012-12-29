@@ -79,7 +79,7 @@ namespace ARK {
                     }
                 //    container->m_platformSpecific.initOpenGL2D(width, height);
 				}
-			#elif (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS))
+			#elif (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS) || defined(ARK2D_FLASCC))
 				float tx = float(container->getDynamicWidth() - (float(container->getWidth())*container->getScale()))/2;
                 float ty = float(container->getDynamicHeight() - (float(container->getHeight())*container->getScale()))/2;
                 container->m_translateX = (int) tx;

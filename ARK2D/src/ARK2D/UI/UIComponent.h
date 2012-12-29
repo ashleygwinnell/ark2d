@@ -36,9 +36,9 @@ namespace ARK {
 					if (b) { s_currentFocus = this; } 
 				}
 				bool isFocussed() { return m_focussed; }
-				virtual int getX() = 0;
-				virtual int getY() = 0;
-				virtual void setLocation(int x, int y) = 0;
+				virtual float getX() = 0;
+				virtual float getY() = 0;
+				virtual void setLocation(float x, float y) = 0;
 				virtual void setSize(unsigned int w, unsigned int h) = 0;
 				virtual ~UIComponent() {
 

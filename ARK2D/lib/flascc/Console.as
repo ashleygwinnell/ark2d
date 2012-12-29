@@ -2,11 +2,12 @@ package com.adobe.flascc
 {
   import flash.display.Bitmap;
   import flash.display.BitmapData;
-  import flash.display.DisplayObjectContainer;
+  import flash.display.DisplayObjectContainer; 
   import flash.display.Sprite;
   import flash.display.Stage3D;
   import flash.display.StageAlign;
   import flash.display.StageScaleMode;
+  import flash.display.StageDisplayState;
   import flash.display3D.Context3D;
   import flash.display3D.Context3DProfile;
   import flash.display3D.Context3DRenderMode;
@@ -26,6 +27,7 @@ package com.adobe.flascc
   import flash.geom.*;
   import flash.media.Sound;
   import flash.media.SoundChannel;
+  import flash.media.SoundTransform;
   import flash.net.LocalConnection;
   import flash.net.URLLoader;
   import flash.net.URLLoaderDataFormat;
@@ -43,6 +45,7 @@ package com.adobe.flascc
   import com.adobe.flascc.CModule;
   import com.adobe.flascc.vfs.gamevfs;
   import com.adobe.flascc.vfs.InMemoryBackingStore;
+  import com.adobe.flascc.vfs.LSOBackingStore;
   import com.adobe.flascc.vfs.ISpecialFile;
   import com.adobe.flascc.vfs.zip.*;
   import GLS3D.GLAPI;
@@ -88,6 +91,7 @@ package com.adobe.flascc
   {
     private var m_sound:Sound;
     private var m_channel:SoundChannel;
+    private var m_transform;
     private var m_isSoundPlaying:Boolean;
     private var m_pausePosition:int;
 
@@ -95,6 +99,7 @@ package com.adobe.flascc
     {
       m_sound = null;
       m_channel = null;
+      m_transform = null;
       m_isSoundPlaying = false;
       m_pausePosition = 0;
 
@@ -102,6 +107,9 @@ package com.adobe.flascc
   
       var d:ByteArray = Console.s_gamevfs.getFile(s);
       m_sound.loadCompressedDataFromByteArray( d, d.length );
+      m_transform = new SoundTransform();
+      m_transform.volume = 1.0;
+
     }
 
     public function play():void
@@ -110,6 +118,7 @@ package com.adobe.flascc
       {
         m_channel = m_sound.play(m_pausePosition);
         m_channel.addEventListener(Event.SOUND_COMPLETE, s_handleSoundComplete);
+        m_channel.soundTransform = m_transform;
         
         m_isSoundPlaying = true;
       }
@@ -137,6 +146,16 @@ package com.adobe.flascc
     public function isPlaying():Boolean
     {
       return m_isSoundPlaying;
+    }
+    
+    public function setVolume(v:Number):void
+    {
+      if (m_channel != null) {
+        if (m_channel.soundTransform != null) {
+          m_transform.volume = v;
+          m_channel.soundTransform = m_transform;
+        }
+      }
     }
 
     private function s_handleSoundComplete(ev:Event):void
@@ -196,7 +215,7 @@ package com.adobe.flascc
         trace("AS3: pausing sound " + s);
         s_audioMap[s].pause();
     }
-    public static function stoppingSound(s:String):void
+    public static function stopSound(s:String):void
     {
         trace("AS3: stopping sound " + s);
         s_audioMap[s].stop();
@@ -206,16 +225,80 @@ package com.adobe.flascc
         trace("AS3: is playing sound " + s);
         return (s_audioMap[s].isPlaying())?1:0;
     }
+    public static function setSoundVolume(s:String, v:Number):void
+    {
+      trace("AS3: setting sound volume " + s + " = " + v);
+      s_audioMap[s].setVolume(v);
+    }
     
+    // misc functions
+    //public static var s_urlRequestDone:Boolean = false;
+    public static var s_urlResponse:String = "";
+    public static function urlRequest(s:String):void
+    {
+      var req:URLRequest = new URLRequest(s);
+      //req.method = URLRequestMethod.POST;
 
+      var loader:URLLoader = new URLLoader();
+      loader.dataFormat = URLLoaderDataFormat.TEXT;
+      loader.addEventListener(Event.OPEN, urlLoader_openHandler);
+      loader.addEventListener(Event.COMPLETE, urlLoader_complete);
+      loader.addEventListener(IOErrorEvent.IO_ERROR, urlLoader_ioErrorHandler);
+      loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, urlLoader_securityErrorHandler);
+      loader.load(req);
 
+      function urlLoader_openHandler(evt:Event):void { 
+        trace("url opened."); 
+      }
+      function urlLoader_ioErrorHandler(evt:Event):void { 
+        //Console.s_urlRequestDone = true; 
+        s_urlResponse = "io error";
+        trace("io error"); 
+      }
+      function urlLoader_securityErrorHandler(evt:Event):void { 
+        //Console.s_urlRequestDone = true; 
+        s_urlResponse = "security error";
+        trace("security error"); 
+      }
 
+      function urlLoader_complete(evt:Event):void { 
+        //Console.s_urlRequestDone = true; 
+        s_urlResponse = loader.data;
+      }
+      //Console.s_urlRequestDone = false;
+
+     // var r:String = loader.data;
+     // return r;
+    }
+
+    // fullscreen
+    public static function setFullscreen(b:Boolean):void
+    { 
+      try
+      {
+        if (b) { 
+          Console.s_console.stage.displayState = StageDisplayState.FULL_SCREEN; 
+          //Console.s_console.systemManager.stage.displayState = StageDisplayState.FULL_SCREEN;
+        } else {
+          Console.s_console.stage.displayState = StageDisplayState.NORMAL; 
+          //Console.s_console.systemManager.stage.displayState = StageDisplayState.NORMAL;
+        }
+      }
+      catch(e:Error)
+      {
+        trace(e);
+      }
+    }
+
+    public static var s_console:Console = null;
     /**
     * To Support the preloader case you might want to have the Console
     * act as a child of some other DisplayObjectContainer.
     */
     public function Console(container:DisplayObjectContainer = null)
     {
+      s_console = this;
+
       CModule.rootSprite = container ? container.root : this
 
       if(CModule.runningAsWorker()) {
@@ -285,7 +368,7 @@ package com.adobe.flascc
     private function context_created(e:Event):void
     {
       ctx3d = s3d.context3D
-      ctx3d.configureBackBuffer(stage.stageWidth, stage.stageHeight, 2, true /*enableDepthAndStencil*/ )
+      ctx3d.configureBackBuffer(stage.stageWidth, stage.stageHeight, 0, true /*enableDepthAndStencil*/ )
       ctx3d.enableErrorChecking = false;
       trace("Stage3D context: " + ctx3d.driverInfo);
 
@@ -502,23 +585,16 @@ package com.adobe.flascc
       }
     }
 
-  
-
-    /**
-    * The enterFrame callback is run once every frame. UI thunk requests should be handled
-    * here by calling <code>CModule.serviceUIRequests()</code> (see CModule ASdocs for more information on the UI thunking functionality).
-    */
-    protected function enterFrame(e:Event):void
+    protected function gameinit():void
     {
-      if(!inited) {
+      if (!inited) {
         inited = true 
-        //CModule.vfs.console = this
-        //CModule.vfs.addBackingStore(zfs, null)
-
-
+        
         s_gamevfs = new gamevfs();
         CModule.vfs.console = this;
         CModule.vfs.addBackingStore(s_gamevfs, null);
+        CModule.vfs.addDirectory("/local");
+        CModule.vfs.addBackingStore(new LSOBackingStore("gamevfsLSO"), "/local");
 
         CModule.startAsync(this, new <String>["/game.swf"])
 
@@ -537,6 +613,15 @@ package com.adobe.flascc
         m_keyUpPtr = CModule.getPublicSymbol("_Z18flascc_event_keyUpi");
 
       }
+    }
+
+    /**
+    * The enterFrame callback is run once every frame. UI thunk requests should be handled
+    * here by calling <code>CModule.serviceUIRequests()</code> (see CModule ASdocs for more information on the UI thunking functionality).
+    */
+    protected function enterFrame(e:Event):void 
+    {
+      gameinit();
 
  
 

@@ -29,7 +29,7 @@
 
     <script type="text/javascript" src="swfobject.js"></script>
     <script type="text/javascript">
-    swfobject.registerObject("gameswf", "11.4.0", "expressInstall.swf");
+    swfobject.registerObject("gameswf", "11.5.0", "expressInstall.swf");
  </script>
 </head>
   <body data-spy="scroll" data-target=".subnav" data-offset="50">
@@ -41,12 +41,13 @@
         </div>
         <div>
           
-            <object id="gameswf" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="%GAME_WIDTH%" height="%GAME_HEIGHT%">
+            <object id="gameswf" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="%GAME_WIDTH%" height="%GAME_HEIGHT%" allowFullscreen="true">
               <param name="movie" value="game.swf" />
               <!--[if !IE]>-->
               <object type="application/x-shockwave-flash" data="game.swf" width="%GAME_WIDTH%" height="%GAME_HEIGHT%">
               <!--<![endif]-->
                 <param name="wmode" value="direct" />
+                <param name="allowFullscreen" value="true"/>
                 <param name="allowScriptAccess" value="sameDomain" />
                 <param name="bgcolor" value="CCCCCC" /> 
                 <div>

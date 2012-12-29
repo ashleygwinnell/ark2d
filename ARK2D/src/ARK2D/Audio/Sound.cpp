@@ -842,7 +842,12 @@ namespace ARK {
 		void Sound::setVolume(float volume) {
 			m_volume = volume;
 			#if defined(ARK2D_FLASCC) 
-			
+				const char* str = m_FileName.c_str();
+				inline_as3(
+					"import com.adobe.flascc.Console;\n"\
+					"Console.setSoundVolume(CModule.readString(%0, %1), %2);\n" 
+					: : "r"(str), "r"(strlen(str)), "r"(volume)
+				);
 			#else 
 				alSourcef(Source, AL_GAIN, volume);
 			#endif

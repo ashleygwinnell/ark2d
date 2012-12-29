@@ -214,7 +214,7 @@ namespace ARK {
                 g->translate(container->getTranslateX(), container->getTranslateY());
                 g->pushMatrix();
                 g->scale(container->getScale(), container->getScale());
-            #elif (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS))
+            #elif (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS) || defined(ARK2D_FLASCC))
 
                	/*glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 				glLoadIdentity();
@@ -222,7 +222,7 @@ namespace ARK {
                	g->scissor(
 					container->getTranslateX(),
 					container->getTranslateY(),
-					container->getWidth() * container->getScaleX(),
+					container->getWidth() * container->getScaleX(), 
 					container->getHeight() * container->getScaleY()
 				)*/
 
@@ -241,7 +241,7 @@ namespace ARK {
 				if (container->getOrientation() == GameContainer::ORIENTATION_LANDSCAPE) {
 					g->popMatrix(); // pop rotate
 				}
-			#elif (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS))
+			#elif (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS) || defined(ARK2D_FLASCC))
 				g->popMatrix(); // pop scale
 				g->popMatrix(); // pop translate
 

@@ -175,14 +175,14 @@ namespace ARK {
 					cur_y += (signed int) g->getFont()->getLineHeight();
 				}
 			}
-		}
+		} 
 		
 		void TextField::renderCaret() {
 			int sw = ARK2D::getRenderer()->getFont()->getStringWidth(m_text.substring(0, m_cursorPosition).get());
 			renderCaret(  
 				m_x + getPaddingLeft() + sw,
 				m_y + getPaddingTop(),
-				m_x + getPaddingLeft() + sw,
+				m_x + getPaddingLeft() + sw, 
 				m_y + m_height - getPaddingBottom()
 			);
 		}

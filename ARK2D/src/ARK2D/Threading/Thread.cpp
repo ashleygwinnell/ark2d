@@ -83,11 +83,18 @@ namespace ARK {
 			}
 
 			void Thread::start() {
-				int rc = 0;
-				rc = pthread_create(&m_thread, NULL, (void* (*)(void*)) myLauncher, (void*) this);
-				if (rc) {
-					ErrorDialog::createAndShow(StringUtil::append("Error creating thread: ", rc));
-				}
+
+				#if defined(ARK2D_FLASCC)
+					ARK2D::getLog()->w("Threads not supported properly before Flash Player 11.5. Running thread now.");
+					doInternal();
+				#else
+
+					int rc = 0;
+					rc = pthread_create(&m_thread, NULL, (void* (*)(void*)) myLauncher, (void*) this);
+					if (rc) {
+						ErrorDialog::createAndShow(StringUtil::append("Error creating thread: ", rc));
+					}
+				#endif
 			}
 			void* Thread::doInternal() {
 				if (m_functionPointer != NULL) {
@@ -109,7 +116,7 @@ namespace ARK {
 			}
 			int Thread::getPriority() {
 				ARK2D::getLog()->w("no thread priorities on non-windows platforms.");
-				return 0;
+				return 0; 
 			}
 			void Thread::end() {
 				terminate();

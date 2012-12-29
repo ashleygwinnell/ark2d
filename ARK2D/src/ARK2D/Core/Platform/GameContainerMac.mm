@@ -149,34 +149,7 @@
 		
 			} 
 			
-			void ARK::Core::GameContainer::resizeBehaviour(int width, int height) {
-				if (m_resizeBehaviour == RESIZE_BEHAVIOUR_SCALE) 
-			    {
-			    	m_scaleX = (float) width / (float) m_originalWidth;
-					m_scaleY = (float) height / (float) m_originalHeight;
-					if (m_scaleX > m_scaleY) {
-						m_scale = m_scaleY;
-						m_scaleX = m_scaleY;
-						m_scaleY = 1.0f;
-					} else { // y > x
-						m_scale = m_scaleX;
-						m_scaleY = m_scaleX;
-						m_scaleX = 1.0f;
-					}
-					m_width = width;
-					m_height = height;
-
-			   		
-			    } else if (m_resizeBehaviour == RESIZE_BEHAVIOUR_NOSCALE) {
-			    	m_width = width; 
-			    	m_height = height;
-			    	//ARK2D::s_game->resize(this, width, height);
-			    	//ARK2D::getRenderer()->setScissorTestEnabled(false);
-			    	//ARK2D::getRenderer()->scissor(0,0,width,height);
-			    }
-			    ARK2D::s_game->resize(this, width, height);
-			}
-
+			
 			void ARK::Core::GameContainer::setSize(int width, int height) {
 
 				if (width == (signed int) m_width && height == (signed int) m_height) { return; }

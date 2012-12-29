@@ -15,54 +15,54 @@ namespace ARK {
 			m_x(0), m_y(0),
 			m_width(1), m_height(1),
 			m_padding(0,0,0,0),
-			m_margin(0,0,0,0),
+			m_margin(0,0,0,0), 
 			m_clipping(true),
 			m_visible(true),
 			m_enabled(true)
 			{
  
 		}
-		int AbstractUIComponent::getX() {
+		float AbstractUIComponent::getX() {
 			return m_x;
 		}
-		int AbstractUIComponent::getY() {
+		float AbstractUIComponent::getY() {
 			return m_y;
 		}
-		int AbstractUIComponent::getCenterX() {
+		float AbstractUIComponent::getCenterX() {
 			return m_x + (m_width/2);
 		}
-		int AbstractUIComponent::getCenterY() {
+		float AbstractUIComponent::getCenterY() {
 			return m_y + (m_height/2);
 		}
-		int AbstractUIComponent::getMaxX() {
+		float AbstractUIComponent::getMaxX() {
 			return m_x + m_width;
 		}
-		int AbstractUIComponent::getMaxY() {
+		float AbstractUIComponent::getMaxY() {
 			return m_y + m_height;
 		}
-		int AbstractUIComponent::getMinX() {
+		float AbstractUIComponent::getMinX() {
 			return m_x; 
 		}
-		int AbstractUIComponent::getMinY() {
+		float AbstractUIComponent::getMinY() {
 			return m_y;
 		}
 		unsigned int AbstractUIComponent::getWidth() {
 			return m_width;
-		}
+		} 
 		unsigned int AbstractUIComponent::getHeight() {
 			return m_height;
 		}
-		void AbstractUIComponent::setX(int x) {
+		void AbstractUIComponent::setX(float x) {
 			m_x = x;
 		}
-		void AbstractUIComponent::setY(int y) {
+		void AbstractUIComponent::setY(float y) {
 			m_y = y;
 		}
-		void AbstractUIComponent::setLocation(int x, int y) {
+		void AbstractUIComponent::setLocation(float x, float y) {
 			m_x = x;
 			m_y = y;
 		} 
-		void AbstractUIComponent::setLocationByCenter(int x, int y) {
+		void AbstractUIComponent::setLocationByCenter(float x, float y) {
 			m_x = x - (m_width/2);
 			m_y = y - (m_height/2);
 		}

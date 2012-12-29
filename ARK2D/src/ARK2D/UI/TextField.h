@@ -75,10 +75,10 @@ namespace ARK {
 				void setRestrictedCharacterSet(unsigned int r);
 
 				virtual void render();
-				void renderBackground();
+				void renderBackground(); 
 				void renderSelectedArea(int x, int y, int w, int h);
 				void renderText(int x, int y);
-				void renderCaret();
+				virtual void renderCaret();
 				virtual void renderCaret(int x1, int y1, int x2, int y2);
 				void renderOverlay();
 

@@ -195,8 +195,46 @@ namespace ARK {
 				return m_response;
             #elif defined(ARK2D_IPHONE) 
                 return "Not implemented";
-            #elif defined(ARK2D_FLASCC)
-                return "Not implemented";
+           	#elif defined(ARK2D_FLASCC)
+
+                 return "Not implemented";
+                 
+                /*
+                inline_as3(
+                	"import com.adobe.flascc.Console;\n"\
+                	"Console.s_urlResponse = \"\";"
+                );
+
+                const char* str = m_url.c_str();
+
+				inline_as3(
+					"import com.adobe.flascc.Console;\n"\
+					"Console.urlRequest(CModule.readString(%0, %1));\n"\
+					: : "r"(str), "r"(strlen(str))
+				);
+
+				int done = 0;
+				while(done == 0) {
+					inline_as3(
+						"import com.adobe.flascc.Console;\n"\
+						"%0 = (Console.s_urlResponse == \"\")?0:1;\n" 
+						: "=r"(done) : 
+					);
+				}
+				
+				char* wordptrs = NULL;
+				inline_as3(
+			        "var stringptr:int = CModule.mallocString(Console.s_urlResponse);\n"
+			        "CModule.write32(%0, stringptr);\n"
+			        : : "r"(&wordptrs)
+			    );
+				printf(">>> %s\n", wordptrs);
+
+				m_response = string(wordptrs);
+
+				free(wordptrs);
+				return m_response;*/
+
             #else
  
 				String returnString("");

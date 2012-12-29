@@ -301,8 +301,8 @@ namespace ARK {
 		void BMFont::drawString(const string& Str, int drawx, int drawy) 
 		{
 			if (m_loaded == false) { return; }
-			ARK2D::getLog()->i("BMFont:: drawing string: ");
-			ARK2D::getLog()->i(Str);
+			//ARK2D::getLog()->i("BMFont:: drawing string: ");
+			//ARK2D::getLog()->i(Str);
 
 			int CharX, CharY, Width, WidthOriginal, Height, HeightOriginal, OffsetX, OffsetY, XAdvance;
 			//m_Image.getSubImage(10, 10, 10, 10).draw(drawx, drawy);

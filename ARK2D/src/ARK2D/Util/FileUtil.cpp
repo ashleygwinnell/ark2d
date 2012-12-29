@@ -44,6 +44,10 @@ namespace ARK {
 				}
 			#endif
 
+			#if defined(ARK2D_FLASCC)
+				filename = string("/local") + filename;
+			#endif
+
 			ARK2D::getLog()->i(StringUtil::append("Making file: ", filename));
 
 			// yarp

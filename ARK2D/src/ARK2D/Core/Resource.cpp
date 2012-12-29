@@ -166,6 +166,19 @@ namespace ARK {
 					delete rt;
 					free(newtextbuffer);
 
+				#elif defined(ARK2D_FLASCC)
+
+					// return /local/ file if it exists, otherwise return default from inside swf.
+					ARK2D::getLog()->i("Checking for Local Storage file first.");
+					string flasccLocalFile = string("/local/") + oldref;
+					if (exists(flasccLocalFile)) {
+						string s = StringUtil::file_get_contents(flasccLocalFile.c_str());
+						arkstr->append(s);
+					} else {
+						string s = StringUtil::file_get_contents(oldref.c_str());
+						arkstr->append(s);
+					}
+
 				#else
 					string s = StringUtil::file_get_contents(oldref.c_str());
 					arkstr->append(s);
@@ -198,7 +211,18 @@ namespace ARK {
 
 			ARK2D::getLog()->i(StringUtil::append("Does Resource Exist: ", ref));
 
-			#if defined(ARK2D_ANDROID)
+			#if defined(ARK2D_FLASCC)
+
+				// check if it exists in /local/ before anywhere else.
+				string flasccLocalFile = string("/local/") + oldref;
+				bool localExists = StringUtil::file_exists(flasccLocalFile.c_str());
+				if (localExists) {
+					return true;
+				} 
+
+				return StringUtil::file_exists(oldref.c_str());
+
+			#elif defined(ARK2D_ANDROID)
 				if (apkZip == NULL) {
 					init();
 				} 

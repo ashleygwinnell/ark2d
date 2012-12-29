@@ -19,7 +19,7 @@
 		
 			ARK::Core::GameContainer::GameContainer(Game& g, int width, int height, int bpp, bool fullscreen):
 				m_timer(), 
-				m_game(g),
+				m_game(g), 
 				m_input(),
 				m_graphics(),
 				m_gamepads(), 
@@ -62,33 +62,7 @@
 		
 			} 
 			
-			/*void ARK::Core::GameContainer::resizeBehaviour(int width, int height) {
-				if (m_resizeBehaviour == RESIZE_BEHAVIOUR_SCALE) 
-			    {
-			    	m_scaleX = (float) width / (float) m_originalWidth;
-					m_scaleY = (float) height / (float) m_originalHeight;
-					if (m_scaleX > m_scaleY) {
-						m_scale = m_scaleY;
-						m_scaleX = m_scaleY;
-						m_scaleY = 1.0f;
-					} else { // y > x
-						m_scale = m_scaleX;
-						m_scaleY = m_scaleX;
-						m_scaleX = 1.0f;
-					}
-					m_width = width;
-					m_height = height;
-
-			   		
-			    } else if (m_resizeBehaviour == RESIZE_BEHAVIOUR_NOSCALE) {
-			    	m_width = width; 
-			    	m_height = height;
-			    	//ARK2D::s_game->resize(this, width, height);
-			    	//ARK2D::getRenderer()->setScissorTestEnabled(false);
-			    	//ARK2D::getRenderer()->scissor(0,0,width,height);
-			    }
-			    ARK2D::s_game->resize(this, width, height);
-			}*/
+			
 
 			void ARK::Core::GameContainer::setSize(int width, int height) {
 
@@ -96,6 +70,48 @@
 		
 			void ARK::Core::GameContainer::setFullscreen(bool fullscreen) {
 				
+
+				if (fullscreen && !m_fullscreen) {
+					// go to fullscreen mode 
+
+					inline_as3(
+						"import com.adobe.flascc.Console;\n"\
+						"Console.setFullscreen(true);\n"
+					);
+
+					int fs_width = m_originalWidth;
+					int fs_height = m_originalHeight;
+ 
+					inline_as3(
+						"import com.adobe.flascc.Console;\n"\
+						"%0 = Console.s_console.stage.fullScreenWidth;\n"\
+						"%1 = Console.s_console.stage.fullScreenHeight;\n" 
+						: "=r"(fs_width), "=r"(fs_height) : 
+					);
+
+					String s;
+					s.append("changing to fullscreen mode. w: ");
+					s.append(fs_width);
+					s.append(" h: ");
+					s.append(fs_height);
+					ARK2D::getLog()->i(s.get()); 
+
+					resizeBehaviour(fs_width, fs_height);
+					//ARK2D::s_game->resize(this, fs_width, fs_height);
+
+				} else if (!fullscreen && m_fullscreen) {
+					// go back to normal flash window mode.
+
+					inline_as3(
+						"import com.adobe.flascc.Console;\n"\
+						"Console.setFullscreen(false);\n"
+					);
+
+					resizeBehaviour(m_originalWidth, m_originalHeight);
+					//ARK2D::s_game->resize(this, m_originalWidth, m_originalHeight);
+				}
+
+				m_fullscreen = fullscreen;
 			}
 		
 			void ARK::Core::GameContainer::processGamepadInput() {
@@ -235,15 +251,15 @@
 		
 			void ARK::Core::GameContainer::close() const {
 				ARK2D::getLog()->i("GameContainer::close"); 
-				ARK2D::getLog()->i("Deleting Game object "); 
-				delete &m_game;
+				//ARK2D::getLog()->i("Deleting Game object "); 
+				//delete &m_game;
 
 				//ARK2D::getLog()->i("Closing Window at last "); 
 				//[m_platformSpecific.m_window close];
 				//exit(0);
 			}
 			
-			
+			 
 			void ARK::Core::GameContainer::swapBuffers() {
 				/*NSOpenGLContext* context = [NSOpenGLContext currentContext];
 				if (context != nil) {

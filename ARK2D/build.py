@@ -876,6 +876,10 @@ clean:
 			for dir in directoriesToCreate:
 				self.makeDirectories([game_dir + "/build/flascc/data/" + dir]);
 
+			moreDirectoriesToCreate = self.listDirectories(game_dir+"/src", False);
+			for dir in moreDirectoriesToCreate:
+				self.makeDirectories([game_dir + "/build/flascc/src/" + dir]);
+
 			print("----------");
 			print("copying Preloader and Console files");
 			print("----------");
@@ -997,7 +1001,7 @@ build:
 		-import $(FLASCC)/usr/lib/BinaryData.abc \
 		-import $(FLASCC)/usr/lib/PlayerKernel.abc \
 		-import $(GAMEDIR)/build/flascc/gamevfs.abc \
-		$(GAMEDIR)/build/flascc/Console.as -outdir $(GAMEDIR)/build/flascc -out Console
+		$(FLASCC)/usr/share/LSOBackingStore.as $(GAMEDIR)/build/flascc/Console.as -outdir $(GAMEDIR)/build/flascc -out Console
 
 	java -jar $(FLASCC)/usr/lib/asc2.jar -merge -md -AS3 -strict -optimize \
 		-import $(FLASCC)/usr/lib/builtin.abc \
@@ -1012,7 +1016,7 @@ build:
 		-import $(FLASCC)/usr/lib/PlayerKernel.abc \
 		-import $(GAMEDIR)/build/flascc/Console.abc \
 		-import $(GAMEDIR)/build/flascc/gamevfs.abc \
-		$(GAMEDIR)/build/flascc/PreLoader.as -swf com.adobe.flascc.preloader.PreLoader,640,480,60 -outdir $(GAMEDIR)/build/flascc -out PreLoader
+		$(GAMEDIR)/build/flascc/PreLoader.as -swf com.adobe.flascc.preloader.PreLoader,"""+str(game_width)+""","""+str(game_height)+""",60 -outdir $(GAMEDIR)/build/flascc -out PreLoader
 
 	@echo "----------"
 """;
@@ -1038,7 +1042,7 @@ build:
 				makefileStr += "	@\"$(FLASCC)/usr/bin/" + compiler + "\" $(BASE_CFLAGS) -O4 -DARK2D_FLASCC ";
 				makefileStr += "-I$(GLS3D)/install/usr/include ";
 				makefileStr += "-I$(ARK2D)/src/ARK2D/vendor/libcurl ";
-				makefileStr += "-I$(ARK2D)/src/ARK2D/vendor/android/freetype/jni/include "
+				makefileStr += "-I$(ARK2D)/src/ARK2D/vendor/android/freetype/jni/include  "
 				makefileStr += "$(GAMEDIR)/" + srcfile + " ";
 				makefileStr += "-c -o $(GAMEDIR)/build/flascc/" + newf;
 				makefileStr += "\r\n";
@@ -1087,12 +1091,14 @@ build:
 			#linkingStr += " -L$(ARK2D)/build/flascc ";
 			#linkingStr += " -lark2d ";
 			linkingStr += " -lGL -lfreetype -lAS3++ -lFlash++ ";
+			#linkingStr += " -lcurl ";
+			#linkingStr += " -pthread ";
 			#-emit-swf=org.ashleygwinnell.defaultgame
 
 
 
-			linkingStr += " $(FLASCC)/usr/lib/AlcVFSZip.abc $(GAMEDIR)/build/flascc/gamevfs.abc -swf-preloader=$(GAMEDIR)/build/flascc/PreLoader.swf -swf-version=17 -symbol-abc=$(GAMEDIR)/build/flascc/Console.abc -jvmopt=-Xmx4G ";
-			linkingStr += " -swf-size=640x480 -emit-swf -o $(GAMEDIR)/build/flascc/game.swf -j8 ";
+			linkingStr += " $(FLASCC)/usr/lib/AlcVFSZip.abc $(GAMEDIR)/build/flascc/gamevfs.abc -swf-preloader=$(GAMEDIR)/build/flascc/PreLoader.swf -swf-version=18 -symbol-abc=$(GAMEDIR)/build/flascc/Console.abc -jvmopt=-Xmx4G ";
+			linkingStr += " -swf-size="+str(game_width)+"x"+str(game_height)+" -emit-swf -o $(GAMEDIR)/build/flascc/game.swf -j8 ";
 			makefileStr += linkingStr;
  
  

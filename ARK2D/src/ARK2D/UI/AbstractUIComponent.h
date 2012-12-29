@@ -25,8 +25,8 @@ namespace ARK {
 		class AbstractUIComponent : public UIComponent {
 			public:
 				AbstractUIComponent* m_parent;
-				int m_x;
-				int m_y;
+				float m_x;
+				float m_y;
 				unsigned int m_width;
 				unsigned int m_height;
 				Vector4<int> m_padding; // left, top, right, bottom.
@@ -36,20 +36,20 @@ namespace ARK {
 				bool m_enabled;
 
 				AbstractUIComponent();
-				virtual int getX();
-				virtual int getY();
-				virtual int getCenterX();
-				virtual int getCenterY();
-				virtual int getMinX();
-				virtual int getMinY();
-				virtual int getMaxX();
-				virtual int getMaxY();
+				virtual float getX();
+				virtual float getY();
+				virtual float getCenterX();
+				virtual float getCenterY();
+				virtual float getMinX();
+				virtual float getMinY();
+				virtual float getMaxX();
+				virtual float getMaxY();
 				virtual unsigned int getWidth();
 				virtual unsigned int getHeight();
-				virtual void setX(int x);
-				virtual void setY(int y);
-				virtual void setLocation(int x, int y);
-				virtual void setLocationByCenter(int x, int y);
+				virtual void setX(float x);
+				virtual void setY(float y);
+				virtual void setLocation(float x, float y);
+				virtual void setLocationByCenter(float x, float y);
 				virtual void setSize(unsigned int w, unsigned int h);
 
 				void setWidth(unsigned int w);

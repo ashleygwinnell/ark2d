@@ -8,7 +8,7 @@
 #include "UIComponent.h"
 #include <stddef.h>
 
-namespace ARK {
+namespace ARK { 
 	namespace UI {
 		UIComponent* UIComponent::s_currentFocus = NULL;
 	}

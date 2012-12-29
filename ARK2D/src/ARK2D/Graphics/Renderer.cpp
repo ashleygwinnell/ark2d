@@ -145,7 +145,7 @@ namespace ARK {
 			glRotatef(angle, 0, 0, 1);
 		}
 		void Renderer::scale(float x, float y) const {
-			glScalef(x, y, 0);
+			glScalef(x, y, 0.0f);
 		}
 		void Renderer::setScissorTestEnabled(bool b) const {
 			if (b) {
@@ -212,7 +212,7 @@ namespace ARK {
 			//}
 
 			// Alignment
-			if (alignX == ALIGN_CENTER) {
+			/*if (alignX == ALIGN_CENTER) {
 				x -= strWidth/2;
 			} else if (alignX == ALIGN_RIGHT || alignX == ALIGN_END) {
 				x -= strWidth; 
@@ -222,6 +222,26 @@ namespace ARK {
 				y -= strHeight/2;
 			} else if (alignY == ALIGN_END || alignY == ALIGN_BOTTOM) {
 				y -= strHeight;
+			}*/ 
+
+			float inv_scale = 1.0f / sc;
+
+			float offsetX = 0.0f;
+			if (alignX == ALIGN_CENTER) { 
+				offsetX = (strWidth/2.0f) * -1.0f;	
+			} else if (alignX == ALIGN_LEFT || alignX == ALIGN_START) {
+				
+			} else if (alignX == ALIGN_RIGHT || alignX == ALIGN_END) {
+				offsetX = strWidth * -1.0f;
+			} 
+
+			float offsetY = 0.0f;
+			if (alignY == ALIGN_CENTER) { 
+				offsetY = (strHeight/2.0f) * -1.0f;	
+			} else if (alignY == ALIGN_START || alignY == ALIGN_TOP) {
+				
+			} else if (alignY == ALIGN_END || alignY == ALIGN_BOTTOM) {
+				offsetY = strHeight * -1.0f;
 			} 
 
 
@@ -237,7 +257,8 @@ namespace ARK {
 				scale(sc, sc);
 
 
-			m_Font->drawString(str, 0, 0);
+
+			m_Font->drawString(str, 0 + (offsetX*inv_scale), 0 + (offsetY*inv_scale));
 
 			if (sc != 1.0f) 
 				scale(1.0f/sc, 1.0f/sc);
@@ -419,24 +440,79 @@ namespace ARK {
 		}
 		void Renderer::drawRect(float x, float y, int width, int height) const {
 			//#if defined(ARK2D_ANDROID)
-				float verts[] = {
-					0, 0,//tl
-					width, 0,// tr
-					width, height,// br 
-					0, height//lr
-				};
-				
-				RendererState::start(RendererState::GEOMETRY);
-				glPushMatrix();
-				glTranslatef(x, y, 0);
 
-				glVertexPointer(2, GL_FLOAT, 0, verts);
-				glDrawArrays(GL_LINE_LOOP, 0, 4);
 
-				glTranslatef(x * -1, y * -1, 0);
-				glPopMatrix();
+				#if defined(ARK2D_FLASCC)
+					RendererState::start(RendererState::GEOMETRY);
 
-				RendererStats::s_lines += 4;
+					float hlw = (m_LineWidth/2.0f);
+					float fw = (float) width;
+					float fh = (float) height;
+					float rawVertices[] = {
+						// left side
+						0.0f - hlw,		0.0f,	// tl
+						0.0f + hlw,		0.0f,	// tr
+						0.0f - hlw,		fh,	  	// bl
+						0.0f - hlw,		fh,	  	// bl
+						0.0f + hlw,		0.0f,	// tr
+						0.0f + hlw,		fh,		// br
+
+						// right side side
+						fw - hlw,		0.0f,	// tl
+						fw + hlw,		0.0f,	// tr
+						fw - hlw,		fh,	  	// bl
+						fw - hlw,		fh,	  	// bl
+						fw + hlw,		0.0f,	// tr
+						fw + hlw,		fh,		// br
+
+						// top side
+						0.0f,		0.0f - hlw,	// tl
+						0.0f+fw,	0.0f - hlw,	// tr
+						0.0f,		0.0f + hlw,	// bl
+						0.0f,		0.0f + hlw,	// bl
+						0.0f+fw,	0.0f - hlw,	// tr
+						0.0f+fw,	0.0f + hlw,	// br
+
+						// bottom side
+						0.0f,		fh - hlw,	// tl
+						0.0f+fw,	fh - hlw,	// tr
+						0.0f,		fh + hlw,	// bl
+						0.0f,		fh + hlw,	// bl
+						0.0f+fw,	fh - hlw,	// tr
+						0.0f+fw,	fh + hlw	// br
+					};
+
+					glPushMatrix();
+					glTranslatef(x, y, 0);
+				 
+					glVertexPointer(2, GL_FLOAT, 0, rawVertices);
+					glDrawArrays(GL_TRIANGLES, 0, 24); //6); // 6 is number of points in verts.
+
+					glTranslatef(x * -1, y * -1, 0);
+					glPopMatrix(); 
+
+					RendererStats::s_tris += 8;
+
+				#else 
+					float verts[] = {
+						0, 0,//tl
+						width, 0,// tr
+						width, height,// br 
+						0, height//lr
+					};
+					
+					RendererState::start(RendererState::GEOMETRY);
+					glPushMatrix();
+					glTranslatef(x, y, 0);
+
+					glVertexPointer(2, GL_FLOAT, 0, verts);
+					glDrawArrays(GL_LINE_LOOP, 0, 4);
+
+					glTranslatef(x * -1, y * -1, 0);
+					glPopMatrix();
+
+					RendererStats::s_lines += 4;
+				#endif
 				//glDisableClientState(GL_VERTEX_ARRAY); 
 				//glEnable(GL_TEXTURE_2D);
 			/*#else
@@ -481,33 +557,62 @@ namespace ARK {
 		void Renderer::fillGradientRect(float x, float y, float width, float height, Color* top, Color* bottom) const {
 			RendererState::start(RendererState::GEOMETRY);
 
-			float rawVertices[] = {
-				0.0f,			0.0f,		  // tl
-				(float) width,	0.0f,			// tr
-				0.0f,			(float)height,	  // bl
-				(float) width,	(float)height	// br
-			};
-
-			float rawColors[] = {
-				top->getRedf(), top->getGreenf(), top->getBluef(), top->getAlphaf(),	// tl
-				top->getRedf(), top->getGreenf(), top->getBluef(), top->getAlphaf(),	// tr
-				bottom->getRedf(), bottom->getGreenf(), bottom->getBluef(), bottom->getAlphaf(),	// bl
-				bottom->getRedf(), bottom->getGreenf(), bottom->getBluef(), bottom->getAlphaf()		// br
-			};
-
 			glPushMatrix();
 			glTranslatef(x, y, 0);
 			glEnableClientState(GL_COLOR_ARRAY);
-			
-			glColorPointer(4, GL_FLOAT, 0, rawColors);
-			glVertexPointer(2, GL_FLOAT, 0, rawVertices);
-			glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+			#if defined(ARK2D_FLASCC) 
+
+				char rawColors[] = {
+					(char) top->getRed(), (char) top->getGreen(), (char) top->getBlue(), (char) top->getAlpha(), // tl 
+					(char) top->getRed(), (char) top->getGreen(), (char) top->getBlue(), (char) top->getAlpha(),
+					(char) bottom->getRed(), (char) bottom->getGreen(), (char) bottom->getBlue(), (char) bottom->getAlpha(),
+					(char) bottom->getRed(), (char) bottom->getGreen(), (char) bottom->getBlue(), (char) bottom->getAlpha(),
+					(char) top->getRed(), (char) top->getGreen(), (char) top->getBlue(), (char) top->getAlpha(),
+					(char) bottom->getRed(), (char) bottom->getGreen(), (char) bottom->getBlue(), (char) bottom->getAlpha()
+				};
+
+				float rawVertices[] = {
+					0.0f,			0.0f,		// tl
+					(float) width,	0.0f,		// tr
+					0.0f,			(float)height,	  	// bl
+					0.0f,			(float)height,	  	// bl
+					(float) width,	0.0f,		// tr
+					(float) width,	(float)height		// br
+				};
+
+				glColorPointer(4, GL_UNSIGNED_BYTE, 0, rawColors);
+				glVertexPointer(2, GL_FLOAT, 0, rawVertices);
+				glDrawArrays(GL_TRIANGLES, 0, 6);
+
+			#else
+
+				float rawVertices[] = {
+					0.0f,			0.0f,		  // tl
+					(float) width,	0.0f,			// tr
+					0.0f,			(float)height,	  // bl
+					(float) width,	(float)height	// br
+				};
+
+				float rawColors[] = {
+					top->getRedf(), top->getGreenf(), top->getBluef(), top->getAlphaf(),	// tl
+					top->getRedf(), top->getGreenf(), top->getBluef(), top->getAlphaf(),	// tr
+					bottom->getRedf(), bottom->getGreenf(), bottom->getBluef(), bottom->getAlphaf(),	// bl
+					bottom->getRedf(), bottom->getGreenf(), bottom->getBluef(), bottom->getAlphaf()		// br
+				};
+
+				glColorPointer(4, GL_FLOAT, 0, rawColors);
+				glVertexPointer(2, GL_FLOAT, 0, rawVertices);
+				glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+			#endif
 
 			glDisableClientState(GL_COLOR_ARRAY);
 			glTranslatef(x * -1, y * -1, 0);
-			glPopMatrix();
+			glPopMatrix();	
 
 			RendererStats::s_tris += 2;
+
 		}
 		void Renderer::fillRect(float x, float y, int width, int height) const {
 			//#if defined(ARK2D_ANDROID)
