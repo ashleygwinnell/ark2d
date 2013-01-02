@@ -136,7 +136,7 @@ namespace ARK {
 			public:
 		#endif
 
-		#if (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS) || defined(ARK2D_FLASCC))
+		#if (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS) || defined(ARK2D_FLASCC) || defined(ARK2D_ANDROID))
 				void resizeBehaviour(int width, int height);
 		#endif
 

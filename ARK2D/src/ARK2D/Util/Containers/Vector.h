@@ -125,6 +125,25 @@ namespace ARK {
 							lst.push_back(o);
 						#endif
 					}
+					void add(unsigned int index, T o) {
+						if (!isIndexInBounds(index)) {
+							add(o);
+							return;
+						} 
+
+						#if !defined(STL_AVAILABLE)
+							ARK2D::getLog()->e("Vector<?>::add(unsigned int, ?) is not implemented without STL.");
+						#else 
+							if (!usingList) {
+								vec.insert(vec.begin() + index, o);
+								return;
+							}
+
+							typename list<T>::iterator it = lst.begin();
+							advance(it, index);
+							lst.insert(it, o);
+						#endif
+					}
 					void set(unsigned int i, T item) {
 						#if !defined(STL_AVAILABLE)
 							return NULL;
