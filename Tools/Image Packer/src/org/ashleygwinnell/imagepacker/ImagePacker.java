@@ -48,7 +48,7 @@ public class ImagePacker {
 		// add game dir to the path, somehow?
 		String newName = img.getPath();
 		newName = newName.replace(m_gamePreproductionDirectory, "");
-		if (newName.charAt(0) == '/') {
+		if (newName.charAt(0) == '/' || newName.charAt(0) == '\\') {
 			newName = newName.substring(1, newName.length());
 		}
 		img.setName(newName);
