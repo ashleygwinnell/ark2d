@@ -1,2 +1,2 @@
-python C:\\Dropbox\\ARK2D\\ark2d\\build.py
+python build.py
 pause;
