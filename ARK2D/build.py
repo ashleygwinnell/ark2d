@@ -1213,8 +1213,9 @@ build:
 					#was ineffective. Solution is string literals (r + string) and calling arguments seperatly.
 					#JSON format also changed, to remove escape characters.
 					if(sys.platform == "win32"):
-						spritesheetJSON = str(json.dumps(spritesheet, separators=(',',':'))).replace("\"", "\"");
-						compileLine = r"F:\Dev\Frameworks\ark2d\Tools\Image Packer\build\jar\ImagePacker.jar"
+						spritesheetJSON = str(json.dumps(spritesheet, separators=(',',':')));
+						print (spritesheetJSON);
+						compileLine = self.ark2d_dir + r"\..\Tools\Image Packer\build\jar\ImagePacker.jar"
 						subprocess.call(["java", "-jar", compileLine, spritesheetJSON], shell=True);
 					#Old method, assumed to work on other platforms
 					else:
