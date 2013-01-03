@@ -481,9 +481,7 @@ class ARK2DBuildSystem:
 				print("could not copy sources [from:"+builddirsorc+",to:"+builddirdest);
 				return;
 				pass;
-				
-		
-		 
+			
 			linkingStr = "";
 			linkingStr += self.gppCompiler + " " + self.mingw_link + " " + self.linkingFlags + " -o" + self.game_dir + self.ds + self.build_artifact + "";
 			#linkingStr += self.gppCompiler + " " + self.mingw_link + " -o" + self.build_artifact + "";
@@ -1210,10 +1208,21 @@ build:
 					print("Generating SpriteSheet: " + spritesheet["output"]);
 					spritesheet['game_dir'] = self.game_dir;
 					spritesheet['game_preproduction_dir'] = self.config[self.platformOn]['game_preproduction_dir'];
-					spritesheetJSON = str(json.dumps(spritesheet, separators=(',',':'))).replace("\"", "\\\"");
-					compileLine = "java -jar " + self.ark2d_dir + "/../Tools/Image\ Packer/build/jar/ImagePacker.jar \"" + spritesheetJSON + "\"";
-					subprocess.call([compileLine], shell=True); # player 
 
+					#Previos implementation did not work correctly on win 7 64 bit. Escape character (Image\ Packer)					
+					#was ineffective. Solution is string literals (r + string) and calling arguments seperatly.
+					#JSON format also changed, to remove escape characters.
+					if(sys.platform == "win32"):
+						spritesheetJSON = str(json.dumps(spritesheet, separators=(',',':')));
+						print (spritesheetJSON);
+						compileLine = self.ark2d_dir + r"\..\Tools\Image Packer\build\jar\ImagePacker.jar"
+						subprocess.call(["java", "-jar", compileLine, spritesheetJSON], shell=True);
+					#Old method, assumed to work on other platforms
+					else:
+						spritesheetJSON = str(json.dumps(spritesheet, separators=(',',':'))).replace("\"", "\\\"");
+						compileLine = "java -jar " + self.ark2d_dir + "/../Tools/Image\ Packer/build/jar/ImagePacker.jar \"" + spritesheetJSON + "\"";
+						subprocess.call([compileLine], shell=True); # player 
+						
 					#redocache
 					cacheChanged = True;
 					cacheJSON[spritesheetName] = {};
@@ -2499,7 +2508,6 @@ if __name__ == "__main__":
 		exit(0);
 
 
-	
 	if (type == "library"):
 
 		print("---");
@@ -2540,8 +2548,6 @@ if __name__ == "__main__":
 		print("---");
 		print("Building game");
 
-		
-		
 		print("---");
 		print("Opening config file: " + dir + "/config.json");
 		f = open(dir + "/config.json", "r");
