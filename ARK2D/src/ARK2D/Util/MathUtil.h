@@ -37,6 +37,7 @@ namespace ARK {
 				static double distance(float x1, float y1, float x2, float y2);
 				static double angle(int x1, int y1, int x2, int y2);
 				static double anglef(float x1, float y1, float x2, float y2);
+				static double anglef(float x1, float y1, float x2, float y2, bool enforce_abs);
 				static double toRadians(double angle);
 				static double getPercentage(int top, int denominator);
 				static const char* getPercentage_CSTR(int top, int denominator);

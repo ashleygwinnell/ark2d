@@ -1,5 +1,6 @@
 
 #include "TiledMapProperty.h"
+#include "../Util/Cast.h"
 
 namespace ARK {
 	namespace Tiled {
@@ -17,12 +18,15 @@ namespace ARK {
 		{
 
 		}
-
+ 
 		const string TiledMapProperty::getName() const {
 			return m_name;
 		}
 		const string TiledMapProperty::getValue() const {
 			return m_value;
+		}
+		signed int TiledMapProperty::getValueAsInt() const {
+			return Cast::fromString<signed int>(m_value);
 		}
 
 		void TiledMapProperty::setName(const string& s) {

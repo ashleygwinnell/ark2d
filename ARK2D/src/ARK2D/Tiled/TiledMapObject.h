@@ -18,6 +18,7 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
 		class TiledMapObject {
+
 			public:
 				TiledMapObject();
 
@@ -41,6 +42,9 @@ namespace ARK {
 
 				void setGID(unsigned int h);
 				unsigned int getGID();
+
+				TiledMapProperty* getPropertyByName(string name) const;
+				void addProperty(string key, string value);
 
 				~TiledMapObject();
 			private:

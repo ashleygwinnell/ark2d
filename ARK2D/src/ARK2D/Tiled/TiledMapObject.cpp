@@ -12,9 +12,9 @@ namespace ARK {
 			m_y(0),
 			m_width(1),
 			m_height(1),
-			m_gid(0)
+			m_gid(0) 
 		{
-
+ 
 		}
 
 		void TiledMapObject::setName(string s) {
@@ -64,6 +64,21 @@ namespace ARK {
 		}
 		unsigned int TiledMapObject::getGID() {
 			return m_gid;
+		}
+
+		void TiledMapObject::addProperty(string key, string value) {
+			m_properties.push_back(new TiledMapProperty(key, value));
+		}
+
+		TiledMapProperty* TiledMapObject::getPropertyByName(string s) const {
+			for(unsigned int p = 0; p < m_properties.size(); p++) 
+			{
+				TiledMapProperty* property = m_properties.at(p);
+				if (property->getName() == s) {
+					return property;
+				}
+			}
+			return NULL;
 		}
 
 		TiledMapObject::~TiledMapObject() {

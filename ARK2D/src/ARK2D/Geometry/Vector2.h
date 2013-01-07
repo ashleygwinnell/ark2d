@@ -43,10 +43,10 @@ namespace ARK {
 
 				}
 
-				T getX() {
+				T getX() const {
 					return m_x;
 				}
-				T getY() {
+				T getY() const {
 					return m_y;
 				}
 

@@ -17,7 +17,7 @@
 #include "../Core/String.h"
 
 #ifdef ARK2D_WINDOWS
-	#include <direct.h>
+	#include <direct.h> 
 	#include <windows.h>
 	#define GetCurrentDirectoryMacro _getcwd
 	#define DIRECTORY_SEPARATOR "\\"
@@ -32,8 +32,7 @@
 namespace ARK {
 	namespace Util {
 
-		bool FileUtil::file_put_contents(string filename, string contents) {
-
+		string FileUtil::prependPlatform(string filename) {
 			#if defined(ARK2D_ANDROID)
 				filename = ARK2D::getContainer()->m_platformSpecific.m_externalDataStr + filename;
 			#else
@@ -47,6 +46,12 @@ namespace ARK {
 			#if defined(ARK2D_FLASCC)
 				filename = string("/local") + filename;
 			#endif
+			return filename;
+		}
+
+		bool FileUtil::file_put_contents(string filename, string contents) {
+
+			filename = prependPlatform(filename);
 
 			ARK2D::getLog()->i(StringUtil::append("Making file: ", filename));
 

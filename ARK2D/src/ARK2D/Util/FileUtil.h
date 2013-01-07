@@ -29,6 +29,7 @@ namespace ARK {
 		class FileUtil {
 			private:
 			public:
+				static string prependPlatform(string filename);
 				static bool file_put_contents(string filename, string contents);
 				static string getCurrentDirectory();
 				static string getSeparator();

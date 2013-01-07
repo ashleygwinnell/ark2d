@@ -45,7 +45,7 @@ namespace ARK {
 
 				void draw(int xOffset, int yOffset) const;
 
-				~TiledMapLayer();
+				virtual ~TiledMapLayer();
 			public:
 
 				TiledMap* m_map;

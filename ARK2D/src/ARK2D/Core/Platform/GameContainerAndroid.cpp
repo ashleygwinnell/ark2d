@@ -242,6 +242,9 @@ namespace ARK {
 		void AndroidPluggable::openBrowserToUrl(string url) {
 			
 		}
+		void AndroidPluggable::openGalleryToImageUrl(string url) {
+			
+		}
 		void AndroidPluggable::openSoftwareKeyboard(){
 
 		}

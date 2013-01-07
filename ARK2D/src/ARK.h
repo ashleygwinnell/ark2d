@@ -26,7 +26,7 @@
 #include "ARK2D/Geometry/Polygon.h"
 #include "ARK2D/Geometry/Rectangle.h"
 #include "ARK2D/Geometry/Circle.h"
-#include "ARK2D/Geometry/Line.h"
+#include "ARK2D/Geometry/Line.h" 
 
 // Game Jolt
 #include "ARK2D/GJ/GameJolt.h"
@@ -137,6 +137,9 @@
 #include "ARK2D/Path/Path.h"
 #include "ARK2D/Path/PathGroup.h"
 #include "ARK2D/Path/PathIO.h"
+
+// Pathfinding
+#include "ARK2D/Pathfinding/AStar.h"
 
 // Tools
 #include "ARK2D/Tools/Packer.h"

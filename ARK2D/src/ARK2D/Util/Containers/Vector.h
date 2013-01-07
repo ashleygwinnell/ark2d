@@ -20,6 +20,7 @@
 #include "../../Core/GameObject.h"
 #include "../MathUtil.h"
  #include "../../Core/GameContainer.h"
+#include "../Util.h"
 
 using namespace std;
 
@@ -161,7 +162,29 @@ namespace ARK {
 
 						#endif
 					}
+					T first() {
+						return get(0);
+					}
+					T last() {
+						return get(size() - 1); 
+					}
 					T get(unsigned int i) {
+						#if !defined(STL_AVAILABLE)
+							if (!isIndexInBounds(i)) {
+								return NULL;
+							}
+
+							return (T) m_data + (i * m_typeSize);
+						#else
+							if (!usingList) {
+								return vec.at(i);
+							}
+							typename list<T>::iterator it = lst.begin();
+							advance(it, i);
+							return *it;
+						#endif
+					}
+					T& getr(unsigned int i) {
 						#if !defined(STL_AVAILABLE)
 							if (!isIndexInBounds(i)) {
 								return NULL;
@@ -227,15 +250,27 @@ namespace ARK {
 					}
 					void shuffle() {
 						//random_shuffle(vec.begin(). vec.end());
-						/*#if !defined(STL_AVAILABLE)
+						#if !defined(STL_AVAILABLE)
 							return NULL; 
 						#else
 							if (!usingList) {
-								std::random_shuffle(vec.begin(). vec.end());
+								std::random_shuffle(vec.begin(), vec.end());
 								return;
 							}
-							std::random_shuffle(lst.begin(). lst.end());
-						#endif*/
+							std::random_shuffle(lst.begin(), lst.end());
+						#endif
+					}
+					void reverse() {
+						//std::reverse(vec.begin(), vec.end());
+						#if !defined(STL_AVAILABLE)
+							return NULL; 
+						#else
+							if (!usingList) {
+								std::reverse(vec.begin(), vec.end());
+								return;
+							}
+							std::reverse(lst.begin(), lst.end());
+						#endif
 					}
 					void* getData() {
 						#if !defined(STL_AVAILABLE)
@@ -522,7 +557,39 @@ namespace ARK {
 						return s;
 					}
 					~Vector() {
+						
+						/*if (!usingList) {
+							for(unsigned int i = 0; i < vec.size(); i++) {
+								
+								//if (is_pointer<T>(vec.at(i))) {
+								//	delete vec.at(i);	
+								//}
 
+								if (is_pointer<T>(vec.at(i))) {
+									typedef typename remove_pointer<T>::type type;
+									delete ((type)vec).at(i)
+								}
+
+							}
+							vec.clear();
+						} else {
+							unsigned int ii = 0;
+							typename list<T>::iterator it = lst.begin();
+							while (it != lst.end()) {
+								T obj = (*it);
+
+								if (is_pointer_type<T>::value) {
+									delete obj;
+								} else {
+									// do what?
+								}
+
+								ii++;
+								++it;
+							}
+							lst.clear();
+						}*/					
+							
 					}
 				private:
 					bool isIndexInBounds(unsigned int i) {

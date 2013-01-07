@@ -166,6 +166,7 @@ class ARK2DBuildSystem:
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Graphics" + self.ds + "ImageIO",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Particles",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Path",
+			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Pathfinding",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "State",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "State" + self.ds + "Transition",
 			self.build_folder + self.ds + self.platform + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Tests",
@@ -1199,7 +1200,9 @@ build:
 				spritesheetName = spritesheet["name"];
 				generateThisSheet = False;
 				for imageFile in spritesheet["files"]:
-					if (not spritesheetName in cacheJSON or not imageFile in cacheJSON[spritesheetName] or cacheJSON[spritesheetName][imageFile]['date_modified'] < os.stat(imageFile).st_mtime):
+					#print( imageFile + " : " + str(cacheJSON[spritesheetName][imageFile]['date_modified']) + " : " + str(os.stat(self.game_dir + self.ds + imageFile).st_mtime) );
+					#print(cacheJSON[spritesheetName]);
+					if (not spritesheetName in cacheJSON or not imageFile in cacheJSON[spritesheetName] or cacheJSON[spritesheetName][imageFile]['date_modified'] < os.stat(self.game_dir + self.ds + imageFile).st_mtime):
 						generateThisSheet = True;
 						break;
 
@@ -1221,13 +1224,14 @@ build:
 					else:
 						spritesheetJSON = str(json.dumps(spritesheet, separators=(',',':'))).replace("\"", "\\\"");
 						compileLine = "java -jar " + self.ark2d_dir + "/../Tools/Image\ Packer/build/jar/ImagePacker.jar \"" + spritesheetJSON + "\"";
+						#print(compileLine);
 						subprocess.call([compileLine], shell=True); # player 
 						
 					#redocache
 					cacheChanged = True;
 					cacheJSON[spritesheetName] = {};
 					for imageFile in spritesheet["files"]:
-						cacheJSON[spritesheetName][imageFile] = {"date_modified": os.stat(imageFile).st_mtime };
+						cacheJSON[spritesheetName][imageFile] = {"date_modified": os.stat(self.game_dir + self.ds + imageFile).st_mtime };
 
 				pass;
 
@@ -1238,7 +1242,7 @@ build:
 
 	def openCache(self, filename):
 		cachefilename = "";		
-		cachefilename += self.build_folder + self.ds + self.platform + self.ds + "build-cache" + self.ds  + filename + ".json";
+		cachefilename += self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + "build-cache" + self.ds  + filename + ".json";
 		self.createCacheFile(cachefilename);
 		f = open(cachefilename, "r")
 		fcontents = f.read();
@@ -1247,7 +1251,7 @@ build:
 		return fjson;
 
 	def saveCache(self, filename, data):
-		f = open(self.build_folder + self.ds + self.platform + self.ds + "build-cache" + self.ds + filename + ".json", "w")
+		f = open(self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + "build-cache" + self.ds + filename + ".json", "w");
 		f.write(json.dumps(data, sort_keys=True, indent=4));
 		f.close();
 		return;
@@ -2172,12 +2176,12 @@ build:
 			print("removing temp folders");
 			self.rmdir_recursive(jnifolder);
 			self.rmdir_recursive(libsdir);
-			
+
 			print("done c++ bits.");
 			print("do androidy-javay bits...");
 			try:
 				print("using custom AndroidManifest.xml");
-				androidManifestPath = config['osx']['android_manifest'];
+				androidManifestPath = config['android']['manifest'];
 				#todo: copy this to rootPath+"/build/android/project/AndroidManifest.xml";
 			except:
 				print("generating default AndroidManifest.xml");
@@ -2255,8 +2259,17 @@ build:
 
 				
 			#copy sample game java files...
-			print("generating android Activity");
-			f = open(ark2ddir+"/lib/android/GameActivity.java", "r");
+			fgamefile = "";
+			fgamecontents = "";
+			try: 
+				print("using custom GameActivity.java");
+				fgamefile = self.game_dir + self.ds + config['android']['override_activity'];
+			except:
+				print("using default (generated) GameActivity.java");
+				fgamefile = ark2ddir + "/lib/android/GameActivity.java";
+				pass;
+
+			f = open(fgamefile, "r");
 			fgamecontents = f.read();
 			f.close();
 			fgamecontents = self.str_replace(fgamecontents, editsStrReplace);

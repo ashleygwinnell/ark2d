@@ -29,6 +29,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 public class %GAME_CLASS_NAME%Activity extends Activity {
@@ -145,6 +146,36 @@ public class %GAME_CLASS_NAME%Activity extends Activity {
 
 		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse( url ));
 		s_activity.startActivity(browserIntent);
+	}
+
+	public static void openGalleryToImageUrl(String url) 
+	{
+		try { 
+			
+			if (!new File(url).exists()) { 
+				System.err.println("File (" + url + ") does not exist");
+				return;
+			}
+			
+			if (url.startsWith("/")) {
+				url = url.substring(1, url.length());
+			}
+			//s_activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("content://" + url)));
+			
+			Uri uri =  Uri.fromFile(new File(url));
+			Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
+			String mime = "*/*";
+			MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
+			if (mimeTypeMap.hasExtension(
+					MimeTypeMap.getFileExtensionFromUrl(uri.toString())))
+			    mime = mimeTypeMap.getMimeTypeFromExtension(
+			    		MimeTypeMap.getFileExtensionFromUrl(uri.toString()));
+			intent.setDataAndType(uri,mime);
+			s_activity.startActivity(intent);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
     private %GAME_CLASS_NAME%View mGLView;

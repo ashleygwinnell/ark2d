@@ -81,6 +81,10 @@ namespace ARK {
 			return anglef(float(x1), float(y1), float(x2), float(y2));
 		}
 		double MathUtil::anglef(float x1, float y1, float x2, float y2) {
+			return anglef(x1, y1, x2, y2, false);
+		}
+
+		double MathUtil::anglef(float x1, float y1, float x2, float y2, bool enforce_abs) {
 			if (x1 == x2 && y1 == y2) {
 				return 0;
 			} else if (x1 == x2) {
@@ -101,6 +105,12 @@ namespace ARK {
 			double yDifference = y2 - y1;
 
 			double angle = atan2(yDifference,xDifference) *(180/MY_PI);
+
+			if (enforce_abs && angle < 0) {
+				angle = fmod(angle, 360);
+				angle += 360;
+			}
+
 			return angle;
 		}
 

@@ -26,6 +26,7 @@ namespace ARK {
 
 				const string getName() const;
 				const string getValue() const;
+				signed int getValueAsInt() const;
 
 				void setName(const string& s);
 				void setValue(const string& s);

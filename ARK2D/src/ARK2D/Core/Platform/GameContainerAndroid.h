@@ -21,6 +21,7 @@ namespace ARK {
 				string m_keyChar;
 				virtual string urlRequest(string url);
 				virtual void openBrowserToUrl(string url);
+				virtual void openGalleryToImageUrl(string url);
 				virtual void openSoftwareKeyboard();
 				virtual void closeSoftwareKeyboard();
 		};

@@ -33,7 +33,7 @@ namespace ARK {
 					bool isRGB();
 					bool isRGBA();
 					static void saveFile(std::string filename, char* data, int w, int h);
-					~PNGImage();
+					~PNGImage(); 
 				private:
 					std::string m_filename;
 					//FILE *fp; // file handle.

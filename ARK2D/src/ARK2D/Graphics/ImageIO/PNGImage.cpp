@@ -18,11 +18,13 @@
 #include "../../UI/ErrorDialog.h"
 #include "../../Util/StringUtil.h"
 
+#include "../../Core/GameContainer.h"
+
 #include "PNGImage.h"
 
 using namespace std;
 
-namespace ARK {
+namespace ARK { 
 	namespace Graphics {
 		namespace ImageIO {
 
@@ -365,6 +367,26 @@ namespace ARK {
 			}
 
 			void PNGImage::saveFile(std::string filename, char* data, int w, int h) {
+
+				// copied from FileUtil::file_put_contents
+				{
+					#if defined(ARK2D_ANDROID)
+						filename = ARK2D::getContainer()->m_platformSpecific.m_externalDataStr + filename;
+					#else
+						if (filename.substr(1,1).compare(":") == 0 || filename.substr(0,1).compare("/") == 0) { 
+
+						} else {
+							filename = ARK2D::getContainer()->getResourcePath() + filename;
+						}
+					#endif
+
+					#if defined(ARK2D_FLASCC)
+						filename = string("/local") + filename;
+					#endif
+
+					ARK2D::getLog()->i(StringUtil::append("Making file: ", filename));
+				}
+
 				/* create file */
 				FILE* fp = fopen(filename.c_str(), "wb");
 				if (!fp) {
@@ -425,11 +447,13 @@ namespace ARK {
 				for(int i = h-1; i >= 0; i--) {
 					png_byte* row = row_pointers[i];
 					for (int j = 0; j < w; j++) {
+						unsigned char opaque = 255;
 						png_byte* ptr = &row[j*4];
 						memcpy(&ptr[0], (data + curOffset), 1);
 						memcpy(&ptr[1], (data + curOffset + 1), 1);
 						memcpy(&ptr[2], (data + curOffset + 2), 1);
-						memcpy(&ptr[3], (data + curOffset + 3), 1);
+						//memcpy(&ptr[3], (data + curOffset + 3), 1);
+						memcpy(&ptr[3], &opaque, 1);
 						curOffset += 4;
 					}
 				}

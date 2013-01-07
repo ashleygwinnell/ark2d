@@ -100,6 +100,10 @@ namespace ARK {
 
 				Renderer();
 
+				// this call needs freeing afterwards.
+				void* readPixels(int x, int y, int w, int h);
+				void flush(); 
+ 
 				void setFont(ARK::Font::Font* f);
 				void setDefaultFont(ARK::Font::Font* f);
 				ARK::Font::Font* getFont() const ;

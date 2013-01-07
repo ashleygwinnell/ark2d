@@ -439,10 +439,20 @@ void MyAndroidPluggable::openBrowserToUrl(string url) {
     //string returnStr(str);
     //s_env->ReleaseStringUTFChars(jstr); 
 	//ARK2D::getLog()->i(returnStr);
-    ARK2D::getLog()->i("done opening browser to url");
-     
-    
+    ARK2D::getLog()->i("done opening browser to url");   
 }
+
+void MyAndroidPluggable::openGalleryToImageUrl(string url) {
+	ARK2D::getLog()->i("opening gallery to image");
+
+	jstring jstr = s_env->NewStringUTF(url.c_str());
+	jclass clazz = s_env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
+	jmethodID messageMe = s_env->GetStaticMethodID(clazz, "openGalleryToImageUrl", "(Ljava/lang/String;)V"); // Get the method that you want to call
+	jobject result = s_env->CallStaticObjectMethod(clazz, messageMe, jstr); // Call the method on the object
+	
+	ARK2D::getLog()->i("done opening gallery to image"); 
+}
+
 void MyAndroidPluggable::openSoftwareKeyboard() {
 	ARK2D::getLog()->i("Opening software keyboard");
 

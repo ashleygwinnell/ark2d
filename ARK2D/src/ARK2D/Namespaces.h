@@ -108,6 +108,11 @@ namespace ARK {
 		class PathIO;
 		class SubPath;
 	}
+	//! Pathfinding, woo! 
+	namespace Pathfinding {
+		class AStar;
+		class AStarNode;
+	}
 	//! Classes for the finite state machine and game state. (e.g. Transitions, Loading)
 	namespace State {
 		class StateBasedGame;
@@ -200,6 +205,7 @@ using namespace ARK::Tiled;
 using namespace ARK::Tween;
 using namespace ARK::Threading;
 using namespace ARK::Path;
+using namespace ARK::Pathfinding;
 using namespace ARK::Particles;
 using namespace ARK::State;
 using namespace ARK::State::Transition;

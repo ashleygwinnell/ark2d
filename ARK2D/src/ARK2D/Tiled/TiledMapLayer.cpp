@@ -107,18 +107,20 @@ namespace ARK {
 				// for each width  -- this goes across the map.
 				for (unsigned int x = 0; x < m_width; x++)
 				{
-					//g->setDrawColor(Color::white);
+					//g->setDrawColor(Color::white); 
 					//g->drawRect((x * m_tileWidth) + xOffset, (y * m_tileWidth) + yOffset, m_tileWidth, m_tileHeight);
 
 					unsigned int gid = getTileGID(x, y);
 					if (gid != 0) {
 						TiledMapTileset* tileset = m_map->getTilesetByGID(gid);
+						if (tileset != NULL) { 
 
-						Image* t = tileset->getTileByGID(gid)->getImage();
-						if (t != NULL) {
-							t->setAlpha(m_opacity);
-							t->draw((int) (x * tileset->getTileWidth()) + xOffset, (int) (y * tileset->getTileHeight()) + yOffset);
-							t->setAlpha(1.0f);
+							Image* t = tileset->getTileByGID(gid)->getImage();
+							if (t != NULL) {
+								t->setAlpha(m_opacity);
+								t->draw((int) (x * tileset->getTileWidth()) + xOffset, (int) (y * tileset->getTileHeight()) + yOffset);
+								t->setAlpha(1.0f);
+							}
 						}
 					}
 				}

@@ -20,7 +20,7 @@
 class ARK2D {
 	friend class ARK::Core::GameContainer;
 
-	public:
+	public: 
 		static GameContainer* getContainer();
 		static Game* getGame();
 		static Renderer* getRenderer();
@@ -31,6 +31,9 @@ class ARK2D {
 
 		static bool is64BitArchitecture();
 		static bool isBigEndian();
+
+		static bool isDebug();
+		static void setDebug(bool b);
 
 		static const unsigned int PLATFORM_WINDOWS = 0;
 		static const unsigned int PLATFORM_OSX = 1;
@@ -45,6 +48,7 @@ class ARK2D {
 		static Renderer* s_graphics;
 		static Input* s_input;
 		static Log* s_log;
+		static bool s_debug;
 
 };
 

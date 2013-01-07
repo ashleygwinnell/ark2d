@@ -64,7 +64,6 @@ namespace ARK {
 		} 
 
 		void RendererState::startGeometry() {
-
 			s_textureId = 0;
 			RendererStats::s_textureSwaps++;
 
@@ -114,9 +113,32 @@ namespace ARK {
 		{
 			//m_DefaultFont = new BMFont("data/calibri.fnt", "data/calibri.bmp", Color::magenta);
 			//m_Font = m_DefaultFont;
+		} 
+
+		void* Renderer::readPixels(int x, int y, int w, int h) {
+			//void* data[w * h];// = malloc(w * h * 8);
+			//glReadPixels(x, y, w, h, GL_RGBA, GL_UNSIGNED_BYTE, &data);
+	
+			GLubyte* pixels = NULL;
+			/*{
+				int size = w * h * 4;
+				GLubyte* pixels = new GLubyte[size];
+				if (pixels == NULL) return NULL; 
+				glReadPixels(x, y, w, h, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+			}*/
+			{
+				int size = (w * h) * 4; 
+				pixels = new GLubyte[size];
+				if (pixels == NULL) return NULL;  
+				glReadPixels(x, y, w, h, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+			}
+
+			//delete[] pixels; 
+			return pixels;
+		} 
+		void Renderer::flush() {
+			glFlush();
 		}
-
-
 
 		void Renderer::setFont(ARK::Font::Font* f) {
 			m_Font = f;

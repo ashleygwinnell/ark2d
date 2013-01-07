@@ -229,7 +229,13 @@ namespace ARK {
 
 						if (layer.getWidth() != layer.m_data.size()
 								|| layer.getHeight() != layer.m_data.at(0).size()) {
-							ErrorDialog::createAndShow("Error Loading tiled map.\nThe width/height was incorrect after populating data.");
+							String s;
+							s += StringUtil::append("layer width: ", layer.getWidth());
+							s += StringUtil::append(", layer data width: ", layer.m_data.at(0).size());
+							s += StringUtil::append(", layer height: ", layer.getHeight());
+							s += StringUtil::append(", layer data height: ", layer.m_data.at(0).size());
+							string s2 = StringUtil::append("Error Loading tiled map.\nThe width/height was incorrect after populating data.", s.get());
+							ErrorDialog::createAndShow(s2);
 							exit(0);
 						}
 
@@ -340,6 +346,31 @@ namespace ARK {
 						int gid = Cast::fromString<signed int>(gid_cstr);
 						obj->setGID(gid);
 					}
+
+					/*
+						 <object name="spawn" type="spawn" gid="2" x="448" y="544">
+						   <properties>
+						    <property name="id" value="1"/>
+						   </properties>
+						  </object>
+					  */
+
+					// add object properties
+					TiXmlElement* object_properties_root = NULL;
+					object_properties_root = object_element->FirstChildElement("properties");
+
+					if (object_properties_root != NULL) { 
+
+						TiXmlElement* object_property = NULL;
+						for (object_property = object_properties_root->FirstChildElement("property");
+								object_property;
+								object_property = object_property->NextSiblingElement("property"))
+						{
+							obj->addProperty(object_property->Attribute("name"), object_property->Attribute("value"));
+						}
+
+					}
+
 
 					group.addObject(obj);
 				}

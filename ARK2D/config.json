@@ -114,6 +114,9 @@
 			"src/ARK2D/Path/Path.cpp",
 			"src/ARK2D/Path/SubPath.cpp",
 			"src/ARK2D/Path/PathIO.cpp",
+
+			"src/ARK2D/Pathfinding/AStar.cpp",
+
 			"src/ARK2D/Particles/ConfigurableEmitter.cpp",
 			"src/ARK2D/Particles/Particle.cpp",
 			"src/ARK2D/Particles/ParticleIO.cpp",
@@ -163,6 +166,7 @@
 			"src/ARK2D/UI/ErrorDialog.cpp",
 			"src/ARK2D/UI/Notification.cpp",
 			"src/ARK2D/UI/NotificationSystem.cpp",
+
 			"src/ARK2D/Util/ArcadeHighscoreInput.cpp",
 			"src/ARK2D/Util/FileUtil.cpp",
 			"src/ARK2D/Util/MathUtil.cpp",

@@ -12,6 +12,7 @@ Game* ARK2D::s_game = 0;
 Renderer* ARK2D::s_graphics = 0;
 Input* ARK2D::s_input = 0;
 Log* ARK2D::s_log = 0;
+bool ARK2D::s_debug = false;
 
 GameContainer* ARK2D::getContainer() {
 	return s_container;
@@ -33,6 +34,12 @@ Log* ARK2D::getLog() {
 	return s_log;
 }
 
+bool ARK2D::isDebug() {
+	return s_debug;
+}
+void ARK2D::setDebug(bool b) {
+	s_debug = b;
+}
 		
 unsigned int ARK2D::getPlatform() {
 	#if defined(ARK2D_FLASCC)
