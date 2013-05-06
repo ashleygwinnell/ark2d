@@ -21,12 +21,13 @@ namespace ARK {
 
 			public:
 				Highscore();
-				unsigned int getType();
-				unsigned int getTime();
-				string getScoreString();
-				signed int getScoreValue();
-				string getExtraData();
-				unsigned int getUserId();
+				unsigned int getType() const;
+				unsigned int getTime() const;
+				string getScoreString() const;
+				signed int getScoreValue() const; 
+				string getExtraData() const;
+				unsigned int getUserId() const;
+				string getName() const; 
 				virtual ~Highscore();
 		};
 	}

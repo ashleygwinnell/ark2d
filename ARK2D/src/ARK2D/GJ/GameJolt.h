@@ -34,6 +34,11 @@ namespace ARK {
 
 				string m_errorMessage;
 
+				unsigned int m_usingFormat;
+				static const unsigned int FORMAT_PLAINTEXT = 0;
+				static const unsigned int FORMAT_JSON = 1;
+				static const unsigned int FORMAT_XML = 2;
+
 			protected: // protected functions
 				string md5(string input);
 				string open(string url);
@@ -45,6 +50,17 @@ namespace ARK {
 				void logError(string message);
 				void logWarning(string message);
 				void logInformation(string message);
+
+				string getFormatString() {
+					if (m_usingFormat == FORMAT_PLAINTEXT) { 
+						return "keypair";
+					} else if (m_usingFormat == FORMAT_JSON) {
+						return "json";
+					} else if (m_usingFormat == FORMAT_XML) {
+						return "xml";
+					}
+					return "keypair";
+				}
 
 			public: // public functions
 				GameJolt(unsigned int gameId, string privateKey);
@@ -65,7 +81,8 @@ namespace ARK {
 				bool verifyUser(string username, string token);
 
 				string getErrorMessage();
-
+ 
+				vector<Highscore> getHighscoresInTable(unsigned int tableId, unsigned int page, unsigned int limit);
 				vector<Highscore*> getHighscores();
 				vector<Highscore*> getHighscores(bool all);
 				vector<Highscore*> getHighscores(bool all, unsigned int limit);
@@ -73,6 +90,7 @@ namespace ARK {
 				bool addHighscore(string score, int sort, string extra);
 				bool addGuestHighscore(string username, string score, int sort);
 				bool addGuestHighscore(string username, string score, int sort, string extra); 
+				bool addGuestHighscore(string username, string score, int sort, string extra, unsigned int tableId);
 
 				DataStore* setDataStore(unsigned int type, string key, string value);
 				bool removeDataStore(unsigned int type, string key);
@@ -84,6 +102,10 @@ namespace ARK {
 				bool sessionUpdate();
 				bool sessionUpdate(bool active);
 				bool sessionClose();
+
+				// get rank
+				//unsigned int getRank(signed int score);
+				unsigned int getRank(signed int score, unsigned int tableId);
 
 				string achieveTrophy(Trophy* trophy);
 				string achieveTrophy(unsigned int trophyId);

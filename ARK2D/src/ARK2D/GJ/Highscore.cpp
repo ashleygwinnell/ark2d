@@ -8,25 +8,28 @@ namespace ARK {
 		Highscore::Highscore(): PropertyItem() {
 
 		}
-		unsigned int Highscore::getType() {
-			return Cast::fromString<unsigned int>(m_properties["type"]);
+		unsigned int Highscore::getType() const { 
+			return Cast::fromString<unsigned int>(m_properties.find("type")->second);
 		}
-		unsigned int Highscore::getTime() {
-			return Cast::fromString<unsigned int>(m_properties["time"]);
+		unsigned int Highscore::getTime() const {
+			return Cast::fromString<unsigned int>(m_properties.find("time")->second);
 		}
-		string Highscore::getScoreString() {
-			return m_properties["score"];
+		string Highscore::getScoreString() const {
+			return m_properties.find("score")->second;
+		} 
+		signed int Highscore::getScoreValue() const {
+			return Cast::fromString<signed int>(m_properties.find("sort")->second);
 		}
-		signed int Highscore::getScoreValue() {
-			return Cast::fromString<signed int>(m_properties["sort"]);
+		string Highscore::getExtraData() const { 
+			return m_properties.find("extra_data")->second; 
 		}
-		string Highscore::getExtraData() { 
-			return m_properties["extra_data"]; 
+		unsigned int Highscore::getUserId() const {
+			return Cast::fromString<unsigned int>(m_properties.find("user_id")->second);
+		} 
+		string Highscore::getName() const {
+			return m_properties.find("name")->second;  
 		}
-		unsigned int Highscore::getUserId() {
-			return Cast::fromString<unsigned int>(m_properties["user_id"]);
-		}
-		Highscore::~Highscore() {
+		Highscore::~Highscore() { 
 			m_properties.clear();
 		}
 

@@ -1,23 +1,35 @@
 
 #include "GameJolt.h"
 #include "../../ARK.h"
+#include "../Util/Cast.h"
 
 namespace ARK {
 	namespace GJ { 
 
 		GameJolt::GameJolt(unsigned int gameId, string privateKey): 
-			m_gameId(gameId), m_privateKey(privateKey),  
-			m_username(""), m_userToken(""), 
-			m_version(1), m_verbose(false), m_verified(false),
-			m_errorMessage("")
+			m_gameId(gameId), 
+			m_privateKey(privateKey),  
+			m_username(""), 
+			m_userToken(""), 
+			m_version(1), 
+			m_verbose(false),  
+			m_verified(false),
+			m_errorMessage(""), 
+			m_usingFormat(FORMAT_XML)
 			{ 
 
 		}
  
 		GameJolt::GameJolt(unsigned int gameId, string privateKey, string username, string userToken): 
-			m_gameId(gameId), m_privateKey(privateKey), 
-			m_username(username), m_userToken(userToken), 
-			m_version(1), m_verbose(false), m_verified(false) 
+			m_gameId(gameId), 
+			m_privateKey(privateKey), 
+			m_username(username), 
+			m_userToken(userToken), 
+			m_version(1), 
+			m_verbose(false), 
+			m_verified(false),
+			m_errorMessage(""),
+			m_usingFormat(FORMAT_XML)
 			{
 			verifyUser(username, userToken);
 		}
@@ -42,18 +54,49 @@ namespace ARK {
 
 		bool GameJolt::verifyUser(string username, string token) {
 			m_verified = false;
+			m_errorMessage = "";
 
 			map<string, string> params;
 			params["username"] = username;
 			params["user_token"] = token;
 
 			string json = request("users/auth/", params, false);
-			JSONNode* root = libJSON::Parse(json);
-			JSONNode* response = root->GetNode("response");
-			if (response->GetNode("success")->NodeAsString() == "false") {
-				logError(response->GetNode("message")->NodeAsString());
-				return false;
-			} 
+
+			if (m_usingFormat == FORMAT_JSON) { 
+				JSONNode* root = libJSON::Parse(json);
+				JSONNode* response = root->GetNode("response");
+				if (response->GetNode("success")->NodeAsString() == "false") {
+					m_errorMessage = response->GetNode("message")->NodeAsString();
+					logError(m_errorMessage);
+					return false;
+				} 
+			} else if (m_usingFormat == FORMAT_XML) {
+				TiXmlDocument doc;
+				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
+
+				if (doc.Error()) {
+					m_errorMessage = doc.ErrorDesc();
+					logError(m_errorMessage);
+					return false;
+				}
+ 
+				TiXmlNode* responseNode = doc.FirstChild("response");
+				TiXmlElement* responseElement = responseNode->ToElement();
+				
+				TiXmlNode* successNode = responseElement->FirstChild("success");
+				TiXmlElement* successElement = successNode->ToElement();
+				const char* data_c_str = successElement->GetText();
+
+				if (string(data_c_str) == "false") {
+					TiXmlNode* messageNode = responseElement->FirstChild("message");
+					TiXmlElement* messageElement = messageNode->ToElement();
+					
+					m_errorMessage = messageElement->GetText();
+					logError(m_errorMessage);
+					return false; 
+				} 
+			}
+
 			m_username = username;
     		m_userToken = token;
     		m_verified = true;
@@ -62,8 +105,11 @@ namespace ARK {
 			
 		}
 		User* GameJolt::getVerifiedUser() {
+			m_errorMessage = "";
+
 			if (!m_verified) {
-				logError("Could not get the (currently verified) user.");
+				m_errorMessage = "Could not get the (currently verified) user.";
+				logError(m_errorMessage);
 				return NULL;
 			}
 			
@@ -78,28 +124,48 @@ namespace ARK {
 
 			requestUrl = url("users/", params, false);
 			string json = open(requestUrl);
-			
-			JSONNode* root = libJSON::Parse(json);
-			JSONNode* response = root->GetNode("response");
-			if (response->GetNode("success")->NodeAsString() == "false") {
-				logError(response->GetNode("message")->NodeAsString());
+
+			if (json.length() == 0) { 
+				m_errorMessage = "No internet connection / see log.";
+				logError(m_errorMessage);
 				return NULL;
-			} 
+			}
 
-			JSONNode* user = response->GetNode("users")->NodeAt(0);
+			User* u = NULL;
+			if (m_usingFormat == FORMAT_JSON) 
+			{ 
+				JSONNode* root = libJSON::Parse(json);
+				if (root == NULL) {
+					m_errorMessage = "Could not parse JSON.";
+					logError(m_errorMessage);
+					return NULL;
+				}
 
-			User* u = new User();
-			u->addProperty("id", user->GetNode("id")->NodeAsString());
-			u->addProperty("type", user->GetNode("type")->NodeAsString());
-			u->addProperty("username", m_username);
-			u->addProperty("user_token", m_userToken);
-			u->addProperty("avatar_url", user->GetNode("avatar_url")->NodeAsString());
-			u->addProperty("signed_up", user->GetNode("signed_up")->NodeAsString());
-			u->addProperty("last_logged_in", user->GetNode("last_logged_in")->NodeAsString());
-			u->addProperty("status", user->GetNode("status")->NodeAsString());
-			//"developer_name": "Ashley Gwinnell",
-            //"developer_website": "http://www.ashleygwinnell.co.uk/",
-            //"developer_description": "Game Jolt is actually cereal.My name is Ashley. I'm one of the moderators here.You can see that I don't have many games to date. I get busy with real life, and I'm too much of an elitist programmer to learn time-saving tools such as Construct, GM or Stencyl.\\o"
+				JSONNode* response = root->GetNode("response");
+				if (response->GetNode("success")->NodeAsString() == "false") {
+					m_errorMessage = response->GetNode("message")->NodeAsString();
+					logError(m_errorMessage);
+					return NULL;
+				} 
+
+				JSONNode* user = response->GetNode("users")->NodeAt(0);
+
+				u = new User();
+				u->addProperty("id", user->GetNode("id")->NodeAsString());
+				u->addProperty("type", user->GetNode("type")->NodeAsString());
+				u->addProperty("username", m_username);
+				u->addProperty("user_token", m_userToken);
+				u->addProperty("avatar_url", user->GetNode("avatar_url")->NodeAsString());
+				u->addProperty("signed_up", user->GetNode("signed_up")->NodeAsString());
+				u->addProperty("last_logged_in", user->GetNode("last_logged_in")->NodeAsString());
+				u->addProperty("status", user->GetNode("status")->NodeAsString());
+				//"developer_name": "Ashley Gwinnell",
+	            //"developer_website": "http://www.ashleygwinnell.co.uk/",
+	            //"developer_description": "Game Jolt is actually cereal.My name is Ashley. I'm one of the moderators here.You can see that I don't have many games to date. I get busy with real life, and I'm too much of an elitist programmer to learn time-saving tools such as Construct, GM or Stencyl.\\o"
+			} else if (m_usingFormat == FORMAT_XML) {
+				m_errorMessage = "XML not implemented for getVerifiedUser";
+				logError(m_errorMessage);
+			}
 			return u;
 		}
 		
@@ -113,9 +179,12 @@ namespace ARK {
 		vector<Highscore*> GameJolt::getHighscores() { return getHighscores(true, 100); }
 		vector<Highscore*> GameJolt::getHighscores(bool all) { return getHighscores(all, 100);   }
 		vector<Highscore*> GameJolt::getHighscores(bool all, unsigned int limit) { 
+			m_errorMessage = "";
+
 			vector<Highscore*> highscores; 
 			if (all == false && !m_verified) { 
-				logError("User must be verified to get user Highscores");
+				m_errorMessage = "User must be verified to get user Highscores";
+				logError(m_errorMessage);
 				return highscores;
 			}
 
@@ -145,44 +214,343 @@ namespace ARK {
 			//ErrorDialog::createAndShow(json);
 			logInformation(json);
 
-			JSONNode* root = libJSON::Parse(json);
-			if (root == NULL) { return highscores; }
-
-			JSONNode* response = root->GetNode("response");
-			if (response->GetNode("success")->NodeAsString() == "false") {
-				logError(response->GetNode("message")->NodeAsString());
-				m_errorMessage = response->GetNode("message")->NodeAsString();
+			if (json.length() == 0) { 
+				m_errorMessage = "No internet connection / see log.";
+				logError(m_errorMessage);
 				return highscores;
 			} 
 
-			JSONNode* scores = response->GetNode("scores");
-			for(unsigned int i = 0; i < scores->NodeSize(); i++) {
-				// {"score":"3 Stars","sort":"3","extra_data":"","user":"","user_id":"","guest":"lol90","stored":"10 hours ago"}
-				JSONNode* score = scores->Children[i];
-				Highscore* highscore = new Highscore();
-				highscore->addProperty("score", score->GetNode("score")->NodeAsString());
-				highscore->addProperty("sort", score->GetNode("sort")->NodeAsString());
-				highscore->addProperty("extra_data", score->GetNode("extra_data")->NodeAsString());
-				highscore->addProperty("user", score->GetNode("user")->NodeAsString());
-				highscore->addProperty("user_id", score->GetNode("user_id")->NodeAsString());
-				highscore->addProperty("guest", score->GetNode("guest")->NodeAsString());
-				highscore->addProperty("stored", score->GetNode("stored")->NodeAsString());
+			if (m_usingFormat == FORMAT_JSON) 
+			{
 
-				if (score->GetNode("guest")->NodeAsString().length() > 0) {
-					highscore->addProperty("name", score->GetNode("guest")->NodeAsString());					
-				} else {
-					highscore->addProperty("name", score->GetNode("user")->NodeAsString());
+				JSONNode* root = libJSON::Parse(json);
+				if (root == NULL) { 
+					m_errorMessage = "Could not parse JSON."; 
+					logError(m_errorMessage); 
+					return highscores; 
 				}
-				highscores.push_back(highscore);
+
+				JSONNode* response = root->GetNode("response");
+				if (response->GetNode("success")->NodeAsString() == "false") {
+					m_errorMessage = response->GetNode("message")->NodeAsString();
+					logError(m_errorMessage);
+					return highscores;
+				} 
+
+				JSONNode* scores = response->GetNode("scores");
+				for(unsigned int i = 0; i < scores->NodeSize(); i++) {
+					// {"score":"3 Stars","sort":"3","extra_data":"","user":"","user_id":"","guest":"lol90","stored":"10 hours ago"}
+					JSONNode* score = scores->Children[i];
+					Highscore* highscore = new Highscore();
+					highscore->addProperty("score", score->GetNode("score")->NodeAsString());
+					highscore->addProperty("sort", score->GetNode("sort")->NodeAsString());
+					highscore->addProperty("extra_data", score->GetNode("extra_data")->NodeAsString());
+					highscore->addProperty("user", score->GetNode("user")->NodeAsString());
+					highscore->addProperty("user_id", score->GetNode("user_id")->NodeAsString());
+					highscore->addProperty("guest", score->GetNode("guest")->NodeAsString());
+					highscore->addProperty("stored", score->GetNode("stored")->NodeAsString());
+
+					if (score->GetNode("guest")->NodeAsString().length() > 0) {
+						highscore->addProperty("name", score->GetNode("guest")->NodeAsString());					
+					} else {
+						highscore->addProperty("name", score->GetNode("user")->NodeAsString());
+					}
+					highscores.push_back(highscore);
+				}
+			}
+			else if (m_usingFormat == FORMAT_XML) 
+			{
+				m_errorMessage = "XML not implemented for getHighscores";
+				logError(m_errorMessage);
 			}
 
 			return highscores;  
 		}
 		
+ 
+		vector<Highscore> GameJolt::getHighscoresInTable(unsigned int tableId, unsigned int page, unsigned int limit)
+		{
+ 			m_errorMessage = "";
+ 
+ 			vector<Highscore> highscores; 
+			
+			string json;
+			map<string, string> params;
+			params["limit"] = Cast::toString<unsigned int>(limit);
+			params["table_id"] = Cast::toString<unsigned int>(tableId);
+			
+			string requestUrl = url("scores", params, false, true);
+			//ErrorDialog::createAndShow(requestUrl);
+			//params["limit"] = Cast::toString<unsigned int>(limit); 
+			params["signature"] = md5(requestUrl);
+			requestUrl = url("scores", params, false);
+			
+			logInformation(requestUrl);
+			
+			json = open(requestUrl);
+						
+			//ErrorDialog::createAndShow(json);
+			logInformation(json);
+
+			if (json.length() == 0) {
+				m_errorMessage = "No internet connection / see log.";
+				logError(m_errorMessage);
+				return highscores;
+			}
+
+			if (m_usingFormat == FORMAT_JSON) 
+			{
+
+				JSONNode* root = libJSON::Parse(json);
+				if (root == NULL) { 
+					m_errorMessage = "Could not parse JSON.";
+					logError(m_errorMessage); 
+					return highscores; 
+				}
+
+				JSONNode* response = root->GetNode("response");
+				if (response->GetNode("success")->NodeAsString() == "false") {
+					logError(response->GetNode("message")->NodeAsString());
+					m_errorMessage = response->GetNode("message")->NodeAsString();
+					return highscores;
+				} 
+
+				JSONNode* scores = response->GetNode("scores");
+				for(unsigned int i = 0; i < scores->NodeSize(); i++) {
+					// {"score":"3 Stars","sort":"3","extra_data":"","user":"","user_id":"","guest":"lol90","stored":"10 hours ago"}
+					JSONNode* score = scores->Children[i];
+					Highscore highscore;
+					highscore.addProperty("score", score->GetNode("score")->NodeAsString());
+					highscore.addProperty("sort", score->GetNode("sort")->NodeAsString());
+					highscore.addProperty("extra_data", score->GetNode("extra_data")->NodeAsString());
+					highscore.addProperty("user", score->GetNode("user")->NodeAsString());
+					highscore.addProperty("user_id", score->GetNode("user_id")->NodeAsString());
+					highscore.addProperty("guest", score->GetNode("guest")->NodeAsString());
+					highscore.addProperty("stored", score->GetNode("stored")->NodeAsString());
+
+					if (score->GetNode("guest")->NodeAsString().length() > 0) {
+						highscore.addProperty("name", score->GetNode("guest")->NodeAsString());					
+					} else {
+						highscore.addProperty("name", score->GetNode("user")->NodeAsString());
+					}
+					highscores.push_back(highscore);
+				} 
+
+			} 
+			else if (m_usingFormat == FORMAT_XML) 
+			{
+				/*
+				
+				<?xml version="1.0" encoding="UTF-8"?>
+				<response>
+					<success><![CDATA[true]]></success>
+					<scores>
+						<score>
+							<score>100</score>
+							<sort>100</sort>
+							<extra_data><![CDATA[{\"name\": \"William\", \"hat\": 0, \"face\": 8,\"misc\": 0,\"duration\": 10}]]></extra_data>
+							<user></user>
+							<user_id></user_id>
+							<guest><![CDATA[William]]></guest>
+							<stored><![CDATA[3 seconds ago]]></stored>
+						</score>
+					</scores>
+				</response>
+				
+				*/
+
+				//m_errorMessage = "XML not implemented for getHighscoresInTable";
+				//logError(m_errorMessage);
+
+				TiXmlDocument doc;
+				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
+
+				if (doc.Error()) {
+					m_errorMessage = doc.ErrorDesc();
+					logError(m_errorMessage);
+					return highscores;
+				}
+ 
+				TiXmlNode* responseNode = doc.FirstChild("response");
+				TiXmlElement* responseElement = responseNode->ToElement();
+				
+				TiXmlNode* successNode = responseElement->FirstChild("success");
+				TiXmlElement* successElement = successNode->ToElement();
+				const char* data_c_str = successElement->GetText();
+
+				if (string(data_c_str) == "false") {
+					TiXmlNode* messageNode = responseElement->FirstChild("message");
+					TiXmlElement* messageElement = messageNode->ToElement();
+					
+					m_errorMessage = messageElement->GetText();
+					logError(m_errorMessage);
+					return highscores; 
+				} 
+ 
+				// parse data now
+				TiXmlNode* scoresNode = responseElement->FirstChild("scores");
+				TiXmlElement* scoresElement = scoresNode->ToElement();
+
+				// layers please!
+				TiXmlNode* scoreNode = 0;
+				for (scoreNode = scoresElement->FirstChild("score");
+								scoreNode;  
+								scoreNode = scoreNode->NextSibling("score")) 
+				{
+					Highscore highscore;   
+					highscore.addProperty("score", scoreNode->FirstChild("score")->ToElement()->GetText() );
+					highscore.addProperty("sort", scoreNode->FirstChild("sort")->ToElement()->GetText() );
+					highscore.addProperty("extra_data", scoreNode->FirstChild("extra_data")->ToElement()->GetText() );
+					
+					if (scoreNode->FirstChild("user")->ToElement()->GetText() != NULL) { 
+						highscore.addProperty("user", scoreNode->FirstChild("user")->ToElement()->GetText());
+					} else {
+						highscore.addProperty("user", "");
+					}
+
+					if (scoreNode->FirstChild("user_id")->ToElement()->GetText() != NULL) { 
+						highscore.addProperty("user_id", scoreNode->FirstChild("user_id")->ToElement()->GetText());
+					} else {
+						highscore.addProperty("user_id", "");
+					}
+
+					if (scoreNode->FirstChild("guest")->ToElement()->GetText() != NULL) { 
+						highscore.addProperty("guest", scoreNode->FirstChild("guest")->ToElement()->GetText());
+					} else {
+						highscore.addProperty("guest", "");
+					}
+
+					highscore.addProperty("stored", scoreNode->FirstChild("stored")->ToElement()->GetText() );
+
+					const char* guestStr = scoreNode->FirstChildElement("guest")->GetText();
+					if (guestStr != NULL && strlen(guestStr) > 0) { 
+						highscore.addProperty("name", scoreNode->FirstChild("guest")->ToElement()->GetText() );
+					} else { 
+						highscore.addProperty("name", scoreNode->FirstChild("user")->ToElement()->GetText() );
+					}
+					//highscore.addProperty("score", "122");
+					//highscore.addProperty("name", "Boo");   
+					highscores.push_back(highscore);	
+ 
+				}
+				
+			}
+
+			return highscores;   
+		}
+
+		// get rank
+		//unsigned int getRank(signed int score);
+		unsigned int GameJolt::getRank(signed int score, unsigned int tableId) 
+		{
+			m_errorMessage = "";
+
+			if (score == 0) { 
+				m_errorMessage = "Cannot get rank with a score of zero.";
+				logError(m_errorMessage);
+				return 0;
+			}
+ 			
+			string json;
+			map<string, string> params;
+			params["sort"] = Cast::toString<signed int>(score);
+			params["table_id"] = Cast::toString<unsigned int>(tableId);
+			
+			string requestUrl = url("scores/get-rank", params, false, true);
+			params["signature"] = md5(requestUrl);
+			requestUrl = url("scores/get-rank", params, false);
+			
+			logInformation(requestUrl);
+			
+			json = open(requestUrl);
+						
+			//ErrorDialog::createAndShow(json);
+			logInformation(json);
+
+			if (json.length() == 0) {
+				m_errorMessage = "No internet connection / see log.";
+				logError(m_errorMessage);
+				return 0;
+			}
+
+			if (m_usingFormat == FORMAT_JSON)
+			{
+				JSONNode* root = libJSON::Parse(json);
+				if (root == NULL) {
+					m_errorMessage = "Could not parse JSON.";
+					logError(m_errorMessage);
+					return 0;
+				}
+
+				JSONNode* response = root->GetNode("response");
+				if (response->GetNode("success")->NodeAsString() == "false") {
+					m_errorMessage = response->GetNode("message")->NodeAsString();
+					logError(m_errorMessage);
+					return 0;
+				} 
+
+				return response->GetNode("rank")->NodeAsInt();
+			}
+			else if (m_usingFormat == FORMAT_XML) 
+			{
+
+				/*
+					SUCCESS:
+					<?xml version="1.0" encoding="UTF-8"?>
+					<response>
+						<success><![CDATA[true]]></success>
+						<rank>5</rank>
+					</response>
+					
+					FAIL:
+					<?xml version="1.0" encoding="UTF-8"?>
+					<response>
+						<success><![CDATA[false]]></success>
+						<message><![CDATA[Could not get a rank for the parameters you entered.]]></message>
+					</response>
+				*/
+
+				TiXmlDocument doc;
+				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
+
+				if (doc.Error()) {
+					m_errorMessage = doc.ErrorDesc();
+					logError(m_errorMessage);
+					return 0;
+				}  
+ 
+				TiXmlNode* responseNode = doc.FirstChild("response");
+				TiXmlElement* responseElement = responseNode->ToElement();
+				
+				TiXmlNode* successNode = responseElement->FirstChild("success");
+				TiXmlElement* successElement = successNode->ToElement();
+				const char* data_c_str = successElement->GetText();
+
+				if (string(data_c_str) == "false") {
+					TiXmlNode* messageNode = responseElement->FirstChild("message");
+					TiXmlElement* messageElement = messageNode->ToElement();
+					 
+					m_errorMessage = messageElement->GetText();
+					logError(m_errorMessage); 
+					return 0; 
+				} 
+
+				TiXmlNode* rankNode = responseElement->FirstChild("rank");
+				TiXmlElement* rankElement = rankNode->ToElement();
+				return Cast::fromString<signed int>( rankElement->GetText() );
+			}
+			m_errorMessage = "Invalid Format";
+			logError(m_errorMessage); 
+			return 0;
+		}
+		
 		bool GameJolt::addHighscore(string score, int sort) { return addHighscore(score, sort, ""); }
 		bool GameJolt::addHighscore(string score, int sort, string extra) { 
+			m_errorMessage = "";
+
 			if (!m_verified) {
-				logError("GameJoltAPI: Could not add the High Score because the user is not verified.");
+				m_errorMessage = "GameJoltAPI: Could not add the High Score because the user is not verified.";
+				logError(m_errorMessage);
 				return false;
 			}
 			
@@ -202,19 +570,68 @@ namespace ARK {
 			string json = open(requestUrl);
 			logInformation(json);
 
-			JSONNode* root = libJSON::Parse(json);
-			JSONNode* response = root->GetNode("response");
-
-			if (response->GetNode("success")->NodeAsString() == "false") {
-				logError(response->GetNode("message")->NodeAsString());
-				m_errorMessage = response->GetNode("message")->NodeAsString();
+			if (json.length() == 0) {
+				m_errorMessage = "No internet connection / see log.";
+				logError(m_errorMessage);
 				return false;
-			} 
-			return true;
+			}
+
+			if (m_usingFormat == FORMAT_JSON) 
+			{
+				JSONNode* root = libJSON::Parse(json);
+				if (root == NULL) {
+					m_errorMessage = "Could not parse JSON";
+					logError(m_errorMessage);
+					return false;
+				}
+
+				JSONNode* response = root->GetNode("response");
+				if (response->GetNode("success")->NodeAsString() == "false") {
+					logError(response->GetNode("message")->NodeAsString());
+					m_errorMessage = response->GetNode("message")->NodeAsString();
+					return false;
+				} 
+			}
+			else if (m_usingFormat == FORMAT_XML) 
+			{
+				TiXmlDocument doc;
+				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
+
+				if (doc.Error()) {
+					m_errorMessage = doc.ErrorDesc();
+					logError(m_errorMessage);
+					return false;
+				}
+ 
+				TiXmlNode* responseNode = doc.FirstChild("response");
+				TiXmlElement* responseElement = responseNode->ToElement();
+				
+				TiXmlNode* successNode = responseElement->FirstChild("success");
+				TiXmlElement* successElement = successNode->ToElement();
+				const char* data_c_str = successElement->GetText();
+
+				if (string(data_c_str) == "false") {
+					TiXmlNode* messageNode = responseElement->FirstChild("message");
+					TiXmlElement* messageElement = messageNode->ToElement();
+					
+					m_errorMessage = messageElement->GetText();
+					logError(m_errorMessage);
+					return false; 
+				} 
+			}
+			return true; 
 		}
-		bool GameJolt::addGuestHighscore(string username, string score, int sort) { return addGuestHighscore(username, score, sort, ""); }
+
+		bool GameJolt::addGuestHighscore(string username, string score, int sort) { 
+			return addGuestHighscore(username, score, sort, ""); 
+		}
 		bool GameJolt::addGuestHighscore(string username, string score, int sort, string extra) { 
-			
+			return addGuestHighscore(username, score, sort, "", 0);
+		}
+		bool GameJolt::addGuestHighscore(string username, string score, int sort, string extra, unsigned int tableId)
+		{
+			m_errorMessage = "";
+
 			username = StringUtil::str_replace(" ", "%20", username);
 			username = StringUtil::str_replace("\r", "", username);
 			username = StringUtil::str_replace("\n", "", username);
@@ -230,6 +647,9 @@ namespace ARK {
 			if (extra.length() > 0) {
 				params["extra_data"] = extra;
 			}
+			if (tableId > 0) { 
+				params["table_id"] = Cast::toString<unsigned int>(tableId); 
+			}
 
 			string requestUrl = url("scores/add/", params, false, true);
 			requestUrlLog1 = requestUrl;
@@ -243,27 +663,229 @@ namespace ARK {
 			string json = open(requestUrl);
 			logInformation(json);
 			if (json.length() == 0) {
+				m_errorMessage = "No internet connection / see log.";
+				logError(m_errorMessage);
 				return false;
 			}
-			//ErrorDialog::createAndShow(json);
-			JSONNode* root = libJSON::Parse(json);
-			JSONNode* response = root->GetNode("response");
 
-			if (response->GetNode("success")->NodeAsString() == "false") {
-				logError(response->GetNode("message")->NodeAsString());
-				//logError(requestUrlLog1);
-				logError(requestUrlLog2);
-				m_errorMessage = response->GetNode("message")->NodeAsString();
-				return false;
-			} 
+			if (m_usingFormat == FORMAT_JSON) 
+			{
+				//ErrorDialog::createAndShow(json);
+				JSONNode* root = libJSON::Parse(json);
+				if (root == NULL) {
+					m_errorMessage = "Could not parse JSON.";
+					logError(m_errorMessage);
+					return false;
+				}
+				JSONNode* response = root->GetNode("response");
+
+				if (response->GetNode("success")->NodeAsString() == "false") {
+					logError(requestUrlLog2);
+					m_errorMessage = response->GetNode("message")->NodeAsString();
+					logError(m_errorMessage);
+					return false;
+				} 
+			}
+			else if (m_usingFormat == FORMAT_XML) 
+			{
+				TiXmlDocument doc;
+				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
+
+				if (doc.Error()) {
+					m_errorMessage = doc.ErrorDesc();
+					logError(m_errorMessage);
+					return false;
+				}
+ 
+				TiXmlNode* responseNode = doc.FirstChild("response");
+				TiXmlElement* responseElement = responseNode->ToElement();
+				
+				TiXmlNode* successNode = responseElement->FirstChild("success");
+				TiXmlElement* successElement = successNode->ToElement();
+				const char* data_c_str = successElement->GetText();
+
+				if (string(data_c_str) == "false") {
+					TiXmlNode* messageNode = responseElement->FirstChild("message");
+					TiXmlElement* messageElement = messageNode->ToElement();
+					
+					m_errorMessage = messageElement->GetText();
+					logError(m_errorMessage);
+					return false; 
+				} 
+			}
 			return true;
 		}
 
-		DataStore* GameJolt::setDataStore(unsigned int type, string key, string value) { return NULL; }
+		DataStore* GameJolt::setDataStore(unsigned int type, string key, string value) { 
+			m_errorMessage = "";
+
+			string requestUrlLog1, requestUrlLog2;
+
+			map<string, string> params;
+			params["game_id"] = Cast::toString<unsigned int>(m_gameId);
+			params["key"] = key;
+			params["data"] = value;
+			
+			string requestUrl = url("data-store/set/", params, false, true);
+			requestUrlLog1 = requestUrl;
+			
+			//params["sort"] = Cast::toString<int>(sort);
+			params["signature"] = md5(requestUrl);
+			
+			requestUrl = url("data-store/set/", params, false, false);
+			requestUrlLog2 = requestUrl;
+
+			string json = open(requestUrl); 
+			logInformation(json);
+			if (json.length() == 0) {
+				m_errorMessage = "No internet connection / see log.";
+				logError(m_errorMessage);
+				return NULL; 
+			}
+
+			if (m_usingFormat == FORMAT_JSON) { 
+				//ErrorDialog::createAndShow(json);
+				JSONNode* root = libJSON::Parse(json);
+				if (root == NULL) {
+					m_errorMessage = "Could not parse JSON.";
+					logError(m_errorMessage);
+					return NULL;
+				}
+
+				JSONNode* response = root->GetNode("response");
+				if (response->GetNode("success")->NodeAsString() == "false") {
+					logError(response->GetNode("message")->NodeAsString());
+					//logError(requestUrlLog1);
+					logError(requestUrlLog2);
+					m_errorMessage = response->GetNode("message")->NodeAsString();
+					return NULL;
+				} 
+				
+			} else if (m_usingFormat == FORMAT_XML) {
+
+				TiXmlDocument doc;
+				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
+
+				if (doc.Error()) {
+					m_errorMessage = doc.ErrorDesc();
+					logError(m_errorMessage);
+					return NULL;
+				}
+ 
+				TiXmlNode* responseNode = doc.FirstChild("response");
+				TiXmlElement* responseElement = responseNode->ToElement();
+				
+				TiXmlNode* successNode = responseElement->FirstChild("success");
+				TiXmlElement* successElement = successNode->ToElement();
+				const char* data_c_str = successElement->GetText();
+
+				if (string(data_c_str) == "false") {
+					TiXmlNode* messageNode = responseElement->FirstChild("message");
+					TiXmlElement* messageElement = messageNode->ToElement();
+					
+					m_errorMessage = messageElement->GetText();
+					logError(m_errorMessage);
+					return NULL;
+				} 
+			} 
+			// TODO: cacheing... 
+			return new DataStore(key, value, type);
+
+		}
 		bool GameJolt::removeDataStore(unsigned int type, string key) { return false; }
 		vector<DataStore*> GameJolt::getDataStores(unsigned int type) { vector<DataStore*> ds; return ds; }
 		vector<string> GameJolt::getDataStoreKeys(unsigned int type) { vector<string>ds; return ds; }
-		DataStore* GameJolt::getDataStore(unsigned int type, string key) { return NULL; }
+		DataStore* GameJolt::getDataStore(unsigned int type, string key) { 
+			m_errorMessage = "";
+
+			string requestUrlLog1, requestUrlLog2;
+
+			map<string, string> params;
+			params["game_id"] = Cast::toString<unsigned int>(m_gameId);
+			params["key"] = key;
+			
+			string requestUrl = url("data-store/", params, false, true);
+			requestUrlLog1 = requestUrl;
+			
+			//params["sort"] = Cast::toString<int>(sort);
+			params["signature"] = md5(requestUrl);
+			
+			requestUrl = url("data-store/", params, false, false);
+			requestUrlLog2 = requestUrl;
+
+			string json = open(requestUrl);
+			logInformation(json);
+			if (json.length() == 0) { 
+				m_errorMessage = "No internet connection / see log.";
+				logError(m_errorMessage);
+				return NULL;
+			}
+
+			string valueStr("");
+
+			if (m_usingFormat == FORMAT_JSON) { 
+
+				//ErrorDialog::createAndShow(json);
+				logInformation("creating json node from above str");
+				JSONNode* root = libJSON::Parse(json); 
+				if (root == NULL) { 
+					m_errorMessage = "Could not parse JSON / see log.";
+					logError(m_errorMessage); 
+					return NULL; 
+				}
+				JSONNode* response = root->GetNode("response");
+
+				logInformation("checking response code");
+				if (response->GetNode("success")->NodeAsString() == "false") {
+					logError(response->GetNode("message")->NodeAsString());
+					//logError(requestUrlLog1);
+					logError(requestUrlLog2);
+					m_errorMessage = response->GetNode("message")->NodeAsString();
+					return NULL;
+				} 
+
+				valueStr = response->GetNode("data")->NodeAsString();
+
+				ARK2D::getLog()->i("libjson::delete");
+				libJSON::Delete(root); 
+
+			} else if (m_usingFormat == FORMAT_XML) {
+				TiXmlDocument doc;
+				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
+
+				if (doc.Error()) {
+					m_errorMessage = doc.ErrorDesc();
+					logError(m_errorMessage);
+					return NULL;
+				}
+
+				TiXmlNode* responseNode = doc.FirstChild("response");
+				TiXmlElement* responseElement = responseNode->ToElement();
+				
+				TiXmlNode* successNode = responseElement->FirstChild("success");
+				TiXmlElement* successElement = successNode->ToElement();
+				const char* data_c_str = successElement->GetText();
+
+				if (string(data_c_str) == "false") {
+					TiXmlNode* messageNode = responseElement->FirstChild("message");
+					TiXmlElement* messageElement = messageNode->ToElement();
+					
+					m_errorMessage = messageElement->GetText();
+					logError(m_errorMessage);
+					return NULL;
+				} 
+
+				TiXmlNode* dataNode = responseElement->FirstChild("data");
+				TiXmlElement* dataElement = dataNode->ToElement();
+				valueStr += dataElement->GetText();
+ 
+			}
+				 
+			// TODO: cacheing... 
+			ARK2D::getLog()->i("returning data store");
+			return new DataStore(key, valueStr, type);
+
+		}
 
 		bool GameJolt::sessionOpen() { return false; }
 		bool GameJolt::sessionUpdate() { return false; }
@@ -317,7 +939,7 @@ namespace ARK {
 				string signature = md5(urlString);
 				
 				params["user_token"] = user_token;
-				params["signature"] = signature;
+				params["signature"] = signature; 
 			} else {
 				params["user_token"] = m_userToken + m_privateKey;
 				params["username"] = m_username;
@@ -351,11 +973,11 @@ namespace ARK {
 			
 			string user_token("");
 			map<string, string>::iterator it;
-			params["format"] = "json";
+			params["format"] = getFormatString();
 			for (it = params.begin(); it != params.end(); it++ ) {
 				string key = it->first;
 				string value = it->second;
-				if (key == "user_token") {
+				if (key == "user_token") { 
 					user_token = value;
 					continue; 
 				}
@@ -371,7 +993,7 @@ namespace ARK {
 		}
 		string GameJolt::md5(string input) {
 			return ARK::GJ::md5(input);
-		}
+		} 
 
 	}
 }
