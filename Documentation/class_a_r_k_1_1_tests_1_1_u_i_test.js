@@ -5,6 +5,5 @@ var class_a_r_k_1_1_tests_1_1_u_i_test =
     [ "initStates", "class_a_r_k_1_1_tests_1_1_u_i_test.html#a6825591b2543ae24d5d3d5fa7a9f0340", null ],
     [ "render", "class_a_r_k_1_1_tests_1_1_u_i_test.html#aac6d027fa95655e24c48a3a12b0ef7b8", null ],
     [ "resize", "class_a_r_k_1_1_tests_1_1_u_i_test.html#ad8dec06d8e22a1680fe79ad729464f99", null ],
-    [ "start", "class_a_r_k_1_1_tests_1_1_u_i_test.html#a6c09619e22ea5dc092f96b86d246cb64", null ],
     [ "update", "class_a_r_k_1_1_tests_1_1_u_i_test.html#a7aae5603a6725088c105a588577b129a", null ]
 ];

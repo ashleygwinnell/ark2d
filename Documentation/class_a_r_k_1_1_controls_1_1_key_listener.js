@@ -1,5 +1,5 @@
 var class_a_r_k_1_1_controls_1_1_key_listener =
 [
-    [ "keyPressed", "class_a_r_k_1_1_controls_1_1_key_listener.html#ae5de6d638b5223c1bcd049f85e404913", null ],
-    [ "keyReleased", "class_a_r_k_1_1_controls_1_1_key_listener.html#a42681b7356a727f10f5b504851096b1e", null ]
+    [ "keyPressed", "class_a_r_k_1_1_controls_1_1_key_listener.html#a32d912fa7628813cd263b94ebb6ca356", null ],
+    [ "keyReleased", "class_a_r_k_1_1_controls_1_1_key_listener.html#ac3cfb5742ab653962a414ab941bbddf0", null ]
 ];

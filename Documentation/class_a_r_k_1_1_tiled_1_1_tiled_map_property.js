@@ -5,6 +5,8 @@ var class_a_r_k_1_1_tiled_1_1_tiled_map_property =
     [ "~TiledMapProperty", "class_a_r_k_1_1_tiled_1_1_tiled_map_property.html#a9a1281b3a06c655860cbfb9767ddbe0a", null ],
     [ "getName", "class_a_r_k_1_1_tiled_1_1_tiled_map_property.html#a706b639b939a37b7f2a435f108a6ba13", null ],
     [ "getValue", "class_a_r_k_1_1_tiled_1_1_tiled_map_property.html#ae5fc825fafc646cc109093f04fe8bb5c", null ],
+    [ "getValueAsFloat", "class_a_r_k_1_1_tiled_1_1_tiled_map_property.html#aea3ac6ddb4e41cee1bdb1b02214e5e1c", null ],
+    [ "getValueAsInt", "class_a_r_k_1_1_tiled_1_1_tiled_map_property.html#acd9a0dd1cf8d7705cb1bc99f87e0c125", null ],
     [ "operator+=", "class_a_r_k_1_1_tiled_1_1_tiled_map_property.html#ac07743ef4c94eeed87eec8d30ffbdfa4", null ],
     [ "setName", "class_a_r_k_1_1_tiled_1_1_tiled_map_property.html#aac1aec6fe18bae59b5de5ddd8cf3029a", null ],
     [ "setValue", "class_a_r_k_1_1_tiled_1_1_tiled_map_property.html#a99d74b9e342fc5872fd759d513e7128d", null ],

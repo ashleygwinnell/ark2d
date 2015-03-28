@@ -1,5 +1,6 @@
 var class_a_r_k_1_1_particles_1_1_particle_emitter =
 [
+    [ "~ParticleEmitter", "class_a_r_k_1_1_particles_1_1_particle_emitter.html#a72ff92390a6d203c7769bdf661169542", null ],
     [ "getImage", "class_a_r_k_1_1_particles_1_1_particle_emitter.html#a103455dc5b89adf8bd8fd7da43a551fb", null ],
     [ "isComplete", "class_a_r_k_1_1_particles_1_1_particle_emitter.html#a749a4558f8b1d46148605bfadb247ebb", null ],
     [ "isEnabled", "class_a_r_k_1_1_particles_1_1_particle_emitter.html#a2257e333a11af8d8530bb157dbe2fdd0", null ],

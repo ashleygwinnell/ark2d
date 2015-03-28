@@ -1,14 +1,16 @@
 var class_a_r_k_1_1_u_i_1_1_button =
 [
     [ "Button", "class_a_r_k_1_1_u_i_1_1_button.html#af2b2a88b33e88739a8fb5f71a6b3a938", null ],
-    [ "doEvent", "class_a_r_k_1_1_u_i_1_1_button.html#a4fd205013c78e46f068964101b54148f", null ],
+    [ "Button", "class_a_r_k_1_1_u_i_1_1_button.html#ae01989d2a0172cb2441ffcc3e3224754", null ],
+    [ "doEvent", "class_a_r_k_1_1_u_i_1_1_button.html#abfda4e8ebe3787f6c875d61090e12e87", null ],
     [ "getEvent", "class_a_r_k_1_1_u_i_1_1_button.html#a0e0269ce8f1c2ca0e3a711c8cb7c3702", null ],
     [ "getEventObj", "class_a_r_k_1_1_u_i_1_1_button.html#a8b78fa8aa26a50e25217f00256eabe39", null ],
     [ "getState", "class_a_r_k_1_1_u_i_1_1_button.html#aa4e4efc3426ff44c21a1c26af4955680", null ],
     [ "getText", "class_a_r_k_1_1_u_i_1_1_button.html#a093095d880d85ae29958661687644276", null ],
-    [ "keyPressed", "class_a_r_k_1_1_u_i_1_1_button.html#ad9df379ac17814d2b08042a37e4fa595", null ],
-    [ "keyReleased", "class_a_r_k_1_1_u_i_1_1_button.html#a0874c9f6612e71d249082c08644feb65", null ],
-    [ "mouseMoved", "class_a_r_k_1_1_u_i_1_1_button.html#a45cc8e6e409ecad80b28df58115d3618", null ],
+    [ "isPointerOver", "class_a_r_k_1_1_u_i_1_1_button.html#afb1ab5f35d5dcbb1b412a1593ddb7af1", null ],
+    [ "keyPressed", "class_a_r_k_1_1_u_i_1_1_button.html#afb62c0b4f35f0d7f410bed6082f93967", null ],
+    [ "keyReleased", "class_a_r_k_1_1_u_i_1_1_button.html#aa8f481d2687bf3b32ab05a8738ae4e53", null ],
+    [ "mouseMoved", "class_a_r_k_1_1_u_i_1_1_button.html#a81406f6ea905afb24ecaa1feff1c634d", null ],
     [ "render", "class_a_r_k_1_1_u_i_1_1_button.html#a446e60b02cf6f0bfbcd57ee4fc117481", null ],
     [ "renderBackground", "class_a_r_k_1_1_u_i_1_1_button.html#a280fee327b384069f5972d568e5f6921", null ],
     [ "renderImage", "class_a_r_k_1_1_u_i_1_1_button.html#ac6d1fb9ccde49ef93425d800d5a74e35", null ],
@@ -19,7 +21,9 @@ var class_a_r_k_1_1_u_i_1_1_button =
     [ "setImage", "class_a_r_k_1_1_u_i_1_1_button.html#a984514e2e75f691975c5adbb125ff38a", null ],
     [ "setState", "class_a_r_k_1_1_u_i_1_1_button.html#a056e51cf073742a7b6d44a435d924fb1", null ],
     [ "setText", "class_a_r_k_1_1_u_i_1_1_button.html#af299fccf860e1b6f6b127c5ba1c9559b", null ],
-    [ "STATE_DOWN", "class_a_r_k_1_1_u_i_1_1_button.html#a4f05eefcff4a9524ce253b26c4700120", null ],
-    [ "STATE_OFF", "class_a_r_k_1_1_u_i_1_1_button.html#a47a15b26fe6efed7dcfdeac7645703bf", null ],
-    [ "STATE_OVER", "class_a_r_k_1_1_u_i_1_1_button.html#a2e4841c44d4be1c68fdbc17536bd8380", null ]
+    [ "m_event", "class_a_r_k_1_1_u_i_1_1_button.html#a381e35528a92129bf4d8e08a57d935f2", null ],
+    [ "m_eventObj", "class_a_r_k_1_1_u_i_1_1_button.html#a7743ac94b0461543f1de63011327c483", null ],
+    [ "m_image", "class_a_r_k_1_1_u_i_1_1_button.html#aa93207562c320edf559ff9b2588bfce2", null ],
+    [ "m_state", "class_a_r_k_1_1_u_i_1_1_button.html#a7f4749a02c2516f12273701aca2faa29", null ],
+    [ "m_text", "class_a_r_k_1_1_u_i_1_1_button.html#ac551bfcaf339e7fab79fc613e88ba72d", null ]
 ];

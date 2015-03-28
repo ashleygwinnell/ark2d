@@ -5,7 +5,6 @@ var class_a_r_k_1_1_tests_1_1_transition_test =
     [ "initStates", "class_a_r_k_1_1_tests_1_1_transition_test.html#a399fff70062e4429daac1133229b6948", null ],
     [ "render", "class_a_r_k_1_1_tests_1_1_transition_test.html#a40f469404cce99f249f318d69d1f0c97", null ],
     [ "resize", "class_a_r_k_1_1_tests_1_1_transition_test.html#ac8e41b1840eac0f3975278d0ba6051ff", null ],
-    [ "start", "class_a_r_k_1_1_tests_1_1_transition_test.html#a7d21c269ce2e1cd47bc3dccc1d61b61e", null ],
     [ "update", "class_a_r_k_1_1_tests_1_1_transition_test.html#a0405a0be015e34289136c9053c1a7da0", null ],
     [ "entryTransitions", "class_a_r_k_1_1_tests_1_1_transition_test.html#aee34d6f293d51f7a1396bb9fe315b971", null ],
     [ "leaveTransitions", "class_a_r_k_1_1_tests_1_1_transition_test.html#a4cf3142378dac40181d9f0077cdd2573", null ],

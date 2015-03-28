@@ -5,6 +5,8 @@ var class_a_r_k_1_1_state_1_1_transition_1_1_transition =
     [ "getEasing", "class_a_r_k_1_1_state_1_1_transition_1_1_transition.html#a2e90530bc014effa71a8883f2c98a613", null ],
     [ "init", "class_a_r_k_1_1_state_1_1_transition_1_1_transition.html#a3124e95fd5939c20a81e9cdc76637420", null ],
     [ "isComplete", "class_a_r_k_1_1_state_1_1_transition_1_1_transition.html#acf2babdfa67c92ff4a954f005c097c74", null ],
+    [ "postEnter", "class_a_r_k_1_1_state_1_1_transition_1_1_transition.html#abcd1464bcec723be07adee4c3e0744df", null ],
+    [ "postLeave", "class_a_r_k_1_1_state_1_1_transition_1_1_transition.html#ae6a156a0d3abc8e4ffca58571661a83f", null ],
     [ "postRender", "class_a_r_k_1_1_state_1_1_transition_1_1_transition.html#a2100835111f5d03c6c91985d964ad494", null ],
     [ "preRender", "class_a_r_k_1_1_state_1_1_transition_1_1_transition.html#a9b2bc698b3c2a8d493b3b58ce58101c9", null ],
     [ "setEasing", "class_a_r_k_1_1_state_1_1_transition_1_1_transition.html#a33af6a4db0c4b24567d441852f40489a", null ],

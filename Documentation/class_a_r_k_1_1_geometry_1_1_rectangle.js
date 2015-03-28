@@ -3,6 +3,9 @@ var class_a_r_k_1_1_geometry_1_1_rectangle =
     [ "Rectangle", "class_a_r_k_1_1_geometry_1_1_rectangle.html#a2a719d2b40f83db64f2b1b4f35aa5c9e", null ],
     [ "Rectangle", "class_a_r_k_1_1_geometry_1_1_rectangle.html#ae400d992fbc18869f55ba7e71a15bf53", null ],
     [ "~Rectangle", "class_a_r_k_1_1_geometry_1_1_rectangle.html#acb3fbf10b1ec63916307b85edbb7e787", null ],
+    [ "adjustX", "class_a_r_k_1_1_geometry_1_1_rectangle.html#a049097463bc319761eabc1d34ccf8008", null ],
+    [ "adjustY", "class_a_r_k_1_1_geometry_1_1_rectangle.html#a9473eb92db4c4298a8932eedf6cb1a04", null ],
+    [ "asPolygon", "class_a_r_k_1_1_geometry_1_1_rectangle.html#afd5956e97812d485f6d52919e5aa19c9", null ],
     [ "collides", "class_a_r_k_1_1_geometry_1_1_rectangle.html#aaa372bf790da004fd3cb70b36cd1d035", null ],
     [ "contains", "class_a_r_k_1_1_geometry_1_1_rectangle.html#a1c47ce96fea51f491e4a9f580d5664dc", null ],
     [ "getCenterX", "class_a_r_k_1_1_geometry_1_1_rectangle.html#a34584062f37fcea79a84dc3eb74ef3cd", null ],
@@ -15,11 +18,16 @@ var class_a_r_k_1_1_geometry_1_1_rectangle =
     [ "getWidth", "class_a_r_k_1_1_geometry_1_1_rectangle.html#ac387827751b43b795f55df581d5158c0", null ],
     [ "render", "class_a_r_k_1_1_geometry_1_1_rectangle.html#a84f99087a51569305cb79ea567189261", null ],
     [ "resolve", "class_a_r_k_1_1_geometry_1_1_rectangle.html#a7cd53d9341dd4c48be93b994c05c92dc", null ],
+    [ "set", "class_a_r_k_1_1_geometry_1_1_rectangle.html#a1e5b96b07cbd615172b524cf002ac3ac", null ],
     [ "setHeight", "class_a_r_k_1_1_geometry_1_1_rectangle.html#ad7b14ab06d974f66e8b8c614989e0276", null ],
     [ "setLocation", "class_a_r_k_1_1_geometry_1_1_rectangle.html#a639eaf258250a25b772918f1db16e837", null ],
+    [ "setLocationByAlignment", "class_a_r_k_1_1_geometry_1_1_rectangle.html#aac79a722bc451eff376ebbb1a15a3540", null ],
     [ "setLocationByCenter", "class_a_r_k_1_1_geometry_1_1_rectangle.html#ada0f2f63dea343a95be0339f9ca2141f", null ],
     [ "setSize", "class_a_r_k_1_1_geometry_1_1_rectangle.html#a32331f1682b48490b0c57693478c769a", null ],
     [ "setWidth", "class_a_r_k_1_1_geometry_1_1_rectangle.html#a708c9f6029628711789c9dd2326d9848", null ],
     [ "setX", "class_a_r_k_1_1_geometry_1_1_rectangle.html#a39e1b3f1133f9562d40de67d56bbe974", null ],
-    [ "setY", "class_a_r_k_1_1_geometry_1_1_rectangle.html#ad933f8f21a93a93c3f34cfa1276e1b4e", null ]
+    [ "setXByCenter", "class_a_r_k_1_1_geometry_1_1_rectangle.html#a3c4191327c6f80036bd4bb2bb9497832", null ],
+    [ "setY", "class_a_r_k_1_1_geometry_1_1_rectangle.html#ad933f8f21a93a93c3f34cfa1276e1b4e", null ],
+    [ "setYByCenter", "class_a_r_k_1_1_geometry_1_1_rectangle.html#ab6591b76bd4f78285267db90e908e38f", null ],
+    [ "toString", "class_a_r_k_1_1_geometry_1_1_rectangle.html#a2b6565baeb7b6fa2536610f5bd885033", null ]
 ];

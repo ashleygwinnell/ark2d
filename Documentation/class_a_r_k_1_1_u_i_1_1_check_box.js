@@ -12,5 +12,8 @@ var class_a_r_k_1_1_u_i_1_1_check_box =
     [ "renderOverlay", "class_a_r_k_1_1_u_i_1_1_check_box.html#ac0434ec2a70588e748d43749711a2d18", null ],
     [ "renderTick", "class_a_r_k_1_1_u_i_1_1_check_box.html#a903a42728aff159c1316732d63930807", null ],
     [ "setChecked", "class_a_r_k_1_1_u_i_1_1_check_box.html#ada1a5c9dcb05afb377feae11cadbe0d4", null ],
-    [ "setStateChangedEvent", "class_a_r_k_1_1_u_i_1_1_check_box.html#af642e79b5d1b5a18abc1f7137e81b474", null ]
+    [ "setStateChangedEvent", "class_a_r_k_1_1_u_i_1_1_check_box.html#af642e79b5d1b5a18abc1f7137e81b474", null ],
+    [ "m_checked", "class_a_r_k_1_1_u_i_1_1_check_box.html#a941d4733b935d0802ee25bac008e2d50", null ],
+    [ "m_state", "class_a_r_k_1_1_u_i_1_1_check_box.html#aed29d6974800e6185e9f0300b5f27a4e", null ],
+    [ "m_stateChangedEvent", "class_a_r_k_1_1_u_i_1_1_check_box.html#a6d809590cfa57b5c206634010cae2dcb", null ]
 ];

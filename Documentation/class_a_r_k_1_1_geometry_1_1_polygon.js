@@ -1,8 +1,11 @@
 var class_a_r_k_1_1_geometry_1_1_polygon =
 [
     [ "Polygon", "class_a_r_k_1_1_geometry_1_1_polygon.html#a22dafdf1d8bbcae365262468103a22f7", null ],
+    [ "Polygon", "class_a_r_k_1_1_geometry_1_1_polygon.html#a8243a3f4506a3324eab2efa4e1f3f48b", null ],
     [ "Polygon", "class_a_r_k_1_1_geometry_1_1_polygon.html#a22f554d68b5a0b84e8b5893b2945d317", null ],
+    [ "Polygon", "class_a_r_k_1_1_geometry_1_1_polygon.html#a8440425446885c496745a6a2bf522fec", null ],
     [ "~Polygon", "class_a_r_k_1_1_geometry_1_1_polygon.html#aa320e8506fc34b177310dc7870ceba86", null ],
+    [ "add", "class_a_r_k_1_1_geometry_1_1_polygon.html#afbf660c65426440c60aca0c356dbc631", null ],
     [ "addPoint", "class_a_r_k_1_1_geometry_1_1_polygon.html#a319231123d7f5b0a31c95a4db8c21dec", null ],
     [ "collides", "class_a_r_k_1_1_geometry_1_1_polygon.html#af89967be67e5ef0736ee96a0f8b31476", null ],
     [ "contains", "class_a_r_k_1_1_geometry_1_1_polygon.html#a4a330512bff8980cc467118d3ad78fa2", null ],
@@ -13,10 +16,16 @@ var class_a_r_k_1_1_geometry_1_1_polygon =
     [ "getMaxY", "class_a_r_k_1_1_geometry_1_1_polygon.html#afebcaacb01e7490edc2ddef595b3aa93", null ],
     [ "getMinX", "class_a_r_k_1_1_geometry_1_1_polygon.html#a8940c02c05c423c30e30945bd298eefe", null ],
     [ "getMinY", "class_a_r_k_1_1_geometry_1_1_polygon.html#a4e6c514c6b81886180aebb1b6c02b6b2", null ],
-    [ "getPoints", "class_a_r_k_1_1_geometry_1_1_polygon.html#ab3db7b55c1d1c20b7ad5091577a12cfb", null ],
+    [ "getPoint", "class_a_r_k_1_1_geometry_1_1_polygon.html#a3841be0f8ced8aab44809b3707bea7c1", null ],
+    [ "getPoints", "class_a_r_k_1_1_geometry_1_1_polygon.html#aa63cf5c02c7062a7422d95eb925bef51", null ],
     [ "getWidth", "class_a_r_k_1_1_geometry_1_1_polygon.html#a8ac6031659ff92c75718c3a6399af6f4", null ],
     [ "render", "class_a_r_k_1_1_geometry_1_1_polygon.html#a15ccd6bab9fd3424090920d745e169d0", null ],
     [ "resolve", "class_a_r_k_1_1_geometry_1_1_polygon.html#a9fb80d88da570314ed3fed54c84b09a7", null ],
+    [ "rotate", "class_a_r_k_1_1_geometry_1_1_polygon.html#a255eb0e517ff8c8ae36d3d32c60336b7", null ],
     [ "setLocation", "class_a_r_k_1_1_geometry_1_1_polygon.html#abd7ca45c35e8d0ec28387bd07122fe84", null ],
-    [ "setLocationByCenter", "class_a_r_k_1_1_geometry_1_1_polygon.html#a18ee829450e224c8b68267d87fcafecf", null ]
+    [ "setLocationByAlignment", "class_a_r_k_1_1_geometry_1_1_polygon.html#a992d8df4df3020999e9af4f0fa56868a", null ],
+    [ "setLocationByCenter", "class_a_r_k_1_1_geometry_1_1_polygon.html#a18ee829450e224c8b68267d87fcafecf", null ],
+    [ "setPoint", "class_a_r_k_1_1_geometry_1_1_polygon.html#a5aa81c3b07c36573e8637f9b5a541efb", null ],
+    [ "setXByCenter", "class_a_r_k_1_1_geometry_1_1_polygon.html#a09b00c2fac57861078395ab21b952e94", null ],
+    [ "setYByCenter", "class_a_r_k_1_1_geometry_1_1_polygon.html#a3e87c4ee91b1bb472bf744314adf0e6c", null ]
 ];

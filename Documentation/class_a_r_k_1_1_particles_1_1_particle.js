@@ -38,7 +38,6 @@ var class_a_r_k_1_1_particles_1_1_particle =
     [ "update", "class_a_r_k_1_1_particles_1_1_particle.html#abab0c6377c0df4c4454f433f09d6890f", null ],
     [ "ParticleSystem", "class_a_r_k_1_1_particles_1_1_particle.html#a233ae59d6977e50773d931c6fd613030", null ],
     [ "image", "class_a_r_k_1_1_particles_1_1_particle.html#a99bb7bf719d00bb83bfefbbdfd3a455d", null ],
-    [ "INHERIT_POINTS", "class_a_r_k_1_1_particles_1_1_particle.html#aa2fd3d2fee857ed3d106450607462688", null ],
     [ "life", "class_a_r_k_1_1_particles_1_1_particle.html#a93c77ad9ec5bcdc26436a8f59b1b83f9", null ],
     [ "m_color", "class_a_r_k_1_1_particles_1_1_particle.html#a06097c494789953bd35ffb61622fd0a5", null ],
     [ "m_emitter", "class_a_r_k_1_1_particles_1_1_particle.html#a224326f27d1b02c209cf2b343afffcdd", null ],
@@ -52,7 +51,5 @@ var class_a_r_k_1_1_particles_1_1_particle =
     [ "originalLife", "class_a_r_k_1_1_particles_1_1_particle.html#ab3c6d83ad4328f3d7dffae511bd116f6", null ],
     [ "scaleY", "class_a_r_k_1_1_particles_1_1_particle.html#af915e2729de2b3e359eb2d7b043ffe5e", null ],
     [ "type", "class_a_r_k_1_1_particles_1_1_particle.html#a58e6c61806dd7e40e7a8dfc24abce8a3", null ],
-    [ "USE_POINTS", "class_a_r_k_1_1_particles_1_1_particle.html#a49a116c0c6cae2ec2ae54df130a60e79", null ],
-    [ "USE_QUADS", "class_a_r_k_1_1_particles_1_1_particle.html#a476d30c035756c031a3142070706c16d", null ],
     [ "usePoints", "class_a_r_k_1_1_particles_1_1_particle.html#a08d279475e4a594a36e374c7f4b6efc2", null ]
 ];

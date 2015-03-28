@@ -3,6 +3,8 @@ var class_a_r_k_1_1_geometry_1_1_circle =
     [ "Circle", "class_a_r_k_1_1_geometry_1_1_circle.html#a1d50cb522e7102349d6869a6ffbef199", null ],
     [ "Circle", "class_a_r_k_1_1_geometry_1_1_circle.html#a1d6dcaa2384471f3413e6afb3d929423", null ],
     [ "~Circle", "class_a_r_k_1_1_geometry_1_1_circle.html#a6719c9a92123fe121c1e03d4cce80a80", null ],
+    [ "adjustX", "class_a_r_k_1_1_geometry_1_1_circle.html#a6c55f9a9a701f88f58fe659de3ea6ab4", null ],
+    [ "adjustY", "class_a_r_k_1_1_geometry_1_1_circle.html#abcdd178526351b606c168b52160e7ba9", null ],
     [ "collides", "class_a_r_k_1_1_geometry_1_1_circle.html#acc4a319666a65a0a776df39f84d672c6", null ],
     [ "contains", "class_a_r_k_1_1_geometry_1_1_circle.html#adb9e211281f6dded62b7609854fc83fd", null ],
     [ "getCenterX", "class_a_r_k_1_1_geometry_1_1_circle.html#af4bd67189472313b3330369b4c923464", null ],
@@ -17,6 +19,11 @@ var class_a_r_k_1_1_geometry_1_1_circle =
     [ "render", "class_a_r_k_1_1_geometry_1_1_circle.html#abdad05ce2393e19ba22d828629ae8a4c", null ],
     [ "resolve", "class_a_r_k_1_1_geometry_1_1_circle.html#a884ef4cbf3cea9759e38d6029dcb8e6b", null ],
     [ "setLocation", "class_a_r_k_1_1_geometry_1_1_circle.html#a0a1e3d96b0cc7744a9d4c99b0f604242", null ],
+    [ "setLocationByAlignment", "class_a_r_k_1_1_geometry_1_1_circle.html#a133f41c7db016bc9625dbdf9cc2042e9", null ],
     [ "setLocationByCenter", "class_a_r_k_1_1_geometry_1_1_circle.html#abc72eea78db910dd382b3d4caccb3975", null ],
-    [ "setRadius", "class_a_r_k_1_1_geometry_1_1_circle.html#a42265dde218b10fc76589fd2753d0184", null ]
+    [ "setRadius", "class_a_r_k_1_1_geometry_1_1_circle.html#a42265dde218b10fc76589fd2753d0184", null ],
+    [ "setX", "class_a_r_k_1_1_geometry_1_1_circle.html#ac261a9d4060b7b230070f3daa063f670", null ],
+    [ "setXByCenter", "class_a_r_k_1_1_geometry_1_1_circle.html#ad2110976b5aeae212fd2458649b84be1", null ],
+    [ "setY", "class_a_r_k_1_1_geometry_1_1_circle.html#aa71730ea8bfd810903dddbf959b5bb32", null ],
+    [ "setYByCenter", "class_a_r_k_1_1_geometry_1_1_circle.html#aae04c7e3acdb366c3170292d7773bf2d", null ]
 ];

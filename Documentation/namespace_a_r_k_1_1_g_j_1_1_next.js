@@ -1,0 +1,25 @@
+var namespace_a_r_k_1_1_g_j_1_1_next =
+[
+    [ "API", "class_a_r_k_1_1_g_j_1_1_next_1_1_a_p_i.html", "class_a_r_k_1_1_g_j_1_1_next_1_1_a_p_i" ],
+    [ "GameJolt", "class_a_r_k_1_1_g_j_1_1_next_1_1_game_jolt.html", "class_a_r_k_1_1_g_j_1_1_next_1_1_game_jolt" ],
+    [ "gjAchievement", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_achievement.html", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_achievement" ],
+    [ "gjAchievementsResult", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_achievements_result.html", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_achievements_result" ],
+    [ "GJAchievementsState", "class_a_r_k_1_1_g_j_1_1_next_1_1_g_j_achievements_state.html", "class_a_r_k_1_1_g_j_1_1_next_1_1_g_j_achievements_state" ],
+    [ "GJButton", "class_a_r_k_1_1_g_j_1_1_next_1_1_g_j_button.html", "class_a_r_k_1_1_g_j_1_1_next_1_1_g_j_button" ],
+    [ "gjCallback", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_callback.html", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_callback" ],
+    [ "gjGeneralResult", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_general_result.html", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_general_result" ],
+    [ "gjHighscore", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_highscore.html", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_highscore" ],
+    [ "gjHighscoresResult", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_highscores_result.html", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_highscores_result" ],
+    [ "gjHighscoreTable", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_highscore_table.html", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_highscore_table" ],
+    [ "gjHighscoreTablesResult", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_highscore_tables_result.html", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_highscore_tables_result" ],
+    [ "GJLeaderboardsState", "class_a_r_k_1_1_g_j_1_1_next_1_1_g_j_leaderboards_state.html", "class_a_r_k_1_1_g_j_1_1_next_1_1_g_j_leaderboards_state" ],
+    [ "GJLeaderboardState", "class_a_r_k_1_1_g_j_1_1_next_1_1_g_j_leaderboard_state.html", "class_a_r_k_1_1_g_j_1_1_next_1_1_g_j_leaderboard_state" ],
+    [ "GJLoginState", "class_a_r_k_1_1_g_j_1_1_next_1_1_g_j_login_state.html", "class_a_r_k_1_1_g_j_1_1_next_1_1_g_j_login_state" ],
+    [ "GJOverviewState", "class_a_r_k_1_1_g_j_1_1_next_1_1_g_j_overview_state.html", "class_a_r_k_1_1_g_j_1_1_next_1_1_g_j_overview_state" ],
+    [ "GJScrollablePanel", "class_a_r_k_1_1_g_j_1_1_next_1_1_g_j_scrollable_panel.html", "class_a_r_k_1_1_g_j_1_1_next_1_1_g_j_scrollable_panel" ],
+    [ "GJStatsState", "class_a_r_k_1_1_g_j_1_1_next_1_1_g_j_stats_state.html", "class_a_r_k_1_1_g_j_1_1_next_1_1_g_j_stats_state" ],
+    [ "GJTextField", "class_a_r_k_1_1_g_j_1_1_next_1_1_g_j_text_field.html", "class_a_r_k_1_1_g_j_1_1_next_1_1_g_j_text_field" ],
+    [ "gjUrlRequest", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_url_request.html", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_url_request" ],
+    [ "gjUsersAuthRequestAttachment", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_users_auth_request_attachment.html", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_users_auth_request_attachment" ],
+    [ "gjUsersAuthResult", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_users_auth_result.html", "struct_a_r_k_1_1_g_j_1_1_next_1_1gj_users_auth_result" ]
+];

@@ -8,7 +8,5 @@ var class_packer_file =
     [ "nameLength", "class_packer_file.html#af922647d97d4b2f98e379c8e3d510aca", null ],
     [ "nameString", "class_packer_file.html#a7226becf74d2b5706c0147a2cc13d009", null ],
     [ "size", "class_packer_file.html#a97d729d96bdb3a802e32c1953289f3d7", null ],
-    [ "type", "class_packer_file.html#a6ed5885818ae83177dfcb7104e80c9b3", null ],
-    [ "TYPE_AUDIO", "class_packer_file.html#a0b4540106681865045d669bd354077e7", null ],
-    [ "TYPE_IMAGE", "class_packer_file.html#a467d0759bf9f40917a31c39416ca284e", null ]
+    [ "type", "class_packer_file.html#a6ed5885818ae83177dfcb7104e80c9b3", null ]
 ];

@@ -26,5 +26,5 @@ THE SOFTWARE.
 
 -- Using This Project -- 
 
-Tutorials are available on http://www.indieark.com/
+No tutorials available anywhere. Whoops! 
 

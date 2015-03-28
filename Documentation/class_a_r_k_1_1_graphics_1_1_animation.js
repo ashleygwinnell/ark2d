@@ -2,6 +2,7 @@ var class_a_r_k_1_1_graphics_1_1_animation =
 [
     [ "Animation", "class_a_r_k_1_1_graphics_1_1_animation.html#aa29c4af46a1fe954e8979fb9a97a4020", null ],
     [ "~Animation", "class_a_r_k_1_1_graphics_1_1_animation.html#a302f32b942552af3185409228fe394ad", null ],
+    [ "addFrame", "class_a_r_k_1_1_graphics_1_1_animation.html#a752981ca62f9b19a1590b1888b645721", null ],
     [ "addImage", "class_a_r_k_1_1_graphics_1_1_animation.html#a27269b762dd49655d89108b623d6eb59", null ],
     [ "clear", "class_a_r_k_1_1_graphics_1_1_animation.html#a9ced7c3d09387a99ca0af1abde1d45ae", null ],
     [ "draw", "class_a_r_k_1_1_graphics_1_1_animation.html#af3ec0687c06ee0f00d431fdb6e6abfc0", null ],
@@ -9,10 +10,23 @@ var class_a_r_k_1_1_graphics_1_1_animation =
     [ "drawCenteredFlipped", "class_a_r_k_1_1_graphics_1_1_animation.html#a979ccb04ae528697c1bd69bbd1d7f0f8", null ],
     [ "drawFlipped", "class_a_r_k_1_1_graphics_1_1_animation.html#ad26937b3112ff7aad94acb18332393ea", null ],
     [ "getCurrentFrame", "class_a_r_k_1_1_graphics_1_1_animation.html#a07e285c5b26bdd88759e4b39b6f79dd7", null ],
+    [ "getCurrentFrameIndex", "class_a_r_k_1_1_graphics_1_1_animation.html#aa306121f4c1f758cfec668c5f6b9ccb1", null ],
+    [ "getDuration", "class_a_r_k_1_1_graphics_1_1_animation.html#af6bc1e5d7bf8a8e05957b4bd54d972c6", null ],
     [ "getFrame", "class_a_r_k_1_1_graphics_1_1_animation.html#a3b1a14d4cf69b9280df5354b65d6cb73", null ],
-    [ "getFrameTime", "class_a_r_k_1_1_graphics_1_1_animation.html#a0b2b2189ec5fd0bb12255b9a16ca0e91", null ],
+    [ "getFrameTime", "class_a_r_k_1_1_graphics_1_1_animation.html#a8b252c916ddc3fbeac0bc2e0937a7161", null ],
+    [ "getNextFrame", "class_a_r_k_1_1_graphics_1_1_animation.html#a5e8a5b1793f51ddf4cc30b75d7d8e541", null ],
+    [ "getNextFrameModifier", "class_a_r_k_1_1_graphics_1_1_animation.html#a194e65e927b8fdf40deb4c47351e7e2f", null ],
+    [ "getTime", "class_a_r_k_1_1_graphics_1_1_animation.html#ad2029047511968ad2da5efd04e949263", null ],
     [ "isPingPong", "class_a_r_k_1_1_graphics_1_1_animation.html#a4fc819fc282ed40b9d453d89287e079f", null ],
+    [ "reset", "class_a_r_k_1_1_graphics_1_1_animation.html#a73e36d7596393979bab87775d77bc30e", null ],
+    [ "setAlpha", "class_a_r_k_1_1_graphics_1_1_animation.html#a99ac9ea84b3461f166c735ff0727f2e7", null ],
+    [ "setCurrentFrameIndex", "class_a_r_k_1_1_graphics_1_1_animation.html#ad10193d36ce99d5590949ae3ada1b833", null ],
     [ "setFrameTime", "class_a_r_k_1_1_graphics_1_1_animation.html#a74c0c1bd48563e2cbc5e329b0994ef55", null ],
+    [ "setFrameTime", "class_a_r_k_1_1_graphics_1_1_animation.html#a615d4199401d1f01a21e618830e3b3c9", null ],
+    [ "setNextFrameModifier", "class_a_r_k_1_1_graphics_1_1_animation.html#a77887967621b280124d8398638d1e30a", null ],
     [ "setPingPong", "class_a_r_k_1_1_graphics_1_1_animation.html#a2b07282a62e7bcf211021c5db9d3e8a3", null ],
-    [ "update", "class_a_r_k_1_1_graphics_1_1_animation.html#a2224b4a95e8b71bfe566de586cac0c38", null ]
+    [ "setTime", "class_a_r_k_1_1_graphics_1_1_animation.html#a09c303114125e33479fdefd7fc400fc6", null ],
+    [ "size", "class_a_r_k_1_1_graphics_1_1_animation.html#a35094d89595823774ba335c4a30b499f", null ],
+    [ "update", "class_a_r_k_1_1_graphics_1_1_animation.html#a2224b4a95e8b71bfe566de586cac0c38", null ],
+    [ "update", "class_a_r_k_1_1_graphics_1_1_animation.html#ae48f65b9d3d735404111d829cf820e4a", null ]
 ];
