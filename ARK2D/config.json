@@ -2,24 +2,45 @@
 	"clean": false,
 	"windows": {
 		"python_executable": "C:\\Python31\\python.exe",
-		"ark2d_dir": "C:\\Dropbox\\ARK2D\\ark2d"
+		"ark2d_dir": "D:\\Dropbox\\ARK2D\\ark2d",
+		"gyp_executable": "D:\\Dropbox\\ark2d\\ARK2D\\lib\\gyp-read-only\\gyp",
+		"android":{
+			"sdk_dir": "C:\\Users\\Ashley\\.android\\adt-bundle-windows-x86-20130917\\sdk",
+			"ndk_dir": "C:\\Users\\Ashley\\.android\\android-ndk-r9"
+		}
 	},
-	"osx": {
+	"osx": { 
 		"python_executable": "/usr/local/bin/python3.1",
 		"ark2d_dir": "/Users/ashleygwinnell/Dropbox/ark2d/ARK2D",
         "android": {
-			"ndk_dir": "/Users/ashleygwinnell/.android/android-ndk-r7"
+        	"sdk_dir": "/Users/ashleygwinnell/Documents/adt-bundle-mac-x86_64-20130717/sdk/",
+			"ndk_dir": "/Users/ashleygwinnell/.android/android-ndk-r9"
+		},
+		"gyp_executable_old": "/Users/ashleygwinnell/Documents/gyp-read-only/gyp",
+		"gyp_executable": "/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/lib/gyp-read-only/gyp"
+	},
+	"linux": {
+		"python_executable": "/usr/bin/python3.4",
+		"ark2d_dir": "/home/forceofhabit/Dropbox/ark2d/ARK2D",
+		"android": {
+        	"sdk_dir": "/home/forceofhabit/android_sdk",
+			"ndk_dir": "/home/forceofhabit/android_ndk"
+		}
+	},
+	"html5": {
+		"osx": {
+			"emscripten_dir": "/Users/ashleygwinnell/Downloads/emsdk_portable"
 		}
 	},
 	"android": {
-		"ndk_version": 5,
+		"ndk_version": 9,
 		"sdk_version": 7
 	},
 	"mkdirs": {
 		"windows": [
 		
 		],
-		"osx": [
+		"osx": [ 
 		
 		],
 		"android": [
@@ -78,11 +99,11 @@
 			"src/ARK2D/Core/Resource.cpp",
 			"src/ARK2D/Core/Sort.cpp",
 			"src/ARK2D/Core/String.cpp",
-			"src/ARK2D/Core/Platform/GameContainerLinux.cpp",
 			"src/ARK2D/Core/Platform/GameContainerWindows.cpp",
+			
 			"src/ARK2D/Font/Font.cpp",
 			"src/ARK2D/Font/FTFont.cpp",
-			"src/ARK2D/Font/BMFont.cpp",
+			"src/ARK2D/Font/BMFont.cpp", 
 			"src/ARK2D/GJ/GameJolt.cpp",
 			"src/ARK2D/GJ/PropertyItem.cpp",
 			"src/ARK2D/GJ/DataStore.cpp",
@@ -90,6 +111,9 @@
 			"src/ARK2D/GJ/MD5.cpp", 
 			"src/ARK2D/GJ/Trophy.cpp",
 			"src/ARK2D/GJ/User.cpp",
+			"src/ARK2D/GJ/Next/Overlay.cpp",
+			"src/ARK2D/GJ/Next/API.cpp",
+
 			"src/ARK2D/Graphics/Animation.cpp",
 			"src/ARK2D/Graphics/Color.cpp",
 			"src/ARK2D/Graphics/Renderer.cpp",
@@ -97,6 +121,7 @@
 			"src/ARK2D/Graphics/FBO.cpp",
 			"src/ARK2D/Graphics/SpriteSheetDescription.cpp",
 			"src/ARK2D/Graphics/SpriteSheetDescriptionItem.cpp",
+			"src/ARK2D/Graphics/SpriteSheetStore.cpp",
 			"src/ARK2D/Graphics/Image.cpp",
 			"src/ARK2D/Graphics/Texture.cpp",
 			"src/ARK2D/Graphics/TextureStore.cpp",
@@ -107,6 +132,7 @@
 			"src/ARK2D/Geometry/Vector2.cpp",
 			"src/ARK2D/Geometry/Shape.cpp",
 			"src/ARK2D/Geometry/Rectangle.cpp",
+			"src/ARK2D/Geometry/Cube.cpp",
 			"src/ARK2D/Geometry/Circle.cpp",
 			"src/ARK2D/Geometry/Polygon.cpp",
 			"src/ARK2D/Geometry/Line.cpp",
@@ -124,6 +150,7 @@
 			"src/ARK2D/Particles/ParticleSystem.cpp",
 			"src/ARK2D/State/GameState.cpp",
 			"src/ARK2D/State/IntelligentGameState.cpp",
+			"src/ARK2D/State/VideoGameState.cpp",
 			"src/ARK2D/State/LoadingState.cpp",
 			"src/ARK2D/State/StateBasedGame.cpp",
 			"src/ARK2D/State/Transition/EmptyTransition.cpp",
@@ -136,6 +163,7 @@
 			"src/ARK2D/State/Transition/Transition.cpp",
 			"src/ARK2D/State/Transition/TranslateOutInTransition.cpp",
 			"src/ARK2D/Tests/CollisionTest.cpp", 
+			"src/ARK2D/Tests/GamepadsTest.cpp",
 			"src/ARK2D/Tests/TransitionTest.cpp",
 			"src/ARK2D/Tests/ParticlesTest.cpp",
 			"src/ARK2D/Tests/UITest.cpp",
@@ -160,29 +188,47 @@
 			"src/ARK2D/UI/TextField.cpp",
 			"src/ARK2D/UI/Button.cpp",
 			"src/ARK2D/UI/CheckBox.cpp",
+			"src/ARK2D/UI/Dialog.cpp",
 			"src/ARK2D/UI/FileDialog.cpp",
 			"src/ARK2D/UI/ComboBox.cpp",
 			"src/ARK2D/UI/ComboBoxItem.cpp",
-			"src/ARK2D/UI/ErrorDialog.cpp",
+			"src/ARK2D/UI/ErrorDialog.cpp", 
 			"src/ARK2D/UI/Notification.cpp",
 			"src/ARK2D/UI/NotificationSystem.cpp",
+			"src/ARK2D/UI/SimpleTextField.cpp", 
+			"src/ARK2D/UI/Slider.cpp", 
 
+			"src/ARK2D/Util/AnalyticsUtil.cpp",
 			"src/ARK2D/Util/ArcadeHighscoreInput.cpp",
+			"src/ARK2D/Util/Callbacks.cpp",
+			"src/ARK2D/Util/CameraShake.cpp",
 			"src/ARK2D/Util/FileUtil.cpp",
-			"src/ARK2D/Util/MathUtil.cpp",
-			"src/ARK2D/Util/StringUtil.cpp",
-			"src/ARK2D/Util/StringStore.cpp",
+			"src/ARK2D/Util/DisplayUtil.cpp",
+			
+			"src/ARK2D/Util/GameCenterUtil.cpp",
+			"src/ARK2D/Util/ICloudUtil.cpp",
+			"src/ARK2D/Util/GooglePlayGameServicesUtil.cpp",
+			"src/ARK2D/Util/GameCircleUtil.cpp",
+			"src/ARK2D/Util/KeyPairFile.cpp",
+			"src/ARK2D/Util/LocalHighscores.cpp",
 			"src/ARK2D/Util/Log.cpp",
+			"src/ARK2D/Util/MathUtil.cpp",
+			"src/ARK2D/Util/Matrix44.cpp", 
+			"src/ARK2D/Util/RSSL.cpp",
+			"src/ARK2D/Util/SAT.cpp",
+			"src/ARK2D/Util/SocialUtil.cpp",
+			"src/ARK2D/Util/StringStore.cpp",
+			"src/ARK2D/Util/StringUtil.cpp",
+			"src/ARK2D/Util/URLRequest.cpp",
+			"src/ARK2D/Util/Validation.cpp",
+			"src/ARK2D/Util/Vector4.cpp",
 			"src/ARK2D/Util/VerticalMenu.cpp",
 			"src/ARK2D/Util/VerticalMenuItem.cpp",
-			"src/ARK2D/Util/CameraShake.cpp",
-			"src/ARK2D/Util/LocalHighscores.cpp",
-			"src/ARK2D/Util/RSSL.cpp",
-			"src/ARK2D/Util/Vector4.cpp",
-			"src/ARK2D/Util/Matrix44.cpp", 
-			"src/ARK2D/Util/URLRequest.cpp",
+			"src/ARK2D/Util/Vibrator.cpp",
+			
 			"src/ARK2D/Util/Containers/Pool.cpp",
 			"src/ARK2D/Util/Containers/Vector.cpp",
+
 			"src/ARK2D/vendor/FileInterface.cpp",
 			"src/ARK2D/vendor/libJSON/JSON_Worker.cpp",
 			"src/ARK2D/vendor/libJSON/jsonmain.cpp",
@@ -241,27 +287,101 @@
 			"src/ARK2D/vendor/zlib123/inftrees.c",
 			"src/ARK2D/vendor/zlib123/trees.c",
 			"src/ARK2D/vendor/zlib123/uncompr.c",
-			"src/ARK2D/vendor/zlib123/zutil.c"
+			"src/ARK2D/vendor/zlib123/zutil.c",
+
+			"src/ARK2D/vendor/spine/spine-ark2d.cpp",
+			"src/ARK2D/vendor/spine/SpineSkeleton.cpp",
+			"src/ARK2D/vendor/spine/src/AnimationSp.c",
+			"src/ARK2D/vendor/spine/src/AnimationState.c",
+			"src/ARK2D/vendor/spine/src/AnimationStateData.c",
+			"src/ARK2D/vendor/spine/src/Atlas.c",
+			"src/ARK2D/vendor/spine/src/AtlasAttachmentLoader.c",
+			"src/ARK2D/vendor/spine/src/Attachment.c",
+			"src/ARK2D/vendor/spine/src/AttachmentLoader.c",
+			"src/ARK2D/vendor/spine/src/Bone.c",
+			"src/ARK2D/vendor/spine/src/BoneData.c",
+			"src/ARK2D/vendor/spine/src/BoundingBoxAttachment.c",
+			"src/ARK2D/vendor/spine/src/EventData.c",
+			"src/ARK2D/vendor/spine/src/EventSp.c",
+			"src/ARK2D/vendor/spine/src/extension.c",
+			"src/ARK2D/vendor/spine/src/IkConstraint.c",
+			"src/ARK2D/vendor/spine/src/IkConstraintData.c",
+			"src/ARK2D/vendor/spine/src/Json.c",
+			"src/ARK2D/vendor/spine/src/MeshAttachment.c",
+			"src/ARK2D/vendor/spine/src/RegionAttachment.c",
+			"src/ARK2D/vendor/spine/src/Skeleton.c",
+			"src/ARK2D/vendor/spine/src/SkeletonBounds.c",
+			"src/ARK2D/vendor/spine/src/SkeletonData.c",
+			"src/ARK2D/vendor/spine/src/SkeletonJson.c",
+			"src/ARK2D/vendor/spine/src/Skin.c",
+			"src/ARK2D/vendor/spine/src/SkinnedMeshAttachment.c",
+			"src/ARK2D/vendor/spine/src/Slot.c",
+			"src/ARK2D/vendor/spine/src/SlotData.c"
 		],
 		"windows": [
-			"src\\ARK2D\\vendor\\glew.c",
-			"src/ARK2D/Windres.rc"
+			"src/ARK2D/Windres.rc",
+			"src/ARK2D/Graphics/HLSL/geometry-dx11-pixel.hlsl",
+			"src/ARK2D/Graphics/HLSL/geometry-dx11-vertex.hlsl",
+			"src/ARK2D/vendor/gl3w.c"
+		],
+		"windows_old": [
+			"src\\ARK2D\\vendor\\glew.c"
+		],
+		"windows-phone": [
+			"src/ARK2D/Windres.rc",
+			"src/ARK2D/Graphics/HLSL/geometry-dx11-pixel.hlsl",
+			"src/ARK2D/Graphics/HLSL/geometry-dx11-vertex.hlsl",
+			"src/ARK2D/Graphics/HLSL/texture-dx11-pixel.hlsl",
+			"src/ARK2D/Graphics/HLSL/texture-dx11-vertex.hlsl",
+			"src/ARK2D/Core/Platform/GameContainerWindowsPhone8.cpp",
+
+			"src/ARK2D/vendor/lpng1251/png.c",
+			"src/ARK2D/vendor/lpng1251/pngerror.c",
+			"src/ARK2D/vendor/lpng1251/pngget.c",
+			"src/ARK2D/vendor/lpng1251/pngmem.c",
+			"src/ARK2D/vendor/lpng1251/pngpread.c",
+			"src/ARK2D/vendor/lpng1251/pngread.c",
+			"src/ARK2D/vendor/lpng1251/pngrio.c",
+			"src/ARK2D/vendor/lpng1251/pngrtran.c",
+			"src/ARK2D/vendor/lpng1251/pngrutil.c",
+			"src/ARK2D/vendor/lpng1251/pngset.c",
+			"src/ARK2D/vendor/lpng1251/pngtrans.c",
+			"src/ARK2D/vendor/lpng1251/pngwio.c",
+			"src/ARK2D/vendor/lpng1251/pngwrite.c",
+			"src/ARK2D/vendor/lpng1251/pngwtran.c",
+			"src/ARK2D/vendor/lpng1251/pngwutil.c"
+
+		],
+		"windows-phone-old": [
+			"src/ARK2D/vendor/wp8/gl2dx/gl.cpp",
+			"src/ARK2D/vendor/wp8/gl2dx/OpenGL.cpp",
+			"src/ARK2D/vendor/wp8/gl2dx/VertexBuilder.cpp"
 		],
 		"osx": [
+			"src/ARK2D/Util/MidiUtil.cpp",
 			"src/ARK2D/Core/Platform/GameContainerMac.mm",
 			"src/ARK2D/Core/Platform/GameContainerMacAppDelegate.mm",
 			"src/ARK2D/Core/Platform/GameContainerMacWindowListener.mm"
+		],
+		"linux": [
+			"src/ARK2D/Core/Platform/GameContainerLinux.cpp",
+			"src/ARK2D/Core/Platform/GameContainerLinuxSDL2.cpp",
+			"src/ARK2D/vendor/gl3w-linux.c"
 		],
 		"android": [
 			"src/ARK2D/Core/Platform/GameContainerAndroid.cpp"
 		],
 		"iphone": [ 
+			"src/ARK2D/Core/Platform/GameContainerIPhoneCloudDocument.mm",
 			"src/ARK2D/Core/Platform/GameContainerIPhoneAppDelegate.mm",
 			"src/ARK2D/Core/Platform/GameContainerIPhoneGLView.mm",
 			"src/ARK2D/Core/Platform/GameContainerIPhone.mm"
 		],
 		"flascc": [
 			"src/ARK2D/Core/Platform/GameContainerFlascc.cpp"
+		],
+		"html5": [
+			"src/ARK2D/Core/Platform/GameContainerHTML5.cpp"
 		]
 	}
 }
