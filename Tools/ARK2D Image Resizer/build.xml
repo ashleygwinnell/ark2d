@@ -8,7 +8,7 @@
 	<property name="classes.dir" value="${build.dir}/bin"/>
 	<property name="jar.dir"     value="${build.dir}/jar"/>
 	
-	<property name="application" value="${jar.dir}/Resizer.jar"/>
+	<property name="application" value="${jar.dir}/ImageResizer.jar"/>
 	
 	<property name="main-class"  value="org.ashleygwinnell.imageresizer.ImageResizer"/>
 	

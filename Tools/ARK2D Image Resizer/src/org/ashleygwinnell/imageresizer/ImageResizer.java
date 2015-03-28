@@ -106,8 +106,9 @@ public class ImageResizer {
 	
 	 */
 	public static void main(String[] args) {
+		String jsonString = "";
 		try {
-			String jsonString = args[0];
+			jsonString = args[0];
 			
 			JSONArray o = new JSONArray(jsonString);
 			for(int i = 0; i < o.length(); i++) {
@@ -117,11 +118,24 @@ public class ImageResizer {
 				for(int j = 0; j < to.length(); j++) {
 					JSONObject itemTo = to.getJSONObject(j);
 					String tofilename = itemTo.getString("filename");
-					int width = itemTo.getInt("width");
-					int height = itemTo.getInt("height");
-					//String interpolation = itemTo.get(key)
 					
-					java.awt.Image img = ImageIO.read(new File(from));
+					File fromf = new File(from);
+					if (!fromf.exists()) {
+						System.err.println("File \"" + fromf + "\" does not exist.");
+						return; 
+					}
+					java.awt.Image img = ImageIO.read(fromf);
+					
+					int width = 0;
+					int height = 0;
+					if (itemTo.has("width") && itemTo.has("height")) { 
+						width = itemTo.getInt("width");
+						height = itemTo.getInt("height");
+					} else if (itemTo.has("scale")) {
+						double scale = itemTo.getDouble("scale");
+						width = (int) (img.getWidth(null) * scale);
+						height = (int) (img.getHeight(null) * scale);
+					}
 					
 					if (width > img.getWidth(null) && height > img.getHeight(null)) {
 						continue;
@@ -149,6 +163,8 @@ public class ImageResizer {
 			System.err.println("Missing command line JSON argument.");
 		} catch (JSONException e) { 
 			System.err.println("Invalid JSON passed.");
+			System.err.println(jsonString);
+			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
