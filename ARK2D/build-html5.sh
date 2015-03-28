@@ -1,0 +1,1 @@
+python build.py clean=false debug=false target=html5
