@@ -39,6 +39,9 @@ namespace ARK {
 		void GameState::mouseMoved(int x, int y, int oldx, int oldy) {
 			if (m_rootUIComponent != NULL) { m_rootUIComponent->mouseMoved(x,y,oldx,oldy); }
 		}
+		void GameState::orientationChanged(int orientation) {
+
+		}
 		GameState::~GameState() {
 			// hmm
 		}

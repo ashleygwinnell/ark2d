@@ -9,7 +9,6 @@
 #include <iostream>
 #include <cstdio>
 
-#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -27,6 +26,21 @@ using namespace std;
 namespace ARK { 
 	namespace Graphics {
 		namespace ImageIO {
+
+			#if defined(ARK2D_WINDOWS_PHONE_8)
+				//#if (PNG_LIBPNG_VER < 10400 || PNG_LIBPNG_VER >= 10500)
+	     		//	#define IF_JMPBUF if (setjmp(png_jmpbuf(png_ptr))) 
+				//#else
+				    // Warning is unavoidable if #define PNG_DEPSTRUCT is not present
+	   				//#define IF_JMPBUF(PTR) if (setjmp((PTR)->jmpbuf)) 
+
+					// no error checking?!
+					#define IF_JMPBUF(PTR) if (false) 
+				//#endif
+	   		#else 
+				//#define IF_JMPBUF(PTR) if (setjmp((PTR)->jmpbuf))
+				#define IF_JMPBUF(PTR) if (setjmp(png_jmpbuf(png_ptr))) 
+			#endif
 
 			PNGImage::PNGImage(const string filename): m_filename(filename) {
 
@@ -63,6 +77,13 @@ namespace ARK {
 
 			}
 
+			void user_error_fn(png_structp png_ptr, png_const_charp error_msg) {
+				ARK2D::getLog()->e(error_msg);
+			}
+			void user_warning_fn(png_structp png_ptr, png_const_charp warning_msg){
+				ARK2D::getLog()->w(warning_msg);
+			}
+
 			// 0: SUCCESS! :D
 			// 1: fileopen err
 			// 2: not a png
@@ -72,6 +93,10 @@ namespace ARK {
 			// 6: could not create image_data;
 			// 7: could not create row_pointers;
 			int PNGImage::load(void* data) {
+
+				
+				
+
 				char header[8];
 
 				char* md = (char*) data;
@@ -85,11 +110,12 @@ namespace ARK {
 
 				/* initialize stuff */
 				png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+				png_set_error_fn(png_ptr, NULL, &user_error_fn, &user_warning_fn);
 
 				if (!png_ptr) {
 					string s = string("void* data: png_create_read_struct failed");
 					ErrorDialog::createAndShow(s);
-					return 1;
+					return 1; 
 				}
 
 
@@ -105,11 +131,13 @@ namespace ARK {
 					return 1;
 				}
 
-				if (setjmp(png_jmpbuf(png_ptr))) {
+			
+
+				IF_JMPBUF(png_ptr) {
 					ErrorDialog::createAndShow("[read_png_file] Error during init_io or reading png.");
 					return 1;
 				}
-
+				
 
 				//FILE* fp = fmemopen(data, sizeof(md), "r");
 
@@ -135,7 +163,8 @@ namespace ARK {
 
 
 				/* read file */
-				if (setjmp(png_jmpbuf(png_ptr))) {
+				//if (setjmp(png_jmpbuf(png_ptr))) {
+				IF_JMPBUF(png_ptr) {
 					ErrorDialog::createAndShow("[read_png_file] Error during read_image");
 					return 1;
 				}
@@ -220,17 +249,23 @@ namespace ARK {
 				char header[8];    // 8 is the maximum size that can be checked
 
 				/* open file and test for it being a png */
-				FILE* fp = fopen(m_filename.c_str(), "rb");
+				FILE* fp = NULL;
+				#if defined(ARK2D_WINDOWS_PHONE_8)
+					fopen_s(&fp, m_filename.c_str(), "rb");
+				#else
+					fp = fopen(m_filename.c_str(), "rb");
+				#endif
+
 				if (!fp) {
-					string s = string(m_filename.c_str()) + " could not be opened for reading.";
+					string s = string(m_filename.c_str()) + string(" could not be opened for reading.");
 					ErrorDialog::createAndShow(s);
 					return 1;
 				}
 
-				fread(header, 1, 8, fp);
+				int tempres = fread(header, 1, 8, fp);
 
 				if (png_sig_cmp((png_byte*) header, 0, 8)) {
-					string s = string(m_filename.c_str()) + " is not recognised as a PNG file.";
+					string s = string(m_filename.c_str()) + string(" is not recognised as a PNG file.");
 					ErrorDialog::createAndShow(s);
 					return 1;
 				}
@@ -240,7 +275,7 @@ namespace ARK {
 				png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 
 				if (!png_ptr) {
-					string s = string(m_filename.c_str()) + ": png_create_read_struct failed";
+					string s = string(m_filename.c_str()) + string(": png_create_read_struct failed");
 					ErrorDialog::createAndShow(s);
 					return 1;
 				}
@@ -248,20 +283,21 @@ namespace ARK {
 
 				info_ptr = png_create_info_struct(png_ptr);
 				if (!info_ptr) {
-					string s = string(m_filename.c_str()) + " png_create_info_struct failed.";
+					string s = string(m_filename.c_str()) + string(" png_create_info_struct failed.");
 					ErrorDialog::createAndShow(s);
 					return 1;
 				}
 
 				end_info = png_create_info_struct(png_ptr);
 				if (!end_info) {
-					string s = string(m_filename.c_str()) + " png_create_info_struct failed (2).";
+					string s = string(m_filename.c_str()) + string(" png_create_info_struct failed (2).");
 					ErrorDialog::createAndShow(s);
 					return 1;
 				}
 
-				if (setjmp(png_jmpbuf(png_ptr))) {
-					string s = string(m_filename.c_str()) + " error during init_io.";
+				//if (setjmp(png_jmpbuf(png_ptr))) {
+				IF_JMPBUF(png_ptr) {
+					string s = string(m_filename.c_str()) + string(" error during init_io.");
 					ErrorDialog::createAndShow(s);
 					return 1;
 				}
@@ -281,8 +317,9 @@ namespace ARK {
 
 
 				/* read file */
-				if (setjmp(png_jmpbuf(png_ptr))) {
-					string s = string(m_filename.c_str()) + " error during read_image.";
+				//if (setjmp(png_jmpbuf(png_ptr))) {
+				IF_JMPBUF(png_ptr) {
+					string s = string(m_filename.c_str()) + string(" error during read_image.");
 					ErrorDialog::createAndShow(s);
 					return 1;
 				}
@@ -357,7 +394,7 @@ namespace ARK {
 						}
 					}
 				} else {
-					string s = string(m_filename.c_str()) + " [process_file] color_type of input file must be PNG_COLOR_TYPE_RGBA or RGB (%d) (is %d)";
+					string s = string(m_filename.c_str()) + string(" [process_file] color_type of input file must be PNG_COLOR_TYPE_RGBA or RGB (%d) (is %d)");
 					ErrorDialog::createAndShow(s);
 					return 1;
 				}
@@ -368,10 +405,17 @@ namespace ARK {
 
 			void PNGImage::saveFile(std::string filename, char* data, int w, int h) {
 
-				// copied from FileUtil::file_put_contents
+				// copied from FileUtil::file_put_contents OR FileUtil::prependPlatform
 				{
 					#if defined(ARK2D_ANDROID)
 						filename = ARK2D::getContainer()->m_platformSpecific.m_externalDataStr + filename;
+					#elif defined(ARK2D_IPHONE) 
+						// append Documents folder first.
+						NSArray* searchPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+						NSString* documentsPath = [searchPaths objectAtIndex:0];
+						string respath( [ documentsPath UTF8String ] );
+
+						filename = respath + string("/") + filename;
 					#else
 						if (filename.substr(1,1).compare(":") == 0 || filename.substr(0,1).compare("/") == 0) { 
 
@@ -388,7 +432,13 @@ namespace ARK {
 				}
 
 				/* create file */
-				FILE* fp = fopen(filename.c_str(), "wb");
+				FILE* fp = NULL;
+				#if defined(ARK2D_WINDOWS_PHONE_8)
+					fopen_s(&fp, filename.c_str(), "wb");
+				#else
+					fp = fopen(filename.c_str(), "wb");
+				#endif
+
 				if (!fp) {
 					ErrorDialog::createAndShow(StringUtil::append("[write_png_file] File %s could not be opened for writing", filename));
 					return;
@@ -410,7 +460,8 @@ namespace ARK {
 					return;
 				}
 
-				if (setjmp(png_jmpbuf(png_ptr))) {
+				//if (setjmp(png_jmpbuf(png_ptr))) {
+				IF_JMPBUF(png_ptr) {
 					ErrorDialog::createAndShow("[write_png_file] Error during init_io");
 					return;
 				}
@@ -421,7 +472,8 @@ namespace ARK {
 
 
 				/* write header */
-				if (setjmp(png_jmpbuf(png_ptr))) {
+				//if (setjmp(png_jmpbuf(png_ptr))) {
+				IF_JMPBUF(png_ptr) {
 					ErrorDialog::createAndShow("[write_png_file] Error during writing header");
 					return;
 				}
@@ -434,7 +486,8 @@ namespace ARK {
 
 
 				/* write bytes */
-				if (setjmp(png_jmpbuf(png_ptr))) {
+				//if (setjmp(png_jmpbuf(png_ptr))) {
+				IF_JMPBUF(png_ptr) {
 					ErrorDialog::createAndShow("[write_png_file] Error during writing bytes");
 					return;
 				}
@@ -463,7 +516,8 @@ namespace ARK {
 
 
 				/* end write */
-				if (setjmp(png_jmpbuf(png_ptr))) {
+				//if (setjmp(png_jmpbuf(png_ptr))) {
+				IF_JMPBUF(png_ptr) {
 					ErrorDialog::createAndShow("[write_png_file] Error during end of write");
 					return;
 				}
@@ -484,7 +538,13 @@ namespace ARK {
 				png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
 				//delete[] image_data;
 				delete[] row_pointers;
-				delete m_data;
+				//delete m_data;
+
+				if (m_data != NULL) {
+					free(m_data);
+					m_data = NULL;
+				}
+
 				//fclose(fp);
 			}
 		}

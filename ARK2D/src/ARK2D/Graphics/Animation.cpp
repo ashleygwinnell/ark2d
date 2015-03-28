@@ -7,6 +7,9 @@
 
 #include "Animation.h"
 
+#include "../Core/GameTimer.h"
+#include "Image.h"
+
 namespace ARK {
 	namespace Graphics {
 
@@ -16,14 +19,25 @@ namespace ARK {
 			m_nextFrameModifier(1),
 			m_timer(0.0f),
 			m_frameTime(0.0f),
-			m_pingPong(false)
+			m_pingPong(false) 
 			{
 
+		}
+		void Animation::setNextFrameModifier(signed int mod) {
+			m_nextFrameModifier = mod;
+		}
+		signed int Animation::getNextFrameModifier() {
+			return m_nextFrameModifier;
 		}
 
 		void Animation::clear() {
 			m_frames.clear();
-			m_timer = 0;
+			m_timer = 0.0f;
+			m_currentFrameIndex = 0;
+			m_nextFrameModifier = 1;
+		}
+		void Animation::reset() {
+			m_timer = 0.0f; 
 			m_currentFrameIndex = 0;
 			m_nextFrameModifier = 1;
 		}
@@ -35,11 +49,18 @@ namespace ARK {
 		void Animation::setTime(float f) {
 			m_timer = f;
 		}
+		float Animation::getTime() {
+			return m_timer;
+		}
 
 		void Animation::setAlpha(float f) {
 			for(unsigned int i = 0 ; i < m_frames.size(); i++) {
 				m_frames.get(i)->setAlpha(f);
 			} 
+		}
+
+		void Animation::addFrame(Image* image) { 
+			addImage(image); 
 		}
 
 		void Animation::addImage(Image* image) {
@@ -85,7 +106,7 @@ namespace ARK {
 		void Animation::update(float delta) {
 			if (m_frames.size() == 0) { return; }
 			m_timer += delta;
-			if (m_timer > m_frameTime) {
+			while (m_timer > m_frameTime) {
 				m_timer -= m_frameTime;
 
 				// next frame (+1 or -1)
@@ -103,7 +124,13 @@ namespace ARK {
 				} else {
 					if (m_currentFrameIndex >= (signed int) m_frames.size()) {
 						m_currentFrameIndex = 0;
+					} else if (m_currentFrameIndex < 0) {
+						m_currentFrameIndex = m_frames.size() - 1;
 					}
+				}
+
+				if (m_frameTime == 0.0f) {
+					break;
 				}
 			}
 		}

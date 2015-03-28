@@ -8,8 +8,8 @@
 #ifndef TILEDMAP_H_
 #define TILEDMAP_H_
 
-#include <string>
-#include <vector>
+#include "../Includes.h"
+
 #include "../vendor/tinyxml/tinyxml.h"
 #include "../Core/ToString.h"
 #include "../Core/Resource.h"
@@ -22,11 +22,45 @@
 #include "TiledMapObjectGroup.h" 
 #include "TiledMapObject.h"
 
-using namespace std;
-
 namespace ARK {
 	namespace Tiled {
 
+		class TiledMap;
+		class ARK2D_API TiledMapParser {
+			public:
+				TiledMap* m_map;
+				TiledMapParser(TiledMap* map);
+				virtual void parse() = 0;
+				virtual ~TiledMapParser();
+		};
+
+		class ARK2D_API TiledMapParser_TinyXml : public TiledMapParser {
+			public:
+				TiXmlDocument m_xmldocument;
+			public:
+				TiledMapParser_TinyXml(TiledMap* map, string file);
+				virtual void parse();
+				void parseTileset(unsigned int& firstgid, string& src, TiXmlDocument* tileset_d);	
+		};
+		class ARK2D_API TiledMapParser_RapidXml : public TiledMapParser {
+			public:
+				xml_document<> m_xmldocument;
+				vector<char> m_xml_copy;
+				vector<char> m_tileset_xml_temp;
+			public:
+				TiledMapParser_RapidXml(TiledMap* map);
+				virtual void parse();
+				void parseTileset(unsigned int& firstgid, string& src, xml_document<>* tileset_d);
+		};
+		class ARK2D_API TiledMapParser_JSON : public TiledMapParser {
+			public:
+				JSONNode* m_root;
+			public:
+				TiledMapParser_JSON(TiledMap* map);
+				virtual void parse();
+		};
+
+		
 		/*!
 		 * \brief Class for managing tiled maps.
 		 *
@@ -37,13 +71,18 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class TiledMap : public ARK::Core::Resource {
+		class ARK2D_API TiledMap : public ARK::Core::Resource {
 
 			friend class TiledMapLayer;
+			friend class TiledMapParser;
+			friend class TiledMapParser_TinyXml;
+			friend class TiledMapParser_RapidXml;
+			friend class TiledMapParser_JSON;
 
 			public:
 				TiledMap(const string& file);
 				TiledMap(const string& file, void* data);
+				void load();
 				void addProperty(const TiledMapProperty& property);
 				void addTileset(const TiledMapTileset& tileset);
 				void addLayer(const TiledMapLayer& layer);
@@ -73,9 +112,10 @@ namespace ARK {
 				void draw();
 				void draw(signed int x, signed int y);
 				virtual ~TiledMap();
-			private:
+			
+			protected: 
+				TiledMapParser* m_parser;
 				string m_file;
-				TiXmlDocument m_xmldocument;
 				void* m_data;
 				vector<TiledMapProperty> m_properties;
 				vector<TiledMapTileset> m_tilesets;
@@ -89,11 +129,11 @@ namespace ARK {
 				unsigned int m_widthInPixels;
 				unsigned int m_heightInPixels;
 
-				void parse();
-				void parseTileset(unsigned int& firstgid, string& src, TiXmlDocument* tileset_d);
-
+				
 		};
 
+		
+	
 	}
 }
 

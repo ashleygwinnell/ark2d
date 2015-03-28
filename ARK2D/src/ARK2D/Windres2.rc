@@ -1,0 +1,104 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+/////////////////////////////////////////////////////////////////////////////
+// English (United Kingdom) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENG)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_UK
+#pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+ARK2D_ICON              ICON                    "C:\\Dropbox\\ark2d\\ARK2D\\data\\icon.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// 2000
+//
+
+ARK2D_FONT_PNG          2000                    "C:\\Dropbox\\ark2d\\ARK2D\\data\\fonts\\default.png"
+ARK2D_PARTICLE          2000                    "C:\\Dropbox\\ark2d\\ARK2D\\data\\particle.png"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// 2004
+//
+
+ARK2D_FONT_FNT          2004                    "C:\\Dropbox\\ark2d\\ARK2D\\data\\fonts\\default.fnt"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+ARK2D_DIALOG_INPUT_TEXT DIALOGEX 10, 10, 300, 110
+STYLE DS_SETFONT | WS_POPUP | WS_CAPTION
+CAPTION "Enter text:"
+FONT 8, "MS Sans Serif", 0, 0, 0x0
+BEGIN
+    CTEXT           "Enter text:",1,10,10,49,12
+    EDITTEXT        ARK2D_DIALOG_INPUT_TEXT_CONTENTS,19,24,258,54,ES_MULTILINE | ES_UPPERCASE
+    PUSHBUTTON      "&Retry",3,217,86,60,12
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    ARK2D_DIALOG_INPUT_TEXT, DIALOG
+    BEGIN
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (United Kingdom) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

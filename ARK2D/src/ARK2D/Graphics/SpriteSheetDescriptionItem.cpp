@@ -16,7 +16,8 @@ namespace ARK {
 			m_x(0),
 			m_y(0),
 			m_width(0),
-			m_height(0)
+			m_height(0), 
+			m_rotated(false)
 		{
 
 		}
@@ -35,6 +36,9 @@ namespace ARK {
 		unsigned int SpriteSheetDescriptionItem::getHeight() const {
 			return m_height;
 		}
+		bool SpriteSheetDescriptionItem::isRotated() const {
+			return m_rotated;
+		}
 
 		void SpriteSheetDescriptionItem::setName(const char* name) {
 			m_name = name;
@@ -50,6 +54,10 @@ namespace ARK {
 		}
 		void SpriteSheetDescriptionItem::setHeight(unsigned int height) {
 			m_height = height;
+		}
+		
+		void SpriteSheetDescriptionItem::setRotated(bool b) {
+			m_rotated = b;
 		}
 
 		SpriteSheetDescriptionItem::~SpriteSheetDescriptionItem() {

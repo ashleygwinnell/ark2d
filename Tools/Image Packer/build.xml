@@ -1,4 +1,4 @@
-<project name="ImagePacker" basedir="." default="run">
+<project name="ARK2D Image Packer" basedir="." default="run">
 	
 	
 	<property name="src.dir"     value="src"/>
@@ -8,7 +8,7 @@
 	<property name="classes.dir" value="${build.dir}/bin"/>
 	<property name="jar.dir"     value="${build.dir}/jar"/>
 	
-	<property name="application" value="${jar.dir}/${ant.project.name}.jar"/>
+	<property name="application" value="${jar.dir}/ImagePacker.jar"/>
 	
 	<property name="main-class"  value="org.ashleygwinnell.imagepacker.ImagePacker"/>
 	
@@ -58,7 +58,8 @@
 		 <java jar="${application}" fork="true" >
 		 	<!-- <arg value='
 		 		{
-		 			"max_texture_size":512, 
+		 			"max_texture_width":512,
+		 			"max_texture_height":512, 
 		 			"spacing":2, 
 		 			"files":[
 		 				"data/tests/60x60.png",
@@ -71,27 +72,37 @@
 		 	<arg value='
 		 		{
 		 			"name": "player", 
-		 			"max_texture_size":256, 
+		 			"max_texture_width":256,
+		 			"max_texture_height":256, 
 		 			"spacing":2, 
 					"output": "player",
+					"output_folder":"data",
 	 				"format": "JSON",
 		 			"files":[
 		 				"data/player/blue_idle_1.png", 
 		 					"data/player/blue_jump_1.png",
-		 					"data/player/blue_run_1.png", 	"data/player/blue_run_2.png",
-		 					"data/player/blue_run_3.png", 	"data/player/blue_run_4.png",
+		 					"data/player/blue_run_1.png", 	
+		 					"data/player/blue_run_2.png",
+		 					"data/player/blue_run_3.png", 	
+		 					"data/player/blue_run_4.png",
 		 				"data/player/green_idle_1.png", 
 		 					"data/player/green_jump_1.png",
-		 					"data/player/green_run_1.png", 	"data/player/green_run_2.png",
-		 					"data/player/green_run_3.png", 	"data/player/green_run_4.png",
+		 					"data/player/green_run_1.png", 	
+		 					"data/player/green_run_2.png",
+		 					"data/player/green_run_3.png", 	
+		 					"data/player/green_run_4.png",
 		 				"data/player/red_idle_1.png", 
 		 					"data/player/red_jump_1.png",
-		 					"data/player/red_run_1.png", 	"data/player/red_run_2.png",
-		 					"data/player/red_run_3.png", 	"data/player/red_run_4.png",
+		 					"data/player/red_run_1.png", 	
+		 					"data/player/red_run_2.png",
+		 					"data/player/red_run_3.png", 	
+		 					"data/player/red_run_4.png",
 		 				"data/player/white_idle_1.png", 
 		 					"data/player/white_jump_1.png",
-		 					"data/player/white_run_1.png", 	"data/player/white_run_2.png",
-		 					"data/player/white_run_3.png", 	"data/player/white_run_4.png"
+		 					"data/player/white_run_1.png", 	
+		 					"data/player/white_run_2.png",
+		 					"data/player/white_run_3.png", 	
+		 					"data/player/white_run_4.png"
 		 			]
 		 		}
 		 	'/> 

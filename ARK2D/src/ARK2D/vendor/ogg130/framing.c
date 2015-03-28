@@ -4,7 +4,7 @@
  * USE, DISTRIBUTION AND REPRODUCTION OF THIS LIBRARY SOURCE IS     *
  * GOVERNED BY A BSD-STYLE SOURCE LICENSE INCLUDED WITH THIS SOURCE *
  * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
- *                                                                  *
+ *                                                                   *
  * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2010             *
  * by the Xiph.Org Foundation http://www.xiph.org/                  *
  *                                                                  *
@@ -23,7 +23,7 @@
 #ifndef ARK2D_IPHONE
     #include <stdlib.h>
     #include <string.h>
-#endif
+#endif 
 #include "ogg.h"
 
 /* A complete description of Ogg framing exists in docs/framing.html */

@@ -22,7 +22,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class AbstractUIComponent : public UIComponent {
+		class ARK2D_API AbstractUIComponent : public UIComponent {
 			public:
 				AbstractUIComponent* m_parent;
 				float m_x;
@@ -47,10 +47,13 @@ namespace ARK {
 				virtual unsigned int getWidth();
 				virtual unsigned int getHeight();
 				virtual void setX(float x);
+				virtual void setXByCenter(float x);
 				virtual void setY(float y);
+				virtual void setYByCenter(float y);
 				virtual void setLocation(float x, float y);
 				virtual void setLocationByCenter(float x, float y);
 				virtual void setSize(unsigned int w, unsigned int h);
+				//virtual void setSize(float w, float h);
 
 				void setWidth(unsigned int w);
 				void setHeight(unsigned int h);

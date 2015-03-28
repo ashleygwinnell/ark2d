@@ -10,12 +10,13 @@
 #define SHADER_H_
 
 
-#include "../Includes.h"
+//#include "../Includes.h"
+#include "../Common/OpenGL.h"
 #include "../Util/Containers/Vector.h"
 
 namespace ARK {
 	namespace Graphics {
-
+ 
 		/*!
 		 * \brief OpenGL Shader support.
 		 *
@@ -42,12 +43,16 @@ namespace ARK {
 		 * http://www.lighthouse3d.com
 		 *
 		 */
-		class Shader {
+		class ARK2D_API Shader {
 			public:
 				Shader();
 				void addVertexShader(string file);
 				void addFragmentShader(string file);
-				unsigned int getId();
+				void addVertexShaderFromString(string file);
+				void addFragmentShaderFromString(string file);
+				void addVertexShaderFromData(void* data, unsigned int datalength);
+				void addFragmentShaderFromData(void* data, unsigned int datalength);
+				signed int getId();
 
 				// getting/setting uniform shader vars -- these don't (can't) change inbetween begin/end calls within the shader.
 				int getUniformVariable(string var); 
@@ -56,27 +61,81 @@ namespace ARK {
 				void setUniformVariableI(int var, int value); 
 				void setUniformVariableI(int var, int count, int* values); 
 
+				void setUniformVariable2I(int var, int v1, int v2);  
 				void setUniformVariable2F(int var, float v1, float v2); 
 				void setUniformVariable3F(int var, float v1, float v2, float v3); 
+				void setUniformVariable4FV(int var, int count, float* data);
+				void setUniformVariableMat4f(int var, float* mat); 
 
 				// getting/setting attrib shader vars -- these are per-vertex variables. they cannot be changed in vertex shader.
 				int getAttributeVariable(string var); 
+				int getAttributeVariableVertexArray(string var);  
+				void enableVertexAttribArray(int var);
 				void setAttributeVariableF(int var, float value); 
+				void setAttributeVariableVertexPointerFloat(int var, int sz, bool normalise, float* data);
+				void setAttributeVariableVertexPointerFloatStride(int var, int sz, bool normalise, float* data, unsigned int stride);
+				void setAttributeVariableVertexPointerStride(int var, int sz, bool normalise, unsigned int stride, void* data);
+				void setAttributeVariableVertexPointerUnsignedChar(int var, int sz, void* data);
+
+				// bind things
+				void bindAttributeLocation(unsigned int loc, string var);
+				//void bindAttributeLocationVertexArray(unsigned int loc, string var);
+				void bindFragmentDataLocation(unsigned int loc, string var);
 
 				void link();
-				void bind();
-				void unbind();
+				virtual void linkDX();
+
+				void initVariables(); // do MANUALLY after link to get ARK2D variable references.
+				int getInittedVariable(string s);
+
+				virtual void bind();
+				virtual void unbind();
+				
 				virtual ~Shader();
+
+				void setName(string s) { m_name = s; }
+				string getName() { return m_name; }
+
+				bool hasError() { return m_error; }
+				string getErrorString() { return m_errorString; }
+
+				static string processGLSLForIncludes(string ss);
 
 			private:
 				unsigned int addShader(string file, GLuint type);
+				unsigned int addShaderFromString(string contents, GLuint type);
+				bool checkShaderCompiled(unsigned int shaderId);
 
 			private:
-				unsigned int m_programId;
+				string m_name;
+				signed int m_programId;
 				Vector<int> m_vertexShaders;
 				Vector<int> m_fragmentShaders;
 				//unsigned int m_shader_vertex_program;
 				//unsigned int m_shader_fragment_program;
+
+				map<string, int> m_variables;
+
+				bool m_error;
+				string m_errorString;
+
+				#if defined(ARK2D_RENDERER_DIRECTX)
+					public: 
+						ID3D11VertexShader* m_d3d_vertexShader;
+						ID3D11PixelShader* m_d3d_pixelShader;
+						ID3D11InputLayout* m_d3d_inputLayout;
+						ID3D11Device* getD3D11Device();
+						ID3D11DeviceContext* getD3D11DeviceContext();
+
+						void* m_d3d_vertexCSO;
+						unsigned int m_d3d_vertexCSOLength;
+
+						void* m_d3d_pixelCSO;
+						unsigned m_d3d_pixelCSOLength;
+
+						ID3D11InputLayout* getD3DInputLayout() { return m_d3d_inputLayout; }
+
+				#endif
 		};
 
 	}

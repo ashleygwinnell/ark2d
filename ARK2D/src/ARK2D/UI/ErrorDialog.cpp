@@ -10,14 +10,59 @@
 #include "../ARK2D.h"
 #include "../Util/Log.h"
 
+#include "../Core/GameContainer.h"
+
 namespace ARK {
 	namespace UI {
-		void ErrorDialog::createAndShow(string message) {
-			#if defined (ARK2D_ANDROID)
-				ARK2D::getLog()->e(message);
+		void ErrorDialog::createAndShow(string message) { 
+			#if defined(ARK2D_WINDOWS_PHONE_8)
+
+				using namespace Windows::UI::Popups;
+
+				string title = "Error: ";
+				string contents = message;
+				wchar_t* wideTitle = Cast::charToWideChar(title.c_str());
+				wchar_t* wideContents = Cast::charToWideChar(contents.c_str());
+
+				Platform::String^ titleStr = ref new Platform::String(wideTitle);
+				Platform::String^ contentsStr = ref new Platform::String(wideContents);
+				MessageDialog^ md = ref new MessageDialog(contentsStr, titleStr);
+				md->ShowAsync();
+
+				delete wideTitle;
+				delete wideContents;
+
+			#elif defined(ARK2D_EMSCRIPTEN_JS)
+				ARK2D::getLog()->e(message); 
+
+			#elif defined(ARK2D_ANDROID)
+				ARK2D::getLog()->e(message); 
+				if (ARK2D::getContainer()->getPlatformSpecific()->getPluggable()->ouya_isOuya()) {
+					ARK2D::getContainer()->getPlatformSpecific()->getPluggable()->openErrorDialog(message);
+				} 
 			#elif defined(ARK2D_WINDOWS)
 				MessageBox(NULL, message.c_str(), NULL, MB_OK | MB_ICONEXCLAMATION);
+			#elif defined(ARK2D_UBUNTU_LINUX)
+				ARK2D::getLog()->e(message); 
+				
+				#if defined(ARK2D_SDL2)
+					SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error: ", message.c_str(), NULL);
+				#else
+					string note = "notify-send \"";
+					note += message;
+					note += "\"";
+					int ret = system(note.c_str());
+				#endif
+			#elif defined(ARK2D_IPHONE)
+				
+				NSString* nsmessage = [NSString stringWithCString:message.c_str() encoding:[NSString defaultCStringEncoding]];
+				UIAlertView* alert = [[[UIAlertView alloc] initWithTitle: @"Error:" message: nsmessage delegate: NULL cancelButtonTitle: @"OK" otherButtonTitles: NULL] autorelease];
+    			[alert show];
+
+			
 			#elif defined(ARK2D_MACINTOSH)
+
+    			ARK2D::getLog()->e(message); 
 
 				CFStringRef header_ref    = CFStringCreateWithCString( NULL, "",   strlen("")    );
 				CFStringRef message_ref  = CFStringCreateWithCString( NULL, message.c_str(),  strlen(message.c_str()) );

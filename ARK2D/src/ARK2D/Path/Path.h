@@ -30,7 +30,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class Path {
+		class ARK2D_API Path {
 			friend class ARK::Path::PathGroup;
 
 			private:

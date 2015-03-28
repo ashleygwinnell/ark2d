@@ -61,7 +61,7 @@ namespace ARK {
 	namespace Graphics {
 		namespace ImageIO {
 
-			class BMPImage {
+			class ARK2D_API BMPImage {
 				public:
 					int Width,Height;		// Dimensions
 					int BPP;				// Bits Per Pixel.

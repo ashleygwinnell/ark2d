@@ -28,7 +28,7 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 * @todo continue updating during transitions.
 		 */
-		class StateBasedGame : public ARK::Core::Game {
+		class ARK2D_API StateBasedGame : public ARK::Core::Game {
 			public:
 				StateBasedGame(string title);
 				string getTitle();
@@ -40,10 +40,14 @@ namespace ARK {
 				void setLoadingState(LoadingState* state);
 				LoadingState* getLoadingState();
 
+				void setFromState(GameState* state);
+				void setCurrentState(GameState* state);
+				void setCurrentState(unsigned int id);
 				GameState* getCurrentState();
 				unsigned int getCurrentStateID();
 
 				vector<GameState*> getStates();
+				GameState* getState(unsigned int id);
 
 				void enterState(unsigned int id, ARK::State::Transition::Transition* leave, ARK::State::Transition::Transition* enter);
 				void enterState(GameState* state, ARK::State::Transition::Transition* leave, ARK::State::Transition::Transition* enter);
@@ -55,8 +59,11 @@ namespace ARK {
 				virtual void postUpdate(GameContainer* container, GameTimer* timer);
 
 				virtual void preRender(GameContainer* container, Renderer* g);
+				virtual void preRenderTransitions();
 				virtual void render(GameContainer* container, Renderer* g);
+				virtual void postRenderTransitions();
 				virtual void postRender(GameContainer* container, Renderer* g);
+				
 
 				GameContainer* getContainer();
 
@@ -72,6 +79,8 @@ namespace ARK {
 				virtual void keyPressed(unsigned int key);
 				virtual void keyReleased(unsigned int key);
 				virtual void mouseMoved(int x, int y, int oldx, int oldy);
+				
+				virtual void orientationChanged(int orientation);
 
 				virtual ~StateBasedGame();
 

@@ -1,7 +1,11 @@
 
 #include "GameJolt.h"
-#include "../../ARK.h"
+#include "../Includes.h"
 #include "../Util/Cast.h"
+#include "../Util/StringUtil.h"
+#include "../Util/URLRequest.h"
+#include "../Util/Log.h"
+#include "../vendor/tinyxml/tinyxml.h"
 
 namespace ARK {
 	namespace GJ { 
@@ -11,11 +15,14 @@ namespace ARK {
 			m_privateKey(privateKey),  
 			m_username(""), 
 			m_userToken(""), 
-			m_version(1), 
 			m_verbose(false),  
 			m_verified(false),
 			m_errorMessage(""), 
-			m_usingFormat(FORMAT_XML)
+			m_usingFormat(FORMAT_XML),
+
+			m_isBatching(false),
+			m_numBatchItems(0),
+			m_batchUrl("")
 			{ 
 
 		}
@@ -25,20 +32,16 @@ namespace ARK {
 			m_privateKey(privateKey), 
 			m_username(username), 
 			m_userToken(userToken), 
-			m_version(1), 
 			m_verbose(false), 
 			m_verified(false),
-			m_errorMessage(""),
-			m_usingFormat(FORMAT_XML)
+			m_errorMessage(""), 
+			m_usingFormat(FORMAT_XML),
+
+			m_isBatching(false),
+			m_numBatchItems(0),
+			m_batchUrl("")
 			{
 			verifyUser(username, userToken);
-		}
-
-		void GameJolt::setVersion(unsigned int version) {
-			m_version = version;
-		}
-		unsigned int GameJolt::getVersion() {
-			return m_version;
 		}
 
 		void GameJolt::setVerbose(bool verbose) {
@@ -48,7 +51,7 @@ namespace ARK {
 			return m_verbose;
 		}
 
-		bool GameJolt::isVerified() {
+		bool GameJolt::isVerified() { 
 			return m_verified;
 		}
 
@@ -58,7 +61,7 @@ namespace ARK {
 
 			map<string, string> params;
 			params["username"] = username;
-			params["user_token"] = token;
+			params["user_token"] = token; 
 
 			string json = request("users/auth/", params, false);
 
@@ -309,9 +312,18 @@ namespace ARK {
 				}
 
 				JSONNode* response = root->GetNode("response");
+				if (response == NULL) {
+					m_errorMessage = "Could not parse JSON. No response tag.";
+					logError(m_errorMessage); 
+					return highscores; 
+				}
 				if (response->GetNode("success")->NodeAsString() == "false") {
 					logError(response->GetNode("message")->NodeAsString());
 					m_errorMessage = response->GetNode("message")->NodeAsString();
+
+					libJSON::Delete(root);
+					root = NULL;
+
 					return highscores;
 				} 
 
@@ -335,6 +347,9 @@ namespace ARK {
 					}
 					highscores.push_back(highscore);
 				} 
+
+				libJSON::Delete(root);
+				root = NULL;
 
 			} 
 			else if (m_usingFormat == FORMAT_XML) 
@@ -361,6 +376,84 @@ namespace ARK {
 
 				//m_errorMessage = "XML not implemented for getHighscoresInTable";
 				//logError(m_errorMessage);
+
+				/*xml_document<> xmldocument;
+				
+				xmldocument.parse<0>((char*)json.c_str()); 
+
+				xml_node<>* responseNode = xmldocument.first_node("response");
+				xml_node<>* successNode = responseNode->first_node("success");
+
+				const char* successNode_cstr = successNode->value();
+	 			string successNode_str = string(successNode_cstr);
+
+	 			if (successNode_str == "false") {
+	 				xml_node<>* messageNode = responseNode->first_node("message");
+	 				const char* messageNode_cstr = messageNode->value();
+	 				m_errorMessage = string(messageNode_cstr);
+
+	 				logError(m_errorMessage);
+					return highscores; 
+	 			}
+
+	 			// parse data now
+				xml_node<>* scoresNode = responseNode->first_node("scores");
+				
+				// layers please!
+				xml_node<>* scoreNode = 0;
+				for (scoreNode = scoresNode->first_node("score");
+					scoreNode;
+					scoreNode = scoreNode->next_sibling("score")) 
+				{
+					Highscore highscore;   
+					highscore.addProperty("score", scoreNode->first_node("score")->value() );
+					highscore.addProperty("sort", scoreNode->first_node("sort")->value() );
+					highscore.addProperty("extra_data", scoreNode->first_node("extra_data")->value() );
+					
+					if (scoreNode->first_node("user") != NULL) { 
+						highscore.addProperty("user", scoreNode->first_node("user")->value());
+					} else {
+						highscore.addProperty("user", "");
+					}
+
+					if (scoreNode->first_node("user_id") != NULL) { 
+						highscore.addProperty("user_id", scoreNode->first_node("user_id")->value());
+					} else {
+						highscore.addProperty("user_id", "");
+					}
+
+					if (scoreNode->first_node("guest") != NULL) { 
+						highscore.addProperty("guest", scoreNode->first_node("guest")->value());
+					} else {
+						highscore.addProperty("guest", "");
+					}
+
+					highscore.addProperty("stored", scoreNode->first_node("stored")->value() );
+
+					bool isGuest = scoreNode->first_node("guest") != NULL;
+					if (isGuest) {
+						if (strlen(scoreNode->first_node("guest")->value()) > 0) {
+							isGuest = true;
+						} else { 
+							isGuest = false;
+						}
+					}
+					if (isGuest) { 
+						highscore.addProperty("name", scoreNode->first_node("guest")->value() );
+					} else { 
+						highscore.addProperty("name", scoreNode->first_node("user")->value() );
+					}
+					//highscore.addProperty("score", "122");
+					//highscore.addProperty("name", "Boo");   
+					highscores.push_back(highscore);	
+				}
+				
+				*/
+
+				
+				// ------------------------
+				//	TINYXML
+				// ------------------------
 
 				TiXmlDocument doc;
 				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
@@ -433,6 +526,8 @@ namespace ARK {
 					highscores.push_back(highscore);	
  
 				}
+
+				
 				
 			}
 
@@ -570,8 +665,12 @@ namespace ARK {
 			string json = open(requestUrl);
 			logInformation(json);
 
+			if (m_errorMessage.length() > 0) {
+				return false;
+			}
+ 
 			if (json.length() == 0) {
-				m_errorMessage = "No internet connection / see log.";
+				m_errorMessage = "No internet connection!";
 				logError(m_errorMessage);
 				return false;
 			}
@@ -660,10 +759,17 @@ namespace ARK {
 			requestUrl = url("scores/add/", params, false, false);
 			requestUrlLog2 = requestUrl;
 
+			//ARK2D::getLog()->v(requestUrl);
+
 			string json = open(requestUrl);
 			logInformation(json);
+
+			if (m_errorMessage.length() > 0) { 
+				return false;
+			}
+
 			if (json.length() == 0) {
-				m_errorMessage = "No internet connection / see log.";
+				m_errorMessage = "No internet connection.";
 				logError(m_errorMessage);
 				return false;
 			}
@@ -846,7 +952,7 @@ namespace ARK {
 
 				valueStr = response->GetNode("data")->NodeAsString();
 
-				ARK2D::getLog()->i("libjson::delete");
+				//ARK2D::getLog()->i("libjson::delete");
 				libJSON::Delete(root); 
 
 			} else if (m_usingFormat == FORMAT_XML) {
@@ -882,7 +988,7 @@ namespace ARK {
 			}
 				 
 			// TODO: cacheing... 
-			ARK2D::getLog()->i("returning data store");
+			//ARK2D::getLog()->v("returning data store");
 			return new DataStore(key, valueStr, type);
 
 		}
@@ -902,14 +1008,17 @@ namespace ARK {
 
 
 		// protected things
-
+ 
 		void GameJolt::logError(string message) {
+			if (URLRequest::isThreadedStatic()) { ARK2D::getLog()->t(message); return; }
 			ARK2D::getLog()->e(message);
 		}
 		void GameJolt::logWarning(string message) {
+			if (URLRequest::isThreadedStatic()) { ARK2D::getLog()->t(message); return; }
 			ARK2D::getLog()->w(message);
 		}
 		void GameJolt::logInformation(string message) {
+			if (URLRequest::isThreadedStatic()) { ARK2D::getLog()->t(message); return; }
 			ARK2D::getLog()->i(message);
 		}
 
@@ -955,10 +1064,15 @@ namespace ARK {
 			return open(urlString);;
 		}
 		
-		string GameJolt::open(string url) {
+		string GameJolt::open(string url) { 
 			URLRequest req;
 			req.setUrl(url);
-			return req.start(); 
+			string resp = req.start(); 
+			if (req.hasError()) {
+				m_errorMessage = req.getError();
+				logError(m_errorMessage);
+			}
+			return resp;
 		}
 		string GameJolt::url(string method, map<string, string> params) {
 			return url(method, params, true);
@@ -967,9 +1081,9 @@ namespace ARK {
 			return url(method, params, addUserToken, false);
 		}
 		string GameJolt::url(string method, map<string, string> params, bool addUserToken, bool addKey) {
-			string protocol("http://");
-			string apiRoot("gamejolt.com/api/game/");
-			string urlString = protocol + apiRoot + string("v") + Cast::toString<unsigned int>(m_version) + string("/") + method + "?game_id=" + Cast::toString<unsigned int>(m_gameId);
+			string protocol("http://"); 
+			string apiRoot("api.gamejolt.com/api/game/");
+			string urlString = protocol + apiRoot + string("v1_1/") + method + "?game_id=" + Cast::toString<unsigned int>(m_gameId);
 			
 			string user_token("");
 			map<string, string>::iterator it;
@@ -994,6 +1108,38 @@ namespace ARK {
 		string GameJolt::md5(string input) {
 			return ARK::GJ::md5(input);
 		} 
+
+
+
+
+		void GameJolt::startBatch() {
+			/*
+				http://gamejolt.com/api/game/v1_1/batch/
+				?requests[]=http%3A%2F%2Fgamejolt.com%2Fapi%2Fgame%2Fv1_1%2Fdata-store%2Fset%2F%3Fkey%3Dglobally%26data%3Dthis%2Bis%2Bthe%2Bdata%26game_id%3D937%26format%3Djson%26signature%3Da0dd0d0126e11cc24a10b9aee391595d
+				&requests[]=http%3A%2F%2Fgamejolt.com%2Fapi%2Fgame%2Fv1_1%2Fdata-store%2Fget%2F%3Fkey%3Dglobally%26game_id%3D937%26format%3Djson%26signature%3Dfad1c3762d4c1b52eafa48774d5f72bc
+				&game_id=937
+				&format=json
+				&signature=42b74b968152b291e031972525991d8e
+			*/
+			m_isBatching = true;
+			m_numBatchItems = 0;
+			m_batchUrl = "http://api.gamejolt.com/api/game/v1_1/batch/";
+
+			
+			
+		}
+		string GameJolt::endBatch() {
+			return m_batchUrl;
+			//m_batchUrl += "&game_id=" + Cast::toString<unsigned int>(m_gameId);
+			//m_batchUrl += "&format=json";
+			//m_batchUrl += "&signature=xxxxxxxxxx";
+
+			m_isBatching = false;
+			return "";
+		}
+		bool GameJolt::isBatching() {
+			return m_isBatching;
+		}
 
 	}
 }

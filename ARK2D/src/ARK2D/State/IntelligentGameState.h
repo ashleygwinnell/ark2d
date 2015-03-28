@@ -12,6 +12,7 @@
 #include <string>
 #include "GameState.h"
 
+#include "../Includes.h"
 #include "../Namespaces.h"
 #include "../Util/Containers/Vector.h"
 
@@ -25,7 +26,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class IntelligentGameState : public GameState {
+		class ARK2D_API IntelligentGameState : public GameState {
 			private:
 
 				map<string, Vector<GameObject*> > m_entities;

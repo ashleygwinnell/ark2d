@@ -11,10 +11,10 @@ namespace ARK {
 		void PropertyItem::addProperty(string key, string val) {
 			m_properties[key] = val;
 		} 
-		string PropertyItem::getProperty(string key) {
-			return m_properties[key];
+		string PropertyItem::getProperty(string key) const {
+			return m_properties.find(key)->second;
 		}
-		 
+		  
 		PropertyItem::~PropertyItem() {
 			m_properties.clear();
 		}

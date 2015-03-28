@@ -8,9 +8,11 @@
 #ifndef GAMECONTAINER_H_
 #define GAMECONTAINER_H_
 
-#include "../Namespaces.h"
+
 #include "../ARK2D.h"
-#include "../Includes.h"
+//#include "../Includes.h"
+#include "../Common/OpenGL.h"
+#include "../Namespaces.h"
 
 #include "Game.h"
 #include "../Controls/Gamepad.h"
@@ -35,6 +37,8 @@
 //class GigaRectangle;
 #if defined(ARK2D_FLASCC)
  	#include "Platform/GameContainerFlascc.h"
+#elif defined(ARK2D_EMSCRIPTEN_JS)
+ 	#include "Platform/GameContainerHTML5.h"
 #elif defined(ARK2D_ANDROID)
 	#include "Platform/GameContainerAndroid.h"
 #elif defined(ARK2D_IPHONE)
@@ -42,15 +46,26 @@
 #elif defined(ARK2D_WINDOWS)
 	#include "Platform/GameContainerWindows.h"
 #elif defined(ARK2D_UBUNTU_LINUX)
-	#include "Platform/GameContainerLinux.h"
+	#if defined(ARK2D_SDL2)
+ 		#include "Platform/GameContainerLinuxSDL2.h"
+ 	#else
+		#include "Platform/GameContainerLinux.h"
+ 	#endif
 #elif defined(ARK2D_MACINTOSH)
 	#include "Platform/GameContainerMac.h"
+#elif defined(ARK2D_WINDOWS_PHONE_8)
+	#include "Platform/GameContainerWindowsPhone8.h"
 #endif
 
 using namespace std;
 
 namespace ARK {
 	namespace Core {
+
+		//class ARK2D_API OrientationListener {
+		//	public:
+		//		virtual void onOrientationChanged(int newOrientation) = 0;
+		//};
 
 		/*!
 		 * \brief Create this class in your main method. It is the main entry point for the library.
@@ -60,7 +75,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class GameContainer {
+		class ARK2D_API GameContainer {
 			friend class ARK::Core::GameContainerPlatform;
 			friend class ARK::Graphics::Renderer;
 			friend class Log;
@@ -81,11 +96,17 @@ namespace ARK {
 				void setTouchMode(bool tm);
 
 				void setSize(int width, int height);
+				#if defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE)
+					// does the setSize without calling game::resize. 
+					// so the game can adjust without infinitely recursively looping.
+					void setSizeNoCallback(int width, int height);
+				#endif
 
 				bool isResizable();
 				void setResizable(bool fs);
 
 				void setScaleToWindow(bool b);
+				void setScaleLock(bool b);
 				unsigned int getFPS();
 				void setIcon(const std::string& path);
 				void start();
@@ -101,8 +122,10 @@ namespace ARK {
 				const Game& getGame() const;
 				const Input& getInput() const;
 				Renderer* getRenderer() const;
-				inline unsigned int getWidth() const { return m_originalWidth; } // dimensions defined in main or config
-				inline unsigned int getHeight() const { return m_originalHeight; }
+				//inline unsigned int getWidth() const { return m_originalWidth; } // dimensions defined in main or config
+				//inline unsigned int getHeight() const { return m_originalHeight; }
+				unsigned int getWidth() const;
+				unsigned int getHeight() const;
 				unsigned int getDynamicWidth() const; // actual dimensions of the container. e.g. 800*480
 				unsigned int getDynamicHeight() const;
 				unsigned int getScreenWidth() const; // on pc, screen resolution. on mobile, same as dynamic widths.
@@ -110,9 +133,13 @@ namespace ARK {
 				float getScale() const; // actual scale.
 				float getScaleX() const; // display scale
 				float getScaleY() const; // display scale
+				void setScaleX(float f) { m_scaleX = f; }
+				void setScaleY(float f) { m_scaleY = f; }
 				float getTranslateX() const;
 				float getTranslateY() const;
-				vector<Gamepad*> getGamepads() const;
+				void setTranslateX(float f) { m_translateX = f; }
+				void setTranslateY(float f) { m_translateY = f; }
+				vector<Gamepad*>* getGamepads();
 
 				// always ends in the trailing slash.
 				string getResourcePath() const;
@@ -120,9 +147,17 @@ namespace ARK {
 				int getResizeBehaviour();
 				void setResizeBehaviour(int b);
 
+				void setWillLoadDefaultFont(bool b);
+
 				static const unsigned int ORIENTATION_PORTRAIT = 0;
 				static const unsigned int ORIENTATION_LANDSCAPE = 1;
+				static const unsigned int ORIENTATION_DUMMY = 2;
 				unsigned int getOrientation();
+				unsigned int getScreenOrientation();
+				unsigned int getPreviousScreenOrientation();
+				void setOrientationInverted(bool b);
+				bool isOrientationInverted();
+				bool is2in1Enabled();
 
 				void saveScreenshot(string filename);
 
@@ -136,14 +171,15 @@ namespace ARK {
 			public:
 		#endif
 
-		#if (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS) || defined(ARK2D_FLASCC) || defined(ARK2D_ANDROID))
+	//	#if (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS) || defined(ARK2D_FLASCC) || defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 				void resizeBehaviour(int width, int height);
-		#endif
+	//	#endif
 
 				void close() const;
 				virtual ~GameContainer();
 
 				void enable2D();
+				//void enable2DOriginal();
 				void disable2D();
 
 			#ifdef ARK2D_FLASCC
@@ -157,8 +193,9 @@ namespace ARK {
 				
 				void enableOpenAL();
 				void disableOpenAL();
+			public:
 				void swapBuffers();
-
+			private:
 
 
 				float time();
@@ -183,12 +220,18 @@ namespace ARK {
 				vector<Gamepad*> m_gamepads;
 
 				string m_strTitle;
+
+			public:
 				unsigned int m_originalWidth;
 				unsigned int m_originalHeight;
+
 				unsigned int m_width;
 				unsigned int m_height;
+
+			private:
 				unsigned int m_screenWidth;
 				unsigned int m_screenHeight;
+				bool m_scaleLock;
 				float m_scale;
 				float m_scaleX;
 				float m_scaleY;
@@ -201,7 +244,9 @@ namespace ARK {
 				bool m_scaleToWindow;
 				bool m_verbose;
 				bool m_touchMode;
-
+				unsigned int m_screenOrientationPrevious;
+				bool m_orientationInverted; // portrait game rotated landscape for example. useful in tablet/touch-based games that go fullscreen.
+				bool m_2in1enabled;
 
 				Color m_clearColor;
 
@@ -210,12 +255,14 @@ namespace ARK {
 			private:
 				int m_resizeBehaviour;
 				bool m_showingFPS;
+				bool m_willLoadDefaultFont;
 
 
 
 			// Platform Specific
 			public:
 				GameContainerPlatform m_platformSpecific;
+				GameContainerPlatform* getPlatformSpecific() { return &m_platformSpecific; }
 				static const int RESIZE_BEHAVIOUR_SCALE = 0;
 				static const int RESIZE_BEHAVIOUR_NOSCALE = 1;
 

@@ -61,7 +61,7 @@ namespace ARK {
 
 			Color* myWhite = new Color("#ffffff");
 			//Color* myWhite2 = myWhite->copy();
-			Color* myWhite3 = new Color(255,255,255,255);
+			Color* myWhite3 = new Color(255,255,255);
 
 			leaveTransitions.add(new SlideRectanglesAcrossTransition(myWhite, 30, SlideRectanglesAcrossTransition::DIRECTION_LEFT, 1.0f));
 			entryTransitions.add(NULL);

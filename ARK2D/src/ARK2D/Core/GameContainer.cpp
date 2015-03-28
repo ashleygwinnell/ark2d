@@ -1,4 +1,3 @@
-
 /*
  * GameContainer.cpp
  *
@@ -12,18 +11,26 @@
 
 #if defined(ARK2D_FLASCC)
  	#include "Platform/GameContainerFlascc.h"
+#elif defined(ARK2D_EMSCRIPTEN_JS)
+ 	#include "Platform/GameContainerHTML5.h"
 #elif defined(ARK2D_ANDROID)
 	#include "Platform/GameContainerAndroid.h"
 #elif defined(ARK2D_WINDOWS)
 	#include "Platform/GameContainerWindows.h"
 #elif defined(ARK2D_UBUNTU_LINUX) 
-	#include "Platform/GameContainerLinux.h"
+ 	#if defined(ARK2D_SDL2)
+ 		#include "Platform/GameContainerLinuxSDL2.h"
+ 	#else
+		#include "Platform/GameContainerLinux.h"
+ 	#endif
 #elif defined(ARK2D_MACINTOSH)
 	#include "Platform/GameContainerMac.h"
+#elif defined(ARK2D_WINDOWS_PHONE_8)
+	#include "Platform/GameContainerWindowsPhone8.h"
 #endif
 
 namespace ARK {
-	namespace Core {
+	namespace Core { 
 
 		bool GameContainer::isVerbose() {
 			return m_verbose;
@@ -33,7 +40,7 @@ namespace ARK {
 		}
  
 		bool GameContainer::isFullscreen() {
-			return m_fullscreen;
+			return m_fullscreen; 
 		}
  
 		//const ARK::Geometry::Rectangle<int>& GameContainer::getWindowRectangle() const {
@@ -51,10 +58,19 @@ namespace ARK {
 		unsigned int GameContainer::getFPS() {
 			return m_timer.getFPS();
 		}
+
+		unsigned int GameContainer::getWidth() const { 
+			return m_originalWidth; 
+		} 
+		unsigned int GameContainer::getHeight() const { 
+			return m_originalHeight; 
+		}
 		unsigned int GameContainer::getDynamicWidth() const {
+			//if (m_orientationInverted) { return m_height; }
 			return m_width;
 		}
 		unsigned int GameContainer::getDynamicHeight() const { // this changes on window resize/scaling.
+			//if (m_orientationInverted) { return m_width; }
 			return m_height;
 		}
 
@@ -95,26 +111,78 @@ namespace ARK {
 		}
 
 		void GameContainer::enable2D() {
+			ARK2D::getLog()->i("enable 2d");
 			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))// || defined(ARK2D_FLASCC))
 
-			#else
-				glMatrixMode(GL_PROJECTION) ;
-				glPushMatrix();
+			#else 
+				Renderer* r = ARK2D::getRenderer();
+				r->matrixMode(MatrixStack::TYPE_PROJECTION);
+				r->pushMatrix();
+				r->loadIdentity(); 
+ 
+				//r->ortho2d(0, 0, m_width, m_height, -1.0f, 1.0f);
+				r->ortho2d(0, 0, m_width, m_height, -1.0f, 1.0f);
+
+				r->matrixMode(MatrixStack::TYPE_MODELVIEW);
+				r->pushMatrix();
+				r->loadIdentity();
+				
+				showAnyGlErrorAndExitMacro();
+				
+				/*glMatrixMode(GL_PROJECTION);
+				glPushMatrix(); 
 				glLoadIdentity();
 
 				glOrtho(0, m_width, m_height, 0, -1, 1);
 
 				glMatrixMode(GL_MODELVIEW);
 				glPushMatrix();
-				glLoadIdentity();
+				glLoadIdentity();*/
 			#endif
+			ARK2D::getLog()->i("enable 2d complete");
 		}
+		/*void GameContainer::enable2DOriginal() {
+			ARK2D::getLog()->i("enable 2d original");
+			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))// || defined(ARK2D_FLASCC))
+
+			#else
+				Renderer* r = ARK2D::getRenderer();
+				r->matrixMode(MatrixStack::TYPE_PROJECTION);
+				r->pushMatrix();
+				r->loadIdentity(); 
+ 
+				r->ortho2d(0, 0, m_originalHeight, m_originalHeight, -1.0f, 1.0f);
+
+				r->matrixMode(MatrixStack::TYPE_MODELVIEW);
+				r->pushMatrix();
+				r->loadIdentity();
+				
+				showAnyGlErrorAndExitMacro();
+	
+			#endif
+			ARK2D::getLog()->i("enable 2d original complete");
+		}*/
 
 		void GameContainer::disable2D() {
-			glMatrixMode(GL_PROJECTION);
+			//ARK2D::getLog()->i("disable 2d");
+			
+			Renderer* r = ARK2D::getRenderer();
+			r->matrixMode(MatrixStack::TYPE_PROJECTION);
+			r->popMatrix();
+
+			r->matrixMode(MatrixStack::TYPE_MODELVIEW);
+			r->popMatrix();			
+
+			/*Image::showAnyGlErrorAndExit();
+			glMatrixMode(GL_PROJECTION); 
 			glPopMatrix();
+
+			Image::showAnyGlErrorAndExit();
 			glMatrixMode(GL_MODELVIEW);
-			glPopMatrix();
+			glPopMatrix();*/
+
+			showAnyGlErrorAndExitMacro();
+			//ARK2D::getLog()->i("disable 2d complete");
 		}
 
 		void GameContainer::enableOpenAL() {
@@ -136,16 +204,18 @@ namespace ARK {
 			m_showingFPS = b;
 		}
 		void GameContainer::renderFPS() {
-			string fps = string("FPS: ") + Cast::toString<unsigned int>(m_timer.getFPS());
+			m_graphics.setDrawColorf(1.0f, 1.0f, 1.0f, 1.0f);  
+
+			string fps = StringUtil::append("FPS: ", m_timer.getFPS());
 			m_graphics.drawString(fps, getDynamicWidth() - 10 - m_graphics.getFont()->getStringWidth(fps), 10);
 		}
-
+ 
 
 		void GameContainer::deinitGamepads() {
 
 		}
-		vector<Gamepad*> GameContainer::getGamepads() const {
-			return m_gamepads;
+		vector<Gamepad*>* GameContainer::getGamepads() {
+			return &m_gamepads; 
 		}
 
 		void GameContainer::setClearColor(const Color& color) {
@@ -169,6 +239,9 @@ namespace ARK {
 		void GameContainer::setScaleToWindow(bool b) {
 			m_scaleToWindow = b;
 		}
+		void GameContainer::setScaleLock(bool b) {
+			m_scaleLock = b;
+		}
 
 		string GameContainer::getResourcePath() const {
 			return m_platformSpecific.getResourcePath();
@@ -181,22 +254,66 @@ namespace ARK {
 			m_resizeBehaviour = b;
 		}
 
+		void GameContainer::setWillLoadDefaultFont(bool b) {
+			m_willLoadDefaultFont = b;
+		}
+
 		void ARK::Core::GameContainer::resizeBehaviour(int width, int height) {
 			if (m_resizeBehaviour == RESIZE_BEHAVIOUR_SCALE) 
 		    {
-		    	m_scaleX = (float) width / (float) m_originalWidth;
-				m_scaleY = (float) height / (float) m_originalHeight;
-				if (m_scaleX > m_scaleY) {
-					m_scale = m_scaleY;
-					m_scaleX = m_scaleY;
-					m_scaleY = 1.0f;
-				} else { // y > x 
-					m_scale = m_scaleX;
-					m_scaleY = m_scaleX;
-					m_scaleX = 1.0f; 
+		    	if (m_orientationInverted) {
+		    		ARK2D::getLog()->i("--Resize behaviour--");
+		    		ARK2D::getLog()->i(StringUtil::append("Width: ", width));
+					ARK2D::getLog()->i(StringUtil::append("Height: ", height));
+
+					ARK2D::getLog()->i(StringUtil::append("Original Width: ", m_originalWidth));
+					ARK2D::getLog()->i(StringUtil::append("Original Height: ", m_originalHeight));
+
+		    		m_scaleX = (float) height / (float) m_originalWidth;
+					m_scaleY = (float) width / (float) m_originalHeight;
+
+					if (m_scaleLock) {
+						m_scaleX = width / m_originalWidth;	
+						m_scaleY = height / m_originalHeight;	
+					}
+
+					ARK2D::getLog()->i(StringUtil::appendf("Scale X: ", m_scaleX));
+					ARK2D::getLog()->i(StringUtil::appendf("Scale Y: ", m_scaleY));
+
+					if (m_scaleX > m_scaleY) {
+						m_scale = m_scaleY; 
+						m_scaleX = m_scaleY;
+					} else { // y > x 
+						m_scale = m_scaleX;
+						m_scaleY = m_scaleX;
+					}
+					
+					ARK2D::getLog()->i(StringUtil::appendf("Scale: ", m_scale));
+
+		    	} else { 
+			    	m_scaleX = (float) width / (float) m_originalWidth;
+					m_scaleY = (float) height / (float) m_originalHeight;
+
+					if (m_scaleLock) {
+						m_scaleX = width / m_originalWidth;	
+						m_scaleY = height / m_originalHeight;	
+					}
+
+					if (m_scaleX > m_scaleY) {
+						m_scale = m_scaleY;
+						m_scaleX = m_scaleY;
+					} else { // y > x 
+						m_scale = m_scaleX;
+						m_scaleY = m_scaleX;
+					}
 				}
+
 				m_width = width;
 				m_height = height;
+
+				//#ifdef ARK2D_WINDOWS_PHONE_8
+					//ARK2D::getLog()->i(StringUtil::append("", m_scaleX))
+				//#endif
 
 		   		
 		    } else if (m_resizeBehaviour == RESIZE_BEHAVIOUR_NOSCALE) {
@@ -211,7 +328,7 @@ namespace ARK {
 
 
 		unsigned int GameContainer::getOrientation() {
-			#if defined(ARK2D_WINDOWS) || defined(ARK2D_MACINTOSH) || defined(ARK2D_UBUNTU_LINUX) || defined(ARK2D_ANDROID)
+			#if defined(ARK2D_WINDOWS) || defined(ARK2D_MACINTOSH) || defined(ARK2D_UBUNTU_LINUX) || defined(ARK2D_ANDROID) || defined(ARK2D_WINDOWS_PHONE_8)
 				if (m_originalWidth > m_originalHeight) { 
 					return ORIENTATION_LANDSCAPE;
 				} else {
@@ -222,6 +339,34 @@ namespace ARK {
 			#endif
 			return ORIENTATION_PORTRAIT;
 		}
+		unsigned int GameContainer::getScreenOrientation() {
+			#if defined(ARK2D_WINDOWS) || defined(ARK2D_MACINTOSH) || defined(ARK2D_UBUNTU_LINUX) || defined(ARK2D_ANDROID) || defined(ARK2D_WINDOWS_PHONE_8)
+				return (m_screenWidth >= m_screenHeight) 
+					? ORIENTATION_LANDSCAPE
+					: ORIENTATION_PORTRAIT;
+			#else
+				ARK2D::getLog()->w("getScreenOrientation not support on this platform.");
+			#endif
+			return ORIENTATION_LANDSCAPE;		
+		}
+		unsigned int GameContainer::getPreviousScreenOrientation() {
+			return m_screenOrientationPrevious;
+		}
+
+		void GameContainer::setOrientationInverted(bool b) {
+			if (b != m_orientationInverted) {
+				// orientation changed! 
+				m_orientationInverted = b;
+				resizeBehaviour(m_width, m_height);
+			}
+			
+		}
+		bool GameContainer::isOrientationInverted() {
+			return m_orientationInverted;
+		}
+		bool GameContainer::is2in1Enabled() {
+			return m_2in1enabled;
+		}
 
 		bool GameContainer::isTouchMode() {
 			return m_touchMode; 
@@ -231,10 +376,13 @@ namespace ARK {
 		}
 
 		void GameContainer::saveScreenshot(string filename) {
-			void* data[m_width * m_height];
-			glReadPixels(0, 0, m_width, m_height, GL_RGBA, GL_UNSIGNED_BYTE, &data);
-
+			const unsigned int datalen = m_width * m_height;
+			void* data = (void*) malloc(datalen); 
+			ARK2D::getRenderer()->readPixels(data, 0, 0, m_width, m_height);
+			 
 			PNGImage::saveFile(filename, (char*) data, m_width, m_height);
+
+			free(data);
 		}
 
 		GameContainer::~GameContainer() {

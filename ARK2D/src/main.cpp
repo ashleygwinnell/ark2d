@@ -9,11 +9,14 @@
  #include <AS3/AS3.h>
 #endif
 
-int main(int argc, char *argv[]) {
-
-	#if defined(__AVM2__)
-
-	#endif
- 
-	return 0;
-}
+#if defined(ARK2D_WINDOWS_PHONE_8)
+	int main(Platform::Array<Platform::String^>^ args) {
+		return 0;
+	}
+#elif defined(ARK2D_EMSCRIPTEN_JS)
+	
+#else
+	int main(int argc, char *argv[]) {
+		return 0;
+	}
+#endif 

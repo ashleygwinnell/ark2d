@@ -13,7 +13,7 @@
 namespace ARK {
 	namespace GJ {
 
-		class User : public PropertyItem {
+		class ARK2D_API User : public PropertyItem {
 			public:
 				static const unsigned int TYPE_USER = 0;
 				static const unsigned int TYPE_DEVELOPER = 1;

@@ -8,11 +8,8 @@
 #ifndef PARTICLESYSTEM_H_
 #define PARTICLESYSTEM_H_
 
-#include <vector>
-#include <list>
-#include <map>
-using namespace std;
 
+#include "../Includes.h"
 #include "../Namespaces.h"
 
 namespace ARK {
@@ -32,7 +29,7 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 * @author Kevin Glass
 		 */
-		class ParticleSystem {
+		class ARK2D_API ParticleSystem {
 			public:
 				static const unsigned int BLEND_ADDITIVE = 1;
 				static const unsigned int BLEND_COMBINE = 2;

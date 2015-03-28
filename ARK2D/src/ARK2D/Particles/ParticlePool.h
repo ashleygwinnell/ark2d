@@ -8,8 +8,7 @@
 #ifndef PARTICLEPOOL_H_
 #define PARTICLEPOOL_H_
 
-#include <vector>
-using namespace std;
+#include "../Includes.h"
 
 namespace ARK {
 	namespace Particles {
@@ -26,7 +25,7 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 * @author Kevin Glass
 		 */
-		class ParticlePool {
+		class ARK2D_API ParticlePool {
 			public:
 				vector<Particle*> particlesActive;
 				vector<Particle*> particlesInactive;

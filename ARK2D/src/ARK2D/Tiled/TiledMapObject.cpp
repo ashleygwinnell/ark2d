@@ -1,6 +1,7 @@
 
 #include "TiledMapObject.h"
 
+
 namespace ARK {
 	namespace Tiled {
 
@@ -12,7 +13,9 @@ namespace ARK {
 			m_y(0),
 			m_width(1),
 			m_height(1),
-			m_gid(0) 
+			m_gid(0),
+			m_properties(),
+			m_polyline()
 		{
  
 		}
@@ -25,7 +28,7 @@ namespace ARK {
 		}
 
 		void TiledMapObject::setType(string s) {
-			m_type = s;
+			m_type = s; 
 		}
 		string& TiledMapObject::getType() {
 			return m_type;
@@ -78,7 +81,18 @@ namespace ARK {
 					return property;
 				}
 			}
-			return NULL;
+			return NULL; 
+		}
+
+		Vector2<signed int>* TiledMapObject::getPolylinePoint(unsigned int index) {
+			return &m_polyline.at(index);
+		}
+		unsigned int TiledMapObject::getPolylineSize() {
+			return m_polyline.size();
+		}
+		void TiledMapObject::addPolylinePoint(signed int x, signed int y) {
+			Vector2<signed int> point = Vector2<signed int>(x, y);
+			m_polyline.push_back(point);
 		}
 
 		TiledMapObject::~TiledMapObject() {

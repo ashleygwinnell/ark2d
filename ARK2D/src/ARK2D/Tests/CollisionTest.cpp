@@ -54,7 +54,7 @@ namespace ARK {
 			shapes.push_back(lineThree);
 			shapes.push_back(lineFour);
 			shapes.push_back(polygonOne);
-			shapes.push_back(polygonTwo);
+			shapes.push_back(polygonTwo); 
 		}
 
 		void CollisionTestGameState::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {
@@ -82,8 +82,8 @@ namespace ARK {
 			else if (i->isKeyPressed(Input::KEY_5)) { current = shapes.at(5); }
 			else if (i->isKeyPressed(Input::KEY_6)) { current = shapes.at(6); }
 			else if (i->isKeyPressed(Input::KEY_7)) { current = shapes.at(7); }
-			else if (i->isKeyPressed(Input::KEY_7)) { current = shapes.at(8); }
-			else if (i->isKeyPressed(Input::KEY_7)) { current = shapes.at(9); }
+			else if (i->isKeyPressed(Input::KEY_8)) { current = shapes.at(8); }
+			else if (i->isKeyPressed(Input::KEY_9)) { current = shapes.at(9); }
 
 		}
 		void CollisionTestGameState::render(GameContainer* container, StateBasedGame* game, Renderer* g) {
@@ -149,8 +149,8 @@ namespace ARK {
 		}
 		int CollisionTest::start() {
 			ARK::Tests::CollisionTest* test = new ARK::Tests::CollisionTest();
-			GameContainer container(*test, 800, 600, 32, false);
-			container.start();
+			GameContainer* container = new GameContainer(*test, 800, 600, 32, false);
+			container->start();
 			return 0;
 		}
 

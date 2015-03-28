@@ -10,15 +10,20 @@
 
 #include "../Core/Event.h"
 #include "../Includes.h"
+#include "../Util/Containers/Vector.h"
 
-#if defined (ARK2D_WINDOWS)
+#if (defined (ARK2D_WINDOWS) || defined(ARK2D_WINDOWS_PHONE_8))
 	#include <windows.h>
 #else
 	#include <pthread.h>
 #endif
 
+
+
 namespace ARK {
 	namespace Threading {
+
+
 
 		
 		/*!
@@ -26,7 +31,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class Thread {
+		class ARK2D_API Thread {
 			public:
 				Thread();
 				void init(void* functionPointer);
@@ -35,9 +40,14 @@ namespace ARK {
 				void* doInternal();
 				void pause();
 				void end();
+				void join();
 				void terminate();
 				int getPriority();
 				void setPriority(int i);
+				
+				inline void setAutoDetaching(bool b) { m_autoDetaching = b; } // needed for JNI thing.
+				inline bool isAutoDetaching() { return m_autoDetaching; }
+
 				virtual ~Thread();
 
 			#if defined (ARK2D_WINDOWS)
@@ -52,6 +62,13 @@ namespace ARK {
 				public:
 					HDC m_deviceContext;
 					HGLRC m_renderingContext;
+			
+			#elif defined(ARK2D_WINDOWS_PHONE_8)
+
+				void* m_functionPointer;
+				void* m_classPointer;
+				Windows::Foundation::IAsyncAction^ m_handle;
+
 			#else
 
 				private:
@@ -59,6 +76,19 @@ namespace ARK {
 					void* m_classPointer;
 					pthread_t m_thread;
 
+			#endif
+
+			public:
+				bool m_autoDetaching;
+				bool m_detached;
+
+			#if defined(ARK2D_ANDROID) 
+				unsigned int m_internalId;
+
+				static bool s_initted;
+				static Vector<Thread* >* s_threads;
+				static unsigned int s_internalId;
+				static void s_threadStartInternal(unsigned int thread_id);
 			#endif
 		};
 	}

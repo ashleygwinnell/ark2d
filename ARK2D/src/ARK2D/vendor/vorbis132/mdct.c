@@ -18,7 +18,7 @@
  banks for coding of high quality digital audio_, by T. Sporer,
  K. Brandenburg and B. Edler, collection of the European Signal
  Processing Conference (EUSIPCO), Amsterdam, June 1992, Vol.1, pp
- 211-214
+ 211-214 
 
  The below code implements an algorithm that no longer looks much like
  that presented in the paper, but the basic structure remains if you

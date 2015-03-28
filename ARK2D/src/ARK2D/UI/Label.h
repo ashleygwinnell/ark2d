@@ -24,7 +24,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class Label : public AbstractUIComponent {
+		class ARK2D_API Label : public AbstractUIComponent {
 			private:
 				string m_text;
 			public:

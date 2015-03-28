@@ -8,6 +8,7 @@
 #ifndef PACKER_H_
 #define PACKER_H_
 
+#include <stdint.h>
 #include "../vendor/ogg130/ogg.h"
 #include "../vendor/vorbis132/vorbisfile.h"
 
@@ -23,61 +24,65 @@
 using namespace std;*/
 #include "../Includes.h"
 
-#define PACKER_AUDIO_MONO16   1
-#define PACKER_AUDIO_STEREO16 2
+#ifndef ARK2D_WINDOWS_PHONE_8
 
-#include <stdint.h>
+	#define PACKER_AUDIO_MONO16   1
+	#define PACKER_AUDIO_STEREO16 2
 
-class PackerFile {
-	public:
-		static const int TYPE_AUDIO = 0;
-		static const int TYPE_IMAGE = 1;
+	#include <stdint.h>
 
-		int32_t type;
-		int32_t nameLength;
-		char* nameString;
-		uint64_t size;
-		void* data;
+	class PackerFile {
+		public:
+			static const int TYPE_AUDIO = 0;
+			static const int TYPE_IMAGE = 1;
 
-		// audio file properties
-		int32_t format;
-		int32_t frequency;
+			int32_t type;
+			int32_t nameLength;
+			char* nameString;
+			uint64_t size;
+			void* data;
 
-	public:
-		PackerFile();
-		virtual ~PackerFile();
-};
+			// audio file properties
+			int32_t format;
+			int32_t frequency;
 
-/**
- * Packer format
- *
- * 	num_files 					4 bytes
- * 	[
- * 		type 					4 bytes
- * 		name_length				4 bytes
- * 		name_string				name_length bytes
- * 		length					8 bytes
- * 			audiofileformat 	4 bytes (will exist depending on file type);
- * 			audiofilefrequency 	4 bytes (will exist depending on file type);
- * 			imagefilecolour		4 bytes (will exist depending on file type);
- * 			imagefilewidth		4 bytes
- * 			imagefileheight		4 bytes
- * 		data					length bytes
- * 	]
- * 	checksum					4 bytes
- *
- *
- */
-class Packer {
-	public:
-		vector<PackerFile*> files;
+		public:
+			PackerFile();
+			virtual ~PackerFile();
+	};
 
-	public:
-		Packer();
-		PackerFile* get(string file);
-		void read(string inFile);
-		void write(string outFile, vector<string> inFiles);
-		virtual ~Packer();
-};
+	/**
+	 * Packer format
+	 *
+	 * 	num_files 					4 bytes
+	 * 	[
+	 * 		type 					4 bytes
+	 * 		name_length				4 bytes
+	 * 		name_string				name_length bytes
+	 * 		length					8 bytes
+	 * 			audiofileformat 	4 bytes (will exist depending on file type);
+	 * 			audiofilefrequency 	4 bytes (will exist depending on file type);
+	 * 			imagefilecolour		4 bytes (will exist depending on file type);
+	 * 			imagefilewidth		4 bytes
+	 * 			imagefileheight		4 bytes
+	 * 		data					length bytes
+	 * 	]
+	 * 	checksum					4 bytes
+	 *
+	 *
+	 */
+	class Packer {
+		public:
+			vector<PackerFile*> files;
+
+		public:
+			Packer();
+			PackerFile* get(string file);
+			void read(string inFile);
+			void write(string outFile, vector<string> inFiles);
+			virtual ~Packer();
+	};
+
+#endif
 
 #endif /* PACKER_H_ */

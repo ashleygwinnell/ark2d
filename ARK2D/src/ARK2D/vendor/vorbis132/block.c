@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../ogg130/ogg.h"
-#include "codec.h"
+#include "codec.h" 
 #include "codec_internal.h"
 
 #include "window.h"

@@ -9,9 +9,10 @@
 #define ARKRECTANGLE_H_
 
 #include "Shape.h"
+#include "Line.h"
 #include "Vector2.h"
- 
-namespace ARK {
+  
+namespace ARK { 
 	namespace Geometry {
 
 		/*!
@@ -39,9 +40,9 @@ namespace ARK {
 				}
 				virtual void set(T x, T y, T width, T height) {
 					m_x = x;
-					m_y = y;
-					m_width = width;
-					m_height = height;
+					m_y = y; 
+					m_width = (int) width;
+					m_height = (int) height;
 				}
 
 				virtual T getMinX() {
@@ -85,9 +86,33 @@ namespace ARK {
 					m_x = x - (m_width/2);
 					m_y = y - (m_height/2);
 				}
+				virtual void setLocationByAlignment(T x, T y, signed int alignX, signed int alignY) {
+					
+					if (alignX == Renderer::ALIGN_CENTER) { 
+						x -= m_width / 2.0f;
+					} else if (alignX == Renderer::ALIGN_RIGHT || alignX == Renderer::ALIGN_END) {
+						x -= m_width;
+					} 
+
+					if (alignY == Renderer::ALIGN_CENTER) { 
+						y -= m_height / 2.0f;
+					} else if (alignY == Renderer::ALIGN_END || alignY == Renderer::ALIGN_BOTTOM) {
+						y -= m_height;
+					} 
+					
+					m_x = x;
+					m_y = y;
+
+				}
+				virtual void setXByCenter(T x) {
+					m_x = x - (m_width/2);
+				}
+				virtual void setYByCenter(T y) {
+					m_y = y - (m_height/2);
+				}
 
 				virtual void adjustX(T x) {
-					m_x += x;
+					m_x += x; 
 				}
 				virtual void adjustY(T y) {
 					m_y += y;
@@ -119,7 +144,7 @@ namespace ARK {
 					if (rect != NULL) {
 						return Shape<T>::collision_rectangleRectangle(m_x, m_y, m_width, m_height, rect->getMinX(), rect->getMinY(), rect->getWidth(), rect->getHeight());
 					}
-
+ 
                     // circle 
 					Circle<T>* circle = NULL;
 					circle = dynamic_cast<Circle<T>* >(s);
@@ -162,7 +187,20 @@ namespace ARK {
 					return polygon;
 				}
 
-
+				string toString() {
+					ARK::Core::String s;
+					s += "{";
+					s += "\"x\":";
+					s += m_x;
+					s += ", \"y\":";
+					s += m_y;
+					s += ", \"w\":";
+					s += m_width;
+					s += ", \"h\":";
+					s += m_height;
+					s += "}";
+					return s.get();
+				}
 
 				virtual ~Rectangle() {
 

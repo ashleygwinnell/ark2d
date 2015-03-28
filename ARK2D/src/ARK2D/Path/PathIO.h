@@ -26,7 +26,7 @@ namespace ARK {
 		 * You can also get the String value of a PathGroup with this class.
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class PathIO {
+		class ARK2D_API PathIO {
 			public:
 				static PathGroup* createFromFile(string file);
 				static PathGroup* createFromJSON(string json);

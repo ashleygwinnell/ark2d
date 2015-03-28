@@ -117,90 +117,92 @@ namespace ARK {
 			} else if (i == BOUNCE_IN_OUT) {
 				return "BOUNCE_IN_OUT";
 			}
-			return LINEAR;
+			return "LINEAR";
+		}
+		double Easing::easebetween(unsigned int easing, double t, double start, double end, double duration) {
+			return ease(easing, t, start, end - start, duration);
 		}
 
-
-		double Easing::ease(unsigned int easing, double time, double start, double change, double duration)
+		double Easing::ease(unsigned int easing, double t, double start, double change, double duration)
 		{
-			if (time >= duration) {
+			if (t >= duration) {
 				return start + change;
 			}
 			switch(easing) {
 				case Easing::LINEAR:
-					return change * time / duration + start;
+					return change * t / duration + start;
 
 				case Easing::QUADRATIC_IN:
-					return change * (time /= duration) * time + start;
+					return change * (t /= duration) * t + start;
 
 				case Easing::QUADRATIC_OUT:
-					return -change * (time /= duration) * (time - 2) + start;
+					return -change * (t /= duration) * (t - 2) + start;
 
 				case Easing::QUADRATIC_IN_OUT:
-					if ((time /= duration / 2) < 1) {
-						return change / 2 * time * time + start;
+					if ((t /= duration / 2) < 1) {
+						return change / 2 * t * t + start;
 					}
-					return -change / 2 * ((--time) * (time - 2) - 1) + start;
+					return -change / 2 * ((--t) * (t - 2) - 1) + start;
 
 				case Easing::CUBIC_IN:
-					return change * (time /= duration) * time * time + start;
+					return change * (t /= duration) * t * t + start;
 
 				case Easing::CUBIC_OUT:
-					return change * ((time = time / duration - 1) * time * time + 1) + start;
+					return change * ((t = t / duration - 1) * t * t + 1) + start;
 
 				case Easing::CUBIC_IN_OUT:
-					if ((time /= duration / 2) < 1) {
-						return change / 2 * time * time * time + start;
+					if ((t /= duration / 2) < 1) {
+						return change / 2 * t * t * t + start;
 					}
-					return change / 2 * ((time -= 2) * time * time + 2) + start;
+					return change / 2 * ((t -= 2) * t * t + 2) + start;
 
 				case Easing::QUARTIC_IN:
-					return change * (time /= duration) * time * time * time + start;
+					return change * (t /= duration) * t * t * t + start;
 
 				case Easing::QUARTIC_OUT:
-					return -change * ((time = time / duration - 1) * time * time * time - 1) + start;
+					return -change * ((t = t / duration - 1) * t * t * t - 1) + start;
 
 				case Easing::QUARTIC_IN_OUT:
-					if ((time /= duration / 2) < 1) {
-						return change / 2 * time * time * time * time + start;
+					if ((t /= duration / 2) < 1) {
+						return change / 2 * t * t * t * t + start;
 					}
-					return -change / 2 * ((time -= 2) * time * time * time - 2) + start;
+					return -change / 2 * ((t -= 2) * t * t * t - 2) + start;
 
 				case Easing::SINE_IN:
 
-					return -change * (float) cos(time / duration * (MY_PI / 2)) + change + start;
+					return -change * (float) cos(t / duration * (MY_PI / 2)) + change + start;
 
 				case Easing::SINE_OUT:
-					return change * (float) sin(time / duration * (MY_PI / 2)) + start;
+					return change * (float) sin(t / duration * (MY_PI / 2)) + start;
 
 				case Easing::SINE_IN_OUT:
-					return -change / 2 * ((float) cos(MY_PI * time / duration) - 1) + start;
+					return -change / 2 * ((float) cos(MY_PI * t / duration) - 1) + start;
 
 				case Easing::EXPONENTIAL_IN:
-					return (time==0) ? start : change * (float)pow(2, 10 * (time/duration - 1)) + start;
+					return (t==0) ? start : change * (float)pow(2, 10 * (t/duration - 1)) + start;
 
 				case Easing::EXPONENTIAL_OUT:
-					return (time==duration) ? start+change : change * (-(float)pow(2, -10 * time/duration) + 1) + start;
+					return (t==duration) ? start+change : change * (-(float)pow(2, -10 * t/duration) + 1) + start;
 
 				case Easing::EXPONENTIAL_IN_OUT:
-					if (time==0) return start;
-					if (time==duration) return start+change;
-					if ((time/=duration/2) < 1) return change/2 * (float)pow(2, 10 * (time - 1)) + start;
-					return change/2 * (-(float)pow(2, -10 * --time) + 2) + start;
+					if (t==0) return start;
+					if (t==duration) return start+change;
+					if ((t/=duration/2) < 1) return change/2 * (float)pow(2, 10 * (t - 1)) + start;
+					return change/2 * (-(float)pow(2, -10 * --t) + 2) + start;
 
 				case Easing::CIRCLE_IN:
-					return -change * ((float)sqrt(1 - (time/=duration) * time) - 1) + start;
+					return -change * ((float)sqrt(1 - (t/=duration) * t) - 1) + start;
 
 				case Easing::CIRCLE_OUT:
-					return change * (float)sqrt(1 - (time=time/duration-1) * time) + start;
+					return change * (float)sqrt(1 - (t=t/duration-1) * t) + start;
 
 				case Easing::CIRCLE_IN_OUT:
-					if ((time/=duration/2) < 1) return -change/2 * ((float)sqrt(1 - time*time) - 1) + start;
-					return change/2 * ((float)sqrt(1 - (time-=2)*time) + 1) + start;
+					if ((t/=duration/2) < 1) return -change/2 * ((float)sqrt(1 - t*t) - 1) + start;
+					return change/2 * ((float)sqrt(1 - (t-=2)*t) + 1) + start;
 				
 				case Easing::ELASTIC_IN: {
-					if (time==0) return start;  
-					if ((time/=duration)==1) return start+change;  
+					if (t==0) return start;
+					if ((t/=duration)==1) return start+change;
 					
 					double amplitude = 1.0;
 					double period = duration * 0.3; //if (!p) p=duration*.3;
@@ -211,11 +213,11 @@ namespace ARK {
 					} else { 
 						s = period / (2 * MathUtil::PIE) * asin(change/amplitude); 
 					}
-					return -(amplitude * pow(2, 10 * (time-=1)) * sin( (time*duration-s)*(2* MathUtil::PIE)/period )) + start;
+					return -(amplitude * pow(2, 10 * (t-=1)) * sin( (t*duration-s)*(2* MathUtil::PIE)/period )) + start;
 				}
 				case Easing::ELASTIC_OUT: {
-					if (time==0) return start;  
-					if ((time/=duration)==1) return start+change;  
+					if (t==0) return start;
+					if ((t/=duration)==1) return start+change;
 					
 					double amplitude = 1.0;
 					double period = duration * 0.3; //if (!p) p=duration*.3;
@@ -226,11 +228,11 @@ namespace ARK {
 					} else { 
 						s = period/(2 * MathUtil::PIE) * asin (change/amplitude); 
 					}
-					return amplitude * pow(2,-10*time) * sin( (time*duration-s)*(2 * MathUtil::PIE)/period ) + change + start;
+					return amplitude * pow(2,-10*t) * sin( (t*duration-s)*(2 * MathUtil::PIE)/period ) + change + start;
 				}
 				case Easing::ELASTIC_IN_OUT: {
-					if (time==0) return start;  
-					if ((time/=duration/2)==2) return start+change;  
+					if (t==0) return start;
+					if ((t/=duration/2)==2) return start+change;
 					//if (!p) p=d*(.3*1.5); 
 					double amplitude = 1.0;
 					double period = duration*(0.3*1.5);
@@ -243,28 +245,28 @@ namespace ARK {
 						s = period/(2 * MathUtil::PIE) * asin (change/amplitude); 
 					}
 
-					if (time < 1) { 
-						return -0.5 * (amplitude * pow(2,10*(time-=1)) * sin( (time*duration-s)*(2*MathUtil::PIE)/period )) + start;
+					if (t < 1) {
+						return -0.5 * (amplitude * pow(2,10*(t-=1)) * sin( (t*duration-s)*(2*MathUtil::PIE)/period )) + start;
 					}
-					return amplitude * pow(2,-10*(time-=1)) * sin( (time*duration-s)*(2*MathUtil::PIE)/period )*.5 + change + start;
+					return amplitude * pow(2,-10*(t-=1)) * sin( (t*duration-s)*(2*MathUtil::PIE)/period )*.5 + change + start;
 				}
 				case Easing::BOUNCE_IN:
-					return change - Easing::ease(Easing::BOUNCE_OUT, duration - time, 0, change, duration) + start;
+					return change - Easing::ease(Easing::BOUNCE_OUT, duration - t, 0, change, duration) + start;
 				case Easing::BOUNCE_OUT:
-					if ((time/=duration) < (1/2.75)) {
-						return change*(7.5625*time*time) + start;
-					} else if (time < (2/2.75)) {
-						return change*(7.5625*(time-=(1.5/2.75))*time + .75) + start;
-					} else if (time < (2.5/2.75)) {
-						return change*(7.5625*(time-=(2.25/2.75))*time + .9375) + start;
+					if ((t/=duration) < (1/2.75)) {
+						return change*(7.5625*t*t) + start;
+					} else if (t < (2/2.75)) {
+						return change*(7.5625*(t-=(1.5/2.75))*t + .75) + start;
+					} else if (t < (2.5/2.75)) {
+						return change*(7.5625*(t-=(2.25/2.75))*t + .9375) + start;
 					} else {
-						return change*(7.5625*(time-=(2.625/2.75))*time + .984375) + start;
+						return change*(7.5625*(t-=(2.625/2.75))*t + .984375) + start;
 					}
 					return start;
 
 				case Easing::BOUNCE_IN_OUT:
-					if (time < duration/2) { return Easing::ease(Easing::BOUNCE_IN, time*2, 0, change, duration) * 0.5 + start; }
-					return Easing::ease(Easing::BOUNCE_OUT, time*2-duration, 0, change, duration) * .5 + change * 0.5 + start;
+					if (t < duration/2) { return Easing::ease(Easing::BOUNCE_IN, t*2, 0, change, duration) * 0.5 + start; }
+					return Easing::ease(Easing::BOUNCE_OUT, t*2-duration, 0, change, duration) * .5 + change * 0.5 + start;
 
 				case Easing::NONE:
 					return start;

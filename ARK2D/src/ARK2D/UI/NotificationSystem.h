@@ -18,8 +18,12 @@ namespace ARK {
 	namespace UI {
 		class Notification;
 
-		class NotificationSystem {
+		class ARK2D_API NotificationSystem {
 			
+			private:
+				static NotificationSystem* s_notificationSystem;
+				static NotificationSystem* getInstance();
+
 			private:
 				ARK::Util::Containers::Vector<ARK::UI::Notification* > m_notifications;
 				float m_defaultDuration;

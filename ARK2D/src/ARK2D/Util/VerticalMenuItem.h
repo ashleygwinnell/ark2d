@@ -15,7 +15,7 @@
  * @deprecated
  * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
  */
-class VerticalMenuItem {
+class ARK2D_API VerticalMenuItem {
 	public:
 		VerticalMenuItem();
 		VerticalMenuItem(const char* text);

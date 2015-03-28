@@ -8,6 +8,7 @@
 #include "../Util/MathUtil.h"
 #include "../UI/ErrorDialog.h"
 #include "../Util/Cast.h"
+#include "../Common/OpenGL.h"
 #include "Color.h"
 #include <string>
 #include <stdio.h>
@@ -19,27 +20,27 @@ namespace ARK {
 
 
 
-		const Color Color::black = Color(0, 0, 0, 255);
-		const Color Color::white = Color(255, 255, 255, 255);
+		const Color Color::black = Color(0, 0, 0);
+		const Color Color::white = Color(255, 255, 255);
 
 		const Color Color::red = Color(255, 0, 0);
-		const Color Color::green = Color(0, 255, 0);
+		const Color Color::green = Color(0, 255, 0); 
 		const Color Color::cyan = Color(0, 255, 255);
 		const Color Color::blue = Color(0, 0, 255);
 		const Color Color::magenta = Color(255, 0, 255);
 		const Color Color::orange = Color(255, 127, 0);
 		const Color Color::yellow = Color(255, 255, 0);
 
-		const Color Color::black_50a = Color(0, 0, 0, 127);
-		const Color Color::black_0a = Color(0, 0, 0, 0);
+		const Color Color::black_50a = Color(0.0f, 0.0f, 0.0f, 0.5f);
+		const Color Color::black_0a = Color(0.0f, 0.0f, 0.0f, 0.0f);
 
-		const Color Color::white_50a = Color(255, 255, 255, 127);
-		const Color Color::white_0a = Color(255, 255, 255, 0);
+		const Color Color::white_50a = Color(1.0f, 1.0f, 1.0f, 0.5f);
+		const Color Color::white_0a = Color(1.0f, 1.0f, 1.0f, 0.0f);
 
-		const Color Color::darker_grey = Color(32, 32, 32, 255);
-		const Color Color::dark_grey = Color(63, 63, 63, 255);
-		const Color Color::grey = Color(127, 127, 127, 255);
-		const Color Color::light_grey = Color(191, 191, 191, 255);
+		const Color Color::darker_grey = Color(32, 32, 32);
+		const Color Color::dark_grey = Color(64, 64, 64);
+		const Color Color::grey = Color(127, 127, 127);
+		const Color Color::light_grey = Color(191, 191, 191);
 
 
 		Color::Color():
@@ -59,21 +60,7 @@ namespace ARK {
 		}
 
 		Color::Color(const std::string hexString) {
-			char hex[2]; strncpy(hex, &hexString[0], 1); hex[1] = 0;
-
-			//std::cout << hex << " : " << hexString << std::endl;
-			if (strcmp(hex, "#") != 0) {
-				ErrorDialog::createAndShow("Color::Color(string) constructor's hex color must begin with a hash symbol.");
-				exit(0);
-			}
-			char red[3]; strncpy(red, &hexString[1], 2); red[2] = 0;
-			char green[3]; strncpy(green, &hexString[3], 2); green[2] = 0;
-			char blue[3]; strncpy(blue, &hexString[5], 2); blue[2] = 0;
-			std::cout << "Loaded Color: #" << red << green << blue << std::endl;
-			m_r = Cast::hextoint(&red[0]);
-			m_g = Cast::hextoint(&green[0]);
-			m_b = Cast::hextoint(&blue[0]);
-			m_a = 255;
+			set(hexString);
 		}
 
 		Color::Color(int red, int green, int blue):
@@ -85,13 +72,24 @@ namespace ARK {
 
 		}
 
-		Color::Color(int r, int g, int b, int a):
+		Color::Color(unsigned int r, unsigned int g, unsigned int b, unsigned int a):
 			m_r(r),
 			m_g(g),
 			m_b(b),
 			m_a(a)
 		{
 
+		}
+		
+		Color::Color(float r, float g, float b, float a):
+			m_r(0),
+			m_g(0),
+			m_b(0),
+			m_a(0) {
+			m_r = ((unsigned int) (r * 255.0f));
+			m_g = ((unsigned int) (g * 255.0f));
+			m_b = ((unsigned int) (b * 255.0f));
+			m_a = ((unsigned int) (a * 255.0f));
 		}
 
 		Color* Color::getRandom() {
@@ -115,24 +113,64 @@ namespace ARK {
 		void Color::setAlpha(unsigned int a) {
 			m_a = a;
 		}
+		
 
 		void Color::set(float r, float g, float b, float a) {
 			m_r = (unsigned int) (r * 255.0f);
 			m_g = (unsigned int) (g * 255.0f);
 			m_b = (unsigned int) (b * 255.0f);
 			m_a = (unsigned int) (a * 255.0f);
+
+			if (m_r > 255) m_r = 255;
+			if (m_g > 255) m_g = 255;
+			if (m_b > 255) m_b = 255;
+			if (m_a > 255) m_a = 255;
 		}
 		void Color::setRed(float r) {
 			m_r = (unsigned int) (r * 255.0f);
+			if (m_r > 255) m_r = 255;
 		}
 		void Color::setGreen(float g) {
 			m_g = (unsigned int) (g * 255.0f);
+			if (m_g > 255) m_g = 255;
 		}
 		void Color::setBlue(float b) {
 			m_b = (unsigned int) (b * 255.0f);
+			if (m_b > 255) m_b = 255;
 		}
 		void Color::setAlpha(float a) {
 			m_a = (unsigned int) (a * 255.0f);
+			if (m_a > 255) m_a = 255;
+		}
+
+		void Color::set(const std::string hexString) {
+			char hex[2]; 
+			strncpy(hex, &hexString[0], 1); 
+			hex[1] = 0;
+
+			//std::cout << hex << " : " << hexString << std::endl;
+			if (strcmp(hex, "#") != 0) {
+				ErrorDialog::createAndShow("Color::Color(string) constructor's hex color must begin with a hash symbol.");
+				exit(0);
+			}
+			
+			char red[3]; 
+			strncpy(red, &hexString[1], 2); 
+			red[2] = 0;
+
+			char green[3]; 
+			strncpy(green, &hexString[3], 2); 
+			green[2] = 0;
+
+			char blue[3]; 
+			strncpy(blue, &hexString[5], 2); 
+			blue[2] = 0;
+			
+			//std::cout << "Loaded Color: #" << red << green << blue << std::endl;
+			m_r = Cast::hextoint(&red[0]);
+			m_g = Cast::hextoint(&green[0]);
+			m_b = Cast::hextoint(&blue[0]);
+			m_a = 255;
 		}
 
 		unsigned int Color::getRed() const {
@@ -147,6 +185,14 @@ namespace ARK {
 		unsigned int Color::getAlpha() const {
 			return m_a;
 		}
+
+		const Color* Color::constpointer() const {
+			return this;
+		}
+		Color* Color::pointer() const {
+			return const_cast<Color*>( this );
+		}
+		
 		float Color::getRedf() const {
 			return float(m_r)/255.0f;
 		}
@@ -159,12 +205,24 @@ namespace ARK {
 		float Color::getAlphaf() const {
 			return float(m_a)/255.0f;
 		}
+		string Color::getHex() const {
+			string returnStr = string("#");;
+			returnStr += Cast::inttohexcolor(m_r);
+			returnStr += Cast::inttohexcolor(m_g);
+			returnStr += Cast::inttohexcolor(m_b);
+			return returnStr;
+		}
 
-		void Color::bind() const {
-			glColor4f(getRedf(), getGreenf(), getBluef(), getAlphaf());
+		void Color::bind() const { 
+			#ifndef NO_FIXED_FUNCTION_PIPELINE
+				glColor4f(getRedf(), getGreenf(), getBluef(), getAlphaf());
+			#endif
 		}
 		Color* Color::copy() {
 			return new Color(m_r,m_g,m_b,m_a);
+		}
+		const Color Color::ccopy() {
+			return Color(m_r, m_g, m_b, m_a);
 		}
 		bool Color::operator==(Color c) {
 			if (m_r == c.getRed() && m_g == c.getGreen() && m_b == c.getBlue() && m_a == c.getAlpha()) {

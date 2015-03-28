@@ -20,7 +20,7 @@ class VerticalMenuItem;
  * @deprecated
  * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
  */
-class VerticalMenu {
+class ARK2D_API VerticalMenu {
 	public:
 		VerticalMenu(GameContainer* container);
 

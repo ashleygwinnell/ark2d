@@ -52,7 +52,8 @@ namespace ARK {
 						unsigned int m_typeSize; // in bytes
 						unsigned int m_sizeOccupied;
 						unsigned int m_sizeTotal;
-					#endif
+					#endif 
+					signed int m_size;
 
 					bool usingList;
 
@@ -68,6 +69,7 @@ namespace ARK {
 							m_sizeOccupied(0),
 							m_sizeTotal(1),
 						#endif
+						m_size(0),
 						usingList(false), it(NULL)
 						{
 						#if !defined (STL_AVAILABLE)
@@ -78,9 +80,24 @@ namespace ARK {
 					void setUsingList(bool b) {
 						usingList = b;
 					}
-					bool isUsingList() {
-						return usingList;
-					}
+					inline bool isUsingList() { return usingList; }
+
+					/* 
+					void sort( void* sortFunction  ) {
+						#if !defined(STL_AVAILABLE)
+							ARK2D::getLog()->w("Not implemented without STL.");
+							return;
+						#else 
+							bool (*funcptr)(T,T) = (bool (*)(T,T)) sortFunction;
+
+							if (!usingList) { 
+								std::sort (vec.begin(), vec.end(), funcptr);
+							} else {
+								std::sort (lst.begin(), lst.end(), funcptr);
+							}
+						#endif
+					} */
+
 					bool contains(T val) {
 						#if !defined(STL_AVAILABLE)
 							return false;
@@ -119,6 +136,8 @@ namespace ARK {
 							memcpy(((char*)m_data) + (m_sizeOccupied*m_typeSize), o, m_typeSize);
 							return;
 						#else
+							m_size++;
+
 							if (!usingList) {
 								vec.push_back(o);
 								return;
@@ -135,6 +154,7 @@ namespace ARK {
 						#if !defined(STL_AVAILABLE)
 							ARK2D::getLog()->e("Vector<?>::add(unsigned int, ?) is not implemented without STL.");
 						#else 
+							m_size++;
 							if (!usingList) {
 								vec.insert(vec.begin() + index, o);
 								return;
@@ -212,6 +232,7 @@ namespace ARK {
 										ErrorDialog::createAndShow("Cannot pop because the Vector is empty.");
 									#endif
 								}
+								m_size--;
 
 								int end = vec.size()-1;
 								T endObj = vec.at(end);
@@ -226,6 +247,8 @@ namespace ARK {
 									ErrorDialog::createAndShow("Cannot pop because the Vector is empty.");
 								#endif
 							}
+							m_size--;
+
 							int end = lst.size()-1;
 							//T endObj = lst.begin() + end;
 							typename list<T>::iterator it = lst.begin();
@@ -277,9 +300,9 @@ namespace ARK {
 							return (void*) NULL;
 						#else
 							if (!usingList) {
-								return (void*) vec;
+								return (void*) &vec;
 							}
-							return (void*) lst;
+							return (void*) &lst;
 						#endif
 					}
 					vector<T>& getDataVec() { return vec; }
@@ -288,9 +311,11 @@ namespace ARK {
 						#else
 							if (!usingList) {
 								vec = data;
+								m_size = vec.size();
 								return;
 							}
 							lst = data;
+							m_size = lst.size();
 						#endif
 					}
 					VectorIterator<T>* iterator() {
@@ -300,15 +325,21 @@ namespace ARK {
 						it->reset();
 						return it;
 					}
+					VectorIterator<T> newiteratorref() {
+						VectorIterator<T> it(this);
+						it.reset();
+						return it;
+					}
 
 					unsigned int size() {
 						#if !defined(STL_AVAILABLE)
 							return (unsigned int) m_sizeOccupied;
 						#else
-							if (!usingList) {
-								return vec.size();
-							}
-							return lst.size();
+							return m_size;
+							//if (!usingList) {
+							//	return vec.size();
+							//}
+							//return lst.size();
 						#endif
 					}
 					void remove(unsigned int i) {
@@ -318,6 +349,7 @@ namespace ARK {
 						#if !defined(STL_AVAILABLE)
 
 						#else
+							m_size--;
 							if (!usingList) {
 								vec.erase(vec.begin() + i);
 								return;
@@ -334,6 +366,7 @@ namespace ARK {
 						#if !defined(STL_AVAILABLE)
 						#else
 							if (!usingList) {
+								m_size--;
 								typename vector<T>::iterator it = vec.begin();
 								while (it != vec.end()) {
 									T obj = (*it);
@@ -347,6 +380,7 @@ namespace ARK {
 								return;
 							}
 
+							m_size--;
 							typename list<T>::iterator it = lst.begin();
 							while (it != lst.end()) {
 								T obj = (*it);
@@ -372,6 +406,7 @@ namespace ARK {
 									if (obj->isPendingRemoval()) {
 										obj->onPrune();
 										it = vec.erase(it);
+										m_size--;
 										//break;
 									} else {
 										++it;
@@ -385,6 +420,7 @@ namespace ARK {
 								if (obj->isPendingRemoval()) {
 									obj->onPrune();
 									it = lst.erase(it);
+									m_size--;
 									//break;
 								} else {
 									++it;
@@ -397,6 +433,7 @@ namespace ARK {
 						#if !defined(STL_AVAILABLE)
 
 						#else
+							m_size = 0;
 							if (!usingList) {
 								vec.clear();
 								return;
@@ -589,11 +626,12 @@ namespace ARK {
 							}
 							lst.clear();
 						}*/					
-							
+							 
 					}
 				private:
 					bool isIndexInBounds(unsigned int i) {
-						return (i >= 0 && i < size());
+						//return (i >= 0 && i < size());
+                        return (i < size());
 					}
 
 			};
@@ -611,7 +649,7 @@ namespace ARK {
 					VectorIterator(Vector<T>* p):
 						parent(p), index(0)
 						#if defined(STL_AVAILABLE)
-							, iterator(NULL)
+							, iterator()
 						#endif
 					{
 
@@ -638,7 +676,7 @@ namespace ARK {
 									return obj;
 								}
 								ErrorDialog::createAndShow("Out of items in Iterator (lst) - returning NULL.");
-								return NULL;
+								return (T) NULL;
 							}
 
 							if (hasNext()) {
@@ -647,7 +685,7 @@ namespace ARK {
 								return obj;
 							}
 							ErrorDialog::createAndShow("Out of items in Iterator (vec) - returning NULL.");
-							return NULL;
+							return (T) NULL;
 						#endif
 					}
 					Vector<T>* getVector() {
@@ -682,6 +720,7 @@ namespace ARK {
 
 						#else
 							if (parent->isUsingList()) {
+								parent->m_size--;
 								iterator--;
 								iterator = parent->lst.erase(iterator);
 								return;

@@ -19,8 +19,8 @@ namespace ARK {
 		 */
 		class KeyListener {
 			public:
-				void keyPressed(int key, char c);
-				void keyReleased(int key, char c);
+				virtual void keyPressed(int key, char c) = 0;
+				virtual void keyReleased(int key, char c) = 0;
 		};
 
 	}

@@ -1,16 +1,26 @@
 #ifndef libJSON_NODE_H
 #define libJSON_NODE_H
 
+#include "../../Includes.h"
 
 #include <string>
 
 #include "JSON_Strings.h"
 #include "JSONChildren.h"
 
+#if (defined(_MSC_FULL_VER) || defined(_MSC_VER)) 
+
 #define foreach(iterator, container)\
-    for (typeof(container.begin()) iterator = container.begin(), iterator##_end = container.end();\
-         iterator != iterator##_end;\
-         ++iterator)
+    for (auto iterator = container.begin(); iterator != container.end(); ++iterator)
+ 
+#else
+
+	#define foreach(iterator, container)\
+	    for (typeof(container.begin()) iterator = container.begin(), iterator##_end = container.end();\
+	         iterator != iterator##_end;\
+	         ++iterator)
+
+#endif
 
 using namespace std;
 
@@ -25,7 +35,7 @@ union value_union_t {
     #endif
 };
 
-class JSONNode {
+class ARK2D_API JSONNode {
     public:
 	   JSONNode(const json_string & name_t, const json_string & value_t);
 	   JSONNode(void){};  //Used ONLY for duplicating

@@ -12,10 +12,19 @@
 namespace ARK {
 	namespace UI {
 
+		NotificationSystem* NotificationSystem::s_notificationSystem = NULL;
+		NotificationSystem* NotificationSystem::getInstance() {
+			if (s_notificationSystem == NULL) {
+				s_notificationSystem = new NotificationSystem(); 
+			}
+			return s_notificationSystem;
+		}
+
+
 		NotificationSystem::NotificationSystem():  
 			m_notifications(),
 			m_defaultDuration(2.0f)
-		{
+		{ 
 			
 		}
 

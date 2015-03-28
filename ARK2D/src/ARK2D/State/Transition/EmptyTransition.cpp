@@ -12,32 +12,33 @@ namespace ARK {
 		namespace Transition {
 
 			EmptyTransition::EmptyTransition() {
-				ARK2D::getLog()->v("EmptyTransition::__construct");
+				//ARK2D::getLog()->v("EmptyTransition::__construct");
 			}
 
 			void EmptyTransition::init(GameContainer* container, StateBasedGame* game, GameState* first, GameState* second) {
 				// No operations, durr. That's why it's empty!
-				ARK2D::getLog()->v("EmptyTransition::init");
+				//ARK2D::getLog()->v("EmptyTransition::init");
+				Transition::init(container, game, first, second);
 			}
 			void EmptyTransition::update(GameContainer* container, StateBasedGame* game, GameTimer* delta) {
 				// No operations, durr. That's why it's empty!
-				ARK2D::getLog()->v("EmptyTransition::update");
+				//ARK2D::getLog()->v("EmptyTransition::update");
 			}
 			void EmptyTransition::preRender(GameContainer* container, StateBasedGame* game, Renderer* g) {
 				// No operations, durr. That's why it's empty!
-				ARK2D::getLog()->v("EmptyTransition::preRender");
+				//ARK2D::getLog()->v("EmptyTransition::preRender");
 			}
 			void EmptyTransition::postRender(GameContainer* container, StateBasedGame* game, Renderer* g) {
 				// No operations, durr. That's why it's empty!
-				ARK2D::getLog()->v("EmptyTransition::postRender");
+				//ARK2D::getLog()->v("EmptyTransition::postRender");
 			}
 			bool EmptyTransition::isComplete() {
-				ARK2D::getLog()->v("EmptyTransition::isComplete");
+				//ARK2D::getLog()->v("EmptyTransition::isComplete"); 
 				return true;
 			}
 
 			EmptyTransition::~EmptyTransition() {
-
+				//ARK2D::getLog()->v("EmptyTransition::__destruct");
 			}
 		}
 	}

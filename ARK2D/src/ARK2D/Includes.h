@@ -14,11 +14,16 @@
 			#define ARK2D_FLASCC
 		#endif
 
+ 		#define ARK2D_API 
 		#define STL_AVAILABLE
 		#define EXCEPTIONS_AVAILABLE
  		#include <AS3/AS3.h>
+ 		//#include <AS3/AS3++.h>
  		#include <Flash++.h>
+ 		//using namespace AS3;
 
+ 		
+ 		
  		#include <string>
 		#include <vector>
 		#include <list>
@@ -36,20 +41,9 @@
 		#include <sys/types.h>
 		#include <math.h> 
 		#include <algorithm>
+ 		#include <unistd.h>
 
- 		//#include <inttypes.h>
-
- 		#include <GL/gl.h>
- 		#include <GL/glext.h>
- 		#include <GL/glu.h>
- 		//#include <GL/glxext.h>
-
- 		/*#include <GLES/gl.h>
-		#include <GLES/glext.h>
-		#include <GLES/glplatform.h>
-
- 		#include <GLES2/gl2.h>
- 		#include <GLES2/gl2ext.h>*/
+ 		#include "Common/OpenGL.h" 		
 
  		using namespace std;
 
@@ -59,9 +53,47 @@
 
  		#include "vendor/libcurl/curl.h"
 
+ 	#elif defined(ARK2D_EMSCRIPTEN_JS)
+
+ 		#define ARK2D_API 
+ 		#define STL_AVAILABLE
+		//#define EXCEPTIONS_AVAILABLE
+		#define JSON_SAFE
+		//#define ALLOW_MEMORY_GROWTH
+ 		
+ 		#include "Common/Audio.h"
+ 		#include "Common/OpenGL.h"
+
+		#include <vector>
+		#include <list> 
+		#include <map>
+		#include <set>
+		#include <limits>
+
+		#include <stdlib.h>
+		#include <stdint.h>
+		#include <inttypes.h>
+		#include <string>
+		#include <iostream>
+		#include <fstream>
+		#include <sys/time.h>
+		#include <sys/ioctl.h>
+		#include <sys/stat.h>
+		#include <pthread.h>
+		#include <unistd.h> 
+
+		//typedef signed long int64_t;
+		#define typeof __typeof__
+
+		#include "vendor/libcurl/curl.h"
+
+ 		using namespace std;
 
 	#elif defined(ARK2D_ANDROID)
+ 		#define ARK2D_API 
  		#define STL_AVAILABLE
+ 		//#define EXCEPTIONS_AVAILABLE
+ 		#define JSON_SAFE
 
 		#include <string>
 		#include <vector>
@@ -71,7 +103,7 @@
 		#include <sstream>
 		#include <iostream>
 		#include <fstream>
-		#include <jni.h>
+		#include <jni.h> 
 		#include <sys/time.h>
 		#include <time.h>
 		#include <android/log.h>
@@ -83,33 +115,27 @@
 		#include <sys/types.h>
 		#include <math.h> 
 		#include <algorithm>
-
-		#include <GLES/gl.h>
-		#include <GLES/glext.h>
-		#include <GLES/glplatform.h>
-
- 		#include <GLES2/gl2.h>
- 		#include <GLES2/gl2ext.h>
-
-		#include <AL/AL.h>
-		#include <AL/ALc.h>
-		#include <AL/ALext.h>
-
- 		
+		#include <unistd.h>
+ 
+ 		#include "Common/Audio.h"
+ 		#include "Common/OpenGL.h"
 
 	 	using namespace std;
 
 	#elif defined(ARK2D_IPHONE)
 
+	 	#define ARK2D_API 
  		#define STL_AVAILABLE
 		#define EXCEPTIONS_AVAILABLE
+		#define JSON_SAFE
 
- 		#include <stdio.h>
+ 		#include <stdio.h> 
 		#include <stdlib.h>
+		#include <unistd.h>
 		#include <sys/types.h>
  		#include <sys/time.h>
 
-		#include <iostream>
+		#include <iostream> 
  		#include <sstream>
  		#include <fstream>
  		#include <string>
@@ -123,39 +149,47 @@
 
  		using namespace std;
 
- 		#include <OpenAL/al.h>
-		#include <OpenAL/alc.h>
+ 		
+
+		#include <AVFoundation/AVFoundation.h>
 
 		#include <OpenGLES/EAGL.h>
 		#include <QuartzCore/QuartzCore.h>
 
-		#include <OpenGLES/ES1/gl.h>
-		#include <OpenGLES/ES1/glext.h>
-		#include <OpenGLES/ES2/gl.h>
-		#include <OpenGLES/ES2/glext.h>
-		#include <OpenGLES/EAGLDrawable.h>
+ 		#include "Common/Audio.h"
+		#include "Common/OpenGL.h"
 
-        //typedef unsigned int ALuint;
+ 		#include <GameKit/GameKit.h>
+		#include "TargetConditionals.h"
+
+		#include "vendor/iphone/ga/GAI.h"
+		#include "vendor/iphone/ga/GAIDictionaryBuilder.h"
+		#include "vendor/iphone/ga/GAIFields.h"
+
+		#if (TARGET_IPHONE_SIMULATOR)
+ 			#define ARK2D_IPHONE_SIMULATOR
+		#endif
+
+//		#include <EGL/egl.h>
+
+
+        //typedef unsigned int ALuint; 
         //typedef unsigned int ALenum;
         //typedef float ALfloat;
 
+ 	#elif defined(ARK2D_WINDOWS_PHONE_8)
 
-
-	#elif defined(_WIN32)
-
-		#ifndef ARK2D_WINDOWS
-			#define ARK2D_WINDOWS
-		#endif
-		#define STL_AVAILABLE
+ 		#define STL_AVAILABLE
 		#define EXCEPTIONS_AVAILABLE
-		#include <windows.h>
-		#include <mmsystem.h>
-		#include <winbase.h>
- 		#include <wininet.h>
+		#define ARK2D_WINDOWS_VS
 
- 		//#include <winsock.h>
-		//#include <winsock2.h>
 		
+
+		//#define ARK2D_MISSING_C99_FUNCTIONS true
+
+		#include <windows.h>
+		#include <wrl.h>
+
 		#include <vector>
 		#include <list>
 		#include <map>
@@ -164,63 +198,248 @@
 		#include <stdlib.h>
 		#include <string>
 		#include <time.h>
-		#include <sys/time.h>
 
- 		#include <cstdlib>
-		#include <cstring>
-		#include <fstream>
+
+		#include <cstdlib> 
+		//#include <cstring>
+		#include <fstream> 
+		 
+		#include <math.h>
+		#include <cmath>
 		#include <iostream>
 
-		#include <GL/GLew.h>
-		#include <GL/GL.h>
+		#ifdef min 
+			#undef min
+		#endif 
+		 
+		#ifdef max
+			#undef max
+		#endif
 
-		#include <AL/AL.h>
-		#include <AL/ALc.h>
-		#include <AL/ALext.h>
-		#include <AL/ALut.h>
+		#define snprintf _snprintf
+		#define sprintf sprintf_s
+
+
+		typedef unsigned int ALuint;
+		typedef unsigned int ALenum;
+		typedef float ALfloat;
+
+
+
+		#include <wrl/client.h>
+
+		using namespace std;
+		
+		//#include <d2d1.h>
+		//#include <d2d1effects_1.h>
+		//#include <dwrite.h>
+		
+		#include "Common/OpenGL.h"
+
+		
+		#include <memory>
+		#include <ppl.h>
+		#include <ppltasks.h>
+
+		
+
+ 		// audio 
+		#include "Common/Audio.h"
+ 
+		#ifdef ARK2D_WINDOWS_DLL // abc.dll source code will define this macro before including this header
+			#define ARK2D_API __declspec( dllexport )				
+			//#define ARK2D_STATICVAR __declspec( dllimport )				
+		#else
+			#define ARK2D_API __declspec( dllimport )
+			//#define ARK2D_STATICVAR 
+		#endif 
+
+		#ifndef Assert
+			#if defined( ARK2D_DEBUG )
+				#define Assert(b) do {if (!(b)) {OutputDebugStringA("Assert: " #b "\n");}} while(0)
+			#else
+				#define Assert(b)
+			#endif //DEBUG || _DEBUG
+		#endif 
+
+
+		// vendor
+		#include "vendor/wp8/gl2dx/gl2dx.h"
+		//#include "vendor/libcurl-windows/curl.h"
+
+		// PNG LIBs
+		// https://github.com/cocos2d-x/cocos2dx-win8/tree/wp8/cocos2dx/platform/third_party/win8_metro/libraries
+
+		//using namespace Windows::ApplicationModel;
+		//using namespace Windows::ApplicationModel::Core;
+		//using namespace Windows::ApplicationModel::Activation;
+		//using namespace Windows::UI::Core; 
+		//using namespace Windows::System;
+		//using namespace Windows::Foundation;
+		//using namespace Windows::Graphics::Display;
+		//using namespace concurrency;
+
+		//#define strncpy strncpy_s
+		#define fopen fopen_s
+		// #define OF(args)  ()
+
+		//#using <Windows.winmd>
+
+		#ifdef __cplusplus_winrt
+			#include <agile.h>
+			#include <collection.h> 
+		#endif
+		//#using <Platform.winmd>
+
+
+		using namespace std;
+
+		#include "vendor/spine/includes/spine/spine.h"
+
+		
+	#elif defined(_WIN32)
+
+		#ifndef ARK2D_WINDOWS
+			#define ARK2D_WINDOWS
+		#endif
+		#define STL_AVAILABLE
+		#define EXCEPTIONS_AVAILABLE
+		
+		#include <windows.h>
+		#include <mmsystem.h>
+		#include <winbase.h>
+ 		//#include <wininet.h>
+ 		#include <Winhttp.h>
+
+ 		//#include <winsock.h>
+		//#include <winsock2.h>
+		
+		#include <vector>
+		#include <list> 
+		#include <map>
+		#include <set>
+
+		#include <stdlib.h>
+		#include <string>
+		#include <time.h>
+
+		// multimedia system (midi)
+		#include <mmsystem.h>
+
+		
+
+		#ifdef __GNUC__
+			#include <sys/time.h>
+ 			#define ARK2D_API 
+ 		#elif (defined(_MSC_FULL_VER) || defined(_MSC_VER))
+
+ 			#define ARK2D_WINDOWS_VS
+ 			#include <time.h>
+
+ 		
+ 			#ifdef min 
+ 				#undef min
+ 			#endif 
+			
+			#ifdef max
+ 				#undef max
+ 			#endif
+
+ 			#define snprintf _snprintf
+
+
+ 			#ifdef ARK2D_WINDOWS_DLL // abc.dll source code will define this macro before including this header
+				#define ARK2D_API __declspec( dllexport )				
+			#else
+				#define ARK2D_API __declspec( dllimport )
+			#endif 
+
+			#if defined(ARK2D_WINDOWS_VS)
+				#ifndef Assert
+					#if defined( ARK2D_DEBUG )
+						#define Assert(b) do {if (!(b)) {OutputDebugStringA("Assert: " #b "\n");}} while(0)
+					#else
+						#define Assert(b)
+					#endif //DEBUG || _DEBUG
+				#endif
+			#endif
+		 
+	 		//#define JSON_DLL
+
+		#endif
+
+ 		#include <cstdlib> 
+		#include <cstring>
+		#include <fstream> 
+		 
+		#include <math.h>
+		#include <cmath>
+		#include <iostream>
+
+		
+		
+
+		#pragma comment(lib, "advapi32.lib")
+		#pragma comment(lib, "user32.lib")
+		#pragma comment(lib, "gdi32.lib")
+		#pragma comment(lib, "shell32.lib")
+		#pragma comment(lib, "kernel32.lib")
+		#pragma comment(lib, "Winhttp.lib")
+
+		//#pragma comment(lib, "msvcr120.lib")
+
+		#include "Common/OpenGL.h"
+
+		
+
+
+	 	//#define GLEW_BUILD
+	 	//#define GLEW_STATIC
+	 	// GLEW_STATIC
+	 	// #define GLEW_MX
+	 	//#undef GLEW_MX
+		 
+		//#include <GL/GLew.h>
+		//#include "vendor/glew-vs.c"
+	 	//#include <GLFW/glfw3.h>
+
+	 	//#include <GL/GL.h> 
+		//#include <GL/glu.h> 
+ 
+		#include "Common/Audio.h"
+		
 
  		#include "vendor/libcurl-windows/curl.h"
 
  		using namespace std;
 
 
+ 
 
-
-	#elif defined(__linux__)
-		#define ARK2D_UBUNTU_LINUX
-		#define STL_AVAILABLE
-		#define EXCEPTIONS_AVAILABLE
-		#include <X11/X.h>
-		#include <X11/Xlib.h>
-
-		#include <GL/glew.h>
-		#include <GL/gl.h>
-		#include <GL/glx.h>
-		#include <GL/glu.h>
-
-		#include <AL/al.h>
-		#include <AL/alc.h>
-		#include <AL/alext.h>
-		#include <AL/alut.h>
-
- 		#include "vendor/libcurl/curl.h"
+	
 
 	#elif (defined(ARK2D_MACINTOSH)) // defined(__MACH__) || defined(__APPLE__)
 
-		//#define ARK2D_MACINTOSH
-		#define STL_AVAILABLE
+ 		#define STL_AVAILABLE
 		#define EXCEPTIONS_AVAILABLE
-		#include <Cocoa/Cocoa.h>
-		#include <CoreFoundation/CFBundle.h>
-		#include <ApplicationServices/ApplicationServices.h>
+
+		#define ARK2D_API
+		
+		//#include "Common/OpenGL.h"
+
+		//#include <Cocoa/Cocoa.h>
+		//#include <CoreFoundation/CFBundle.h>
+		//#include <ApplicationServices/ApplicationServices.h>
 
 		#include <stdlib.h>
 		#include <string>
 		#include <stdio.h>
+		#include <cstdio>
 		#include <vector>
+		#include <unistd.h>
 		#include <list>
 		#include <map>
- 		#include <set>
+ 		#include <set> 
 		#include <fstream>
 		#include <iostream>
 		#include <cstdio>
@@ -231,49 +450,74 @@
 		#include <ctime>
 		#include <sys/time.h>
 
-		#include <OpenGL/OpenGL.h>
-		#include <OpenGL/gl.h>
-		#include <OpenGL/gltypes.h>
-		#include <OpenGL/glu.h>
-		#include <OpenGL/glext.h>
+		#include <stdarg.h>
 
-		#include <OpenAL/al.h>
-		#include <OpenAL/alc.h>
+		#import <QTKit/QTKit.h>
 
  		#include "vendor/libcurl/curl.h"
+ 		#include "vendor/spine/includes/spine/spine.h"
+ 		//#include "vendor/spine/SpineSkeleton.h"
+
+ 	#elif defined(__linux__)
+		//#define ARK2D_UBUNTU_LINUX
+		#define STL_AVAILABLE
+		#define EXCEPTIONS_AVAILABLE
+
+		#define ARK2D_API 
+		
+
+
+
+		#include "Common/Audio.h"
+		#include "Common/OpenGL.h"
+
+		#if defined(ARK2D_SDL2) 
+ 			#include <SDL2/SDL.h>
+ 			#include <SDL2/SDL_opengl.h>
+		#endif
+
+		#include <vector>
+		#include <list> 
+		#include <map>
+		#include <set>
+		#include <limits>
+
+		#include <stdlib.h>
+		#include <stdint.h>
+		#include <inttypes.h>
+		#include <string>
+		#include <iostream>
+		#include <fstream>
+		#include <sys/time.h>
+		#include <sys/ioctl.h>
+		#include <sys/stat.h>
+		#include <pthread.h>
+		#include <unistd.h> 
+
+		#include <dirent.h>
+		#include <errno.h>
+		#include <fcntl.h>
+		
+		#include "vendor/libcurl/curl.h"
+
+ 		using namespace std;
 
 	#endif
 
 	#include <stdint.h>
 
-	typedef unsigned int GLuint;
-	typedef unsigned int GLenum;
-	typedef void GLvoid;
-
-	#ifndef FBO_SUPPORT
-		#if (defined(ARK2D_WINDOWS)  || defined(ARK2D_ANDROID) || defined(ARK2D_FLASCC))
-			//#define FBO_SUPPORT false
-		#else
-			#define FBO_SUPPORT true
-		#endif
-	#endif
-
-	#ifndef SHADER_SUPPORT
-		#if (defined(ARK2D_WINDOWS)  || defined(ARK2D_ANDROID) || defined(ARK2D_FLASCC))
-			//#define SHADER_SUPPORT false
-		#else
-			#define SHADER_SUPPORT true
-		#endif
-	#endif
-
-    
-
-	#include "vendor/ogg130/ogg.h"
-	#include "vendor/vorbis132/vorbisfile.h"
-
-	#include "vendor/lpng151/png.h"
-
+	#define showAnyGlErrorAndExitMacro() Image::showAnyGlErrorAndExit(__FILE__, __LINE__)
 	
+	#if defined (ARK2D_WINDOWS_PHONE_8)
+	//	typedef jmp_buf* (*png_set_longjmp_fnPtr)(png_structp png_ptr, png_longjmp_ptr longjmp_fn, size_t jmp_buf_size);
+	//	png_set_longjmp_fnPtr mypng_set_longjmp_fnPtr = 0;
+		#include "vendor/lpng1251-wp8/png.h" 
+	#else
+		#include "vendor/lpng151/png.h"
+	#endif
+
+	#include "vendor/rapidxml/rapidxml.hpp"	
+	using namespace rapidxml; 
 
 	#include "vendor/libJSON/JSON_Defs.h"
 	#include "vendor/libJSON/JSONNode.h"

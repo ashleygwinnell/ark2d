@@ -8,6 +8,7 @@
 #ifndef ARK_GJ_GAMEJOLT_H_
 #define ARK_GJ_GAMEJOLT_H_
 
+#include "../Includes.h"
 #include "../Namespaces.h"
 
 #include "DataStore.h"
@@ -19,7 +20,7 @@
 namespace ARK {
 	namespace GJ {
 
-		class GameJolt {
+		class ARK2D_API GameJolt {
 
 			private: // protected properties
 				unsigned int m_gameId;
@@ -28,13 +29,13 @@ namespace ARK {
 				string m_username;
 				string m_userToken;
 
-				unsigned int m_version;
 				bool m_verbose;
 				bool m_verified;
 
 				string m_errorMessage;
 
 				unsigned int m_usingFormat;
+			public:
 				static const unsigned int FORMAT_PLAINTEXT = 0;
 				static const unsigned int FORMAT_JSON = 1;
 				static const unsigned int FORMAT_XML = 2;
@@ -62,12 +63,10 @@ namespace ARK {
 					return "keypair";
 				}
 
+
 			public: // public functions
 				GameJolt(unsigned int gameId, string privateKey);
 				GameJolt(unsigned int gameId, string privateKey, string username, string userToken);
-				
-				void setVersion(unsigned int version);
-				unsigned int getVersion();
 
 				void setVerbose(bool verbose);
 				bool isVerbose();
@@ -102,6 +101,15 @@ namespace ARK {
 				bool sessionUpdate();
 				bool sessionUpdate(bool active);
 				bool sessionClose();
+
+				inline void setFormat(unsigned int format) { m_usingFormat = format; }
+
+				bool m_isBatching;
+				int m_numBatchItems;
+				string m_batchUrl;
+				void startBatch();
+				string endBatch();
+				bool isBatching();
 
 				// get rank
 				//unsigned int getRank(signed int score);

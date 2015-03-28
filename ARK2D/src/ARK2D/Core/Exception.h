@@ -16,7 +16,7 @@
  */
 namespace ARK {
 	namespace Core {
-		class Exception {
+		class ARK2D_API Exception {
 			public:
 				Exception();
 				Exception(char* c);

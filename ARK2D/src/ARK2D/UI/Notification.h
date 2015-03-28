@@ -14,7 +14,7 @@
 namespace ARK {
 	namespace UI {
 
-		class Notification {
+		class ARK2D_API Notification {
 			
 			public:
 				Image* m_icon; 

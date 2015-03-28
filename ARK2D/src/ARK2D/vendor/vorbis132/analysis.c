@@ -21,7 +21,7 @@
 #include "../ogg130/ogg.h"
 #include "codec.h"
 #include "codec_internal.h"
-#include "registry.h"
+#include "registry.h" 
 #include "scales.h"
 #include "os.h"
 #include "misc.h"

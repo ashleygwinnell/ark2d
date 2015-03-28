@@ -17,7 +17,7 @@
   few bugfixes) from "On the Computation of the LSP Frequencies" by
   Joseph Rothweiler (see http://www.rothweiler.us for contact info).
   The paper is available at:
-
+ 
   http://www.myown1.com/joe/lsf
 
  ********************************************************************/

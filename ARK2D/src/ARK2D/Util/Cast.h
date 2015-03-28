@@ -60,6 +60,22 @@ namespace ARK {
 					stream >> t;
 					return t;
 				};
+				static bool boolFromString(string s) {
+					return (s == "true")?true:false;
+				}
+
+				// must manually call delete on the new string.
+				static wchar_t* charToWideChar(const char* orig) {
+					#ifdef ARK2D_WINDOWS_VS
+						size_t newsize = strlen(orig) + 1;
+						wchar_t * wcstring = new wchar_t[newsize];
+						size_t convertedChars = 0;
+						mbstowcs_s(&convertedChars, wcstring, newsize, orig, _TRUNCATE);
+						return wcstring;
+					#endif
+					//ARK2D::getLog()->e("Cast::charToWideChar not implemented on this platform.");
+					return NULL;
+				}
 
 		};
 	}

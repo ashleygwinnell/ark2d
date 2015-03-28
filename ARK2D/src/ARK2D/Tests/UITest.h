@@ -13,7 +13,7 @@
 namespace ARK {
 	namespace Tests {
 
-		class UITestGameState : public GameState {
+		class ARK2D_API UITestGameState : public GameState {
 			public:
 
 				ScrollPanel* rightPanel;
@@ -31,7 +31,7 @@ namespace ARK {
 				virtual ~UITestGameState();
 		};
 
-		class UITest : public StateBasedGame {
+		class ARK2D_API UITest : public StateBasedGame {
 			public:
 				UITest();
 

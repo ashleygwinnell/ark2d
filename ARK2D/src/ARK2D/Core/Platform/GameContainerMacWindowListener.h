@@ -27,9 +27,18 @@ using namespace ARK::Core;
 
 -(void)flagsChanged:(NSEvent *)theEvent;
 
+- (void)cancelOperation:(id)sender;
+
 -(void)mouseDown:(NSEvent *)theEvent;
 -(void)mouseUp:(NSEvent *)theEvent;
 -(void)mouseMoved:(NSEvent *)theEvent;
+
+- (void)rightMouseDown:(NSEvent*)theEvent;
+- (void)rightMouseUp:(NSEvent*)theEvent;
+
+- (BOOL) acceptsFirstResponder;
+- (BOOL) becomeFirstResponder;
+- (BOOL) resignFirstResponder;
 
 
 @end

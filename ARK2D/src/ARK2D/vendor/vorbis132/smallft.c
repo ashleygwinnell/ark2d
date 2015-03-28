@@ -20,7 +20,7 @@
  * cut-down version.
  *
  * To do more than just power-of-two sized vectors, see the full
- * version I wrote for NetLib.
+ * version I wrote for NetLib. 
  *
  * Note that the packing is a little strange; rather than the FFT r/i
  * packing following R_0, I_n, R_1, I_1, R_2, I_2 ... R_n-1, I_n-1,

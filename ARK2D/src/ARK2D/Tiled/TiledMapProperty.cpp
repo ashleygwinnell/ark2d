@@ -28,6 +28,9 @@ namespace ARK {
 		signed int TiledMapProperty::getValueAsInt() const {
 			return Cast::fromString<signed int>(m_value);
 		}
+		float TiledMapProperty::getValueAsFloat() const { 
+			return Cast::fromString<float>(m_value);
+		}
 
 		void TiledMapProperty::setName(const string& s) {
 			m_name = s;

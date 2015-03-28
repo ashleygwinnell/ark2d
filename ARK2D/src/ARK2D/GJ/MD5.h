@@ -33,7 +33,7 @@ documentation and/or software.
 #ifndef ARK_GJ_MD5_H
 #define ARK_GJ_MD5_H
 
-#include "../../ARK.h"
+#include "../Includes.h"
 
 namespace ARK {
   namespace GJ { 
@@ -48,7 +48,7 @@ namespace ARK {
     //      MD5(std::string).hexdigest()
     //
     // assumes that char is 8 bit and int is 32 bit
-    class MD5
+    class ARK2D_API MD5
     {
     public:
       typedef unsigned int size_type; // must be 32bit

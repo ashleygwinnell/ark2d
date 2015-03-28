@@ -1,0 +1,12 @@
+#version 130
+precision highp float;
+
+in vec4 ark_VertexColorOut;
+
+out vec4 ark_FragColor;
+
+void main(void)
+{
+	ark_FragColor = ark_VertexColorOut;
+	// ark_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
+}

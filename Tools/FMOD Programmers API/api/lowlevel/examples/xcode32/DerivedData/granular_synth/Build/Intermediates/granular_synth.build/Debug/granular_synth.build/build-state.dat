@@ -1,0 +1,295 @@
+Tgranular_synth
+v6
+r1
+cCheck dependencies
+cCompileC DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/granular_synth.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/granular_synth.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/common.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/common_platform.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common_platform.mm normal x86_64 objective-c++ com.apple.compilers.llvm.clang.1_0.compiler
+cLd /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/MacOS/granular_synth normal x86_64
+cPBXCp /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/lib/libfmod.dylib DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Frameworks/libfmod.dylib
+cPBXCp /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/lib/libfmodL.dylib DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Frameworks/libfmodL.dylib
+cCpResource /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/media DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Resources/media
+cTouch /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk
+c000000005243E79F00000000000000AA
+t1380181919
+s170
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/SDKSettings.plist
+c00000000526A3A6B000000000000044C
+t1382693483
+s1100
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/CoreServices/SystemVersion.plist
+c00000000526A3A6B00000000000001DB
+t1382693483
+s475
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Cocoa.framework/Cocoa
+c00000000526A3A6B000000000000253C
+t1382693483
+s9532
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common.cpp
+c000000005334EAC5000000000000097F
+t1395976901
+s2431
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common_platform.mm
+c000000005334EAC500000000000013DE
+t1395976901
+s5086
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/granular_synth.cpp
+c000000005334EAC500000000000028A3
+t1395976901
+s10403
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/media
+c000000005338127E0000000000000198
+t1396183678
+s408
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/common.o
+t1396183936
+s25908
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/common_platform.o
+t1396183937
+s65612
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/granular_synth.LinkFileList
+c000000005338138000000000000002A2
+t1396183936
+s674
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/granular_synth.o
+t1396183936
+s58008
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app
+t1396183936
+s102
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Frameworks/libfmod.dylib
+t1396183937
+s2655908
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Frameworks/libfmodL.dylib
+t1396183937
+s2871096
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/MacOS/granular_synth
+t1396183937
+s61372
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Resources/media
+t1396183937
+s374
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/lib/libfmod.dylib
+c000000005334EAC100000000002886A4
+t1395976897
+s2655908
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/lib/libfmodL.dylib
+c000000005334EAC100000000002BCF38
+t1395976897
+s2871096
+
+CBuild AST from /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common.cpp
+r0
+
+CBuild AST from /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common_platform.mm
+r0
+
+CBuild AST from /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/granular_synth.cpp
+r0
+
+CCheck dependencies
+r0
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies18"Check dependencies8d7da5004be8b841^9486ae004be8b841^---0#1#1#--18"Check dependencies36"EC67AA1B-6D2E-4A8A-9FDE-C42C42B1262C-
+
+CCompileC DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/common.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+s417876736.678355
+e417876736.776031
+r1
+xCompileC
+xDerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/common.o
+x/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common.cpp
+xnormal
+xx86_64
+xc++
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common.cpp
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common_platform.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod_common.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod_codec.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod_dsp.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod_errors.h
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection103"Compile /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common.cpp294"CompileC DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/common.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler2ac6ad004be8b841^e701c8004be8b841^---0#0#1#-19%DVTDocumentLocation2@106"file:///Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD%20Programmers%20API/api/lowlevel/examples/common.cpp0000000000000000^3274"CompileC DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/common.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd "/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32"    setenv LANG en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -Wno-trigraphs -fno-rtti -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Wno-return-type -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wno-unused-function -Wno-unused-label -Wno-unused-parameter -Wno-unused-variable -Wunused-value -Wno-empty-body -Wno-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wno-constant-conversion -Wno-int-conversion -Wno-bool-conversion -Wno-enum-conversion -Wno-shorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.5 -g -fvisibility=hidden -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/granular_synth.hmap -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/include -I../../../lowlevel/inc -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/DerivedSources/x86_64 -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/DerivedSources -F/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug -MMD -MT dependencies -MF /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/common.d --serialize-diagnostics /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/common.dia -c /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common.cpp -o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/common.o36"CB7777D5-466B-4E31-9152-436AB33FF669-
+b6F00F1D6-9326-48D3-B7C0-1D03A66A1054
+
+CCompileC DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/common_platform.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common_platform.mm normal x86_64 objective-c++ com.apple.compilers.llvm.clang.1_0.compiler
+s417876736.680546
+e417876737.441259
+r1
+xCompileC
+xDerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/common_platform.o
+x/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common_platform.mm
+xnormal
+xx86_64
+xobjective-c++
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common_platform.mm
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common_platform.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod_common.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod_codec.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod_dsp.h
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection111"Compile /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common_platform.mm321"CompileC DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/common_platform.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common_platform.mm normal x86_64 objective-c++ com.apple.compilers.llvm.clang.1_0.compiler6476ae004be8b841^66f770014be8b841^---0#0#1#-19%DVTDocumentLocation2@114"file:///Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD%20Programmers%20API/api/lowlevel/examples/common_platform.mm0000000000000000^3539"CompileC DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/common_platform.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common_platform.mm normal x86_64 objective-c++ com.apple.compilers.llvm.clang.1_0.compiler    cd "/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32"    setenv LANG en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -Wno-trigraphs -fno-rtti -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Wno-return-type -Wno-implicit-atomic-properties -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wno-unused-function -Wno-unused-label -Wno-unused-parameter -Wno-unused-variable -Wunused-value -Wno-empty-body -Wno-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wno-constant-conversion -Wno-int-conversion -Wno-bool-conversion -Wno-enum-conversion -Wno-shorten-64-to-32 -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wno-undeclared-selector -Wno-deprecated-implementations -Wno-c++11-extensions -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.5 -g -fvisibility=hidden -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/granular_synth.hmap -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/include -I../../../lowlevel/inc -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/DerivedSources/x86_64 -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/DerivedSources -F/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug -MMD -MT dependencies -MF /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/common_platform.d --serialize-diagnostics /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/common_platform.dia -c /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common_platform.mm -o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/common_platform.o36"F7D0658A-EDD6-498E-A606-06F0FFB373C6-
+b6F00F1D6-9326-48D3-B7C0-1D03A66A1054
+
+CCompileC DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/granular_synth.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/granular_synth.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+s417876736.678021
+e417876736.819546
+r1
+xCompileC
+xDerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/granular_synth.o
+x/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/granular_synth.cpp
+xnormal
+xx86_64
+xc++
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/granular_synth.cpp
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod.hpp
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod_common.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod_codec.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod_dsp.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common_platform.h
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection111"Compile /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/granular_synth.cpp310"CompileC DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/granular_synth.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/granular_synth.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler651dae004be8b841^04cbd1004be8b841^---0#0#1#-19%DVTDocumentLocation2@114"file:///Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD%20Programmers%20API/api/lowlevel/examples/granular_synth.cpp0000000000000000^3322"CompileC DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/granular_synth.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/granular_synth.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd "/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32"    setenv LANG en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -Wno-trigraphs -fno-rtti -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Wno-return-type -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wno-unused-function -Wno-unused-label -Wno-unused-parameter -Wno-unused-variable -Wunused-value -Wno-empty-body -Wno-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wno-constant-conversion -Wno-int-conversion -Wno-bool-conversion -Wno-enum-conversion -Wno-shorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.5 -g -fvisibility=hidden -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/granular_synth.hmap -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/include -I../../../lowlevel/inc -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/DerivedSources/x86_64 -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/DerivedSources -F/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug -MMD -MT dependencies -MF /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/granular_synth.d --serialize-diagnostics /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/granular_synth.dia -c /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/granular_synth.cpp -o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/granular_synth.o36"1932F0A3-F129-42D2-9F6A-B04C9463DD01-
+b6F00F1D6-9326-48D3-B7C0-1D03A66A1054
+
+CCpResource /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/media DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Resources/media
+s417876737.515085
+e417876737.518191
+r1
+xCpResource
+x/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/media
+xDerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Resources/media
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection96"Copy DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Resources/media195"CpResource /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/media DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Resources/mediacde883014be8b841^04a984014be8b841^---0#0#1#-19%DVTDocumentLocation2@195"file:///Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD%20Programmers%20API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Resources/media00343442dcffdf42^810"CpResource /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/media DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Resources/media    cd "/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-debug-symbols -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/media /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Resources36"5A277F4F-7042-4D67-9DFC-4803C6D1D0A0-
+b6F00F1D6-9326-48D3-B7C0-1D03A66A1054
+
+CLd /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/MacOS/granular_synth normal x86_64
+s417876737.442290
+e417876737.492640
+r1
+xLd
+x/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/MacOS/granular_synth
+xnormal
+xx86_64
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/granular_synth.LinkFileList
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/crt1.10.5.o
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/granular_synth.o
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/common.o
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/common_platform.o
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/lib/libfmodL.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Cocoa.framework/Cocoa
+d/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/arc/libarclite_macosx.a
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Foundation.framework/Foundation
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/libobjc.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/libstdc++.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/libSystem.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/libgcc_s.10.5.dylib
+d/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/5.0/lib/darwin/libclang_rt.osx.a
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcache.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcommonCrypto.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcompiler_rt.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcopyfile.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcorecrypto.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libdispatch.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libdyld.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libkeymgr.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/liblaunch.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libmacho.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libquarantine.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libremovefile.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_asl.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_blocks.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_c.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_configuration.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_dnssd.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_info.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_kernel.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_m.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_malloc.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_network.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_notify.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_platform.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_pthread.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_sandbox.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_stats.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libunc.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libunwind.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libxpc.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/AppKit.framework/AppKit
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreData.framework/CoreData
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/ApplicationServices
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreText.framework/CoreText
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ImageIO.framework/ImageIO
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/ATS
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ColorSync.framework/Versions/A/ColorSync
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/CoreServices
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/HIServices.framework/Versions/A/HIServices
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/LangAnalysis.framework/Versions/A/LangAnalysis
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/PrintCore.framework/Versions/A/PrintCore
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/QD.framework/Versions/A/QD
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/SpeechSynthesis.framework/Versions/A/SpeechSynthesis
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CFNetwork.framework/CFNetwork
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/CarbonCore
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Metadata
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/OSServices.framework/Versions/A/OSServices
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/SearchKit.framework/Versions/A/SearchKit
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/AE
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/LaunchServices
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/DictionaryServices.framework/Versions/A/DictionaryServices
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection194"Link /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/MacOS/granular_synth113"Ld DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/MacOS/granular_synth normal x86_64d84971014be8b841^711e7e014be8b841^---0#0#1#--1647"Ld DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/MacOS/granular_synth normal x86_64    cd "/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32"    setenv MACOSX_DEPLOYMENT_TARGET 10.5    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -L/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug -F/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug -filelist /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/granular_synth.LinkFileList -Xlinker -rpath -Xlinker @loader_path/../Frameworks -mmacosx-version-min=10.5 ../../../lowlevel/lib/libfmodL.dylib -fobjc-link-runtime -framework Cocoa -Xlinker -dependency_info -Xlinker /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Intermediates/granular_synth.build/Debug/granular_synth.build/Objects-normal/x86_64/granular_synth_dependency_info.dat -o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/MacOS/granular_synth36"DD7E164C-FD2D-4F2E-AE99-0A844F7CF588-
+b6F00F1D6-9326-48D3-B7C0-1D03A66A1054
+
+CPBXCp /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/lib/libfmod.dylib DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Frameworks/libfmod.dylib
+s417876737.493473
+e417876737.513307
+r1
+xPBXCp
+x/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/lib/libfmod.dylib
+xDerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Frameworks/libfmod.dylib
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection105"Copy DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Frameworks/libfmod.dylib202"PBXCp /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/lib/libfmod.dylib DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Frameworks/libfmod.dylibc4607e014be8b841^556983014be8b841^-387"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -S /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/lib/libfmod.dylib -o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Frameworks/libfmod.dylib-0#0#1#-19%DVTDocumentLocation2@204"file:///Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD%20Programmers%20API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Frameworks/libfmod.dylib00343442dcffdf42^821"PBXCp /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/lib/libfmod.dylib DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Frameworks/libfmod.dylib    cd "/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-debug-symbols -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/lib/libfmod.dylib /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Frameworks36"4DA2631E-4523-4577-8030-5F25031EA223-
+b6F00F1D6-9326-48D3-B7C0-1D03A66A1054
+
+CPBXCp /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/lib/libfmodL.dylib DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Frameworks/libfmodL.dylib
+s417876737.493688
+e417876737.514696
+r1
+xPBXCp
+x/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/lib/libfmodL.dylib
+xDerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Frameworks/libfmodL.dylib
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection106"Copy DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Frameworks/libfmodL.dylib204"PBXCp /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/lib/libfmodL.dylib DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Frameworks/libfmodL.dylibc9727e014be8b841^09c483014be8b841^-389"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -S /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/lib/libfmodL.dylib -o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Frameworks/libfmodL.dylib-0#0#1#-19%DVTDocumentLocation2@205"file:///Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD%20Programmers%20API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Frameworks/libfmodL.dylib00343442dcffdf42^824"PBXCp /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/lib/libfmodL.dylib DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Frameworks/libfmodL.dylib    cd "/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-debug-symbols -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/lib/libfmodL.dylib /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app/Contents/Frameworks36"5CE68408-9EBD-49CA-845F-E66155AB77C8-
+b6F00F1D6-9326-48D3-B7C0-1D03A66A1054
+
+CTouch /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app
+s417876737.518732
+e417876737.522791
+r1
+xTouch
+x/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection165"Touch /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app72"Touch DerivedData/granular_synth/Build/Products/Debug/granular_synth.app28d784014be8b841^5ad685014be8b841^---0#0#1#--359"Touch DerivedData/granular_synth/Build/Products/Debug/granular_synth.app    cd "/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32"    /usr/bin/touch -c /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/granular_synth/Build/Products/Debug/granular_synth.app36"76B9D68B-9CFD-4482-ADB3-F7564D4CE98E-
+b6F00F1D6-9326-48D3-B7C0-1D03A66A1054
+

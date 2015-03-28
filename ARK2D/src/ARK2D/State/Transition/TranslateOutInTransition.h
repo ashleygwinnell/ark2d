@@ -19,7 +19,7 @@ namespace ARK {
 			 *
 			 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 			 */
-			class TranslateOutInTransition : public Transition {
+			class ARK2D_API TranslateOutInTransition : public Transition {
 				public:
 					TranslateOutInTransition(unsigned int dir);
 					TranslateOutInTransition(unsigned int dir, float timeSeconds);

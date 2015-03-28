@@ -52,6 +52,12 @@ namespace ARK {
 							
 							increase(amount);
 						}
+						Pool(unsigned int amount, bool usingList): m_inactive(), m_active(), it(NULL), m_increaseAmount(2) {
+							m_inactive.setUsingList(usingList);
+							m_active.setUsingList(usingList);
+							
+							increase(amount);
+						}
 						void increase() {
 							increase(m_increaseAmount);
 							m_increaseAmount *= 2;
@@ -99,13 +105,23 @@ namespace ARK {
 							it->reset();
 							return it;
 						}
+						PoolIterator<T> newiteratorref() { // make sure to delete afterwards.
+							PoolIterator<T> it(this);
+							it.reset();
+							return it;
+						}
 						void setUsingList(bool b) {
+							
+							if (m_active->isUsingList() && !b) {
+								// TODO: move items from lst to vec.
+							} else if (!m_active->isUsingList() && b) {
+								// TODO: move items from vec to lst.
+							}
+							
 							m_active.setUsingList(b);
 							m_inactive.setUsingList(b);
 						}
-						bool isUsingList() {
-							return m_active.isUsingList();
-						}
+						inline bool isUsingList() { return m_active.isUsingList(); }
 						T get() {
 							if (m_inactive.size() == 0 && m_active.size() ==0) {
 								increase();
@@ -118,6 +134,10 @@ namespace ARK {
 								//return NULL; 
 							}
 							
+							// this should be done in the internal methods.
+							//m_inactive.m_size--;
+							//m_active.m_size++;
+
 							T obj = m_inactive.pop();
 							m_active.add(obj);
 							return obj;
@@ -158,12 +178,23 @@ namespace ARK {
 							}*/
 						}
 						void reset() {
-							VectorIterator<T>* it = m_active.iterator();
+							/*VectorIterator<T>* it = m_active.iterator();
 							while (it->hasNext()) {
 								T obj = it->next();
 								obj->setPendingRemoval(true);
 							}
-							pruneAll();
+							pruneAll();*/ 
+
+							VectorIterator<T>* it = m_active.iterator();
+							while (it->hasNext()) {
+								T obj = it->next();
+								obj->setPendingRemoval(false);
+								obj->onPrune();
+								
+								m_inactive.add(obj);
+							}
+							m_active.clear();
+							//pruneAll();
 						}
 						string toString() {
 							string s = "{";
@@ -206,7 +237,7 @@ namespace ARK {
 						unsigned int index;
 						typename list<T>::iterator iterator; // Used only for lists.
 					public:
-						PoolIterator(Pool<T>* p): parent(p), index(0), iterator(NULL) {
+						PoolIterator(Pool<T>* p): parent(p), index(0), iterator() {
 
 						}
 						T next() {
@@ -234,7 +265,7 @@ namespace ARK {
 						bool hasNext() {
 							signed int top = parent->m_active.size();
 							if (top == 0) { return false; }
-
+ 
 							if (parent->isUsingList()) {
 								if (iterator != parent->m_active.lst.end()) {
 									return true;
@@ -257,12 +288,19 @@ namespace ARK {
 								T obj = (*iterator);
 								iterator = parent->m_active.lst.erase(iterator);
 								parent->m_inactive.add(obj);
+
+								parent->m_active.m_size--;
+								//parent->m_inactive.m_size++;
+
 								return;
 							}
 
 							T obj = parent->m_active.get(index-1);
 							parent->m_active.remove(index-1);
 							parent->m_inactive.add(obj);
+
+							//parent->m_active.m_size--;
+							//parent->m_inactive.m_size++; 
 						}
 						void reset() {
 							if (parent->isUsingList()) {

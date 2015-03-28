@@ -9,7 +9,7 @@
 #include "../Graphics/Renderer.h"
 
 namespace ARK {
-	namespace UI {
+	namespace UI { 
 		CheckBox::CheckBox():
 			AbstractUIComponent(),
 			m_checked(false),

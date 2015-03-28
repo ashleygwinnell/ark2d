@@ -21,7 +21,7 @@ using namespace std;
 
 namespace ARK {
 	namespace Util {
-		class LocalHighscoreItem {
+		class ARK2D_API LocalHighscoreItem {
 			public:
 				string name;
 				int score;
@@ -35,24 +35,35 @@ namespace ARK {
 		 * @see Resource
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class LocalHighscores : public ARK::Core::Resource {
+		class ARK2D_API LocalHighscores : public ARK::Core::Resource {
 			private:
 				string m_filename;
 				void* m_data;
 				vector<LocalHighscoreItem*> m_items;
+				bool m_threaded;
+
+				static bool s_isThreadedOverride;
+
 			public:
 				LocalHighscores(string filename);
 				LocalHighscores(string filename, void* data);
 				void addItem(string name, int score);
 				void save();
+				string saveString();
 				vector<LocalHighscoreItem*> data();
+				void set(vector<LocalHighscoreItem*> newarray);
 				void sort();
+				void clear();
 				string getFilename();
 				virtual ~LocalHighscores();
 
 			private:
 				static bool mysortcomparator(LocalHighscoreItem* one, LocalHighscoreItem* two);
 				void parse();
+
+			public:
+				inline static bool isThreadedStatic() { return s_isThreadedOverride; }
+				inline static void setThreadedStatic(bool b) { s_isThreadedOverride = b; }
 		};
 	}
 }

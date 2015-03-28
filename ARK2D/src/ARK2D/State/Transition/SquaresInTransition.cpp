@@ -88,6 +88,8 @@ namespace ARK {
 			{
 				g->setDrawColorf(m_color->getRedf(), m_color->getGreenf(), m_color->getBluef(), m_color->getAlphaf());
 
+				g->getBatch()->setEnabled(true);
+
 				for(signed int x = 0; x < m_squaresX; x++) 
 				{
 					for(signed int y = 0; y < m_squaresY; y++) 
@@ -100,6 +102,8 @@ namespace ARK {
 					
 				}
 
+				g->getBatch()->render(); 
+				g->getBatch()->setEnabled(false);
 				
 			}
 			bool SquaresInTransition::isComplete() {

@@ -21,7 +21,7 @@ namespace ARK {
 			 *
 			 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 			 */
-			class EmptyTransition : public Transition {
+			class ARK2D_API EmptyTransition : public Transition {
 				public:
 					EmptyTransition();
 					void init(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to);

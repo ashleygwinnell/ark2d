@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
+
+  <Identity Name="org.%COMPANY_NAME_SAFE%.%GAME_NAME_SAFE%"
+            Publisher="CN=%COMPANY_NAME%"
+            Version="1.0.0.0" />
+
+  <mp:PhoneIdentity PhoneProductId="1d839193-7dca-4e65-8af5-537f69a12903" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+
+  <Properties>
+    <DisplayName>%GAME_NAME%</DisplayName>
+    <PublisherDisplayName>%COMPANY_NAME%</PublisherDisplayName>
+    <Logo>data\ark2d\wp81\StoreLogo.png</Logo>
+  </Properties>
+
+  <Prerequisites>
+    <OSMinVersion>6.3.1</OSMinVersion>
+    <OSMaxVersionTested>6.3.1</OSMaxVersionTested>
+  </Prerequisites>
+  
+  <Resources>
+    <Resource Language="x-generate"/>
+  </Resources>
+
+  <Applications>
+    <Application Id="%GAME_NAME_SAFE%"
+        Executable="$targetnametoken$.exe"
+        EntryPoint="%GAME_NAME_SAFE%.App">
+        <m3:VisualElements
+            DisplayName="%GAME_NAME%"
+            Square150x150Logo="data\ark2d\wp81\Logo.png"
+            Square44x44Logo="data\ark2d\wp81\SmallLogo.png"
+            Description="%GAME_DESCRIPTION%"
+            ForegroundText="light"
+            BackgroundColor="transparent">
+
+            <m3:LockScreen 
+              Notification="badge" 
+              BadgeLogo="data\ark2d\wp81\BadgeLogo.png" 
+            />
+
+            <m3:DefaultTile 
+              Wide310x150Logo="data\ark2d\wp81\WideLogo.png" 
+              Square71x71Logo="data\ark2d\wp81\Square71x71Logo.png" />
+
+         
+
+            <m3:SplashScreen 
+              Image="data\ark2d\wp81\SplashScreen.png" 
+              BackgroundColor="%GAME_CLEAR_COLOR%"/>
+            
+            <m3:InitialRotationPreference>
+              <m3:Rotation Preference="%GAME_ORIENTATION%" />
+            </m3:InitialRotationPreference>
+
+        </m3:VisualElements>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="internetClientServer" />
+  </Capabilities>
+</Package>

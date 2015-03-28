@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+     <ProjectConfiguration Include="Development|Win32">
+      <Configuration>Development</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5ECAADAD-DC4C-51D4-63CE-DAFCB337EDD9}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectName>libARK2D</ProjectName>
+    <RootNamespace>libARK2D</RootNamespace>
+     <DefaultLanguage>en-US</DefaultLanguage>
+    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+  </PropertyGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Development|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
+  </ImportGroup>
+
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+
+
+
+  <PropertyGroup>
+    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\.\bin\;$(MSBuildProjectDirectory)\.\bin\</ExecutablePath>
+    <IntDir>$(Configuration)\obj\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>
+
+
+  <!--  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ARK2D_DEBUG;ARK2D_WINDOWS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;_WIN32;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <MinimalRebuild>true</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+    </ClCompile>
+    <Link> -->
+     <!-- <AdditionalDependencies>D:\Dropbox\ARK2D\ark2d\lib\windows\alut.lib;D:\Dropbox\ARK2D\ark2d\lib\windows\OpenAL32.lib;D:\Dropbox\ARK2D\ark2d\lib\windows\freetype6.lib;D:\Dropbox\ARK2D\ark2d\lib\windows\zlib1.lib;D:\Dropbox\ARK2D\ark2d\lib\windows\curl\Debug\curllib.lib;opengl32.lib;msvcrt.lib;libcmtd.lib;winmm.lib</AdditionalDependencies> -->
+      <!-- <AdditionalDependencies>D:\Dropbox\ARK2D\ark2d\lib\windows\alut.lib;D:\Dropbox\ARK2D\ark2d\lib\windows\OpenAL32.lib;D:\Dropbox\ARK2D\ark2d\lib\windows\freetype6.lib;D:\Dropbox\ARK2D\ark2d\lib\windows\zlib1.lib;D:\Dropbox\ARK2D\ark2d\lib\windows\curl\Debug\curllib.lib;opengl32.lib;msvcrt.lib;winmm.lib</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile> -->
+     <!--  <IgnoreSpecificDefaultLibraries>libc.lib;libcmt.lib;msvcrt.lib;msvcprt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries> -->
+   <!--    <IgnoreSpecificDefaultLibraries>libc.lib;libcmt.lib;libcd.lib;libcmtd.lib;msvcrtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries> 
+       <GenerateDebugInformation>true</GenerateDebugInformation>
+       <AssemblyDebug>true</AssemblyDebug>
+       <NoEntryPoint>true</NoEntryPoint>
+    </Link>
+    <ResourceCompile> 
+      <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ARK2D_DEBUG;ARK2D_WINDOWS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;_WIN32;_DEBUG;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup> -->
+
+  <!-- Debug Config -->
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;ARK2D_DEBUG;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+       <MinimalRebuild>true</MinimalRebuild>
+       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>D:\Dropbox\ARK2D\ark2d\lib\windows\alut.lib;D:\Dropbox\ARK2D\ark2d\lib\windows\OpenAL32.lib;D:\Dropbox\ARK2D\ark2d\lib\windows\freetype6.lib;D:\Dropbox\ARK2D\ark2d\lib\windows\zlib1.lib;D:\Dropbox\ARK2D\ark2d\lib\windows\curl\Debug\curllib.lib;opengl32.lib;msvcrt.lib;winmm.lib</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
+      <IgnoreSpecificDefaultLibraries>libc.lib;libcmt.lib;libcd.lib;libcmtd.lib;msvcrtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <NoEntryPoint>false</NoEntryPoint>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;ARK2D_DEBUG;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup> 
+
+  <!-- Development Config -->
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization> <!-- <Optimization>Full</Optimization> -->
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <MinimalRebuild>true</MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>D:\Dropbox\ARK2D\ark2d\lib\windows\alut.lib;D:\Dropbox\ARK2D\ark2d\lib\windows\OpenAL32.lib;D:\Dropbox\ARK2D\ark2d\lib\windows\freetype6.lib;D:\Dropbox\ARK2D\ark2d\lib\windows\zlib1.lib;D:\Dropbox\ARK2D\ark2d\lib\windows\curl\Debug\curllib.lib;opengl32.lib;msvcrt.lib;libcmt.lib;winmm.lib</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
+      <IgnoreSpecificDefaultLibraries>msvcrtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <NoEntryPoint>false</NoEntryPoint>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AssemblyDebug>false</AssemblyDebug>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+ 
+  <!-- Release Config -->
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <Optimization>Disabled</Optimization> <!-- <Optimization>Full</Optimization> -->
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>D:\Dropbox\ARK2D\ark2d\lib\windows\alut.lib;D:\Dropbox\ARK2D\ark2d\lib\windows\OpenAL32.lib;D:\Dropbox\ARK2D\ark2d\lib\windows\freetype6.lib;D:\Dropbox\ARK2D\ark2d\lib\windows\zlib1.lib;D:\Dropbox\ARK2D\ark2d\lib\windows\curl\Debug\curllib.lib;opengl32.lib;msvcrt.lib;libcmt.lib;winmm.lib</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
+      <IgnoreSpecificDefaultLibraries>msvcrtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <NoEntryPoint>false</NoEntryPoint>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AssemblyDebug>false</AssemblyDebug>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+
+  <!-- 
+  <ItemGroup>
+    <FxCompile Include="..\..\src\ARK2D\Graphics\HLSL\geometry-dx11-pixel.hlsl">
+      <FileType>Document</FileType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+    </FxCompile>
+    <FxCompile Include="..\..\src\ARK2D\Graphics\HLSL\geometry-dx11-vertex.hlsl">
+      <FileType>Document</FileType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+    </FxCompile>
+  </ItemGroup>
+  -->
+
+  <!-- Header Files -->
+  <ItemGroup>
+    %COMPILE_HEADER_FILES%
+    <!-- <ClInclude Include="..\..\src\ARK2D\Windres.h" />
+    <ClInclude Include="..\..\src\ARK2D\ARK2D.h" />
+    <ClInclude Include="..\..\src\ARK2D\Audio\Sound.h" />
+    <ClInclude Include="..\..\src\ARK2D\Audio\SoundStore.h" />
+    <ClInclude Include="..\..\src\ARK2D\Controls\Input.h" />
+    <ClInclude Include="..\..\src\ARK2D\Controls\Gamepad.h" />
+    <ClInclude Include="..\..\src\ARK2D\Core\Game.h" />
+    <ClInclude Include="..\..\src\ARK2D\Core\Event.h" />
+    <ClInclude Include="..\..\src\ARK2D\Core\Exception.h" />
+    <ClInclude Include="..\..\src\ARK2D\Core\GameObject.h" />
+    <ClInclude Include="..\..\src\ARK2D\Core\GameContainer.h" />
+    <ClInclude Include="..\..\src\ARK2D\Core\GameTimer.h" />
+    <ClInclude Include="..\..\src\ARK2D\Core\Resource.h" />
+    <ClInclude Include="..\..\src\ARK2D\Core\String.h" />
+    <ClInclude Include="..\..\src\ARK2D\Core\Platform\GameContainerLinux.h" />
+    <ClInclude Include="..\..\src\ARK2D\Core\Platform\GameContainerWindows.h" />
+    <ClInclude Include="..\..\src\ARK2D\Font\Font.h" />
+    <ClInclude Include="..\..\src\ARK2D\Font\FTFont.h" />
+    <ClInclude Include="..\..\src\ARK2D\Font\BMFont.h" />
+    <ClInclude Include="..\..\src\ARK2D\GJ\GameJolt.h" />
+    <ClInclude Include="..\..\src\ARK2D\GJ\PropertyItem.h" />
+    <ClInclude Include="..\..\src\ARK2D\GJ\DataStore.h" />
+    <ClInclude Include="..\..\src\ARK2D\GJ\Highscore.h" />
+    <ClInclude Include="..\..\src\ARK2D\GJ\MD5.h" />
+    <ClInclude Include="..\..\src\ARK2D\GJ\Trophy.h" />
+    <ClInclude Include="..\..\src\ARK2D\GJ\User.h" />
+    <ClInclude Include="..\..\src\ARK2D\Graphics\Animation.h" />
+    <ClInclude Include="..\..\src\ARK2D\Graphics\Color.h" />
+    <ClInclude Include="..\..\src\ARK2D\Graphics\Renderer.h" />
+    <ClInclude Include="..\..\src\ARK2D\Graphics\Shader.h" />
+    <ClInclude Include="..\..\src\ARK2D\Graphics\FBO.h" />
+    <ClInclude Include="..\..\src\ARK2D\Graphics\SpriteSheetDescription.h" />
+    <ClInclude Include="..\..\src\ARK2D\Graphics\SpriteSheetDescriptionItem.h" />
+    <ClInclude Include="..\..\src\ARK2D\Graphics\Image.h" />
+    <ClInclude Include="..\..\src\ARK2D\Graphics\Texture.h" />
+    <ClInclude Include="..\..\src\ARK2D\Graphics\TextureStore.h" />
+    <ClInclude Include="..\..\src\ARK2D\Graphics\ImageIO\BMPImage.h" />
+    <ClInclude Include="..\..\src\ARK2D\Graphics\ImageIO\PNGImage.h" />
+    <ClInclude Include="..\..\src\ARK2D\Graphics\ImageIO\TargaImage.h" />
+    <ClInclude Include="..\..\src\ARK2D\Geometry\GigaRectangle.h" />
+    <ClInclude Include="..\..\src\ARK2D\Geometry\Vector2.h" />
+    <ClInclude Include="..\..\src\ARK2D\Geometry\Shape.h" />
+    <ClInclude Include="..\..\src\ARK2D\Geometry\Rectangle.h" />
+    <ClInclude Include="..\..\src\ARK2D\Geometry\Circle.h" />
+    <ClInclude Include="..\..\src\ARK2D\Geometry\Polygon.h" />
+    <ClInclude Include="..\..\src\ARK2D\Geometry\Line.h" />
+    <ClInclude Include="..\..\src\ARK2D\Path\PathGroup.h" />
+    <ClInclude Include="..\..\src\ARK2D\Path\Path.h" />
+    <ClInclude Include="..\..\src\ARK2D\Path\SubPath.h" />
+    <ClInclude Include="..\..\src\ARK2D\Path\PathIO.h" />
+    <ClInclude Include="..\..\src\ARK2D\Pathfinding\AStar.h" />
+    <ClInclude Include="..\..\src\ARK2D\Particles\ConfigurableEmitter.h" />
+    <ClInclude Include="..\..\src\ARK2D\Particles\Particle.h" />
+    <ClInclude Include="..\..\src\ARK2D\Particles\ParticleIO.h" />
+    <ClInclude Include="..\..\src\ARK2D\Particles\ParticlePool.h" />
+    <ClInclude Include="..\..\src\ARK2D\Particles\ParticleSystem.h" />
+    <ClInclude Include="..\..\src\ARK2D\State\GameState.h" />
+    <ClInclude Include="..\..\src\ARK2D\State\IntelligentGameState.h" />
+    <ClInclude Include="..\..\src\ARK2D\State\VideoGameState.h" />
+    <ClInclude Include="..\..\src\ARK2D\State\LoadingState.h" />
+    <ClInclude Include="..\..\src\ARK2D\State\StateBasedGame.h" />
+    <ClInclude Include="..\..\src\ARK2D\State\Transition\EmptyTransition.h" />
+    <ClInclude Include="..\..\src\ARK2D\State\Transition\FadeTransition.h" />
+    <ClInclude Include="..\..\src\ARK2D\State\Transition\FadeToColourTransition.h" />
+    <ClInclude Include="..\..\src\ARK2D\State\Transition\FadeFromColourTransition.h" />
+    <ClInclude Include="..\..\src\ARK2D\State\Transition\SquaresOutTransition.h" />
+    <ClInclude Include="..\..\src\ARK2D\State\Transition\SquaresInTransition.h" />
+    <ClInclude Include="..\..\src\ARK2D\State\Transition\SlideRectanglesAcrossTransition.h" />
+    <ClInclude Include="..\..\src\ARK2D\State\Transition\Transition.h" />
+    <ClInclude Include="..\..\src\ARK2D\State\Transition\TranslateOutInTransition.h" />
+    <ClInclude Include="..\..\src\ARK2D\Tests\CollisionTest.h" />
+    <ClInclude Include="..\..\src\ARK2D\Tests\GamepadsTest.h" />
+    <ClInclude Include="..\..\src\ARK2D\Tests\TransitionTest.h" />
+    <ClInclude Include="..\..\src\ARK2D\Tests\ParticlesTest.h" />
+    <ClInclude Include="..\..\src\ARK2D\Tests\UITest.h" />
+    <ClInclude Include="..\..\src\ARK2D\Threading\Thread.h" />
+    <ClInclude Include="..\..\src\ARK2D\Threading\Mutex.h" />
+    <ClInclude Include="..\..\src\ARK2D\Tiled\TiledMap.h" />
+    <ClInclude Include="..\..\src\ARK2D\Tiled\TiledMapLayer.h" />
+    <ClInclude Include="..\..\src\ARK2D\Tiled\TiledMapObject.h" />
+    <ClInclude Include="..\..\src\ARK2D\Tiled\TiledMapObjectGroup.h" />
+    <ClInclude Include="..\..\src\ARK2D\Tiled\TiledMapProperty.h" />
+    <ClInclude Include="..\..\src\ARK2D\Tiled\TiledMapTile.h" />
+    <ClInclude Include="..\..\src\ARK2D\Tiled\TiledMapTileset.h" />
+    <ClInclude Include="..\..\src\ARK2D\Tools\Packer.h" />
+    <ClInclude Include="..\..\src\ARK2D\Tween\Timeline.h" />
+    <ClInclude Include="..\..\src\ARK2D\Tween\Easing.h" />
+    <ClInclude Include="..\..\src\ARK2D\Tween\Timer.h" />
+    <ClInclude Include="..\..\src\ARK2D\UI\UIComponent.h" />
+    <ClInclude Include="..\..\src\ARK2D\UI\AbstractUIComponent.h" />
+    <ClInclude Include="..\..\src\ARK2D\UI\Panel.h" />
+    <ClInclude Include="..\..\src\ARK2D\UI\ScrollPanel.h" />
+    <ClInclude Include="..\..\src\ARK2D\UI\Label.h" />
+    <ClInclude Include="..\..\src\ARK2D\UI\TextField.h" />
+    <ClInclude Include="..\..\src\ARK2D\UI\Button.h" />
+    <ClInclude Include="..\..\src\ARK2D\UI\CheckBox.h" />
+    <ClInclude Include="..\..\src\ARK2D\UI\Dialog.h" />
+    <ClInclude Include="..\..\src\ARK2D\UI\FileDialog.h" />
+    <ClInclude Include="..\..\src\ARK2D\UI\ComboBox.h" />
+    <ClInclude Include="..\..\src\ARK2D\UI\ComboBoxItem.h" />
+    <ClInclude Include="..\..\src\ARK2D\UI\ErrorDialog.h" />
+    <ClInclude Include="..\..\src\ARK2D\UI\Notification.h" />
+    <ClInclude Include="..\..\src\ARK2D\UI\NotificationSystem.h" />
+    <ClInclude Include="..\..\src\ARK2D\UI\SimpleTextField.h" />
+    <ClInclude Include="..\..\src\ARK2D\UI\Slider.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\AnalyticsUtil.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\ArcadeHighscoreInput.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\Callbacks.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\CameraShake.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\FileUtil.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\DisplayUtil.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\GameCenterUtil.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\ICloudUtil.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\GooglePlayGameServicesUtil.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\KeyPairFile.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\LocalHighscores.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\Log.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\MathUtil.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\Matrix44.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\RSSL.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\SAT.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\SocialUtil.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\StringStore.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\StringUtil.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\URLRequest.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\Validation.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\Vector4.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\VerticalMenu.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\VerticalMenuItem.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\Vibrator.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\Containers\Pool.h" />
+    <ClInclude Include="..\..\src\ARK2D\Util\Containers\Vector.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\FileInterface.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\libJSON\JSON_Worker.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\libJSON\jsonmain.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\libJSON\JSONNode.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\lpng151\png.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\tinyxml\tinystr.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\tinyxml\tinyxml.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\vorbis132\bitrate.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\vorbis132\codebook.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\vorbis132\envelope.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\vorbis132\lookup.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\vorbis132\lpc.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\vorbis132\lsp.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\vorbis132\mdct.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\vorbis132\psy.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\vorbis132\registry.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\vorbis132\smallft.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\vorbis132\vorbisenc.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\vorbis132\vorbisfile.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\vorbis132\window.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\zlib123\crc32.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\zlib123\deflate.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\zlib123\inffast.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\zlib123\inflate.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\zlib123\inftrees.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\zlib123\trees.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\zlib123\zutil.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\spine\SpineSkeleton.h" />
+    <ClInclude Include="..\..\src\ARK2D\vendor\spine\src\json.h" />-->
+  </ItemGroup>
+
+  <!-- Source Files -->
+  <ItemGroup>
+    %COMPILE_SOURCE_FILES%
+    <!-- 
+    <ClCompile Include="..\..\src\ARK2D\vendor\gl3w.c" />
+    <ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\ARK2D.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Audio\Sound.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Audio\SoundStore.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Controls\Input.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Controls\Gamepad.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Core\Game.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Core\Event.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Core\Exception.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Core\GameObject.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Core\GameContainer.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Core\GameTimer.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Core\Resource.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Core\Sort.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Core\String.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Core\Platform\GameContainerLinux.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Core\Platform\GameContainerWindows.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Font\Font.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Font\FTFont.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Font\BMFont.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\GJ\GameJolt.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\GJ\PropertyItem.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\GJ\DataStore.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\GJ\Highscore.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\GJ\MD5.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\GJ\Trophy.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\GJ\User.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Graphics\Animation.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Graphics\Color.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Graphics\Renderer.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Graphics\Shader.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Graphics\FBO.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Graphics\SpriteSheetDescription.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Graphics\SpriteSheetDescriptionItem.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Graphics\Image.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Graphics\Texture.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Graphics\TextureStore.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Graphics\ImageIO\BMPImage.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Graphics\ImageIO\PNGImage.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Graphics\ImageIO\TargaImage.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Geometry\GigaRectangle.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Geometry\Vector2.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Geometry\Shape.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Geometry\Rectangle.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Geometry\Circle.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Geometry\Polygon.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Geometry\Line.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Path\PathGroup.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Path\Path.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Path\SubPath.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Path\PathIO.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Pathfinding\AStar.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Particles\ConfigurableEmitter.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Particles\Particle.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Particles\ParticleIO.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Particles\ParticlePool.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Particles\ParticleSystem.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\State\GameState.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\State\IntelligentGameState.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\State\VideoGameState.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\State\LoadingState.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\State\StateBasedGame.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\State\Transition\EmptyTransition.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\State\Transition\FadeTransition.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\State\Transition\FadeToColourTransition.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\State\Transition\FadeFromColourTransition.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\State\Transition\SquaresOutTransition.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\State\Transition\SquaresInTransition.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\State\Transition\SlideRectanglesAcrossTransition.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\State\Transition\Transition.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\State\Transition\TranslateOutInTransition.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Tests\CollisionTest.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Tests\GamepadsTest.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Tests\TransitionTest.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Tests\ParticlesTest.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Tests\UITest.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Threading\Thread.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Threading\Mutex.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Tiled\TiledMap.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Tiled\TiledMapLayer.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Tiled\TiledMapObject.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Tiled\TiledMapObjectGroup.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Tiled\TiledMapProperty.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Tiled\TiledMapTile.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Tiled\TiledMapTileset.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Tools\Packer.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Tween\Timeline.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Tween\Easing.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Tween\Timer.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\UI\UIComponent.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\UI\AbstractUIComponent.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\UI\Panel.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\UI\ScrollPanel.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\UI\Label.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\UI\TextField.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\UI\Button.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\UI\CheckBox.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\UI\Dialog.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\UI\FileDialog.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\UI\ComboBox.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\UI\ComboBoxItem.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\UI\ErrorDialog.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\UI\Notification.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\UI\NotificationSystem.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\UI\SimpleTextField.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\UI\Slider.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\AnalyticsUtil.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\ArcadeHighscoreInput.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\Callbacks.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\CameraShake.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\FileUtil.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\DisplayUtil.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\GameCenterUtil.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\ICloudUtil.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\GooglePlayGameServicesUtil.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\KeyPairFile.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\LocalHighscores.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\Log.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\MathUtil.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\Matrix44.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\RSSL.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\SAT.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\SocialUtil.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\StringStore.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\StringUtil.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\URLRequest.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\Validation.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\Vector4.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\VerticalMenu.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\VerticalMenuItem.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\Vibrator.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\Containers\Pool.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\Util\Containers\Vector.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\FileInterface.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\libJSON\JSON_Worker.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\libJSON\jsonmain.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\libJSON\JSONNode.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\lpng151\png.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\lpng151\pngerror.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\lpng151\pngget.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\lpng151\pngmem.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\lpng151\pngpread.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\lpng151\pngread.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\lpng151\pngrio.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\lpng151\pngrtran.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\lpng151\pngrutil.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\lpng151\pngset.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\lpng151\pngtrans.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\lpng151\pngwio.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\lpng151\pngwrite.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\lpng151\pngwtran.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\lpng151\pngwutil.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\ogg130\bitwise.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\ogg130\framing.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\tinyxml\tinystr.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\tinyxml\tinyxml.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\tinyxml\tinyxmlerror.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\tinyxml\tinyxmlparser.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\analysis.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\bitrate.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\block.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\codebook.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\envelope.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\floor0.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\floor1.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\info.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\lookup.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\lpc.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\lsp.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\mapping0.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\mdct.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\psy.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\registry.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\res0.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\sharedbook.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\smallft.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\synthesis.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\vorbisenc.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\vorbisfile.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\vorbis132\window.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\zlib123\adler32.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\zlib123\compress.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\zlib123\crc32.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\zlib123\deflate.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\zlib123\gzio.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\zlib123\infback.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\zlib123\inffast.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\zlib123\inflate.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\zlib123\inftrees.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\zlib123\trees.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\zlib123\uncompr.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\zlib123\zutil.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\spine-ark2d.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\SpineSkeleton.cpp" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\AnimationSp.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\AnimationState.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\AnimationStateData.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\Atlas.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\AtlasAttachmentLoader.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\Attachment.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\AttachmentLoader.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\Bone.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\BoneData.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\BoundingBoxAttachment.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\EventData.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\EventSp.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\extension.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\json.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\MeshAttachment.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\RegionAttachment.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\Skeleton.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\SkeletonBounds.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\SkeletonData.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\SkeletonJson.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\Skin.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\SkinnedMeshAttachment.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\Slot.c" />
+    <ClCompile Include="..\..\src\ARK2D\vendor\spine\src\SlotData.c" />
+  -->
+  </ItemGroup>
+
+  <!-- Resource Files -->
+  <ItemGroup>
+    <ResourceCompile Include="..\..\src\ARK2D\Windres.rc" />
+  </ItemGroup>
+  
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

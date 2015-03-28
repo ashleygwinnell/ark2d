@@ -25,7 +25,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class SubPath {
+		class ARK2D_API SubPath {
 			friend class PathGroup;
 			friend class Path;
 

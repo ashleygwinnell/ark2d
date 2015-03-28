@@ -8,6 +8,7 @@
 #ifndef GAMESTATE_H_
 #define GAMESTATE_H_
 
+#include "../Includes.h"
 #include "../Namespaces.h"
 #include "../UI/AbstractUIComponent.h"
 
@@ -19,7 +20,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class GameState {
+		class ARK2D_API GameState {
 			public:
 				GameState();
 
@@ -37,6 +38,8 @@ namespace ARK {
 				virtual void keyPressed(unsigned int key);
 				virtual void keyReleased(unsigned int key);
 				virtual void mouseMoved(int x, int y, int oldx, int oldy);
+
+				virtual void orientationChanged(int orientation);
 
 				virtual ~GameState();
 

@@ -8,71 +8,76 @@
 #ifdef __WIN32
 	#include <windows.h>
 #endif
- 
 
-
+#include "../Includes.h" 
 #include "../Namespaces.h"
-#include "../Includes.h"
 
-#include "Input.h"
+#include "Input.h" 
 #include "Gamepad.h"
 #include "../Core/GameContainer.h"
-
-namespace ARK {
-	namespace Controls {
-
-		const int Input::MOUSE_BUTTON_LEFT;
-		const int Input::MOUSE_BUTTON_RIGHT;
-		const int Input::KEY_SPACE;
-		const int Input::KEY_PERIOD;
-		const int Input::KEY_COMMA;
-		const int Input::KEY_EQUALS;
-		const int Input::KEY_HYPHEN;
-		const int Input::KEY_0;
-		const int Input::KEY_1;
-		const int Input::KEY_2;
-		const int Input::KEY_3;
-		const int Input::KEY_4;
-		const int Input::KEY_5;
-		const int Input::KEY_6;
-		const int Input::KEY_7;
-		const int Input::KEY_8;
-		const int Input::KEY_9;
-		const int Input::KEY_A;
-		const int Input::KEY_B;
-		const int Input::KEY_C;
-		const int Input::KEY_D;
-		const int Input::KEY_E;
-		const int Input::KEY_F;
-		const int Input::KEY_G;
-		const int Input::KEY_H;
-		const int Input::KEY_I;
-		const int Input::KEY_J;
-		const int Input::KEY_K;
-		const int Input::KEY_L;
-		const int Input::KEY_M;
-		const int Input::KEY_N;
-		const int Input::KEY_O;
-		const int Input::KEY_P;
-		const int Input::KEY_Q;
-		const int Input::KEY_R;
-		const int Input::KEY_S;
-		const int Input::KEY_T;
-		const int Input::KEY_U;
-		const int Input::KEY_V;
-		const int Input::KEY_W;
-		const int Input::KEY_X;
-		const int Input::KEY_Y;
-		const int Input::KEY_Z;
+  
+namespace ARK { 
+	namespace Controls { 
+ 
+		#if !defined(ARK2D_WINDOWS_VS) // && !defined(ARK2D_UBUNTU_LINUX)
+			const int Input::MOUSE_BUTTON_LEFT; 
+			const int Input::MOUSE_BUTTON_MIDDLE; 
+			const int Input::MOUSE_BUTTON_RIGHT;
+			const int Input::KEY_SPACE; 
+			const int Input::KEY_PERIOD; 
+			const int Input::KEY_COMMA;
+			const int Input::KEY_EQUALS;
+			const int Input::KEY_HYPHEN;
+			const int Input::KEY_0;
+			const int Input::KEY_1;
+			const int Input::KEY_2;
+			const int Input::KEY_3;
+			const int Input::KEY_4;
+			const int Input::KEY_5;
+			const int Input::KEY_6;
+			const int Input::KEY_7;
+			const int Input::KEY_8;
+			const int Input::KEY_9;
+			const int Input::KEY_A;
+			const int Input::KEY_B;
+			const int Input::KEY_C;
+			const int Input::KEY_D;
+			const int Input::KEY_E;
+			const int Input::KEY_F;
+			const int Input::KEY_G;
+			const int Input::KEY_H;
+			const int Input::KEY_I;
+			const int Input::KEY_J;
+			const int Input::KEY_K;
+			const int Input::KEY_L;
+			const int Input::KEY_M;
+			const int Input::KEY_N;
+			const int Input::KEY_O;
+			const int Input::KEY_P;
+			const int Input::KEY_Q;
+			const int Input::KEY_R;
+			const int Input::KEY_S;
+			const int Input::KEY_T;
+			const int Input::KEY_U;
+			const int Input::KEY_V;
+			const int Input::KEY_W; 
+			const int Input::KEY_X;
+			const int Input::KEY_Y;
+			const int Input::KEY_Z;
+		#endif
 
 		const char* Input::s_keyboardState = new char[256];
 
 		Input::Input():
-			keyDownBuffer(), m_container(NULL),
-			keyNames(), keyChars(),
-			mouse_x(0), mouse_y(0)
+			keyDownBuffer(), 
+			m_container(NULL),
+			keyNames(), 
+			keyChars(),
+			mouse_x(0), 
+			mouse_y(0) 
 		{
 			keyNames[Input::MOUSE_BUTTON_LEFT] = "left mouse button";
+			keyNames[Input::MOUSE_BUTTON_MIDDLE] = "middle mouse button";
 			keyNames[Input::MOUSE_BUTTON_RIGHT] = "right mouse button";
 
 			keyNames[Input::KEY_SPACE] = "space bar";
@@ -81,7 +86,7 @@ namespace ARK {
 			keyNames[Input::KEY_PERIOD] = "period/fullstop";
 			keyChars[Input::KEY_PERIOD] = ".";
 
-			keyNames[Input::KEY_COMMA] = "comma";
+			keyNames[Input::KEY_COMMA] = "comma"; 
 			keyChars[Input::KEY_COMMA] = ",";
 
 			keyNames[Input::KEY_EQUALS] = "equals";
@@ -132,28 +137,47 @@ namespace ARK {
 		// --------
 		// Game pads!!!
 		// --------
-		vector<Gamepad*> Input::getGamepads() const {
+		vector<Gamepad*>* Input::getGamepads() {
 			return m_container->getGamepads();
+		}
+		Gamepad* Input::getGamepad(unsigned int id) {
+			vector<Gamepad*>* gamepads = m_container->getGamepads();
+			for(unsigned int i = 0; i < gamepads->size(); ++i) {
+				if (gamepads->at(i)->id == id) {
+					return gamepads->at(i);
+				}
+			}
+
+			//ARK2D::getLog()->e(StringUtil::append("Could not get gamepad with id: ", id));
+			return NULL;
+		}
+		Gamepad* Input::getGamepadByIndex(unsigned int index) {
+			vector<Gamepad*>* gamepads = m_container->getGamepads();
+			if (index >= gamepads->size()) { 
+				//ARK2D::getLog()->e(StringUtil::append("Could not get gamepad at index: ", id));
+				return NULL; 
+			}
+			return gamepads->at(index);
 		}
 
 		bool Input::isGamepadButtonDown(unsigned int button) {
-			vector<Gamepad*> gamepads = getGamepads();
-			for (unsigned int i = 0; i < gamepads.size(); i++) {
-				bool r = gamepads.at(i)->isButtonDown(button);
+			vector<Gamepad*>* gamepads = getGamepads();
+			for (unsigned int i = 0; i < gamepads->size(); i++) {
+				bool r = gamepads->at(i)->isButtonDown(button);
 				if (r) {
 					return true;
 				}
-			}
+			}  
 			return false;
 		}
 
 		bool Input::isGamepadButtonPressed(unsigned int button) {
-			vector<Gamepad*> gamepads = getGamepads();
-			for (unsigned int i = 0; i < gamepads.size(); i++) {
-				bool r = gamepads.at(i)->isButtonPressed(button);
+			vector<Gamepad*>* gamepads = getGamepads();
+			for (unsigned int i = 0; i < gamepads->size(); i++) {
+				bool r = gamepads->at(i)->isButtonPressed(button);
 				if (r) {
 					return true;
-				}
+				} 
 			}
 			return false;
 		}
@@ -165,6 +189,16 @@ namespace ARK {
 
 		bool Input::isGamepadButtonPressed(Gamepad* gamepad, unsigned int button) {
 			return gamepad->isButtonPressed(button);
+		}
+		bool Input::isAnyGamepadButtonPressed() {
+			vector<Gamepad*>* gamepads = getGamepads();
+			for (unsigned int i = 0; i < gamepads->size(); i++) {
+				bool r = gamepads->at(i)->isAnyButtonPressed();
+				if (r) {
+					return true; 
+				} 
+			}
+			return false;
 		}
 
 		bool Input::isKeyDown(unsigned int key) {
@@ -186,17 +220,24 @@ namespace ARK {
 				return false;
 			}
 		}
-
+ 
 		void Input::pressKey(unsigned int key) {
 			this->keyDownBuffer[key] = true;
 			pressedEvents.insert(key);
 
+			ARK2D::getLog()->keyPressed(key);
 			ARK2D::getGame()->keyPressed(key);
+ 
+			//#ifdef ARK2D_UBUNTU_LINUX
+			//#ifdef ARK2D_ANDROID
+			//	ARK2D::getLog()->e(StringUtil::append("key press: ", getKeyName(key)));
+			//#endif
 		}
 		void Input::releaseKey(unsigned int key) {
 			this->keyDownBuffer[key] = false;
 			releasedEvents.insert(key);
 
+			ARK2D::getLog()->keyReleased(key);
 			ARK2D::getGame()->keyReleased(key);
 		}
 
@@ -214,7 +255,15 @@ namespace ARK {
 			}
 			return string("");*/
 
-			#if defined(ARK2D_ANDROID)
+			#if defined(ARK2D_FLASCC)
+
+				map<int, string>::iterator it = keyChars.find(key);
+				if (it != keyChars.end()) {
+					return keyChars[key];
+				}
+				return string("");
+
+			#elif defined(ARK2D_ANDROID)
 
 				if (key == (unsigned int) KEY_ENTER) {
 					return "\n";
@@ -402,7 +451,7 @@ namespace ARK {
 		int Input::getMouseY() const {
 			return mouse_y;
 		} 
-		void Input::setGameContainer(const ARK::Core::GameContainer* c) {
+		void Input::setGameContainer(ARK::Core::GameContainer* c) {
 			m_container = c;
 		}
 

@@ -37,7 +37,12 @@ namespace ARK {
 		void StateBasedGame::addState(GameState* state) {
 			m_states.push_back(state);
 			m_from_state = state;
-			m_current_state = state;
+			//if (m_current_state != NULL && m_current_state == m_loading_state) {
+				
+			//}
+			if (m_current_state == NULL) {
+				m_current_state = state;
+			}
 		}
 		void StateBasedGame::setLoadingState(LoadingState* state) {
 			m_loading_state = state;
@@ -92,6 +97,18 @@ namespace ARK {
 
 			m_leaveTransition->init(m_container, this, m_from_state, state);
 		}
+		void StateBasedGame::setCurrentState(GameState* state) {
+			m_current_state = state;
+		}
+		void StateBasedGame::setCurrentState(unsigned int id) {
+			for (unsigned int i = 0; i < m_states.size(); i++) {
+				if (m_states.at(i)->id() == id) {
+					m_current_state = m_states.at(i);
+					break;
+				}
+			}
+		}
+
 		GameState* StateBasedGame::getCurrentState() {
 			return m_current_state;
 		}
@@ -101,6 +118,19 @@ namespace ARK {
 
 		vector<GameState*> StateBasedGame::getStates() {
 			return m_states;
+		}
+		GameState* StateBasedGame::getState(unsigned int id) {
+			for(unsigned int i = 0; i < m_states.size(); ++i) {
+				GameState* s = m_states.at(i);
+				if (s->id() == id) {
+					return s;
+				}
+			}
+			return NULL;
+		}
+
+		void StateBasedGame::setFromState(GameState* state) {
+			m_from_state = state;
 		}
 
 		void StateBasedGame::init(GameContainer* container) {
@@ -134,6 +164,7 @@ namespace ARK {
 				m_leaveTransition->update(container, this, timer);
 				if (m_leaveTransition->isComplete()) {
 					m_from_state->leave(container, this, m_next_state);
+					m_leaveTransition->postLeave(container, this, m_from_state, m_next_state);
 
 					if (m_autoDeleteTransitions) { delete m_leaveTransition; }
 					m_leaveTransition = NULL;
@@ -155,6 +186,7 @@ namespace ARK {
 				m_enterTransition->update(container, this, timer);
 				if (m_enterTransition->isComplete()) {
 					m_current_state->enter(container, this, m_from_state);
+					m_enterTransition->postEnter(container, this, m_from_state, m_current_state);
 
 					if (m_autoDeleteTransitions) { delete m_enterTransition; }
 					m_enterTransition = NULL;
@@ -163,123 +195,59 @@ namespace ARK {
 				}
 			}
 
+			//ARK2D::getLog()->v("sbg::update");
+			//Image::showAnyGlErrorAndExit();
+			if (m_current_state == NULL) {
+				ARK2D::getLog()->e("StateBasedGame::update(): Current State is null");
+				return;
+			}
 
 			m_current_state->update(container, this, timer);
 
 			//postUpdate(container, timer);
 		}
 
-		void StateBasedGame::preRender(GameContainer* container, Renderer* g) {
-			#if defined( ARK2D_ANDROID ) 
-
-				glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-				glLoadIdentity();
-
-				/*g->setScissorTestEnabled(true);
-				glScissor(container->getTranslateX(), container->getTranslateY(),
-					float(container->getWidth()) * container->getScaleX(),
-					float(container->getHeight()) * container->getScaleY());
-					*/
-
-				/*
-					g->setScissorTestEnabled(true);
-				g->scissor(
-					container->getTranslateX(),
-					container->getTranslateY(),
-					(int) float(container->getWidth()) * container->getScaleX(),
-					(int) float(container->getHeight()) * container->getScaleY()
-				);
-				 */
-
-				/*g->setScissorTestEnabled(true);
-				g->scissor(
-					container->getTranslateX(),
-					container->getTranslateY(),
-					container->getWidth() * container->getScaleX(),
-					container->getHeight() * container->getScaleY()
-				);*/
-
-				g->pushMatrix();
-				g->translate(container->getTranslateX(), container->getTranslateY());
-				g->pushMatrix();
-				g->scale(container->getScale(), container->getScale());
-            #elif defined(ARK2D_IPHONE)
-				if (container->getOrientation() == GameContainer::ORIENTATION_LANDSCAPE) {
-					glPushMatrix();
-					glTranslatef(container->m_platformSpecific.m_glView.bounds.size.width, 0.0f, 0.0f );
-					glRotatef(90.0, 0.0, 0.0, 1.0);
-				}
-				
-                g->pushMatrix();
-                g->translate(container->getTranslateX(), container->getTranslateY());
-                g->pushMatrix();
-                g->scale(container->getScale(), container->getScale());
-            #elif (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS) || defined(ARK2D_FLASCC))
-
-               	/*glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-				glLoadIdentity();
-				g->setScissorTestEnabled(true);
-               	g->scissor(
-					container->getTranslateX(),
-					container->getTranslateY(),
-					container->getWidth() * container->getScaleX(), 
-					container->getHeight() * container->getScaleY()
-				)*/
-
-				g->pushMatrix();
-                g->translate(container->getTranslateX(), container->getTranslateY());
-                g->pushMatrix();
-                g->scale(container->getScale(), container->getScale());
-            #else
-                g->pushMatrix(); 
-			#endif
+		void StateBasedGame::preRender(GameContainer* container, Renderer* r) {
+			Game::preRender(container, r);
 		}
-		void StateBasedGame::postRender(GameContainer* container, Renderer* g) {
-			#if defined(ARK2D_IPHONE)
-				g->popMatrix(); // pop scale
-				g->popMatrix(); // pop translate
-				if (container->getOrientation() == GameContainer::ORIENTATION_LANDSCAPE) {
-					g->popMatrix(); // pop rotate
-				}
-			#elif (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS) || defined(ARK2D_FLASCC))
-				g->popMatrix(); // pop scale
-				g->popMatrix(); // pop translate
-
-				g->drawScissorBoxes(); 
-			#elif defined( ARK2D_ANDROID )
-				g->popMatrix(); // pop scale
-				g->popMatrix(); // pop translate
-
-				g->drawScissorBoxes(); 
-			#else
-				g->popMatrix();
-			#endif
+		void StateBasedGame::postRender(GameContainer* container, Renderer* r) {
+			Game::postRender(container, r);
 		}
 		void StateBasedGame::render(GameContainer* container, Renderer* g) {
 			//preRender(container, g);
+			//ARK2D::getLog()->v("sbg::render");
 
-
-			// Render pre-enter transition
-			if (m_leaveTransition != NULL) {
-				m_leaveTransition->preRender(container, this, g);
-			} else if (m_enterTransition != NULL) {
-				m_enterTransition->preRender(container, this, g);
-			}
-
+			preRenderTransitions();
+			
 			// Render Current State.
 			if (m_current_state != NULL) {
 				//ARK2D::getLog()->v("StateBasedGame::render - render current state");
 				m_current_state->render(container, this, g);
 			}
 
-			// Render post-enter transition
-			if (m_leaveTransition != NULL) {
-				m_leaveTransition->postRender(container, this, g);
-			} else if (m_enterTransition != NULL) {
-				m_enterTransition->postRender(container, this, g);
-			}
+			postRenderTransitions();
  
 			//postRender(container, g);
+		}
+		void StateBasedGame::preRenderTransitions() {
+			// Render post-enter transition 
+			GameContainer* container = ARK2D::getContainer();
+			Renderer* r = ARK2D::getRenderer();
+			if (m_leaveTransition != NULL) {
+				m_leaveTransition->preRender(container, this, r);
+			} else if (m_enterTransition != NULL) {
+				m_enterTransition->preRender(container, this, r);
+			}
+		}
+		void StateBasedGame::postRenderTransitions() {
+			// Render post-enter transition 
+			GameContainer* container = ARK2D::getContainer();
+			Renderer* r = ARK2D::getRenderer();
+			if (m_leaveTransition != NULL) {
+				m_leaveTransition->postRender(container, this, r);
+			} else if (m_enterTransition != NULL) {
+				m_enterTransition->postRender(container, this, r);
+			}
 		}
 
 		bool StateBasedGame::isTransitioning() {
@@ -325,10 +293,29 @@ namespace ARK {
 			if (m_loading_state != NULL && m_loading_state->isLoading()) { return; }
 
 			m_current_state->mouseMoved(x, y, oldx, oldy);
+		} 
+
+		void StateBasedGame::orientationChanged(int orientation) {
+			for(unsigned int i = 0; i < m_states.size(); ++i) {
+				GameState* state = m_states[i];
+				if (state == NULL) { continue; }
+				state->orientationChanged(orientation);
+			}
 		}
 
-		StateBasedGame::~StateBasedGame() {
-
+		StateBasedGame::~StateBasedGame() { 
+			for(unsigned int i = 0; i < m_states.size(); i++) {
+				//try { 
+					GameState* state = m_states.at(i);
+					if (state != NULL) { 
+						delete state; 
+					}
+				//} catch(...) {
+				//	ARK2D::getLog()->e(StringUtil::append("Could not delete GameState at index: ", i));
+				//	exit(0);
+				//}
+			}
+			m_states.clear();
 		}
 	}
 }

@@ -8,13 +8,87 @@
 #ifndef INPUT_H_
 #define INPUT_H_
  
-
-
 #include "../Namespaces.h"
 #include "../Includes.h"
-
+ 
 using namespace std;
 
+#ifdef ARK2D_UBUNTU_LINUX
+	#include <linux/input.h>
+	
+	#undef KEY_ENTER
+	#undef KEY_TAB
+	#undef KEY_BACKSPACE
+	#undef KEY_CAPSLOCK
+	#undef KEY_SPACE
+	#undef KEY_PAGEUP
+	#undef KEY_PAGEDOWN
+	#undef KEY_END
+	#undef KEY_HOME
+	#undef KEY_LEFT
+	#undef KEY_RIGHT
+	#undef KEY_UP
+	#undef KEY_DOWN
+	#undef KEY_INSERT
+	#undef KEY_DELETE
+	#undef KEY_0
+	#undef KEY_1
+	#undef KEY_2
+	#undef KEY_3
+	#undef KEY_4
+	#undef KEY_5
+	#undef KEY_6
+	#undef KEY_7
+	#undef KEY_8
+	#undef KEY_9
+	#undef KEY_A
+	#undef KEY_B
+	#undef KEY_C
+	#undef KEY_D
+	#undef KEY_E
+	#undef KEY_F
+	#undef KEY_G
+	#undef KEY_H
+	#undef KEY_I
+	#undef KEY_J
+	#undef KEY_K
+	#undef KEY_L
+	#undef KEY_M
+	#undef KEY_N
+	#undef KEY_O
+	#undef KEY_P
+	#undef KEY_Q
+	#undef KEY_R
+	#undef KEY_S
+	#undef KEY_T
+	#undef KEY_U
+	#undef KEY_V
+	#undef KEY_W
+	#undef KEY_X
+	#undef KEY_Y
+	#undef KEY_Z
+	#undef KEY_SELECT
+	#undef KEY_SLEEP
+	#undef KEY_F1
+	#undef KEY_F2
+	#undef KEY_F3
+	#undef KEY_F4
+	#undef KEY_F5
+	#undef KEY_F6
+	#undef KEY_F7
+	#undef KEY_F8
+	#undef KEY_F9
+	#undef KEY_F10
+	#undef KEY_F11
+	#undef KEY_F12
+	#undef KEY_NUMLOCK
+	#undef KEY_SCROLLLOCK
+	#undef KEY_SEMICOLON
+	#undef KEY_COMMA
+	#undef KEY_APOSTROPHE
+
+
+#endif
 
 namespace ARK {
 	namespace Controls {
@@ -22,12 +96,12 @@ namespace ARK {
 		class Gamepad;
 
 
-		/*!
+		/*! 
 		 * \brief The main class for getting Input from the user.
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class Input {
+		class ARK2D_API Input {
 
 			public:
 				//#ifdef ARK2D_WINDOWS
@@ -36,9 +110,11 @@ namespace ARK {
 					static const int ANDROID_BACK   = 0x402; // 1000 -- made up value that (probably) won't clash.
 					static const int ANDROID_SEARCH = 0x403; // 1000 -- made up value that (probably) won't clash.
 
+					static const int MOBILE_BACK 	= 0x402;
+
 					static const int MOUSE_BUTTON_LEFT = 0x01;
 					static const int MOUSE_BUTTON_RIGHT = 0x02;
-					static const int MOUSE_BUTTON_MIDDLE = 0x04;
+					static const int MOUSE_BUTTON_MIDDLE = 0x04; 
 					static const int KEY_ENTER = 0x0D;
 					static const int KEY_TAB = 0x09;
 					static const int KEY_BACKSPACE = 0x08;
@@ -309,13 +385,13 @@ namespace ARK {
 
 
 				map<int, bool> keyDownBuffer;
-				const GameContainer* m_container;
+				GameContainer* m_container;
 
 				map<int, string> keyNames;
 				map<int, string> keyChars;
 
 				Input();
-				Input(const GameContainer* c);
+				Input(GameContainer* c);
 
 				bool isKeyDown(unsigned int key);
 				bool isKeyPressed(unsigned int key);
@@ -325,6 +401,7 @@ namespace ARK {
 				bool isGamepadButtonDown(Gamepad* gamepad, unsigned int button);
 				bool isGamepadButtonPressed(unsigned int button);
 				bool isGamepadButtonPressed(Gamepad* gamepad, unsigned int button);
+				bool isAnyGamepadButtonPressed();
 
 				void pressKey(unsigned int key);
 				void releaseKey(unsigned int key);
@@ -342,7 +419,9 @@ namespace ARK {
 				int getMouseX() const;
 				int getMouseY() const;
 
-				vector<Gamepad*> getGamepads() const;
+				vector<Gamepad*>* getGamepads();
+				Gamepad* getGamepad(unsigned int id);
+				Gamepad* getGamepadByIndex(unsigned int index);
 
 				static void setSoftwareKeyboardOpen(bool b);
 
@@ -350,7 +429,7 @@ namespace ARK {
 			public:
 				int mouse_x;
 				int mouse_y;
-				void setGameContainer(const GameContainer* c);
+				void setGameContainer(GameContainer* c);
 				set<int> pressedEvents;
 				set<int> releasedEvents;
 

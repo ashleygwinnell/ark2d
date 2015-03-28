@@ -1,8 +1,7 @@
 #ifndef TILED_MAP_OBJECTGROUP_H_
 #define TILED_MAP_OBJECTGROUP_H_
 
-#include <vector>
-#include <string>
+#include "../Includes.h"
 
 #include "TiledMapObject.h"
 
@@ -17,7 +16,7 @@ namespace ARK {
 		 * @warning You should never need to create this manually.
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class TiledMapObjectGroup {
+		class ARK2D_API TiledMapObjectGroup {
 			public:
 				TiledMapObjectGroup();
 				void addObject(TiledMapObject* object);
@@ -32,13 +31,19 @@ namespace ARK {
 				void setVisible(bool b);
 				bool isVisible();
 
+				void setOpacity(float f);
+				float getOpacity();
+
 				~TiledMapObjectGroup();
 			private:
 				string m_name;
-				vector<TiledMapObject*> m_objects;
-				bool m_visible;
 				unsigned int m_width;
 				unsigned int m_height;
+				bool m_visible;
+				float m_opacity;
+				vector<TiledMapObject*> m_objects;
+				
+				
 
 		};
 	}

@@ -32,11 +32,12 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class SpriteSheetDescription : public ARK::Core::Resource {
+		class ARK2D_API SpriteSheetDescription : public ARK::Core::Resource {
 			public:
 				SpriteSheetDescription(string path);
 				SpriteSheetDescription(string path, void* rawData);
-				const SpriteSheetDescriptionItem& getItemByName(const char* name);
+				const SpriteSheetDescriptionItem& getItemByName(const char* name) const;
+				bool hasItemByName(const char* name) const;
 				~SpriteSheetDescription();
 
 			private:

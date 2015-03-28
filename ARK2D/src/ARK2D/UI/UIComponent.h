@@ -19,7 +19,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class UIComponent {
+		class ARK2D_API UIComponent {
 			public:
 				static UIComponent* s_currentFocus;
 			private:

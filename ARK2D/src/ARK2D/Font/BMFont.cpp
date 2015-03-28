@@ -10,16 +10,23 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include "BMFont.h"
+
 #include "../Graphics/Image.h"
+#include "../Graphics/Texture.h"
 #include "../Core/GameContainer.h"
 
-#include "BMFont.h"
+
 
 namespace ARK {
 	namespace Font {
 
 		BMFont::BMFont():
-			Font::Font(),
+			#ifdef ARK2D_WINDOWS_VS
+				ARK::Font::Font(),
+			#else 
+				Font::Font(),
+			#endif 
 			m_loaded(false),
 			m_data(NULL),
 			m_FontFile(""),
@@ -33,7 +40,11 @@ namespace ARK {
 		}
 
 		BMFont::BMFont(unsigned int fntResource, unsigned int imgResource, unsigned int imgResourceType):
-			Font::Font(),
+			#ifdef ARK2D_WINDOWS_VS
+				ARK::Font::Font(),
+			#else 
+				Font::Font(),
+			#endif 
 			m_loaded(false),
 			m_data(NULL),
 			m_FontFile(""),
@@ -54,7 +65,11 @@ namespace ARK {
 		}
 
 		BMFont::BMFont(void* data, Image* i):
-			Font::Font(),
+			#ifdef ARK2D_WINDOWS_VS
+				ARK::Font::Font(),
+			#else 
+				Font::Font(),
+			#endif 
 			m_loaded(false),
 			m_data(NULL),
 			m_FontFile(""),
@@ -75,7 +90,11 @@ namespace ARK {
 		}
 
 		BMFont::BMFont(const string& f, const string& i):
-			Font::Font(),
+			#ifdef ARK2D_WINDOWS_VS
+				ARK::Font::Font(),
+			#else 
+				Font::Font(),
+			#endif 
 			m_loaded(false),
 			m_data(NULL),
 			m_FontFile(f),
@@ -97,7 +116,11 @@ namespace ARK {
 		}
 
 		BMFont::BMFont(const string& f, const string& i, const Color& mask):
-			Font::Font(),
+			#ifdef ARK2D_WINDOWS_VS
+				ARK::Font::Font(),
+			#else 
+				Font::Font(),
+			#endif 
 			m_loaded(false),
 			m_data(NULL),
 			m_FontFile(f),
@@ -131,7 +154,6 @@ namespace ARK {
 		void BMFont::scale(float f) {
 			//ARK2D::getLog()->e("BMFont scale not implemented.");
 			//exit(0);
-
 
 	/*		m_Charset.LineHeight = (unsigned int) (float(m_Charset.LineHeight) * f);
 			m_Charset.Base = (unsigned int) (float(m_Charset.Base) * f);
@@ -179,7 +201,7 @@ namespace ARK {
 				std::size_t i;
 
 				while( !Stream.eof() )
-				{
+				{ 
 					stringstream LineStream;
 					std::getline( Stream, Line );
 
@@ -293,87 +315,224 @@ namespace ARK {
 		}
 
 		void BMFont::drawString(const std::string str, float x, float y, signed int alignX, signed int alignY, float rotation, float scale) {
-			ARK2D::getRenderer()->setFont(this);
-			ARK2D::getRenderer()->drawString(str, x, y, alignX, alignY, rotation, scale);
+			Renderer* r = ARK2D::getRenderer();
+			r->setFont(this); 
+			r->drawString(str, x, y, alignX, alignY, rotation, scale);
 		}
 
 		// remember that u and v are width and height, respectively.
 		void BMFont::drawString(const string& Str, int drawx, int drawy) 
 		{
-			if (m_loaded == false) { return; }
-			//ARK2D::getLog()->i("BMFont:: drawing string: ");
-			//ARK2D::getLog()->i(Str);
+			if (m_loaded == false) { return; } 
+			if (Str.length() == 0) { return; }
 
 			int CharX, CharY, Width, WidthOriginal, Height, HeightOriginal, OffsetX, OffsetY, XAdvance;
-			//m_Image.getSubImage(10, 10, 10, 10).draw(drawx, drawy);
 
-		//	int TotalX = 0;
-			for( unsigned int i = 0; i < Str.size(); ++i )
-			{
-				int charid = (int) Str[i];
-				CharX = m_Charset.Chars[charid].x;
-				CharY = m_Charset.Chars[charid].y;
-				Width = m_Charset.Chars[charid].Width;
-				WidthOriginal = m_Charset.Chars[charid].WidthOriginal;
-				Height = m_Charset.Chars[charid].Height;
-				HeightOriginal = m_Charset.Chars[charid].HeightOriginal;
-				OffsetX = m_Charset.Chars[charid].XOffset;
-				OffsetY = m_Charset.Chars[charid].YOffset;
-				XAdvance = m_Charset.Chars[charid].XAdvance;
+			#if (defined(ARK2D_OPENGL_3_2) || defined(ARK2D_OPENGL_ES_2_0) || defined(ARK2D_RENDERER_DIRECTX))
 
-				/*Image* img = NULL;
-				if (m_letterImages.find(charid) != m_letterImages.end()) {
-					img = (Image*) m_letterImages.find(charid)->second;
-				} else { 
-					ARK2D::getLog()->i("new letter cache");
-					img = m_Image->getSubImage(CharX, CharY, Width, Height);
-					m_letterImages[charid] = img;
-				} 
-				img->setAlpha(m_Image->getAlpha());
-				img->draw(drawx + OffsetX, drawy + OffsetY);*/
+				const int numVerts = Str.length() * 6 * 2;
+				const int numCVerts = Str.length() * 6 * 4;
+				
+				
+
+				#ifdef ARK2D_WINDOWS_VS
+					float* rawVertices = (float*)alloca(numVerts * sizeof(float));
+					float* rawTextureCoords = (float*)alloca(numVerts * sizeof(float));
+					unsigned char* rawColors = (unsigned char*)alloca(numCVerts * sizeof(unsigned char));
+
+					Assert(rawVertices);
+					Assert(rawTextureCoords);
+					Assert(rawColors);
+				#else
+					float rawVertices[numVerts];
+					float rawTextureCoords[numVerts];
+					unsigned char rawColors[numCVerts];
+				#endif
+
+
+				Renderer* r = ARK2D::getRenderer();
+				unsigned char color_r = r->getDrawColor().getRedc();
+				unsigned char color_g = r->getDrawColor().getGreenc();
+				unsigned char color_b = r->getDrawColor().getBluec();
+				unsigned char color_a = (unsigned char) ((m_Image->getAlpha() * r->getDrawColor().getAlphaf()) * 255);
+
+				if (m_Image->getColor() != NULL) { 
+					color_r = (unsigned char) (m_Image->getColor()->getRedc() * r->getDrawColor().getRedf());
+					color_g = (unsigned char) (m_Image->getColor()->getGreenc() * r->getDrawColor().getGreenf());
+					color_b = (unsigned char) (m_Image->getColor()->getBluec() * r->getDrawColor().getBluef());
+					color_a = (unsigned char) ((m_Image->getColor()->getAlphaf() * m_Image->getAlpha() * r->getDrawColor().getAlphaf()) * 255);
+				}
+
+				/*if (Renderer::isBatching()) {
+					for( unsigned int i = 0; i < Str.length(); ++i )
+					{
+						int charid = (int) Str[i];
+						CharX = m_Charset.Chars[charid].x;
+						CharY = m_Charset.Chars[charid].y;
+						Width = m_Charset.Chars[charid].Width;
+						WidthOriginal = m_Charset.Chars[charid].WidthOriginal;
+						Height = m_Charset.Chars[charid].Height;
+						HeightOriginal = m_Charset.Chars[charid].HeightOriginal;
+						OffsetX = m_Charset.Chars[charid].XOffset;
+						OffsetY = m_Charset.Chars[charid].YOffset;
+						XAdvance = m_Charset.Chars[charid].XAdvance;
+
+						float drawx2 = drawx+OffsetX + (i*m_kerning);
+						float drawy2 = drawy+OffsetY;
+
+						float charXPC = ((CharX / float(m_Image->getWidth())) * m_Image->getTextureW()) + m_Image->getTextureX();
+						float charYPC = ((CharY / float(m_Image->getHeight())) * m_Image->getTextureH()) + m_Image->getTextureY();
+						float widthPC = ((WidthOriginal / float(m_Image->getWidth())) * m_Image->getTextureW());
+						float heightPC = ((HeightOriginal / float(m_Image->getHeight())) * m_Image->getTextureH());
+
+						r->getBatch()->addTexturedQuad(
+							m_Image->getTexture()->getId(),
+							drawx2, drawy2,
+							drawx2 + Width, drawy2,
+							drawx2, drawy2 + Height,
+							drawx2 + Width, drawy2 + Height,
+
+							charXPC, charYPC, 
+							charXPC + widthPC, charYPC, 
+							charXPC, charYPC + heightPC,
+							charXPC + widthPC, charYPC + heightPC,
+
+							color_r, color_g, color_b, color_a,
+							color_r, color_g, color_b, color_a,
+							color_r, color_g, color_b, color_a,
+							color_r, color_g, color_b, color_a
+						);
+						
+					}
+					return;
+				}*/
+
+				for( signed int i = 0; i < (signed int) Str.length(); ++i )
+				{
+					int charid = (int) Str[i];
+					CharX = m_Charset.Chars[charid].x;
+					CharY = m_Charset.Chars[charid].y;
+					Width = m_Charset.Chars[charid].Width;
+					WidthOriginal = m_Charset.Chars[charid].WidthOriginal;
+					Height = m_Charset.Chars[charid].Height;
+					HeightOriginal = m_Charset.Chars[charid].HeightOriginal;
+					OffsetX = m_Charset.Chars[charid].XOffset;
+					OffsetY = m_Charset.Chars[charid].YOffset;
+					XAdvance = m_Charset.Chars[charid].XAdvance;
+  
+					float charXPC = ((CharX / float(m_Image->getWidth())) * m_Image->getTextureW()) + m_Image->getTextureX();
+					float charYPC = ((CharY / float(m_Image->getHeight())) * m_Image->getTextureH()) + m_Image->getTextureY();
+					float widthPC = ((WidthOriginal / float(m_Image->getWidth())) * m_Image->getTextureW());
+					float heightPC = ((HeightOriginal / float(m_Image->getHeight())) * m_Image->getTextureH());
+
+					int vert = (i * 12);
+					int vertc = (i * 24);
+
+					// tl
+					rawVertices[vert] = drawx+OffsetX + (i*m_kerning);
+					rawVertices[vert+1] = drawy+OffsetY;
+					
+					rawTextureCoords[vert] = charXPC;
+					rawTextureCoords[vert+1] = charYPC;
+
+					rawColors[vertc] = color_r;
+					rawColors[vertc+1] = color_g;
+					rawColors[vertc+2] = color_b;
+					rawColors[vertc+3] = color_a;
+
+					// tr
+					rawVertices[vert+2] = drawx+OffsetX + (i*m_kerning) + Width;
+					rawVertices[vert+3] = drawy+OffsetY;
+
+					rawTextureCoords[vert+2] = charXPC + widthPC;
+					rawTextureCoords[vert+3] = charYPC;
+
+					rawColors[vertc+4] = color_r;
+					rawColors[vertc+5] = color_g;
+					rawColors[vertc+6] = color_b;
+					rawColors[vertc+7] = color_a;
+
+					// bl
+					rawVertices[vert+4] = drawx+OffsetX + (i*m_kerning);
+					rawVertices[vert+5] = drawy+OffsetY + Height;
+
+					rawTextureCoords[vert+4] = charXPC;
+					rawTextureCoords[vert+5] = charYPC + heightPC;
+
+					rawColors[vertc+8] = color_r;
+					rawColors[vertc+9] = color_g;
+					rawColors[vertc+10] = color_b;
+					rawColors[vertc+11] = color_a;
+
+					// bl
+					rawVertices[vert+6] = drawx+OffsetX + (i*m_kerning);
+					rawVertices[vert+7] = drawy+OffsetY + Height;
+
+					rawTextureCoords[vert+6] = charXPC;
+					rawTextureCoords[vert+7] = charYPC + heightPC;
+
+					rawColors[vertc+12] = color_r;
+					rawColors[vertc+13] = color_g;
+					rawColors[vertc+14] = color_b;
+					rawColors[vertc+15] = color_a;
+
+					// tr
+					rawVertices[vert+8] = drawx+OffsetX + (i*m_kerning) + Width;
+					rawVertices[vert+9] = drawy+OffsetY;
+
+					rawTextureCoords[vert+8] = charXPC + widthPC;
+					rawTextureCoords[vert+9] = charYPC;
+
+					rawColors[vertc+16] = color_r;
+					rawColors[vertc+17] = color_g;
+					rawColors[vertc+18] = color_b;
+					rawColors[vertc+19] = color_a;
+
+					// br
+					rawVertices[vert+10] = drawx+OffsetX + (i*m_kerning) + Width;
+					rawVertices[vert+11] = drawy+OffsetY + Height;
+
+					rawTextureCoords[vert+10] = charXPC + widthPC;
+					rawTextureCoords[vert+11] = charYPC + heightPC;
+
+					rawColors[vertc+20] = color_r;
+					rawColors[vertc+21] = color_g;
+					rawColors[vertc+22] = color_b;
+					rawColors[vertc+23] = color_a;
+
+					drawx += XAdvance;
+					
+				}
+				r->texturedQuads(m_Image->getTexture()->getId(), rawVertices, rawTextureCoords, rawColors, Str.length());	
+			
+				//#ifdef ARK2D_WINDOWS_VS
+				//	free(rawVertices);
+				//	free(rawTextureCoords);
+				//	free(rawColors);
+				//#endif
+
+			#else 
 
 				m_Image->drawSubImageStart();
-				m_Image->drawSubImage(CharX, CharY, drawx+OffsetX + (i*m_kerning), drawy+OffsetY, WidthOriginal, HeightOriginal, Width, Height);
+				for( unsigned int i = 0; i < Str.length(); ++i )
+				{
+					int charid = (int) Str[i];
+					CharX = m_Charset.Chars[charid].x;
+					CharY = m_Charset.Chars[charid].y;
+					Width = m_Charset.Chars[charid].Width;
+					WidthOriginal = m_Charset.Chars[charid].WidthOriginal;
+					Height = m_Charset.Chars[charid].Height;
+					HeightOriginal = m_Charset.Chars[charid].HeightOriginal;
+					OffsetX = m_Charset.Chars[charid].XOffset;
+					OffsetY = m_Charset.Chars[charid].YOffset;
+					XAdvance = m_Charset.Chars[charid].XAdvance;
+
+					m_Image->drawSubImage(CharX, CharY, drawx+OffsetX + (i*m_kerning), drawy+OffsetY, WidthOriginal, HeightOriginal, Width, Height);
+					drawx += XAdvance;
+				}
 				m_Image->drawSubImageEnd();
-
-
-				/// ******
-				/// @todo:
-				/// 		- optimise this by making a single vector with triangle strip.
-				/// 		- reduce calls to opengl by N relative to string length. ;D
-				/// ******
-
-				//TotalX += Width;
-				drawx += XAdvance;
-				//drawy += m_Charset.Chars[Str[i]].YAdvance;
-
-				//upper left
-			/*	Verts[i*4].tu = (float) CharX / (float) m_Charset.Width;
-				Verts[i*4].tv = (float) CharY / (float) m_Charset.Height;
-				Verts[i*4].x = (float) CurX + OffsetX;
-				Verts[i*4].y = (float) OffsetY;
-
-				//upper right
-				Verts[i*4+1].tu = (float) (CharX+Width) / (float) m_Charset.Width;
-				Verts[i*4+1].tv = (float) CharY / (float) m_Charset.Height;
-				Verts[i*4+1].x = (float) Width + CurX + OffsetX;
-				Verts[i*4+1].y = (float) OffsetY;
-
-				//lower right
-				Verts[i*4+2].tu = (float) (CharX+Width) / (float) m_Charset.Width;
-				Verts[i*4+2].tv = (float) (CharY+Height) / (float) m_Charset.Height;
-				Verts[i*4+2].x = (float) Width + CurX + OffsetX;
-				Verts[i*4+2].y = (float) Height + OffsetY;
-
-				//lower left
-				Verts[i*4+3].tu = (float) CharX / (float) m_Charset.Width;
-				Verts[i*4+3].tv = (float) (CharY+Height) / (float) m_Charset.Height;
-				Verts[i*4+3].x = (float) CurX + OffsetX;
-				Verts[i*4+3].y = (float) Height + OffsetY;
-
-				CurX += m_Charset.Chars[Str[i]].XAdvance;*/
-			}
-			//std::cout << TotalX << std::endl;
+			#endif
+		
 		}
 
 		void BMFont::setKerning(int k) {
@@ -384,19 +543,19 @@ namespace ARK {
 			if (m_loaded == false) { return 0; }
 
 			unsigned int total = 0;
-			for (unsigned int i = 0; i < Str.size(); i++ ) {
+			for (unsigned int i = 0; i < Str.length(); i++ ) {
 				//total += m_Charset.Chars[(int) Str[i]].Width;
 				//total += m_Charset.Chars[(int) Str[i]].XOffset;
 				total += m_Charset.Chars[(int) Str[i]].XAdvance;
 			}
-			total += (Str.size()-1) * m_kerning;
+			total += (Str.length()-1) * m_kerning;
 			return total;
 		}
 		unsigned int BMFont::getStringHeight(const string& Str) const {
 			if (m_loaded == false) { return 0; }
 
 			unsigned int max = 0;
-			for (unsigned int i = 0; i < Str.size(); i++ ) {
+			for (unsigned int i = 0; i < Str.length(); i++ ) {
 				if ((m_Charset.Chars[(int) Str[i]].Height + m_Charset.Chars[(int) Str[i]].YOffset) > max) {
 					max = (m_Charset.Chars[(int) Str[i]].Height + m_Charset.Chars[(int) Str[i]].YOffset);
 				}

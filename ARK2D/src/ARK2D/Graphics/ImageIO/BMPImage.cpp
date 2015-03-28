@@ -56,7 +56,7 @@ namespace ARK {
 				// Assign some short variables:
 				BPP = bmih.biBitCount;
 				Width = bmih.biWidth;
-				Height = (bmih.biHeight>0) ? bmih.biHeight : -bmih.biHeight; // absoulte value
+				Height = (bmih.biHeight>0) ? bmih.biHeight : bmih.biHeight*-1; // absoulte value
 				BytesPerRow = Width * BPP / 8;
 				BytesPerRow += (4-BytesPerRow%4) % 4;	// int alignment
 

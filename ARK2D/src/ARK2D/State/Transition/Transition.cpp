@@ -28,6 +28,13 @@ namespace ARK {
 				return m_easing;
 			}
 
+			void Transition::postEnter(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to) { 
+
+			}
+			void Transition::postLeave(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to) {
+
+			}
+
 			void Transition::init(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to) {
 				m_container = container;
 				m_from = from;

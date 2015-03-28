@@ -11,10 +11,19 @@
 #include "../ARK2D.h"
 
 #include "../Geometry/Vector2.h"
+#include "../Geometry/Vector3.h"
 #include "Cast.h"
 
 #ifndef MY_PI
 	#define MY_PI 3.14159265
+#endif
+
+#ifndef PI_OVER_360
+	#define PI_OVER_360 0.008726646259972
+#endif
+
+#ifndef EPSILON
+	#define EPSILON 0.000001f
 #endif
 
 namespace ARK { 
@@ -25,34 +34,46 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class MathUtil {
+		class ARK2D_API MathUtil {
 			public:
                 static double PIE;
 
 				static void seedRandom();
 				static int randBetween(int lower, int upper);
 
-				static float randBetweenf(float lower, float upper);
+				static float randBetweenf(float lower, float upper); 
 
 				static double distance(float x1, float y1, float x2, float y2);
+				static double distanceSquared(float x1, float y1, float x2, float y2);
+				static double distance3d(float x1, float y1, float z1, float x2, float y2, float z2);
+				static double distanceSquared3d(float x1, float y1, float z1, float x2, float y2, float z2);
 				static double angle(int x1, int y1, int x2, int y2);
 				static double anglef(float x1, float y1, float x2, float y2);
 				static double anglef(float x1, float y1, float x2, float y2, bool enforce_abs);
+				static double forcePositiveAngle(double angle);
 				static double toRadians(double angle);
 				static double getPercentage(int top, int denominator);
 				static const char* getPercentage_CSTR(int top, int denominator);
 				static void snap(int& snap, int& x, int& y);
+				static void snap(float& snap, float angle);
 
 				static int nextPowerOfTwo(int val);
 
+
 				static unsigned long unixTimestamp();
 
+				static float averageAngle(float a, float b);
+				static float rotateAngleToTarget(float angleStart, float angleTarget, float degrees);
+				static float rotateAngleToTarget(float angleStart, float angleTarget, float degrees, bool restrictOvershoot);
+				static float rotateAngleToTarget2(float angleStart, float angleTarget, float degrees);
+			
+				
 
 				/*
 					**  Usage:
 					**      bias(b,t)
 					**
-					**  Arguments:
+					**  Arguments: 
 					**      b       bais, real
 					**      t       value, real
 					**
@@ -73,6 +94,15 @@ namespace ARK {
 					    return 1.0f;
 					}
 
+				template <class T>
+				static bool isOdd(T number) {
+					return number % 2 == 1;
+				}
+
+				template <class T>
+				static bool isEven(T number) {
+					return number % 2 == 0;
+				}
 
 				template <class T> 
 				static Vector2<T>* minY(vector< Vector2<T>* > vecs) {
@@ -111,6 +141,41 @@ namespace ARK {
 				}
 
 				template <class T>
+				static void rotateVectorAroundAxis(Vector3<T>* vec, Vector3<T>* axis, float degreeAngle)
+				{
+					// Check the preconditions.
+					if (vec == NULL || axis == NULL) { return; }
+					if (abs(axis->length() - 1) >= EPSILON) { return; }
+
+					rotateVectorAroundAxis(&vec->m_x, &vec->m_y, &vec->m_z, axis->m_x, axis->m_y, axis->m_z, degreeAngle);
+				}
+				static void rotateVectorAroundAxis(float* vecx, float* vecy, float* vecz, float axisx, float axisy, float axisz, float degreeAngle) {
+					
+					// Main algorithm
+					double radianAngle = degreeAngle * MY_PI/180.0;
+					double cosAngle = cos(radianAngle);
+					double sinAngle = sin(radianAngle);
+					
+					float crossX = axisy * *vecz - axisz * *vecy;
+					float crossY = axisz * *vecx - axisx * *vecz;
+					float crossZ = axisx * *vecy - axisy * *vecx;
+
+					*vecx = *vecx * cosAngle;
+					*vecy = *vecy * cosAngle;
+					*vecz = *vecz * cosAngle;
+					
+					*vecx = *vecx + (sinAngle * crossX); 
+					*vecy = *vecy + (sinAngle * crossY);
+					*vecz = *vecz + (sinAngle * crossZ);
+
+					float dotp = ((axisx * *vecx) + (axisy * *vecy) + (axisz * *vecz));
+					float factor = dotp * (1 - cosAngle);
+					*vecx = *vecx + (factor * axisx);
+					*vecy = *vecy + (factor * axisy);
+					*vecz = *vecz + (factor * axisz);
+				}
+
+				template <class T>
 				static void rotatePointAroundPoint(Vector2<T>* pointToRotate, Vector2<T>* centerOfRotation, float angle) {
 					T centerx = centerOfRotation->getX();
 					T centery = centerOfRotation->getY();
@@ -134,6 +199,73 @@ namespace ARK {
 					pointToRotate->setY(pointToRotate->getY() + centery);
 				}
 
+				template <class T>
+				static void rotatePointAroundPoint(T* pointToRotateX, T* pointToRotateY, T centerOfRotationX, T centerOfRotationY, float angle) {
+					double newAngle = MathUtil::toRadians((double) angle);
+
+					(*pointToRotateX) -= centerOfRotationX;
+					(*pointToRotateY) -= centerOfRotationY;
+					
+					T newx = ((*pointToRotateX) * cos(newAngle)) - ((*pointToRotateY) * sin(newAngle));
+					T newy = ((*pointToRotateX) * sin(newAngle)) + ((*pointToRotateY) * cos(newAngle));
+
+					(*pointToRotateX) = newx + centerOfRotationX;
+					(*pointToRotateY) = newy + centerOfRotationY;
+				}
+
+				template <class T>
+				static void rotateQuadAroundPoint(T* points, T centerOfRotationX, T centerOfRotationY, float angle) {
+					double newAngle = MathUtil::toRadians((double) angle);
+
+					*points   -= centerOfRotationX;
+					*(points+1) -= centerOfRotationY;
+
+					*(points+2) -= centerOfRotationX;
+					*(points+3) -= centerOfRotationY;
+					
+					*(points+4) -= centerOfRotationX;
+					*(points+5) -= centerOfRotationY;
+					
+					*(points+6) -= centerOfRotationX;
+					*(points+7) -= centerOfRotationY;
+					
+					*(points+8) -= centerOfRotationX;
+					*(points+9) -= centerOfRotationY;
+					
+					*(points+10) -= centerOfRotationX;
+					*(points+11) -= centerOfRotationY;
+					
+					T tlX = centerOfRotationX + ((*points) * cos(newAngle)) - (*(points+1) * sin(newAngle));
+					T tlY = centerOfRotationY + ((*points) * sin(newAngle)) + (*(points+1) * cos(newAngle));
+
+					T trX = centerOfRotationX + (*(points+2) * cos(newAngle)) - (*(points+3) * sin(newAngle));
+					T trY = centerOfRotationY + (*(points+2) * sin(newAngle)) + (*(points+3) * cos(newAngle));
+
+					T blX = centerOfRotationX + (*(points+4) * cos(newAngle)) - (*(points+5) * sin(newAngle));
+					T blY = centerOfRotationY + (*(points+4) * sin(newAngle)) + (*(points+5) * cos(newAngle));
+					
+					T brX = centerOfRotationX + (*(points+10) * cos(newAngle)) - (*(points+11) * sin(newAngle));
+					T brY = centerOfRotationY + (*(points+10) * sin(newAngle)) + (*(points+11) * cos(newAngle));
+
+					*(points)   = tlX;
+					*(points+1) = tlY;
+
+					*(points+2) = trX;
+					*(points+3) = trY;
+
+					*(points+4) = blX;
+					*(points+5) = blY;
+					
+					*(points+6) = blX;
+					*(points+7) = blY;
+					
+					*(points+8) = trX;
+					*(points+9) = trY;
+					
+					*(points+10) = brX;
+					*(points+11) = brY;
+				}
+
 				//template <class T>
 				//static Vector2<T> s_moveAngleFromOriginV;
 
@@ -151,11 +283,17 @@ namespace ARK {
 					//vector->x += distance * double(cos(angleRadians));
 					//vector->y +=
 				}
-				template <class T>
+				template <class T> 
 				static void moveAngle(T& x, T& y, double angleDegrees, float distance) {
 					double angleRadians = toRadians(angleDegrees);
-					x += (distance * double(cos(angleRadians)));
-					y += (distance * double(sin(angleRadians)));
+					x = T(x + (distance * double(cos(angleRadians))));
+					y = T(y + (distance * double(sin(angleRadians))));
+				}
+				template <class T> 
+				static void moveAngleEllipse(T& x, T& y, double angleDegrees, float distanceX, float distanceY) {
+					double angleRadians = toRadians(angleDegrees);
+					x = T(x + (distanceX * double(cos(angleRadians))));
+					y = T(y + (distanceY * double(sin(angleRadians))));
 				}
 
 				template <class T>
@@ -164,6 +302,70 @@ namespace ARK {
 					double x = double(cos(angleRadians));
 					double y = double(sin(angleRadians));
 					return new Vector2<T>(x, y);
+				}
+
+				template <class T>
+				static void reflectVectorOverCircle(T cx, T cy, T cr, T& vx, T& vy) {
+
+				}
+
+				static void normalizevec3(float* resultX, float* resultY, float* resultZ, float x1, float y1, float z1) {
+					float sqr = x1 * x1 + y1 * y1 + z1 * z1;
+					float l = sqrt(sqr);
+					*resultX = x1 / l;
+					*resultY = y1 / l;
+					*resultZ = z1 / l;
+					//return x * inversesqrt(sqr); // multiplication is faster?
+				}
+				static void crossvec3(float* resultX, float* resultY, float* resultZ, float x1, float y1, float z1, float x2, float y2, float z2) {
+					*resultX = y1 * z2 - y2 * z1;
+					*resultY = z1 * x2 - z2 * x1;
+					*resultZ = x1 * y2 - x2 * y1;
+				}
+
+				static float dotproductvec3(float x1, float y1, float z1, float x2, float y2, float z2) {
+					return (x1 * x2) + (y1 * y2) + (z1 * z2);
+				}
+
+				// http://www.ccodechamp.com/c-program-to-find-inverse-of-matrix/
+				// http://www.cs.rochester.edu/u/brown/Crypto/assts/projects/adj.html
+				static float determinant(void* ap, float k) // a = mat[25][25], k = sz
+				{
+					float s = 1, det = 0, b[25][25];
+					int i, j, m, n, c;
+
+					float (*a)[25] = (float(*)[25]) ap;
+
+					if (k==1) {
+						return (a[0][0]);
+					} else {
+						det = 0;
+						for (c = 0; c < k; c++)
+						{
+							m = 0;
+							n = 0;
+							for (i = 0; i < k; i++)
+							{
+								for (j = 0; j < k; j++)
+								{
+					            	b[i][j] = 0;
+									if (i != 0 && j != c)
+									{
+										b[m][n] = a[i][j];
+										if (n < (k-2)) { 
+											n++;
+										} else {
+											n = 0;
+											m++;
+										}
+									}
+								}
+							}
+							det = det + s * (a[0][c] * determinant(b, k-1));
+							s = -1 * s;
+						}
+					}
+					return det;
 				}
 
 		};

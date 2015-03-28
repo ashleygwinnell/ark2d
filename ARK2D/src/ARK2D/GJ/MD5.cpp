@@ -340,8 +340,15 @@ namespace ARK {
         return ""; 
 
       char buf[33];
-      for (int i=0; i<16; i++)
-        sprintf(buf+i*2, "%02x", digest[i]);
+      for (int i=0; i<16; i++) { 
+		  #ifdef ARK2D_WINDOWS_PHONE_8
+			//char temp[3];
+			sprintf(buf+i*2, 3, "%02x", digest[i]);
+			//strcat(buf, temp);
+		  #else
+			sprintf(buf+i*2, "%02x", digest[i]);
+		  #endif
+	  }
       buf[32]=0;
 
       return std::string(buf);

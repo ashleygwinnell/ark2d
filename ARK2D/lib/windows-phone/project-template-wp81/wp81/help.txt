@@ -1,0 +1,2 @@
+Asset types:
+http://blogs.msdn.com/b/stevewhite/archive/2014/08/14/windows-phone-store-apps-visual-assets.aspx

@@ -11,19 +11,23 @@
 
 namespace ARK {
 	namespace Core {
+ 
+		bool GameContainerPlatform::s_nativeResizing = false;
+		bool GameContainerPlatform::s_gamePaused = false;
 
 		GameContainer::GameContainer(Game& g, int width, int height, int bpp, bool fullscreen):
 			m_timer(),
 			m_game(g),
 			m_input(),
 			m_graphics(),
-			m_gamepads(),
+			m_gamepads(), 
 			m_originalWidth(width),
 			m_originalHeight(height),
 			m_width(width),
 			m_height(height),
 			m_screenWidth(0),
 			m_screenHeight(0),
+			m_scaleLock(false),
 			m_scale(1.0f),
 			m_scaleX(1.0f),
 			m_scaleY(1.0f),
@@ -34,9 +38,13 @@ namespace ARK {
 			m_resizable(false),
 			m_scaleToWindow(true),
 			m_touchMode(true),
+			m_screenOrientationPrevious(ORIENTATION_DUMMY),
+			m_orientationInverted(false),
+			m_2in1enabled(false),
 			m_clearColor(Color::black),
 			m_resizeBehaviour(RESIZE_BEHAVIOUR_SCALE),
 			m_showingFPS(false),
+			m_willLoadDefaultFont(true),
 			m_platformSpecific()
 		{
 			m_platformSpecific.m_container = this;
@@ -47,26 +55,55 @@ namespace ARK {
 			ARK2D::s_game = &m_game;
 			ARK2D::s_graphics = &m_graphics;
 			ARK2D::s_input = &m_input;
-			ARK2D::s_log = new ARK::Util::Log();
+			ARK2D::s_log = ARK2D::getLog();
 
+			ARK2D::getRenderer()->preinit();
 		}
 
-		void GameContainer::setSize(int width, int height) {
+		
+		void GameContainer::setSizeNoCallback(int width, int height) {
 			m_screenWidth = width;
 			m_screenHeight = height;
 
 			if (m_resizeBehaviour == RESIZE_BEHAVIOUR_SCALE) {
-				m_scaleX = (float) width / (float) m_originalWidth;
-				m_scaleY = (float) height / (float) m_originalHeight;
+				m_scaleX = float(width) / float(m_originalWidth);
+				m_scaleY = float(height) / float(m_originalHeight);
 				if (m_scaleX > m_scaleY) {
-					m_scale = m_scaleY;
+					m_scale = m_scaleY; 
 					m_scaleX = m_scaleY;
-					m_scaleY = 1.0f;
+					//m_scaleY = 1.0f;
+				} else { // y > x
+					m_scale = m_scaleX;
+					m_scaleY = m_scaleX; 
+					//m_scaleX = 1.0f;
+				}
+
+				m_width = width;
+				m_height = height;
+				
+			} else if (m_resizeBehaviour == RESIZE_BEHAVIOUR_NOSCALE) {
+				m_width = width;
+				m_height = height;
+				
+			}
+		}
+
+		void GameContainer::setSize(int width, int height) {
+			m_screenWidth = width;
+			m_screenHeight = height; 
+
+			if (m_resizeBehaviour == RESIZE_BEHAVIOUR_SCALE) {
+				m_scaleX = float(width) / float(m_originalWidth);
+				m_scaleY = float(height) / float(m_originalHeight);
+				if (m_scaleX > m_scaleY) {
+					m_scale = m_scaleY; 
+					m_scaleX = m_scaleY;
+					//m_scaleY = 1.0f;
 				} else { // y > x
 					m_scale = m_scaleX;
 					m_scaleY = m_scaleX;
-					m_scaleX = 1.0f;
-				}
+					//m_scaleX = 1.0f;
+				} 
 
 				//m_width = m_originalWidth * m_scaleX;
 				//m_height = m_originalHeight * m_scaleY;
@@ -81,7 +118,7 @@ namespace ARK {
 		}
 
 		void GameContainer::setFullscreen(bool fullscreen) {
-
+			m_fullscreen = fullscreen;
 		}
 
 		int GameContainer::getGlobalMouseX() const {
@@ -102,12 +139,15 @@ namespace ARK {
 		}  
 
 		void GameContainer::close() const {
-			exit(0);
-		}
+			//exit(0);
+			m_platformSpecific.m_pluggable->container_close();
+		} 
 
 		GameContainerPlatform::GameContainerPlatform():
 			m_container(NULL),
-			m_pluggable(NULL)
+			m_pluggable(NULL),
+			m_gamepadId(0),
+			m_jvm(NULL)
 			{
 			m_pluggable = new ARK::Core::AndroidPluggable();
 		}
@@ -118,46 +158,94 @@ namespace ARK {
 		void GameContainerPlatform::initGL(string clearColorStr, int w, int h) {
 			ARK2D::getLog()->i("init opengl");
 
-			Color* clearColor;
-			if (clearColorStr.size() > 0) {
+			Color clearColor;  
+			if (clearColorStr.length() > 0) { 
 				Color cc(clearColorStr);
-				m_container->m_clearColor = cc;
-				clearColor = &cc;
+				m_container->m_clearColor = cc; 
+		 		clearColor = cc;
 			} else {
-				clearColor = &m_container->m_clearColor;
+				clearColor = m_container->m_clearColor;
 			} 
+			m_container->setClearColor(clearColor);
 
+			Image::showAnyGlErrorAndExit();
 
+			ARK2D::getLog()->v("viewport");
+			glViewport(0, 0, w, h); 
 
-			glViewport(0, 0, w, h);
-			glClearColor(clearColor->getRedf(),clearColor->getGreenf(), clearColor->getBluef(), clearColor->getAlphaf());
+			ARK2D::getLog()->v("clear color");
+			glClearColor(clearColor.getRedf(), clearColor.getGreenf(), clearColor.getBluef(), clearColor.getAlphaf());
+
+			ARK2D::getLog()->v("clear");
 			glClear( GL_COLOR_BUFFER_BIT );
 
-			glShadeModel(GL_SMOOTH);
+			Image::showAnyGlErrorAndExit();
 
+			//ARK2D::getLog()->v("shade model");
+			//glShadeModel(GL_SMOOTH);
+
+			//glDisable(GL_DEPTH_TEST);
+
+			Image::showAnyGlErrorAndExit();
+ 
+			ARK2D::getLog()->v("enable blend");
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
+			Image::showAnyGlErrorAndExit();
 		}
 		void GameContainerPlatform::initGL2D(int w, int h) {
+			
 			//enable 2d?
-			glMatrixMode(GL_PROJECTION) ;
+			/*ARK2D::getLog()->v("projection");
 			glPushMatrix();
 			glLoadIdentity();
 
+			Image::showAnyGlErrorAndExit();
+
+			ARK2D::getLog()->v("ortho");
 			glOrthof(0, w, h, 0, -1, 1);
 
+			Image::showAnyGlErrorAndExit();
+
+			ARK2D::getLog()->v("modelview");
 			glMatrixMode(GL_MODELVIEW);
 			glPushMatrix();
-			glLoadIdentity();
+			glLoadIdentity(); */
 
+			ARK2D::getLog()->v("enable 2d"); 
+			Image::showAnyGlErrorAndExit();
+
+			Renderer* r = ARK2D::getRenderer();
+			r->matrixMode(MatrixStack::TYPE_PROJECTION);
+			r->pushMatrix();
+			r->loadIdentity(); 
+
+			r->ortho2d(0, 0, w, h, -1, 1);
+
+			r->matrixMode(MatrixStack::TYPE_MODELVIEW);
+			r->pushMatrix();
+			r->loadIdentity();
+			
+			Image::showAnyGlErrorAndExit(); 
+
+			ARK2D::getLog()->v("disables");
+			ARK2D::getLog()->v("disables depth");
 			glDisable( GL_DEPTH_TEST );
-			glDisable( GL_LIGHTING );
-			glDisable( GL_DITHER );
+			Image::showAnyGlErrorAndExit();
+
+			//ARK2D::getLog()->v("disables lighting");
+			//glDisable( GL_LIGHTING ); 
+			//Image::showAnyGlErrorAndExit();
+			
+			//ARK2D::getLog()->v("disables dither");
+			//glDisable( GL_DITHER );
+			//
 		}
 
 		bool GameContainerPlatform::initOpenAL() {
+			 
 			if (alcGetCurrentContext() != NULL) {
 				ErrorDialog::createAndShow("OpenAL is already initialised. "); //Exiting program.");
 				//exit(0);
@@ -165,7 +253,7 @@ namespace ARK {
 			}
 
 			// Load OpenAL.
-			ALCdevice* dev = NULL;
+			ALCdevice* dev = NULL; 
 
 			dev = alcOpenDevice(NULL);
 			if(dev == NULL) {
@@ -236,8 +324,14 @@ namespace ARK {
 		}
 
 		// Android pluggable.
-		string AndroidPluggable::urlRequest(string url) {
+		string AndroidPluggable::urlRequest(JNIEnv* env, string url) {
 			return "";
+		}
+		string AndroidPluggable::urlRequestThreaded(string url) { 
+			return "";
+		}
+		bool AndroidPluggable::isNetworkAvailable() {
+			
 		}
 		void AndroidPluggable::openBrowserToUrl(string url) {
 			
@@ -245,12 +339,120 @@ namespace ARK {
 		void AndroidPluggable::openGalleryToImageUrl(string url) {
 			
 		}
+		void AndroidPluggable::openGooglePlayStore(string packageName) {
+			
+		}
+		void AndroidPluggable::openErrorDialog(string message) {
+
+		}
 		void AndroidPluggable::openSoftwareKeyboard(){
 
 		}
 		void AndroidPluggable::closeSoftwareKeyboard() {
 
 		}
+		void AndroidPluggable::openInputDialog(unsigned int jniCallbackId, string title, string defaultStr) {
+
+		}
+		string AndroidPluggable::getInputDialogText() {
+			return "";
+		}
+
+
+		bool AndroidPluggable::vibrator_hasVibrator() {
+			
+		}
+		void AndroidPluggable::vibrator_vibrate(int millis) {
+
+		}
+    	void AndroidPluggable::vibrator_cancel() {
+
+    	}
+
+		void AndroidPluggable::ga_sendSocial(string network, string action, string targeturl) {
+
+		}
+		void AndroidPluggable::ga_sendEvent(string category, string action, string label, long opt_value) {
+
+		}
+		void AndroidPluggable::ga_sendTiming(long loadTime, string category, string name, string label) {
+
+		}
+
+		void AndroidPluggable::share_googleplus(string text) {
+
+		}
+		void AndroidPluggable::thread_start(unsigned int thread_id) {
+			
+		}
+
+		void AndroidPluggable::googleplaygameservices_signIn() {
+			
+		}
+		void AndroidPluggable::googleplaygameservices_signOut() {
+			
+		}		
+		bool AndroidPluggable::googleplaygameservices_isSignedIn() {
+			return false;
+		}
+		bool AndroidPluggable::googleplaygameservices_isSigningIn() {
+			return false;
+		}
+		void AndroidPluggable::googleplaygameservices_viewAchievements() {
+			
+		}
+		void AndroidPluggable::googleplaygameservices_unlockAchievement(string id) {
+			
+		}
+		void AndroidPluggable::googleplaygameservices_viewScores(string id) {
+
+		}
+		void AndroidPluggable::googleplaygameservices_submitScore(string id, int score) {
+			
+		}
+
+		void AndroidPluggable::container_close() {
+			
+		}
+
+		bool AndroidPluggable::ouya_isOuya() {
+			return false;
+		}
+		void AndroidPluggable::ouya_requestPurchase(string name) {
+
+		}
+		string AndroidPluggable::ouya_getUsername() {
+			return "";
+		}
+
+		bool AndroidPluggable::firetv_isAmazonFireTV() {
+			return false;
+		}
+		string AndroidPluggable::firetv_getUsername() {
+			return "";
+		}
+		void AndroidPluggable::firetv_viewAchievements() { 
+
+		}
+		void AndroidPluggable::firetv_unlockAchievement(string id) { 
+
+		}
+		void AndroidPluggable::firetv_viewScores() { 
+
+		}
+		void AndroidPluggable::firetv_viewScores(string id) { 
+
+		}
+		void AndroidPluggable::firetv_submitScore(string id, int score) { 
+
+		}
+
+		// bool AndroidPluggable::googleplaygameservices_isConnected() {
+		// 	return false;
+		// }	
+		// bool AndroidPluggable::googleplaygameservices_isConnecting() {
+		// 	return false;
+		// }
 
 
 	}

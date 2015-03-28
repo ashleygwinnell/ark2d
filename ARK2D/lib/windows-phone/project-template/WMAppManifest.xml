@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
+  <DefaultLanguage xmlns="" code="en-US"/>
+  <App xmlns="" ProductID="{a8b1aaf7-d90c-4b30-ba48-09c642c5cde6}" Title="%GAME_NAME%" RuntimeType="Modern Native" Version="1.0.0.0" Genre="apps.normal"  Author="%GAME_SHORT_NAME% author" Description="%GAME_DESCRIPTION%" Publisher="%GAME_SHORT_NAME%" PublisherID="{82d9a29f-0c8a-4b17-abd3-a86b3556f3b9}">
+    <IconPath IsRelative="true" IsResource="false">data\ark2d\wp8\ApplicationIcon.png</IconPath>
+    <Capabilities>
+      <Capability Name="ID_CAP_NETWORKING" />
+      <Capability Name="ID_CAP_MEDIALIB_AUDIO" /> 
+      <Capability Name="ID_CAP_MEDIALIB_PLAYBACK" />
+    </Capabilities>
+    <Tasks>
+      <DefaultTask Name="_default" ImagePath="%GAME_SHORT_NAME%.exe" ImageParams="" />
+    </Tasks>
+    <Tokens>
+      <PrimaryToken TokenID="%GAME_SHORT_NAME%Token" TaskName="_default">
+        <TemplateFlip>
+          <SmallImageURI IsRelative="true" IsResource="false">data\ark2d\wp8\Tiles\FlipCycleTileSmall.png</SmallImageURI>
+          <Count>0</Count>
+          <BackgroundImageURI IsRelative="true" IsResource="false">data\ark2d\wp8\Tiles\FlipCycleTileMedium.png</BackgroundImageURI>
+          <Title>%GAME_NAME%</Title>
+          <BackContent></BackContent>
+          <BackBackgroundImageURI></BackBackgroundImageURI>
+          <BackTitle></BackTitle>
+          <DeviceLockImageURI></DeviceLockImageURI>
+          <HasLarge></HasLarge>
+        </TemplateFlip>
+      </PrimaryToken>
+    </Tokens>
+    <ScreenResolutions>
+      <ScreenResolution Name="ID_RESOLUTION_WVGA" />
+      <ScreenResolution Name="ID_RESOLUTION_WXGA" />
+      <ScreenResolution Name="ID_RESOLUTION_HD720P" />
+    </ScreenResolutions>
+  </App>
+</Deployment>

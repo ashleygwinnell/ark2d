@@ -13,34 +13,47 @@
 namespace ARK {
 	namespace Util {
 
+		bool LocalHighscores::s_isThreadedOverride = false;
+
 		LocalHighscores::LocalHighscores(string filename):
 			ARK::Core::Resource(),
 			m_filename(filename),
 			m_data(NULL),
-			m_items()
+			m_items(),
+			m_threaded(false)
 			{
+			m_threaded = LocalHighscores::s_isThreadedOverride; 
 			parse();
 		}
 		LocalHighscores::LocalHighscores(string filename, void* data):
 			ARK::Core::Resource(),
 			m_filename(filename),
 			m_data(data),
-			m_items() {
-			parse();
+			m_items(),
+			m_threaded(false)
+			{
+			m_threaded = LocalHighscores::s_isThreadedOverride; 
+			parse();  
 		}
 
 		vector<LocalHighscoreItem*> LocalHighscores::data() {
 			return m_items;
+		}
+		void LocalHighscores::set(vector<LocalHighscoreItem*> newarray) {
+			m_items = newarray;
 		}
 
 		string LocalHighscores::getFilename() {
 			return m_filename;
 		}
 		void LocalHighscores::parse() {
+			ARK2D::getLog()->v("Parsing LocalHighscores");
 
 			string s;
-			#if defined(ARK2D_ANDROID)
-				if (StringUtil::file_exists(m_filename.c_str())) {
+			#if defined(ARK2D_ANDROID)  
+				if (m_threaded && m_data != NULL) { 
+					s = string((char*) m_data);
+				} else if (StringUtil::file_exists(m_filename.c_str())) {
 					s = StringUtil::file_get_contents(m_filename.c_str());
 				} else {
 					s = string((char*) m_data);
@@ -52,18 +65,42 @@ namespace ARK {
 				} else {
 					s = StringUtil::file_get_contents(m_filename.c_str());
 				}
+
 			#endif
+			ARK2D::getLog()->v(StringUtil::append("JSON String is: ", s));
 
-			JSONNode* arr = libJSON::Parse(s);
-			for(unsigned int i = 0; i < arr->NodeSize(); i++) {
-				JSONNode* item = arr->NodeAt(i);
+			if (s.length() == 0) {
+				ARK2D::getLog()->e("JSON String was empty. Huh?");
+				return;
+			} 
 
-				LocalHighscoreItem* it = new LocalHighscoreItem();
-				it->name = item->GetNode("name")->NodeAsString();
-				it->score = item->GetNode("score")->NodeAsInt();
-				m_items.push_back(it);
+			if (s == "[]") { 
+				ARK2D::getLog()->v("Local highscores were blank. That's fine. ");
+			} else {
+	 
+				JSONNode* arr = libJSON::Parse(s);
+				if (arr == NULL) {
+					ARK2D::getLog()->e("Could not parse json");
+					return;
+				}
+				for(unsigned int i = 0; i < arr->NodeSize(); i++) { 
+					JSONNode* item = arr->NodeAt(i);
+
+					LocalHighscoreItem* it = new LocalHighscoreItem();
+					it->name = item->GetNode("name")->NodeAsString();
+					it->score = item->GetNode("score")->NodeAsInt();
+	 
+					//StringUtil::str_replace("\"", "\\\"", it->name); 
+
+					m_items.push_back(it);
+				}
+				ARK2D::getLog()->i("loaded local highscores");
+
+				// fix memory leaks
+				ARK2D::getLog()->i("Freeing up memory.");
+				libJSON::Delete(arr);
+
 			}
-			ARK2D::getLog()->i("loaded local highscores");
 
 			this->sort();
 		}
@@ -81,7 +118,7 @@ namespace ARK {
 
 		void LocalHighscores::sort() {
 			std::sort(m_items.begin(), m_items.end(), LocalHighscores::mysortcomparator);
-			std::cout << "sorted local highscores" << std::endl;
+			//std::cout << "sorted local highscores" << std::endl;
 		}
 
 		bool LocalHighscores::mysortcomparator(LocalHighscoreItem* one, LocalHighscoreItem* two) {
@@ -94,10 +131,16 @@ namespace ARK {
 			item->score = score;
 			m_items.push_back(item);
 		}
-		void LocalHighscores::save() {
+		void LocalHighscores::clear() {
+			ARK2D::getLog()->i("Clearing LocalHighscores");
+			for (unsigned int i = 0; i < m_items.size(); ++i) { 
+				LocalHighscoreItem* item = m_items.at(i);
+				delete item;
+			}
+			m_items.clear();
+		}
 
-			//! @todo: sort highscores.
-
+		string LocalHighscores::saveString() { 
 			string s = "[";
 				for(unsigned int i = 0; i < m_items.size(); i++) {
 					LocalHighscoreItem* it = m_items.at(i);
@@ -113,18 +156,36 @@ namespace ARK {
 					}
 				}
 			s.append("]");
+			return s;
+		}
 
-			bool success = FileUtil::file_put_contents(m_filename, s);
+		void LocalHighscores::save() {
+
+			//! @todo: sort highscores.
+
+			string s = saveString();
+
+			string usefilename = m_filename;
+			#if defined(ARK2D_ANDROID) 
+				bool useoldref = (m_filename.substr(0,7).compare("assets/") == 0);
+				if (useoldref) { 
+					usefilename = m_filename.substr(7, string::npos);
+				}
+			#endif
+
+			bool success = FileUtil::file_put_contents(usefilename, s);
 			if (success) {
 				std::cout << "saved local highscores" << std::endl;
 			} else {
 				std::cout << "could not save local highscores" << std::endl;
 			}
 		}
-
-		LocalHighscores::~LocalHighscores() {
-
-		}
+ 
+		LocalHighscores::~LocalHighscores() { 
+			clear();
+			ARK2D::getLog()->i("Deleting LocalHighscores");
+			
+		}	
 
 	}
 }

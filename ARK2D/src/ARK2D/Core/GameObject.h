@@ -8,6 +8,7 @@
 #ifndef ARKGAMEOBJECT_H_
 #define ARKGAMEOBJECT_H_
 
+#include "../Includes.h"
 #include "../Namespaces.h"
 #include <string>
 using namespace std;
@@ -19,7 +20,7 @@ namespace ARK {
 		 * \brief A default game object for use in Vector and Pool Containers.
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class GameObject {
+		class ARK2D_API GameObject {
 			protected:
 				bool m_pendingRemoval;
 				int m_renderingLayer;

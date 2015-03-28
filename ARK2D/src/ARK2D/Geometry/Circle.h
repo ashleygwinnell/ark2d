@@ -69,6 +69,13 @@ namespace ARK {
 					m_radius = radius;
 				}
 
+				virtual void setX(T x) {
+					m_x = x + m_radius;
+				}
+				virtual void setY(T y) {
+					m_y = y + m_radius;
+				}
+
 				virtual void setLocation(T x, T y) {
 					m_x = x + m_radius;
 					m_y = y + m_radius;
@@ -76,6 +83,24 @@ namespace ARK {
 				virtual void setLocationByCenter(T x, T y) {
 					m_x = x;
 					m_y = y;
+				}
+
+				virtual void setXByCenter(T x) {
+					m_x = x;
+				}
+				virtual void setYByCenter(T y) {
+					m_y = y;
+				}
+
+				virtual void adjustX(T x) {
+					m_x += x; 
+				}
+				virtual void adjustY(T y) {
+					m_y += y;
+				}
+
+				virtual void setLocationByAlignment(T x, T y, signed int alignX, signed int alignY) {
+					ARK2D::getLog()->w("Circle::setLocationByAlignment not implemented");
 				}
 
 				virtual bool contains(T x, T y) {

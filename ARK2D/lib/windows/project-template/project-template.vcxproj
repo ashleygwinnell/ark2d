@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Development|Win32">
+      <Configuration>Development</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{52D77161-6E57-DCCF-42C9-E152E938C2D5}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>%GAME_SHORT_NAME%</RootNamespace>
+    <DefaultLanguage>en-US</DefaultLanguage>
+  </PropertyGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Development|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\.\bin\;$(MSBuildProjectDirectory)\.\bin\</ExecutablePath>
+    <IntDir>$(Configuration)\obj\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup> 
+
+  <!-- Configurations -->
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>%ARK2D_DIR%\src;%ARK2D_DIR%\src\ARK2D;%ARK2D_DIR%\src\ARK2D\vendor\windows;%ARK2D_DIR%\src\ARK2D\vendor\spine\includes;%ARK2D_DIR%\lib\windows\includes;%ADDITIONAL_INCLUDE_DIRECTORIES%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%ADDITIONAL_PREPROCESSOR_DEFINITIONS%ARK2D_WINDOWS;ARK2D_DESKTOP;_WIN32;ARK2D_DEBUG;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <MinimalRebuild>true</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>%ARK2D_DIR%\build\windows\Debug\libARK2D.lib%ADDITIONAL_DOTLIB_FILES%</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
+      <SubSystem>Windows</SubSystem>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AssemblyDebug>true</AssemblyDebug>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib;msvcprt.lib;libcmtd.lib</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>%ARK2D_DIR%\src;%ARK2D_DIR%\src\ARK2D;%ARK2D_DIR%\src\ARK2D\vendor\windows;%ARK2D_DIR%\src\ARK2D\vendor\spine\includes;%ARK2D_DIR%\lib\windows\includes;%ADDITIONAL_INCLUDE_DIRECTORIES%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%ADDITIONAL_PREPROCESSOR_DEFINITIONS%ARK2D_WINDOWS;ARK2D_DESKTOP;_WIN32;ARK2D_DEBUG;_DEBUG;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>%ARK2D_DIR%\src;%ARK2D_DIR%\src\ARK2D;%ARK2D_DIR%\src\ARK2D\vendor\windows;%ARK2D_DIR%\src\ARK2D\vendor\spine\includes;%ARK2D_DIR%\lib\windows\includes;%ADDITIONAL_INCLUDE_DIRECTORIES%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%ADDITIONAL_PREPROCESSOR_DEFINITIONS%ARK2D_WINDOWS;ARK2D_DESKTOP;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Full</Optimization>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <MinimalRebuild>true</MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>%ARK2D_DIR%\build\windows\Release\libARK2D.lib;msvcrt.lib%ADDITIONAL_DOTLIB_FILES%</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
+      <SubSystem>Windows</SubSystem>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AssemblyDebug>false</AssemblyDebug>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <IgnoreSpecificDefaultLibraries>msvcr120d.lib</IgnoreSpecificDefaultLibraries>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>%ARK2D_DIR%\src;%ARK2D_DIR%\src\ARK2D;%ARK2D_DIR%\src\ARK2D\vendor\windows;%ARK2D_DIR%\src\ARK2D\vendor\spine\includes;%ARK2D_DIR%\lib\windows\includes;%ADDITIONAL_INCLUDE_DIRECTORIES%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%ADDITIONAL_PREPROCESSOR_DEFINITIONS%ARK2D_WINDOWS;ARK2D_DESKTOP;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions> 
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <Optimization>Full</Optimization>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+
+
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>%ARK2D_DIR%\src;%ARK2D_DIR%\src\ARK2D;%ARK2D_DIR%\src\ARK2D\vendor\windows;%ARK2D_DIR%\src\ARK2D\vendor\spine\includes;%ARK2D_DIR%\lib\windows\includes;%ADDITIONAL_INCLUDE_DIRECTORIES%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%ADDITIONAL_PREPROCESSOR_DEFINITIONS%ARK2D_WINDOWS;ARK2D_DESKTOP;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <Optimization>Full</Optimization>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>%ARK2D_DIR%\build\windows\Release\libARK2D.lib;msvcrt.lib%ADDITIONAL_DOTLIB_FILES%</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
+      <SubSystem>Windows</SubSystem>
+      <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AssemblyDebug>false</AssemblyDebug>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <IgnoreSpecificDefaultLibraries>msvcr120d.lib</IgnoreSpecificDefaultLibraries>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>%ARK2D_DIR%\src;%ARK2D_DIR%\src\ARK2D;%ARK2D_DIR%\src\ARK2D\vendor\windows;%ARK2D_DIR%\src\ARK2D\vendor\spine\includes;%ARK2D_DIR%\lib\windows\includes;%ADDITIONAL_INCLUDE_DIRECTORIES%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%ADDITIONAL_PREPROCESSOR_DEFINITIONS%ARK2D_WINDOWS;ARK2D_DESKTOP;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions> 
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <Optimization>Full</Optimization>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+    <ClInclude Include="ARK.h" />
+    %COMPILE_HEADER_FILES%
+    <!--<ClInclude Include="..\..\src\DefaultGame.h" />
+    <ClInclude Include="..\..\src\objects\Bullet.h" />
+    <ClInclude Include="..\..\src\objects\BlankObject.h" />
+    <ClInclude Include="..\..\src\objects\Explosion.h" />
+    <ClInclude Include="..\..\src\objects\MyParticle.h" />
+    <ClInclude Include="..\..\src\objects\Object.h" />
+    <ClInclude Include="..\..\src\objects\Pickup.h" />
+    <ClInclude Include="..\..\src\objects\Player.h" />
+    <ClInclude Include="..\..\src\objects\SolidTile.h" />
+    <ClInclude Include="..\..\src\objects\Pit.h" />
+    <ClInclude Include="..\..\src\objects\Rug.h" />
+    <ClInclude Include="..\..\src\objects\Decoration.h" />
+    <ClInclude Include="..\..\src\objects\EightWayMovementComponent.h" />
+    <ClInclude Include="..\..\src\states\BlankState.h" />
+    <ClInclude Include="..\..\src\states\MyLoadingState.h" />
+    <ClInclude Include="..\..\src\states\SplashState.h" />
+    <ClInclude Include="..\..\src\states\StoryState.h" />
+    <ClInclude Include="..\..\src\states\MenuState.h" />
+    <ClInclude Include="..\..\src\states\InstructionsState.h" />
+    <ClInclude Include="..\..\src\states\InGameState.h" />
+    <ClInclude Include="..\..\src\states\SummaryState.h" />
+    <ClInclude Include="..\..\src\Resources.h" />-->
+  </ItemGroup>
+  <ItemGroup>
+    %COMPILE_SOURCE_FILES%
+    <!--<ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\DefaultGame.cpp" />
+    <ClCompile Include="..\..\src\objects\Bullet.cpp" />
+    <ClCompile Include="..\..\src\objects\BlankObject.cpp" />
+    <ClCompile Include="..\..\src\objects\Explosion.cpp" />
+    <ClCompile Include="..\..\src\objects\MyParticle.cpp" />
+    <ClCompile Include="..\..\src\objects\Object.cpp" />
+    <ClCompile Include="..\..\src\objects\Pickup.cpp" />
+    <ClCompile Include="..\..\src\objects\Player.cpp" />
+    <ClCompile Include="..\..\src\objects\SolidTile.cpp" />
+    <ClCompile Include="..\..\src\objects\Pit.cpp" />
+    <ClCompile Include="..\..\src\objects\Rug.cpp" />
+    <ClCompile Include="..\..\src\objects\Decoration.cpp" />
+    <ClCompile Include="..\..\src\objects\EightWayMovementComponent.cpp" />
+    <ClCompile Include="..\..\src\states\BlankState.cpp" />
+    <ClCompile Include="..\..\src\states\MyLoadingState.cpp" />
+    <ClCompile Include="..\..\src\states\SplashState.cpp" />
+    <ClCompile Include="..\..\src\states\StoryState.cpp" />
+    <ClCompile Include="..\..\src\states\MenuState.cpp" />
+    <ClCompile Include="..\..\src\states\InstructionsState.cpp" />
+    <ClCompile Include="..\..\src\states\InGameState.cpp" />
+    <ClCompile Include="..\..\src\states\SummaryState.cpp" />-->
+  </ItemGroup>
+  <ItemGroup>
+    <!-- <ResourceCompile Include="..\..\src\Resources.rc" />-->
+    %GAME_RESOURCES%
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

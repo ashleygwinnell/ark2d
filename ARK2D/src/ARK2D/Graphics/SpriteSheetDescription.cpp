@@ -10,12 +10,13 @@
 #include "../Util/Cast.h"
 #include "../Includes.h"
 #include "../UI/ErrorDialog.h" 
+#include "../Util/Log.h" 
 
 namespace ARK {
 	namespace Graphics {
 
 		SpriteSheetDescription::SpriteSheetDescription(string path): ARK::Core::Resource(), m_path(path) {
-			m_data = StringUtil::file_get_contents(path.c_str());
+			m_data = StringUtil::file_get_contents(path.c_str()); 
 			load();
 		}
 		SpriteSheetDescription::SpriteSheetDescription(string path, void* rawData): ARK::Core::Resource(), m_path(path) {
@@ -38,16 +39,23 @@ namespace ARK {
 				JSONNode* items = sheet->GetNode("items");
  
 				for (unsigned int i = 0; i < items->NodeSize(); i++) {
-					SpriteSheetDescriptionItem* it = new SpriteSheetDescriptionItem();
+					SpriteSheetDescriptionItem it;
 
 					JSONNode* item = items->NodeAt(i);
-					it->setX( (unsigned int) item->GetNode("x")->NodeAsInt() );
-					it->setY( (unsigned int) item->GetNode("y")->NodeAsInt() );
-					it->setWidth( (unsigned int) item->GetNode("width")->NodeAsInt() );
-					it->setHeight( (unsigned int) item->GetNode("height")->NodeAsInt() );
-					it->setName( item->GetNode("name")->NodeAsString().c_str() );
+					it.setX( (unsigned int) item->GetNode("x")->NodeAsInt() );
+					it.setY( (unsigned int) item->GetNode("y")->NodeAsInt() );
+					it.setWidth( (unsigned int) item->GetNode("width")->NodeAsInt() );
+					it.setHeight( (unsigned int) item->GetNode("height")->NodeAsInt() );
+					it.setName( item->GetNode("name")->NodeAsString().c_str() );
 
-					m_items[string(it->getName())] = (*it);
+					it.setRotated(false); 
+					if (item->GetNode("rotated") != NULL) { 
+						if (item->GetNode("rotated")->NodeAsBool()) { 
+							it.setRotated(true); 
+						}
+					}
+
+					m_items[string(it.getName())] = it;
 				}
 
 
@@ -136,8 +144,46 @@ namespace ARK {
 			std::cout << "Loaded Spritesheet Description" << std::endl;
 		}
 
-		const SpriteSheetDescriptionItem& SpriteSheetDescription::getItemByName(const char* name) {
-			return m_items[string(name)];
+		const SpriteSheetDescriptionItem& SpriteSheetDescription::getItemByName(const char* name) const {
+			std::map<string, SpriteSheetDescriptionItem>::const_iterator it;
+ 
+			it = m_items.find(string(name));
+			if (it != m_items.end()) { 
+				return it->second;
+			} 
+
+			// find version replaced \\ with /
+			const string fslash("/");
+			const string backslash("\\");
+			string oldname(name);
+			string newname = StringUtil::str_replace(fslash, backslash, oldname);
+			it = m_items.find(newname);
+			if (it != m_items.end()) { 
+				return it->second;
+			} 
+			ARK2D::getLog()->e(StringUtil::append("Could not find SpriteSheetDescriptionItem with name: ", name));
+			return m_items.begin()->second;
+		} 
+
+		bool SpriteSheetDescription::hasItemByName(const char* name) const 
+		{
+			std::map<string, SpriteSheetDescriptionItem>::const_iterator it;
+ 
+			it = m_items.find(string(name));
+			if (it != m_items.end()) { 
+				return true;
+			} 
+
+			// find version replaced \\ with /
+			const string fslash("/");
+			const string backslash("\\");
+			string oldname(name);
+			string newname = StringUtil::str_replace(fslash, backslash, oldname);
+			it = m_items.find(newname);
+			if (it != m_items.end()) { 
+				return true;
+			} 
+			return false;
 		}
 
 		SpriteSheetDescription::~SpriteSheetDescription() {

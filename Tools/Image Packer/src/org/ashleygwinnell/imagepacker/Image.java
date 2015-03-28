@@ -17,6 +17,11 @@ public class Image {
 	int m_width;
 	int m_height;
 	
+	int m_originalWidth;
+	int m_originalHeight;
+	
+	boolean m_rotated;
+	
 	boolean m_hasBeenLaid;
 	
 	public Image(File f) throws IOException {
@@ -31,6 +36,10 @@ public class Image {
 		m_path = f.getAbsolutePath();
 		m_width = img.getWidth(null);
 		m_height = img.getHeight(null);
+		m_originalWidth = img.getWidth(null);
+		m_originalHeight = img.getHeight(null);
+		
+		m_rotated = false;
 		
 		m_hasBeenLaid = false; // used by force pack strategy
 	}
@@ -55,6 +64,12 @@ public class Image {
 		m_name = name;
 	}
 	public String getName() {
+		return m_name;
+	}
+	public String getNameNoExtension() {
+		if (m_name.contains(".")) {
+			return m_name.substring(0, m_name.lastIndexOf("."));
+		}
 		return m_name;
 	}
 	
@@ -86,5 +101,15 @@ public class Image {
 	}
 	public int getHeight() {
 		return m_height;
+	}
+	public void rotate() {
+		m_rotated = !m_rotated;
+			
+		int h = m_height;
+		m_height = m_width;
+		m_width = h;
+	}
+	public boolean isRotated() {
+		return m_rotated;
 	}
 }

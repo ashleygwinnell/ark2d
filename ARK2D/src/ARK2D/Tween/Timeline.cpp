@@ -43,7 +43,7 @@ namespace ARK {
 			return keyedTweenedEvents;
 		}
 		void Timeline::printKeyedTweenedEvents() {
-			cout << "---- Printing Keyed Tweened Events in Timeline ----" << endl;
+			ARK2D::getLog()->v("---- Printing Keyed Tweened Events in Timeline ----");
 
 			map<string, TweenedEvent*>::const_iterator it = keyedTweenedEvents.begin();
 			while(it != keyedTweenedEvents.end() ) {
@@ -97,7 +97,7 @@ namespace ARK {
 
 		void Timeline::update(float delta) {
 
-			for (unsigned int i = 0; i < staticEvents.size(); i++) {
+			for (unsigned int i = 0; i < staticEvents.size(); ++i) {
 				StaticEvent* event = staticEvents.at(i);
 				event->m_starting_delay -= delta;
 				if (event->m_starting_delay <= 0) {
@@ -119,7 +119,7 @@ namespace ARK {
 				}
 			}
 
-			for (unsigned int i = 0; i < tweenedEvents.size(); i++) {
+			for (unsigned int i = 0; i < tweenedEvents.size(); ++i) {
 				TweenedEvent* event = tweenedEvents.at(i);
 				if (event->m_starting_delay >= 0) {
 					event->m_starting_delay -= delta;
@@ -221,6 +221,9 @@ namespace ARK {
 		}
 
 
+		void Timeline::reset() {
+			clear();
+		}
 		void Timeline::clear() {
 			keyedStaticEvents.clear();
 			keyedTweenedEvents.clear();
@@ -269,6 +272,21 @@ namespace ARK {
 			m_type = AnimationEvent::STATIC;
 		}
 		StaticEvent::~StaticEvent() { }
+
+		// Static event with Function Pointer
+		FPStaticEvent::FPStaticEvent(void* fp, float delay):
+			StaticEvent(),
+			m_fp(fp) 
+		{
+			m_starting_delay = delay;
+		}
+		void FPStaticEvent::invoke(Timeline* t) {
+			void (*pt)() = (void(*)()) m_fp;
+			pt();
+		}
+		FPStaticEvent::~FPStaticEvent() {
+
+		}
 
 	}
 }

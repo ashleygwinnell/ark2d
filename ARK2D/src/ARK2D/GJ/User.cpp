@@ -1,6 +1,7 @@
 
 #include "User.h"
-#include "../../ARK.h"
+#include "../Includes.h"
+#include "../Util/Cast.h"
 
 namespace ARK {
 	namespace GJ {

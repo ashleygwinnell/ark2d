@@ -8,6 +8,7 @@
 #ifndef BUTTON_H_
 #define BUTTON_H_
 
+#include "../Includes.h"
 #include "../Namespaces.h"
 #include "AbstractUIComponent.h"
 
@@ -24,7 +25,7 @@ namespace ARK {
 		 * @todo Improve rendering on mobile devices not using primitive geometry.
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class Button : public AbstractUIComponent {
+		class ARK2D_API Button : public AbstractUIComponent {
 			protected:
 				String m_text;
 				Image* m_image;
@@ -71,23 +72,23 @@ namespace ARK {
 				void setImage(Image* i) {
 					m_image = i;
 				}
-				void keyPressed(unsigned int key) {
+				virtual void keyPressed(unsigned int key) {
 					if (!m_enabled) { return; } 
 
 					Input* i = ARK2D::getInput();
 					if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT
-						&& GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), (signed int) (m_width), (signed int) (m_height), (signed int) (i->getMouseX()), (signed int) (i->getMouseY()))) {
+						&& isPointerOver()) {
 							m_state = STATE_DOWN;
 							setFocussed(true);
 					}
 				}
 
-				void keyReleased(unsigned int key) {
+				virtual void keyReleased(unsigned int key) {
 					if (!m_enabled) { return; } 
 
 					Input* i = ARK2D::getInput();
 					if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT) {
-						if (GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), (signed int) (m_width), (signed int)(m_height), (signed int) (i->getMouseX()), (signed int) (i->getMouseY()))) {
+						if (isPointerOver()) {
 							if (m_state == STATE_DOWN) {
 								m_state = STATE_OVER;
 								doEvent();
@@ -98,8 +99,12 @@ namespace ARK {
 						}
 					}
 				}
+				virtual bool isPointerOver() {
+					Input* i = ARK2D::getInput();
+					return GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), (signed int) (m_width), (signed int)(m_height), (signed int) (i->getMouseX()), (signed int) (i->getMouseY()));
+				}
 
-				void doEvent() {
+				virtual void doEvent() {
 					if (m_event != NULL) {
 						if (m_eventObj == NULL) {
 							
@@ -115,7 +120,7 @@ namespace ARK {
 				}
 
 
-				void mouseMoved(int x, int y, int oldx, int oldy) {
+				virtual void mouseMoved(int x, int y, int oldx, int oldy) {
 					if (!m_enabled) { return; } 
 					
 					if (m_state == STATE_DOWN) { return; }
@@ -126,6 +131,7 @@ namespace ARK {
 					}
 				}
 				void setText(string s) {
+					m_text.clear();
 					m_text += s;
 				}
 				const String& getText() {
@@ -144,13 +150,13 @@ namespace ARK {
 					Renderer* g = ARK2D::getRenderer();
 					renderBackground();
 
-					int renderTextX = m_x + (m_width/2) - (g->getFont()->getStringWidth(m_text.get())/2);
-					int renderTextY = m_y + (m_height/2) - (g->getFont()->getLineHeight()/2);
+					float renderTextX = m_x + (m_width/2) - (g->getFont()->getStringWidth(m_text.get())/2);
+					float renderTextY = m_y + (m_height/2) - (g->getFont()->getLineHeight()/2);
 					if (m_state == STATE_DOWN) {
 						renderTextX += 2;
 						renderTextY += 2;
 					}
-					renderText(renderTextX, renderTextY);
+					renderText((int) renderTextX, (int) renderTextY);
 
 					if (m_image != NULL) {
 						int rx = int(m_x + (m_width/2)) - int(m_image->getWidth()/2);

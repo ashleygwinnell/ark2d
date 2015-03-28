@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>73D49E2B-7538-420B-8157-C429D3EB02B5</string>
+	<key>IDESourceControlProjectName</key>
+	<string>granular_synth</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>CEF8F4E0-1A94-408B-9B66-617566E4CD1D</key>
+		<string>ssh://github.com/ashleygwinnell/ark2d.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/granular_synth.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>CEF8F4E0-1A94-408B-9B66-617566E4CD1D</key>
+		<string>../../../../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/ashleygwinnell/ark2d.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>CEF8F4E0-1A94-408B-9B66-617566E4CD1D</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>CEF8F4E0-1A94-408B-9B66-617566E4CD1D</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ark2d</string>
+		</dict>
+	</array>
+</dict>
+</plist>

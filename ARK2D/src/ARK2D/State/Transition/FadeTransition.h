@@ -22,7 +22,7 @@ namespace ARK {
 			 * @todo Optimise this to use the same texture each time.
 			 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 			 */
-			class FadeTransition : public Transition {
+			class ARK2D_API FadeTransition : public Transition {
 				public:
 					FadeTransition(unsigned int timeMillis);
 					void init(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to);

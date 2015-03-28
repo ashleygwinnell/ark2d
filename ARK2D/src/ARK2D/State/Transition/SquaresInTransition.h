@@ -22,7 +22,7 @@ namespace ARK {
 			 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 			 * @todo This transition does not work.
 			 */
-			class SquaresInTransition : public Transition {
+			class ARK2D_API SquaresInTransition : public Transition {
 				public:
 					SquaresInTransition(float duration, float squareSize);
 					SquaresInTransition(float duration, float squareSize, Color* c);

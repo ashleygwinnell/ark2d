@@ -8,6 +8,7 @@
 #ifndef LOADINGSTATE_H_
 #define LOADINGSTATE_H_
 
+#include "../Includes.h"
 #include "../Namespaces.h"
 #include "GameState.h"
 
@@ -20,7 +21,7 @@ namespace ARK {
 		 * @warning Note that you CANNOT load Images in this separate thread because OpenGL fails.
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class LoadingState : public GameState {
+		class ARK2D_API LoadingState : public GameState {
 			public:
 				LoadingState();
 

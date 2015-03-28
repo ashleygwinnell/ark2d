@@ -13,7 +13,7 @@
 namespace ARK {
 	namespace Tests {
 
-		class TransitionTestGameState : public GameState {
+		class ARK2D_API TransitionTestGameState : public GameState {
 			public:
 				int index;
 				string name;
@@ -28,7 +28,7 @@ namespace ARK {
 				virtual ~TransitionTestGameState();
 		};
 
-		class TransitionTest : public StateBasedGame {
+		class ARK2D_API TransitionTest : public StateBasedGame {
 			public:
 				unsigned int transitionIndex;
 				ARK::Util::Containers::Vector<ARK::State::Transition::Transition*> leaveTransitions;

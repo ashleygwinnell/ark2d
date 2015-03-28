@@ -5,7 +5,14 @@ namespace ARK {
 	namespace Tiled {
 
 		// object group
-		TiledMapObjectGroup::TiledMapObjectGroup(): m_name(), m_objects(), m_visible(true) {
+		TiledMapObjectGroup::TiledMapObjectGroup(): 
+			m_name(), 
+			m_width(0),
+			m_height(0),
+			m_visible(true),
+			m_opacity(1.0f),
+			m_objects()
+			{
 
 		}
 		void TiledMapObjectGroup::addObject(TiledMapObject* object) {
@@ -38,6 +45,13 @@ namespace ARK {
 		}
 		bool TiledMapObjectGroup::isVisible() {
 			return m_visible;
+		}
+
+		void TiledMapObjectGroup::setOpacity(float f) {
+			m_opacity = f;
+		}
+		float TiledMapObjectGroup::getOpacity() {
+			return m_opacity;
 		}
 
 		TiledMapObjectGroup::~TiledMapObjectGroup() {

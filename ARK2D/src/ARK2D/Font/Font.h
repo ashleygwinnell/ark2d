@@ -14,17 +14,18 @@ using namespace std;
 class BMFont;
 class FTFont;
 
+#include "../Includes.h"
 #include "../Core/Resource.h"
 
-namespace ARK {
-	namespace Font {
+//namespace ARK {
+	//namespace Font {
 
 		/*!
 		 * \brief Abstract class for all Font implementations.
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class Font : public ARK::Core::Resource {
+		class ARK2D_API ARK::Font::Font : public ARK::Core::Resource {
 			public:
 				Font();
 				virtual void drawString(const string& str, int x, int y) = 0;
@@ -40,6 +41,6 @@ namespace ARK {
 				ARK::Font::FTFont* asFTFont();
 				virtual ~Font();
 		};
-	}
-}
+//	}
+//}
 #endif /* FONT_H_ */

@@ -39,14 +39,14 @@ namespace ARK {
 			offsetsX.push_back(-102);
 			offsetsX.push_back(3);
 			for(int i = 0; i < amount; i++) {
-				Button* thisUp = new Button();
+				ARK::UI::Button* thisUp = new ARK::UI::Button();
 				thisUp->setText("/\\");
 				thisUp->setSize(100,100);
 				thisUp->setLocation(centerX + offsetsX.at(i), centerY - 160);
 				thisUp->setEvent((void*) &btnClickUp);
 				m_buttonsUp.push_back(thisUp);
 
-				Button* thisDown = new Button();
+				ARK::UI::Button* thisDown = new ARK::UI::Button();
 				thisDown->setText("\\/");
 				thisDown->setSize(100,100);
 				thisDown->setLocation(centerX + offsetsX.at(i), centerY + 60);
@@ -54,7 +54,7 @@ namespace ARK {
 				m_buttonsDown.push_back(thisDown);
 			}
 
-			m_buttonLetterEnd = new Button();
+			m_buttonLetterEnd = new ARK::UI::Button();
 			m_buttonLetterEnd->setText("END");
 			m_buttonLetterEnd->setSize(150,120);
 			//m_buttonLetterEnd->setLocation(centerX+108, centerY-50);
@@ -109,7 +109,7 @@ namespace ARK {
 				characterIndexes.push_back(0);
 			}
 
-			m_backgroundColor = new Color(0,0,0,127);
+			m_backgroundColor = new Color(0.0f, 0.0f, 0.0f, 0.5f);
 
 			m_score = 0;
 

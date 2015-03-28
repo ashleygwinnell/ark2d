@@ -13,7 +13,7 @@
 namespace ARK {
 	namespace GJ {
 
-		class Highscore : public PropertyItem {
+		class ARK2D_API Highscore : public PropertyItem {
 			
 			public:
 				static const unsigned int TYPE_GUEST = 0;

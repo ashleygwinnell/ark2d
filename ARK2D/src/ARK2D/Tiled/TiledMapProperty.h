@@ -1,8 +1,7 @@
 #ifndef TILEDMAP_PROPERTY_H_
 #define TILEDMAP_PROPERTY_H_
 
-#include <vector>
-#include <string>
+#include "../Includes.h"
 
 #include "../Core/ToString.h"
 
@@ -19,7 +18,7 @@ namespace ARK {
 		 * @warning You should never need to create this manually.
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class TiledMapProperty : public ARK::Core::ToString {
+		class ARK2D_API TiledMapProperty : public ARK::Core::ToString {
 			public:
 				TiledMapProperty();
 				TiledMapProperty(const std::string& name, const std::string& value);
@@ -27,6 +26,7 @@ namespace ARK {
 				const string getName() const;
 				const string getValue() const;
 				signed int getValueAsInt() const;
+				float getValueAsFloat() const;
 
 				void setName(const string& s);
 				void setValue(const string& s);

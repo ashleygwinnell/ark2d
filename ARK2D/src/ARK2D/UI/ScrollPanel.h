@@ -20,7 +20,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class ScrollPanel : public Panel {
+		class ARK2D_API ScrollPanel : public Panel {
 			public:
 				Button m_upButton;
 				Button m_downButton;

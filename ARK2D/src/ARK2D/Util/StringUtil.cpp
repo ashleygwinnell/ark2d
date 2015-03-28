@@ -14,6 +14,8 @@
 namespace ARK {
 	namespace Util {
 
+	
+
 		int digitsInNumber(int number);
 		int digitsInNumber(int number) {
 			// todo: this, properly. 
@@ -50,8 +52,36 @@ namespace ARK {
 			return s;
 		}
 
+		string StringUtil::getMinuteSecondsFormatFromSeconds(float totaltime) {
+			int minutes = floor(totaltime/60.0f);
+			int seconds = int(totaltime) % 60;
+			
+			string scoreStr = "";
+			scoreStr += Cast::toString<int>(minutes); 
+			scoreStr += string(":");
+			scoreStr += StringUtil::zeropad(seconds, 2);
+			return scoreStr;
+		}
+
+		string StringUtil::getMinuteSecondsLongFormatFromSeconds(float totaltime) {
+			int minutes = floor(totaltime/60.0f);
+			int seconds = int(totaltime) % 60;
+			
+			string scoreStr = "";
+			scoreStr += Cast::toString<int>(minutes);  
+			scoreStr += string(" minutes ");
+			scoreStr += StringUtil::zeropad(seconds, 2);
+			scoreStr += string(" seconds");
+			return scoreStr;
+		}
 
 		std::string StringUtil::append(string str, int i) {
+			std::ostringstream os;
+			os << i;
+			string newString = os.str();
+			str += newString;
+			return str;
+		}std::string StringUtil::appendf(string str, float i) {
 			std::ostringstream os;
 			os << i;
 			string newString = os.str();
@@ -67,6 +97,10 @@ namespace ARK {
 			string newString = os.str();
 			str = newString + str;
 			return str;
+		}
+
+		bool StringUtil::str_contains(const string& haystack, const string& needle) {
+			return (haystack.find(needle) != string::npos);
 		}
 
 		string& StringUtil::str_replace(const string& search, const string& replace, string& subject) {
@@ -95,6 +129,11 @@ namespace ARK {
 			subject = buffer;
 			return subject;
 		}
+		string StringUtil::str_replace_copy(string search, string replace, string subject) {
+			string newString = subject;
+			str_replace(search, replace, newString);
+			return newString;
+		}
 
 		std::vector<string> StringUtil::split(string s, const char* delimiter) {
 			/*char str[] = s.c_str(); //"- This, a sample string.";
@@ -117,6 +156,33 @@ namespace ARK {
 				elems.push_back(item);
 			}
 			return elems;
+		}
+
+
+		vector<string> StringUtil::getLinesForWordWrap(std::string str, int maxWidth) {
+			int accumulatedWidth = 0;
+			unsigned int lastLineUpToWord = 0;
+
+			vector<string> lines;
+			std::vector<std::string> words = StringUtil::split(str, " ");
+
+			for (unsigned int i = 0; i < words.size(); i++) {
+				accumulatedWidth += ARK2D::getRenderer()->getFont()->getStringWidth(words.at(i).append(" "));
+				if (i == words.size()-1 && lastLineUpToWord != words.size()) {
+					accumulatedWidth = maxWidth + 1;
+					i += 1;
+				}
+				if (accumulatedWidth > maxWidth) {
+					std::string line = "";
+					for (unsigned int j = lastLineUpToWord; j < i; j++) {
+						line += words.at(j) + " ";
+					}
+					lines.push_back(line);
+					lastLineUpToWord = i;
+					accumulatedWidth = 0;
+				} 
+			}
+			return lines;
 		}
 
 
@@ -260,11 +326,19 @@ namespace ARK {
 			
 			ARK2D::getLog()->i(StringUtil::append("Does file exist: ", strFileName));
 			FILE* file = NULL;
-			file = fopen(strFileName.c_str(), "r");
+			#if defined( ARK2D_WINDOWS_PHONE_8 )
+				fopen_s(&file, strFileName.c_str(), "r");
+			#else
+				file = fopen(strFileName.c_str(), "r");
+			#endif
+
+			//file = fopen(strFileName.c_str(), "r");
 			if (file != NULL) {
+				ARK2D::getLog()->v("Yup");
 				fclose(file);
 				return true;
 			}
+			ARK2D::getLog()->v("Nope"); 
 			//fclose(file);
 			return false;
 		}
@@ -303,30 +377,48 @@ namespace ARK {
 
 					char* text = NULL;
 
-					FILE* file = fopen(strFileName.c_str(), "rt");
+					//ARK2D::getLog()->e("pre fopen");
+					FILE* file = NULL;// fopen(strFileName.c_str(), "rt");
+					#if defined( ARK2D_WINDOWS_PHONE_8 )
+						fopen_s(&file, strFileName.c_str(), "rt");
+					#else
+						file = fopen(strFileName.c_str(), "rt");
+					#endif
 					if (file == NULL) {
 						string str = "Could not open file ["; str += strFileName; str += "] as it does not exist.";
 						ARK2D::getLog()->e(str);
 						return string(""); 
 					}
 
+					//ARK2D::getLog()->e("pre seeking");
 					fseek(file, 0, SEEK_END);
 					int count = ftell(file);
+
+					//ARK2D::getLog()->e("pre rewind");
 					rewind(file);
 
 					// ***********************
 					//! @todo: memory management: memory leak. yay.
 					// *************************
 
+					//ARK2D::getLog()->e("pre count/malloc"); 
 					if (count > 0) {
 						text = (char*)malloc(sizeof(char) * (count + 1));
 						count = fread(text, sizeof(char), count, file);
 						text[count] = '\0';
 					}
+
+
+					//ARK2D::getLog()->e("pre fclose");
 					fclose(file);
 
+					//ARK2D::getLog()->e("pre return str");
 					string returnStr = (text == NULL)?string(""):string(text);
+
+					//ARK2D::getLog()->e("pre free");
 					free(text);
+
+					//ARK2D::getLog()->e("pre return");
 					return returnStr;
 
 					//return text;
@@ -450,9 +542,90 @@ namespace ARK {
 			//}
 		}
 
+		string StringUtil::caesarShift(const string& s, int amount) {
+			string newString;
+			for(unsigned int i = 0; i < s.length(); i++) {
+				const unsigned char thisChar = s.at(i);
+				newString += ((unsigned char)thisChar >> amount) | (thisChar << (8-amount));
+			}
+			return newString;
+		}
+
 		string StringUtil::getExtension(string s) {
 			unsigned int pos = s.find_last_of('.') + 1;
 			return s.substr(pos);
+		}
+
+		string StringUtil::getOrdinal(int i) {
+			vector<string> ends;
+			ends.push_back("th");
+			ends.push_back("st"); 
+			ends.push_back("nd");
+			ends.push_back("rd");
+			ends.push_back("th");
+			ends.push_back("th");
+			ends.push_back("th"); 
+			ends.push_back("th");
+			ends.push_back("th"); 
+			ends.push_back("th");
+
+			if ((i % 100) >= 11 && (i % 100) <= 13) {
+   				return "th";
+			} else {
+   				return ends.at(i % 10); 
+			}
+			return "th";
+		}
+
+		string StringUtil::restrictToAlphanumericsSpaces(string str) {
+			vector<char> allowedChars;
+			allowedChars.push_back('A'); allowedChars.push_back('a');
+			allowedChars.push_back('B'); allowedChars.push_back('b');
+			allowedChars.push_back('C'); allowedChars.push_back('c');
+			allowedChars.push_back('D'); allowedChars.push_back('d');
+			allowedChars.push_back('E'); allowedChars.push_back('e');
+			allowedChars.push_back('F'); allowedChars.push_back('f');
+			allowedChars.push_back('G'); allowedChars.push_back('g');
+			allowedChars.push_back('H'); allowedChars.push_back('h');
+			allowedChars.push_back('I'); allowedChars.push_back('i');
+			allowedChars.push_back('J'); allowedChars.push_back('j');
+			allowedChars.push_back('K'); allowedChars.push_back('k');
+			allowedChars.push_back('L'); allowedChars.push_back('l');
+			allowedChars.push_back('M'); allowedChars.push_back('m');
+			allowedChars.push_back('N'); allowedChars.push_back('n');
+			allowedChars.push_back('O'); allowedChars.push_back('o');
+			allowedChars.push_back('P'); allowedChars.push_back('p');
+			allowedChars.push_back('Q'); allowedChars.push_back('q');
+			allowedChars.push_back('R'); allowedChars.push_back('r');
+			allowedChars.push_back('S'); allowedChars.push_back('s');
+			allowedChars.push_back('T'); allowedChars.push_back('t');
+			allowedChars.push_back('U'); allowedChars.push_back('u');
+			allowedChars.push_back('V'); allowedChars.push_back('v');
+			allowedChars.push_back('W'); allowedChars.push_back('w'); 
+			allowedChars.push_back('X'); allowedChars.push_back('x');
+			allowedChars.push_back('Y'); allowedChars.push_back('y');
+			allowedChars.push_back('Z'); allowedChars.push_back('z');
+			allowedChars.push_back('0'); 
+			allowedChars.push_back('1'); 
+			allowedChars.push_back('2'); 
+			allowedChars.push_back('3'); 
+			allowedChars.push_back('4'); 
+			allowedChars.push_back('5'); 
+			allowedChars.push_back('6'); 
+			allowedChars.push_back('7'); 
+			allowedChars.push_back('8'); 
+			allowedChars.push_back('9');  
+			allowedChars.push_back(' ');  
+			return restrictToCharset(str, allowedChars);
+		}
+		string StringUtil::restrictToCharset(string str, vector<char> allowedChars) {
+			string cleanStr("");
+			for (unsigned int i = 0; i < str.length(); i++) {
+				if(std::find(allowedChars.begin(), allowedChars.end(), str[i]) != allowedChars.end()) {
+					cleanStr += str[i]; 
+				}  
+			} 
+			return cleanStr;
 		}
 
 

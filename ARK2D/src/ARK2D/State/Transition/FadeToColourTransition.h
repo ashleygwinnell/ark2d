@@ -23,7 +23,7 @@ namespace ARK {
 			 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 			 * @todo This transition does not work.
 			 */
-			class FadeToColourTransition : public Transition {
+			class ARK2D_API FadeToColourTransition : public Transition {
 				public:
 					FadeToColourTransition(float time);
 					FadeToColourTransition(float time, Color* c);

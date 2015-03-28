@@ -13,7 +13,7 @@
 namespace ARK {
 	namespace Tests {
 
-		class ParticlesTestGameState : public GameState {
+		class ARK2D_API ParticlesTestGameState : public GameState {
 			public:
 				Image* defaultParticle;
 				ParticleSystem* system;
@@ -28,7 +28,7 @@ namespace ARK {
 				virtual ~ParticlesTestGameState();
 		};
 
-		class ParticlesTest : public StateBasedGame {
+		class ARK2D_API ParticlesTest : public StateBasedGame {
 			public:
 				ParticlesTest();
 				virtual void initStates(GameContainer* container);

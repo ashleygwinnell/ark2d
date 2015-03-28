@@ -26,15 +26,40 @@ namespace ARK {
 		 * @see Resource
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class FileUtil {
-			private:
+		
+		struct file_get_contents_binary_result {
+			const char* data;
+			unsigned int len;
+		}; 
+		struct file_get_contents_text_result {
+			const char* data;
+			unsigned int len;
+		}; 
+
+		class ARK2D_API FileUtil {
+			private: 
 			public:
+				static string getResourcePath();
 				static string prependPlatform(string filename);
 				static bool file_put_contents(string filename, string contents);
+				static bool file_put_contents(string filename, string contents, bool doPrependPlatform);
+				static bool file_put_contents(string filename, const char* data, unsigned int len);
+				
+
+				
+				static file_get_contents_binary_result file_get_contents_binary(string filename);
+				static file_get_contents_text_result file_get_contents_text(string filename);
+				
+
 				static string getCurrentDirectory();
 				static string getSeparator();
 				static string getOSDirectory();
 				static void openBrowserToURL(string url);
+				static void openGalleryToImageUrl(string url);
+
+				static void openGooglePlayStore(string packageName);
+
+
 		};
 	}
 }

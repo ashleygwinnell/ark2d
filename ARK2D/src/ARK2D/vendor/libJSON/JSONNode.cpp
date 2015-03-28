@@ -14,7 +14,7 @@ inline void clearString(json_string & str){
     #ifdef JSON_LESS_MEMORY
         json_string().swap(str);
     #else
-        str.clear();
+        str.clear(); 
     #endif
 }
 

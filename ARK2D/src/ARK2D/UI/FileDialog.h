@@ -21,7 +21,7 @@ using namespace std;
 namespace ARK {
 	namespace UI {
 
-		class FileDialogPlatformData {
+		class ARK2D_API FileDialogPlatformData {
 			public:
 				#ifdef ARK2D_WINDOWS
 					OPENFILENAME opf;
@@ -37,7 +37,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class FileDialog {
+		class ARK2D_API FileDialog {
 			private:
 				static void init(FileDialogPlatformData* fdpd);
 

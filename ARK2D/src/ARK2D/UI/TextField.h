@@ -30,7 +30,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class TextField : public AbstractUIComponent {
+		class ARK2D_API TextField : public AbstractUIComponent {
 			public:
 				String m_text;
 				int m_cursorPosition;
@@ -44,6 +44,10 @@ namespace ARK {
 
 				bool m_multiline;
 				bool m_wrap;
+
+				unsigned int m_maxLength;
+				Color m_textColor;
+				Color m_caretColor;
 
 				// align vars
 				static const signed int ALIGN_START = -1;
@@ -75,12 +79,12 @@ namespace ARK {
 				void setRestrictedCharacterSet(unsigned int r);
 
 				virtual void render();
-				void renderBackground(); 
+				virtual void renderBackground(); 
 				void renderSelectedArea(int x, int y, int w, int h);
-				void renderText(int x, int y);
+				virtual void renderText(int x, int y);
 				virtual void renderCaret();
 				virtual void renderCaret(int x1, int y1, int x2, int y2);
-				void renderOverlay();
+				virtual void renderOverlay();
 
 				bool hasSelection();
 				void keyPressed(unsigned int key);
@@ -88,6 +92,11 @@ namespace ARK {
 				void clearSelection();
 				void cursorLeft();
 				void cursorRight();
+
+				inline void setMaxLength(unsigned int len) { m_maxLength = len; }
+				inline unsigned int getMaxLength() { return m_maxLength; }
+
+				inline signed int getCursorPosition() { return m_cursorPosition; }
 
 				virtual void setFocussed(bool b);
 				virtual ~TextField();

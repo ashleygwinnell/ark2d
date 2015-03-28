@@ -19,7 +19,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class Game {
+		class ARK2D_API Game  {
 			public:
 
 				Game(string title);
@@ -40,9 +40,18 @@ namespace ARK {
 				virtual void pause(); // android events
 				virtual void resume();
 
+				// Key Listener
 				virtual void keyPressed(unsigned int key);
 				virtual void keyReleased(unsigned int key);
+
+				// Mouse Listener
 				virtual void mouseMoved(int x, int y, int oldx, int oldy);
+
+				// Gamepad Listener
+
+				// Orientation Listener
+				virtual void orientationChanged(int orientation);
+
 				virtual ~Game();
 
 			protected:

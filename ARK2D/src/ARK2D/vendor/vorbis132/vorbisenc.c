@@ -9,7 +9,7 @@
  * by the Xiph.Org Foundation http://www.xiph.org/                  *
  *                                                                  *
  ********************************************************************
-
+  
  function: simple programmatic interface for encoder mode setup
  last mod: $Id: vorbisenc.c 17028 2010-03-25 05:22:15Z xiphmont $
 
@@ -20,7 +20,7 @@
 #include <math.h>
 
 #include "codec.h"
-#include "vorbisenc.h"
+#include "vorbisenc.h" 
 
 #include "codec_internal.h"
 

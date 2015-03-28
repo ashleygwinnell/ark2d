@@ -13,7 +13,7 @@
 namespace ARK {
 	namespace GJ {
 
-		class DataStore : public PropertyItem {
+		class ARK2D_API DataStore : public PropertyItem {
 			public:
 				static const unsigned int TYPE_USER = 0;
 				static const unsigned int TYPE_GAME = 1;

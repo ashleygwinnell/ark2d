@@ -6,7 +6,7 @@
  * IN 'COPYING'. PLEASE READ THESE TERMS BEFORE DISTRIBUTING.       *
  *                                                                  *
  * THE OggVorbis SOURCE CODE IS (C) COPYRIGHT 1994-2010             *
- * by the Xiph.Org Foundation http://www.xiph.org/                  *
+ * by the Xiph.Org Foundation http://www.xiph.org/                  * 
  *                                                                  *
  ********************************************************************
 
@@ -19,8 +19,8 @@
    then we'll read the lsb first */
 
 #include <string.h>
-#include <stdlib.h>
-
+#include <stdlib.h> 
+ 
 #include <limits.h>
 #include "ogg.h"
 

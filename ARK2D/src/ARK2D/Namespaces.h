@@ -58,6 +58,9 @@ namespace ARK {
 		
 		template <class T=int>
 		class Line;
+
+		template <class T=int>
+		class Cube;
 		
 
 	}
@@ -79,6 +82,7 @@ namespace ARK {
 		class Animation;
 		class SpriteSheetDescription;
 		class SpriteSheetDescriptionItem;
+		class SpriteSheetStore;
 		class Image;
 
 		class Texture;
@@ -113,11 +117,18 @@ namespace ARK {
 		class AStar;
 		class AStarNode;
 	}
+	
+	//! Classes for skeletal animations
+	namespace Spine {
+		class Skeleton;
+	}
+	
 	//! Classes for the finite state machine and game state. (e.g. Transitions, Loading)
 	namespace State {
 		class StateBasedGame;
 		class GameState;
 		class LoadingState;
+		class VideoGameState;
 
 		//! Classes for transitioning between game states.
 		namespace Transition {
@@ -138,6 +149,10 @@ namespace ARK {
 	//! Contains classes for reading and rendering TilED maps.
 	namespace Tiled {
 		class TiledMap;
+		class TiledMapParser;
+		class TiledMapParser_TinyXml;
+		class TiledMapParser_RapidXml;
+		class TiledMapParser_JSON;
 	}
 	//! Easing and time-based events.
 	namespace Tween {
@@ -159,18 +174,25 @@ namespace ARK {
 		class ScrollPanel;
 		class TextField;
 		class UIComponent;
+		class Slider;
 	}
 	//! Contains miscellaneous classes for mathematical functions, logging, etc.
 	namespace Util {
+		class AnalyticsUtil;
+		class GooglePlayGameServicesUtil;
 		class Log;
 		class CameraShake;
 		class Cast;
 		class FileUtil;
 		class LocalHighscores;
+		class KeyPairFile;
 		class MathUtil;
 		class RSSL;
 		class StringUtil;
 		class URLRequest;
+		class Vibrator;
+		class Callback;
+		class DisplayUtil;
 
 		template <class T>
 		class Matrix44;
@@ -196,7 +218,7 @@ using namespace ARK;
 using namespace ARK::Audio;
 using namespace ARK::Controls;
 using namespace ARK::Core;
-using namespace ARK::Font;
+//using namespace ARK::Font;
 using namespace ARK::Geometry;
 using namespace ARK::GJ;
 using namespace ARK::Graphics;
@@ -207,6 +229,7 @@ using namespace ARK::Threading;
 using namespace ARK::Path;
 using namespace ARK::Pathfinding;
 using namespace ARK::Particles;
+using namespace ARK::Spine;
 using namespace ARK::State;
 using namespace ARK::State::Transition;
 using namespace ARK::UI;

@@ -20,7 +20,7 @@
    yet even a nagging little idea lurking in the shadows.  Oh and BTW,
    it's slow. */
 
-#ifndef ARK2D_IPHONE
+#ifndef ARK2D_IPHONE 
     #include <stdlib.h>
     #include <string.h>
 #endif

@@ -23,7 +23,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class String : public ARK::Core::Resource {
+		class ARK2D_API String : public ARK::Core::Resource {
 			private:
 				std::string m_string;
 			public:
@@ -94,7 +94,7 @@ namespace ARK {
 					if (from < 0) { return; }
 					m_string.erase(from, length);
 				}
-				void clear() {
+				void clear() { 
 					m_string.erase(0, m_string.length());
 				}
 				void operator--() {
@@ -104,6 +104,9 @@ namespace ARK {
 					return String(m_string.substr(from, length));
 				}
 				const std::string& get() const {
+					return m_string;
+				}
+				std::string getc() const {
 					return m_string;
 				}
 				int getAsInt() const {

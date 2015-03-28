@@ -20,7 +20,7 @@
    thus we include their copyright below.  The entirety of this file
    is freely redistributable on the condition that both of these
    copyright notices are preserved without modification.  */
-
+ 
 /* Preserved Copyright: *********************************************/
 
 /* Copyright 1992, 1993, 1994 by Jutta Degener and Carsten Bormann,

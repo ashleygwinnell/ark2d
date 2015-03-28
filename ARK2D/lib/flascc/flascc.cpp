@@ -13,8 +13,29 @@
 
 		#include "ARK.h"
 
+ 		//void flascc_openInputDialog(unsigned int callbackId, string title, string defaultStr) {
+ 			
+
+			/*inline_as3(
+				"import com.adobe.flascc.Console;\n"\
+				"Console.s_console.inputdialog();\n" 
+				: : "r"(str), "r"(m_FileName.length())
+			);*/
+
+ 			//Alert.show("Please re-enter your Information.", "Your Username/Password was incorrect", Alert.OK, _parent, wrongpassword);
+ 		//}
+
 	 	void flascc_tick() {
 			ARK2D::getContainer()->m_platformSpecific.doTick();
+		}
+
+		const char* flascc_logstr;
+		void flascc_log() {
+			ARK2D::getLog()->v(flascc_logstr);
+			free((void*) flascc_logstr);
+		}
+		void flascc_log2(string str) {
+			ARK2D::getLog()->v(str);
 		}
 
 		void flascc_event_mouseDown(int button, int x, int y) {
@@ -54,6 +75,7 @@
 			thisy /= container->getScale();
 
 			Input* i = ARK2D::getInput();
+			ARK2D::getLog()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 			ARK2D::getGame()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 			i->mouse_x = (int) thisx;
 			i->mouse_y = (int) thisy;
@@ -88,8 +110,35 @@
 			ARK2D::getInput()->pressKey(key);
 		}
 
-		void flascc_event_keyUp(int key) {
+		void flascc_event_keyUp(int key) { 
 			ARK2D::getInput()->releaseKey(key);
+		}
+
+		void flascc_event_onGamepadAttached(int gamepadIndex, string gamepadName) { 
+			
+		}
+		void flascc_event_onGamepadButtonAttached(int gamepadIndex, int buttonId) {
+
+		}
+		void flascc_event_onGamepadAxisAttached(int gamepadIndex, int axisId, float minValue, float maxValue) {
+
+		}
+		void flascc_event_onGamepadButtonDown(int gamepadIndex, int buttonId) { 
+
+		}
+		void flascc_event_onGamepadButtonUp(int gamepadIndex, int buttonId) { 
+ 
+		}
+		void flascc_event_onGamepadAxisChanged(int gamepadIndex, int axisId, float value) {
+
+		}
+		void flascc_event_onGamepadRemoved(int gamepadIndex, string gamepadName) {
+
+		}
+
+		void flascc_nativeCallbackById(int id) {
+			ARK2D::getLog()->v("flascc native callback by id"); 
+			Callbacks::invoke((unsigned int) id); 
 		}
 
 	#endif

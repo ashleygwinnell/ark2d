@@ -1,0 +1,67 @@
+OpenGL vendor string: Parallels and Intel Inc.
+OpenGL renderer string: Parallels using Intel HD Graphics 3000 OpenGL Engine
+OpenGL version string: 2.1 INTEL-8.18.28
+OpenGL extensions (GL_): 
+    GL_EXT_texture3D, GL_ARB_depth_texture, GL_ARB_draw_buffers,
+    GL_ARB_fragment_program, GL_ARB_fragment_program_shadow,
+    GL_ARB_fragment_shader, GL_ARB_framebuffer_object, GL_ARB_half_float_pixel,
+    GL_ARB_half_float_vertex, GL_ARB_multisample, GL_ARB_multitexture,
+    GL_ARB_occlusion_query, GL_ARB_pixel_buffer_object, GL_ARB_point_parameters,
+    GL_ARB_point_sprite, GL_ARB_shader_objects, GL_ARB_shader_texture_lod,
+    GL_ARB_shading_language_100, GL_ARB_shadow, GL_ARB_texture_border_clamp,
+    GL_ARB_texture_compression, GL_ARB_texture_compression_rgtc,
+    GL_ARB_texture_cube_map, GL_ARB_texture_env_add, GL_ARB_texture_env_combine,
+    GL_ARB_texture_env_crossbar, GL_ARB_texture_env_dot3, GL_ARB_texture_float,
+    GL_ARB_texture_mirrored_repeat, GL_ARB_texture_non_power_of_two,
+    GL_ARB_texture_rectangle, GL_ARB_texture_rg, GL_ARB_transpose_matrix,
+    GL_ARB_vertex_blend, GL_ARB_vertex_buffer_object, GL_ARB_vertex_program,
+    GL_ARB_vertex_shader, GL_ARB_window_pos, GL_EXT_abgr, GL_EXT_bgra,
+    GL_EXT_blend_color, GL_EXT_blend_equation_separate,
+    GL_EXT_blend_func_separate, GL_EXT_blend_minmax, GL_EXT_blend_subtract,
+    GL_EXT_clip_volume_hint, GL_EXT_draw_buffers2, GL_EXT_draw_range_elements,
+    GL_EXT_fog_coord, GL_EXT_framebuffer_blit, GL_EXT_framebuffer_multisample,
+    GL_EXT_framebuffer_object, GL_EXT_framebuffer_sRGB, GL_EXT_geometry_shader4,
+    GL_EXT_gpu_program_parameters, GL_EXT_multi_draw_arrays,
+    GL_EXT_packed_depth_stencil, GL_EXT_packed_float, GL_EXT_provoking_vertex,
+    GL_EXT_rescale_normal, GL_EXT_secondary_color,
+    GL_EXT_separate_specular_color, GL_EXT_shadow_funcs,
+    GL_EXT_stencil_two_side, GL_EXT_stencil_wrap, GL_EXT_texture_array,
+    GL_EXT_texture_compression_dxt1, GL_EXT_texture_compression_s3tc,
+    GL_EXT_texture_env_add, GL_EXT_texture_filter_anisotropic,
+    GL_EXT_texture_integer, GL_EXT_texture_lod_bias, GL_EXT_texture_rectangle,
+    GL_EXT_texture_shared_exponent, GL_EXT_texture_sRGB,
+    GL_EXT_vertex_array_bgra, GL_ATI_separate_stencil,
+    GL_ATI_texture_env_combine3, GL_ATI_texture_float,
+    GL_ATI_texture_mirror_once, GL_NV_blend_square, GL_NV_depth_clamp,
+    GL_NV_fog_distance, GL_NV_light_max_exponent, GL_NV_texgen_reflection,
+    GL_SGIS_generate_mipmap, GL_SGIS_texture_edge_clamp, GL_SGIS_texture_lod,
+    GL_EXT_texture_env_combine, GL_NV_texture_rectangle,
+    GL_EXT_texture_edge_clamp, GL_ARB_map_buffer_range,
+    WGL_ARB_extensions_string, WGL_EXT_extensions_string, WGL_ARB_pixel_format,
+    WGL_EXT_pixel_format, WGL_EXT_swap_control, WGL_ARB_pbuffer,
+    WGL_EXT_pbuffer, WGL_ARB_make_current_read, WGL_EXT_make_current_read,
+    WGL_ARB_render_texture, WGL_EXT_render_texture.
+GLU version string: 1.2.2.0 Microsoft Corporation
+GLU extensions (GLU_): 
+    GL_EXT_bgra.
+WGL extensions (WGL_): 
+    WGL_ARB_extensions_string, WGL_EXT_extensions_string, WGL_ARB_pixel_format,
+    WGL_EXT_pixel_format, WGL_EXT_swap_control, WGL_ARB_pbuffer,
+    WGL_EXT_pbuffer, WGL_ARB_make_current_read, WGL_EXT_make_current_read,
+    WGL_ARB_render_texture, WGL_EXT_render_texture.
+ +-----+-------------------------+-----------------+----------+-----------------+----------+
+ |     |          visual         |      color      | ax dp st |      accum      |   layer  |
+ |  id | tp ac gd fm db sw st ms |  sz  r  g  b  a | bf th cl |  sz  r  g  b  a | ov un sw |
+ +-----+-------------------------+-----------------+----------+-----------------+----------+
+ |   1 | wp fu  .  i  .  c  .  . |  16  5  5  5  1 |  .  .  8 |  64 16 16 16 16 |  .  .  . |
+ |   2 | wp fu  .  i  y  c  .  . |  16  5  5  5  1 |  .  .  8 |  64 16 16 16 16 |  .  .  . |
+ |   3 | wp fu  .  i  .  c  .  . |  16  5  5  5  1 |  . 24  8 |  64 16 16 16 16 |  .  .  . |
+ |   4 | wp fu  .  i  y  c  .  . |  16  5  5  5  1 |  . 24  8 |  64 16 16 16 16 |  .  .  . |
+ |   5 | wp fu  .  i  .  c  .  . |  32  8  8  8  8 |  .  .  8 |  64 16 16 16 16 |  .  .  . |
+ |   6 | wp fu  .  i  y  c  .  . |  32  8  8  8  8 |  .  .  8 |  64 16 16 16 16 |  .  .  . |
+ |   7 | wp fu  .  i  .  c  .  . |  32  8  8  8  8 |  . 24  8 |  64 16 16 16 16 |  .  .  . |
+ |   8 | wp fu  .  i  y  c  .  . |  32  8  8  8  8 |  . 24  8 |  64 16 16 16 16 |  .  .  . |
+ +-----+-------------------------+-----------------+----------+-----------------+----------+
+ |     |          visual         |      color      | ax dp st |      accum      |   layer  |
+ |  id | tp ac gd fm db sw st ms |  sz  r  g  b  a | bf th cl |  sz  r  g  b  a | ov un sw |
+ +-----+-------------------------+-----------------+----------+-----------------+----------+

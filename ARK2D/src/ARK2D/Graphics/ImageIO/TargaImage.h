@@ -46,7 +46,7 @@ namespace ARK {
 				TFT_RLE_GRAYSCALE = 11
 			};
 
-			class TargaImage
+			class ARK2D_API TargaImage
 			{
 			public:
 				TargaImage();
@@ -60,7 +60,7 @@ namespace ARK {
 				unsigned int getBitsPerPixel() const;
 				const unsigned char* getImageData() const;
 
-				GLenum getType() const;
+				//GLenum getType() const;
 
 			private:
 				TargaHeader m_header;

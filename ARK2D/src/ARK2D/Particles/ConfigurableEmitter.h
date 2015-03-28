@@ -8,6 +8,7 @@
 #ifndef CONFIGURABLEEMITTER_H_
 #define CONFIGURABLEEMITTER_H_
 
+#include "../Includes.h"
 #include "../Namespaces.h"
 #include "../Graphics/Color.h"
 #include "../Util/Range.h"
@@ -143,7 +144,7 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 * @author Kevin Glass
 		 */
-		class ConfigurableEmitter : public ParticleEmitter {
+		class ARK2D_API ConfigurableEmitter : public ParticleEmitter {
 			friend class ParticleIO;
 			friend class ParticleSystem;
 

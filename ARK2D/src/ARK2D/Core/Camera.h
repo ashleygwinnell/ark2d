@@ -14,7 +14,7 @@ using namespace std;
 
 namespace ARK {
 	namespace Core {
-		class Camera {
+		class ARK2D_API Camera {
 			private:
 				ARK::Geometry::Rectangle<int>* m_rect;
 			public:

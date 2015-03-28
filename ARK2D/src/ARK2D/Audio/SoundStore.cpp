@@ -8,6 +8,8 @@
 #include "../Includes.h"
 #include "Sound.h" 
 #include "SoundStore.h"
+#include "../Util/StringUtil.h"
+#include "../Util/Log.h"
 
 namespace ARK {
 	namespace Audio {
@@ -34,7 +36,11 @@ namespace ARK {
 		}
 		void SoundStore::removeSound(string s) {
 			map<string, Sound*>::iterator it;
-			it = m_map.find(s);
+			it = m_map.find(s); 
+			if (it == m_map.end()) { 
+				ARK2D::getLog()->w(StringUtil::append("Sound was not in SoundStore: ", s));
+				return; 
+			}
 			m_map.erase(it);
 		}
 		Sound* SoundStore::getSound(string ref) {

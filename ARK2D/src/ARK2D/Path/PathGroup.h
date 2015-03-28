@@ -28,7 +28,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinell.co.uk>
 		 */
-		class PathGroup : public ARK::Core::Resource {
+		class ARK2D_API PathGroup : public ARK::Core::Resource {
 			private:
 				vector<Path*> paths;
 				Vector2<float> currentLocation;

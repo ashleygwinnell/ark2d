@@ -25,7 +25,7 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 * @author Kevin Glass
 		 */
-		class ParticleEmitter {
+		class ARK2D_API ParticleEmitter {
 			friend class ParticleSystem;
 			public:
 			virtual void update(ParticleSystem* system, float delta) = 0;

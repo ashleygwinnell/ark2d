@@ -10,9 +10,15 @@
 namespace ARK {
 	namespace Core {
 
-		Event::Event() { }
-		void Event::eventPerformed() { }
-		Event::~Event() { }
+		Event::Event() { 
+		
+		}
+		void Event::eventPerformed() { 
+		
+		}
+		Event::~Event() { 
+		
+		}
 
 	}
 }

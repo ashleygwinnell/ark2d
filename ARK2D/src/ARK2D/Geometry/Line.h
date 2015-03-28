@@ -24,94 +24,103 @@ namespace ARK {
 		template <class T>
 		class Line: public Shape<T> {
 			private:
-				Vector2<T>* first;
-				Vector2<T>* second;
-				Vector2<T>* vec; // vector from first to second.
+				Vector2<T> first;
+				Vector2<T> second;
+				Vector2<T> vec; // vector from first to second.
 				bool dirty;
 
 			public:
-				Line(): first(new Vector2<T>(0,0)), second(new Vector2<T>(0,0)), vec(new Vector2<T>(0,0)) {
-
+				Line(): 
+					first(0, 0), 
+					second(0, 0), 
+					vec(0, 0) 
+				{
+					//ARK2D::getLog()->w("TODO: Line::__construct(), remove dynamic memory allocations");
 				}
-				Line(T x1, T y1, T x2, T y2): first(new Vector2<T>(x1,y1)), second(new Vector2<T>(x2, y2)), vec(new Vector2<T>(0,0)) {
-					vec->set(second);
-					vec->subtract(first);
+				Line(T x1, T y1, T x2, T y2): 
+					first(x1, y1), 
+					second(x2, y2), 
+					vec(0, 0) 
+				{
+					//ARK2D::getLog()->w("TODO: Line::__construct(), remove dynamic memory allocations");
+					vec.set(&second);
+					vec.subtract(&first);
 				}
 				virtual Vector2<T>* getStart() {
-					return first;
+					return &first;
 				}
 				virtual Vector2<T>* getEnd() {
-					return second;
+					return &second;
 				}
 				virtual Vector2<T>* getVec() {
-					return vec;
+					return &vec;
 				}
 				virtual void set(T x1, T y1, T x2, T y2) {
-					first->set(x1, y1);
-					second->set(x2, y2);
+					first.set(x1, y1);
+					second.set(x2, y2);
 					dirty = true;
 					clean();
 				}
 				virtual void setStartX(T x) {
-					first->setX(x);
+					first.setX(x);
 					dirty = true;
 					clean();
 				}
 				virtual void setStartY(T y) {
-					first->setY(y);
+					first.setY(y);
 					dirty = true;
 					clean();
 				}
 				virtual void setStart(T x, T y) {
-					first->set(x, y);
+					first.set(x, y);
 					dirty = true;
 					clean();
 				}
 				virtual void setEndX(T x) {
-					second->setX(x);
+					second.setX(x);
 					dirty = true;
 					clean();
 				}
 				virtual void setEndY(T y) {
-					second->setY(y);
+					second.setY(y);
 					dirty = true;
 					clean();
 				}
 				virtual void setEnd(T x, T y) {
-					second->set(x, y);
+					second.set(x, y);
 					dirty = true;
 					clean();
 				}
 				virtual T getMinX() {
-					if (first->getX() < second->getX()) {
-						return first->getX();
+					if (first.getX() < second.getX()) {
+						return first.getX();
 					}
-					return second->getX();
+					return second.getX();
 				}
 				virtual T getMaxX() {
-					if (first->getX() > second->getX()) {
-						return first->getX();
+					if (first.getX() > second.getX()) {
+						return first.getX();
 					}
-					return second->getX();
+					return second.getX();
 				}
 				virtual T getCenterX() {
-					return (first->getX() + second->getX())/2;
+					return (first.getX() + second.getX())/2;
 				}
 
 				virtual T getMinY() {
-					if (first->getY() < second->getY()) {
-						return first->getY();
+					if (first.getY() < second.getY()) {
+						return first.getY();
 					}
-					return second->getY();
+					return second.getY();
 				}
 				virtual T getMaxY() {
-					if (first->getY() > second->getY()) {
-						return first->getY();
+					if (first.getY() > second.getY()) {
+						return first.getY();
 					}
-					return second->getY();
+					return second.getY();
 				}
 				virtual T getCenterY() {
-					return (first->getY() + second->getY())/2;
+					return (first.getY() + second.getY())/2;
 				}
 
 				virtual T getWidth() {
@@ -122,21 +131,25 @@ namespace ARK {
 				}
 
 				virtual T getLength() {
-					return vec->length();
+					//return vec.length();
+					return sqrt(getLengthSquared());
 				}
 				virtual T getLengthSquared() {
-					return vec->lengthSquared();
+					//return vec.lengthSquared();
+					float diffx = first.getX() - second.getX();
+					float diffy = first.getY() - second.getY();
+					return ((diffx * diffx) + (diffy * diffy));
 				}
 				virtual void clean() {
 					if (!dirty) { return; }
-					vec->set(second);
-					vec->subtract(first);
+					vec.set(&second);
+					vec.subtract(&first);
 				}
 
 				virtual void add(T x, T y)
 				{
-					first->add(x, y);
-					second->add(x, y);
+					first.add(x, y);
+					second.add(x, y);
 				}
 
 				/**
@@ -165,23 +178,23 @@ namespace ARK {
 				void getClosestPoint(Vector2<T>* point, Vector2<T>* result) {
 					Vector2<T> loc;
 					loc.set(point);
-					loc.subtract(first);
+					loc.subtract(&first);
 
-					float projDistance = vec->dot(&loc);
+					float projDistance = vec.dot(&loc);
 
-					projDistance /= vec->lengthSquared();
+					projDistance /= vec.lengthSquared();
 
 					if (projDistance < 0) {
-						result->set(first);
+						result->set(&first);
 						return;
 					}
 					if (projDistance > 1) {
-						result->set(second);
+						result->set(&second);
 						return;
 					}
 
-					result->setX(first->getX() + projDistance * vec->getX());
-					result->setY(first->getY() + projDistance * vec->getY());
+					result->setX(first.getX() + projDistance * vec.getX());
+					result->setY(first.getY() + projDistance * vec.getY());
 				}
 
 
@@ -195,11 +208,23 @@ namespace ARK {
 					T dx = x - getCenterX();
 					T dy = y - getCenterY();
 
-					first->add(dx, dy);
-					second->add(dx, dy);
+					first.add(dx, dy);
+					second.add(dx, dy);
 
 					dirty = true;
 					clean();
+				}
+				virtual void setLocationByAlignment(T x, T y, signed int alignX, signed int alignY) {
+					ARK2D::getLog()->w("Line::setLocationByAlignment not implemented");
+				}
+
+				virtual void setXByCenter(T x) {
+					// TODO: improve this.
+					setLocationByCenter(x, getCenterY());
+				}
+				virtual void setYByCenter(T y) {
+					// TODO: improve this.
+					setLocationByCenter(getCenterX(), y);
 				}
 
 				virtual bool contains(T x, T y) {
@@ -211,19 +236,25 @@ namespace ARK {
 					Line<T>* line = NULL;
 					line = dynamic_cast<Line<T>* >(s);
 					if (line != NULL) {
-						return Shape<T>::collision_lineLine(first->getX(), first->getY(), second->getX(), second->getY(), line->getStart()->getX(), line->getStart()->getY(), line->getEnd()->getX(), line->getEnd()->getY());
+						return Shape<T>::collision_lineLine(first.getX(), first.getY(), second.getX(), second.getY(), line->getStart()->getX(), line->getStart()->getY(), line->getEnd()->getX(), line->getEnd()->getY());
 					}
 
 					Circle<T>* circle = NULL;
 					circle = dynamic_cast<Circle<T>* >(s);
 					if (circle != NULL) {
-						return Shape<T>::collision_circleLine(circle->getCenterX(), circle->getCenterY(), circle->getRadius(), first->getX(), first->getY(), second->getX(), second->getY());
+						return Shape<T>::collision_circleLine(circle->getCenterX(), circle->getCenterY(), circle->getRadius(), first.getX(), first.getY(), second.getX(), second.getY());
 					}
 
 					Rectangle<T>* rect = NULL;
 					rect = dynamic_cast<Rectangle<T>* >(s);
 					if (rect != NULL) {
-						return Shape<T>::collision_rectangleLine(rect->getMinX(), rect->getMinY(), rect->getWidth(), rect->getHeight(), first->getX(), first->getY(), second->getX(), second->getY());
+						return Shape<T>::collision_rectangleLine(rect->getMinX(), rect->getMinY(), rect->getWidth(), rect->getHeight(), first.getX(), first.getY(), second.getX(), second.getY());
+					}
+
+					Polygon<T>* poly = NULL;
+					poly = dynamic_cast<Polygon<T>* >(s);
+					if (poly != NULL) {
+						return Shape<T>::collision_polygonLine(poly, first.getX(), first.getY(), second.getX(), second.getY());
 					}
 
 					return false;
@@ -233,20 +264,20 @@ namespace ARK {
 				}
 				virtual void render() {
 					Renderer* g = ARK2D::getRenderer();
-					g->drawLine((int) first->getX(), (int) first->getY(), (int) second->getX(), (int) second->getY());
+					g->drawLine((int) first.getX(), (int) first.getY(), (int) second.getX(), (int) second.getY());
 				}
 				virtual string toString() {
 					string nl = "\r\n";
 					string str;
 					str += "{";
 					str += "	\"first\": ";
-					str += first->toString();
+					str += first.toString();
 					str += ",";
 					str += "	\"second\": ";
-					str += second->toString();
+					str += second.toString();
 					str += ",";
 					str += "	\"vec\": ";
-					str += vec->toString();
+					str += vec.toString();
 					str += "}";
 					return str;
 				}

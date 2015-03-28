@@ -2,7 +2,8 @@ package org.ashleygwinnell.imagepacker;
 
 public enum ExportFormat  {
 	XML,
-	JSON;
+	JSON,
+	TEXTUREPACKERJSONV1;
 	
 	public static boolean isValid(String s) {
 		try {

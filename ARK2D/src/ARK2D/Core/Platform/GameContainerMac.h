@@ -9,7 +9,7 @@
 #define GAMECONTAINERMAC_H_
 
 #include "../../Namespaces.h"
-#include "../../ARK2D.h"
+//#include "../../ARK2D.h"
 
 	#ifdef ARK2D_MACINTOSH
 
@@ -20,6 +20,13 @@
 		#import "GameContainerMacWindowListener.h"
 		#include <string>
 		#include <stdlib.h>
+
+		// Gamepad headers
+		#include <IOKit/hid/IOHIDLib.h>
+		#include <limits.h> 
+		#include <mach/mach.h>
+		#include <mach/mach_time.h>
+
 
 		namespace ARK {
 			namespace Core {
@@ -33,9 +40,13 @@
 						string m_resourcePath;
 						NSOpenGLContext* m_context;
 
+						// Gamepad vars
+						IOHIDManagerRef m_hidManager;
+						
+
 						static void* getARK2DResource(int resourceId, int resourceType);
 
-					private:
+					public:
 						NSOpenGLContext* createGLContext();
 						void makeContextCurrent(NSWindow* window, NSOpenGLContext* context);
 						void deleteGLContext(NSOpenGLContext* context);
@@ -45,6 +56,13 @@
 
 						bool initOpenAL();
 						bool deinitOpenAL();
+
+						inline bool isRetina() { return false; } 
+
+					public:
+						void setBorderlessWindow(bool b);
+
+					public:
 
 						void setTitle(std::string title);
 						string getResourcePath() const;

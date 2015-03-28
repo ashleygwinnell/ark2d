@@ -74,6 +74,13 @@ namespace ARK {
 					m_y = y;
 				}
 
+				void adjustX(T x) {
+					m_x += x;
+				}
+				void adjustY(T y) {
+					m_y += y;
+				}
+
 				//float angle() {
 				//	return MathUtil::anglef(0, 0, m_x, m_y);
 				//}
@@ -194,7 +201,7 @@ namespace ARK {
 					return this;
 				}
 
-				// Restrict
+				// Restrict 
 				void restrictMax(Vector2<T>* max) {
 					restrictMax(max->getX(), max->getY());
 				}
@@ -204,6 +211,13 @@ namespace ARK {
 					}
 					if (m_y > y) {
 						m_y = y;
+					} 
+
+					if (m_x < x * -1) {
+						m_x = x * -1;
+					}
+					if (m_y < y * -1) {
+						m_y = y * -1;
 					}
 				}
 
@@ -214,16 +228,58 @@ namespace ARK {
 					return (m_x * x) + (m_y * y);
 				}
 
-				T lengthSquared() {
+				T cross(Vector2* v) {
+					return cross(v->getX(), v->getY());
+				}
+				T cross(T x, T y) {
+					return ((m_x * y) - (m_y * x));
+				}
+
+				static T s_cross(T x1, T y1, T x2, T y2) {
+					return ((x1 * y2) - (y1 * x2));
+				}
+
+				T lengthSquared() const {
 					return (m_x*m_x) + (m_y * m_y);
 				}
-				T length() {
+				T length() const {
 					return (T) sqrt((double) lengthSquared());
 				}
 
 				T diff() {
 					return m_y - m_x;
 				}
+
+				Vector2<T> operator*(const Vector2<T>& other) { 
+					m_x *= other.m_x;
+					m_y *= other.m_y;
+					return *this; 
+				}
+				Vector2<T> operator*=(const Vector2<T>& other) { 
+					m_x *= other.m_x;
+					m_y *= other.m_y;
+					return *this; 
+				}
+				Vector2<T> operator*(float other) { 
+					m_x *= other;
+					m_y *= other;
+					return *this; 
+				}
+				Vector2<T> operator*=(float other) { 
+					m_x *= other;
+					m_y *= other;
+					return *this; 
+				}
+
+				Vector2<T> operator+=(const Vector2<T>& other) { 
+					add(other.m_x, other.m_y); 
+					return *this; 
+				}
+				Vector2<T> operator+=(float other) { 
+					add(other, other); 
+					return *this; 
+				}
+
 
 				string toString() {
 					ARK::Core::String s;

@@ -9,10 +9,14 @@
 
 
 #import "GameContainerIPhoneCloudDocument.h"
+#import "../../Util/ICloudUtil.h"
+
 
 @implementation IPhoneCloudDocument
 
-@synthesize documentText = _text;
+@synthesize mymeta = _mymeta;
+@synthesize defaultCreationText = _defaultCreationText;
+@synthesize documentText = _documentText;
 @synthesize delegate = _delegate;
 
 // ** READING **
@@ -25,16 +29,24 @@
         self.documentText = [[NSString alloc] initWithBytes:[contents bytes] length:[contents length] encoding:NSUTF8StringEncoding];
     }
     else {
-        self.documentText = @"";
+        self.documentText = self.defaultCreationText;
     }
 
     NSLog(@"UIDocument: Loaded the following text from the cloud: %@", self.documentText);
 
+    if (self.documentText != nil) { 
+
+        // if (self.mymeta->onchangefunction != NULL) {
+        //     void (*pt)() = (void(*)()) self.mymeta->onchangefunction;
+        //     pt();
+        // }
+
+    }
 
     // update textView in delegate...
-    if ([_delegate respondsToSelector:@selector(noteDocumentContentsUpdated:)]) {
-        [_delegate noteDocumentContentsUpdated:self];
-    }
+    //if ([_delegate respondsToSelector:@selector(noteDocumentContentsUpdated:)]) {
+    //    [_delegate noteDocumentContentsUpdated:self];
+    //}
 
     return YES;
 
@@ -45,7 +57,7 @@
 -(id)contentsForType:(NSString *)typeName error:(NSError **)outError
 {
     if ([self.documentText length] == 0) {
-        self.documentText = @"New Note";
+        self.documentText = self.defaultCreationText;
     }
 
     NSLog(@"UIDocument: Will save the following text in the cloud: %@", self.documentText);

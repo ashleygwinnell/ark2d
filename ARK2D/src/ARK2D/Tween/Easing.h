@@ -28,7 +28,7 @@ namespace ARK {
 		 * @see http://www.dzone.com/snippets/robert-penner-easing-equations
 		 * @see file://C:\xampp\htdocs\C++\ARK2D\Docs\Easing.png
 		 */
-		class Easing {
+		class ARK2D_API Easing {
 			public:
 				static const unsigned int LINEAR = 0;
 				static const unsigned int QUADRATIC_IN = 1;
@@ -61,6 +61,7 @@ namespace ARK {
 				static string getByInt(unsigned int str);
 
 				static double ease(unsigned int easing, double time, double start, double change, double duration);
+				static double easebetween(unsigned int easing, double time, double start, double end, double duration);
 
 		};
 	}

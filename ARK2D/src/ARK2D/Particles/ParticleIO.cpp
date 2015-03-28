@@ -169,7 +169,7 @@ namespace ARK {
 					flB = Cast::fromString<float>(b);
 				}
 
-				emitter->addColorPoint(flOffset, new Color(int(flR*255), int(flG*255), int(flB*255), 255));
+				emitter->addColorPoint(flOffset, new Color(int(flR*255), int(flG*255), int(flB*255)));
 
 			}
 

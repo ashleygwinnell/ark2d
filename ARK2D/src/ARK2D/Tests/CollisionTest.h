@@ -13,7 +13,7 @@
 namespace ARK {
 	namespace Tests {
 
-		class CollisionTestGameState : public GameState {
+		class ARK2D_API CollisionTestGameState : public GameState {
 			public:
 
 				ARK::Geometry::Circle<float>* circleOne;
@@ -41,7 +41,7 @@ namespace ARK {
 				virtual ~CollisionTestGameState();
 		};
 
-		class CollisionTest : public StateBasedGame {
+		class ARK2D_API CollisionTest : public StateBasedGame {
 			public:
 				CollisionTest();
 

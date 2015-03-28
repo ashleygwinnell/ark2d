@@ -19,6 +19,20 @@
 	#ifndef TEXT
 		#define TEXT(s) s
 	#endif
+
+    #if defined(ARK2D_WINDOWS_PHONE_8)
+
+        #ifdef TEXT
+            #undef TEXT
+            #define TEXT(s) s
+        #endif
+
+        #ifndef JTEXT
+            #define JTEXT(s) s
+        #endif
+
+    #endif
+
 #endif
 
 #endif

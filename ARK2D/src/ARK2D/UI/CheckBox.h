@@ -19,8 +19,8 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class CheckBox : public AbstractUIComponent {
-			private:
+		class ARK2D_API CheckBox : public AbstractUIComponent {
+			protected:
 				bool m_checked;
 				unsigned int m_state;
 				static const unsigned int STATE_OFF = Button::STATE_OFF;

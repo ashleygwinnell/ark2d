@@ -29,7 +29,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class Panel : public AbstractUIComponent {
+		class ARK2D_API Panel : public AbstractUIComponent {
 			public:
 				vector<AbstractUIComponent*> m_children;
 				bool m_translate;

@@ -23,7 +23,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class ErrorDialog {
+		class ARK2D_API ErrorDialog {
 			public:
 				static void createAndShow(string message);
 		};

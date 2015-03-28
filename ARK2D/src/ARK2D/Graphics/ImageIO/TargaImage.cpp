@@ -270,7 +270,7 @@ namespace ARK {
 			}
 
 
-			GLenum TargaImage::getType() const {
+			/*GLenum TargaImage::getType() const {
 				unsigned int bits = getBitsPerPixel();
 				if (bits <= 24) {
 					return GL_RGB;
@@ -279,7 +279,7 @@ namespace ARK {
 					return GL_RGBA;
 				}
 				return GL_RGB;
-			}
+			}*/
 		}
 	}
 }

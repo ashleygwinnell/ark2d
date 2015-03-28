@@ -23,25 +23,35 @@
 		namespace ARK {
 			namespace Core {
 
+				
+
 				class GameContainerPlatform {
 					friend class GameContainer;
 					public:
 						GameContainer* m_container;
+						GameContainerIPhoneAppDelegate* m_appDelegate;
                         GameContainerIPhoneGLView* m_glView;
 						string m_resourcePath;
 						
-						CAEAGLLayer* _eaglLayer;
-    					EAGLContext* _context;
-    					CADisplayLink* _displayLink;
-
-    					GLuint _viewRenderBuffer;// OpenGL names for the renderbuffer and framebuffers used to render to this view
+						// gl
+						CAEAGLLayer* _eaglLayer; 
+    					EAGLContext* _context;   
+    					CADisplayLink* _displayLink; 
+					
+						GLuint _viewRenderBuffer; // OpenGL names for the renderbuffer and framebuffers used to render to this view
 						GLuint _viewFrameBuffer;
+
+						static bool s_gamePaused;
+					
+					// AL
+					ALCcontext* _ctx;
 
 						void setTitle(string s);
 						string getResourcePath() const;
 						static void* getARK2DResource(int resourceId, int resourceType);
 
 						void initOpenGL(GameContainerIPhoneGLView* view);
+						void initOpenGL2(int width, int height);
 						void initOpenGL2D(int width, int height);
 						void deinitOpenGL();
 
@@ -57,6 +67,8 @@
 						void start();
 						void updateAndRender();
 						void end();
+
+						bool isRetina();
 
 				};
 

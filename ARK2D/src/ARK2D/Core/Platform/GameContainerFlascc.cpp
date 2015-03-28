@@ -29,6 +29,7 @@
 				m_height(height),
 				m_screenWidth(0),
 				m_screenHeight(0), 
+				m_scaleLock(false),
 				m_scale(1.0f),
 				m_scaleX(1.0f),
 				m_scaleY(1.0f),
@@ -39,9 +40,13 @@
 				m_resizable(false),
 				m_scaleToWindow(true),
 				m_touchMode(false),
+				m_screenOrientationPrevious(ORIENTATION_DUMMY),
+				m_orientationInverted(false),
+				m_2in1enabled(false),
 				m_clearColor(Color::black),
 				m_resizeBehaviour(RESIZE_BEHAVIOUR_SCALE),
 				m_showingFPS(false),
+				m_willLoadDefaultFont(true),
 				m_platformSpecific()
 				{
 					m_platformSpecific.m_container = this;
@@ -57,6 +62,8 @@
 					
 					//m_platformSpecific.m_window = window;
 					
+					ARK2D::getRenderer()->preinit();
+					ARK2D::getRenderer()->init();
 					
 					m_bRunning = true;
 		
@@ -65,7 +72,10 @@
 			
 
 			void ARK::Core::GameContainer::setSize(int width, int height) {
+				m_screenWidth = width;
+				m_screenHeight = height; 
 
+				resizeBehaviour(width, height);
 			}
 		
 			void ARK::Core::GameContainer::setFullscreen(bool fullscreen) {
@@ -96,7 +106,8 @@
 					s.append(fs_height);
 					ARK2D::getLog()->i(s.get()); 
 
-					resizeBehaviour(fs_width, fs_height);
+					//resizeBehaviour(fs_width, fs_height);
+					setSize(fs_width, fs_height);
 					//ARK2D::s_game->resize(this, fs_width, fs_height);
 
 				} else if (!fullscreen && m_fullscreen) {
@@ -107,7 +118,8 @@
 						"Console.setFullscreen(false);\n"
 					);
 
-					resizeBehaviour(m_originalWidth, m_originalHeight);
+					//resizeBehaviour(m_originalWidth, m_originalHeight);
+					setSize(m_originalWidth, m_originalHeight);
 					//ARK2D::s_game->resize(this, m_originalWidth, m_originalHeight);
 				}
 
@@ -170,13 +182,20 @@
 				glClearColor(m_clearColor.getRed()/255.0f, m_clearColor.getGreen()/255.0f, m_clearColor.getBlue()/255.0f, m_clearColor.getAlpha()/255.0f);
 				
 				// load default font. 
-				ARK::Font::Font* fnt = ARK::Core::Resource::get("ark2d/fonts/default.fnt")->asFont(); // BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
-				m_graphics.m_DefaultFont = fnt;
-				m_graphics.m_Font = fnt; 
+				if (m_willLoadDefaultFont) { 
+					ARK::Font::Font* fnt = ARK::Core::Resource::get("ark2d/fonts/default.fnt")->asFont(); // BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
+					m_graphics.m_DefaultFont = fnt;
+					m_graphics.m_Font = fnt; 
+
+					std::cout << "font pointer: " << (int) (fnt) <<  " and null is: " << (int) (NULL) << "." << std::endl;
+				} else {
+					m_graphics.m_DefaultFont = NULL;
+					m_graphics.m_Font = NULL;
+				}
 				//ARK2D::s_graphics->setDefaultFont(fnt);
 				//ARK2D::s_graphics->setFont(fnt);
 
-				std::cout << "font pointer: " << (int) (fnt) <<  " and null is: " << (int) (NULL) << "." << std::endl;
+				
 				
 				// initialise 
 				enableOpenAL();
@@ -201,7 +220,7 @@
 			}
  
 			void GameContainerPlatform::doTick() {
-				ARK2D::getLog()->i("Flascc Main Loop Tick");
+				//ARK2D::getLog()->i("Flascc Main Loop Tick");
 				GameContainer* container = ARK2D::getContainer(); 
 
 				GameTimer* m_timer = container->getTimer();
@@ -210,7 +229,7 @@
 				Renderer* m_graphics = ARK2D::getRenderer();
 				//vector<Gamepad*> m_gamepads = container->getGamepads();
 
-				ARK2D::getLog()->i("Timer Tick");
+				//ARK2D::getLog()->i("Timer Tick");
 				m_timer->tick();
 				container->m_platformSpecific.doEvents();
 				
@@ -218,7 +237,9 @@
 			   
 				//ARK2D::getLog()->update();
 			   
-			   	ARK2D::getLog()->i("Game Pre-update");
+			   	ARK2D::getLog()->update();
+			   	
+			   //	ARK2D::getLog()->i("Game Pre-update");
 			   	//ARK2D::getLog()->i("timerdelta:");
 			   	//string deltastr = Cast::toString<int>(int(m_timer->getDelta()*1000));
 			   	//ARK2D::getLog()->i(deltastr);
@@ -228,23 +249,24 @@
 				m_game->update(container, m_timer);				//ARK2D::getLog()->i("Game Pre-update 4");
 				m_game->postUpdate(container, m_timer);
 
-				ARK2D::getLog()->i("Clear Input");
+				//ARK2D::getLog()->i("Clear Input");
 				m_input->clearKeyPressedRecord();
 				//for (unsigned int i = 0; i < m_gamepads.size(); i++) {
 				//	m_gamepads.at(i)->clearButtonPressedRecord();
 				//}
 				
-				ARK2D::getLog()->i("Game Pre-render");
+				//ARK2D::getLog()->i("Game Pre-render");
 				RendererStats::reset();
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
 				m_game->preRender(container, m_graphics);
 				m_game->render(container, m_graphics);
+				ARK2D::getLog()->render(container, m_graphics);
 				m_game->postRender(container, m_graphics);
 				//if (container->isShowingFPS()) { container->renderFPS(); }
-				ARK2D::getLog()->render();
+				
 				
 				container->swapBuffers();
-				ARK2D::getLog()->i("Game Post-render");
+				//ARK2D::getLog()->i("Game Post-render");
 				 
 				//usleep(delta * 500); // 0.017/2.
 			}
@@ -266,6 +288,7 @@
 					[context flushBuffer];
 				}*/
 			}
+
 			
 			
 			

@@ -14,7 +14,7 @@
 
 namespace ARK {
 	namespace Util {
-		class ArcadeHighscoreInput {
+		class ARK2D_API ArcadeHighscoreInput {
 			public:
 
 				signed int m_arcadeInputIndex;
@@ -22,9 +22,9 @@ namespace ARK {
 				vector<signed int> characterIndexes;
 				vector<string> characters;
 
-				vector<Button*> m_buttonsUp;
-				vector<Button*> m_buttonsDown;
-				Button* m_buttonLetterEnd;
+				vector<ARK::UI::Button*> m_buttonsUp;
+				vector<ARK::UI::Button*> m_buttonsDown;
+				ARK::UI::Button* m_buttonLetterEnd;
 
 				void* letterChangedFunction;
 				void* additionalEndFunction;

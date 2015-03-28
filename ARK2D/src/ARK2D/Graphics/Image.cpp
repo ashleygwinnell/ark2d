@@ -11,19 +11,26 @@
 #include "ImageIO/TargaImage.h"
 #include "ImageIO/BMPImage.h"
 #include "ImageIO/PNGImage.h"
-#include "../Util/StringUtil.h"
+#include "../Util/StringUtil.h" 
 #include "Color.h"
 #include "SpriteSheetDescriptionItem.h"
 
-#include "../Includes.h"
+//#include "../Includes.h"
 #include "../Core/GameContainer.h"
 #include "../Core/Resource.h"
 #include "Texture.h"
-#include "TextureStore.h"
+#include "TextureStore.h" 
+#include "Shader.h"
 
+#include "../vendor/FileInterface.h"
+#include "../Common/OpenGL.h"
+
+#define bswap16(x) ((x)>>8 | ((x)&255)<<8)
 
 namespace ARK {
 	namespace Graphics {
+
+		unsigned int Image::s_dxNextTextureId = 0;
  
 		GLuint Image::load(const Color& mask) {
  
@@ -38,6 +45,8 @@ namespace ARK {
 					thisDataType = ARK2D_RESOURCE_TYPE_BMP;
 				} else if (ext == "png") {
 					thisDataType = ARK2D_RESOURCE_TYPE_PNG;
+				} else if (ext == "pkm_png") {
+					thisDataType = ARK2D_RESOURCE_TYPE_PKM;
 				}
 			}
 
@@ -45,40 +54,137 @@ namespace ARK {
 			if (thisDataType == ARK2D_RESOURCE_TYPE_TGA) {
 				//std::cout << "Loading TGA!" << std::endl;
 				TargaImage* tga = loadTGA();
-				this->setWidth(tga->getWidth());
-				this->setHeight(tga->getHeight());
+				ARK2D::getLog()->v("loaded a bit.");
 
-				// Generate one texture (we're creating only one).
-				unsigned Object(0);
+				if (tga == NULL) {
+					ARK2D::getLog()->e("Something has gone terribly wrong loading that TGA file. :(");
+					return 0;
+				}
 
-				//if (texture == 0) { 
+				m_Width = tga->getWidth();
+				m_Height = tga->getHeight();
+
+				ARK2D::getLog()->v(StringUtil::append("width: ", m_Width));
+				ARK2D::getLog()->v(StringUtil::append("height: ", m_Height));
+
+				ARK2D::getLog()->v("loaded a bit more.");
+
+				unsigned int Object(0);
+
+				#if defined(ARK2D_RENDERER_OPENGL)
+
+					// Generate one texture (we're creating only one).
 					glGenTextures(1, &Object);
-					showAnyGlErrorAndExit();
-				//} else {
-				//	Object = texture;
-				//}
+					showAnyGlErrorAndExitMacro();
 
-				// bind?
-				RendererState::internalBindTexture(Object);
-				//glBindTexture(GL_TEXTURE_2D, Object);
-				// You can use these values to specify mipmaps if you want to, such as 'GL_LINEAR_MIPMAP_LINEAR'.
-				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Renderer::getInterpolationGL());
-				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Renderer::getInterpolationGL());
+					// Bind
+					RendererState::internalBindTexture(Object);
 
-				//for (int i = 0; i < tga->getImageData().size(); i++) {
-				//	data = tga->getImageData().at(i);
-				//}
+					// You can use these values to specify mipmaps if you want to, such as 'GL_LINEAR_MIPMAP_LINEAR'.
+					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Renderer::getInterpolationGL());
+					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Renderer::getInterpolationGL());
 
-				// Create the actual texture object.
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->getWidth(), this->getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, tga->getImageData());
+					// Create the actual texture object.
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->getWidth(), this->getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, tga->getImageData());
 
-				// don't forget to unbind the texture now.
-				//glBindTexture(GL_TEXTURE_2D, 0);
-				RendererState::internalBindTexture(0);
-				showAnyGlErrorAndExit();
+					// Don't forget to unbind the texture now...
+					RendererStats::s_textureAllocatedBytes += int(m_Width * m_Height * 3 * 8);
+					RendererState::internalBindTexture(0);
+					showAnyGlErrorAndExitMacro();
+
+				#elif defined(ARK2D_RENDERER_DIRECTX)
+
+					ARK2D::getLog()->v("loaded a bit more again... somehow?");
+
+					// different size to image. need moar memory.
+					const unsigned char* pixelData = tga->getImageData();
+					unsigned char* newdata = (unsigned char*)malloc(m_Width * m_Height * 4);
+					int offset = 0;
+					int oldOffset = 0;
+					for (unsigned int i = 0; i < m_Width; i++) {
+						for (unsigned int j = 0; j < m_Height; j++) {
+
+							
+
+							if (i >= m_Height || j >= m_Width) {
+								newdata[offset] = (unsigned char)0;
+								newdata[offset + 1] = (unsigned char)0;
+								newdata[offset + 2] = (unsigned char)0;
+								newdata[offset + 3] = (unsigned char)0;
+							}
+							else if ((unsigned int)((unsigned char)pixelData[oldOffset]) == mask.getRed() &&
+								(unsigned int)((unsigned char)pixelData[oldOffset + 1]) == mask.getGreen() &&
+								(unsigned int)((unsigned char)pixelData[oldOffset + 2]) == mask.getBlue()) {
+								//std::cout << "replacing " << j << ":" << i << std::endl;
+								newdata[offset] = (unsigned char)0;
+								newdata[offset + 1] = (unsigned char)0;
+								newdata[offset + 2] = (unsigned char)0;
+								newdata[offset + 3] = (unsigned char)0;
+								oldOffset += 3;
+							}
+							else {
+								memcpy((newdata + offset), &pixelData[oldOffset], 3);
+								newdata[offset + 3] = 255;
+								oldOffset += 3;
+							}
+							offset += 4;
+						}
+					}
+
+					offset = 0;
+					for (unsigned int i = 0; i < m_Width; i++) {
+						for (unsigned int j = 0; j < m_Height; j++) {
+
+							if (i == 0 && j == 0) {
+								// print first color...
+								string ppp = "{";
+								ppp += string("r: "); ppp += Cast::toString<unsigned int>((unsigned int)newdata[offset]);   ppp += string(", ");
+								ppp += string("g: "); ppp += Cast::toString<unsigned int>((unsigned int)newdata[offset + 1]); ppp += string(", ");
+								ppp += string("b: "); ppp += Cast::toString<unsigned int>((unsigned int)newdata[offset + 2]); ppp += string(", ");
+								ppp += string("a: "); ppp += Cast::toString<unsigned int>((unsigned int)newdata[offset + 2]); ppp += string(", ");
+								ppp += string("}");
+								ARK2D::getLog()->v(StringUtil::append("tl color: ", ppp));
+							}
+							else if (i == 10 && j == 10) {
+								string ppp = "{";
+								ppp += string("r: "); ppp += Cast::toString<unsigned int>((unsigned int)newdata[offset]);   ppp += string(", ");
+								ppp += string("g: "); ppp += Cast::toString<unsigned int>((unsigned int)newdata[offset + 1]); ppp += string(", ");
+								ppp += string("b: "); ppp += Cast::toString<unsigned int>((unsigned int)newdata[offset + 2]); ppp += string(", ");
+								ppp += string("a: "); ppp += Cast::toString<unsigned int>((unsigned int)newdata[offset + 2]); ppp += string(", ");
+								ppp += string("}");
+								ARK2D::getLog()->v(StringUtil::append("10,10 color: ", ppp));
+							} 
+							else if (i == 10 && j == 244) {
+								string ppp = "{";
+								ppp += string("r: "); ppp += Cast::toString<unsigned int>((unsigned int)newdata[offset]);   ppp += string(", ");
+								ppp += string("g: "); ppp += Cast::toString<unsigned int>((unsigned int)newdata[offset + 1]); ppp += string(", ");
+								ppp += string("b: "); ppp += Cast::toString<unsigned int>((unsigned int)newdata[offset + 2]); ppp += string(", ");
+								ppp += string("a: "); ppp += Cast::toString<unsigned int>((unsigned int)newdata[offset + 2]); ppp += string(", ");
+								ppp += string("}");
+								ARK2D::getLog()->v(StringUtil::append("10,10 color: ", ppp));
+							}
+
+							newdata[offset] = MathUtil::randBetween(0, 255);
+							newdata[offset+1] = MathUtil::randBetween(0, 255);
+							newdata[offset+2] = MathUtil::randBetween(0, 255);
+							newdata[offset+3] = 255;
+
+							offset += 4;
+						}
+					}
+
+					Object = createDXTexture(m_Width, m_Height, newdata); 
+					RendererStats::s_textureAllocatedBytes += (m_Width * m_Height * 8 * 4);
+
+					free(newdata);
+					
+				#endif
 
 				// Free TGA memory.
+				ARK2D::getLog()->v("Freeing up TGA memory");
 				delete(tga);
+
+				RendererStats::s_glCalls += 4;
 
 				// and finally return
 				return Object;
@@ -88,23 +194,6 @@ namespace ARK {
 				m_Width = bmp->Width;
 				m_Height = bmp->Height;
 
-				// Generate one texture (we're creating only one).
-				unsigned Object(0);
-
-				//if (texture == 0) { 
-					glGenTextures(1, &Object);
-					showAnyGlErrorAndExit();
-				//} else {
-				//	Object = texture;
-				//}
-				//glGenTextures(1, &Object);
-				//showAnyGlErrorAndExit();
-
-				//for (unsigned int i = 0; i < sizeof(&bmp->Raster); i++) {
-				//	byte pixel = byte(&bmp->Raster[i]);
-				//	std::cout << pixel << std::endl;
-				//}
-
 
 				// generate a new Raster from the BMP information. this one has an alpha channel!
 				unsigned int OldRasterSize = (bmp->BytesPerRow * bmp->Height);
@@ -113,7 +202,8 @@ namespace ARK {
 				//std::cout << OldRasterSize << " : " << NewRasterSize << std::endl;
 				//std::cout << bmp->BPP << std::endl;
 
-				char NewRaster[NewRasterSize];	// 32 bits raster, yes!
+				//char NewRaster[NewRasterSize];	// 32 bits raster, yes!
+				char* NewRaster = (char*) malloc(NewRasterSize);
 
 				int NewRasterIndex = 0;
 				for (unsigned int i = 0; i < OldRasterSize; i += 3) {
@@ -134,48 +224,159 @@ namespace ARK {
 
 				//std::cout << "Width: " << m_Width << ". Height: " << m_Width << std::endl;
 
-				// bind?
-				//glBindTexture(GL_TEXTURE_2D, Object);
-				RendererState::internalBindTexture(Object);
+				unsigned Object(0);
+				
+				#if defined(ARK2D_RENDERER_OPENGL)
 
-				// You can use these values to specify mipmaps if you want to, such as 'GL_LINEAR_MIPMAP_LINEAR'.
-				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Renderer::getInterpolationGL());
-				glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Renderer::getInterpolationGL());
+					// Generate one texture (we're creating only one).
+					glGenTextures(1, &Object);
+					showAnyGlErrorAndExitMacro();
 
-				// Create the actual texture object.
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NewRaster);
+					// Bind
+					RendererState::internalBindTexture(Object);
 
-				//for (unsigned int x = 0; x < bmp->Width; x++) {
-				//	for (unsigned int y = 0; y < bmp->Height; y++) {
-						/*int x = 3; int y = 3;
-						unsigned char pixel[3];
-						glReadPixels(x, y, 1, 1, GL_BGR, GL_UNSIGNED_BYTE, pixel);
-						float fr, fg, fb;
-						fr = pixel[0]/255.0;
-						fg = pixel[1]/255.0;
-						fb = pixel[2]/255.0;
-						float r, g, b;
-						r = pixel[0];
-						g = pixel[1];
-						b = pixel[2];
-						std::cout << fr << " : " << fg << " : " << fb << std::endl;
-						std::cout << r << " : " << g << " : " << b << std::endl; */
-				//	}
-				//}
+					// You can use these values to specify mipmaps if you want to, such as 'GL_LINEAR_MIPMAP_LINEAR'.
+					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Renderer::getInterpolationGL());
+					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Renderer::getInterpolationGL());
 
-				// don't forget to unbind the texture now.
-				//glBindTexture(GL_TEXTURE_2D, 0);
-				RendererState::internalBindTexture(0);
-				//texture = Object;
+					// Create the actual texture object.
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (int) m_Width, (int) m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NewRaster);
 
-				showAnyGlErrorAndExit();
+					// Don't forget to unbind the texture now.
+					RendererStats::s_textureAllocatedBytes += int(m_Width * m_Height * 4 * 8);
+					RendererState::internalBindTexture(0);
+					showAnyGlErrorAndExitMacro();
 
-				// Free BMP memory.
+				#elif defined(ARK2D_RENDERER_DIRECTX)
+					
+					//gl2dx::OpenGL::getInstance()->_device->SetSamplerState(IDirect3DDevice9, )
+					Object = createDXTexture(m_Width, m_Height, NewRaster); 
+
+				#endif
+
+				// Free BMP memory. 
+				free(NewRaster);
 				delete(bmp);
+
+				RendererStats::s_glCalls += 4;
 
 				// and return!
 				return Object;
-			} else if (thisDataType == ARK2D_RESOURCE_TYPE_PNG) {
+			} 
+			else if (thisDataType == ARK2D_RESOURCE_TYPE_PKM) 
+			{
+				
+				#if ( defined(ARK2D_ANDROID)  )
+				
+					/*
+						http://forums.arm.com/index.php?/topic/15835-pkm-header-format/
+						4 byte magic number: "PKM "
+						2 byte version "10"
+						2 byte data type: 0 (ETC1_RGB_NO_MIPMAPS)
+						16 bit big endian extended width
+						16 bit big endian extended height
+						16 bit big endian original width
+						16 bit big endian original height
+						data, 64bit big endian words.
+					*/ 
+					char* buffer = NULL;
+					long lSize = 0;
+					if (m_data == NULL) {
+						FILE* fp = fopen(this->filename.c_str(), "r");
+
+						fseek (fp, 0, SEEK_END);
+						lSize = ftell (fp);
+						rewind (fp);
+
+						buffer = (char*) malloc(sizeof(char) * lSize);
+						fread (buffer, 1, lSize, fp);
+						
+						fclose(fp);
+					} else {
+						buffer = (char*) m_data;
+						lSize = (long) m_dataLength;
+					}
+
+					FILE_INTERFACE* fp = fi_fopen("", "r", buffer, lSize);
+					
+					char stuff[8];
+					fi_fread((void*) &stuff, sizeof(char), 8, fp);
+
+					uint16_t width = 0;
+					uint16_t height = 0; 
+					uint16_t extended_width = 0;
+					uint16_t extended_height = 0; 	
+
+					fi_fread((void*) &width, sizeof(uint16_t), 1, fp);
+					fi_fread((void*) &height, sizeof(uint16_t), 1, fp);
+
+					fi_fread((void*) &extended_width, sizeof(uint16_t), 1, fp);
+					fi_fread((void*) &extended_height, sizeof(uint16_t), 1, fp);
+
+					m_Width = bswap16(width);
+					m_Height = bswap16(height);
+
+					ARK2D::getLog()->v(StringUtil::append("w: ", m_Width));
+					ARK2D::getLog()->v(StringUtil::append("h: ", m_Height));
+
+					size_t result;
+					char* pcData = (char*) malloc(lSize - 16);
+					result = fi_fread(pcData, sizeof(char), lSize - 16, fp);
+					if (result != lSize - 16) {
+						ARK2D::getLog()->e("PKM: Reading error");
+						exit(1);
+					}
+
+					//Now generate the OpenGL texture object
+					ARK2D::getLog()->v("generating texture");
+					unsigned Object(0);
+					
+					glGenTextures(1, &Object);
+					showAnyGlErrorAndExitMacro();
+
+					ARK2D::getLog()->v("binding texture");
+					RendererState::internalBindTexture(Object);
+					showAnyGlErrorAndExitMacro();
+
+					ARK2D::getLog()->v("setting texture data");
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Renderer::getInterpolationGL());
+					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Renderer::getInterpolationGL());
+					
+					GLuint uiSize = 8 * ((int(m_Width) + 3) >> 2) * ((int(m_Height) + 3) >> 2);
+					glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_ETC1_RGB8_OES, m_Width, m_Height, 0, uiSize, pcData);
+					//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tempTextureWidth, tempTextureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, newdata);
+					
+					showAnyGlErrorAndExitMacro();  
+
+					RendererStats::s_textureAllocatedBytes += uiSize;
+
+					ARK2D::getLog()->v("unbinding texture");
+					RendererState::internalBindTexture(0);
+					//texture = Object;
+
+					showAnyGlErrorAndExitMacro();
+
+					free(pcData); 
+
+					if (m_data == NULL) {
+						free(buffer);
+					}
+
+					RendererStats::s_glCalls += 4;
+
+					return Object;
+
+				#else
+					ARK2D::getLog()->e("PKM only supported on OPENGL ES platforms. ");
+				#endif
+				
+				return 0;
+					
+
+				
+			}
+			else if (thisDataType == ARK2D_RESOURCE_TYPE_PNG) 
+			{
 				//std::cout << "Loading PNG!" << std::endl;
 				PNGImage* png = loadPNG();
 
@@ -183,7 +384,7 @@ namespace ARK {
 				m_Width = png->getWidth();
 				m_Height = png->getHeight();
 
-				std::cout << "w: " << m_Width << " h: " << m_Height << std::endl;
+				//std::cout << "w: " << m_Width << " h: " << m_Height << std::endl;
 
 				
 
@@ -226,11 +427,11 @@ namespace ARK {
 				}*/
 
 				//! auto-power-of-twoing
-				unsigned int tempTextureWidth = MathUtil::nextPowerOfTwo(m_Width);
-				unsigned int tempTextureHeight = MathUtil::nextPowerOfTwo(m_Height);
+				unsigned int tempTextureWidth = MathUtil::nextPowerOfTwo((unsigned int) m_Width);
+				unsigned int tempTextureHeight = MathUtil::nextPowerOfTwo((unsigned int) m_Height);
 
-				ARK2D::getLog()->i(StringUtil::append("new width:", tempTextureWidth));
-				ARK2D::getLog()->i(StringUtil::append("new height:", tempTextureHeight));
+				ARK2D::getLog()->v(StringUtil::append("new width:", tempTextureWidth));
+				ARK2D::getLog()->v(StringUtil::append("new height:", tempTextureHeight));
 
 				// 
 				// check it can fit! and is compatible with hardware!
@@ -238,8 +439,8 @@ namespace ARK {
 				// http://www.opengl.org/archives/resources/faq/technical/texture.htm
 				// 21.130 What's the maximum size texture map my device will render hardware accelerated?
 
-                ARK2D::getLog()->i("check texture is compatible with hardware...");
-                #if !defined(ARK2D_IPHONE) && !defined(ARK2D_ANDROID) && !defined(ARK2D_FLASCC)
+                ARK2D::getLog()->v("check texture is compatible with hardware...");
+				#if !defined(ARK2D_IPHONE) && !defined(ARK2D_ANDROID) && !defined(ARK2D_FLASCC) && !defined(ARK2D_EMSCRIPTEN_JS) && !defined(ARK2D_WINDOWS_PHONE_8) && !defined(ARK2D_RENDERER_DIRECTX)
                 
                     GLint loltexcompat_w = tempTextureWidth;
                     GLint loltexcompat_h = tempTextureHeight;
@@ -261,79 +462,133 @@ namespace ARK {
                 #endif
 
 
+
 				float newTextureWidth =  float(m_Width) / float(tempTextureWidth);
 				float newTextureHeight =  float(m_Height) / float(tempTextureHeight);
-				this->texture_width = newTextureWidth;
-				this->texture_height = newTextureHeight;
+				//this->texture_width = newTextureWidth;
+				//this->texture_height = newTextureHeight;
+				texture_offset_x_tl = 0.0f;
+				texture_offset_y_tl = 0.0f;
+				texture_offset_x_tr = newTextureWidth;
+				texture_offset_y_tr = 0.0f;
+				texture_offset_x_bl = 0.0f;
+				texture_offset_y_bl = newTextureHeight;
+				texture_offset_x_br = newTextureWidth;
+				texture_offset_y_br = newTextureHeight;
 
 
 				if (png->isRGBA()) {
-					ARK2D::getLog()->i("rgba png");
+					ARK2D::getLog()->v("rgba png");
 
-					unsigned char* newdata = (unsigned char*) malloc(tempTextureWidth * tempTextureHeight * 4);
-					offset = 0;
-					int oldOffset = 0;
-					for (unsigned int i = 0; i < tempTextureHeight; i++) {
-						for (unsigned int j = 0; j < tempTextureWidth; j++) {
-							if (i >= m_Height || j >= m_Width) {
-								newdata[offset] = (unsigned char) 0;
-								newdata[offset+1] = (unsigned char) 0;
-								newdata[offset+2] = (unsigned char) 0;
-								newdata[offset+3] = (unsigned char) 0;
-							} else if ((unsigned int) ((unsigned char) pixelData[oldOffset]) == mask.getRed() &&
-									(unsigned int) ((unsigned char) pixelData[oldOffset+1]) == mask.getGreen() &&
-									(unsigned int) ((unsigned char) pixelData[oldOffset+2]) == mask.getBlue() &&
-									(unsigned int) ((unsigned char) pixelData[oldOffset+3]) == mask.getAlpha()) {
-								//std::cout << "replacing " << j << ":" << i << std::endl;
-								newdata[offset] = (unsigned char) 0;
-								newdata[offset+1] = (unsigned char) 0;
-								newdata[offset+2] = (unsigned char) 0;
-								newdata[offset+3] = (unsigned char) 0;
-								oldOffset += 4;
-							} else {
-								memcpy((newdata + offset), &pixelData[oldOffset], 1);
-								memcpy((newdata + offset + 1), &pixelData[oldOffset+1], 1);
-								memcpy((newdata + offset + 2), &pixelData[oldOffset+2], 1);
-								memcpy((newdata + offset + 3), &pixelData[oldOffset+3], 1);
-								//newdata[offset] = (unsigned char) pixelData[oldOffset];
-								//newdata[offset+1] = (unsigned char) pixelData[oldOffset+1];
-								//newdata[offset+2] = (unsigned char) pixelData[oldOffset+2];
-								//newdata[offset+3] = (unsigned char) pixelData[oldOffset+3];
-								oldOffset += 4;
+					unsigned char* newdata = NULL;
+					bool usesNewMemory = false;
+					if (tempTextureWidth == m_Width && tempTextureHeight == m_Height) {
+                		// same size. don't need to allocate new memory, only change existing memory.
+                		newdata = pixelData;
+                		offset = 0;
+						int oldOffset = 0;
+						for (unsigned int i = 0; i < tempTextureHeight; i++) {
+							for (unsigned int j = 0; j < tempTextureWidth; j++) {
+								if ((unsigned int) ((unsigned char) pixelData[oldOffset]) == mask.getRed() &&
+										(unsigned int) ((unsigned char) pixelData[oldOffset+1]) == mask.getGreen() &&
+										(unsigned int) ((unsigned char) pixelData[oldOffset+2]) == mask.getBlue() &&
+										(unsigned int) ((unsigned char) pixelData[oldOffset+3]) == mask.getAlpha()) {
+									//std::cout << "replacing " << j << ":" << i << std::endl;
+									pixelData[offset] = (unsigned char) 0;
+									pixelData[offset+1] = (unsigned char) 0;
+									pixelData[offset+2] = (unsigned char) 0; 
+									pixelData[offset+3] = (unsigned char) 0;
+									oldOffset += 4;
+								} else {
+									oldOffset += 4;
+								}
+								offset += 4;
 							}
-							offset += 4;
+						}
+
+					} else {
+						// different size to image. need moar memory.
+						usesNewMemory = true;
+						newdata = (unsigned char*) malloc(tempTextureWidth * tempTextureHeight * 4);
+						offset = 0;
+						int oldOffset = 0;
+						for (unsigned int i = 0; i < tempTextureHeight; i++) {
+							for (unsigned int j = 0; j < tempTextureWidth; j++) {
+								if (i >= m_Height || j >= m_Width) {
+									newdata[offset] = (unsigned char) 0;
+									newdata[offset+1] = (unsigned char) 0;
+									newdata[offset+2] = (unsigned char) 0;
+									newdata[offset+3] = (unsigned char) 0;
+								} else if ((unsigned int) ((unsigned char) pixelData[oldOffset]) == mask.getRed() &&
+										(unsigned int) ((unsigned char) pixelData[oldOffset+1]) == mask.getGreen() &&
+										(unsigned int) ((unsigned char) pixelData[oldOffset+2]) == mask.getBlue() &&
+										(unsigned int) ((unsigned char) pixelData[oldOffset+3]) == mask.getAlpha()) {
+									//std::cout << "replacing " << j << ":" << i << std::endl;
+									newdata[offset] = (unsigned char) 0;
+									newdata[offset+1] = (unsigned char) 0;
+									newdata[offset+2] = (unsigned char) 0;
+									newdata[offset+3] = (unsigned char) 0;
+									oldOffset += 4;
+								} else {
+									memcpy((newdata + offset), &pixelData[oldOffset], 4);
+									oldOffset += 4;
+								}
+								offset += 4;
+							}
 						}
 					}
 
-					//Now generate the OpenGL texture object
-					ARK2D::getLog()->i("generating texture");
-					unsigned Object(0);
-					//if (texture == 0) { 
-						glGenTextures(1, &Object);
-						showAnyGlErrorAndExit();
-					//} else {
-					//	Object = texture;
-					//}
-					//glGenTextures(1, &Object);
-					//showAnyGlErrorAndExit();
 					
-					//glBindTexture(GL_TEXTURE_2D, Object);
-					ARK2D::getLog()->i("binding texture");
-					RendererState::internalBindTexture(Object);
+					unsigned Object(0);
 
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Renderer::getInterpolationGL());
-					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Renderer::getInterpolationGL());
-					//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tempTextureWidth, tempTextureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, newdata);
-					//glBindTexture(GL_TEXTURE_2D, 0);
-					ARK2D::getLog()->i("unbinding texture");
-					RendererState::internalBindTexture(0);
-					//texture = Object;
+					#if defined(ARK2D_RENDERER_OPENGL)
 
-					showAnyGlErrorAndExit();
+						//Now generate the OpenGL texture object
+						ARK2D::getLog()->v("generating texture");
+						//if (texture == 0) { 
+							glGenTextures(1, &Object);
+							showAnyGlErrorAndExitMacro(); 
+						//} else {
+						//	Object = texture;
+						//}
+						//glGenTextures(1, &Object);
+						//showAnyGlErrorAndExit();
+						
+						//glBindTexture(GL_TEXTURE_2D, Object);
+						ARK2D::getLog()->v("binding texture");
+						RendererState::internalBindTexture(Object);
+						showAnyGlErrorAndExitMacro();
+
+						ARK2D::getLog()->v("setting texture data");
+						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Renderer::getInterpolationGL());
+						glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Renderer::getInterpolationGL());
+
+						ARK2D::getLog()->v("glTexImage2d");
+						//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
+						glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tempTextureWidth, tempTextureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, newdata);
+						//glBindTexture(GL_TEXTURE_2D, 0);
+						showAnyGlErrorAndExitMacro(); 
+
+						RendererStats::s_textureAllocatedBytes += (tempTextureWidth * tempTextureHeight * 8 * 4);
+
+						ARK2D::getLog()->v("unbinding texture");
+						RendererState::internalBindTexture(0);
+						//texture = Object;
+
+						showAnyGlErrorAndExitMacro();
+					
+					#elif defined(ARK2D_RENDERER_DIRECTX)
+						Object = createDXTexture(tempTextureWidth, tempTextureHeight, newdata); 
+						RendererStats::s_textureAllocatedBytes += (tempTextureWidth * tempTextureHeight * 8 * 4);
+					#endif
+
+					
 
 					delete png;
-					free(newdata);
+
+					if (usesNewMemory) { 
+						free(newdata);
+					}
 
 					return Object;
 				} else if (png->isRGB()) {
@@ -341,7 +596,7 @@ namespace ARK {
 					//ErrorDialog::createAndShow(StringUtil::append("Add an alpha channel to png image: ", filename));
 					//exit(0);
 
-					ARK2D::getLog()->i("rgb png");
+					ARK2D::getLog()->v("rgb png");
 
 					// power of two textures!
 					unsigned char* newdata = (unsigned char*) malloc(tempTextureWidth * tempTextureHeight * 4);
@@ -364,101 +619,202 @@ namespace ARK {
 								newdata[offset+3] = (unsigned char) 0;
 								oldOffset += 4;
 							} else {
+								memcpy((newdata + offset), &pixelData[oldOffset], 4);
+								/*
 								memcpy((newdata + offset), &pixelData[oldOffset], 1);
 								memcpy((newdata + offset + 1), &pixelData[oldOffset+1], 1);
 								memcpy((newdata + offset + 2), &pixelData[oldOffset+2], 1);
 								memcpy((newdata + offset + 3), &pixelData[oldOffset+3], 1);
+								*/
 								//newdata[offset] = (unsigned char) pixelData[oldOffset];
 								//newdata[offset+1] = (unsigned char) pixelData[oldOffset+1];
 								//newdata[offset+2] = (unsigned char) pixelData[oldOffset+2];
 								//newdata[offset+3] = (unsigned char) pixelData[oldOffset+3];
 								oldOffset += 4;
 							}
-							offset += 4;
+							offset += 4; 
 						}
 					}
 
-					//Now generate the OpenGL texture object
-					ARK2D::getLog()->i("generating texture");
 					unsigned Object(0);
-					//if (texture == 0) { 
-						glGenTextures(1, &Object);
-						showAnyGlErrorAndExit();
-					//} else {
-					//	Object = texture;
-					//}	
-					//glGenTextures(1, &Object);
-					//showAnyGlErrorAndExit();
-					//glBindTexture(GL_TEXTURE_2D, Object);
-					ARK2D::getLog()->i("unbinding texture");
-					RendererState::internalBindTexture(Object);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Renderer::getInterpolationGL());
-					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Renderer::getInterpolationGL());
-					//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tempTextureWidth, tempTextureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, newdata);
-					//glBindTexture(GL_TEXTURE_2D, 0);
-					RendererState::internalBindTexture(0);
-					//texture = Object;
 
-					showAnyGlErrorAndExit();
+					#if defined(ARK2D_RENDERER_OPENGL)
+
+	  					//Now generate the OpenGL texture object
+						ARK2D::getLog()->v("generating texture");
+						glGenTextures(1, &Object);
+						showAnyGlErrorAndExitMacro();
+						
+						ARK2D::getLog()->v("binding texture");
+						RendererState::internalBindTexture(Object);
+						showAnyGlErrorAndExitMacro();
+
+						ARK2D::getLog()->v("setting texture data");
+						glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Renderer::getInterpolationGL());
+						glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Renderer::getInterpolationGL());
+
+						//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixelData);
+						glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tempTextureWidth, tempTextureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, newdata);
+						//glBindTexture(GL_TEXTURE_2D, 0);
+
+						RendererStats::s_textureAllocatedBytes += (tempTextureWidth * tempTextureHeight * 8 * 4);
+
+						ARK2D::getLog()->v("unbinding texture");
+						RendererState::internalBindTexture(0);
+						//texture = Object;
+ 
+						showAnyGlErrorAndExitMacro(); 
+
+					#elif defined(ARK2D_RENDERER_DIRECTX)
+						Object = createDXTexture(tempTextureWidth, tempTextureHeight, newdata); 
+						RendererStats::s_textureAllocatedBytes += (tempTextureWidth * tempTextureHeight * 8 * 4);
+					#endif
+
+					
 
 					delete png;
 					free(newdata);
 					return Object;
 				}
 
-				return 0;
-			}
+				return 0; 
+			} 
 			return 0;
 		}
 		void Image::showAnyGlErrorAndExit() {
-			int e = glGetError();
-			if (e != GL_NO_ERROR) { 
-				ErrorDialog::createAndShow(getGlErrorString(e)); 
-				exit(0);
-			} 
+			showAnyGlErrorAndExit( __FILE__, __LINE__ );
 		}
-		string Image::getGlErrorString(int error) {
-			switch(error) {
-				case GL_INVALID_ENUM:
-					return "GL_INVALID_ENUM";
-					break;
-				case GL_INVALID_VALUE:
-					return "GL_INVALID_VALUE";
-					break;
-				#if !defined(ARK2D_ANDROID)
-					case GL_INVALID_FRAMEBUFFER_OPERATION:
-						return "GL_INVALID_FRAMEBUFFER_OPERATION";
-						break;
+		void Image::showAnyGlErrorAndExit(const char* fname, int line) {
+			//#ifdef ARK2D_DEBUG
+			if (ARK2D::getLog()->getFilter() == ARK::Util::Log::TYPE_ALL)
+			{
+				#if defined(ARK2D_RENDERER_DIRECTX)
+					/*string s = "dx: ";
+					s += fname;
+					s += " - ";
+					s += Cast::toString<int>(line);
+					s += ".";
+					ARK2D::getLog()->v(s);*/
+					return;
+				#elif defined(ARK2D_RENDERER_OPENGL)
+					RendererStats::s_glCalls++; 
+					int e = glGetError();
+					if (e != GL_NO_ERROR) { 
+						ARK2D::getLog()->e("Definitely a GL error. :( ");
+						RendererStats::s_glCalls++;
+						string s = getGlErrorString(e);
+						s += " : ";
+						s += fname;
+						s += Cast::toString<int>(line);
+						s += ".";
+						ErrorDialog::createAndShow(s); 
+						exit(0);
+					} 
 				#endif
-				case GL_INVALID_OPERATION:
-					return "GL_INVALID_OPERATION";
-					break;
-				case GL_OUT_OF_MEMORY:
-					return "GL_OUT_OF_MEMORY";
-					break;
-
-				/*case GL_STACK_OVERFLOW:
-					return "GL_STACK_OVERFLOW";
-					break;
-				case GL_STACK_UNDERFLOW:
-					return "GL_STACK_UNDERFLOW";
-					break;
-				case GL_TABLE_TOO_LARGE:
-					return "GL_TABLE_TOO_LARGE";
-					break;*/
 			}
-			return "GL_UNKNOWN_ERROR"; 
+			//#endif
+		}
+		
+
+
+		string Image::getGlErrorString(int error) {
+			#if defined(ARK2D_RENDERER_OPENGL)
+				switch(error) {
+					case GL_INVALID_ENUM:
+						return "GL_INVALID_ENUM"; 
+						break;
+					case GL_INVALID_VALUE:
+						return "GL_INVALID_VALUE";
+						break;
+					#if !defined(ARK2D_ANDROID)
+						case GL_INVALID_FRAMEBUFFER_OPERATION:
+							return "GL_INVALID_FRAMEBUFFER_OPERATION";
+							break;
+					#endif
+					case GL_INVALID_OPERATION:
+						return "GL_INVALID_OPERATION";
+						break;
+					case GL_OUT_OF_MEMORY:
+						return "GL_OUT_OF_MEMORY";
+						break;
+	 
+					/*case GL_STACK_OVERFLOW:
+						return "GL_STACK_OVERFLOW";
+						break;
+					case GL_STACK_UNDERFLOW:
+						return "GL_STACK_UNDERFLOW";
+						break;
+					case GL_TABLE_TOO_LARGE:
+						return "GL_TABLE_TOO_LARGE";
+						break;*/
+				}
+				return "GL_UNKNOWN_ERROR"; 
+			#else
+				return "DIRECTX_ERROR_NOT_IMPLEMENTED";
+			#endif
+		}
+
+		unsigned int Image::createDXTexture(int w, int h, void* data) 
+		{
+			#if defined(ARK2D_RENDERER_DIRECTX)
+				D3D11_TEXTURE2D_DESC desc;
+				desc.Width = w; // this->getWidth();
+				desc.Height = h; // this->getHeight();
+				desc.MipLevels = desc.ArraySize = 1;
+				desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+				desc.SampleDesc.Count = 1; 
+				desc.SampleDesc.Quality = 0;
+				desc.Usage = D3D11_USAGE_IMMUTABLE;// D3D11_USAGE_DYNAMIC;
+				desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+				desc.CPUAccessFlags = 0;// D3D11_CPU_ACCESS_WRITE;
+				desc.MiscFlags = 0;
+
+				D3D11_SUBRESOURCE_DATA texdata;
+				texdata.pSysMem = data;
+				texdata.SysMemPitch = w * 4; // 0;
+				texdata.SysMemSlicePitch = w * h * 4 * sizeof(unsigned char); // 0;
+
+				ID3D11Device* pd3dDevice = ARK2D::getContainer()->getPlatformSpecific()->m_device;
+				HRESULT rs = pd3dDevice->CreateTexture2D(&desc, &texdata, &m_dxTexture);
+				if (FAILED(rs)) { ARK2D::getLog()->e("Could not create texture 2d."); exit(0); }
+
+				D3D11_SAMPLER_DESC sdesc;
+				sdesc.Filter = (Renderer::getInterpolation() == Renderer::INTERPOLATION_LINEAR) ? D3D11_FILTER_MIN_MAG_MIP_LINEAR : D3D11_FILTER_MIN_MAG_MIP_POINT;
+				sdesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+				sdesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+				sdesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+				sdesc.MipLODBias = 0.0f;
+				sdesc.MaxAnisotropy = 1;
+				sdesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+				sdesc.BorderColor[0] = 0;
+				sdesc.BorderColor[1] = 0;
+				sdesc.BorderColor[2] = 0;
+				sdesc.BorderColor[3] = 0;
+				sdesc.MinLOD = 0;
+				sdesc.MaxLOD = D3D11_FLOAT32_MAX;
+ 
+				//(Renderer::getInterpolation() == Renderer::INTERPOLATION_LINEAR) ? D3D11_FILTER_TYPE_LINEAR : D3D11_FILTER_TYPE_POINT;
+
+				rs = pd3dDevice->CreateSamplerState(&sdesc, &m_dxSampler);
+				if (FAILED(rs)) { ARK2D::getLog()->e("Could not create texture 2d."); exit(0); }
+
+				//D3D11_SHADER_RESOURCE_VIEW_DESC vdesc;
+				//vdesc.Texture2D
+				pd3dDevice->CreateShaderResourceView(m_dxTexture, NULL, &m_dxResourceView);
+			#endif
+			unsigned int retval = s_dxNextTextureId;
+			s_dxNextTextureId++;
+			return retval;
 		}
 
 		GLuint Image::load() {
-			return load(Color::magenta);
+			return load(ARK2D::getRenderer()->getMaskColor());
 		}
  
 		BMPImage* Image::loadBMP() {
 			BMPImage* bmp = new BMPImage();
 			int suc = bmp->LoadBMP(this->filename.c_str());
-			std::string errmsg = "";
+			std::string errmsg = "loadBMP: ";
 			if (suc == 1) {
 				errmsg = "Error opening bitmap file: " + this->filename + ".";
 			} else if (suc == 2) {
@@ -477,14 +833,14 @@ namespace ARK {
 			int suc = targa->load(this->filename);
 			std::string errmsg = "";
 			if (suc == -1) {
-				errmsg = "unknown error with tga image: ";
+				errmsg = "loadTGA: unknown error with tga image: ";
 			} else if (suc == 1) {
-				errmsg = "could not open image for reading: ";
+				errmsg = "loadTGA: could not open image for reading: ";
 			} else if (suc == 2) {
-				errmsg = "unsupported image tga type: ";
+				errmsg = "loadTGA: unsupported image tga type: ";
 			} else if (suc == 3) {
-				errmsg = "unsupported color depth, seem_bytesPerPixel: ";
-			}
+				errmsg = "loadTGA: unsupported color depth, seem_bytesPerPixel: ";
+			} 
 
 			if (errmsg != "") {
 				ErrorDialog::createAndShow(errmsg);
@@ -510,17 +866,36 @@ namespace ARK {
 			return png;
 		}
 
+		Image* Image::s_dummy = NULL;
+		Image* Image::getDummy() {
+			if (s_dummy == NULL) {
+				s_dummy = new Image();
+				s_dummy->addTexture();
+			}
+			return s_dummy;
+		}
+
 		Image::Image():
 			ARK::Core::Resource(),
 			m_data(NULL),
+			m_dataLength(0),
 			m_resourceType(0),
 			filename(""),
 			m_texture(NULL),
 			texture_temp(0),
-			texture_width(1),
-			texture_height(1),
-			texture_offset_x(0),
-			texture_offset_y(0),
+			m_dxTexture(NULL),
+			//texture_width(1),
+			//texture_height(1),
+			//texture_offset_x(0),
+			//texture_offset_y(0),
+			texture_offset_x_tl(0.0f),
+			texture_offset_y_tl(0.0f),
+			texture_offset_x_tr(1.0f),
+			texture_offset_y_tr(0.0f),
+			texture_offset_x_bl(0.0f),
+			texture_offset_y_bl(1.0f),
+			texture_offset_x_br(1.0f),
+			texture_offset_y_br(1.0f),
 			m_CenterX(0),
 			m_CenterY(0),
 			m_tl_corner_color(),
@@ -536,14 +911,24 @@ namespace ARK {
 		Image::Image(unsigned int resource, unsigned int resourceType):
 			ARK::Core::Resource(),
 			m_data(NULL),
+			m_dataLength(0),
 			m_resourceType(resourceType),
 			filename(""),
 			m_texture(NULL),
 			texture_temp(0),
-			texture_width(1),
-			texture_height(1),
-			texture_offset_x(0),
-			texture_offset_y(0),
+			m_dxTexture(NULL),
+			//texture_width(1),
+			//texture_height(1),
+			//texture_offset_x(0),
+			//texture_offset_y(0),
+			texture_offset_x_tl(0.0f),
+			texture_offset_y_tl(0.0f),
+			texture_offset_x_tr(1.0f),
+			texture_offset_y_tr(0.0f),
+			texture_offset_x_bl(0.0f),
+			texture_offset_y_bl(1.0f),
+			texture_offset_x_br(1.0f),
+			texture_offset_y_br(1.0f),
 			m_CenterX(0),
 			m_CenterY(0),
 			m_tl_corner_color(),
@@ -553,26 +938,38 @@ namespace ARK {
 			m_Rotation(0),
 			m_dirty(false)
 		{
-			ARK2D::getLog()->i("Loading Image from resource. "); //std::cout << "Loading Image from resource. " << std::endl;
+			ARK2D::getLog()->v("Loading Image from resource. "); //std::cout << "Loading Image from resource. " << std::endl;
 			m_data = GameContainerPlatform::getARK2DResource(resource, resourceType);
 			this->texture_temp = this->load();
 			//std::cout << "texture id " << (this->texture_temp) << std::endl;
-			ARK2D::getLog()->i(StringUtil::append("Texture id: ", this->texture_temp));
+			ARK2D::getLog()->v(StringUtil::append("Texture id: ", this->texture_temp));
 			addTexture();
-			clean();
+			clean(); 
 		}
 
 		Image::Image(void* data, unsigned int resourceType, string file):
 			ARK::Core::Resource(),
 			m_data(data),
+			m_dataLength(0),
 			m_resourceType(resourceType),
 			filename(file),
 			m_texture(NULL),
 			texture_temp(0),
-			texture_width(1),
-			texture_height(1),
-			texture_offset_x(0),
-			texture_offset_y(0),
+			m_dxTexture(NULL),
+			m_dxSampler(NULL),
+			m_dxResourceView(NULL),
+			//texture_width(1),
+			//texture_height(1),
+			//texture_offset_x(0),
+			//texture_offset_y(0),
+			texture_offset_x_tl(0.0f),
+			texture_offset_y_tl(0.0f),
+			texture_offset_x_tr(1.0f),
+			texture_offset_y_tr(0.0f),
+			texture_offset_x_bl(0.0f),
+			texture_offset_y_bl(1.0f),
+			texture_offset_x_br(1.0f),
+			texture_offset_y_br(1.0f),
 			m_CenterX(0),
 			m_CenterY(0),
 			m_tl_corner_color(),
@@ -582,7 +979,45 @@ namespace ARK {
 			m_Rotation(0),
 			m_dirty(false)
 		{
-			ARK2D::getLog()->i("Loading Image from data. ");
+			ARK2D::getLog()->v("Loading Image from data. ");
+			this->texture_temp = this->load();
+			addTexture();
+			clean();
+		}
+
+		Image::Image(void* data, unsigned int dataLength, unsigned int resourceType, string file):
+			ARK::Core::Resource(),
+			m_data(data),
+			m_dataLength(dataLength),
+			m_resourceType(resourceType),
+			filename(file),
+			m_texture(NULL),
+			texture_temp(0),
+			m_dxTexture(NULL),
+			m_dxSampler(NULL),
+			m_dxResourceView(NULL),
+			//texture_width(1),
+			//texture_height(1),
+			//texture_offset_x(0),
+			//texture_offset_y(0),
+			texture_offset_x_tl(0.0f),
+			texture_offset_y_tl(0.0f),
+			texture_offset_x_tr(1.0f),
+			texture_offset_y_tr(0.0f),
+			texture_offset_x_bl(0.0f),
+			texture_offset_y_bl(1.0f),
+			texture_offset_x_br(1.0f),
+			texture_offset_y_br(1.0f),
+			m_CenterX(0),
+			m_CenterY(0),
+			m_tl_corner_color(),
+			m_tr_corner_color(),
+			m_alpha(1.0f),
+			m_color(NULL),
+			m_Rotation(0),
+			m_dirty(false)
+		{
+			ARK2D::getLog()->v("Loading Image from data. ");
 			this->texture_temp = this->load();
 			addTexture();
 			clean();
@@ -595,10 +1030,21 @@ namespace ARK {
 			filename(fname),
 			m_texture(NULL),
 			texture_temp(0),
-			texture_width(1),
-			texture_height(1),
-			texture_offset_x(0),
-			texture_offset_y(0),
+			m_dxTexture(NULL),
+			m_dxSampler(NULL),
+			m_dxResourceView(NULL),
+			//texture_width(1),
+			//texture_height(1),
+			//texture_offset_x(0),
+			//texture_offset_y(0),
+			texture_offset_x_tl(0.0f),
+			texture_offset_y_tl(0.0f),
+			texture_offset_x_tr(1.0f),
+			texture_offset_y_tr(0.0f),
+			texture_offset_x_bl(0.0f),
+			texture_offset_y_bl(1.0f),
+			texture_offset_x_br(1.0f),
+			texture_offset_y_br(1.0f),
 			m_CenterX(0),
 			m_CenterY(0),
 			m_tl_corner_color(),
@@ -610,7 +1056,7 @@ namespace ARK {
 		{
 			this->texture_temp = this->load(); // this sets the width and height too! :)
 			//std::cout << "Loaded Image: " << this->filename << " tex id: " << (this->texture_temp) << std::endl; //  BMP must be 24bit unrestricted bmp!
-			ARK2D::getLog()->i(String("Loaded Image: ").append(this->filename).append(" tex id: ").append((unsigned int) this->texture_temp).get());
+			ARK2D::getLog()->v(String("Loaded Image: ").append(this->filename).append(" tex id: ").append((unsigned int) this->texture_temp).get());
 			addTexture();
 			clean();
 		}
@@ -622,10 +1068,21 @@ namespace ARK {
 			filename(fname),
 			m_texture(NULL),
 			texture_temp(0),
-			texture_width(1),
-			texture_height(1),
-			texture_offset_x(0),
-			texture_offset_y(0),
+			m_dxTexture(NULL),
+			m_dxSampler(NULL),
+			m_dxResourceView(NULL),
+			//texture_width(1),
+			//texture_height(1),
+			//texture_offset_x(0),
+			//texture_offset_y(0),
+			texture_offset_x_tl(0.0f),
+			texture_offset_y_tl(0.0f),
+			texture_offset_x_tr(1.0f),
+			texture_offset_y_tr(0.0f),
+			texture_offset_x_bl(0.0f),
+			texture_offset_y_bl(1.0f),
+			texture_offset_x_br(1.0f),
+			texture_offset_y_br(1.0f),
 			m_CenterX(0),
 			m_CenterY(0), 
 			m_tl_corner_color(),
@@ -637,7 +1094,7 @@ namespace ARK {
 		{
 			this->texture_temp = this->load(mask); // this sets the width and height too! :)
 			//std::cout << "Loaded Image: " << this->filename << " tex id: " << (this->texture_temp) << std::endl; //  BMP must be 24bit unrestricted bmp!
-			ARK2D::getLog()->i(String("Loaded Image: ").append(this->filename).append(" tex id: ").append((unsigned int) this->texture_temp).get());
+			ARK2D::getLog()->v(String("Loaded Image: ").append(this->filename).append(" tex id: ").append((unsigned int) this->texture_temp).get());
 			addTexture();
 			clean();
 		}
@@ -647,30 +1104,39 @@ namespace ARK {
 			// add to the texture store. for android reloading purposes, yo. 
 			TextureStore* ts = TextureStore::getInstance();
 			if (!ts->hasTexture(filename)) { 
-				ARK2D::getLog()->i("New Texture Object");
+				ARK2D::getLog()->v("New Texture Object");
 				Texture* t = new Texture(texture_temp, this);
+				t->m_interpolation = Renderer::getInterpolation();
+				#ifdef ARK2D_RENDERER_DIRECTX
+					t->m_dxTexture = m_dxTexture;
+					t->m_dxSampler = m_dxSampler;
+					t->m_dxResourceView = m_dxResourceView;
+
+				#endif
 				ts->addTexture(filename, t);
 				m_texture = t;
 			} else {
-				ARK2D::getLog()->i("Recyling Texture Object");
+				ARK2D::getLog()->v("Recyling Texture Object");
 				m_texture = ts->getTexture(filename);
 			}
 		}
 
 		unsigned int Image::getWidth() const {
-			return m_Width;
+			return (unsigned int) m_Width;
 		}
 		unsigned int Image::getHeight() const {
-			return m_Height;
+			return (unsigned int) m_Height;
 		}
 		double Image::getRotation() {
 			return m_Rotation;
 		}
 		void Image::setRotation(double angle) {
 			m_Rotation = angle;
+			m_dirty = true;
 		}
 		Image* Image::rotate(double angle) {
 			m_Rotation += angle;
+			m_dirty = true;
 			return this;
 		}
 		void Image::setCenterOfRotation(int x, int y) {
@@ -685,23 +1151,94 @@ namespace ARK {
 			m_Height = h;
 			m_dirty = true;
 		}
+		Image* Image::getSubImage(const SpriteSheetDescription* desc, const char* name) {
+			return getSubImage(desc->getItemByName(name));
+		}
 		Image* Image::getSubImage(const SpriteSheetDescriptionItem& desc) {
+			if (desc.isRotated()) { 
+				Image* sub = getSubImage(desc.getX(), desc.getY(), desc.getWidth(), desc.getHeight());
+				
+				float t1 = sub->texture_offset_x_tl;
+				float t2 = sub->texture_offset_y_tl;
+				float t3 = sub->texture_offset_x_tr;
+				float t4 = sub->texture_offset_y_tr;
+				float t5 = sub->texture_offset_x_bl;
+				float t6 = sub->texture_offset_y_bl;
+				float t7 = sub->texture_offset_x_br;
+				float t8 = sub->texture_offset_y_br;
+
+				sub->texture_offset_x_tl = t3;
+				sub->texture_offset_y_tl = t4;
+				sub->texture_offset_x_tr = t7;
+				sub->texture_offset_y_tr = t8;
+				sub->texture_offset_x_bl = t1;
+				sub->texture_offset_y_bl = t2;
+				sub->texture_offset_x_br = t5;
+				sub->texture_offset_y_br = t6;
+
+				sub->setWidth(desc.getHeight());
+				sub->setHeight(desc.getWidth());
+				sub->clean();
+				return sub;
+			} 
+
 			return getSubImage(desc.getX(), desc.getY(), desc.getWidth(), desc.getHeight());
 		}
+		float Image::getTextureW() const {
+			if (texture_offset_y_tl == texture_offset_y_tr) {
+				//if (texture_offset_x_tl > texture_offset_x_tr) {
+				//	return texture_offset_x_tl - texture_offset_x_tr;
+				//}
+				return texture_offset_x_tr - texture_offset_x_tl;
+			} else if (texture_offset_x_tl == texture_offset_x_tr) {
+				//if (texture_offset_y_tl > texture_offset_y_tr) {
+				//	return texture_offset_y_tl -texture_offset_y_tr;
+				//}
+				return texture_offset_y_tr - texture_offset_y_tl;
+			}
+			ARK2D::getLog()->w("getTextureW warning");
+			return 1.0f;
+		};
+		float Image::getTextureH() const {
+			if (texture_offset_x_tl == texture_offset_x_bl) {
+				//if (texture_offset_y_tl > texture_offset_y_bl) {
+				//	return texture_offset_y_tl - texture_offset_y_bl;
+				//}
+				return texture_offset_y_bl - texture_offset_y_tl;
+			} else if (texture_offset_y_tl == texture_offset_y_bl) {
+				//if (texture_offset_x_bl > texture_offset_x_tl) {
+				//	return texture_offset_x_bl - texture_offset_x_tl;
+				//}
+				return texture_offset_x_tl - texture_offset_x_bl;
+			}
+			ARK2D::getLog()->w("getTextureH warning");
+			return 1.0f;
+		};
 		Image* Image::getSubImage(int x, int y, int width, int height) const {
-			float newTextureOffsetX = ((x / (float) m_Width) * this->texture_width) + this->texture_offset_x;
-			float newTextureOffsetY = ((y / (float) m_Height) * this->texture_height) + this->texture_offset_y;
-			float newTextureWidth = ((width / (float) m_Width) * this->texture_width);
-			float newTextureHeight = ((height / (float) m_Height) * this->texture_height);
+			//float newTextureOffsetX = ((x / (float) m_Width) * this->texture_width) + this->texture_offset_x;
+			//float newTextureOffsetY = ((y / (float) m_Height) * this->texture_height) + this->texture_offset_y;
+			//float newTextureWidth = ((width / (float) m_Width) * this->texture_width);
+			//float newTextureHeight = ((height / (float) m_Height) * this->texture_height);
+			float newTextureOffsetX = ((x / (float) m_Width) * this->getTextureW()) + this->texture_offset_x_tl;
+			float newTextureOffsetY = ((y / (float) m_Height) * this->getTextureH()) + this->texture_offset_y_tl;
+			float newTextureWidth = ((width / (float) m_Width) * this->getTextureW());
+			float newTextureHeight = ((height / (float) m_Height) * this->getTextureH());
 
 
 			Image* sub = new Image();
 			sub->m_texture = m_texture;
 			sub->texture_temp = texture_temp;
-			sub->texture_width = newTextureWidth;
-			sub->texture_height = newTextureHeight; 
-			sub->texture_offset_x = newTextureOffsetX;
-			sub->texture_offset_y = newTextureOffsetY;
+			//sub->texture_width = newTextureWidth;
+			//sub->texture_height = newTextureHeight;
+			sub->texture_offset_x_tl = newTextureOffsetX;
+			sub->texture_offset_y_tl = newTextureOffsetY;
+			sub->texture_offset_x_tr = newTextureOffsetX+newTextureWidth;
+			sub->texture_offset_y_tr = newTextureOffsetY;
+			sub->texture_offset_x_bl = newTextureOffsetX;
+			sub->texture_offset_y_bl = newTextureOffsetY+newTextureHeight;
+			sub->texture_offset_x_br = newTextureOffsetX+newTextureWidth;
+			sub->texture_offset_y_br = newTextureOffsetY+newTextureHeight;
+			
 			sub->setWidth(width);
 			sub->setHeight(height);
 			sub->clean();
@@ -727,16 +1264,47 @@ namespace ARK {
 			
 			return this;
 		}
+ 
+		Image* Image::getCopy() {
+			Image* sub = new Image();
+			sub->m_texture = m_texture;
+			sub->texture_temp = texture_temp;
+			//sub->texture_width = texture_width;
+			//sub->texture_height = texture_height;
+			//sub->texture_offset_x = texture_offset_x;
+			//sub->texture_offset_y = texture_offset_y;
+			sub->texture_offset_x_tl = texture_offset_x_tl;
+			sub->texture_offset_y_tl = texture_offset_y_tl;
+			sub->texture_offset_x_tr = texture_offset_x_tr;
+			sub->texture_offset_y_tr = texture_offset_y_tr;
+			sub->texture_offset_x_bl = texture_offset_x_bl;
+			sub->texture_offset_y_bl = texture_offset_y_bl;
+			sub->texture_offset_x_br = texture_offset_x_br;
+			sub->texture_offset_y_br = texture_offset_y_br;
+
+			sub->setWidth(int(m_Width));
+			sub->setHeight(int(m_Height));
+			sub->clean(); 
+			return sub;
+		}
 
 		Image* Image::getScaledCopy(unsigned int x, unsigned int y) {
 
 			Image* sub = new Image();
 			sub->m_texture = m_texture;
 			sub->texture_temp = texture_temp;
-			sub->texture_width = texture_width;
-			sub->texture_height = texture_height;
-			sub->texture_offset_x = texture_offset_x;
-			sub->texture_offset_y = texture_offset_y;
+			//sub->texture_width = texture_width;
+			//sub->texture_height = texture_height;
+			//sub->texture_offset_x = texture_offset_x;
+			//sub->texture_offset_y = texture_offset_y;
+			sub->texture_offset_x_tl = texture_offset_x_tl;
+			sub->texture_offset_y_tl = texture_offset_y_tl;
+			sub->texture_offset_x_tr = texture_offset_x_tr;
+			sub->texture_offset_y_tr = texture_offset_y_tr;
+			sub->texture_offset_x_bl = texture_offset_x_bl;
+			sub->texture_offset_y_bl = texture_offset_y_bl;
+			sub->texture_offset_x_br = texture_offset_x_br;
+			sub->texture_offset_y_br = texture_offset_y_br;
 			sub->setWidth((int) m_Width * x);
 			sub->setHeight((int) m_Height * y);
 			sub->clean();
@@ -747,10 +1315,18 @@ namespace ARK {
 			Image* sub = new Image();
 			sub->m_texture = m_texture;
 			sub->texture_temp = texture_temp;
-			sub->texture_width = texture_width;
-			sub->texture_height = texture_height;
-			sub->texture_offset_x = texture_offset_x;
-			sub->texture_offset_y = texture_offset_y;
+			//sub->texture_width = texture_width;
+			//sub->texture_height = texture_height;
+			//sub->texture_offset_x = texture_offset_x;
+			//sub->texture_offset_y = texture_offset_y;
+			sub->texture_offset_x_tl = texture_offset_x_tl;
+			sub->texture_offset_y_tl = texture_offset_y_tl;
+			sub->texture_offset_x_tr = texture_offset_x_tr;
+			sub->texture_offset_y_tr = texture_offset_y_tr;
+			sub->texture_offset_x_bl = texture_offset_x_bl;
+			sub->texture_offset_y_bl = texture_offset_y_bl;
+			sub->texture_offset_x_br = texture_offset_x_br;
+			sub->texture_offset_y_br = texture_offset_y_br;
 			sub->setWidth((int)(m_Width * x));
 			sub->setHeight((int)(m_Height * y));
 			sub->clean();
@@ -760,14 +1336,44 @@ namespace ARK {
 		Image* Image::flip(bool flipx, bool flipy) 
 		{
 			if (flipx) { 
-				texture_offset_x = texture_offset_x + texture_width;
-				texture_width = -texture_width;
+				//texture_offset_x = texture_offset_x + texture_width;
+				//texture_width = -texture_width;
+				float tl = texture_offset_x_tl;
+				float bl = texture_offset_x_bl;
+				texture_offset_x_tl = texture_offset_x_tr;
+				texture_offset_x_bl = texture_offset_x_br;
+				texture_offset_x_tr = tl;
+				texture_offset_x_br = bl;
 			}
 			if (flipy) {
-				texture_offset_y = texture_offset_y + texture_height;
-				texture_height = -texture_height;
+				//texture_offset_y = texture_offset_y + texture_height;
+				//texture_height = -texture_height;
+				float tl = texture_offset_y_tl;
+				float tr = texture_offset_y_tr;
+				texture_offset_y_tl = texture_offset_y_bl;
+				texture_offset_y_tr = texture_offset_y_br;
+				texture_offset_y_bl = tl;
+				texture_offset_y_br = tr;
 			}
 			clean();
+			return this;
+		}
+
+		Image* Image::setFlipped(bool flipx, bool flipy) {
+			//if ((flipx && texture_width > 0.0f) || (!flipx && texture_width < 0.0f)) {
+			//	flip(true,false);
+			//}
+			
+			//if ((flipy && texture_height > 0.0f) || (!flipy && texture_height < 0.0f)) {
+			//	flip(false, true);
+			//}
+			if ((flipx && getTextureW() > 0.0f) || (!flipx && getTextureW() < 0.0f)) {
+				flip(true, false);
+			}
+			
+			if ((flipy && getTextureH() > 0.0f) || (!flipy && getTextureH() < 0.0f)) {
+				flip(false, true);
+			}
 			return this;
 		}
 		
@@ -775,21 +1381,34 @@ namespace ARK {
 			Image* sub = new Image();
 			sub->m_texture = m_texture;
 			sub->texture_temp = texture_temp;
-			sub->texture_width = texture_width;
-			sub->texture_height = texture_height;
-			sub->texture_offset_x = texture_offset_x;
-			sub->texture_offset_y = texture_offset_y;
+			//sub->texture_width = texture_width;
+			//sub->texture_height = texture_height;
+			//sub->texture_offset_x = texture_offset_x;
+			//sub->texture_offset_y = texture_offset_y;
+			sub->texture_offset_x_tl = texture_offset_x_tl;
+			sub->texture_offset_y_tl = texture_offset_y_tl;
+			sub->texture_offset_x_tr = texture_offset_x_tr;
+			sub->texture_offset_y_tr = texture_offset_y_tr;
+			sub->texture_offset_x_bl = texture_offset_x_bl;
+			sub->texture_offset_y_bl = texture_offset_y_bl;
+			sub->texture_offset_x_br = texture_offset_x_br;
+			sub->texture_offset_y_br = texture_offset_y_br;
+			sub->m_CenterX = m_CenterX;
+			sub->m_CenterY = m_CenterY;
 			sub->setWidth((int) m_Width);
 			sub->setHeight((int) m_Height);
+			
+			
+			sub->flip(horizontal_flip, vertical_flip);
 
-			if (horizontal_flip) {
+			/*if (horizontal_flip) {
 				sub->texture_offset_x = texture_offset_x + texture_width;
 				sub->texture_width = -texture_width;
 			}
 			if (vertical_flip) {
 				sub->texture_offset_y = texture_offset_y + texture_height;
 				sub->texture_height = -texture_height;
-			}
+			}*/
 			sub->clean();
 			return sub;
 		}
@@ -806,70 +1425,143 @@ namespace ARK {
 			m_color = c;
 			m_dirty = true;
 		}
+		void Image::setColor(float r, float g, float b, float a) {
+			if (m_color != NULL) {
+				m_color->set(r, g, b, a);
+				m_dirty = true;
+			}
+		}
 		Color* Image::getColor() const {
 			return m_color;
 		}
 
-		void Image::clean() {
+		void Image::setDirty(bool b) {
+			m_dirty = true;
+		}
+		void Image::clean() { 
 			texture_temp = 0;
 
-			m_texCoords[0] = this->texture_offset_x;
-			m_texCoords[1] = this->texture_offset_y;
+			/*#if defined(ARK2D_OPENGL_ES_2_0)
 
-			m_texCoords[2] = this->texture_offset_x + this->texture_width;
-			m_texCoords[3] = this->texture_offset_y;
+				unsigned char r = 255;
+				unsigned char g = 255;
+				unsigned char b = 255;
+				unsigned char a = (unsigned char) (m_alpha * 255);
+				if (m_color != NULL) {
+					r = m_color->getRedc();
+					g = m_color->getGreenc();
+					b = m_color->getBluec();
+					a = m_color->getAlphac();
+				}
 
-			m_texCoords[4] = this->texture_offset_x;
-			m_texCoords[5] = this->texture_offset_y + this->texture_height;
+				// tl
+				m_vertices[0].vertex[0] 	= 0;
+				m_vertices[0].vertex[1]		= 0;
+				m_vertices[0].texcoord[0]	= this->texture_offset_x;
+				m_vertices[0].texcoord[1]	= this->texture_offset_y;
+				m_vertices[0].color[0]		= r;
+				m_vertices[0].color[1]		= g;
+				m_vertices[0].color[2]		= b;
+				m_vertices[0].color[3]		= a;
 
-			m_texCoords[6] = this->texture_offset_x + this->texture_width;
-			m_texCoords[7] = this->texture_offset_y + this->texture_height;
+				// tr
+				m_vertices[1].vertex[0]		= 0 + this->m_Width;
+				m_vertices[1].vertex[1]		= 0;
+				m_vertices[1].texcoord[0]	= this->texture_offset_x + this->texture_width;
+				m_vertices[1].texcoord[1]	= this->texture_offset_y;
+				m_vertices[1].color[0]		= r;
+				m_vertices[1].color[1]		= g;
+				m_vertices[1].color[2]		= b;
+				m_vertices[1].color[3]		= a;
 
-			m_verts[0]  = 0;
-			m_verts[1]  = 0;
-			m_verts[2]  = 0;
+				// bl
+				m_vertices[2].vertex[0]		= 0;
+				m_vertices[2].vertex[1]		= 0 + this->m_Height;
+				m_vertices[2].texcoord[0]	= this->texture_offset_x;
+				m_vertices[2].texcoord[1]	= this->texture_offset_y + this->texture_height;
+				m_vertices[2].color[0]		= r;
+				m_vertices[2].color[1]		= g;
+				m_vertices[2].color[2]		= b;
+				m_vertices[2].color[3]		= a;
 
-			m_verts[3]  = 0 + this->m_Width;
-			m_verts[4]  = 0;
-			m_verts[5]  = 0;
+				// br
+				m_vertices[3].vertex[0] 	= 0 + this->m_Width;
+				m_vertices[3].vertex[1]		= 0 + this->m_Height;
+				m_vertices[3].texcoord[0]	= this->texture_offset_x + this->texture_width;
+				m_vertices[3].texcoord[1]	= this->texture_offset_y + this->texture_height;
+				m_vertices[3].color[0]		= r;
+				m_vertices[3].color[1]		= g;
+				m_vertices[3].color[2]		= b;
+				m_vertices[3].color[3]		= a;
 
-			m_verts[6]  = 0;
-			m_verts[7]  = 0 + this->m_Height;
-			m_verts[8]  = 0;
+			#else */
 
-			m_verts[9]  = 0 + this->m_Width;
-			m_verts[10] = 0 + this->m_Height;
-			m_verts[11] = 0;
+				m_verts[0] = 0; 					// tl
+				m_verts[1] = 0;
+				m_verts[2] = 0 + this->m_Width;		// tr
+				m_verts[3] = 0;
+				m_verts[4] = 0;						// bl
+				m_verts[5] = 0 + this->m_Height;
+				m_verts[6] = 0 + this->m_Width;		// br
+				m_verts[7] = 0 + this->m_Height;
 
-			float r = 1.0f;
-			float g = 1.0f;
-			float b = 1.0f;
-			float a = 1.0f;
-			if (m_color != NULL) {
-				r = m_color->getRedf();
-				g = m_color->getGreenf();
-				b = m_color->getBluef();
-				a = m_color->getAlphaf();
-			}
-			m_colors[0] = r;
-			m_colors[1] = g;
-			m_colors[2] = b;
-			m_colors[3] = a;
- 
-			m_colors[4] = r;
-			m_colors[5] = g;
-			m_colors[6] = b;
-			m_colors[7] = a;
+				//m_texCoords[0] = this->texture_offset_x;
+				//m_texCoords[1] = this->texture_offset_y;
 
-			m_colors[8] = r;
-			m_colors[9] = g;
-			m_colors[10] = b;
-			m_colors[11] = a;
+				//m_texCoords[2] = this->texture_offset_x + this->texture_width;
+				//m_texCoords[3] = this->texture_offset_y;
 
-			m_colors[12] = r;
-			m_colors[13] = g;
-			m_colors[14] = b;
-			m_colors[15] = a;
+				//m_texCoords[4] = this->texture_offset_x;
+				//m_texCoords[5] = this->texture_offset_y + this->texture_height;
+
+				//m_texCoords[6] = this->texture_offset_x + this->texture_width;
+				//m_texCoords[7] = this->texture_offset_y + this->texture_height;
+			
+				m_texCoords[0] = this->texture_offset_x_tl;
+				m_texCoords[1] = this->texture_offset_y_tl;
+			
+				m_texCoords[2] = this->texture_offset_x_tr;
+				m_texCoords[3] = this->texture_offset_y_tr;
+			
+				m_texCoords[4] = this->texture_offset_x_bl;
+				m_texCoords[5] = this->texture_offset_y_bl;
+			
+				m_texCoords[6] = this->texture_offset_x_br;
+				m_texCoords[7] = this->texture_offset_y_br;
+
+				Renderer* r = ARK2D::getRenderer();
+				unsigned char red = r->getDrawColor().getRedc();
+				unsigned char g   = r->getDrawColor().getGreenc();
+				unsigned char b   = r->getDrawColor().getBluec();
+				unsigned char a   = (unsigned char) (m_alpha * r->getDrawColor().getAlphac());
+				if (m_color != NULL) {
+					red = (unsigned char) (m_color->getRedc() * r->getDrawColor().getRedf());
+					g   = (unsigned char) (m_color->getGreenc() * r->getDrawColor().getGreenf());
+					b   = (unsigned char) (m_color->getBluec() * r->getDrawColor().getBluef());
+					a   = (unsigned char) (m_color->getAlphac() * (r->getDrawColor().getAlphaf() * m_alpha));
+				}
+
+				m_colors[0] = red;
+				m_colors[1] = g;
+				m_colors[2] = b;
+				m_colors[3] = a;
+	 
+				m_colors[4] = red;
+				m_colors[5] = g;
+				m_colors[6] = b;
+				m_colors[7] = a;
+
+				m_colors[8] = red;
+				m_colors[9] = g;
+				m_colors[10] = b;
+				m_colors[11] = a;
+
+				m_colors[12] = red;
+				m_colors[13] = g;
+				m_colors[14] = b;
+				m_colors[15] = a;
+
+			//#endif
 
 			m_dirty = false;
 		}
@@ -877,7 +1569,7 @@ namespace ARK {
 
 		void Image::drawFlipped(float x, float y, bool flipx, bool flipy) {
 
-			float previous_texture_offset_x = texture_offset_x;
+			/*float previous_texture_offset_x = texture_offset_x;
 			float previous_texture_width = texture_width;
 			if (flipx) {
 				texture_offset_x = texture_offset_x + texture_width;
@@ -889,13 +1581,16 @@ namespace ARK {
 			if (flipy) {
 				texture_offset_y = texture_offset_y + texture_height;
 				texture_height = texture_height * -1;
-			}
+			}*/
+			flip(flipx, flipy);
 
 			clean();
 
 			draw(x, y);
+			
+			flip(flipx, flipy);
 
-			if (flipx) {
+			/*if (flipx) {
 				texture_offset_x = previous_texture_offset_x;
 				texture_width = previous_texture_width;
 			}
@@ -903,7 +1598,7 @@ namespace ARK {
 			if (flipy) {
 				texture_offset_y = previous_texture_offset_y;
 				texture_height = previous_texture_height;
-			}
+			}*/
 
 			clean();
 		}
@@ -933,142 +1628,327 @@ namespace ARK {
 		}
 		void Image::draw(float x, float y) {
 
-			if (m_dirty) {
-				clean();
-			}
+			//ARK2D::getLog()->v("temp: 0");
+			showAnyGlErrorAndExitMacro();
+
+			Renderer* r = ARK2D::getRenderer();
+
+			//#if defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS)
+				//clean();
+			//#else 
+				if (m_dirty) {
+					clean();
+				}
+			//#endif 
  
-			if (m_texture == NULL) { return; }
-			glColor4f(1.0f, 1.0f, 1.0f, m_alpha);
+			if (Renderer::isBatching()) {
+				float batch_rawVertices[] = {
+					x,				y,				// tl
+					x + m_Width,	y,				// tr
+					x,				y + m_Height,	// bl
+					x,				y + m_Height,	// bl
+					x + m_Width,	y,				// tr 
+					x + m_Width,	y + m_Height	// br
+				};
 
-			if (m_color != NULL) {
-				glColor4f(m_color->getRedf(), m_color->getGreenf(), m_color->getBluef(), m_color->getAlphaf());
+				unsigned char red = r->getDrawColor().getRedc();
+				unsigned char g = r->getDrawColor().getGreenc();
+				unsigned char b = r->getDrawColor().getBluec();
+				unsigned char a = (unsigned char) (m_alpha * 255.0f);
+				if (m_color != NULL) {
+					red = (unsigned char) (m_color->getRedc() * r->getDrawColor().getRedf());
+					g   = (unsigned char) (m_color->getGreenc() * r->getDrawColor().getGreenf());
+					b   = (unsigned char) (m_color->getBluec() * r->getDrawColor().getBluef());
+					a   = (unsigned char) (m_color->getAlphac() * (m_alpha * r->getDrawColor().getAlphaf()) );
+				}
+
+				MathUtil::rotateQuadAroundPoint(batch_rawVertices, x + m_CenterX, y + m_CenterY, m_Rotation);
+				Renderer::getBatch()->addTexturedQuad(
+					m_texture->getId(), 
+					batch_rawVertices[0], batch_rawVertices[1], 
+					batch_rawVertices[2], batch_rawVertices[3], 
+					batch_rawVertices[4], batch_rawVertices[5], 
+					batch_rawVertices[10], batch_rawVertices[11], 
+					//texture_offset_x, texture_offset_y,
+					//texture_offset_x + texture_width, texture_offset_y,
+					//texture_offset_x, texture_offset_y + texture_height,
+					//texture_offset_x + texture_width, texture_offset_y + texture_height,
+					texture_offset_x_tl, texture_offset_y_tl,
+					texture_offset_x_tr, texture_offset_y_tr,
+					texture_offset_x_bl, texture_offset_y_bl,
+					texture_offset_x_br, texture_offset_y_br,
+					red, g, b, a,
+					red, g, b, a,
+					red, g, b, a,
+					red, g, b, a
+				);
+				return;
 			}
 
-			RendererState::start(RendererState::TEXTURE, this->m_texture->m_id);
+			//ARK2D::getLog()->v("temp: 1");
+
+			if (m_texture == NULL) { ARK2D::getLog()->w("Tried to draw image but texture was null."); return; }
+			showAnyGlErrorAndExitMacro();
+
+			#ifndef NO_FIXED_FUNCTION_PIPELINE
+				glColor4f(r->getDrawColor().getRedf(), r->getDrawColor().getGreenf(), r->getDrawColor().getBluef(), m_alpha * r->getDrawColor().getAlphaf());
+				RendererStats::s_glCalls++;
+				if (m_color != NULL) {
+					glColor4f(
+						m_color->getRedf() * r->getDrawColor().getRedf(), 
+						m_color->getGreenf() * r->getDrawColor().getGreenf(), 
+						m_color->getBluef() * r->getDrawColor().getBluef(),
+						m_color->getAlphaf() * r->getDrawColor().getAlphaf()
+					);
+					RendererStats::s_glCalls++;
+				}
+			#endif
+			showAnyGlErrorAndExitMacro();
+
+
+			//ARK2D::getLog()->v("temp: 2");
 
 			// rotation
 			if (m_Rotation != 0) {
-				glTranslatef(x + m_CenterX, y + m_CenterY, 0);
-				glRotatef(m_Rotation, 0, 0, 1);
-				glTranslatef((x + m_CenterX) * -1, (y + m_CenterY) * -1, 0);
+				r->translate(x + m_CenterX, y + m_CenterY);
+				r->rotate((float) m_Rotation);
+				r->translate((x + m_CenterX) * -1, (y + m_CenterY) * -1);
 			}
 
-			glPushMatrix();
-			glTranslatef(x, y, 0);
+			//ARK2D::getLog()->v("temp: 3");
 
-//			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
+			r->pushMatrix();
+			r->translate(x, y);
 
 
+			#if defined(ARK2D_FLASCC) 
+
+				RendererState::start(RendererState::TEXTURE, m_texture->m_id);
+
+				float rawVertices[] = {
+					0.0f,			0.0f,		// tl
+					m_verts[6],		0.0f,		// tr
+					0.0f,			m_verts[7],	  	// bl
+					0.0f,			m_verts[7],	  	// bl
+					m_verts[6],		0.0f,		// tr 
+					m_verts[6],		m_verts[7]		// br
+				};
 
 				/*float texCoords[] = {
-					this->texture_offset_x, this->texture_offset_y,
-					this->texture_offset_x + this->texture_width, this->texture_offset_y,
-					this->texture_offset_x, this->texture_offset_y + this->texture_height,
-					this->texture_offset_x + this->texture_width, this->texture_offset_y + this->texture_height
+					this->texture_offset_x,							this->texture_offset_y,							// tl
+					this->texture_offset_x + this->texture_width,	this->texture_offset_y,							// tr
+					this->texture_offset_x,							this->texture_offset_y + this->texture_height,	// bl
+					this->texture_offset_x,							this->texture_offset_y + this->texture_height,	// bl
+					this->texture_offset_x + this->texture_width,	this->texture_offset_y,							// tr
+					this->texture_offset_x + this->texture_width,	this->texture_offset_y + this->texture_height	// br
+				};*/
+
+				float texCoords[] = {
+					this->texture_offset_x_tl,	this->texture_offset_y_tl,
+					this->texture_offset_x_tr,	this->texture_offset_y_tr,
+					this->texture_offset_x_bl,	this->texture_offset_y_bl,
+					this->texture_offset_x_bl,	this->texture_offset_y_bl,
+					this->texture_offset_x_tr,	this->texture_offset_y_tr,
+					this->texture_offset_x_br,	this->texture_offset_y_br
 				};
-				float verts[] = {
-					0,					0,					0,  // tl
-					0 + this->m_Width,	0,					0,	// tr
-					0,					0 + this->m_Height,	0,  // bl
-					0 + this->m_Width,	0 + this->m_Height,	0	// br
-				};*/ 
 
-				//if (m_color != NULL) {
+				
 
-				//	glEnableClientState(GL_COLOR_ARRAY);
-					//glColorPointer(4, GL_FLOAT, 0, colors);
-				//	glColorPointer(4, GL_FLOAT, 0, m_colors);
-				//}
+				unsigned char red = 255;
+				unsigned char g = 255;
+				unsigned char b = 255;
+				unsigned char a = (unsigned char) (m_alpha * 255.0f);
+				if (m_color != NULL) {
+					red = (unsigned char) (m_color->getRedc() * r->getDrawColor().getRedf());
+					g   = (unsigned char) (m_color->getGreenc() * r->getDrawColor().getGreenf());
+					b   = (unsigned char) (m_color->getBluec() * r->getDrawColor().getBluef());
+					a   = (unsigned char) (m_color->getAlphac() * (m_alpha * r->getDrawColor().getAlphaf()));
+				}
 
-				//glEnableClientState(GL_VERTEX_ARRAY);
-				//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-				#if defined(ARK2D_FLASCC) 
+				unsigned char rawColors[] = { 
+					red, g, b, a,
+					red, g, b, a, 
+					red, g, b, a,
+					red, g, b, a,
+					red, g, b, a,
+					red, g, b, a
+				};
 
-					
-					float rawVertices[] = {
-						0.0f,			0.0f,		// tl
-						m_verts[3],		0.0f,		// tr
-						0.0f,			m_verts[7],	  	// bl
-						0.0f,			m_verts[7],	  	// bl
-						m_verts[3],		0.0f,		// tr
-						m_verts[3],		m_verts[7]		// br
-					};
+				glVertexPointer(2, GL_FLOAT, 0, rawVertices);
+				glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+				glColorPointer(4, GL_UNSIGNED_BYTE, 0, rawColors); 
+				glDrawArrays(GL_TRIANGLES, 0, 6);
 
-					float texCoords[] = {
-						this->texture_offset_x,							this->texture_offset_y,							// tl
-						this->texture_offset_x + this->texture_width,	this->texture_offset_y,							// tr
-						this->texture_offset_x,							this->texture_offset_y + this->texture_height,	// bl
-						this->texture_offset_x,							this->texture_offset_y + this->texture_height,	// bl
-						this->texture_offset_x + this->texture_width,	this->texture_offset_y,							// tr
-						this->texture_offset_x + this->texture_width,	this->texture_offset_y + this->texture_height	// br
-					};
+				RendererStats::s_glCalls += 4;
 
-					glVertexPointer(2, GL_FLOAT, 0, rawVertices);
-					glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
-					glDrawArrays(GL_TRIANGLES, 0, 6);
+			#else 
+				
+				#ifdef NO_FIXED_FUNCTION_PIPELINE
 
-				#else 
-					
+					RendererState::start(RendererState::TEXTURE, m_texture->m_id);
+					#if defined(ARK2D_OPENGL_3_2)
+						
+						Renderer::s_vaoQuad->bind();
+						glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexPosition);
+						glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexTexCoordIn);
+						glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexColorIn);
 
-					//glVertexPointer(3, GL_FLOAT, 0, verts);
-					glVertexPointer(3, GL_FLOAT, 0, m_verts);
-					//glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+						Renderer::s_vboQuadVerts->setWidth(2);
+						Renderer::s_vboQuadTexCoords->setWidth(2);
+						Renderer::s_vboQuadColors->setWidth(4);
+
+						Renderer::s_vboQuadVerts->setHeight(6);
+						Renderer::s_vboQuadTexCoords->setHeight(6);
+						Renderer::s_vboQuadColors->setHeight(6);
+
+						Renderer::s_vboQuadVerts->bind();
+						Renderer::s_vboQuadVerts->setData(&m_verts[0]); 
+						glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexPosition, 2, GL_FLOAT, GL_FALSE, 0, 0); //&rawVertices);
+
+						Renderer::s_vboQuadTexCoords->bind();
+						Renderer::s_vboQuadTexCoords->setData(&m_texCoords[0]);
+						glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexTexCoordIn, 2, GL_FLOAT, GL_FALSE, 0, 0); //&rawVertices);
+						
+						Renderer::s_vboQuadColors->bind();
+						Renderer::s_vboQuadColors->setData(&m_colors[0]);
+						glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, 0); //&rawColors); 
+
+						glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ModelViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODELVIEW)->pointer());
+						glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ProjectionMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_PROJECTION)->pointer());
+
+						glUniform1i(Renderer::s_shaderBasicTexture_TextureId, 0); 
+
+						glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+						RendererStats::s_glCalls += 10;
+
+					#elif defined(ARK2D_OPENGL_ES_2_0)
+
+						/*char* rawVertices = (char*) &m_vertices;
+						char* rawTextureCoords = ((char*) &m_vertices) + (sizeof(float)*2);
+						char* rawColors = ((char*) &m_vertices) + (sizeof(float)*4); 
+
+						glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexPosition, 2, GL_FLOAT, GL_FALSE, sizeof(Renderer_InterleavingTextureVertexData), rawVertices);
+						glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexTexCoordIn, 2, GL_FLOAT, GL_FALSE, sizeof(Renderer_InterleavingTextureVertexData), rawTextureCoords);
+						glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Renderer_InterleavingTextureVertexData), rawColors); 
+						*/
+				
+						glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexPosition, 2, GL_FLOAT, GL_FALSE, 0, &m_verts);
+						glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexTexCoordIn, 2, GL_FLOAT, GL_FALSE, 0, &m_texCoords);
+						glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, &m_colors); 
+						
+
+						glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ModelViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODELVIEW)->pointer());
+						glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ProjectionMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_PROJECTION)->pointer());
+
+						glUniform1i(Renderer::s_shaderBasicTexture_TextureId, 0); 
+
+						glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+						RendererStats::s_glCalls += 7;
+
+					#elif defined(ARK2D_RENDERER_DIRECTX)
+
+						ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
+						ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.m_deviceContext;
+						ID3D11RenderTargetView* renderTargetView = ARK2D::getContainer()->m_platformSpecific.m_renderTargetView;
+						ID3D11DepthStencilView* depthStencilView = ARK2D::getContainer()->m_platformSpecific.m_depthStencilView;
+
+						float red = 1.0f;
+						float g = 1.0f;
+						float b = 1.0f;
+						float a = m_alpha;
+						if (m_color != NULL) {
+							red = m_color->getRedf() * r->getDrawColor().getRedf();
+							g   = m_color->getGreenf() * r->getDrawColor().getGreenf();
+							b   = m_color->getBluef() * r->getDrawColor().getBluef();
+							a   = m_color->getAlphaf() * m_alpha * r->getDrawColor().getAlphaf();
+						}
+ 
+						Renderer::__internalsDXUpdateMatrices();
+
+						//ID3D11RenderTargetView *const targets[1] = { renderTargetView };
+						//deviceContext->OMSetRenderTargets(1, targets, depthStencilView); 
+
+						
+
+						Renderer_DX_InterleavingTextureVertexData rawVertices[] = {
+							{	
+								DirectX::XMFLOAT4(0, 0, 0.0f, 0.0f), 
+								DirectX::XMFLOAT2(this->texture_offset_x_tl, this->texture_offset_y_tl),
+								DirectX::XMFLOAT4(red, g, b, a) 
+							},
+							{ 
+								DirectX::XMFLOAT4(0 + m_verts[6], 0, 0.0f, 0.0f),
+								DirectX::XMFLOAT2(this->texture_offset_x_tr, this->texture_offset_y_tr),
+								DirectX::XMFLOAT4(red, g, b, a)
+							},
+							{ 
+								DirectX::XMFLOAT4(0, m_verts[7], 0.0f, 0.0f),
+								DirectX::XMFLOAT2(this->texture_offset_x_bl, this->texture_offset_y_bl),
+								DirectX::XMFLOAT4(red, g, b, a)
+							},
+							{ 
+								DirectX::XMFLOAT4(m_verts[6], m_verts[7], 0.0f, 0.0f),
+								DirectX::XMFLOAT2(this->texture_offset_x_br, this->texture_offset_y_br),
+								DirectX::XMFLOAT4(red, g, b, a)
+							}
+						};
+
+						unsigned int rawIndices[] = { 
+							0, 1, 2, 2, 1, 3
+						};
+
+						Renderer::s_vboQuadVerts->setData((void*)&rawVertices[0], (unsigned int) sizeof(Renderer_DX_InterleavingTextureVertexData) * 4);
+						Renderer::s_vboIndices->setData((void*)&rawIndices[0], sizeof(unsigned int) * 6);
+
+						unsigned int stride = sizeof(Renderer_DX_InterleavingTextureVertexData);
+						unsigned int offset = 0;
+						deviceContext->IASetVertexBuffers(0, 1, &Renderer::s_vboQuadVerts->m_buffer, &stride, &offset);
+
+						deviceContext->IASetIndexBuffer(Renderer::s_vboIndices->m_buffer, DXGI_FORMAT_R32_UINT, 0);
+
+						deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+						//ID3D11Buffer *const constantBuffers[1] = { Renderer::s_d3d_matrixBuffer };
+						//deviceContext->VSSetConstantBuffers(0, 1, constantBuffers);
+
+						deviceContext->DrawIndexed(6, 0, 0);
+						//deviceContext->Draw(6, 0);
+
+					#endif
+
+				#else
+
+					RendererState::start(RendererState::TEXTURE, m_texture->m_id);
+
+					glVertexPointer(2, GL_FLOAT, 0, m_verts);
 					glTexCoordPointer(2, GL_FLOAT, 0, m_texCoords);
+					glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_colors);
 
 					glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
+					RendererStats::s_glCalls += 4;
+
 				#endif
 
-				//glDisableClientState(GL_VERTEX_ARRAY);
-				//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+			#endif
 
-				//if (m_color != NULL) {
-				//	glDisableClientState(GL_COLOR_ARRAY);
-				//}
-
-
-			/*#else
-				glBegin( GL_QUADS );
-					//Top-left vertex (corner)
-					//glTexCoord2f( 0, 0 );
-					//glColor4f(m_tl_corner_color.getRed()/255.f, m_tl_corner_color.getGreen()/255.f,
-					//		m_tl_corner_color.getBlue()/255.f, m_tl_corner_color.getAlpha()/255.f);
-					glTexCoord2f( this->texture_offset_x, this->texture_offset_y );
-					glVertex2f(0, 0);
-
-					//Bottom-left vertex (corner)
-					//glTexCoord2f( 0, 1 );
-					glTexCoord2f( this->texture_offset_x, this->texture_offset_y + this->texture_height );
-					glVertex2f(0, 0 + this->m_Height);
-
-					//Bottom-right vertex (corner)
-					//glTexCoord2f( 1, 1 );
-					glTexCoord2f( this->texture_offset_x + this->texture_width, this->texture_offset_y + this->texture_height );
-					glVertex2f(0 + this->m_Width, 0 + this->m_Height);
-
-					//Top-right vertex (corner)
-					//glTexCoord2f( 1, 0 );
-				//	glColor4f(m_tr_corner_color.getRed()/255.f, m_tr_corner_color.getGreen()/255.f,
-				//						m_tr_corner_color.getBlue()/255.f, m_tr_corner_color.getAlpha()/255.f);
-					glTexCoord2f( this->texture_offset_x + this->texture_width, this->texture_offset_y );
-					glVertex2f(0 + this->m_Width, 0);
-				glEnd();
-			#endif*/
-
-			glTranslatef(x * -1, y * -1, 0);
-			glPopMatrix();
-
+			r->popMatrix();
 
 			if (m_Rotation != 0) {
-				glTranslatef(x + m_CenterX, y + m_CenterY, 0);
-				glRotatef(m_Rotation * -1, 0, 0, 1);
-				glTranslatef((x + m_CenterX) * -1, (y + m_CenterY) * -1, 0);
+				r->translate(x + m_CenterX, y + m_CenterY);
+				r->rotate(float(m_Rotation * -1));
+				r->translate((x + m_CenterX) * -1, (y + m_CenterY) * -1);
 			}
 
 			RendererStats::s_tris += 2;
 
 			//this->unbind();
-			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			#ifndef NO_FIXED_FUNCTION_PIPELINE
+				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+				RendererStats::s_glCalls++;
+			#endif
 
 		}
 
@@ -1085,8 +1965,8 @@ namespace ARK {
 
 		void Image::drawAligned(float x, float y, signed int alignX, signed int alignY, float scale)
 		{
-			unsigned int oldWidth = m_Width;
-			unsigned int oldHeight = m_Height;
+			unsigned int oldWidth = (unsigned int) m_Width;
+			unsigned int oldHeight = (unsigned int) m_Height;
 
 			m_Width = float(m_Width) * scale; 
 			m_Height = float(m_Height) * scale;
@@ -1118,6 +1998,27 @@ namespace ARK {
 			g->scale(scale);
 			draw(0, 0);
 			g->popMatrix();*/
+		}
+		
+		void Image::drawPivoted(float x, float y, signed int pivotX, signed int pivotY, float scale)
+		{
+			unsigned int oldWidth = (unsigned int) m_Width;
+			unsigned int oldHeight = (unsigned int) m_Height;
+			
+			m_Width = float(m_Width) * scale;
+			m_Height = float(m_Height) * scale;
+			
+			x -= pivotX;
+			y -= pivotY;
+			
+			m_dirty = true;
+			 
+			draw(x, y);
+			
+			m_Width = oldWidth;
+			m_Height = oldHeight;
+			
+			clean();
 		}
 
 		void Image::drawCenteredScaled(float x, float y, float scalex, float scaley) {
@@ -1180,20 +2081,57 @@ namespace ARK {
 
 		void Image::drawSubImageStart() {
 
+			if (Renderer::isBatching()) { return; }
 
-			RendererState::start(RendererState::TEXTURE, this->m_texture->m_id);
-			//bind();
-			glColor4f(1.0f, 1.0f, 1.0f, m_alpha);
-			if (m_color != NULL) { glEnableClientState(GL_COLOR_ARRAY); }
-			//glEnableClientState(GL_VERTEX_ARRAY);
-			//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			#ifdef NO_FIXED_FUNCTION_PIPELINE
+				RendererState::start(RendererState::TEXTURE, this->m_texture->m_id);
+
+				#if defined(ARK2D_OPENGL_3_2)
+
+					Renderer::s_vaoQuad->bind();
+
+					glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexPosition);
+					glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexTexCoordIn);
+					glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexColorIn);
+
+					RendererStats::s_glCalls += 3;
+
+					Renderer::s_vboQuadVerts->setWidth(2);
+					Renderer::s_vboQuadTexCoords->setWidth(2);
+					Renderer::s_vboQuadColors->setWidth(4);
+
+					Renderer::s_vboQuadVerts->setHeight(6);
+					Renderer::s_vboQuadTexCoords->setHeight(6);
+					Renderer::s_vboQuadColors->setHeight(6);
+					
+				#endif
+
+				
+			#else 
+				
+				RendererState::start(RendererState::TEXTURE, this->m_texture->m_id);
+				//bind();
+				//glColor4f(1.0f, 1.0f, 1.0f, m_alpha);
+				//RendererStats::s_glCalls++;
+				//if (m_color != NULL) { glEnableClientState(GL_COLOR_ARRAY); }
+				//glEnableClientState(GL_VERTEX_ARRAY);
+				//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			#endif
+			
 		}
 		void Image::drawSubImageEnd() {
-			//glDisableClientState(GL_VERTEX_ARRAY);
-			//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-			if (m_color != NULL) { glDisableClientState(GL_COLOR_ARRAY); }
-			//unbind();
-		}
+
+			if (Renderer::isBatching()) { return; }
+			
+			#ifdef NO_FIXED_FUNCTION_PIPELINE
+				//Renderer::s_shaderBasicTexture->unbind();  
+			#else
+				//glDisableClientState(GL_VERTEX_ARRAY);
+				//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+				//if (m_color != NULL) { glDisableClientState(GL_COLOR_ARRAY); }
+				//unbind();
+			#endif
+		} 
 
 		/** 
 		 * the 1s: the texture sub-image
@@ -1204,89 +2142,325 @@ namespace ARK {
  
 			Renderer* g = ARK2D::getRenderer();
 
-			float oldTextureOffsetX = texture_offset_x;
-			float oldTextureOffsetY = texture_offset_y;
-			float oldTextureWidth = texture_width;
-			float oldTextureHeight = texture_height;
-			unsigned int oldWidth = m_Width;
-			unsigned int oldHeight = m_Height;
+			float old_texture_offset_x_tl = texture_offset_x_tl;
+			float old_texture_offset_y_tl = texture_offset_y_tl;
+			float old_texture_offset_x_tr = texture_offset_x_tr;
+			float old_texture_offset_y_tr = texture_offset_y_tr;
+			float old_texture_offset_x_bl = texture_offset_x_bl;
+			float old_texture_offset_y_bl = texture_offset_y_bl;
+			float old_texture_offset_x_br = texture_offset_x_br;
+			float old_texture_offset_y_br = texture_offset_y_br;
+			
+			//float oldTextureOffsetX = texture_offset_x;
+			//float oldTextureOffsetY = texture_offset_y;
+			//float oldTextureWidth = texture_width;
+			//float oldTextureHeight = texture_height;
+			unsigned int oldWidth = (unsigned int) m_Width;
+			unsigned int oldHeight = (unsigned int) m_Height;
 
-			float newTextureOffsetX = ((x1 / (float) m_Width) * this->texture_width) + this->texture_offset_x;
-			float newTextureOffsetY = ((y1 / (float) m_Height) * this->texture_height) + this->texture_offset_y;
-			float newTextureWidth = ((w1 / (float) m_Width) * this->texture_width);
-			float newTextureHeight = ((h1 / (float) m_Height) * this->texture_height);
+			//float newTextureOffsetX = ((x1 / (float) m_Width) * this->texture_width) + this->texture_offset_x;
+			//float newTextureOffsetY = ((y1 / (float) m_Height) * this->texture_height) + this->texture_offset_y;
+			//float newTextureWidth = ((w1 / (float) m_Width) * this->texture_width);
+			//float newTextureHeight = ((h1 / (float) m_Height) * this->texture_height);
+			float newTextureOffsetX = ((x1 / (float) m_Width) * this->getTextureW()) + this->texture_offset_x_tl;
+			float newTextureOffsetY = ((y1 / (float) m_Height) * this->getTextureH()) + this->texture_offset_y_tl;
+			float newTextureWidth = ((w1 / (float) m_Width) * this->getTextureW());
+			float newTextureHeight = ((h1 / (float) m_Height) * this->getTextureH());
 
-
-			texture_width = newTextureWidth;
-			texture_height = newTextureHeight;
-			texture_offset_x = newTextureOffsetX;
-			texture_offset_y = newTextureOffsetY;
+ 
+			//texture_width = newTextureWidth;
+			//texture_height = newTextureHeight;
+			//texture_offset_x = newTextureOffsetX;
+			//texture_offset_y = newTextureOffsetY;
+			texture_offset_x_tl = newTextureOffsetX;
+			texture_offset_y_tl = newTextureOffsetY;
+			texture_offset_x_tr = newTextureOffsetX+newTextureWidth;
+			texture_offset_y_tr = newTextureOffsetY;
+			texture_offset_x_bl = newTextureOffsetX;
+			texture_offset_y_bl = newTextureOffsetY+newTextureHeight;
+			texture_offset_x_br = newTextureOffsetX+newTextureWidth;
+			texture_offset_y_br = newTextureOffsetY+newTextureHeight;
 			m_Width = w2;
 			m_Height = h2;
 			clean();
 
+			Renderer* r = ARK2D::getRenderer();
+			unsigned char color_r = r->getDrawColor().getRedc();
+			unsigned char color_g = r->getDrawColor().getGreenc();
+			unsigned char color_b = r->getDrawColor().getBluec();
+			unsigned char color_a = (unsigned char) (r->getDrawColor().getAlphac() * m_alpha);
+
+			if (m_color != NULL) {
+				color_r = (unsigned char) (m_color->getRedc() * r->getDrawColor().getRedf());
+				color_g = (unsigned char) (m_color->getGreenc() * r->getDrawColor().getGreenf());
+				color_b = (unsigned char) (m_color->getBluec() * r->getDrawColor().getBluef());
+				color_a = (unsigned char) (m_color->getAlphac() * (m_alpha * r->getDrawColor().getAlphaf()));
+			} 
+ 
+			if (Renderer::isBatching()) { 
+				unsigned char red = color_r;
+				unsigned char g = color_g;
+				unsigned char b = color_b;
+				unsigned char a = color_a;
+				
+				Renderer::getBatch()->addTexturedQuad( 
+					m_texture->getId(), 
+					x2,				y2, 
+					x2 + m_Width,	y2, 
+					x2,				y2 + m_Height,
+					x2 + m_Width,	y2 + m_Height, 
+					//texture_offset_x, texture_offset_y,
+					//texture_offset_x + texture_width, texture_offset_y,
+					//texture_offset_x, texture_offset_y + texture_height,
+					//texture_offset_x + texture_width, texture_offset_y + texture_height,
+					texture_offset_x_tl, texture_offset_y_tl,
+					texture_offset_x_tr, texture_offset_y_tr,
+					texture_offset_x_bl, texture_offset_y_bl,
+					texture_offset_x_br, texture_offset_y_br,
+					red, g, b, a,
+					red, g, b, a,
+					red, g, b, a,
+					red, g, b, a
+				);
+
+				//texture_width = oldTextureWidth;
+				//texture_height = oldTextureHeight;
+				//texture_offset_x = oldTextureOffsetX;
+				//texture_offset_y = oldTextureOffsetY;
+				texture_offset_x_tl = old_texture_offset_x_tl;
+				texture_offset_y_tl = old_texture_offset_y_tl;
+				texture_offset_x_tr = old_texture_offset_x_tr;
+				texture_offset_y_tr = old_texture_offset_y_tr;
+				texture_offset_x_bl = old_texture_offset_x_bl;
+				texture_offset_y_bl = old_texture_offset_y_bl;
+				texture_offset_x_br = old_texture_offset_x_br;
+				texture_offset_y_br = old_texture_offset_y_br;
+
+				m_Width = oldWidth;
+				m_Height = oldHeight;
+				clean(); 
+									
+				return;
+			}
+
 			g->pushMatrix();
-			glTranslatef(x2, y2, 0);
+			g->translate(x2, y2); 
 
 			#if defined(ARK2D_FLASCC) 
 				
 				float rawVertices[] = {
 					0.0f,			0.0f,		// tl
-					m_verts[3],		0.0f,		// tr
+					m_verts[6],		0.0f,		// tr
 					0.0f,			m_verts[7],	  	// bl
 					0.0f,			m_verts[7],	  	// bl
-					m_verts[3],		0.0f,		// tr
-					m_verts[3],		m_verts[7]		// br
+					m_verts[6],		0.0f,		// tr
+					m_verts[6],		m_verts[7]		// br
 				};
 
-				float texCoords[] = {
+				/*float texCoords[] = {
 					this->texture_offset_x,							this->texture_offset_y,							// tl
 					this->texture_offset_x + this->texture_width,	this->texture_offset_y,							// tr
 					this->texture_offset_x,							this->texture_offset_y + this->texture_height,	// bl
 					this->texture_offset_x,							this->texture_offset_y + this->texture_height,	// bl
 					this->texture_offset_x + this->texture_width,	this->texture_offset_y,							// tr
 					this->texture_offset_x + this->texture_width,	this->texture_offset_y + this->texture_height	// br
+				};*/
+				float texCoords[] = {
+					this->texture_offset_x_tl,	this->texture_offset_y_tl,
+					this->texture_offset_x_tr,	this->texture_offset_y_tr,
+					this->texture_offset_x_bl,	this->texture_offset_y_bl,
+					this->texture_offset_x_bl,	this->texture_offset_y_bl,
+					this->texture_offset_x_tr,	this->texture_offset_y_tr,
+					this->texture_offset_x_br,	this->texture_offset_y_br
+				};
+				
+				unsigned char red = color_r;
+				unsigned char gre = color_g;
+				unsigned char b = color_b;
+				unsigned char a = color_a;
+
+				unsigned char rawColors[] = { 
+					red, gre, b, a,
+					red, gre, b, a,
+					red, gre, b, a,
+					red, gre, b, a,
+					red, gre, b, a,
+					red, gre, b, a
 				};
 
-				if (m_color != NULL) { 
-					//glEnableClientState(GL_COLOR_ARRAY);
-
-					char localColors[] = {
-						m_color->getRed(), m_color->getBlue(), m_color->getGreen(), m_color->getAlpha(),
-						m_color->getRed(), m_color->getBlue(), m_color->getGreen(), m_color->getAlpha(),
-						m_color->getRed(), m_color->getBlue(), m_color->getGreen(), m_color->getAlpha(),
-						m_color->getRed(), m_color->getBlue(), m_color->getGreen(), m_color->getAlpha()
-					};
-					glColorPointer(4, GL_UNSIGNED_BYTE, 0, localColors); 
-				}
-				
 				glVertexPointer(2, GL_FLOAT, 0, rawVertices);
 				glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+				glColorPointer(4, GL_UNSIGNED_BYTE, 0, rawColors); //rawColors); 
 				glDrawArrays(GL_TRIANGLES, 0, 6);
+
+				RendererStats::s_glCalls += 4;
 
 				//if (m_color != NULL) { 
 					//glDisableClientState(GL_COLOR_ARRAY);
 				//}
 
+			#elif defined( NO_FIXED_FUNCTION_PIPELINE )
+
+				#if defined(ARK2D_OPENGL_3_2)
+
+					// vbo sizes set in drawSubImageStart
+
+					Renderer::s_vboQuadVerts->bind();
+					Renderer::s_vboQuadVerts->setData(&m_verts[0]); 
+					glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexPosition, 2, GL_FLOAT, GL_FALSE, 0, 0); //&rawVertices);
+
+					Renderer::s_vboQuadTexCoords->bind();
+					Renderer::s_vboQuadTexCoords->setData(&m_texCoords[0]);
+					glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexTexCoordIn, 2, GL_FLOAT, GL_FALSE, 0, 0); //&rawVertices);
+					
+					Renderer::s_vboQuadColors->bind();
+					Renderer::s_vboQuadColors->setData(&m_colors[0]);
+					glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, 0); //&rawColors); 
+					
+					glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ModelViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODELVIEW)->pointer());
+					glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ProjectionMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_PROJECTION)->pointer());
+
+					glUniform1i(Renderer::s_shaderBasicTexture_TextureId, 0); 
+
+					glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+				#elif defined(ARK2D_OPENGL_ES_2_0)
+
+					/*char* rawVertices = (char*) &m_vertices;
+					char* rawTextureCoords = ((char*) &m_vertices) + (sizeof(float)*2); 
+					char* rawColors = ((char*) &m_vertices) + (sizeof(float)*4); 
+
+					glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexPosition, 2, GL_FLOAT, GL_FALSE, sizeof(Renderer_InterleavingTextureVertexData), rawVertices);
+					glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexTexCoordIn, 2, GL_FLOAT, GL_FALSE, sizeof(Renderer_InterleavingTextureVertexData), rawTextureCoords);
+					glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Renderer_InterleavingTextureVertexData), rawColors); 
+					*/
+
+					glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexPosition, 2, GL_FLOAT, GL_FALSE, 0, &m_verts); // sizeof(Renderer_InterleavingTextureVertexData)
+					glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexTexCoordIn, 2, GL_FLOAT, GL_FALSE, 0, &m_texCoords);
+					glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, &m_colors); 
+					
+					glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ModelViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODELVIEW)->pointer());
+					glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ProjectionMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_PROJECTION)->pointer());
+
+					glUniform1i(Renderer::s_shaderBasicTexture_TextureId, 0);  
+
+					glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+				#elif defined(ARK2D_RENDERER_DIRECTX)
+
+					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
+					ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.m_deviceContext;
+					//ID3D11RenderTargetView* renderTargetView = ARK2D::getContainer()->m_platformSpecific.m_renderTargetView;
+					//ID3D11DepthStencilView* depthStencilView = ARK2D::getContainer()->m_platformSpecific.m_depthStencilView;
+
+					MatrixStack* modelViewMatrix = Renderer::getMatrix(MatrixStack::TYPE_MODELVIEW);
+					MatrixStack* projectionMatrix = Renderer::getMatrix(MatrixStack::TYPE_PROJECTION);
+
+					float red = r->getDrawColor().getRedf();
+					float gr = r->getDrawColor().getGreenf();
+					float b = r->getDrawColor().getBluef();
+					float a = m_alpha * r->getDrawColor().getAlphaf();
+					if (m_color != NULL) {
+						red = m_color->getRedf() * r->getDrawColor().getRedf();
+						gr  = m_color->getGreenf() * r->getDrawColor().getGreenf();
+						b   = m_color->getBluef() * r->getDrawColor().getBluef();
+						a   = m_color->getAlphaf() * m_alpha * r->getDrawColor().getAlphaf();
+					}
+
+					Renderer::__internalsDXUpdateMatrices();
+
+					//XMStoreFloat4x4(&Renderer::s_d3d_matrixBufferData->modelView, XMMatrixTranspose(modelViewMatrix->d3dpointer()));
+					//XMStoreFloat4x4(&Renderer::s_d3d_matrixBufferData->projection, XMMatrixTranspose(projectionMatrix->d3dpointer()));
+
+					//ID3D11RenderTargetView *const targets[1] = { renderTargetView };
+					//deviceContext->OMSetRenderTargets(1, targets, depthStencilView);
+
+					//deviceContext->UpdateSubresource(Renderer::s_d3d_matrixBuffer, 0, NULL, Renderer::s_d3d_matrixBufferData, 0, 0);
+
+					Renderer_DX_InterleavingTextureVertexData rawVertices[] = {
+							{
+								DirectX::XMFLOAT4(0, 0, 0.0f, 0.0f),
+								DirectX::XMFLOAT2(this->texture_offset_x_tl, this->texture_offset_y_tl),
+								DirectX::XMFLOAT4(red, gr, b, a)
+							},
+							{
+								DirectX::XMFLOAT4(0 + m_verts[6], 0, 0.0f, 0.0f),
+								DirectX::XMFLOAT2(this->texture_offset_x_tr, this->texture_offset_y_tr),
+								DirectX::XMFLOAT4(red, gr, b, a)
+							},
+							{
+								DirectX::XMFLOAT4(0, m_verts[7], 0.0f, 0.0f),
+								DirectX::XMFLOAT2(this->texture_offset_x_bl, this->texture_offset_y_bl),
+								DirectX::XMFLOAT4(red, gr, b, a)
+							},
+							{
+								DirectX::XMFLOAT4(m_verts[6], m_verts[7], 0.0f, 0.0f),
+								DirectX::XMFLOAT2(this->texture_offset_x_br, this->texture_offset_y_br),
+								DirectX::XMFLOAT4(red, gr, b, a)
+							}
+					};
+
+					unsigned int rawIndices[] = {
+						0, 1, 2, 2, 1, 3
+					};
+
+					Renderer::s_vboQuadVerts->setData((void*)&rawVertices[0], (unsigned int) sizeof(Renderer_DX_InterleavingTextureVertexData) * 4);
+					Renderer::s_vboIndices->setData((void*)&rawIndices[0], sizeof(unsigned int) * 6);
+
+					unsigned int stride = sizeof(Renderer_DX_InterleavingTextureVertexData);
+					unsigned int offset = 0;
+					deviceContext->IASetVertexBuffers(0, 1, &Renderer::s_vboQuadVerts->m_buffer, &stride, &offset);
+
+					deviceContext->IASetIndexBuffer(Renderer::s_vboIndices->m_buffer, DXGI_FORMAT_R32_UINT, 0);
+
+					deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+					deviceContext->DrawIndexed(6, 0, 0); 
+
+				#endif
+
+				RendererStats::s_glCalls += 7;
+				
+				/*glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ModelViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODELVIEW)->pointer());
+				glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ProjectionMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_PROJECTION)->pointer());
+				glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexPosition, 2, GL_FLOAT, GL_FALSE, 0, &m_verts);  
+				glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexTexCoordIn, 2, GL_FLOAT, GL_FALSE, 0, &m_texCoords);
+				glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexColorIn, 4, GL_FLOAT, GL_FALSE, 0, &m_colors); 
+				
+				glUniform1i(Renderer::s_shaderBasicTexture_TextureId, 0);  
+
+				glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);  */
+
 			#else 
 				
-				glVertexPointer(3, GL_FLOAT, 0, m_verts);
+				glVertexPointer(2, GL_FLOAT, 0, m_verts);
 				glTexCoordPointer(2, GL_FLOAT, 0, m_texCoords);
-				if (m_color != NULL) { glColorPointer(4, GL_FLOAT, 0, m_colors); }
+				/*if (m_color != NULL) {*/ glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_colors); //}
 
 				glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+				RendererStats::s_glCalls += 3;
 
 			#endif
 
 			g->popMatrix();
 
-			texture_width = oldTextureWidth;
-			texture_height = oldTextureHeight;
-			texture_offset_x = oldTextureOffsetX;
-			texture_offset_y = oldTextureOffsetY;
+			//texture_width = oldTextureWidth;
+			//texture_height = oldTextureHeight;
+			//texture_offset_x = oldTextureOffsetX;
+			//texture_offset_y = oldTextureOffsetY;
+			texture_offset_x_tl = old_texture_offset_x_tl;
+			texture_offset_y_tl = old_texture_offset_y_tl;
+			texture_offset_x_tr = old_texture_offset_x_tr;
+			texture_offset_y_tr = old_texture_offset_y_tr;
+			texture_offset_x_bl = old_texture_offset_x_bl;
+			texture_offset_y_bl = old_texture_offset_y_bl;
+			texture_offset_x_br = old_texture_offset_x_br;
+			texture_offset_y_br = old_texture_offset_y_br;
+
 			m_Width = oldWidth;
 			m_Height = oldHeight;
-			clean();
+			clean(); 
 
 			RendererStats::s_tris += 2;
 
@@ -1302,6 +2476,32 @@ namespace ARK {
 
 		Image::~Image() {
 			//glDeleteTextures( 1, &texture );
+		}
+
+		// http://stackoverflow.com/questions/2008842/creating-and-loading-pngs-in-rgba4444-rgba5551-for-opengl
+		void* Image::util_rgba8888_to_rgba4444(void* src, int cb)
+		{
+		    int i;
+		    // compute the actual number of pixel elements in the buffer.
+		    int cpel = cb/4;
+		    unsigned long* psrc = (unsigned long*)src;
+		    unsigned short* pdst = (unsigned short*)src;
+
+		    // convert every pixel
+		    for(i=0;i<cpel; i++)
+		    {
+		        // read a source pixel
+		        unsigned pel = psrc[i];
+		        // unpack the source data as 8 bit values
+		        unsigned r = (pel << 8)  & 0xf000;
+		        unsigned g = (pel >> 4) & 0x0f00;
+		        unsigned b = (pel >> 16) & 0x00f0;
+		        unsigned a = (pel >> 28) & 0x000f;
+
+		        // and store
+		        pdst[i] = r | g | b | a;
+		    }
+		    return pdst;
 		}
 
 	}

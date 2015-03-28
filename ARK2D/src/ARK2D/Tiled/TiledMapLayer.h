@@ -8,6 +8,8 @@
 #include <iostream>
 #include <stdexcept>
 
+#include "../Includes.h"
+
 #include "TiledMapProperty.h"
 
 using namespace std;
@@ -24,7 +26,7 @@ namespace ARK {
 		 * @warning You should never need to create this manually.
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class TiledMapLayer {
+		class ARK2D_API TiledMapLayer {
 			public:
 				TiledMapLayer();
 				void setMap(TiledMap* map);
@@ -34,8 +36,10 @@ namespace ARK {
 				unsigned int getWidth() const;
 				void setHeight(unsigned int height);
 				unsigned int getHeight() const;
+				
 				void setVisible(bool v);
 				bool isVisible() const;
+
 				void prepare();
 				unsigned int getTileGID(unsigned int x, unsigned int y) const;
 				void setTileGID(unsigned int x, unsigned int y, unsigned int gid);

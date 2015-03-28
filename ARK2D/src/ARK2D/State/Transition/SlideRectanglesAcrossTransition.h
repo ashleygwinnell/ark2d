@@ -33,7 +33,7 @@ namespace ARK {
 			 * @todo Introduce a Colour set instead of a single colour?
 			 * @todo Implement sliding rectangles DOWN the screen.
 			 */
-			class SlideRectanglesAcrossTransition: public Transition {
+			class ARK2D_API SlideRectanglesAcrossTransition: public Transition {
 				public:
 					Color* m_color; // the colour for the overlay
 

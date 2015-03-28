@@ -11,7 +11,6 @@
 
 #include "../ARK2D.h"
 #include "../Util/MathUtil.h"
-#include "../Includes.h"
 
 namespace ARK {
 	namespace Graphics {
@@ -24,13 +23,14 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class Color {
+		class ARK2D_API Color {
 			public:
 				Color();
 				Color(const Color& color);
 				Color(const std::string hexString);
-				Color(int red, int green, int blue);
-				Color(int r, int g, int b, int a);
+				Color(int red, int green, int blue); 
+				Color(unsigned int r, unsigned int g, unsigned int b, unsigned int a);
+				Color(float r, float g, float b, float a);
 				void setRed(unsigned int r);
 				void setGreen(unsigned int g);
 				void setBlue(unsigned int b);
@@ -40,16 +40,26 @@ namespace ARK {
 				void setBlue(float b);
 				void setAlpha(float a);
 				void set(float r, float g, float b, float a);
+				void set(const std::string hexString);
 				unsigned int getRed() const;
 				unsigned int getGreen() const;
 				unsigned int getBlue() const;
 				unsigned int getAlpha() const;
+				const Color* constpointer() const;
+				Color* pointer() const;
+				inline unsigned char getRedc() const { return m_r; }
+				inline unsigned char getGreenc() const { return m_g; }
+				inline unsigned char getBluec() const { return m_b; }
+				inline unsigned char getAlphac() const { return m_a; }
 				float getRedf() const;
 				float getGreenf() const;
 				float getBluef() const;
 				float getAlphaf() const;
+				string getHex() const;
 				void bind() const;
 				Color* copy();
+				const Color ccopy(); 
+
 
 				bool operator==(Color c);
 

@@ -1,0 +1,295 @@
+Tdsp_effect_per_speaker
+v6
+r1
+cCheck dependencies
+cCompileC DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/common.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/dsp_effect_per_speaker.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/dsp_effect_per_speaker.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/common_platform.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common_platform.mm normal x86_64 objective-c++ com.apple.compilers.llvm.clang.1_0.compiler
+cLd /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/MacOS/dsp_effect_per_speaker normal x86_64
+cPBXCp /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/lib/libfmod.dylib DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Frameworks/libfmod.dylib
+cPBXCp /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/lib/libfmodL.dylib DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Frameworks/libfmodL.dylib
+cCpResource /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/media DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Resources/media
+cTouch /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk
+c000000005243E79F00000000000000AA
+t1380181919
+s170
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/SDKSettings.plist
+c00000000526A3A6B000000000000044C
+t1382693483
+s1100
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/CoreServices/SystemVersion.plist
+c00000000526A3A6B00000000000001DB
+t1382693483
+s475
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Cocoa.framework/Cocoa
+c00000000526A3A6B000000000000253C
+t1382693483
+s9532
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common.cpp
+c000000005334EAC5000000000000097F
+t1395976901
+s2431
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common_platform.mm
+c000000005334EAC500000000000013DE
+t1395976901
+s5086
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/dsp_effect_per_speaker.cpp
+c000000005334EAC50000000000002332
+t1395976901
+s9010
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/media
+c000000005338127E0000000000000198
+t1396183678
+s408
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/common.o
+t1396183876
+s25908
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/common_platform.o
+t1396183877
+s65612
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/dsp_effect_per_speaker.LinkFileList
+c000000005338134400000000000002F2
+t1396183876
+s754
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/dsp_effect_per_speaker.o
+t1396183876
+s61280
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app
+t1396183876
+s102
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Frameworks/libfmod.dylib
+t1396183878
+s2655908
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Frameworks/libfmodL.dylib
+t1396183878
+s2871096
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/MacOS/dsp_effect_per_speaker
+t1396183878
+s61012
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Resources/media
+t1396183878
+s374
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/lib/libfmod.dylib
+c000000005334EAC100000000002886A4
+t1395976897
+s2655908
+
+N/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/lib/libfmodL.dylib
+c000000005334EAC100000000002BCF38
+t1395976897
+s2871096
+
+CBuild AST from /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common.cpp
+r0
+
+CBuild AST from /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common_platform.mm
+r0
+
+CBuild AST from /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/dsp_effect_per_speaker.cpp
+r0
+
+CCheck dependencies
+r0
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies18"Check dependencies91d38bc44ae8b841^8961abc44ae8b841^---0#1#1#--18"Check dependencies36"6DFB0D43-2E25-44C8-A414-7E26F77A037A-
+
+CCompileC DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/common.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+s417876676.672322
+e417876676.891756
+r1
+xCompileC
+xDerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/common.o
+x/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common.cpp
+xnormal
+xx86_64
+xc++
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common.cpp
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common_platform.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod_common.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod_codec.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod_dsp.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod_errors.h
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection103"Compile /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common.cpp318"CompileC DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/common.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilerb742acc44ae8b841^7b4ce4c44ae8b841^---0#0#1#-19%DVTDocumentLocation2@106"file:///Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD%20Programmers%20API/api/lowlevel/examples/common.cpp0000000000000000^3466"CompileC DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/common.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd "/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32"    setenv LANG en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -Wno-trigraphs -fno-rtti -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Wno-return-type -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wno-unused-function -Wno-unused-label -Wno-unused-parameter -Wno-unused-variable -Wunused-value -Wno-empty-body -Wno-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wno-constant-conversion -Wno-int-conversion -Wno-bool-conversion -Wno-enum-conversion -Wno-shorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.5 -g -fvisibility=hidden -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/dsp_effect_per_speaker.hmap -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/include -I../../../lowlevel/inc -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/DerivedSources/x86_64 -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/DerivedSources -F/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug -MMD -MT dependencies -MF /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/common.d --serialize-diagnostics /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/common.dia -c /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common.cpp -o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/common.o36"B630CDF0-34A6-41D9-8871-72A98D0BE0EC-
+bF80B9F00-B048-4837-80C0-EE461EE4B0C0
+
+CCompileC DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/common_platform.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common_platform.mm normal x86_64 objective-c++ com.apple.compilers.llvm.clang.1_0.compiler
+s417876676.673116
+e417876677.951697
+r1
+xCompileC
+xDerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/common_platform.o
+x/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common_platform.mm
+xnormal
+xx86_64
+xobjective-c++
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common_platform.mm
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common_platform.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod_common.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod_codec.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod_dsp.h
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection111"Compile /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common_platform.mm345"CompileC DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/common_platform.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common_platform.mm normal x86_64 objective-c++ com.apple.compilers.llvm.clang.1_0.compiler666cacc44ae8b841^f0a2f3c54ae8b841^---0#0#1#-19%DVTDocumentLocation2@114"file:///Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD%20Programmers%20API/api/lowlevel/examples/common_platform.mm0000000000000000^3731"CompileC DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/common_platform.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common_platform.mm normal x86_64 objective-c++ com.apple.compilers.llvm.clang.1_0.compiler    cd "/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32"    setenv LANG en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -Wno-trigraphs -fno-rtti -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Wno-return-type -Wno-implicit-atomic-properties -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wno-unused-function -Wno-unused-label -Wno-unused-parameter -Wno-unused-variable -Wunused-value -Wno-empty-body -Wno-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wno-constant-conversion -Wno-int-conversion -Wno-bool-conversion -Wno-enum-conversion -Wno-shorten-64-to-32 -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wno-undeclared-selector -Wno-deprecated-implementations -Wno-c++11-extensions -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.5 -g -fvisibility=hidden -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/dsp_effect_per_speaker.hmap -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/include -I../../../lowlevel/inc -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/DerivedSources/x86_64 -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/DerivedSources -F/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug -MMD -MT dependencies -MF /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/common_platform.d --serialize-diagnostics /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/common_platform.dia -c /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/common_platform.mm -o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/common_platform.o36"31F2A3B4-8CC4-4FAE-B84C-3733AF59744F-
+bF80B9F00-B048-4837-80C0-EE461EE4B0C0
+
+CCompileC DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/dsp_effect_per_speaker.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/dsp_effect_per_speaker.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+s417876676.672337
+e417876676.870713
+r1
+xCompileC
+xDerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/dsp_effect_per_speaker.o
+x/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/dsp_effect_per_speaker.cpp
+xnormal
+xx86_64
+xc++
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/dsp_effect_per_speaker.cpp
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod.hpp
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod_common.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod_codec.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod_dsp.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/inc/fmod.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common.h
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/common_platform.h
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection119"Compile /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/dsp_effect_per_speaker.cpp350"CompileC DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/dsp_effect_per_speaker.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/dsp_effect_per_speaker.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compilerea42acc44ae8b841^b4e7dec44ae8b841^---0#0#1#-19%DVTDocumentLocation2@122"file:///Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD%20Programmers%20API/api/lowlevel/examples/dsp_effect_per_speaker.cpp0000000000000000^3562"CompileC DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/dsp_effect_per_speaker.o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/dsp_effect_per_speaker.cpp normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd "/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32"    setenv LANG en_US.US-ASCII    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -Wno-trigraphs -fno-rtti -fpascal-strings -O0 -Wno-missing-field-initializers -Wno-missing-prototypes -Wno-return-type -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wno-unused-function -Wno-unused-label -Wno-unused-parameter -Wno-unused-variable -Wunused-value -Wno-empty-body -Wno-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wno-constant-conversion -Wno-int-conversion -Wno-bool-conversion -Wno-enum-conversion -Wno-shorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.5 -g -fvisibility=hidden -fvisibility-inlines-hidden -Wno-sign-conversion -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/dsp_effect_per_speaker.hmap -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/include -I../../../lowlevel/inc -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/DerivedSources/x86_64 -I/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/DerivedSources -F/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug -MMD -MT dependencies -MF /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/dsp_effect_per_speaker.d --serialize-diagnostics /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/dsp_effect_per_speaker.dia -c /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/dsp_effect_per_speaker.cpp -o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/dsp_effect_per_speaker.o36"FF4D6526-B9BB-4910-AFB4-6F77B1B8D70C-
+bF80B9F00-B048-4837-80C0-EE461EE4B0C0
+
+CCpResource /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/media DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Resources/media
+s417876678.169232
+e417876678.172878
+r1
+xCpResource
+x/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/media
+xDerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Resources/media
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection112"Copy DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Resources/media211"CpResource /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/media DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Resources/media23652bc64ae8b841^a6422cc64ae8b841^---0#0#1#-19%DVTDocumentLocation2@211"file:///Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD%20Programmers%20API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Resources/media00343442dcffdf42^842"CpResource /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/media DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Resources/media    cd "/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-debug-symbols -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/media /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Resources36"8CCD41D8-8C8F-4F64-9F10-F215D96F7427-
+bF80B9F00-B048-4837-80C0-EE461EE4B0C0
+
+CLd /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/MacOS/dsp_effect_per_speaker normal x86_64
+s417876677.952875
+e417876678.143353
+r1
+xLd
+x/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/MacOS/dsp_effect_per_speaker
+xnormal
+xx86_64
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/dsp_effect_per_speaker.LinkFileList
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/crt1.10.5.o
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/dsp_effect_per_speaker.o
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/common.o
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/common_platform.o
+d/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/lib/libfmodL.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Cocoa.framework/Cocoa
+d/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/arc/libarclite_macosx.a
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Foundation.framework/Foundation
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/libobjc.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/libstdc++.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/libSystem.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/libgcc_s.10.5.dylib
+d/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/5.0/lib/darwin/libclang_rt.osx.a
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcache.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcommonCrypto.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcompiler_rt.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcopyfile.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libcorecrypto.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libdispatch.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libdyld.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libkeymgr.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/liblaunch.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libmacho.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libquarantine.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libremovefile.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_asl.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_blocks.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_c.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_configuration.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_dnssd.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_info.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_kernel.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_m.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_malloc.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_network.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_notify.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_platform.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_pthread.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_sandbox.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libsystem_stats.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libunc.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libunwind.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/system/libxpc.dylib
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/AppKit.framework/AppKit
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreData.framework/CoreData
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/ApplicationServices
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreGraphics.framework/CoreGraphics
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreText.framework/CoreText
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ImageIO.framework/ImageIO
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/ATS
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ColorSync.framework/Versions/A/ColorSync
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/CoreServices
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/HIServices.framework/Versions/A/HIServices
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/LangAnalysis.framework/Versions/A/LangAnalysis
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/PrintCore.framework/Versions/A/PrintCore
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/QD.framework/Versions/A/QD
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/SpeechSynthesis.framework/Versions/A/SpeechSynthesis
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CFNetwork.framework/CFNetwork
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/CarbonCore
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Metadata
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/OSServices.framework/Versions/A/OSServices
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/SearchKit.framework/Versions/A/SearchKit
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/AE
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/LaunchServices
+d/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/DictionaryServices.framework/Versions/A/DictionaryServices
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection218"Link /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/MacOS/dsp_effect_per_speaker137"Ld DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/MacOS/dsp_effect_per_speaker normal x86_64bdfff3c54ae8b841^5bb424c64ae8b841^---0#0#1#--1775"Ld DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/MacOS/dsp_effect_per_speaker normal x86_64    cd "/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32"    setenv MACOSX_DEPLOYMENT_TARGET 10.5    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++ -arch x86_64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -L/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug -F/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug -filelist /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/dsp_effect_per_speaker.LinkFileList -Xlinker -rpath -Xlinker @loader_path/../Frameworks -mmacosx-version-min=10.5 ../../../lowlevel/lib/libfmodL.dylib -fobjc-link-runtime -framework Cocoa -Xlinker -dependency_info -Xlinker /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Intermediates/dsp_effect_per_speaker.build/Debug/dsp_effect_per_speaker.build/Objects-normal/x86_64/dsp_effect_per_speaker_dependency_info.dat -o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/MacOS/dsp_effect_per_speaker36"128923F9-4DD8-4871-A63A-973E9B60D287-
+bF80B9F00-B048-4837-80C0-EE461EE4B0C0
+
+CPBXCp /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/lib/libfmod.dylib DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Frameworks/libfmod.dylib
+s417876678.144510
+e417876678.162840
+r1
+xPBXCp
+x/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/lib/libfmod.dylib
+xDerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Frameworks/libfmod.dylib
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection121"Copy DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Frameworks/libfmod.dylib218"PBXCp /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/lib/libfmod.dylib DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Frameworks/libfmod.dylibba1225c64ae8b841^bcb029c64ae8b841^-403"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -S /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/lib/libfmod.dylib -o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Frameworks/libfmod.dylib-0#0#1#-19%DVTDocumentLocation2@220"file:///Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD%20Programmers%20API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Frameworks/libfmod.dylib00343442dcffdf42^853"PBXCp /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/lib/libfmod.dylib DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Frameworks/libfmod.dylib    cd "/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-debug-symbols -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/lib/libfmod.dylib /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Frameworks36"AF6699CD-A67D-46AE-90BF-B334700615BC-
+bF80B9F00-B048-4837-80C0-EE461EE4B0C0
+
+CPBXCp /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/lib/libfmodL.dylib DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Frameworks/libfmodL.dylib
+s417876678.144709
+e417876678.168681
+r1
+xPBXCp
+x/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/lib/libfmodL.dylib
+xDerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Frameworks/libfmodL.dylib
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection122"Copy DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Frameworks/libfmodL.dylib220"PBXCp /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/lib/libfmodL.dylib DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Frameworks/libfmodL.dylib331625c64ae8b841^73302bc64ae8b841^-405"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -S /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/lib/libfmodL.dylib -o /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Frameworks/libfmodL.dylib-0#0#1#-19%DVTDocumentLocation2@221"file:///Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD%20Programmers%20API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Frameworks/libfmodL.dylib00343442dcffdf42^856"PBXCp /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/lib/libfmodL.dylib DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Frameworks/libfmodL.dylib    cd "/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-debug-symbols -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/lib/libfmodL.dylib /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app/Contents/Frameworks36"E37FFAEA-6AB8-4E2F-B9EC-5B544415FADE-
+bF80B9F00-B048-4837-80C0-EE461EE4B0C0
+
+CTouch /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app
+s417876678.173434
+e417876678.179185
+r1
+xTouch
+x/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection181"Touch /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app88"Touch DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app3b722cc64ae8b841^1ee02dc64ae8b841^---0#0#1#--391"Touch DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app    cd "/Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD Programmers API/api/lowlevel/examples/xcode32"    /usr/bin/touch -c /Users/ashleygwinnell/Dropbox/ark2d/Tools/FMOD\ Programmers\ API/api/lowlevel/examples/xcode32/DerivedData/dsp_effect_per_speaker/Build/Products/Debug/dsp_effect_per_speaker.app36"D34DAF3C-6D3A-4D7F-8AF3-8F5F7191A885-
+bF80B9F00-B048-4837-80C0-EE461EE4B0C0
+

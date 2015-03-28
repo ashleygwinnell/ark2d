@@ -390,7 +390,7 @@ namespace ARK {
 		bool AStar::isValidLocation(unsigned int sourceX, unsigned int sourceY, unsigned int x, unsigned int y) {
 			// TODO: rewrite so it's not backwards. 
 
-			bool invalid = (x < 0) || (y < 0) || (x >= m_width) || (y >= m_height);
+			bool invalid = ((signed int) x < 0) || ((signed int) y < 0) || (x >= m_width) || (y >= m_height);
 
 			if ((!invalid) && ((sourceX != x) || (sourceY != y))) {
 				//this.mover = mover;

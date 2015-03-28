@@ -8,8 +8,7 @@
 #ifndef TILEDMAPTILE_H_
 #define TILEDMAPTILE_H_
 
-#include <string>
-#include <vector>
+#include "../Includes.h"
 
 #include "../Graphics/Image.h"
 using namespace std;
@@ -25,7 +24,7 @@ namespace ARK {
 		 * @warning You should never need to create this manually.
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class TiledMapTile {
+		class ARK2D_API TiledMapTile {
 			public: 
 				TiledMapTile();
 				Image* getImage() const;

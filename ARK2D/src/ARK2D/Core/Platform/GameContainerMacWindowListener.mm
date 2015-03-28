@@ -16,7 +16,7 @@
 
 using namespace ARK::Core;
 
-
+ 
 
 // see url:
 // http://classicteck.com/rbarticles/mackeyboard.php
@@ -201,8 +201,15 @@ static int darwin_scancode_table[] = {
     // [m_window close]; 
     //  [NSApp terminate];
 }   
+
+- (void)cancelOperation:(id)sender
+{
+    //[self exitFullScreen];
+    ARK2D::getLog()->v("escape pressed?"); 
+}
  
 -(void)keyDown:(NSEvent *)theEvent {
+	ARK2D::getLog()->v("keyDown");
 	m_latestKeyUpEvent = NULL;
 	
 	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
@@ -219,6 +226,8 @@ static int darwin_scancode_table[] = {
 }
 
 -(void)keyUp:(NSEvent *)theEvent {
+	ARK2D::getLog()->v("keyUp");
+
 	m_latestKeyUpEvent = NULL;
 	
 	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
@@ -250,12 +259,21 @@ static int darwin_scancode_table[] = {
 	// shift = ( flags & NSShiftKeyMask ) ? YES : NO;
 }
 
+- (void)rightMouseDown:(NSEvent *) theEvent {
+	//std::cout << "right mouse down" << std::endl;
+    //ARK2D::getInput()->pressKey(Input::MOUSE_BUTTON_RIGHT);
+}
+- (void)rightMouseUp:(NSEvent *) theEvent {
+	//std::cout << "right mouse up" << std::endl; 
+   // ARK2D::getInput()->releaseKey(Input::MOUSE_BUTTON_RIGHT);
+} 
+
 -(void)mouseDown:(NSEvent *)theEvent {
-  	std::cout << "left mouse down" << std::endl;
+  	//std::cout << "left mouse down" << std::endl;
     ARK2D::getInput()->pressKey(Input::MOUSE_BUTTON_LEFT);
 }
 -(void)mouseUp:(NSEvent *)theEvent {
-    std::cout << "left mouse up" << std::endl;
+    //std::cout << "left mouse up" << std::endl;
     ARK2D::getInput()->releaseKey(Input::MOUSE_BUTTON_LEFT);
 }
 -(void)mouseMoved:(NSEvent *)theEvent {
@@ -287,6 +305,7 @@ static int darwin_scancode_table[] = {
    
 	
 	Input* i = ARK2D::getInput();
+	ARK2D::getLog()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 	ARK2D::getGame()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 
 	i->mouse_x = (int) thisx;
@@ -296,6 +315,27 @@ static int darwin_scancode_table[] = {
 }
 -(void)mouseDragged:(NSEvent* )theEvent {
 	[self mouseMoved:theEvent];
+}
+
+
+
+- (BOOL)acceptsFirstResponder 
+{
+  return YES;
+}
+
+// ---------------------------------
+
+- (BOOL)becomeFirstResponder
+{
+  return  YES;
+}
+
+// ---------------------------------
+
+- (BOOL)resignFirstResponder
+{
+  return YES;
 }
 
 

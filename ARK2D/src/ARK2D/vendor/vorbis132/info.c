@@ -25,7 +25,7 @@
 #include "codec.h"
 #include "codec_internal.h"
 #include "codebook.h"
-#include "registry.h"
+#include "registry.h" 
 #include "window.h"
 #include "psy.h"
 #include "misc.h"

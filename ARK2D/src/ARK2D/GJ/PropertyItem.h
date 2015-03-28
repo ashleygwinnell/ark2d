@@ -14,14 +14,14 @@
 namespace ARK {
 	namespace GJ {
 
-		class PropertyItem {
+		class ARK2D_API PropertyItem {
 			protected:
 				map<string, string> m_properties;
 
 			public:
 				PropertyItem();
 				void addProperty(string key, string val);
-				string getProperty(string key);
+				string getProperty(string key) const;
 				virtual ~PropertyItem();
 		};
 

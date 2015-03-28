@@ -19,7 +19,7 @@
 	    //[self.superview becomeFirstResponder];
 	    NSLog(@"MDown");
 	    ARK2D::getInput()->pressKey(Input::MOUSE_BUTTON_LEFT);
-	}
+	} 
 
 	- (void)mouseDragged:(NSEvent *)theEvent
 	{ 
@@ -231,4 +231,6 @@ namespace ARK {
 
 	}
 }
+
+
 

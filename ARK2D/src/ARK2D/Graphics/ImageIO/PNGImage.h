@@ -21,7 +21,7 @@ namespace ARK {
 					unsigned int m_pos;
 			};
 
-			class PNGImage {
+			class ARK2D_API PNGImage {
 				public:
 					PNGImage(const std::string filename);
 					int load();

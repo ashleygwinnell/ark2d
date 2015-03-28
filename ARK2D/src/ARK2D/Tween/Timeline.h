@@ -26,7 +26,7 @@ namespace ARK {
 
 		class Timeline;
 
-		class AnimationEvent {
+		class ARK2D_API AnimationEvent {
 			public:
 				static const unsigned int STATIC = 0;
 				static const unsigned int TWEENED = 1;
@@ -46,7 +46,7 @@ namespace ARK {
 				unsigned int m_type;
 		};
 
-		class StaticEvent : public AnimationEvent {
+		class ARK2D_API StaticEvent : public AnimationEvent {
 			public:
 
 			public:
@@ -55,8 +55,17 @@ namespace ARK {
 				virtual ~StaticEvent();
 		};
 
+		class ARK2D_API FPStaticEvent : public StaticEvent {
+			public:
+				void* m_fp;
+			public:
+				FPStaticEvent(void* fp, float delay);
+				virtual void invoke(Timeline* t);
+				virtual ~FPStaticEvent();
+		};
 
-		class TweenedEvent : public AnimationEvent {
+
+		class ARK2D_API TweenedEvent : public AnimationEvent {
 			public:
 				unsigned int m_easing;
 				float m_start_val;
@@ -84,7 +93,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class Timeline {
+		class ARK2D_API Timeline {
 			public:
 
 			private:

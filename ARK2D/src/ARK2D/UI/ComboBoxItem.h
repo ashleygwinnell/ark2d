@@ -24,7 +24,7 @@ namespace ARK {
 		/*!
 		 * \brief A drop-down menu item.
 		 */
-		class ComboBoxItem : public AbstractUIComponent {
+		class ARK2D_API ComboBoxItem : public AbstractUIComponent {
 			friend class ComboBox;
 			private:
 				ComboBox* parent;

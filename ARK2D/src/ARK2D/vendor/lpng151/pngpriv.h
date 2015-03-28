@@ -185,7 +185,9 @@ typedef PNG_CONST png_uint_16p FAR * png_const_uint_16pp;
 
 /* Memory model/platform independent fns */
 #ifndef PNG_ABORT
-#  ifdef _WINDOWS_
+#  ifdef ARK2D_WINDOWS_PHONE_8
+#    define PNG_ABORT() exit(0) 
+#  elif defined( _WINDOWS_ )
 #    define PNG_ABORT() ExitProcess(0)
 #  else
 #    define PNG_ABORT() abort()
@@ -206,7 +208,7 @@ typedef PNG_CONST png_uint_16p FAR * png_const_uint_16pp;
 #  define png_memset  _fmemset
 #  define png_sprintf sprintf
 #else
-#  ifdef _WINDOWS_  /* Favor Windows over C runtime fns */
+#  if defined(_WINDOWS_) && !defined(ARK2D_WINDOWS_PHONE_8)  /* Favor Windows over C runtime fns */
 #    define CVT_PTR(ptr)         (ptr)
 #    define CVT_PTR_NOCHECK(ptr) (ptr)
 #    define png_strcpy  lstrcpyA

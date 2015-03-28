@@ -13,7 +13,7 @@
 namespace ARK {
 	namespace GJ {
 
-		class Trophy : public PropertyItem {
+		class ARK2D_API Trophy : public PropertyItem {
 			public:
 				static const unsigned int DIFFICULTY_BRONZE = 0;
 				static const unsigned int DIFFICULTY_SILVER = 1;

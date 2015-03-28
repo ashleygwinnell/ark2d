@@ -3,8 +3,13 @@
 #include <stdarg.h>
 #include <assert.h>
 
+//
+// THIS FILE WAS MODIFIED BY ME TO INCLUDE WINDOWS PHONE 8 SAFETY THINGS.
+//
+
 //#include "../ARK2D.h"
 #include "FileInterface.h"
+
 
 //#pragma warning(disable:4996) // Disabling stupid .NET deprecated warning.
 
@@ -15,7 +20,7 @@
 #   define _stricmp(a,b) strcasecmp((a),(b))                                                   
 #else
 #	define _stricmp(a,b) strcmp((a),(b))
-#endif
+#endif  
 
 class FILE_INTERFACE
 {
@@ -42,15 +47,24 @@ public:
 
 		if ( mData == 0 )
 		{
-			mFph = fopen(fname,spec);
+			#if defined(ARK2D_WINDOWS_PHONE_8)
+				fopen_s(&mFph, fname, spec);
+			#else
+				mFph = fopen(fname, spec);
+			#endif
 		}
 
-  	strncpy(mName,fname,512);
+		#if defined(ARK2D_WINDOWS_PHONE_8)
+			strncpy_s(mName, fname, 512);
+		#else
+			strncpy(mName,fname,512);
+		#endif
+  	
 	}
 
   ~FILE_INTERFACE(void)
   {
-  	if ( mMyAlloc )
+  	if ( mMyAlloc ) 
   	{
   		delete mData;
   	}
@@ -95,7 +109,7 @@ public:
   		ret = 1;
   	}
   	return ret;
-  }
+  } 
 
 	size_t read(void *buffer,size_t size,size_t count)
 	{
@@ -174,7 +188,9 @@ public:
   	return ret;
   }
 
-
+  // ^AG
+  // should return 0 on success and anything else if an error. 
+  // should set errno to indicate error 
   size_t seek(size_t loc,size_t mode)
   {
   	size_t ret = 0;
@@ -192,6 +208,16 @@ public:
   				ret = 1;
   			}
   		}
+      else if ( mode == SEEK_CUR ) 
+      {
+        // my addition ^AG
+        //mLoc += 6;
+        mLoc += loc; 
+        if ( mLoc <= mLen ) 
+        {
+          ret = 1;
+        }
+      }
   		else if ( mode == SEEK_END )
   		{
   			mLoc = mLen;
@@ -312,10 +338,10 @@ size_t        fi_fwrite(const void *buffer,size_t size,size_t count,FILE_INTERFA
 }
 
 size_t        fi_fprintf(FILE_INTERFACE *fph,const char *fmt,...)
-{
+{ 
 	size_t ret = 0;
 
-#if defined(ARK2D_ANDROID)
+#if (defined(ARK2D_ANDROID) || defined(ARK2D_MACINTOSH) || defined (ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_UBUNTU_LINUX) || defined(ARK2D_EMSCRIPTEN_JS) )
 
 #else
 

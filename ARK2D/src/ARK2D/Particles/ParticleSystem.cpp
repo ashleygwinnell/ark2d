@@ -139,7 +139,8 @@ namespace ARK {
 			g->pushMatrix();
 			g->translate(x, y);
 			if (blendingMode == BLEND_ADDITIVE) { // TODO: g->setBlendMode(Renderer::BLEND_ADDITIVE);
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+				//glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+				g->setBlendMode(Renderer::BLEND_ADDITIVE);
 			}
 			//if (isUsePoints()) {
 			//	glEnable(GL_POINT_SMOOTH);
@@ -151,7 +152,8 @@ namespace ARK {
 				//std::cout << "render" << std::endl;
 				// check for additive override and enable when set
 				if (emitter->useAdditive()) {
-					glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+					//glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+					g->setBlendMode(Renderer::BLEND_ADDITIVE);
 				}
 
 				// now get the particle pool for this emitter and render all particles that are in use
@@ -188,7 +190,8 @@ namespace ARK {
 
 				// reset additive blend mode
 				if (emitter->useAdditive()) {
-					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+					//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+					g->setBlendMode(Renderer::BLEND_NORMAL);
 				}
 				//std::cout << "render2" << std::endl;
 			}
@@ -197,7 +200,8 @@ namespace ARK {
 			//}
 
 			if (blendingMode == BLEND_ADDITIVE) {
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+				g->setBlendMode(Renderer::BLEND_NORMAL);
 			}
 
 			g->setDrawColor(Color::white);

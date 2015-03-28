@@ -19,6 +19,9 @@ namespace ARK {
 			m_textAlignY(0),
 			m_multiline(false),
 			m_wrap(false),
+			m_maxLength(10),
+			m_textColor(Color::white),
+			m_caretColor(Color::white_50a),
 			m_restrictCharacters(RESTRICT_NONE)
 			{
 
@@ -159,14 +162,14 @@ namespace ARK {
 
 
 			if (m_multiline == false || (m_multiline == true && !m_text.contains("\n"))) {
-				g->setDrawColor(Color::white);
+				g->setDrawColor(m_textColor);
 				g->drawString(m_text.get(), x, y);
 			} else {
 
 
 
 
-				g->setDrawColor(Color::white);
+				g->setDrawColor(m_textColor);
 				int cur_y = y;
 				vector<String> lines = m_text.split("\n");
 				for(unsigned int i = 0; i < lines.size(); i++) {
@@ -188,7 +191,7 @@ namespace ARK {
 		}
 		void TextField::renderCaret(int x1, int y1, int x2, int y2) {
 			Renderer* g = ARK2D::getRenderer();
-			g->setDrawColor(Color::white_50a);
+			g->setDrawColor(m_caretColor);
 			g->drawLine(x1, y1, x2, y2);
 		}
 		void TextField::renderOverlay() {
@@ -217,6 +220,7 @@ namespace ARK {
 					//}
 					//
 					//UIComponent::s_currentFocus = this;
+					ARK2D::getLog()->e("focussed");
 					setFocussed(true);
 				} else {
 					setFocussed(false);
@@ -306,10 +310,18 @@ namespace ARK {
 					clearSelection();
 				} else if (k.length() > 0) {
 
+					if (m_text.length() >= m_maxLength) {
+						return;
+					}
+
 					// do restrictions
 
-					if (m_restrictCharacters == RESTRICT_ALPHANUMERIC) {
+					if (m_restrictCharacters == RESTRICT_ALPHANUMERIC || m_restrictCharacters == RESTRICT_ALPHANUMERIC_SPACES) {
 						string allowedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+						if (m_restrictCharacters == RESTRICT_ALPHANUMERIC_SPACES) {
+							allowedCharacters += " ";
+						}
+
 						if (allowedCharacters.find(k) == string::npos) {
 							return;
 						}
@@ -350,6 +362,7 @@ namespace ARK {
 			} else {
 				Input::setSoftwareKeyboardOpen(false);
 			}
+			
 		}
 
 		TextField::~TextField() {

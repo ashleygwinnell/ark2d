@@ -1,8 +1,8 @@
 #ifndef TILED_MAP_TILESET_H_
 #define TILED_MAP_TILESET_H_
 
-#include <vector>
-#include <string>
+#include "../Includes.h"
+
 #include <stdexcept>
 #include <iostream>
 #include <stdio.h>
@@ -22,7 +22,7 @@ namespace ARK {
 		 * @warning You should never need to create this manually.
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class TiledMapTileset {
+		class ARK2D_API TiledMapTileset {
 			public:
 				TiledMapTileset();
 

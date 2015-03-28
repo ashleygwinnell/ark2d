@@ -1,0 +1,4 @@
+renderer opengl
+opengl_major_version 3
+opengl_minor_version 2
+multisampling_rate 4

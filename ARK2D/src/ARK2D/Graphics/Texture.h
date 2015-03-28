@@ -15,10 +15,17 @@
 namespace ARK {
 	namespace Graphics {
 
-		class Texture {
+		class ARK2D_API Texture {
 			public:
 				unsigned int m_id;
 				Image* m_resource;
+				unsigned int m_interpolation;
+
+				#ifdef ARK2D_RENDERER_DIRECTX
+					ID3D11Texture2D* m_dxTexture;
+					ID3D11SamplerState* m_dxSampler;
+					ID3D11ShaderResourceView* m_dxResourceView;
+				#endif
 			 
 			public:
 				Texture();

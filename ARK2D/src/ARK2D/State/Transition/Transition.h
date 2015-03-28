@@ -8,6 +8,7 @@
 #ifndef TRANSITION_H_
 #define TRANSITION_H_
 
+#include "../../Includes.h"
 #include "../../Namespaces.h"
 #include "../../Core/Game.h"
 #include "../../Core/GameTimer.h"
@@ -25,7 +26,7 @@ namespace ARK {
 			 *
 			 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 			 */
-			class Transition {
+			class ARK2D_API Transition {
 				public:
 					Transition();
 					void setEasing(unsigned int easing);
@@ -35,6 +36,10 @@ namespace ARK {
 					virtual void preRender(GameContainer* container, StateBasedGame* game, Renderer* g) = 0;
 					virtual void postRender(GameContainer* container, StateBasedGame* game, Renderer* g) = 0;
 					virtual bool isComplete() = 0;
+
+					virtual void postEnter(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to);
+					virtual void postLeave(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to);
+
 					virtual ~Transition();
 
 				protected:

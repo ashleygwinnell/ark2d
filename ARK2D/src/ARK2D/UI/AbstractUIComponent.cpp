@@ -53,10 +53,16 @@ namespace ARK {
 			return m_height;
 		}
 		void AbstractUIComponent::setX(float x) {
-			m_x = x;
+			m_x = x; 
+		}
+		void AbstractUIComponent::setXByCenter(float x) {
+			m_x = x - (m_width/2); 
 		}
 		void AbstractUIComponent::setY(float y) {
 			m_y = y;
+		}
+		void AbstractUIComponent::setYByCenter(float y) {
+			m_y = y - (m_height/2); 
 		}
 		void AbstractUIComponent::setLocation(float x, float y) {
 			m_x = x;
@@ -69,7 +75,10 @@ namespace ARK {
 		void AbstractUIComponent::setSize(unsigned int w, unsigned int h) {
 			m_width = w;
 			m_height = h;
-		}
+		} 
+		//void AbstractUIComponent::setSize(float w, float h) {
+		//	setSize((unsigned int) w, (unsigned int) h);
+		//}
 
 		void AbstractUIComponent::setWidth(unsigned int w) {
 			m_width = w;

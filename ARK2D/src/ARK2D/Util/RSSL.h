@@ -8,17 +8,13 @@
 #ifndef RSSL_H_
 #define RSSL_H_
 
-#include <string>
-#include <vector>
-#include <map>
-#include <stdexcept>
-
-using namespace std;
+#include "../Includes.h"
+#include "../Namespaces.h"
 
 namespace ARK {
 	namespace Util {
 
-		class RSSLException {
+		class ARK2D_API RSSLException {
 			private:
 				string m_message;
 			public:
@@ -27,9 +23,9 @@ namespace ARK {
 				static void parseException(string s);
 		};
 
-		class RSSLArgument {
+		class ARK2D_API RSSLArgument {
 			public:
-				string name;
+				string name; 
 				unsigned int type;
 
 				string valStr;
@@ -41,7 +37,7 @@ namespace ARK {
 				float asFloat();
 		};
 
-		class RSSLFunction {
+		class ARK2D_API RSSLFunction {
 			friend class RSSL;
 			private:
 				vector<RSSLArgument*> m_args;
@@ -63,7 +59,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class RSSL {
+		class ARK2D_API RSSL {
 			friend class RSSLFunction;
 			private:
 				vector<RSSLFunction*> m_functions;

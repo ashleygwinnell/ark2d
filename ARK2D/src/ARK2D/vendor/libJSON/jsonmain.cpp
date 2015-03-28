@@ -13,8 +13,8 @@
 	ErrorCallback Error = 0;
 #endif
 
-using namespace std;
-
+using namespace std; 
+ 
 #ifndef JSON_DLL
     #define STRING_EMPTY(s) (s.empty())
     #define Parent this

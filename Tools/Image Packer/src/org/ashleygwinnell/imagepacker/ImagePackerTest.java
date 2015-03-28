@@ -25,23 +25,38 @@ public class ImagePackerTest {
 	}
 	
 	@Test
-	public void maxTextureSizeMustBePO2() {
+	public void maxTextureWidthMustBePO2() {
 		try {
-			packer.setMaxTextureSize(512);
+			packer.setMaxTextureWidth(512);
 		} catch (Exception e) {
 			Assert.fail();
 		}
 	}
 	
-	@Test(expected=Exception.class)
-	public void maxTextureSizeMustBePO2_boundary() throws Exception {
-		packer.setMaxTextureSize(511);
+	@Test
+	public void maxTextureHeightMustBePO2() {
+		try {
+			packer.setMaxTextureHeight(512);
+		} catch (Exception e) {
+			Assert.fail();
+		}
 	}
+	
+	/*@Test(expected=Exception.class)
+	public void maxTextureWidthMustBePO2_boundary() throws Exception {
+		packer.setMaxTextureWidth(511);
+	}
+	
+	@Test(expected=Exception.class)
+	public void maxTextureHeightMustBePO2_boundary() throws Exception {
+		packer.setMaxTextureHeight(511);
+	}*/
 	
 	@Test
 	public void canPackMultipleFiles() {
 		try {
-			packer.setMaxTextureSize(512);
+			packer.setMaxTextureWidth(512);
+			packer.setMaxTextureHeight(512);
 			packer.setExportFormat(ExportFormat.JSON);
 			packer.setExportName("data/tests/atlas-1");
 			packer.addImage(new Image(new File("data/tests/60x60.png")));
@@ -55,7 +70,8 @@ public class ImagePackerTest {
 	@Test
 	public void canExportJson() {
 		try {
-			packer.setMaxTextureSize(256);
+			packer.setMaxTextureWidth(256);
+			packer.setMaxTextureHeight(256);
 			packer.setExportFormat(ExportFormat.JSON);
 			packer.setExportName("data/tests/atlas-2");
 			packer.addImage(new Image(new File("data/tests/60x60.png")));
@@ -69,7 +85,8 @@ public class ImagePackerTest {
 	@Test
 	public void canExportXml() {
 		try {
-			packer.setMaxTextureSize(256);
+			packer.setMaxTextureWidth(256);
+			packer.setMaxTextureHeight(256);
 			packer.setExportFormat(ExportFormat.XML);
 			packer.setExportName("data/tests/atlas-3");
 			packer.addImage(new Image(new File("data/tests/60x60.png")));
@@ -82,7 +99,8 @@ public class ImagePackerTest {
 	
 	@Test(expected=Exception.class) 
 	public void cannotExceedMaxTextureSize() throws Exception {
-		packer.setMaxTextureSize(256);
+		packer.setMaxTextureWidth(256);
+		packer.setMaxTextureHeight(256);
 		packer.setExportFormat(ExportFormat.JSON);
 		packer.setExportName("data/tests/atlas-4");
 		packer.addImage(new Image(new File("data/tests/120x120.png")));

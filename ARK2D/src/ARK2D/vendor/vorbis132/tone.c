@@ -17,7 +17,7 @@ int main (int argc,char *argv[]){
 
   f=alloca(sizeof(*f)*(argc-1));
   amp=alloca(sizeof(*amp)*(argc-1));
-
+ 
   i=0;
   while(argv[i+1]){
     char *pos=strchr(argv[i+1],',');

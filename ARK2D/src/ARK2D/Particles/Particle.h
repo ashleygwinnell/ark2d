@@ -25,7 +25,7 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 * @author Kevin Glass
 		 */
-		class Particle
+		class ARK2D_API Particle
 		{
 			friend class ParticleSystem;
 

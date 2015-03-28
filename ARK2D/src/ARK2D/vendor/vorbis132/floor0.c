@@ -22,7 +22,7 @@
 #include "codec.h"
 #include "codec_internal.h"
 #include "registry.h"
-#include "lpc.h"
+#include "lpc.h" 
 #include "lsp.h"
 #include "codebook.h"
 #include "scales.h"

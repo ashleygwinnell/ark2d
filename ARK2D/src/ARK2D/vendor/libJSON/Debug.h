@@ -12,7 +12,7 @@
             if ((!(condition)) && (Error)) Error(message);
         #define libJSON_FAIL_SAFE(message, failcode)\
             if (Error) Error(message);
-    #endif
+    #endif 
 
     #define libJSON_ASSERT(condition, message)\
 	    if ((!(condition)) && (Error)) Error(message);

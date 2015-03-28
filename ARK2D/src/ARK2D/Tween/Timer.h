@@ -15,7 +15,7 @@
 namespace ARK {
 	namespace Tween {
 
-		class Timer {
+		class ARK2D_API Timer {
 			public: 
 				float m_timer;
 				float m_duration;

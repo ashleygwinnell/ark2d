@@ -8,7 +8,7 @@
 
 #include "MathUtil.h"
 #include "Log.h"
-#include "../ARK2D.h"
+#include "../ARK2D.h" 
 
 #include "../Core/GameContainer.h"
  
@@ -47,11 +47,32 @@ namespace ARK {
 				y += snap;
 			}
 		}
+		void MathUtil::snap(float& snap, float angle) {
+			signed int divisions = round(snap / angle);
+			snap = divisions * angle; 
+		}
 
 		double MathUtil::distance(float x1, float y1, float x2, float y2) {
 			float diffx = x1 - x2;
 			float diffy = y1 - y2;
 			return sqrt((diffx * diffx) + (diffy * diffy));
+		}
+		double MathUtil::distanceSquared(float x1, float y1, float x2, float y2) {
+			float diffx = x1 - x2;
+			float diffy = y1 - y2;
+			return (diffx * diffx) + (diffy * diffy);
+		}
+		double MathUtil::distance3d(float x1, float y1, float z1, float x2, float y2, float z2) {
+			float xd = x2 - x1;
+			float yd = y2 - y1;
+			float zd = z2 - z1;
+			return sqrt((xd * xd) + (yd * yd) + (zd * zd));
+		}
+		double MathUtil::distanceSquared3d(float x1, float y1, float z1, float x2, float y2, float z2) {
+			float xd = x2 - x1;
+			float yd = y2 - y1;
+			float zd = z2 - z1;
+			return (xd * xd) + (yd * yd) + (zd * zd);
 		}
 
 		/**
@@ -65,7 +86,7 @@ namespace ARK {
 
 		float MathUtil::randBetweenf(float lower, float upper) {
 			if (lower == upper) { return upper; }
-			if (lower > upper) { int teacup = lower; lower = upper; upper = teacup; }
+			if (lower > upper) { float teacup = lower; lower = upper; upper = teacup; }
 
 			float r = float(randBetween(0, 101)) / 100.0f;
 			float diff = upper - lower;
@@ -113,9 +134,83 @@ namespace ARK {
 
 			return angle;
 		}
+		double MathUtil::forcePositiveAngle(double angle) {
+			if (angle < 0) {
+				angle = fmod(angle, 360);
+				angle += 360;
+			}
+			return angle;
+		}
+
+		float MathUtil::averageAngle(float a, float b) 
+		{
+			a = fmod(a,360); // a % 360;
+			b = fmod(b,360); // b % 360;
+
+			int sum = a + b;
+			if (sum > 360 && sum < 540) {
+            	sum = sum % 180;
+        	}
+        	return sum / 2;
+		}
+
+		float MathUtil::rotateAngleToTarget(float angleStart, float angleTarget, float degrees) {
+			return rotateAngleToTarget(angleStart, angleTarget, degrees, false);
+		}
+		float MathUtil::rotateAngleToTarget(float angleStart, float angleTarget, float degrees, bool restrictOvershoot) {
+			//angleTarget = atan2(newVelocityVector.getY(),newVelocityVector.getX()) * (180/pi);		
+
+ 
+			float diff = angleTarget - angleStart;
+			if (diff > 180) diff -= 360;
+			if (diff < -180) diff += 360;
+			
+			if (diff > -0.05f && diff < 0.05f) { return angleTarget; }
 
 
+			float multiplier = 0.0f;
+			if (diff < 0) { 
+				multiplier = -1.0f;
+			} else if (diff > 0) { 
+				multiplier = 1.0f;
+			} 
+ 
+			float returnAngle = angleStart + (degrees*multiplier);
 
+			if (restrictOvershoot) {
+				// make sure we don't go past it. 
+				if (multiplier == 1.0f && returnAngle > angleTarget) { 
+					returnAngle = angleTarget;
+				} else if (multiplier == -1.0f && returnAngle < angleTarget) {
+					returnAngle = angleTarget;
+				}
+			}
+
+ 
+			return returnAngle;
+		}
+		float MathUtil::rotateAngleToTarget2(float angleStart, float angleTarget, float degrees) {
+			
+		    float antiClockwiseDistance = abs(180 - angleStart) + abs(-180 - angleTarget);
+		    float clockwiseDistance = angleTarget - angleStart;
+
+		    //ARK2D::getLog()->i(StringUtil::appendf("clockwise distance: ", clockwiseDistance));
+		    //ARK2D::getLog()->i(StringUtil::appendf("anticlockwise distance: ", antiClockwiseDistance));
+
+		    if (clockwiseDistance < antiClockwiseDistance) {
+		        angleStart += degrees;
+		        if (angleStart > angleTarget) { 
+		        	angleStart = angleTarget; 
+		        }
+		    } else {
+		        angleStart -= degrees;
+		        if (angleStart < angleTarget) { 
+		        	angleStart = angleTarget;  
+		        }
+		    }
+		    return angleStart;
+		}
+		
 
 		double MathUtil::toRadians(double angle) {
 			return angle * (MY_PI/180);
@@ -129,7 +224,7 @@ namespace ARK {
 			std::string str = Cast::toString<int>(pc).append(&"%"[0]);
 			return str.c_str();
 		}
-		#if (defined(ARK2D_ANDROID) || defined(ARK2D_FLASCC))
+		#if (defined(ARK2D_ANDROID) || defined(ARK2D_FLASCC) || defined(ARK2D_WINDOWS_VS))
 			unsigned int util_androidlog2( unsigned int x )
 			{
 			  unsigned int ans = 0 ;
@@ -145,7 +240,7 @@ namespace ARK {
 		#endif
 
 		int MathUtil::nextPowerOfTwo(int val) {
-			#if (defined(ARK2D_ANDROID) || defined(ARK2D_FLASCC))
+			#if (defined(ARK2D_ANDROID) || defined(ARK2D_FLASCC) || defined(ARK2D_WINDOWS_VS)) 
 				return (1 << (int) ceil(Log2AndroidTwo((double)val)));
 			#else
 				return (1 << (int) ceil(log2((double)val)));

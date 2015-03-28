@@ -23,13 +23,14 @@ namespace ARK {
 
 		class AStar;
 
-		class AStarHeuristic {
+		class ARK2D_API AStarHeuristic {
 			public:
 				virtual float getCost(AStar* map, unsigned int x, unsigned int y, unsigned int tx, unsigned int ty) = 0;
+				virtual ~AStarHeuristic() {}
 		};
 
 		// A heuristic that uses the tile that is closest to the target as the next best tile.
-		class ClosestHeuristic : public AStarHeuristic {
+		class ARK2D_API ClosestHeuristic : public AStarHeuristic {
 			public:
 				virtual float getCost(AStar* map, unsigned int x, unsigned int y, unsigned int tx, unsigned int ty) 
 				{
@@ -42,7 +43,7 @@ namespace ARK {
 
 		// A heuristic that uses the tile that is closest to the target as the next best tile. 
 		// In this case the sqrt is removed and the distance squared is used instead.
-		class ClosestSquaredHeuristic : public AStarHeuristic {
+		class ARK2D_API ClosestSquaredHeuristic : public AStarHeuristic {
 			public:
 				virtual float getCost(AStar* map, unsigned int x, unsigned int y, unsigned int tx, unsigned int ty) 
 				{
@@ -54,7 +55,7 @@ namespace ARK {
 		};
 
 		// A heuristic that drives the search based on the Manhattan distance between the current location and the target.
-		class ManhattanHeuristic : public AStarHeuristic {
+		class ARK2D_API ManhattanHeuristic : public AStarHeuristic {
 			public:
 				int m_minimumCost;
 				ManhattanHeuristic(int minimumCost): 
@@ -67,7 +68,7 @@ namespace ARK {
 				}
 		};
 
-		class DiagonalShortcutHeuristic : public AStarHeuristic {
+		class ARK2D_API DiagonalShortcutHeuristic : public AStarHeuristic {
 			public:
 				virtual float getCost(AStar* map, unsigned int x, unsigned int y, unsigned int tx, unsigned int ty) 
 				{
@@ -80,15 +81,16 @@ namespace ARK {
 				}
 		}; 
 
-		class AStarDataMap {
+		class ARK2D_API AStarDataMap {
 			public:
 				virtual bool isBlocked(AStar* map, unsigned int x, unsigned int y) = 0;
+				virtual ~AStarDataMap() {}
 		};
 
-		class DefaultAStarDataMap : public AStarDataMap {
+		class ARK2D_API DefaultAStarDataMap : public AStarDataMap {
 			public:
 				virtual bool isBlocked(AStar* map, unsigned int x, unsigned int y);
-		};
+		}; 
 
 		/* Coefficients for Matrix M */
 		#define M11	 0.0
@@ -97,7 +99,7 @@ namespace ARK {
 		#define M14	 0.0
 		#define M21	-0.5
 		#define M22	 0.0
-		#define M23	 0.5
+		#define M23	 0.5 
 		#define M24	 0.0
 		#define M31	 1.0
 		#define M32	-2.5
@@ -120,7 +122,7 @@ namespace ARK {
 		}
 
 
-		class AStarNode {
+		class ARK2D_API AStarNode {
 			public:
 				unsigned int m_x;
 				unsigned int m_y;
@@ -176,7 +178,7 @@ namespace ARK {
 		};
 
 
-		class PriorityAStarNodeList {
+		class ARK2D_API PriorityAStarNodeList {
 			public:
 				Vector<AStarNode*> m_data;
 		 
@@ -215,7 +217,7 @@ namespace ARK {
 				}
 		};
 
-		class AStar {
+		class ARK2D_API AStar {
 			public:
 				AStarHeuristic* m_heuristic;
 				AStarDataMap* m_dataMap;
@@ -337,7 +339,7 @@ namespace ARK {
 				virtual ~AStar();
 		};
 
-		class AStarUtil {
+		class ARK2D_API AStarUtil {
 			public:
 				static void randomiseAdjacent(AStar* a, Vector<Vector2<int> >& items);
 				static void removeAdjacent(AStar* a, Vector<Vector2<int> >& items);

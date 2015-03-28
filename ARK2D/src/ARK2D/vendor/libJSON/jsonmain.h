@@ -5,6 +5,8 @@
 #ifndef libJSON_main_h
 #define libJSON_main_h
 
+#include "../../Includes.h"
+
 #include "Debug.h"
 #include "JSON_Defs.h"
 
@@ -73,7 +75,7 @@
     }
 #else
     //Embedded helper class
-    class libJSON {
+    class ARK2D_API libJSON {
         public:
             static JSONNode * Parse(const json_string & json);
             static JSONNode * NewNode(const json_string & name, const json_string & value);

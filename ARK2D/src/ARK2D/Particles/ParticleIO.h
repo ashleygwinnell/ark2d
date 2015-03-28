@@ -8,9 +8,7 @@
 #ifndef PARTICLEIO_H_
 #define PARTICLEIO_H_
 
-#include <string>
-using namespace std;
-
+#include "../Includes.h"
 #include "../Namespaces.h"
 #include "../Util/Range.h"
 
@@ -31,7 +29,7 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 * @author Kevin Glass
 		 */
-		class ParticleIO {
+		class ARK2D_API ParticleIO {
 			public:
 				static ParticleSystem* loadConfiguredSystem(string ref);
 				static ParticleSystem* loadConfiguredSystem(string ref, const Color& mask);

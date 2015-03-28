@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <iostream>
 
+#include "Font.h"
 #include "../Includes.h"
 
 #include "../Graphics/Image.h"
@@ -20,7 +21,7 @@
 #include "../Util/Log.h"
 #include "../Util/StringUtil.h"
 
-#include "Font.h"
+
 #include "../ARK2D.h"
 
 using namespace std;
@@ -99,7 +100,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class BMFont : public ARK::Font::Font {
+		class ARK2D_API BMFont : public ARK::Font::Font {
 			private:
 				bool m_loaded;
 				char* m_data;

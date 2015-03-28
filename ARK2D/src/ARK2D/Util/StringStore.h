@@ -8,13 +8,15 @@
 #ifndef STRINGSTORE_H_
 #define STRINGSTORE_H_
  
-#include <map>
+/*#include <map>
 #include <string>
 #include <iostream>
 #include <stdlib.h>
 
+using namespace std;*/
 
-using namespace std;
+#include "../Includes.h"
+#include "../Namespaces.h"
 
 namespace ARK {
 	namespace Util {
@@ -24,7 +26,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class StringStore {
+		class ARK2D_API StringStore {
 			private:
 				static StringStore s_stringStore;
 			public:

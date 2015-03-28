@@ -20,7 +20,7 @@
 #include "lookup_data.h"
 #include "os.h"
 #include "misc.h"
-
+ 
 #ifdef FLOAT_LOOKUP
 
 /* interpolated lookup based cos function, domain 0 to PI only */

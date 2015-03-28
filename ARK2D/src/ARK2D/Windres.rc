@@ -1,11 +1,26 @@
 #include "Windres.h"
- 
-ARK2D_ICON 			ICON 	"C:\\Dropbox\\ARK2D\\ark2d\\data\\icon.ico"
 
-ARK2D_FONT_PNG 	ARK2D_RESOURCE_TYPE_PNG 	"C:\\Dropbox\\ARK2D\\ark2d\\data\\fonts\\default.png"
-ARK2D_FONT_FNT 	ARK2D_RESOURCE_TYPE_FNT 	"C:\\Dropbox\\ARK2D\\ark2d\\data\\fonts\\default.fnt"
-ARK2D_PARTICLE 	ARK2D_RESOURCE_TYPE_PNG 	"C:\\Dropbox\\ARK2D\\ark2d\\data\\particle.png"
+#if defined(ARK2D_WINDOWS)
+	ARK2D_ICON 			ICON 	"D:\\Dropbox\\ark2d\\ARK2D\\data\\icon.ico"
+	ARK2D_FONT_PNG 	ARK2D_RESOURCE_TYPE_PNG 	"D:\\Dropbox\\ark2d\\ARK2D\\data\\fonts\\default.png"
+	ARK2D_FONT_FNT 	ARK2D_RESOURCE_TYPE_FNT 	"D:\\Dropbox\\ark2d\\ARK2D\\data\\fonts\\default.fnt"
+	ARK2D_PARTICLE 	ARK2D_RESOURCE_TYPE_PNG 	"D:\\Dropbox\\ark2d\\ARK2D\\data\\particle.png"
+	#if defined(ARK2D_RENDERER_DIRECTX)
+		ARK2D_DX11_GEOM_VS 	ARK2D_RESOURCE_TYPE_SHADER 	"D:\\Dropbox\\ark2d\\ARK2D\\build\\windows-vs\\Default\\geometry-dx11-vertex.cso"
+		ARK2D_DX11_GEOM_PS 	ARK2D_RESOURCE_TYPE_SHADER 	"D:\\Dropbox\\ark2d\\ARK2D\\build\\windows-vs\\Default\\geometry-dx11-pixel.cso"
+	#endif
+#endif
 
+#ifdef ARK2D_WINDOWS 
 
+ARK2D_DIALOG_INPUT_TEXT DIALOG 10, 10, 300, 110 
+STYLE WS_POPUP | WS_BORDER
+CAPTION "Enter text:" 
+{ 
+    CTEXT "Enter text:", 1, 10, 10, 280, 12
+    EDITTEXT ARK2D_DIALOG_INPUT_TEXT_CONTENTS, 2, 75, 30, 60, 12
+    PUSHBUTTON "&Retry", 3, 75, 50, 60, 12
+}  
 
+#endif
 

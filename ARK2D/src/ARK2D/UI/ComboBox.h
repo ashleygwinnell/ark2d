@@ -27,7 +27,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class ComboBox : public AbstractUIComponent {
+		class ARK2D_API ComboBox : public AbstractUIComponent {
 			friend class ComboBoxItem;
 			private:
 				vector<ComboBoxItem*> m_items;

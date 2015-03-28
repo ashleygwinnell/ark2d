@@ -87,6 +87,8 @@ namespace ARK {
 
 				//m_from->render(container, game, g);
 
+				g->getBatch()->setEnabled(true);
+
 				unsigned int current_y = 0;
 				unsigned int single_height = (int) ceil( float(container->getHeight()) / float(m_numrects) );
 
@@ -152,7 +154,10 @@ namespace ARK {
 
 				}
 
-			}
+				g->getBatch()->render(); 
+				g->getBatch()->setEnabled(false);
+
+			} 
 
 			bool SlideRectanglesAcrossTransition::isComplete() {
 				if (m_current_time >= m_time) {

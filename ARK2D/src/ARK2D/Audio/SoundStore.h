@@ -19,7 +19,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class SoundStore {
+		class ARK2D_API SoundStore {
 			private: 
 				static SoundStore* s_soundStore;
 

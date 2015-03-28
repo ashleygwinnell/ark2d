@@ -93,7 +93,7 @@ namespace ARK {
 			label5->setMargin(10);
 			rightPanel->add(label5);
 
-			Button* button = new Button();
+			ARK::UI::Button* button = new ARK::UI::Button();
 			button->setText("Click me!");
 			button->setSize(50, 50);
 			button->setEvent((void*) &buttonClickEvent);

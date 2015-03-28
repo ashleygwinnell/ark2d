@@ -8,8 +8,7 @@
 #ifndef ARK_CORE_TOSTRING_H_
 #define ARK_CORE_TOSTRING_H_
 
-#include <string>
-using namespace std;
+#include "../Includes.h"
 
 namespace ARK {
 	namespace Core {
@@ -19,7 +18,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class ToString {
+		class ARK2D_API ToString {
 			virtual string toString() = 0;
 		};
 
