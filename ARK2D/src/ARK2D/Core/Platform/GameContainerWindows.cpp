@@ -367,13 +367,47 @@
 
 					}
 					case WM_KEYDOWN:
+					case WM_SYSKEYDOWN:
 					{
-						m_container->m_input.pressKey(wParam);
+						if (wParam == VK_MENU) {
+							if (lParam & (1 << 24)) {
+								m_container->m_input.pressKey(Input::KEY_ALT); // RIGHT ALT
+							} else {
+								m_container->m_input.pressKey(Input::KEY_ALT); // LEFT ALT
+							}
+						} else if (wParam == VK_CONTROL) {
+							if (lParam & (1 << 24)){
+								m_container->m_input.pressKey(Input::KEY_RCONTROL); // RIGHT CTRL
+							} else {
+								m_container->m_input.pressKey(Input::KEY_LCONTROL); // LEFT CTRL
+							}
+						} else if (wParam == VK_SHIFT) {
+							m_container->m_input.pressKey(Input::KEY_LSHIFT);
+						} else {
+							m_container->m_input.pressKey(wParam);
+						} 
 						break;
-					}
+					} 
 					case WM_KEYUP:
+					case WM_SYSKEYUP:
 					{
-						m_container->m_input.releaseKey(wParam);
+						if (wParam == VK_MENU) {
+							if (lParam & (1 << 24)) {
+								m_container->m_input.releaseKey(Input::KEY_ALT); // RIGHT ALT
+							} else {
+								m_container->m_input.releaseKey(Input::KEY_ALT); // LEFT ALT
+							}
+						} else if (wParam == VK_CONTROL) {
+							if (lParam & (1 << 24)){
+								m_container->m_input.releaseKey(Input::KEY_RCONTROL); // RIGHT CTRL
+							} else {
+								m_container->m_input.releaseKey(Input::KEY_LCONTROL); // LEFT CTRL
+							}
+						} else if (wParam == VK_SHIFT) {
+							m_container->m_input.releaseKey(Input::KEY_LSHIFT);
+						} else {
+							m_container->m_input.releaseKey(wParam);
+						}
 						break;
 					}
 					case WM_ACTIVATEAPP:
