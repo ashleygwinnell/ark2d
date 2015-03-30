@@ -96,6 +96,17 @@ namespace ARK {
 		}
 	}
 
+	//! Contains classes for Local/Online Networking with a custom UDP protocol.
+	namespace Net {
+		class Address;
+		class Connection;
+		class FlowControl;
+		class PacketQueue;
+		class ReliabilitySystem;
+		class ReliableConnection;
+		class Socket;
+	}
+
 	//! Contains classes for Particle Systems.
 	namespace Particles {
 		class Particle;
@@ -226,6 +237,7 @@ using namespace ARK::Graphics::ImageIO;
 using namespace ARK::Tiled;
 using namespace ARK::Tween;
 using namespace ARK::Threading;
+using namespace ARK::Net;
 using namespace ARK::Path;
 using namespace ARK::Pathfinding;
 using namespace ARK::Particles;

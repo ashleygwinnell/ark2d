@@ -71,6 +71,17 @@
 #include "ARK2D/Graphics/Texture.h"
 #include "ARK2D/Graphics/TextureStore.h"
 
+
+// Net
+#include "ARK2D/Net/Address.h" 
+#include "ARK2D/Net/Connection.h" 
+#include "ARK2D/Net/EventQueue.h" 
+#include "ARK2D/Net/FlowControl.h" 
+#include "ARK2D/Net/PacketQueue.h" 
+#include "ARK2D/Net/ReliabilitySystem.h" 
+#include "ARK2D/Net/ReliableConnection.h" 
+#include "ARK2D/Net/Socket.h" 
+
 // Audio
 #include "ARK2D/Audio/Sound.h"
 
@@ -172,6 +183,7 @@
 #include "ARK2D/Tests/TransitionTest.h"
 #include "ARK2D/Tests/CollisionTest.h"
 #include "ARK2D/Tests/GamepadsTest.h"
+#include "ARK2D/Tests/NetTest.h"
 #include "ARK2D/Tests/ParticlesTest.h"
 #include "ARK2D/Tests/UITest.h"
 

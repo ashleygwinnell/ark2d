@@ -136,6 +136,16 @@
 			"src/ARK2D/Geometry/Circle.cpp",
 			"src/ARK2D/Geometry/Polygon.cpp",
 			"src/ARK2D/Geometry/Line.cpp",
+
+			"src/ARK2D/Net/Address.cpp",
+			"src/ARK2D/Net/Connection.cpp",
+			"src/ARK2D/Net/EventQueue.cpp",
+			"src/ARK2D/Net/FlowControl.cpp",
+			"src/ARK2D/Net/PacketQueue.cpp",
+			"src/ARK2D/Net/ReliabilitySystem.cpp",
+			"src/ARK2D/Net/ReliableConnection.cpp",
+			"src/ARK2D/Net/Socket.cpp",
+
 			"src/ARK2D/Path/PathGroup.cpp",
 			"src/ARK2D/Path/Path.cpp",
 			"src/ARK2D/Path/SubPath.cpp",
@@ -162,11 +172,14 @@
 			"src/ARK2D/State/Transition/SlideRectanglesAcrossTransition.cpp",
 			"src/ARK2D/State/Transition/Transition.cpp",
 			"src/ARK2D/State/Transition/TranslateOutInTransition.cpp",
+			
 			"src/ARK2D/Tests/CollisionTest.cpp", 
 			"src/ARK2D/Tests/GamepadsTest.cpp",
 			"src/ARK2D/Tests/TransitionTest.cpp",
 			"src/ARK2D/Tests/ParticlesTest.cpp",
 			"src/ARK2D/Tests/UITest.cpp",
+			"src/ARK2D/Tests/NetTest.cpp",
+
 			"src/ARK2D/Threading/Thread.cpp",
 			"src/ARK2D/Threading/Mutex.cpp",
 			"src/ARK2D/Tiled/TiledMap.cpp",

@@ -8,9 +8,7 @@
 #ifndef SOUND_H_
 #define SOUND_H_
 
-#ifdef _WIN32
-	#include <windows.h>
-#endif
+
 
 //
 // http://www.devmaster.net/articles/openal-tutorials/lesson4.php

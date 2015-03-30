@@ -27,6 +27,7 @@
 			#include "../../Includes.h"
 			#include "../../Graphics/Image.h"
 
+ 			#include <Winsock2.h>
 			#include <windows.h>
 			#include <string>
 			#include <vector>

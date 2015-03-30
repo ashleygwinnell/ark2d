@@ -3468,7 +3468,7 @@ build:
 
 			gypfile = {};
 			gypfile['defines'] = []; #'ARK2D_IPHONE'];
-			gypfile['defines'].extend("ARK_INCLUDES_HEADER="+self.ark2d_dir + "/src/ARK.h");
+			gypfile['defines'].extend(["ARK_INCLUDES_HEADER="+self.ark2d_dir + "/src/ARK.h"]);
 			gypfile['defines'].extend(self.preprocessor_definitions);
 			
 			gypfile['targets'] = [];

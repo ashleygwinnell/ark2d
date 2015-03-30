@@ -245,6 +245,9 @@
 
  		// audio 
 		#include "Common/Audio.h"
+
+		// netcode
+		//#include "Net/Includes.h"
  
 		#ifdef ARK2D_WINDOWS_DLL // abc.dll source code will define this macro before including this header
 			#define ARK2D_API __declspec( dllexport )				
@@ -305,6 +308,8 @@
 		#define STL_AVAILABLE
 		#define EXCEPTIONS_AVAILABLE
 		
+		//#define _WINSOCKAPI_ 
+		#include <winsock2.h>
 		#include <windows.h>
 		#include <mmsystem.h>
 		#include <winbase.h>
