@@ -114,11 +114,14 @@ namespace ARK {
 				}
 				m_wp8_currentTime.
 				return m_wp8_currentTime.QuadPart;*/
+				
 				return clock();
 			#elif defined(ARK2D_MACINTOSH)
 				timeval now; 
 				gettimeofday(&now, NULL);
 				return (now.tv_sec + now.tv_usec);
+
+
 			#endif 
 			return 0;
 		}
