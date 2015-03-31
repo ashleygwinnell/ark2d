@@ -22,7 +22,8 @@
 	#elif defined(_WIN32) || defined(ARK2D_WINDOWS)
 		
 		#include <winsock2.h>
-		#pragma comment( lib, "wsock32.lib" )
+		//#pragma comment( lib, "wsock32.lib" )
+		#pragma comment(lib, "ws2_32.lib")
 
 		#ifdef ARK2D_WINDOWS_DLL
 			#define ARK2D_API __declspec( dllexport )

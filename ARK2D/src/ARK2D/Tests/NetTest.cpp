@@ -73,6 +73,7 @@ namespace ARK {
 			if (!ARK::Net::Socket::initializeSockets()) {
 				ARK2D::getLog()->e("failed to initialize sockets");
 				container->close();
+				return;
 			}
 			
 			m_mode = mode;

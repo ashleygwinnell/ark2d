@@ -128,7 +128,7 @@ namespace ARK {
 				return false;
 			}
 #ifdef ARK2D_WINDOWS_VS
-			unsigned char* packet = (unsigned char*)alloca(size+1);
+			unsigned char* packet = (unsigned char*)alloca(size+4);
 #else
 			unsigned char packet[size+4];
 #endif
@@ -144,7 +144,7 @@ namespace ARK {
 		{
 			assert( m_running );
 #ifdef ARK2D_WINDOWS_VS
-			unsigned char* packet = (unsigned char*)alloca(size + 1);
+			unsigned char* packet = (unsigned char*)alloca(size + 4);
 #else
 			unsigned char packet[size + 4];
 #endif

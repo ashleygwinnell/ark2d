@@ -17,8 +17,24 @@ namespace ARK {
 		bool Socket::initializeSockets()
 		{
 			#if defined(ARK2D_WINDOWS)
-		    	WSADATA WsaData;
-				return WSAStartup( MAKEWORD(2,2), &WsaData ) != NO_ERROR;
+		    	WSADATA wsaData;
+				int err = WSAStartup( MAKEWORD(2,2), &wsaData );
+				if (err == NO_ERROR) {
+
+					if (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2) {
+				        /* Tell the user that we could not find a usable */
+				        /* WinSock DLL.                                  */
+				        printf("Could not find a usable version of Winsock.dll\n");
+				       	shutdownSockets();
+				        return false;
+				    } else {
+				        printf("The Winsock 2.2 dll was found okay\n");
+				    }
+
+					return true;
+				}
+				ARK2D::getLog()->e(StringUtil::append("WSAStartup failed with error: ", err));
+				return false;
 			#else
 				return true;
 			#endif
