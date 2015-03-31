@@ -1329,7 +1329,16 @@
 			}
 
 			void GameContainer::setCursorVisible(bool b) {
-				ShowCursor(b);
+				if (b) {
+					int newCounter = ShowCursor(TRUE);
+					ARK2D::getLog()->v(StringUtil::append("Cursor set to visible. Returned: ", newCounter));
+					// TODO loop until it's visible or use some other method of making sure it's always visible.
+				} else {
+					int newCounter = ShowCursor(FALSE);	
+					ARK2D::getLog()->v(StringUtil::append("Cursor set to visible. Returned: ", newCounter));
+					// TODO loop until it's invisible or use some other method of making sure it's always invisible.
+				}
+				
 			}
 
 			void GameContainer::resizeWindowToFitViewport() {
