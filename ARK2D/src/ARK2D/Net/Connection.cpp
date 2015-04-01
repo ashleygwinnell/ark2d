@@ -73,7 +73,8 @@ namespace ARK {
 			}
 			m_mode = Client;
 			m_state = Connecting;
-			m_address = address;
+//			m_address = address;
+			addAddress(address);
 		}
 		
 		bool Connection::isConnecting() const { 
@@ -121,26 +122,56 @@ namespace ARK {
 			}
 		}
 		
-		bool Connection::sendPacket( const unsigned char data[], int size )
+		bool Connection::sendPacketAll( const unsigned char data[], int size )
 		{
 			assert( m_running );
-			if ( m_address.getAddress() == 0 ) {
+			if ( m_addresses.size() == 0 ||
+				(m_addresses.size() == 1 && m_addresses[0].getAddress() == 0 )) {
 				return false;
 			}
-#ifdef ARK2D_WINDOWS_VS
-			unsigned char* packet = (unsigned char*)alloca(size+4);
-#else
-			unsigned char packet[size+4];
-#endif
+			#ifdef ARK2D_WINDOWS_VS
+				unsigned char* packet = (unsigned char*)alloca(size+4); // headersize 4 bytes (protocol id)
+			#else
+				unsigned char packet[size+4];
+			#endif
 			packet[0] = (unsigned char) ( m_protocolId >> 24 );
 			packet[1] = (unsigned char) ( ( m_protocolId >> 16 ) & 0xFF );
 			packet[2] = (unsigned char) ( ( m_protocolId >> 8 ) & 0xFF );
 			packet[3] = (unsigned char) ( ( m_protocolId ) & 0xFF );
 			memcpy( &packet[4], data, size );
-			return m_socket.send( m_address, packet, size + 4 );
+			
+			bool returnValue = true;
+			for(unsigned int i = 0; i < m_addresses.size(); i++) { 
+				bool b = m_socket.send( m_addresses[i], packet, size + 4 );
+				if (!b) {
+					returnValue = false;
+				}
+			}
+			return returnValue; // investigate!
 		}
+		bool Connection::sendPacket( unsigned int addressIndex, const unsigned char data[], int size )
+		{
+			assert( m_running );
+			if ( m_addresses.size() == 0 || m_addresses[addressIndex].getAddress() == 0 ) {
+				return false;
+			}
+			
+			#ifdef ARK2D_WINDOWS_VS
+				unsigned char* packet = (unsigned char*)alloca(size+4);
+			#else
+				unsigned char packet[size+4];
+			#endif
+			packet[0] = (unsigned char) ( m_protocolId >> 24 );
+			packet[1] = (unsigned char) ( ( m_protocolId >> 16 ) & 0xFF );
+			packet[2] = (unsigned char) ( ( m_protocolId >> 8 ) & 0xFF );
+			packet[3] = (unsigned char) ( ( m_protocolId ) & 0xFF );
+			memcpy( &packet[4], data, size );
+			return m_socket.send( m_addresses[addressIndex], packet, size + 4 );
+		}
+				
 		
-		int Connection::receivePacket( unsigned char data[], int size )
+		
+		int Connection::receivePacket(Address& sender, unsigned char data[], int size )
 		{
 			assert( m_running );
 #ifdef ARK2D_WINDOWS_VS
@@ -148,7 +179,7 @@ namespace ARK {
 #else
 			unsigned char packet[size + 4];
 #endif
-			Address sender;
+			//Address sender;
 			int bytes_read = m_socket.receive( sender, packet, size + 4 );
 			if ( bytes_read == 0 ) {
 				return 0;
@@ -166,30 +197,17 @@ namespace ARK {
 			{
 				printf( "server accepts connection from client %d.%d.%d.%d:%d\n", sender.getA(), sender.getB(), sender.getC(), sender.getD(), sender.getPort() );
 				m_state = Connected;
-				m_address = sender;
-				m_addresses.push_back(sender);
-				onConnect();
-			} else if (m_mode == Server && isConnected()) {
+				//m_address = sender;
+				addAddress(sender);
+				onConnect(0);
+			} else if (m_mode == Server && isConnected() && !hasAddress(sender)) {
 				// second/third/fourth client
 				printf( "server accepts connection from another client %d.%d.%d.%d:%d\n", sender.getA(), sender.getB(), sender.getC(), sender.getD(), sender.getPort() );
-				m_addresses.push_back(sender);
-
+				onConnect(m_addresses.size());
+				addAddress(sender);
 			}
 
-			bool foundSender = false;
-			for(unsigned int i = 0; i < m_addresses.size(); ++i) {
-				Address& addr = m_addresses[0]; 
-				if (sender.getA() == addr.getA() && 
-					sender.getB() == addr.getB() &&
-					sender.getC() == addr.getC() &&
-					sender.getD() == addr.getD() &&
-					sender.getPort() == addr.getPort()) 
-				{
-					foundSender = true;
-					break;
-				}
-
-			}
+			bool foundSender = hasAddress(sender);
 			if ( foundSender )
 			//if ( sender == m_address )
 			{
@@ -197,7 +215,7 @@ namespace ARK {
 				{
 					ARK2D::getLog()->v( "client completes connection with server\n" );
 					m_state = Connected;
-					onConnect();
+					onConnect(0);
 				}
 				m_timeoutAccumulator = 0.0f;
 				memcpy( data, &packet[4], bytes_read - 4 );
@@ -211,14 +229,34 @@ namespace ARK {
 			return 4;
 		}
 		
-	
+		void Connection::addAddress(Address addr) {
+			m_addresses.push_back(addr);
+		}
+		bool Connection::hasAddress(Address& sender) 
+		{
+			return getAddressIndex(sender) >= 0;
+		}
+		signed int Connection::getAddressIndex(Address& sender) {
+			for(unsigned int i = 0; i < m_addresses.size(); ++i) {
+				Address& addr = m_addresses[i]; 
+				if (sender.getA() == addr.getA() && 
+					sender.getB() == addr.getB() &&
+					sender.getC() == addr.getC() &&
+					sender.getD() == addr.getD() &&
+					sender.getPort() == addr.getPort()) 
+				{
+					return (signed int) i;
+				}
+			}
+			return -1;
+		}
 			
 		
 		void Connection::clearData()
 		{
 			m_state = Disconnected;
 			m_timeoutAccumulator = 0.0f;
-			m_address = Address();
+			//m_address = Address();
 			m_addresses.clear();
 		}
 

@@ -22,38 +22,50 @@ namespace ARK {
 		 */
 		class ARK2D_API ReliableConnection : public Connection {
 			public:
-		
+				unsigned int m_max_sequence;
 				ReliableConnection( unsigned int protocolId, float timeout, unsigned int max_sequence = 0xFFFFFFFF );
 			
 				// overriden functions from "Connection"
-				bool sendPacket( const unsigned char data[], int size );
+				bool sendPacket( unsigned int addressIndex, const unsigned char data[], int size );
+				bool sendPacketAll( const unsigned char data[], int size );
 				int receivePacket( unsigned char data[], int size );
 
 				void update( float deltaTime );
 				
 				int getHeaderSize() const;
 
-				ReliabilitySystem & getReliabilitySystem();
+				ReliabilitySystem & getReliabilitySystem(unsigned int index);
 
 				// unit test controls
 				#ifdef NET_UNIT_TEST
 					void SetPacketLossMask( unsigned int mask );
 				#endif
 
+				void addAddress(Address addr);
+
+				unsigned int getTotalSentPackets() const;
+				unsigned int getTotalReceivedPackets() const;
+				unsigned int getTotalLostPackets() const;
+				unsigned int getTotalAckedPackets() const;
+				float getAverageRoundTripTime() const ;
+				float getTotalSentBandwidth() const;
+				float getTotalAckedBandwidth() const;
+
 				~ReliableConnection();
 				
 			protected:		
 				
-				void writeInteger( unsigned char * data, unsigned int value );
+				static void writeInteger( unsigned char * data, unsigned int value );
 
-				void writeHeader( unsigned char * header, unsigned int sequence, unsigned int ack, unsigned int ack_bits );
+				static void writeHeader( unsigned char * header, unsigned int sequence, unsigned int ack, unsigned int ack_bits );
 				
-				void readInteger( const unsigned char * data, unsigned int & value );
+				static void readInteger( const unsigned char * data, unsigned int & value );
 				
-				void readHeader( const unsigned char * header, unsigned int & sequence, unsigned int & ack, unsigned int & ack_bits );
+				static void readHeader( const unsigned char * header, unsigned int & sequence, unsigned int & ack, unsigned int & ack_bits );
 
 				virtual void onStop();
 				virtual void onDisconnect();
+				virtual void onConnect(unsigned int num);
 				
 			private:
 
@@ -63,7 +75,8 @@ namespace ARK {
 					unsigned int packet_loss_mask;			// mask sequence number, if non-zero, drop packet - for unit test only
 				#endif
 				
-				ReliabilitySystem reliabilitySystem;	// reliability system: manages sequence numbers and acks, tracks network stats etc.
+				//ReliabilitySystem reliabilitySystem;	// reliability system: manages sequence numbers and acks, tracks network stats etc.
+				vector<ReliabilitySystem> reliabilitySystems;
 		};
 	}
 }

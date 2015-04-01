@@ -85,12 +85,17 @@ namespace ARK {
 				if (m_mode == Client) {
 					ARK2D::getLog()->e("Trying second port.");
 					if ( !m_connection.start( ClientPort2 ) ) {
-						ARK2D::getLog()->e(StringUtil::append("could not start connection on port: ", ClientPort2));
-						return;
+						ARK2D::getLog()->e(StringUtil::append("could not start connection on port: ",  ClientPort2 ));
+						ARK2D::getLog()->e("Trying third and final port.");
+						if ( !m_connection.start( ClientPort3 ) ) {
+							ARK2D::getLog()->e(StringUtil::append("could not start connection on port: ", ClientPort2));
+							return;
+						}
 					}
 				} else {
 					return;
 				}
+				//return;
 				
 			}
 			
@@ -128,7 +133,8 @@ namespace ARK {
 
 			// update flow control
 			if ( m_connection.isConnected() ) {
-				m_flowControl.update( DeltaTime, m_connection.getReliabilitySystem().getRoundTripTime() * 1000.0f );
+				//m_flowControl.update( DeltaTime, m_connection.getReliabilitySystem().getRoundTripTime() * 1000.0f );
+				m_flowControl.update( DeltaTime, m_connection.getReliabilitySystem(0).getRoundTripTime() * 1000.0f );
 			}
 			
 			const float sendRate = m_flowControl.getSendRate();
@@ -177,7 +183,7 @@ namespace ARK {
 					parseReceivedPacket(packet, false);
 				}
 
-				m_connection.sendPacket( packet, sizeof( packet ) );
+				m_connection.sendPacketAll( packet, sizeof( packet ) );
 				m_sendAccumulator -= 1.0f / sendRate;
 			}
 			
@@ -201,7 +207,7 @@ namespace ARK {
 			if (m_showAcks) { 
 				unsigned int * acks = NULL;
 				int ack_count = 0;
-				m_connection.getReliabilitySystem().getAcks( &acks, ack_count );
+				m_connection.getReliabilitySystem(0).getAcks( &acks, ack_count );
 				if ( ack_count > 0 )
 				{
 					printf( "acks: %d", acks[0] );
@@ -220,14 +226,14 @@ namespace ARK {
 
 			while ( m_statsAccumulator >= 0.25f && m_connection.isConnected() )
 			{
-				float rtt = m_connection.getReliabilitySystem().getRoundTripTime();
+				float rtt = m_connection.getReliabilitySystem(0).getRoundTripTime();
 				
-				unsigned int sent_packets = m_connection.getReliabilitySystem().getSentPackets();
-				unsigned int acked_packets = m_connection.getReliabilitySystem().getAckedPackets();
-				unsigned int lost_packets = m_connection.getReliabilitySystem().getLostPackets();
+				unsigned int sent_packets = m_connection.getReliabilitySystem(0).getSentPackets();
+				unsigned int acked_packets = m_connection.getReliabilitySystem(0).getAckedPackets();
+				unsigned int lost_packets = m_connection.getReliabilitySystem(0).getLostPackets();
 				
-				float sent_bandwidth = m_connection.getReliabilitySystem().getSentBandwidth();
-				float acked_bandwidth = m_connection.getReliabilitySystem().getAckedBandwidth();
+				float sent_bandwidth = m_connection.getReliabilitySystem(0).getSentBandwidth();
+				float acked_bandwidth = m_connection.getReliabilitySystem(0).getAckedBandwidth();
 				
 				//printf( "rtt %.1fms, sent %d, acked %d, lost %d (%.1f%%), sent bandwidth = %.1fkbps, acked bandwidth = %.1fkbps\n", 
 				//	rtt * 1000.0f, sent_packets, acked_packets, lost_packets, 
@@ -275,13 +281,13 @@ namespace ARK {
 			if (m_connected) { 
 
 				
-				float rtt = m_connection.getReliabilitySystem().getRoundTripTime();
-				unsigned int sent_packets = m_connection.getReliabilitySystem().getSentPackets();
-				unsigned int acked_packets = m_connection.getReliabilitySystem().getAckedPackets();
-				unsigned int lost_packets = m_connection.getReliabilitySystem().getLostPackets();
+				float rtt = m_connection.getAverageRoundTripTime();
+				unsigned int sent_packets = m_connection.getTotalSentPackets();
+				unsigned int acked_packets = m_connection.getTotalAckedPackets();
+				unsigned int lost_packets = m_connection.getTotalLostPackets();
 				
-				float sent_bandwidth = m_connection.getReliabilitySystem().getSentBandwidth();
-				float acked_bandwidth = m_connection.getReliabilitySystem().getAckedBandwidth();
+				float sent_bandwidth = m_connection.getReliabilitySystem(0).getSentBandwidth();
+				float acked_bandwidth = m_connection.getReliabilitySystem(0).getAckedBandwidth();
 
 				r->drawString("round trip time: ", middleX, 90, Renderer::ALIGN_RIGHT, Renderer::ALIGN_TOP);
 				r->drawString(Cast::toString<float>(rtt), middleX, 90, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);

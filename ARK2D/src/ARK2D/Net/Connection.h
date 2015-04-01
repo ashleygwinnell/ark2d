@@ -32,7 +32,8 @@ namespace ARK {
 					Server
 				};
 
-			private:
+			protected:
+			
 				enum State
 				{
 					Disconnected,
@@ -50,8 +51,9 @@ namespace ARK {
 				State m_state;
 				Socket m_socket;
 				float m_timeoutAccumulator;
-				ARK::Net::Address m_address;
-				vector<ARK::Net::Address> m_addresses;
+				//ARK::Net::Address m_address;
+			
+				vector<ARK::Net::Address> m_addresses; // for servers, this is a list of clients. for clients this is the server address.
 
 
 			public:
@@ -71,11 +73,17 @@ namespace ARK {
 				bool connectFailed() const;
 				
 				Mode getMode() const;
+
+				virtual void addAddress(Address addr);
+				bool hasAddress(Address& sender);
+				signed int getAddressIndex(Address& sender);
 				
 				virtual void update( float deltaTime );
 				
-				virtual bool sendPacket(const unsigned char data[], int size);
-				virtual int receivePacket(unsigned char data[], int size);
+				//virtual bool sendPacket(const unsigned char data[], int size);
+				virtual bool sendPacket(unsigned int addressIndex, const unsigned char data[], int size);
+				virtual bool sendPacketAll(const unsigned char data[], int size);
+				virtual int receivePacket(Address& sender, unsigned char data[], int size);
 				
 				int getHeaderSize() const;
 
@@ -85,7 +93,7 @@ namespace ARK {
 				
 				virtual void onStart()		{ }
 				virtual void onStop()		{ }
-				virtual void onConnect()    { }
+				virtual void onConnect(unsigned int num)    { }
 				virtual void onDisconnect() { }
 					
 			private:

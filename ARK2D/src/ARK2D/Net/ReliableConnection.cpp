@@ -10,26 +10,33 @@
 namespace ARK {
 	namespace Net { 
 		ReliableConnection::ReliableConnection( unsigned int protocolId, float timeout, unsigned int max_sequence ):
-			Connection( protocolId, timeout ), 
-			reliabilitySystem( max_sequence )
+			Connection( protocolId, timeout ),
+			m_max_sequence(max_sequence)//reliabilitySystem( max_sequence )
 		{
 			clearData();
 			#ifdef NET_UNIT_TEST
 				packet_loss_mask = 0;
 			#endif
 		}
+
+		void ReliableConnection::addAddress(Address addr) {
+			Connection::addAddress(addr);
+
+			ReliabilitySystem rs = ReliabilitySystem( m_max_sequence );
+			reliabilitySystems.push_back(rs);
+		}
 	
 		
 		// overriden functions from "Connection"
 				
-		bool ReliableConnection::sendPacket( const unsigned char data[], int size )
+		bool ReliableConnection::sendPacket( unsigned int addressIndex, const unsigned char data[], int size )
 		{
 			#ifdef NET_UNIT_TEST
-			if ( reliabilitySystem.GetLocalSequence() & packet_loss_mask )
-			{
-				reliabilitySystem.PacketSent( size );
-				return true;
-			}
+				if ( reliabilitySystems[addressIndex].GetLocalSequence() & packet_loss_mask )
+				{
+					reliabilitySystems[addressIndex].PacketSent( size );
+					return true;
+				}
 			#endif
 			const int header = 12;
 #ifdef ARK2D_WINDOWS_VS
@@ -37,15 +44,26 @@ namespace ARK {
 #else
 			unsigned char packet[header+size];
 #endif
-			unsigned int seq = reliabilitySystem.getLocalSequence();
-			unsigned int ack = reliabilitySystem.getRemoteSequence();
-			unsigned int ack_bits = reliabilitySystem.generateAckBits();
+			unsigned int seq = reliabilitySystems[addressIndex].getLocalSequence();
+			unsigned int ack = reliabilitySystems[addressIndex].getRemoteSequence();
+			unsigned int ack_bits = reliabilitySystems[addressIndex].generateAckBits();
 			writeHeader( packet, seq, ack, ack_bits );
 			memcpy( packet + header, data, size );
- 			if ( !Connection::sendPacket( packet, size + header ) )
+ 			if ( !Connection::sendPacket( addressIndex, packet, size + header ) )
 				return false;
-			reliabilitySystem.packetSent( size );
+			reliabilitySystems[addressIndex].packetSent( size );
 			return true;
+		}				
+		bool ReliableConnection::sendPacketAll( const unsigned char data[], int size )
+		{
+			bool returnValue = true;
+			for(unsigned int i = 0; i < m_addresses.size(); ++i) {
+				bool b = sendPacket(i, data, size);
+				if (!b) {
+					returnValue = false;
+				}
+			}
+			return returnValue;
 		}	
 		
 		int ReliableConnection::receivePacket( unsigned char data[], int size )
@@ -58,17 +76,19 @@ namespace ARK {
 #else
 			unsigned char packet[header + size];
 #endif
-			int received_bytes = Connection::receivePacket( packet, size + header );
+			Address sender;
+			int received_bytes = Connection::receivePacket(sender, packet, size + header );
 			if ( received_bytes == 0 )
 				return false;
 			if ( received_bytes <= header )
 				return false;
+			unsigned int addressIndex = getAddressIndex(sender);
 			unsigned int packet_sequence = 0;
 			unsigned int packet_ack = 0;
 			unsigned int packet_ack_bits = 0;
 			readHeader( packet, packet_sequence, packet_ack, packet_ack_bits );
-			reliabilitySystem.packetReceived( packet_sequence, received_bytes - header );
-			reliabilitySystem.processAck( packet_ack, packet_ack_bits );
+			reliabilitySystems[addressIndex].packetReceived( packet_sequence, received_bytes - header );
+			reliabilitySystems[addressIndex].processAck( packet_ack, packet_ack_bits );
 			memcpy( data, packet + header, received_bytes - header );
 			return received_bytes - header;
 		}
@@ -76,17 +96,19 @@ namespace ARK {
 		void ReliableConnection::update( float deltaTime )
 		{
 			Connection::update( deltaTime );
-			reliabilitySystem.update( deltaTime );
+			for(unsigned int i = 0; i < reliabilitySystems.size(); ++i) {
+				reliabilitySystems[i].update( deltaTime );
+			}
 		}
 		
 		int ReliableConnection::getHeaderSize() const
 		{
-			return Connection::getHeaderSize() + reliabilitySystem.getHeaderSize();
+			return Connection::getHeaderSize() + reliabilitySystems[0].getHeaderSize();
 		}
 		
-		ReliabilitySystem& ReliableConnection::getReliabilitySystem()
+		ReliabilitySystem& ReliableConnection::getReliabilitySystem(unsigned int index)
 		{
-			return reliabilitySystem;
+			return reliabilitySystems[index];
 		}
 
 		// unit test controls
@@ -138,7 +160,62 @@ namespace ARK {
 
 		void ReliableConnection::clearData()
 		{
-			reliabilitySystem.reset();
+			//reliabilitySystem.reset();
+			reliabilitySystems.clear();
+		}
+		void ReliableConnection::onConnect(unsigned int num) {
+			
+		}
+
+		unsigned int ReliableConnection::getTotalSentPackets() const {
+			unsigned int count = 0;
+			for(unsigned int i = 0; i < reliabilitySystems.size(); i++) {
+				count += reliabilitySystems[i].getSentPackets();
+			}
+			return count;
+		}
+		unsigned int ReliableConnection::getTotalReceivedPackets() const {
+			unsigned int count = 0;
+			for(unsigned int i = 0; i < reliabilitySystems.size(); i++) {
+				count += reliabilitySystems[i].getReceivedPackets();
+			}
+			return count;
+		}
+		unsigned int ReliableConnection::getTotalLostPackets() const {
+			unsigned int count = 0;
+			for(unsigned int i = 0; i < reliabilitySystems.size(); i++) {
+				count += reliabilitySystems[i].getLostPackets();
+			}
+			return count;
+		}
+		unsigned int ReliableConnection::getTotalAckedPackets() const {
+			unsigned int count = 0;
+			for(unsigned int i = 0; i < reliabilitySystems.size(); i++) {
+				count += reliabilitySystems[i].getAckedPackets();
+			}
+			return count;
+		}
+		float ReliableConnection::getAverageRoundTripTime() const {
+			float count = 0.0f;
+			for(unsigned int i = 0; i < reliabilitySystems.size(); i++) {
+				count += reliabilitySystems[i].getRoundTripTime();
+			}
+			return count / float(reliabilitySystems.size());
+		}
+		float ReliableConnection::getTotalSentBandwidth() const {
+			float count = 0.0f;
+			for(unsigned int i = 0; i < reliabilitySystems.size(); i++) {
+				count += reliabilitySystems[i].getSentBandwidth();
+			}
+			return count;
+		}
+
+		float ReliableConnection::getTotalAckedBandwidth() const {
+			float count = 0.0f;
+			for(unsigned int i = 0; i < reliabilitySystems.size(); i++) {
+				count += reliabilitySystems[i].getAckedBandwidth();
+			}
+			return count;
 		}
 
 		ReliableConnection::~ReliableConnection()

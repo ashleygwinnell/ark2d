@@ -17,6 +17,7 @@ namespace ARK {
 		const int ServerPort = 30000;
 		const int ClientPort = 30001;
 		const int ClientPort2 = 30002;
+		const int ClientPort3 = 30003;
 		const int ProtocolId = 0x11223344;
 		const float DeltaTime = 1.0f / 30.0f;
 		const float SendRate = 1.0f / 30.0f;
