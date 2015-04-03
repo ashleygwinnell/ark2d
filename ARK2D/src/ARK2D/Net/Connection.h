@@ -25,30 +25,39 @@ namespace ARK {
 		 */
 		class ARK2D_API Connection {
 			public:
-				enum Mode
-				{
-					None,	
-					Client,
-					Server
-				};
+				static const unsigned int MODE_NONE 	= 0;
+				static const unsigned int MODE_CLIENT 	= 1;
+				static const unsigned int MODE_SERVER 	= 2;
+				//enum Mode {
+				//	None,	
+				//	Client,
+				//	Server
+				//};
+
+				static const unsigned int STATE_DISCONNECTED 	= 0;
+				static const unsigned int STATE_LISTENING 		= 1;
+				static const unsigned int STATE_CONNECTING 		= 2;
+				static const unsigned int STATE_CONNECT_FAIL 	= 3;
+				static const unsigned int STATE_CONNECTED 		= 4;
+				// enum State
+				// {
+				// 	Disconnected,
+				// 	Listening,
+				// 	Connecting,
+				// 	ConnectFail,
+				// 	Connected
+				// };
 
 			protected:
 			
-				enum State
-				{
-					Disconnected,
-					Listening,
-					Connecting,
-					ConnectFail,
-					Connected
-				};
+				
 
 				unsigned int m_protocolId;
 				float m_timeout;
 				
 				bool m_running;
-				Mode m_mode;
-				State m_state;
+				unsigned int m_mode; // Mode enum
+				unsigned int m_state; // State enum
 				Socket m_socket;
 				float m_timeoutAccumulator;
 				//ARK::Net::Address m_address;
@@ -72,7 +81,8 @@ namespace ARK {
 				bool isListening() const;
 				bool connectFailed() const;
 				
-				Mode getMode() const;
+				//Mode getMode() const;
+				unsigned int getMode() const;
 
 				virtual void addAddress(Address addr);
 				bool hasAddress(Address& sender);
