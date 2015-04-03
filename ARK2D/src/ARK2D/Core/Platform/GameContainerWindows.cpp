@@ -1176,7 +1176,8 @@
 
 
 							bool isXbox360Controller = StringUtil::str_contains(gamepad->name, "XBOX 360");
-							if ( isXbox360Controller ) {
+							bool isXbox360Controller2 = StringUtil::str_contains(gamepad->name, "Xbox 360");
+							if ( isXbox360Controller || isXbox360Controller2 ) {
 
 								gamepad->numAxes = 0; // caps.wNumAxes + ((caps.wCaps & JOYCAPS_HASPOV) ? 2 : 0);
 
@@ -1216,7 +1217,7 @@
 								zAxis->rangeMax = caps.wZmax;
 								gamepad->axes.push_back(zAxis);
 						
-								GamepadAxis* vAxis = new GamepadAxis();
+								GamepadAxis* vAxis = new GamepadAxis(); // rtrigger
 								vAxis->id = 5;
 								vAxis->axisId = Gamepad::TRIGGER_2;
 								vAxis->rangeMin = caps.wVmin;
