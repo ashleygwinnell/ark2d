@@ -54,10 +54,12 @@ namespace ARK {
 				static string getCurrentDirectory();
 				static string getSeparator();
 				static string getOSDirectory();
+
 				static void openBrowserToURL(string url);
 				static void openGalleryToImageUrl(string url);
-
 				static void openGooglePlayStore(string packageName);
+
+				static string getOSUsername(); // TODO: not sure where to put this. would seem odd in a class by itself, no?
 
 
 		};

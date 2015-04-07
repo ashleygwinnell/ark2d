@@ -16,17 +16,31 @@ namespace ARK {
 		{
 			Input* in = ARK2D::getInput();
 			if (in->isKeyPressed(Input::KEY_UP)) {
-				index = (index == 0)?1:0;
+				index--;
+				if (index < 0) { index = 2; }
 			} else if (in->isKeyPressed(Input::KEY_DOWN)) {
-				index = (index == 0)?1:0;
+				index++;
+				if (index > 2) { index = 0; }
 			}
 			if (in->isKeyPressed(Input::KEY_ENTER)) {
 				NetTest* dg = dynamic_cast<NetTest*>(game);
 				
-				Mode m = (index==0)?Server:Client;
-				NetTestState* state = dynamic_cast<NetTestState*>(game->getState(1));
-				state->initialise(container, game, m);
-				game->enterState(1);
+				if (index == 0) {
+					Mode m = Server;
+					NetTestState* state = dynamic_cast<NetTestState*>(game->getState(1));
+					state->initialise(container, game, m);
+					game->enterState(1);
+				} else if (index == 1) {
+					Mode m = Client;
+					NetTestState* state = dynamic_cast<NetTestState*>(game->getState(1));
+					state->initialise(container, game, m);
+					game->enterState(1);
+				} else if (index == 2) {
+					NetTestDiscoveryState* state = dynamic_cast<NetTestDiscoveryState*>(game->getState(2));
+					state->initialise(container, game);
+					game->enterState(state);
+				}
+				
 			}
 		} 
 
@@ -34,14 +48,60 @@ namespace ARK {
 		{
 			string serverText = "Server";
 			string clientText = "Client";
+			string discoverText = "Discover";
 			if (index == 0) {
 				serverText = string("< ") + serverText + string(" >");
-			} else {
+			} else if (index == 1) {
 				clientText = string("< ") + clientText + string(" >");
+			} else if (index == 2) {
+				discoverText = string("< ") + discoverText + string(" >");
 			}
 
-			r->drawString(serverText, container->getWidth()/2, 80, Renderer::ALIGN_CENTER, Renderer::ALIGN_TOP);
-			r->drawString(clientText, container->getWidth()/2, 110, Renderer::ALIGN_CENTER, Renderer::ALIGN_TOP);
+			r->drawString(serverText,   container->getWidth()/2, 80, Renderer::ALIGN_CENTER, Renderer::ALIGN_TOP);
+			r->drawString(clientText,   container->getWidth()/2, 110, Renderer::ALIGN_CENTER, Renderer::ALIGN_TOP);
+			r->drawString(discoverText, container->getWidth()/2, 140, Renderer::ALIGN_CENTER, Renderer::ALIGN_TOP);
+		}  
+
+		
+		// ------------------------------------------------------------------------------------------------------
+		NetTestDiscoveryState::~NetTestDiscoveryState() { }
+		NetTestDiscoveryState::NetTestDiscoveryState(): 
+			GameState(),
+			m_discoveryConnection(DiscoveryProtocolId)
+			{ 
+		}
+		unsigned int NetTestDiscoveryState::id() { return 2; }
+		void NetTestDiscoveryState::enter(GameContainer* container, StateBasedGame* game, GameState* from) {}
+		void NetTestDiscoveryState::leave(GameContainer* container, StateBasedGame* game, GameState* to) { } 
+		
+		void NetTestDiscoveryState::init(GameContainer* container, StateBasedGame* game) { }
+		void NetTestDiscoveryState::initialise(GameContainer* container, StateBasedGame* game) { 
+
+			if (!m_discoveryConnection.start(DiscoveryClientPort)) {
+				ARK2D::getLog()->e(StringUtil::append("could not start discovery connection: ", DiscoveryClientPort));
+			}
+			//if (m_mode == Client) {
+				m_discoveryConnection.search();
+			//} 
+		}
+		
+		void NetTestDiscoveryState::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) 
+		{
+			Input* in = ARK2D::getInput();
+			if (in->isKeyPressed(Input::KEY_BACKSPACE)) {
+				game->enterState((unsigned int) 0);
+			}
+
+			m_discoveryConnection.update(timer->getDelta());
+
+		} 
+
+		void NetTestDiscoveryState::render(GameContainer* container, StateBasedGame* game, Renderer* r) 
+		{
+			vector<DiscoveryAddress>* servers = m_discoveryConnection.getServers();
+			for(unsigned int i = 0; i < servers->size(); ++i) {
+				r->drawString(servers->at(i).name,   container->getWidth()/2, 80 + (i*30), Renderer::ALIGN_CENTER, Renderer::ALIGN_TOP);
+			}
 		}  
 
 		
@@ -55,28 +115,33 @@ namespace ARK {
 
 		NetTestState::NetTestState():
 			GameState(),
-			m_connection(ProtocolId, 10.0f),
+			m_connection(ProtocolId, 5.0f),
+			m_discoveryConnection(DiscoveryProtocolId),
 			m_events() 
 		{
-
 			m_showAcks = false;
 			m_number = MathUtil::randBetween(0, 10);
 		}
 		
 		void NetTestState::enter(GameContainer* container, StateBasedGame* game, GameState* from) 
 		{
-			//Socket::shutdownSockets();
+			
 		}
 
 		void NetTestState::initialise(GameContainer* container, StateBasedGame* game, Mode mode) 
 		{
-			if (!ARK::Net::Socket::initializeSockets()) {
-				ARK2D::getLog()->e("failed to initialize sockets");
-				container->close();
-				return;
+			m_mode = mode;
+
+			// discovery			
+			if (m_mode == Server) {
+				if (!m_discoveryConnection.start(DiscoveryServerPort)) { 
+					ARK2D::getLog()->e(StringUtil::append("could not start connection on port: ", DiscoveryServerPort));
+					return;
+				}
+				m_discoveryConnection.listen();
 			}
 			
-			m_mode = mode;
+			// we already know the address dum dum! 
 			m_address = Address(127, 0, 0, 1, ServerPort);
 			
 			const int port = m_mode == Server ? ServerPort : ClientPort;
@@ -95,16 +160,13 @@ namespace ARK {
 				} else {
 					return;
 				}
-				//return;
-				
 			}
-			
 			if ( m_mode == Client ) {
 				m_connection.connect( m_address );
 			} else {
 				m_connection.listen();
 			}
-			
+
 			m_connected = false;
 			m_sendAccumulator = 0.0f;
 			m_statsAccumulator = 0.0f;	
@@ -220,6 +282,8 @@ namespace ARK {
 			// update connection
 			m_connection.update( DeltaTime );
 
+			m_discoveryConnection.update(DeltaTime);
+
 			// show connection stats
 			
 			m_statsAccumulator += DeltaTime;
@@ -324,8 +388,15 @@ namespace ARK {
 
 		}
 		void NetTest::initStates(GameContainer* container) {
+			if (!ARK::Net::Socket::initializeSockets()) {
+				ARK2D::getLog()->e("failed to initialize sockets");
+				container->close();
+				return;
+			}
+
 			addState(new NetTestStartState());
 			addState(new NetTestState());
+			addState(new NetTestDiscoveryState());
 			enterState((unsigned int) 0);
 		}
 		void NetTest::update(GameContainer* container, GameTimer* timer) {
@@ -340,7 +411,7 @@ namespace ARK {
 			StateBasedGame::resize(container, width, height);
 		}
 		NetTest::~NetTest() {
-
+			//Socket::shutdownSockets();
 		}
 		int NetTest::start() {
 			ARK::Tests::NetTest* test = new ARK::Tests::NetTest();

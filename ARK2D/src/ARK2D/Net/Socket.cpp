@@ -134,6 +134,20 @@ namespace ARK {
 		
 			assert( destination.getAddress() != 0 );
 			assert( destination.getPort() != 0 );
+
+			if (destination.getAddress() == INADDR_BROADCAST) {
+				ARK2D::getLog()->i("sending to broadcast.");
+				char broadcastPermission[] = "TRUE";
+				if ((setsockopt(m_socket, SOL_SOCKET, SO_BROADCAST, (char*) broadcastPermission, sizeof(broadcastPermission))) < 0)
+				{
+#ifdef ARK2D_WINDOWS
+					printf("%d",WSAGetLastError());
+#endif
+					while(1);
+					//exit(1);
+				} 
+
+			}
 		
 			sockaddr_in address;
 			address.sin_family = AF_INET;

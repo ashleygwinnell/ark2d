@@ -394,5 +394,29 @@ namespace ARK {
 		}
 
 
+		string FileUtil::getOSUsername() {
+			#if defined(ARK2D_MACINTOSH)
+				NSString *userName = NSUserName();
+				NSString *fullUserName = NSFullUserName();
+
+				string c_username = string([userName UTF8String]);
+				string c_fullusername = string([fullUserName UTF8String]);
+
+				return c_username;
+			#elif defined(ARK2D_WINDOWS)
+				unsigned char namesz = 255;
+				unsigned char* name = alloca(namesz);
+				if (GetUserName(name, &namesz) != 0) {
+					return string(name);
+				}
+				// TODO: GetLastError();
+				return "Unknown";
+			#elif defined(ARK2D_UBUNTU_LINUX)
+				// TODO: linux support for this function.
+				return "Linux User";
+			#endif
+			return "Unknown";
+		}
+
 	}
 }

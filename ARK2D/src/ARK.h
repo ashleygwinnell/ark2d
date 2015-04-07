@@ -75,6 +75,7 @@
 // Net
 #include "ARK2D/Net/Address.h" 
 #include "ARK2D/Net/Connection.h" 
+#include "ARK2D/Net/Discovery.h" 
 #include "ARK2D/Net/EventQueue.h" 
 #include "ARK2D/Net/FlowControl.h" 
 #include "ARK2D/Net/PacketQueue.h" 

@@ -19,8 +19,13 @@ namespace ARK {
 		const int ClientPort2 = 30002;
 		const int ClientPort3 = 30003;
 		const int ProtocolId = 0x11223344;
+		
 		const float DeltaTime = 1.0f / 30.0f;
 		const float SendRate = 1.0f / 30.0f;
+
+		const int DiscoveryServerPort = 31000;
+		const int DiscoveryClientPort = 31001;
+		const int DiscoveryProtocolId = 0x22334455;
 
 
 		enum Mode {
@@ -43,12 +48,29 @@ namespace ARK {
 
 				virtual ~NetTestStartState();
 		};
+		class ARK2D_API NetTestDiscoveryState : public GameState {
+			public:
+				Discovery m_discoveryConnection;	
+			public:
+				NetTestDiscoveryState();
+				void enter(GameContainer* container, StateBasedGame* game, GameState* from);
+				void leave(GameContainer* container, StateBasedGame* game, GameState* to);
+
+				unsigned int id();
+				void init(GameContainer* container, StateBasedGame* game);
+				void initialise(GameContainer* container, StateBasedGame* game);
+				void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
+				void render(GameContainer* container, StateBasedGame* game, Renderer* r);
+
+				virtual ~NetTestDiscoveryState();
+		};
 
 		class ARK2D_API NetTestState : public GameState {
 			public:
 				Mode m_mode;
 				Address m_address;
 				ReliableConnection m_connection;
+				Discovery m_discoveryConnection;	
 				FlowControl m_flowControl;
 
 				bool m_connected;

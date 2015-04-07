@@ -6,6 +6,7 @@
  */
 
 #include "Address.h"
+#include "Includes.h"
 
 namespace ARK {
 	namespace Net { 
@@ -25,6 +26,9 @@ namespace ARK {
 			m_address( ( a << 24 ) | ( b << 16 ) | ( c << 8 ) | d ),
 			m_port(port) {
 			
+		}
+		void Address::setBroadcast() {
+			m_address = INADDR_BROADCAST;
 		}
 	
 		unsigned int Address::getAddress() const {
