@@ -29,7 +29,7 @@ namespace ARK {
 				virtual ~GamepadsTestGameState();
 		};
 
-		class ARK2D_API GamepadsTest : public StateBasedGame {
+		class ARK2D_API GamepadsTest : public StateBasedGame, public GamepadListener {
 			public:
 				GamepadsTest();
 
@@ -38,6 +38,10 @@ namespace ARK {
 				virtual void render(GameContainer* container, Renderer* r);
 				virtual void resize(GameContainer* container, int width, int height);
 
+				virtual void buttonPressed(unsigned int button);
+				virtual void buttonReleased(unsigned int button);
+				virtual void axisMoved(unsigned int axis, float value);
+	
 				static int start();
 
 				virtual ~GamepadsTest();

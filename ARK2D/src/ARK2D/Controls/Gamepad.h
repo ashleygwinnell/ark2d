@@ -73,9 +73,9 @@ namespace ARK {
 
 		class GamepadListener {
 			public:
-				virtual void buttonPressed(unsigned int buton);
-				virtual void buttonReleased(unsigned int button);
-				virtual void axisMoved(unsigned int axis, float value);
+				virtual void buttonPressed(unsigned int button) = 0;
+				virtual void buttonReleased(unsigned int button) = 0;
+				virtual void axisMoved(unsigned int axis, float value) = 0;
 		};
 
 		class ARK2D_API Gamepad {

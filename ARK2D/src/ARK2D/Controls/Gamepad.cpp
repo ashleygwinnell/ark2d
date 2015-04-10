@@ -147,6 +147,13 @@ namespace ARK {
 
 				//buttons[b]->down = true;
 				pressedEvents.insert(b);
+
+				Game* g = ARK2D::getGame();
+				GamepadListener* gl = NULL;
+				gl = dynamic_cast<GamepadListener*>(g);
+				if (gl != NULL) {
+					gl->buttonPressed(b);
+				}
 			#endif
 		} 
 
@@ -186,6 +193,13 @@ namespace ARK {
 
 				//buttons[b]->down = false;
 				releasedEvents.insert(b);
+
+				Game* g = ARK2D::getGame();
+				GamepadListener* gl = NULL;
+				gl = dynamic_cast<GamepadListener*>(g);
+				if (gl != NULL) {
+					gl->buttonReleased(b); 
+				}
 			#endif
 		}
 

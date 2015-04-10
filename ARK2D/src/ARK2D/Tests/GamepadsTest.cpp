@@ -83,21 +83,23 @@ namespace ARK {
 				r->setFont(r->getDefaultFont());
 				r->drawString(StringUtil::append("gamepads connected: ", i->getGamepads()->size()), 230, 20);
 				r->drawString(StringUtil::append("gamepad: ", m_gamepadIndex), 230, 40);
-				r->drawString(StringUtil::append("name: ", p1->getName()), 230, 60);
-
 				
-				r->drawString(StringUtil::append("num buttons: ", p1->numButtons), 230, 70);
-				r->drawString(StringUtil::append("num axes: ", p1->numAxes), 230, 90);
-				r->drawString(StringUtil::append("num axes 2: ", p1->axes.size()), 230, 120);
+				r->drawString(StringUtil::append("name: ", p1->getName()), 230, 70);
+				r->drawString(StringUtil::append("vendor id: ", p1->vendorId), 230, 90);
+				r->drawString(StringUtil::append("product id: ", p1->productId), 230, 110);
+
+				r->drawString(StringUtil::append("num buttons: ", p1->numButtons), 230, 140);
+				r->drawString(StringUtil::append("num axes: ", p1->numAxes), 230, 160);
+				r->drawString(StringUtil::append("num axes 2: ", p1->axes.size()), 230, 180);
 				//r->drawString(StringUtil::append("axis 1: ", p1->axes.at(0)->value), 30, 180);
 				//r->drawString(StringUtil::append("axis 2: ", p1->axes.at(1)->value), 30, 210);
 				
-		 
+		 		float rootY = 250.0f;
 				// left stick
 				float x = p1->getAxisValue(Gamepad::ANALOG_STICK_1_X);
 				float y = p1->getAxisValue(Gamepad::ANALOG_STICK_1_Y);// axes.at(1)->value;
 				float cx = 200.0f;
-				float cy = 300.0f;
+				float cy = rootY + 150; 
 				float rd = 60.0f;
 				r->setDrawColor(Color::white);
 				r->drawCircle(cx, cy, (int) rd, (int) rd);
@@ -108,7 +110,7 @@ namespace ARK {
 				x = p1->getAxisValue(Gamepad::ANALOG_STICK_2_X); //p1->axes.at(2)->value;
 				y = p1->getAxisValue(Gamepad::ANALOG_STICK_2_Y); //p1->axes.at(3)->value;
 				cx = 400.0f;
-				cy = 300.0f;
+				cy = rootY + 150; 
 				r->setDrawColor(Color::white);
 				r->drawCircle(cx, cy, (int) rd, (int)rd);
 				if (p1->isButtonDown(Gamepad::BUTTON_R3)) { r->setDrawColor(Color::red); }
@@ -119,24 +121,24 @@ namespace ARK {
 		 
 				// left trigger  
 				float trigger1 = p1->getAxisValue(Gamepad::TRIGGER_1); //(p1->axes.at(4)->value + 1.0f)/2.0f;
-				r->drawRect(100, 150, 100, 20); 
-				r->fillRect(100, 150, int(100 * trigger1), 20);  
+				r->drawRect(100, rootY, 100, 20); 
+				r->fillRect(100, rootY, int(100 * trigger1), 20);  
 
 				// right trigger 
 				float trigger2 = p1->getAxisValue(Gamepad::TRIGGER_2);//(p1->axes.at(5)->value + 1.0f)/2.0f;
-				r->drawRect(400, 150, 100, 20);
-				r->fillRect(400, 150, int(100 * trigger2), 20);
+				r->drawRect(400, rootY, 100, 20);
+				r->fillRect(400, rootY, int(100 * trigger2), 20);
 
 
 				// left bumper
 				r->setDrawColor(Color::white);
 				if (p1->isButtonDown(Gamepad::BUTTON_LBUMPER)) { r->setDrawColor(Color::red); }
-				r->fillRect(100, 180, 50, 20);
+				r->fillRect(100, rootY+30, 50, 20);
 
 				// right bumper
 				r->setDrawColor(Color::white);
 				if (p1->isButtonDown(Gamepad::BUTTON_RBUMPER)) { r->setDrawColor(Color::red); }
-				r->fillRect(450, 180, 50, 20); 
+				r->fillRect(450, rootY+30, 50, 20); 
 
 
 				//r->drawString(StringUtil::append("logical min: ", p1->axes.at(0)->logicalMin), 30, 390);
@@ -154,63 +156,63 @@ namespace ARK {
 				// dpad
 				r->setDrawColor(Color::white);
 				if (p1->isButtonDown(Gamepad::DPAD_UP)) { r->setDrawColor(Color::red); }
-				r->fillRect(100 - 10, 350, 20, 20); // up
+				r->fillRect(100 - 10, rootY+200, 20, 20); // up
 
 				r->setDrawColor(Color::white);
 				if (p1->isButtonDown(Gamepad::DPAD_LEFT)) { r->setDrawColor(Color::red); }
-				r->fillRect(75 - 10, 375, 20, 20); // left
+				r->fillRect(75 - 10, rootY+225, 20, 20); // left
 
 			 	r->setDrawColor(Color::white);
 				if (p1->isButtonDown(Gamepad::DPAD_RIGHT)) { r->setDrawColor(Color::red); }
-				r->fillRect(125 - 10, 375, 20, 20); // right
+				r->fillRect(125 - 10, rootY+225, 20, 20); // right
 			
 				r->setDrawColor(Color::white);
 				if (p1->isButtonDown(Gamepad::DPAD_DOWN)) { r->setDrawColor(Color::red); }
-				r->fillRect(100 - 10, 400, 20, 20); // down
+				r->fillRect(100 - 10, rootY+250, 20, 20); // down
 
 				// middle buttons
 				r->setDrawColor(Color::white);
 				if (p1->isButtonDown(Gamepad::BUTTON_BACK)) { r->setDrawColor(Color::red); }
-				r->fillRect(250 - 10, 220, 20, 20);
+				r->fillRect(250 - 10, rootY+70, 20, 20);
 
 				r->setDrawColor(Color::white);
 				if (p1->isButtonDown(Gamepad::BUTTON_ACTIVATE)) { r->setDrawColor(Color::green); }
-				r->fillRect(300 - 10, 220, 20, 20);
+				r->fillRect(300 - 10, rootY+70, 20, 20);
 
 				r->setDrawColor(Color::white);
 				if (p1->isButtonDown(Gamepad::BUTTON_START)) { r->setDrawColor(Color::red); }
-				r->fillRect(350 - 10, 220, 20, 20);
+				r->fillRect(350 - 10, rootY+70, 20, 20);
 
 
 				// A button
 				r->setDrawColor(Color::white);
-				r->drawCircle(500.0f, 400.0f, 20, 20); 
+				r->drawCircle(500.0f, rootY+250.0f, 20, 20); 
 				if (p1->isButtonDown(Gamepad::BUTTON_A)) { r->setDrawColor(Color::green); }
-				r->drawCircle(500.0f, 400.0f, 20, 20); 
+				r->drawCircle(500.0f, rootY+250.0f, 20, 20); 
 				
 				// B button
 				r->setDrawColor(Color::white);
-				r->drawCircle(525.0f, 375.0f, 20, 20); 
+				r->drawCircle(525.0f, rootY+225.0f, 20, 20); 
 				if (p1->isButtonDown(Gamepad::BUTTON_B)) { r->setDrawColor(Color::red); }
-				r->drawCircle(525.0f, 375.0f, 20, 20); 
+				r->drawCircle(525.0f, rootY+225.0f, 20, 20); 
 
 				// X button
 				r->setDrawColor(Color::white);
-				r->drawCircle(475.0f, 375.0f, 20, 20); 
+				r->drawCircle(475.0f, rootY+225.0f, 20, 20); 
 				if (p1->isButtonDown(Gamepad::BUTTON_X)) { r->setDrawColor(Color::blue); }
-				r->drawCircle(475.0f, 375.0f, 20, 20); 
+				r->drawCircle(475.0f, rootY+225.0f, 20, 20); 
 
 				// Y button
 				r->setDrawColor(Color::white);
-				r->drawCircle(500.0f, 350.0f, 20, 20); 
+				r->drawCircle(500.0f, rootY+200.0f, 20, 20); 
 				if (p1->isButtonDown(Gamepad::BUTTON_Y)) { r->setDrawColor(Color::yellow); }
-				r->drawCircle(500.0f, 350.0f, 20, 20); 
+				r->drawCircle(500.0f, rootY+200.0f, 20, 20); 
 
 		 
 			} else {
 				r->setDrawColor(Color::white);
-				//r->drawString("nothing connected", 30, 120);	
-				r->fillRect(100,100,100,100);
+				r->drawString("nothing gamepads connected...", 30, 120);	
+				//r->fillRect(100,100,100,100);
 
 			}
 		}
@@ -259,6 +261,15 @@ namespace ARK {
 		GamepadsTest::~GamepadsTest() {
 
 		}
+
+		void GamepadsTest::buttonPressed(unsigned int button) {
+			ErrorDialog::createAndShow(StringUtil::append("button pressed: ", button));
+		}
+		void GamepadsTest::buttonReleased(unsigned int button) { 
+
+		}
+		void GamepadsTest::axisMoved(unsigned int axis, float value) { }
+
 		int GamepadsTest::start() {
 			ARK::Tests::GamepadsTest* test = new ARK::Tests::GamepadsTest();
 			GameContainer* container = new GameContainer(*test, 800, 600, 32, false);
