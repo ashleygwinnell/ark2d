@@ -404,11 +404,14 @@ namespace ARK {
 
 				return c_username;
 			#elif defined(ARK2D_WINDOWS)
-				unsigned char namesz = 255;
-				unsigned char* name = alloca(namesz);
-				if (GetUserName(name, &namesz) != 0) {
-					return string(name);
+				unsigned int namesz = 255;
+				unsigned char name[255];
+				if (GetUserName((LPSTR) &name[0], (LPDWORD)&namesz) != 0) {
+					return string((const char*) name);
 				}
+				DWORD w = GetLastError();
+				//ARK2D::getLog()->e(StringUtil::append("could not get os username: ", (unsigned int)w));
+				ErrorDialog::createAndShow(StringUtil::append("could not get os username: ", (unsigned int)w));
 				// TODO: GetLastError();
 				return "Unknown";
 			#elif defined(ARK2D_UBUNTU_LINUX)

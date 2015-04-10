@@ -64,8 +64,8 @@ namespace ARK {
 				static void readHeader( const unsigned char * header, unsigned int & sequence, unsigned int & ack, unsigned int & ack_bits );
 
 				virtual void onStop();
-				virtual void onDisconnect();
 				virtual void onConnect(unsigned int num);
+				virtual void onDisconnect(unsigned int num);
 				
 			private:
 

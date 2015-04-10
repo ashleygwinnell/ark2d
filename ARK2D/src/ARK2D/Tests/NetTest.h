@@ -51,6 +51,7 @@ namespace ARK {
 		class ARK2D_API NetTestDiscoveryState : public GameState {
 			public:
 				Discovery m_discoveryConnection;	
+				signed int m_selectedIndex;
 			public:
 				NetTestDiscoveryState();
 				void enter(GameContainer* container, StateBasedGame* game, GameState* from);

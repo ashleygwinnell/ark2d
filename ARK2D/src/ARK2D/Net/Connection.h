@@ -57,13 +57,14 @@ namespace ARK {
 				
 				bool m_running;
 				unsigned int m_mode; // Mode enum
-				unsigned int m_state; // State enum
+				//unsigned int m_state; // State enum
 				Socket m_socket;
-				float m_timeoutAccumulator;
+				//float m_timeoutAccumulator;
 				//ARK::Net::Address m_address;
 			
 				vector<ARK::Net::Address> m_addresses; // for servers, this is a list of clients. for clients this is the server address.
-
+				vector<float> m_timeoutAccumulators;
+				vector<unsigned int> m_states;
 
 			public:
 				
@@ -103,9 +104,10 @@ namespace ARK {
 				
 				virtual void onStart()		{ }
 				virtual void onStop()		{ }
-				virtual void onConnect(unsigned int num)    { }
-				virtual void onDisconnect() { }
-					
+				virtual void onConnect(unsigned int num);
+				virtual void onDisconnect(unsigned int num);
+				virtual void onDisconnectAll();
+			
 			private:
 				
 				void clearData();

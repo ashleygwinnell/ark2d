@@ -76,6 +76,8 @@ namespace ARK {
 				float getRoundTripTime() const;
 				int getHeaderSize() const;
 
+				
+
 			protected:
 				
 				void advanceQueueTime( float deltaTime );

@@ -67,7 +67,8 @@ namespace ARK {
 		NetTestDiscoveryState::~NetTestDiscoveryState() { }
 		NetTestDiscoveryState::NetTestDiscoveryState(): 
 			GameState(),
-			m_discoveryConnection(DiscoveryProtocolId)
+			m_discoveryConnection(DiscoveryProtocolId),
+			m_selectedIndex(0)
 			{ 
 		}
 		unsigned int NetTestDiscoveryState::id() { return 2; }
@@ -91,8 +92,21 @@ namespace ARK {
 			if (in->isKeyPressed(Input::KEY_BACKSPACE)) {
 				game->enterState((unsigned int) 0);
 			}
+			vector<DiscoveryAddress>* servers = m_discoveryConnection.getServers();
+			if (in->isKeyPressed(Input::KEY_ENTER) && servers->size() > 0) {
+				NetTestState* state = dynamic_cast<NetTestState*>(game->getState(1));
+
+				Address* server = &servers->at(m_selectedIndex).ipv4address;
+				Address a = Address(server->getA(), server->getB(), server->getC(), server->getD(), ServerPort);
+
+				state->m_address = a;
+				state->initialise(container, game, Client);
+				game->enterState(state);
+			}
 
 			m_discoveryConnection.update(timer->getDelta());
+
+
 
 		} 
 
@@ -100,7 +114,9 @@ namespace ARK {
 		{
 			vector<DiscoveryAddress>* servers = m_discoveryConnection.getServers();
 			for(unsigned int i = 0; i < servers->size(); ++i) {
-				r->drawString(servers->at(i).name,   container->getWidth()/2, 80 + (i*30), Renderer::ALIGN_CENTER, Renderer::ALIGN_TOP);
+				string name = servers->at(i).name;
+				if (i == m_selectedIndex) { name = string("< ") + name + string(" >"); }
+				r->drawString(name, container->getWidth()/2, 80 + (i*30), Renderer::ALIGN_CENTER, Renderer::ALIGN_TOP);
 			}
 		}  
 
@@ -121,6 +137,7 @@ namespace ARK {
 		{
 			m_showAcks = false;
 			m_number = MathUtil::randBetween(0, 10);
+			m_address = Address(127, 0, 0, 1, ServerPort);
 		}
 		
 		void NetTestState::enter(GameContainer* container, StateBasedGame* game, GameState* from) 
@@ -142,7 +159,7 @@ namespace ARK {
 			}
 			
 			// we already know the address dum dum! 
-			m_address = Address(127, 0, 0, 1, ServerPort);
+			
 			
 			const int port = m_mode == Server ? ServerPort : ClientPort;
 			if ( !m_connection.start( port ) ) {
@@ -282,7 +299,7 @@ namespace ARK {
 			// update connection
 			m_connection.update( DeltaTime );
 
-			m_discoveryConnection.update(DeltaTime);
+			m_discoveryConnection.update( DeltaTime );
 
 			// show connection stats
 			

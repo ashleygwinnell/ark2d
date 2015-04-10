@@ -139,6 +139,7 @@
 
 			"src/ARK2D/Net/Address.cpp",
 			"src/ARK2D/Net/Connection.cpp",
+			"src/ARK2D/Net/Discovery.cpp",
 			"src/ARK2D/Net/EventQueue.cpp",
 			"src/ARK2D/Net/FlowControl.cpp",
 			"src/ARK2D/Net/PacketQueue.cpp",

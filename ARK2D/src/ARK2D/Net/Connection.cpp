@@ -42,7 +42,7 @@ namespace ARK {
 			m_socket.close();
 			m_running = false;
 			if ( connected ) {
-				onDisconnect();
+				onDisconnectAll();
 			}
 			onStop();
 		}
@@ -57,10 +57,11 @@ namespace ARK {
 			bool connected = isConnected();
 			clearData();
 			if ( connected ) { 
-				onDisconnect();
+				onDisconnectAll();
 			}
 			m_mode = MODE_SERVER;
-			m_state = STATE_LISTENING;
+			//m_state = STATE_LISTENING;
+
 		}
 		
 		void Connection::connect( const Address & address ) // clients call this.
@@ -69,28 +70,33 @@ namespace ARK {
 			bool connected = isConnected();
 			clearData();
 			if ( connected ) { 
-				onDisconnect();
+				onDisconnectAll();
 			}
 			m_mode = MODE_CLIENT;
-			m_state = STATE_CONNECTING;
+			//m_state = STATE_CONNECTING;
 //			m_address = address;
 			addAddress(address);
 		}
 		
 		bool Connection::isConnecting() const { 
-			return m_state == STATE_CONNECTING; 
+			//return m_state == STATE_CONNECTING; 
+			return  (m_mode == MODE_CLIENT && m_addresses.size() == 0) ||
+					(m_mode == MODE_CLIENT && m_addresses.size() == 1 && m_states[0] == STATE_CONNECTING);
 		}
 		
 		bool Connection::connectFailed() const { 
-			return m_state == STATE_CONNECT_FAIL; 
+			//return m_state == STATE_CONNECT_FAIL; 
+			return  (m_mode == MODE_CLIENT && m_addresses.size() == 1 && m_states[0] == STATE_CONNECT_FAIL);
 		}
 		
 		bool Connection::isConnected() const { 
-			return m_state == STATE_CONNECTED; 
+			//return m_state == STATE_CONNECTED; 
+			return  (m_addresses.size() >= 1 && m_states[0] == STATE_CONNECTED);
 		}
 		
 		bool Connection::isListening() const { 
-			return m_state == STATE_LISTENING; 
+			//return m_state == STATE_LISTENING; 
+			return (m_mode == MODE_SERVER && m_addresses.size() == 0);
 		}
 		
 		//Connection::Mode Connection::getMode() const {
@@ -101,24 +107,29 @@ namespace ARK {
 		void Connection::update( float deltaTime )
 		{
 			assert( m_running );
-			m_timeoutAccumulator += deltaTime;
-			if ( m_timeoutAccumulator > m_timeout )
-			{
-				if ( m_state == STATE_CONNECTING )
+			for(unsigned int i = 0; i < m_timeoutAccumulators.size(); ++i) { 
+				m_timeoutAccumulators[i] += deltaTime;
+				if ( m_timeoutAccumulators[i] > m_timeout )
 				{
-					ARK2D::getLog()->v( "connect timed out\n" );
-					clearData();
-					m_state = STATE_CONNECT_FAIL;
-					onDisconnect();
-				}
-				else if ( m_state == STATE_CONNECTED )
-				{
-					ARK2D::getLog()->v( "connection timed out\n" );
-					clearData();
-					if ( m_state == STATE_CONNECTING ) { 
-						m_state = STATE_CONNECT_FAIL;
+					if ( m_states[i] == STATE_CONNECTING )
+					{
+						ARK2D::getLog()->v( "connect timed out\n" );
+						m_states[i] = STATE_CONNECT_FAIL;
+						onDisconnect(i);
+						clearData();
+						i = 0;
 					}
-					onDisconnect();
+					else if ( m_states[i] == STATE_CONNECTED )
+					{
+						ARK2D::getLog()->v( "connection timed out\n" );
+						onDisconnect(i);
+						clearData();
+						i = 0;
+						if ( m_states[i] == STATE_CONNECTING ) { 
+							m_states[i] = STATE_CONNECT_FAIL;
+						}
+						
+					}
 				}
 			}
 		}
@@ -197,29 +208,31 @@ namespace ARK {
 			if ( m_mode == MODE_SERVER && !isConnected() )
 			{
 				printf( "server accepts connection from client %d.%d.%d.%d:%d\n", sender.getA(), sender.getB(), sender.getC(), sender.getD(), sender.getPort() );
-				m_state = STATE_CONNECTED;
 				//m_address = sender;
 				addAddress(sender);
+				m_states[0] = STATE_CONNECTED;
 				onConnect(0);
 			} else if (m_mode == MODE_SERVER && isConnected() && !hasAddress(sender)) {
 				// second/third/fourth client
 				printf( "server accepts connection from another client %d.%d.%d.%d:%d\n", sender.getA(), sender.getB(), sender.getC(), sender.getD(), sender.getPort() );
-				onConnect(m_addresses.size());
 				addAddress(sender);
+				onConnect(m_addresses.size()-1);
+				
 			}
 
 			bool foundSender = hasAddress(sender);
 			if ( foundSender )
 			//if ( sender == m_address )
 			{
-				if ( m_mode == MODE_CLIENT && m_state == STATE_CONNECTING )
+				signed int senderIndex = getAddressIndex(sender);
+				if ( m_mode == MODE_CLIENT && m_states[senderIndex] == STATE_CONNECTING )
 				{
 					ARK2D::getLog()->v( "client completes connection with server\n" );
-					m_state = STATE_CONNECTED;
-					onConnect(0);
+					m_states[senderIndex] = STATE_CONNECTED;
+					onConnect(senderIndex);
 				}
-				m_timeoutAccumulator = 0.0f;
-				memcpy( data, &packet[4], bytes_read - 4 );
+				m_timeoutAccumulators[senderIndex] = 0.0f;
+				memcpy( data, &packet[4], bytes_read - 4 ); 
 				return bytes_read - 4;
 			}
 			return 0;
@@ -231,7 +244,9 @@ namespace ARK {
 		}
 		
 		void Connection::addAddress(Address addr) {
+			m_states.push_back((unsigned int ) STATE_CONNECTING);
 			m_addresses.push_back(addr);
+			m_timeoutAccumulators.push_back(0.0f);
 		}
 		bool Connection::hasAddress(Address& sender) 
 		{
@@ -251,14 +266,32 @@ namespace ARK {
 			}
 			return -1;
 		}
+
+		void Connection::onConnect(unsigned int num) {
+
+		}
+		void Connection::onDisconnect(unsigned int num) {
+			ARK2D::getLog()->w(StringUtil::append("Connection::onDisconnect ", num));
+			m_addresses.erase(m_addresses.begin() + num);
+			m_timeoutAccumulators.erase(m_timeoutAccumulators.begin() + num);
+			m_states.erase(m_states.begin() + num);
+		}
+		void Connection::onDisconnectAll() {
+			ARK2D::getLog()->w("Connection::onDisconnectAll");
+			//m_addresses.clear();
+			//m_timeoutAccumulators.clear();
+		}
 			
 		
 		void Connection::clearData()
 		{
-			m_state = STATE_DISCONNECTED;
-			m_timeoutAccumulator = 0.0f;
+			//m_state = STATE_DISCONNECTED;
 			//m_address = Address();
+			//m_timeoutAccumulator = 0.0f;
+			
+			m_states.clear();
 			m_addresses.clear();
+			m_timeoutAccumulators.clear();
 		}
 
 		Connection::~Connection()

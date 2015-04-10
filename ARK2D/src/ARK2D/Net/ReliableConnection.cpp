@@ -152,19 +152,17 @@ namespace ARK {
 			clearData();
 		}
 		
-		void ReliableConnection::onDisconnect()
-		{
-			clearData();
-		}
-		
-
-		void ReliableConnection::clearData()
-		{
+		void ReliableConnection::clearData() {
 			//reliabilitySystem.reset();
 			reliabilitySystems.clear();
 		}
 		void ReliableConnection::onConnect(unsigned int num) {
 			
+		}
+		void ReliableConnection::onDisconnect(unsigned int num) {
+			Connection::onDisconnect(num);
+			reliabilitySystems.erase(reliabilitySystems.begin() + num);
+			//clearData();
 		}
 
 		unsigned int ReliableConnection::getTotalSentPackets() const {
