@@ -67,6 +67,7 @@ namespace ARK {
 				g->setDrawColor(Color::white_50a);
 			}
 			g->drawRect(m_x, m_y, m_width, m_height);
+			g->setDrawColor(Color::white);  
 		}
 
 		void CheckBox::keyPressed(unsigned int key) {
