@@ -78,6 +78,22 @@ namespace ARK {
 				virtual void axisMoved(unsigned int axis, float value) = 0;
 		};
 
+
+		// This stores the values that the controller passes through on button presses.
+		// When we receive button events we convert these to ARK2D values.
+		// e.g. if (button == mapping->a) { return Gamepad::BUTTON_A; }
+		class GamepadMapping {
+			public:
+				string name;
+				unsigned int vendorId;
+				unsigned int productId;  
+				std::map<unsigned int, signed int> buttons;
+				std::map<unsigned int, signed int> axes;
+				std::map<signed int, unsigned int> buttonsInverse;
+				std::map<signed int, unsigned int> axesInverse;
+
+		};
+
 		class ARK2D_API Gamepad {
 			public:
 
@@ -212,8 +228,11 @@ namespace ARK {
 				float getAxisValue(unsigned int axisId);
 
 				static unsigned int convertButtonToId(Gamepad* gamepad, unsigned int button, bool printInfo = true);
-				static unsigned int convertIdToButton(Gamepad* gamepad, unsigned int id);
+				//static unsigned int convertIdToButton(Gamepad* gamepad, unsigned int id);
 				static unsigned int convertAxisToId(Gamepad* gamepad, unsigned int axis); 
+
+				static unsigned int convertSystemButtonToARKButton(Gamepad* gamepad, unsigned int button);
+				static unsigned int convertSystemAxisToARKAxis(Gamepad* gamepad, unsigned int axis);
  
 				#ifdef ARK2D_MACINTOSH
 					IOHIDDeviceRef deviceRef;
@@ -223,6 +242,11 @@ namespace ARK {
 
 				static unsigned int s_nextGamepadId;
 				static unsigned int getNextGamepadId();
+
+
+				static vector<GamepadMapping>* s_gamepadMapping;
+				static void initMapping();
+				bool isXbox360Controller();
 
 
 			};

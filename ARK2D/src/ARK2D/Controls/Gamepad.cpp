@@ -20,6 +20,64 @@
 namespace ARK { 
 	namespace Controls {  
 
+		vector<GamepadMapping>* Gamepad::s_gamepadMapping = NULL;
+		void Gamepad::initMapping() {
+			s_gamepadMapping = new vector<GamepadMapping>();
+			String* s = Resource::get("ark2d/gamepads.json")->asString();
+			if (s != NULL) { 
+				JSONNode* root = libJSON::Parse(s->get());
+				JSONNode* pads = root->GetNode(ARK2D::getPlatformString());
+
+				for(unsigned int i = 0; i < pads->NodeSize(); i++) {
+					JSONNode* pad = pads->Children[i];
+					GamepadMapping mapping;
+					mapping.name = pad->GetNode("name")->NodeAsString();
+					mapping.vendorId  = pad->GetNode("vendorId")->NodeAsInt();
+					mapping.productId  = pad->GetNode("productId")->NodeAsInt();
+					
+					mapping.buttons[Gamepad::DPAD_LEFT]  = pad->GetNode("buttons")->GetNode("DPAD_LEFT")->NodeAsInt();
+					mapping.buttons[Gamepad::DPAD_RIGHT] = pad->GetNode("buttons")->GetNode("DPAD_RIGHT")->NodeAsInt();
+					mapping.buttons[Gamepad::DPAD_UP] 	 = pad->GetNode("buttons")->GetNode("DPAD_UP")->NodeAsInt();
+					mapping.buttons[Gamepad::DPAD_DOWN]  = pad->GetNode("buttons")->GetNode("DPAD_DOWN")->NodeAsInt();
+					mapping.buttons[Gamepad::BUTTON_A]   = pad->GetNode("buttons")->GetNode("A")->NodeAsInt();
+					mapping.buttons[Gamepad::BUTTON_B]  = pad->GetNode("buttons")->GetNode("B")->NodeAsInt();
+					mapping.buttons[Gamepad::BUTTON_X]  = pad->GetNode("buttons")->GetNode("X")->NodeAsInt();
+					mapping.buttons[Gamepad::BUTTON_Y]  = pad->GetNode("buttons")->GetNode("Y")->NodeAsInt();
+					mapping.buttons[Gamepad::BUTTON_LBUMPER]  = pad->GetNode("buttons")->GetNode("LBUMPER")->NodeAsInt();
+					mapping.buttons[Gamepad::BUTTON_RBUMPER]  = pad->GetNode("buttons")->GetNode("RBUMPER")->NodeAsInt();
+					mapping.buttons[Gamepad::BUTTON_LTRIGGER]  = pad->GetNode("buttons")->GetNode("LTRIGGER")->NodeAsInt();
+					mapping.buttons[Gamepad::BUTTON_RTRIGGER]  = pad->GetNode("buttons")->GetNode("RTRIGGER")->NodeAsInt();
+					mapping.buttons[Gamepad::BUTTON_L3]  = pad->GetNode("buttons")->GetNode("L3")->NodeAsInt();
+					mapping.buttons[Gamepad::BUTTON_R3]  = pad->GetNode("buttons")->GetNode("R3")->NodeAsInt();
+					mapping.buttons[Gamepad::BUTTON_BACK]  = pad->GetNode("buttons")->GetNode("BACK")->NodeAsInt();
+					mapping.buttons[Gamepad::BUTTON_START] = pad->GetNode("buttons")->GetNode("START")->NodeAsInt();
+					mapping.buttons[Gamepad::BUTTON_ACTIVATE] = pad->GetNode("buttons")->GetNode("ACTIVATE")->NodeAsInt();
+
+					mapping.axes[Gamepad::ANALOG_STICK_1_X] = pad->GetNode("axes")->GetNode("LX")->NodeAsInt();
+					mapping.axes[Gamepad::ANALOG_STICK_1_Y] = pad->GetNode("axes")->GetNode("LY")->NodeAsInt();
+					mapping.axes[Gamepad::ANALOG_STICK_2_X] = pad->GetNode("axes")->GetNode("RX")->NodeAsInt();
+					mapping.axes[Gamepad::ANALOG_STICK_2_Y] = pad->GetNode("axes")->GetNode("RY")->NodeAsInt();
+					mapping.axes[Gamepad::TRIGGER_1] = pad->GetNode("axes")->GetNode("LT")->NodeAsInt();
+					mapping.axes[Gamepad::TRIGGER_2] = pad->GetNode("axes")->GetNode("RT")->NodeAsInt();
+
+					map<unsigned int, signed int>::iterator it;
+					for(it = mapping.buttons.begin(); it != mapping.buttons.end(); it++) {
+						mapping.buttonsInverse[it->second] = it->first;
+					}
+
+					map<unsigned int, signed int>::iterator it2;
+					for(it2 = mapping.axes.begin(); it2 != mapping.axes.end(); it2++) {
+						mapping.axesInverse[it2->second] = it2->first;
+					}
+
+					s_gamepadMapping->push_back(mapping);
+					
+				}
+
+				
+			} 
+		}
+
 		Gamepad::Gamepad():   
 			m_triggersSendBumperEvents(true),
 			m_previousLTriggerValue(0.0f),
@@ -297,6 +355,152 @@ namespace ARK {
 			return 0.0f;
 		}
 
+
+		unsigned int Gamepad::convertSystemButtonToARKButton(Gamepad* gamepad, unsigned int button) {
+			if (s_gamepadMapping == NULL) { ARK2D::getLog()->e("GamepadMapping not initialised."); return button; }
+
+			#if defined(ARK2D_WINDOWS)
+				unsigned int len = s_gamepadMapping->size();
+				for(unsigned int i = 0; i < len; ++i) {
+					const GamepadMapping& mapping = s_gamepadMapping->at(i);
+					if (mapping.vendorId == gamepad->vendorId && 
+						mapping.productId == gamepad->productId) {
+
+						map<signed int, unsigned int>::const_iterator it = mapping.buttonsInverse.find(button);
+						if (it != mapping.buttonsInverse.end()) {
+							return it->second;
+						}
+					}
+				}
+
+				bool isSaitekCyborgRumble = StringUtil::str_contains(gamepad->name, "Saitek Cyborg Rumble Pad");
+				if (isSaitekCyborgRumble) { 
+					switch (button) {
+						case 1:
+							return BUTTON_A; 
+						case 2:
+							return BUTTON_B;
+						case 0:
+							return BUTTON_X; 
+						case 3:
+							return BUTTON_Y;
+					}
+				}
+			#elif defined(ARK2D_ANDROID)
+				if (ARK2D::getContainer()->getPlatformSpecific()->getPluggable()->firetv_isAmazonFireTV()) {
+					switch(button) {
+						case 106:
+							return BUTTON_L3;
+						case 107:
+							return BUTTON_R3;
+						case 96:
+							return BUTTON_A;
+						case 97:
+							return BUTTON_B;
+						case 99:
+							return BUTTON_X;
+						case 100:
+							return BUTTON_Y;
+						case 102:
+							return BUTTON_LBUMPER;
+						case 103:
+							return BUTTON_RBUMPER;
+					}
+					return id; 
+				} else if (ARK2D::getContainer()->getPlatformSpecific()->getPluggable()->ouya_isOuya()) {
+					switch(button) {
+						case 19:
+							return DPAD_UP;
+						case 20:
+							return DPAD_DOWN;
+						case 21:
+							return DPAD_LEFT;
+						case 22:
+							return DPAD_RIGHT;
+						case 82:
+							return BUTTON_ACTIVATE;
+						case 102:
+							return BUTTON_LBUMPER;
+						case 103:
+							return BUTTON_RBUMPER;
+						case 108:
+							return BUTTON_START;
+						case 96:
+							return BUTTON_A;
+						case 97:
+							return BUTTON_B;
+						case 99: 
+							return BUTTON_X;
+						case 100:
+							return BUTTON_Y;
+						case 106:
+							return BUTTON_L3;
+						case 107:
+							return BUTTON_R3;
+						case 104:
+							return BUTTON_LTRIGGER;
+						case 105:
+							return BUTTON_RTRIGGER;
+
+					}
+				} else { 
+					switch(button) {
+						case 104:
+							return DPAD_UP;
+						case 105:
+							return DPAD_DOWN;
+						case 109:
+							return DPAD_LEFT;
+						case 108:
+							return DPAD_RIGHT;
+						case 102:
+							return BUTTON_L3;
+						case 103:
+							return BUTTON_R3;
+						case 96:
+							return BUTTON_A;
+						case 99:
+							return BUTTON_B;
+						case 97:
+							return BUTTON_X;
+						case 98:
+							return BUTTON_Y;
+						case 100:
+							return BUTTON_LBUMPER;
+						case 101:
+							return BUTTON_RBUMPER;
+						//case 110:
+						//	return TRIGGER_1;
+						//case 106:
+						//	return TRIGGER_2;
+						case 107: 
+							return BUTTON_ACTIVATE;
+					}
+				}
+			
+			#endif
+				return button;
+		}
+		unsigned int Gamepad::convertSystemAxisToARKAxis(Gamepad* gamepad, unsigned int axis) {
+			#if defined(ARK2D_WINDOWS)
+				if (s_gamepadMapping == NULL) { ARK2D::getLog()->e("GamepadMapping not initialised."); return axis; }
+				unsigned int len = s_gamepadMapping->size();
+				for(unsigned int i = 0; i < len; ++i) {
+					const GamepadMapping& mapping = s_gamepadMapping->at(i);
+					if (mapping.vendorId == gamepad->vendorId && 
+						mapping.productId == gamepad->productId) {
+
+						map<signed int, unsigned int>::const_iterator it = mapping.axesInverse.find(axis);
+						if (it != mapping.axesInverse.end()) {
+							return it->second;
+						}
+
+					}
+				}
+			#endif
+			return axis;
+		}
+
 		// Fire TV
 		// 12-01 12:39:41.111: I/ARK2D(10663): : Add axis 0 to gamepad id: 14 at index: 0 (X1)
 		// 12-01 12:39:41.111: I/ARK2D(10663): : Add axis 1 to gamepad id: 14 at index: 1 (Y1)
@@ -307,6 +511,9 @@ namespace ARK {
 		// 12-01 12:39:41.111: I/ARK2D(10663): : Add axis 15 to gamepad id: 14 at index: 6 (DPAD X)
 		// 12-01 12:39:41.111: I/ARK2D(10663): : Add axis 16 to gamepad id: 14 at index: 7 (DPAD Y)
 		// 12-01 12:39:41.111: I/ARK2D(10663): : Add axis 32 to gamepad id: 14 at index: 8 (no idea...)
+
+
+
 
 		unsigned int Gamepad::convertAxisToId(Gamepad* gamepad, unsigned int axis) {
 			#if defined(ARK2D_MACINTOSH)
@@ -414,178 +621,9 @@ namespace ARK {
 			// LBUMPER		102
 			// RBUMPER		103
 
-		unsigned int Gamepad::convertIdToButton(Gamepad* gamepad, unsigned int id) {
-			#if defined(ARK2D_ANDROID)
-				if (ARK2D::getContainer()->getPlatformSpecific()->getPluggable()->firetv_isAmazonFireTV()) {
-					switch(id) {
-						case 106:
-							return BUTTON_L3;
-						case 107:
-							return BUTTON_R3;
-						case 96:
-							return BUTTON_A;
-						case 97:
-							return BUTTON_B;
-						case 99:
-							return BUTTON_X;
-						case 100:
-							return BUTTON_Y;
-						case 102:
-							return BUTTON_LBUMPER;
-						case 103:
-							return BUTTON_RBUMPER;
-					}
-					return id; 
-				} else if (ARK2D::getContainer()->getPlatformSpecific()->getPluggable()->ouya_isOuya()) {
-					switch(id) {
-						case 19:
-							return DPAD_UP;
-						case 20:
-							return DPAD_DOWN;
-						case 21:
-							return DPAD_LEFT;
-						case 22:
-							return DPAD_RIGHT;
-						case 82:
-							return BUTTON_ACTIVATE;
-						case 102:
-							return BUTTON_LBUMPER;
-						case 103:
-							return BUTTON_RBUMPER;
-						case 108:
-							return BUTTON_START;
-						case 96:
-							return BUTTON_A;
-						case 97:
-							return BUTTON_B;
-						case 99: 
-							return BUTTON_X;
-						case 100:
-							return BUTTON_Y;
-						case 106:
-							return BUTTON_L3;
-						case 107:
-							return BUTTON_R3;
-						case 104:
-							return BUTTON_LTRIGGER;
-						case 105:
-							return BUTTON_RTRIGGER;
-
-					}
-				} else { 
-					switch(id) {
-						case 104:
-							return DPAD_UP;
-						case 105:
-							return DPAD_DOWN;
-						case 109:
-							return DPAD_LEFT;
-						case 108:
-							return DPAD_RIGHT;
-						case 102:
-							return BUTTON_L3;
-						case 103:
-							return BUTTON_R3;
-						case 96:
-							return BUTTON_A;
-						case 99:
-							return BUTTON_B;
-						case 97:
-							return BUTTON_X;
-						case 98:
-							return BUTTON_Y;
-						case 100:
-							return BUTTON_LBUMPER;
-						case 101:
-							return BUTTON_RBUMPER;
-						//case 110:
-						//	return TRIGGER_1;
-						//case 106:
-						//	return TRIGGER_2;
-						case 107: 
-							return BUTTON_ACTIVATE;
-					}
-				}
-			#elif defined(ARK2D_WINDOWS)
-				bool isSaitekCyborgRumble = StringUtil::str_contains(gamepad->name, "Saitek Cyborg Rumble Pad");
-				if (isSaitekCyborgRumble) { 
-					//ARK2D::getLog()->i(StringUtil::append("saitek convertIdToButton: ", id));
-					
-					switch(id) { 
-						/*case 0:
-							return BUTTON_B; 
-						case 1:
-							return BUTTON_X;
-						case 2:
-							return BUTTON_A;
-						case 3:
-							return BUTTON_Y;*/
-
-						/*case 0:
-							return BUTTON_A; 
-						case 1:
-							return BUTTON_B;
-						case 2:
-							return BUTTON_X; 
-						case 3:
-							return BUTTON_Y;*/
-
-						case 1:
-							return BUTTON_A; 
-						case 2:
-							return BUTTON_B;
-						case 0:
-							return BUTTON_X; 
-						case 3:
-							return BUTTON_Y;
-
-						/*case 4:
-							return BUTTON_LBUMPER;
-						case 5:
-							return BUTTON_RBUMPER;
-						case 8:
-							return BUTTON_BACK;
-						case 9:
-							return BUTTON_START;
-						case 10:
-							return BUTTON_L3;
-						case 11:
-							return BUTTON_R3;*/
-
-
-
-						
-						/*case 1:
-							return BUTTON_A;
-						case BUTTON_X:
-							return BUTTON_A;
-						case BUTTON_A:
-							return BUTTON_B;*/
-
-
-						/*case BUTTON_A:
-							return 1;
-						case BUTTON_B:
-							return 2;
-						case BUTTON_X:
-							return 0;
-						case BUTTON_Y:
-							return 3;
-						case BUTTON_LBUMPER:
-							return 4;
-						case BUTTON_RBUMPER:
-							return 5;
-						case BUTTON_BACK:
-							return 8;
-						case BUTTON_START:
-							return 9;*/
-					}
-
-					
-				}
-			#endif
-			return id;
-		}
+		//unsigned int Gamepad::convertIdToButton(Gamepad* gamepad, unsigned int id) {
+			
+		//}
 
 		
 
@@ -917,6 +955,12 @@ namespace ARK {
 			return (double) currentTime.QuadPart / frequency.QuadPart;
 		}
 		*/
+
+		bool Gamepad::isXbox360Controller() {
+			bool isXbox360Controller = StringUtil::str_contains(this->name, "XBOX 360");
+			bool isXbox360Controller2 = StringUtil::str_contains(this->name, "Xbox 360");
+			return (isXbox360Controller || isXbox360Controller2);
+		}
 
 		unsigned int Gamepad::s_nextGamepadId = 0;
 		unsigned int Gamepad::getNextGamepadId() 

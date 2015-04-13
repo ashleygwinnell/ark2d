@@ -168,7 +168,7 @@ std::string ARK2D::getPlatformString() {
 	#elif defined(ARK2D_MACINTOSH)
 		return "osx";
 	#elif defined(ARK2D_IPHONE)
-		return "iphone";
+		return "ios";
 	#elif defined(ARK2D_ANDROID)
 		return "android";
 	#elif defined(ARK2D_WINDOWS_PHONE_8)

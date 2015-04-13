@@ -825,6 +825,15 @@
 					GamepadAxis* axis = gamepad->axes.at(i);
 					if (axis->id == (unsigned int) axisIndex) {
 						axis->value = (value - axis->rangeMin) / (float) (axis->rangeMax - axis->rangeMin) * 2.0f - 1.0f;
+
+						Game* g = ARK2D::getGame();
+						GamepadListener* gl = NULL;
+						gl = dynamic_cast<GamepadListener*>(g);
+						if (gl != NULL) {
+							gl->axisMoved(axisIndex, axis->value);
+						}
+
+
 						return;
 					}
 				} 
@@ -870,33 +879,31 @@
 						//p->zAxisIndex = info.dwZpos - max;
 
 						if (info.dwXpos != p->lastState.dwXpos) {
-							__handleAxisChange(p, 0, info.dwXpos);
+							__handleAxisChange(p, Gamepad::ANALOG_STICK_1_X, info.dwXpos);
 						}
-
 						if (info.dwYpos != p->lastState.dwYpos) {
-							__handleAxisChange(p, 1, info.dwYpos); 
+							__handleAxisChange(p, Gamepad::ANALOG_STICK_1_Y, info.dwYpos); 
 						}
 						
 
 						if (info.dwZpos != p->lastState.dwZpos) {     
-						//	ARK2D::getLog()->i(StringUtil::append("ltrigger changed: ", info.dwZpos));
-						//	ARK2D::getLog()->i(StringUtil::append("r pos: ", info.dwRpos));
-						//	ARK2D::getLog()->i(StringUtil::append("u pos: ", info.dwUpos));  
-						//	ARK2D::getLog()->i(StringUtil::append("v pos: ", info.dwVpos));
-
-							__handleAxisChange(p, 2, info.dwZpos);
+							//	ARK2D::getLog()->i(StringUtil::append("ltrigger changed: ", info.dwZpos));
+							//	ARK2D::getLog()->i(StringUtil::append("r pos: ", info.dwRpos));
+							//	ARK2D::getLog()->i(StringUtil::append("u pos: ", info.dwUpos));  
+							//	ARK2D::getLog()->i(StringUtil::append("v pos: ", info.dwVpos));
+							__handleAxisChange(p, Gamepad::ANALOG_STICK_2_X, info.dwZpos);
 						}
 
 						if (info.dwRpos != p->lastState.dwRpos) {
-							__handleAxisChange(p, 3, info.dwRpos);
+							__handleAxisChange(p, Gamepad::ANALOG_STICK_2_Y, info.dwRpos);
 						}
 
 						if (info.dwUpos != p->lastState.dwUpos) {
-							__handleAxisChange(p, 4, info.dwUpos); 
+							__handleAxisChange(p, Gamepad::TRIGGER_1, info.dwUpos); 
 						}
  
 						if (info.dwVpos != p->lastState.dwVpos) {
-							__handleAxisChange(p, 5, info.dwVpos);
+							__handleAxisChange(p, Gamepad::TRIGGER_2, info.dwVpos);
 						} 
  
 						p->lastState = info;
@@ -1014,7 +1021,7 @@
 							//if ((p.win32_dwButtons ^ info.dwButtons) & (1 << buttonIndex)) {
 
 								GamepadButton* but = p->buttons.at(buttonIndex);
-								unsigned int newId = Gamepad::convertIdToButton(p, but->id); 
+								unsigned int newId = Gamepad::convertSystemButtonToARKButton(p, but->id); 
 								 
 								if (p->m_triggersSendBumperEvents && (newId == Gamepad::BUTTON_LBUMPER || newId == Gamepad::BUTTON_RBUMPER)) { 
 
@@ -1076,6 +1083,8 @@
 			}
 
 			void GameContainer::initGamepads() {
+
+				Gamepad::initMapping();
 
 				//ARK2D::getLog()->i("Initialising Gamepads");
 
@@ -1175,9 +1184,7 @@
 							gamepad->buttons.push_back(dpad_button);
 
 
-							bool isXbox360Controller = StringUtil::str_contains(gamepad->name, "XBOX 360");
-							bool isXbox360Controller2 = StringUtil::str_contains(gamepad->name, "Xbox 360");
-							if ( isXbox360Controller || isXbox360Controller2 ) {
+							//if ( gamepad->isXbox360Controller()) {
 
 								gamepad->numAxes = 0; // caps.wNumAxes + ((caps.wCaps & JOYCAPS_HASPOV) ? 2 : 0);
 
@@ -1230,7 +1237,7 @@
 								gamepad->numAxes = gamepad->axes.size(); //caps.wNumAxes + ((caps.wCaps & JOYCAPS_HASPOV) ? 2 : 0);  
 
 
-							} else { 					
+							/*} else { 					
 
 								gamepad->numAxes = 0; // caps.wNumAxes + ((caps.wCaps & JOYCAPS_HASPOV) ? 2 : 0);
 
@@ -1257,7 +1264,7 @@
 									axisIndex++;
 								}
 
-								if (caps.wCaps & JOYCAPS_HASR) {
+								if (caps.wCaps & JOYCAPS_HASR) { // right stick x
 									GamepadAxis* rAxis = new GamepadAxis();
 									rAxis->id = axisIndex;
 									rAxis->rangeMin = caps.wRmin;
@@ -1266,7 +1273,7 @@
 									axisIndex++;
 								}
 
-								if (caps.wCaps & JOYCAPS_HASU) {
+								if (caps.wCaps & JOYCAPS_HASU) { // right stick y
 									GamepadAxis* uAxis = new GamepadAxis();
 									uAxis->id = axisIndex;
 									uAxis->rangeMin = caps.wUmin;
@@ -1275,7 +1282,7 @@
 									axisIndex++;
 								} 
 
-								if (caps.wCaps & JOYCAPS_HASV) {
+								if (caps.wCaps & JOYCAPS_HASV) { // right trigger
 									GamepadAxis* vAxis = new GamepadAxis();
 									vAxis->id = axisIndex;
 									vAxis->rangeMin = caps.wVmin;
@@ -1288,7 +1295,7 @@
 								gamepad->povYAxisIndex = (caps.wCaps & JOYCAPS_HASPOV) ? axisIndex++ : -1;
 
 								gamepad->numAxes = caps.wNumAxes + ((caps.wCaps & JOYCAPS_HASPOV) ? 2 : 0);  
-							}
+							}*/
 
 							//int extraAxis = ((caps.wCaps & JOYCAPS_HASPOV) ? 2 : 0);  
 							//gamepad->numAxes = axisIndex + extraAxis;

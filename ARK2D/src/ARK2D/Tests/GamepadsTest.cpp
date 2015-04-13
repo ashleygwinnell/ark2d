@@ -23,8 +23,28 @@ namespace ARK {
 			return 0;
 		}
 
+		void alertButtonsCheckboxEvent() {
+
+		}
+		void alertAxesCheckboxEvent() {
+
+		}
+
 		void GamepadsTestGameState::init(GameContainer* container, StateBasedGame* game) {
 			m_gamepadIndex = 0;
+			
+			m_alertButtons = new CheckBox();
+			m_alertButtons->setMargin(10);
+			m_alertButtons->setChecked(false);
+			m_alertButtons->setStateChangedEvent((void*) &alertButtonsCheckboxEvent);
+
+			m_alertAxes = new CheckBox();
+			m_alertAxes->setMargin(10);
+			m_alertAxes->setChecked(false);
+			m_alertAxes->setStateChangedEvent((void*) &alertAxesCheckboxEvent);
+
+			m_alertButtons->setLocationByCenter(container->getWidth() - 50, 50);
+			m_alertAxes->setLocationByCenter(container->getWidth() - 50, 100);
 		}
 		void GamepadsTestGameState::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {
 
@@ -81,16 +101,16 @@ namespace ARK {
 
 				r->setDrawColor(Color::white);  
 				r->setFont(r->getDefaultFont());
-				r->drawString(StringUtil::append("gamepads connected: ", i->getGamepads()->size()), 230, 20);
-				r->drawString(StringUtil::append("gamepad: ", m_gamepadIndex), 230, 40);
+				r->drawString(StringUtil::append("gamepads connected: ", i->getGamepads()->size()), 50, 20);
+				r->drawString(StringUtil::append("gamepad: ", m_gamepadIndex), 50, 40);
 				
-				r->drawString(StringUtil::append("name: ", p1->getName()), 230, 70);
-				r->drawString(StringUtil::append("vendor id: ", p1->vendorId), 230, 90);
-				r->drawString(StringUtil::append("product id: ", p1->productId), 230, 110);
+				r->drawString(StringUtil::append("name: ", p1->getName()), 50, 70);
+				r->drawString(StringUtil::append("vendor id: ", p1->vendorId), 50, 90);
+				r->drawString(StringUtil::append("product id: ", p1->productId), 50, 110);
 
-				r->drawString(StringUtil::append("num buttons: ", p1->numButtons), 230, 140);
-				r->drawString(StringUtil::append("num axes: ", p1->numAxes), 230, 160);
-				r->drawString(StringUtil::append("num axes 2: ", p1->axes.size()), 230, 180);
+				r->drawString(StringUtil::append("num buttons: ", p1->numButtons), 50, 140);
+				r->drawString(StringUtil::append("num axes: ", p1->numAxes), 50, 160);
+				r->drawString(StringUtil::append("num axes 2: ", p1->axes.size()), 50, 180);
 				//r->drawString(StringUtil::append("axis 1: ", p1->axes.at(0)->value), 30, 180);
 				//r->drawString(StringUtil::append("axis 2: ", p1->axes.at(1)->value), 30, 210);
 				
@@ -208,6 +228,11 @@ namespace ARK {
 				if (p1->isButtonDown(Gamepad::BUTTON_Y)) { r->setDrawColor(Color::yellow); }
 				r->drawCircle(500.0f, rootY+200.0f, 20, 20); 
 
+				m_alertButtons->render();
+				m_alertAxes->render();
+
+				r->drawString("Alert Buttons: ", container->getWidth() - 80, 50,  Renderer::ALIGN_RIGHT, Renderer::ALIGN_CENTER);	
+				r->drawString("Alert Axes: ",    container->getWidth() - 80, 100, Renderer::ALIGN_RIGHT, Renderer::ALIGN_CENTER);	
 		 
 			} else {
 				r->setDrawColor(Color::white);
@@ -215,6 +240,19 @@ namespace ARK {
 				//r->fillRect(100,100,100,100);
 
 			}
+		}
+
+		void GamepadsTestGameState::keyPressed(unsigned int key) {
+			m_alertButtons->keyPressed(key);
+			m_alertAxes->keyPressed(key);
+		}
+		void GamepadsTestGameState::keyReleased(unsigned int key) {
+			m_alertButtons->keyReleased(key);
+			m_alertAxes->keyReleased(key);
+		}
+		void GamepadsTestGameState::mouseMoved(int x, int y, int oldx, int oldy) {
+			m_alertButtons->mouseMoved(x, y, oldx, oldy);
+			m_alertAxes->mouseMoved(x, y, oldx, oldy);
 		}
 
 		GamepadsTestGameState::~GamepadsTestGameState() {
@@ -263,12 +301,22 @@ namespace ARK {
 		}
 
 		void GamepadsTest::buttonPressed(unsigned int button) {
-			ErrorDialog::createAndShow(StringUtil::append("button pressed: ", button));
+			GamepadsTestGameState* state = dynamic_cast<GamepadsTestGameState*>(getState(0));
+			if (state->m_alertButtons->isChecked()) {
+				ErrorDialog::createAndShow(StringUtil::append("button pressed: ", button));
+			}
 		}
 		void GamepadsTest::buttonReleased(unsigned int button) { 
 
 		}
-		void GamepadsTest::axisMoved(unsigned int axis, float value) { }
+		void GamepadsTest::axisMoved(unsigned int axis, float value) { 
+			GamepadsTestGameState* state = dynamic_cast<GamepadsTestGameState*>(getState(0));
+			if (state->m_alertAxes->isChecked()) { 
+				if (value > 0.75f || value < -0.75f) {
+					ErrorDialog::createAndShow(StringUtil::append("axis moved: ", axis));
+				}
+			}
+		}
 
 		int GamepadsTest::start() {
 			ARK::Tests::GamepadsTest* test = new ARK::Tests::GamepadsTest();

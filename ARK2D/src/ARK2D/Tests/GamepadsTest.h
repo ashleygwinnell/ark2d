@@ -16,6 +16,8 @@ namespace ARK {
 		class ARK2D_API GamepadsTestGameState : public GameState {
 			public:
 				signed int m_gamepadIndex;
+				CheckBox* m_alertButtons;
+				CheckBox* m_alertAxes;
 
 			public:
 				GamepadsTestGameState();
@@ -26,6 +28,11 @@ namespace ARK {
 				void init(GameContainer* container, StateBasedGame* game);
 				void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
 				void render(GameContainer* container, StateBasedGame* game, Renderer* r);
+
+				virtual void keyPressed(unsigned int key);
+				virtual void keyReleased(unsigned int key);
+				virtual void mouseMoved(int x, int y, int oldx, int oldy);
+
 				virtual ~GamepadsTestGameState();
 		};
 
