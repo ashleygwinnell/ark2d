@@ -78,7 +78,7 @@
 			"freetype",
 			"bz2"
 		],
-		"iphone": [
+		"ios": [
 			"freetype"
 		]
 	},
@@ -385,7 +385,7 @@
 		"android": [
 			"src/ARK2D/Core/Platform/GameContainerAndroid.cpp"
 		],
-		"iphone": [ 
+		"ios": [ 
 			"src/ARK2D/Core/Platform/GameContainerIPhoneCloudDocument.mm",
 			"src/ARK2D/Core/Platform/GameContainerIPhoneAppDelegate.mm",
 			"src/ARK2D/Core/Platform/GameContainerIPhoneGLView.mm",

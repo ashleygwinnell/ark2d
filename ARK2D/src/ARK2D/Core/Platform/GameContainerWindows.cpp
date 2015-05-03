@@ -2905,13 +2905,13 @@
 				//float myCurrentTime = 0.0f;
 				//float myLastRenderTime = 0.0f;
 
-				ARK2D::getLog()->v("Starting Loop");
+			//	ARK2D::getLog()->v("Starting Loop");
 				while (this->m_bRunning == true)
 				{
-					ARK2D::getLog()->v("Tick");
+					//ARK2D::getLog()->v("Tick");
 					m_timer.tick();
 
-					ARK2D::getLog()->v("Peek");
+					//ARK2D::getLog()->v("Peek");
 					MSG msg;
 					while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) { // process events one by one.
 						if ( msg.message == WM_QUIT ) { this->m_bRunning = false; }
@@ -2919,7 +2919,7 @@
 						DispatchMessage(&msg);
 					}
 
-					ARK2D::getLog()->v("Gamepads");
+					//ARK2D::getLog()->v("Gamepads");
 					processGamepadInput();
 
 					// read appropriate counter
@@ -2988,11 +2988,11 @@
 					//if (myAverageDelta > dt) {
 					//	this->m_game->update(this, dt - myAverageDelta);
 					//}
-					ARK2D::getLog()->v("Update Log");
+					//ARK2D::getLog()->v("Update Log");
 					ARK2D::getLog()->update();
 
 					//int delta = (int) (m_timer.getDelta() * 1000);
-					ARK2D::getLog()->v("Update Game");
+					//ARK2D::getLog()->v("Update Game");
 					m_game.preUpdate(this, &m_timer);
 					m_game.update(this, &m_timer);
 					m_game.postUpdate(this, &m_timer);
@@ -3017,7 +3017,7 @@
 					
 					RendererStats::reset();
 
-					ARK2D::getLog()->v("Render Reset");
+					//ARK2D::getLog()->v("Render Reset");
 					#if defined(ARK2D_RENDERER_OPENGL)
 						glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 					#elif defined(ARK2D_RENDERER_DIRECTX)
@@ -3036,13 +3036,13 @@
 						m_platformSpecific.beginDXFrame();
 					#endif
 					
-					ARK2D::getLog()->v("Pre-render Game");
+					//ARK2D::getLog()->v("Pre-render Game");
 					m_game.preRender(this, &m_graphics);
-					ARK2D::getLog()->v("Render Game");
+					//ARK2D::getLog()->v("Render Game");
 					m_game.render(this, &m_graphics);
-					ARK2D::getLog()->v("Render Log");
+					//ARK2D::getLog()->v("Render Log");
 					ARK2D::getLog()->render(this, &m_graphics);
-					ARK2D::getLog()->v("Post-render Game");
+					//ARK2D::getLog()->v("Post-render Game");
 					m_game.postRender(this, &m_graphics); 
 					//if (m_showingFPS) { renderFPS(); }
 
@@ -3054,7 +3054,7 @@
 					//m_graphics.finish();
 					
 					//glFinish(); 
-					ARK2D::getLog()->v("Swap Buffers");
+					//ARK2D::getLog()->v("Swap Buffers");
 					swapBuffers();
 
 					//Sleep(delta/2);

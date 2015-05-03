@@ -62,6 +62,11 @@ namespace ARK {
 				static const unsigned int CALLBACK_ANIMATION_END = 1;
 				static const unsigned int CALLBACK_ANIMATION_COMPLETE = 2;
 				static const unsigned int CALLBACK_ANIMATION_EVENT = 3;
+				static const unsigned int CALLBACK_PARAMETERISED_EVENT = 4;
+
+				// callback pointer used for sound events. not sure why this is going here.
+				// void soundEventCallbackTestFunction(const char* name, std::map<string, float> params);
+				static void* s_soundEventCallback;
 
 				bool m_copy;
 

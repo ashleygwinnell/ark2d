@@ -95,6 +95,19 @@ namespace ARK {
 
 		class Gamepad;
 
+		class ARK2D_API Pointer {
+			public:
+				float x;
+				float y;
+				#ifdef ARK2D_IPHONE
+					void* data;
+				#endif
+			public:
+				Pointer();
+				float getX();
+				float getY();
+
+		};
 
 		/*! 
 		 * \brief The main class for getting Input from the user.
@@ -432,6 +445,16 @@ namespace ARK {
 				void setGameContainer(GameContainer* c);
 				set<int> pressedEvents;
 				set<int> releasedEvents;
+
+				vector<Pointer> m_touchPointers;
+				signed int addTouch(Pointer pointer);
+				void removeTouch(int index);
+				signed int countTouches();
+				Pointer* getTouch(signed int index);
+				#ifdef ARK2D_IPHONE
+					signed int getTouchByInternalData(void* d);
+				#endif 
+
 
 		};
 	}

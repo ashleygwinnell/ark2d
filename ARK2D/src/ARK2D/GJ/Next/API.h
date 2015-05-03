@@ -155,9 +155,29 @@ namespace ARK {
 			#ifdef GAMEJOLT_SHORT_NAMES
 				typedef gjHighscoreTablesResult HighscoreTablesResult;
 				#define HighscoreTablesResult_create(...) gjHighscoreTablesResult_create(__VA_ARGS__)
+				#define HighscoreTablesResult_copy(...) gjHighscoreTablesResult_copy(__VA_ARGS__)
 				#define HighscoreTablesResult_dispose(...) gjHighscoreTablesResult_dispose(__VA_ARGS__)
 			#endif
 
+			// ------------------------------------------------------------------
+			// Highscore Rank Result
+			// ------------------------------------------------------------------
+			typedef struct gjHighscoreRankResult { 
+				bool success; 
+				char* message;
+				unsigned int rank;
+			} gjHighscoreRankResult;
+			gjHighscoreRankResult* gjHighscoreRankResult_create();
+			gjHighscoreRankResult* gjHighscoreRankResult_copy(gjHighscoreRankResult* result);
+			void gjHighscoreRankResult_dispose(gjHighscoreRankResult* res);
+
+			#ifdef GAMEJOLT_SHORT_NAMES
+				typedef gjHighscoreRankResult HighscoreRankResult;
+				#define HighscoreRankResult_create(...) gjHighscoreRankResult_create(__VA_ARGS__)
+				#define HighscoreRankResult_copy(...) gjHighscoreRankResult_copy(__VA_ARGS__)
+				#define HighscoreRankResult_dispose(...) gjHighscoreRankResult_dispose(__VA_ARGS__)
+			#endif
+				 
 			// ------------------------------------------------------------------
 			// Achievements Results
 			// ------------------------------------------------------------------
@@ -257,6 +277,7 @@ namespace ARK {
 			typedef enum { 
 				GJ_GENERAL_RESULT,
 				GJ_HIGHSCORES_RESULT,
+				GJ_HIGHSCORE_RANK_RESULT,
 				GJ_HIGHSCORE_SUBMIT_RESULT,
 				GJ_HIGHSCORE_TABLES_RESULT,
 				GJ_ACHIEVEMENTS_RESULT,
@@ -283,6 +304,14 @@ namespace ARK {
 				#define Callback_create(...) gjCallback_create(__VA_ARGS__)
 				#define Callback_dispose(...) gjCallback_dispose(__VA_ARGS__)
 			#endif
+
+			// ------------------------------------------------------------------
+			// Formats
+			// ------------------------------------------------------------------
+			typedef enum {
+				GJ_FORMAT_JSON,
+				GJ_FORMAT_XML
+			} gjFormatType;
 
 
 			// ------------------------------------------------------------------
@@ -332,6 +361,8 @@ namespace ARK {
 					gjListener m_internalListener; // one to call before giving it to the user.
 					gjListener m_overlayListener; // another to call before giving it to the user.
 					gjListener m_listener;
+
+					gjFormatType m_format;
 					
 
 				public:
@@ -341,6 +372,7 @@ namespace ARK {
 				public:
 					API(int gameId, string gameKey);
 					void setListener(gjListener eventsCallback);
+					void setFormat(gjFormatType format);
 					void logout();
 					
 					void authUser(string name, string token);
@@ -349,11 +381,14 @@ namespace ARK {
 					void getHighscores(unsigned int tableid, unsigned int startOffset, unsigned int endOffset);
 					static void getHighscoresInternal(API* api, string result, gjUrlRequest* req);
 
+					void getRank(unsigned int tableId, signed int score);
+					static void getRankInternal(API* api, string result, gjUrlRequest* req);
+
 					void getHighscoreTables();
 					static void getHighscoreTablesInternal(API* api, string result, gjUrlRequest* req);
 
 					void submitHighscore(unsigned int tableid, unsigned int score, string unit, string extradata);
-					//void submitHighscore(unsigned int tableid, string guestname, unsigned int score, string unit, string extradata);
+					void submitHighscore(unsigned int tableid, string guestname, unsigned int score, string unit, string extradata);
 					static void submitHighscoreInternal(API* api, string result, gjUrlRequest* req);
 
 					void getFriends();

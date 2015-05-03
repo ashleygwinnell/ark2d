@@ -35,6 +35,7 @@
     - (void)loadView {
      CGRect frame = [[UIScreen mainScreen] bounds];
      self.view = [[GameContainerIPhoneGLView alloc] initWithFrame:frame];
+     self.view.multipleTouchEnabled = YES;
     }
 
    // - (void)viewDidAppear:(BOOL)animated {
@@ -179,6 +180,22 @@
 }*/
 
 
+
+float transformTouchPointX(float x) {
+    GameContainer* container = ARK2D::getContainer();
+    x *= [UIScreen mainScreen].scale;;
+    x /= container->getScale();
+    x -= container->getTranslateX();
+    return x;
+}
+float transformTouchPointY(float y) {
+    GameContainer* container = ARK2D::getContainer();
+    y *= [UIScreen mainScreen].scale;
+    y /= container->getScale();
+    y -= container->getTranslateY();
+    return y;
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     GameContainer* container = ARK2D::getContainer();
     if (container != NULL) 
@@ -188,7 +205,7 @@
 
        // CGPoint lastPoint = [touch previousLocationInView:self];
         CGPoint newPoint = [[touches anyObject] locationInView:self];
-        newPoint.x *= [UIScreen mainScreen].scale;
+       /* newPoint.x *= [UIScreen mainScreen].scale;
         newPoint.y *= [UIScreen mainScreen].scale;
 
         float thisx = newPoint.x;
@@ -199,7 +216,9 @@
         thisy /= container->getScale();
 
         thisx -= container->getTranslateX();
-        thisy -= container->getTranslateY();
+        thisy -= container->getTranslateY();*/
+        float thisx = transformTouchPointX(newPoint.x);
+        float thisy = transformTouchPointY(newPoint.y);
 
         // *******
         // TODO: landscape transform coordinates
@@ -215,6 +234,29 @@
         i->mouse_x = (int) thisx;
         i->mouse_y = (int) thisy;
         i->pressKey(Input::MOUSE_BUTTON_LEFT);
+
+        // Multi-touch
+        for (UITouch* touch in touches) 
+        {
+             //found a touch.  Is it already on our list?
+			int fingerID = i->getTouchByInternalData(touch);
+
+			if (fingerID == -1) {
+				// add it to our list
+				CGPoint pt = [touch locationInView:self];
+				Pointer p;
+				p.x = transformTouchPointX(pt.x);
+				p.y = transformTouchPointY(pt.y);
+				p.data = touch;
+				fingerID = i->addTouch(p);
+                
+                ARK2D::getLog()->v("adding touch point");
+			} else {
+				//already on the list.  Don't send this
+				ARK2D::getLog()->w(StringUtil::append("Ignoring touch ", fingerID));
+				continue;
+			}
+        }
     }
 }
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -222,7 +264,7 @@
     if (container != NULL) 
     {
         CGPoint newPoint = [[touches anyObject] locationInView:self];
-        newPoint.x *= [UIScreen mainScreen].scale;
+        /*newPoint.x *= [UIScreen mainScreen].scale;
         newPoint.y *= [UIScreen mainScreen].scale;
 
         float thisx = newPoint.x;
@@ -231,7 +273,9 @@
         thisy /= container->getScale();
 
         thisx -= container->getTranslateX();
-        thisy -= container->getTranslateY();
+        thisy -= container->getTranslateY();*/
+        float thisx = transformTouchPointX(newPoint.x);
+        float thisy = transformTouchPointY(newPoint.y);
 
         // *******
         // TODO: landscape transform coordinates
@@ -242,23 +286,45 @@
         ARK2D::getGame()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
         i->mouse_x = (int) thisx;
         i->mouse_y = (int) thisy;
+
+        // Multi-touch
+		for (UITouch* touch in touches)
+		{
+			// found a touch.  Is it already on our list?
+			int fingerID = i->getTouchByInternalData(touch);
+			if (fingerID != -1) {
+				//found it
+			} else {
+				//wasn't on our list?!
+				continue;
+			}
+            
+            ARK2D::getLog()->v("touch moved");
+			CGPoint pt = [touch locationInView:self];
+			i->m_touchPointers[fingerID].x = transformTouchPointX(pt.x);
+			i->m_touchPointers[fingerID].y = transformTouchPointY(pt.y);
+			i->m_touchPointers[fingerID].data = touch;
+		}   
     }
 }
+
+
+
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     GameContainer* container = ARK2D::getContainer();
     if (container != NULL) 
     {
         CGPoint newPoint = [[touches anyObject] locationInView:self];
-        newPoint.x *= [UIScreen mainScreen].scale;
-        newPoint.y *= [UIScreen mainScreen].scale;
+        //newPoint.x *= [UIScreen mainScreen].scale;
+        //newPoint.y *= [UIScreen mainScreen].scale;
 
-        float thisx = newPoint.x;
-        float thisy = newPoint.y;
-        thisx /= container->getScale();
+        float thisx = transformTouchPointX(newPoint.x);
+        float thisy = transformTouchPointY(newPoint.y);
+        /*thisx /= container->getScale();
         thisy /= container->getScale();
 
         thisx -= container->getTranslateX();
-        thisy -= container->getTranslateY();
+        thisy -= container->getTranslateY();*/
 
         // *******
         // TODO: landscape transform coordinates
@@ -268,10 +334,41 @@
         i->mouse_x = (int) thisx;
         i->mouse_y = (int) thisy;
         i->releaseKey(Input::MOUSE_BUTTON_LEFT);
+
+        // Multi-touch
+		for (UITouch *touch in touches)
+		{
+			//found a touch.  Is it already on our list?
+			int fingerID = i->getTouchByInternalData(touch);
+			if (fingerID != -1) {
+				i->removeTouch(fingerID);
+                ARK2D::getLog()->v("remove touch point");
+			} else {
+				//wasn't on our list
+				continue;
+			}
+		}  
     }
 }
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+	GameContainer* container = ARK2D::getContainer();
+    if (container != NULL) 
+    {
+     	Input* i = ARK2D::getInput();
 
+     	// Multi-touch
+		for (UITouch* touch in touches)
+		{
+			//found a touch.  Is it already on our list?
+			int fingerID = i->getTouchByInternalData(touch);
+			if (fingerID != -1) {
+				i->removeTouch(fingerID);
+			} else {
+				//wasn't on our list
+				continue;
+			}
+		}  
+	}
 }
 
 - (void)dealloc

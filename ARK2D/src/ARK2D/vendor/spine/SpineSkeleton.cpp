@@ -14,6 +14,8 @@
 namespace ARK {
 	namespace Spine {
 
+		void* Skeleton::s_soundEventCallback = NULL;
+
 		void spineCallback(spAnimationState* state, int trackIndex, spEventType type, spEvent* event, int loopCount) 
 		{
 			spTrackEntry* entry = spAnimationState_getCurrent(state, trackIndex);
@@ -42,9 +44,43 @@ namespace ARK {
 					break;
 				}
 				case SP_ANIMATION_EVENT: {
-					Skeleton* sk4 = (Skeleton*) state->ark2dskeleton;
-					sk4->doCallback(type, 0, NULL);
-					//printf("%d event: %s, %s: %d, %f, %s\n", trackIndex, animationName, event->data->name, event->intValue, event->floatValue, event->stringValue);
+					string s = string(event->data->name);
+					if (Skeleton::s_soundEventCallback != NULL && s.substr(0, 6) == "sound_" && s.length() > 6) {
+						
+						string soundEventName = s.substr(6);
+						
+						const char* soundEventNameCStr = soundEventName.c_str();
+						map<string, float> params;
+
+						if (event->stringValue != NULL) { 
+							string soundEventData = string(event->stringValue);
+							if (soundEventData.length() > 0) {
+								ARK2D::getLog()->e("We have string event data.");
+								vector<string> items = StringUtil::split(soundEventData, ",");
+								for (unsigned int i = 0; i < items.size(); ++i) {
+									vector<string> val = StringUtil::split(items[i], "=");
+
+									if (val[1] == "true") {
+										params[val[0]] = 1.0f;
+									} else {
+										params[val[0]] = Cast::fromString<float>(val[1]);
+									}
+									
+								}
+								
+							} else {
+								ARK2D::getLog()->e("We had string event data but it was empty.");
+							}
+						}
+						
+						void (*pt)(const char*, std::map<string, float>) = (void(*)(const char*, std::map<string, float>)) Skeleton::s_soundEventCallback;
+						pt(soundEventNameCStr, params);
+
+					} else { 
+						Skeleton* sk4 = (Skeleton*) state->ark2dskeleton;
+						sk4->doCallback(type, 0, NULL);
+						printf("%d event: %s, %s: %d, %f, %s\n", trackIndex, animationName, event->data->name, event->intValue, event->floatValue, event->stringValue);
+					}
 					break;
 				}
 			}
@@ -95,7 +131,7 @@ namespace ARK {
 			m_x(0.0f),
 			m_y(0.0f),
 			m_callbacks(),
-			m_invokingCallbacks(false),
+			m_invokingCallbacks(true),
 			m_copy(false)
 		{
 			//load();

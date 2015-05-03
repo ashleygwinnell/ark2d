@@ -126,10 +126,27 @@ namespace ARK {
 			void Thread::init(void* functionPointer, void* classPointer) {
 				m_functionPointer = functionPointer;
 				m_classPointer = classPointer; 
+				m_handle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) initThread, (void*) this, CREATE_SUSPENDED, &m_id);
 			}
 			void Thread::init(void* functionPointer) {
 				m_functionPointer = functionPointer;
 				m_handle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) functionPointer, NULL, CREATE_SUSPENDED, &m_id);
+			}
+			void Thread::initThread(void* obj) {
+				//Thread* t = (Thread*) obj;
+				Thread* thr = reinterpret_cast<Thread*>(obj);
+				if (thr->m_functionPointer != NULL) {
+						if (thr->m_classPointer == NULL) {
+							
+							void (*pt)() = (void(*)()) thr->m_functionPointer;
+							//typedef void fnct();
+							//fnct* pt = (fnct*) m_event;
+							pt();
+						} else {
+							void (*pt)(void*) = (void(*)(void*)) thr->m_functionPointer;
+							pt(thr->m_classPointer);
+						}
+					}
 			}
 
 			void Thread::start() {

@@ -13,7 +13,7 @@
 	#elif defined(ARK2D_ANDROID)
 		
 	// iOS
-	#elif defined(ARK2D_IPHONE)
+	//#elif defined(ARK2D_IPHONE)
 		
 	// WP8
 	#elif defined(ARK2D_WINDOWS_PHONE_8)
@@ -32,7 +32,7 @@
 		#endif 
 
 	// OS X & Linux
-	#elif defined(ARK2D_MACINTOSH) || defined(__linux__) || defined(ARK2D_UBUNTU_LINUX)
+	#elif defined(ARK2D_MACINTOSH) || defined(__linux__) || defined(ARK2D_UBUNTU_LINUX) || defined(ARK2D_IPHONE)
 
 		#define ARK2D_API
 

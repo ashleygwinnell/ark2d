@@ -174,7 +174,7 @@ namespace ARK {
                         container->m_translateX = tx;
                         container->m_translateY = ty; 
    
-                        container->m_platformSpecific.initOpenGL2(height, width);
+                        container->m_platformSpecific.initOpenGL2(width, height); //height, width);
                     	container->m_platformSpecific.initOpenGL2D(width, height);
   
                     	ARK2D::getLog()->v("RESIZE LANDSCAPE!");  

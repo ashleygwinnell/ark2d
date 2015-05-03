@@ -63,6 +63,9 @@ namespace ARK {
 				static bool boolFromString(string s) {
 					return (s == "true")?true:false;
 				}
+				static bool boolFromString(const char* str) {
+					return (strcmp(str, "true") == 0)?true:false;
+				}
 
 				// must manually call delete on the new string.
 				static wchar_t* charToWideChar(const char* orig) {

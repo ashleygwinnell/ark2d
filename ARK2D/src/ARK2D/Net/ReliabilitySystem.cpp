@@ -226,7 +226,7 @@ namespace ARK {
 		// utility functions
 		bool ReliabilitySystem::sequence_more_recent( unsigned int s1, unsigned int s2, unsigned int max_sequence )
 		{
-			return ( s1 > s2 ) && ( s1 - s2 <= max_sequence/2 ) || ( s2 > s1 ) && ( s2 - s1 > max_sequence/2 );
+			return (( s1 > s2 ) && ( s1 - s2 <= max_sequence/2 )) || (( s2 > s1 ) && ( s2 - s1 > max_sequence/2 ));
 		}
 		
 		int ReliabilitySystem::bit_index_for_sequence( unsigned int sequence, unsigned int ack, unsigned int max_sequence )

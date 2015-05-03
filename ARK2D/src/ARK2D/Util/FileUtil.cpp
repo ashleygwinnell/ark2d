@@ -392,7 +392,7 @@ namespace ARK {
 				ARK2D::getLog()->v("Done!");
 			#endif
 		}
-
+ 
 
 		string FileUtil::getOSUsername() {
 			#if defined(ARK2D_MACINTOSH)

@@ -33,6 +33,7 @@ namespace ARK {
 					case GJ_GENERAL_RESULT:
 					case GJ_HIGHSCORES_RESULT:
 					case GJ_HIGHSCORE_SUBMIT_RESULT:
+					case GJ_HIGHSCORE_RANK_RESULT:
 					case GJ_HIGHSCORE_TABLES_RESULT:
 					case GJ_ACHIEVEMENTS_RESULT:
 					case GJ_ACHIEVEMENT_SUBMIT_RESULT:
@@ -42,7 +43,29 @@ namespace ARK {
 					break;
 				}
 			}
-			//
+			// 
+
+			// Rapid XML util
+			string rapidXmlUtil_value(xml_node<>* node) {
+				string val = node->value();
+				if (val.length() == 0) {
+					if (node->first_node() != NULL) {
+						val = node->first_node()->value();
+					}
+				}
+				return val;
+			}
+			unsigned int rapidXmlUtil_countChildren(xml_node<>* node, string childname) {
+				unsigned int i = 0;
+				xml_node<>* child = 0;
+				for (child = node->first_node(childname.c_str());
+					child != NULL;
+					child = child->next_sibling(childname.c_str())) {
+					i++;
+				}
+				return i;
+
+			}
 
 			// ------------------------------------------------------------------
 			// Objects (Highscore, Achievement, User)
@@ -181,7 +204,9 @@ namespace ARK {
 				res->success = true;
 				res->message = (char*) malloc(sizeof(unsigned char) * 255);
 				res->scoresCount = scoresCount;
-				res->scores = (gjHighscore**) malloc(sizeof(gjHighscore*) * scoresCount);
+				if (res->scoresCount > 0) {
+					res->scores = (gjHighscore**) malloc(sizeof(gjHighscore*) * scoresCount);
+				}
 				return res;
 			}
 			gjHighscoresResult* gjHighscoresResult_copy(gjHighscoresResult* result) {
@@ -200,7 +225,9 @@ namespace ARK {
 				for(unsigned int i = 0; i < res->scoresCount; ++i) {
 					gjHighscore_dispose(res->scores[i]);
 				}
-				free(res->scores);
+				if (res->scoresCount > 0) {
+					free(res->scores);
+				}
 				res->scores = NULL;
 				free(res);
 				res = NULL;
@@ -240,6 +267,33 @@ namespace ARK {
 				free(res);
 				res = NULL;
 			}
+
+
+
+			// ------------------------------------------------------------------
+			// Highscore Rank Results
+			// ------------------------------------------------------------------
+			gjHighscoreRankResult* gjHighscoreRankResult_create() {
+				gjHighscoreRankResult* res = (gjHighscoreRankResult*) malloc(sizeof(gjHighscoreRankResult));
+				res->success = true; 
+				res->message = (char*) malloc(sizeof(unsigned char) * 255);
+				res->rank = 0;
+				return res;
+			}
+			gjHighscoreRankResult* gjHighscoreRankResult_copy(gjHighscoreRankResult* result) {
+				gjHighscoreRankResult* copy = gjHighscoreRankResult_create();
+				copy->success = result->success;
+				memcpy(copy->message, result->message, 255);
+				copy->rank = result->rank;
+				return copy;
+			}
+			void gjHighscoreRankResult_dispose(gjHighscoreRankResult* res) {
+				free((void*) res->message);
+				res->message = NULL;
+				free(res);
+				res = NULL;
+			}
+
 
 			// ------------------------------------------------------------------
 			// Achievements Results
@@ -331,6 +385,9 @@ namespace ARK {
 					case GJ_HIGHSCORE_SUBMIT_RESULT:
 						gjHighscoreSubmitResult_dispose((gjHighscoreSubmitResult*) cb->data);
 						break;
+					case GJ_HIGHSCORE_RANK_RESULT:
+						gjHighscoreRankResult_dispose((gjHighscoreRankResult*) cb->data);
+						break;
 					case GJ_HIGHSCORE_TABLES_RESULT:
 						gjHighscoreTablesResult_dispose((gjHighscoreTablesResult*) cb->data);
 						break;
@@ -365,7 +422,7 @@ namespace ARK {
 				gjUrlRequest* req = (gjUrlRequest*) malloc(sizeof(gjUrlRequest));
 				req->id = API::s_requestId++;
 				req->request = new URLRequest();
-				return req;
+				return req; 
 			}
 			void gjUrlRequest_setUrl(gjUrlRequest* req, const char* url) {
 				req->request->setUrl(url);
@@ -395,13 +452,21 @@ namespace ARK {
 				m_callbacks(),
 				m_internalListener(NULL),
 				m_overlayListener(NULL),
-				m_listener(NULL)
+				m_listener(NULL),
+				m_format(GJ_FORMAT_JSON)
 			{
 				m_internalListener = __internalGameJoltListener;
 				m_callbackAddMutex = new Mutex();
+
+				#ifdef ARK2D_WINDOWS
+					m_format = GJ_FORMAT_XML;
+				#endif
 			}
 			void API::setListener(gjListener listener) {
 				m_listener = listener;
+			}
+			void API::setFormat(gjFormatType format) {
+				m_format = format;
 			}
 			void API::logout() {
 				m_userName = "";
@@ -522,9 +587,26 @@ namespace ARK {
 				gjUrlRequest_start(req, (void*) &submitHighscoreInternal, this);
 				m_requests.push_back(req);
 			}
-//			void API::submitHighscore(unsigned int tableid, string guestname, unsigned int score, string unit, string extradata) {
-				// ...
-//			}
+			void API::submitHighscore(unsigned int tableid, string guestname, unsigned int score, string unit, string extradata) {
+				map<string, string> params;
+				params["table_id"] = Cast::toString<unsigned int>(tableid);
+				params["guest"] = guestname;
+				params["sort"] = Cast::toString<unsigned int>(score);
+				params["score"] = unit;
+				params["extra_data"] = extradata;
+				string requestUrl = url("scores/add/", params, true, true);
+
+				params["signature"] = md5(requestUrl);
+				requestUrl = url("scores/add/", params, true, false);
+
+				ARK2D::getLog()->v("-- request url -- ");
+				ARK2D::getLog()->v(requestUrl);
+
+				gjUrlRequest* req = gjUrlRequest_create();
+				gjUrlRequest_setUrl(req, requestUrl.c_str());
+				gjUrlRequest_start(req, (void*) &submitHighscoreInternal, this);
+				m_requests.push_back(req);
+			}
 
 			void API::submitHighscoreInternal(API* gamejolt, string result, gjUrlRequest* req) {
 
@@ -547,34 +629,76 @@ namespace ARK {
 				
 				gamejolt->removeRequest(req);
 				
-				if (result.substr(0, 1) != "{") 
+				if (gamejolt->m_format == GJ_FORMAT_JSON) 
 				{
-					gjHighscoreSubmitResult* res = gjHighscoreSubmitResult_create();
-					res->success = false;
-					strncpy(res->message, "API did not return JSON.", 255);
+					if (result.substr(0, 1) != "{") 
+					{
+						gjHighscoreSubmitResult* res = gjHighscoreSubmitResult_create();
+						res->success = false;
+						strncpy(res->message, "API did not return JSON.", 255);
 
-					gamejolt->m_callbackAddMutex->lock();
-					gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_SUBMIT_RESULT, res);
-					gamejolt->m_callbacks.push_back(cb);
-					gamejolt->m_callbackAddMutex->unlock();
-					return;	
-				}
+						gamejolt->m_callbackAddMutex->lock();
+						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_SUBMIT_RESULT, res);
+						gamejolt->m_callbacks.push_back(cb);
+						gamejolt->m_callbackAddMutex->unlock();
+						return;	
+					}
 
-				// {"response":{"success":"true","scores":[{"score":"1416","sort":"1416","extra_data":"","user":"","user_id":"","guest":"Ashley","stored":"6 months ago"},{"score":"537","sort":"537","extra_data":"","user":"","user_id":"","guest":"Ted","stored":"1 year ago"},
-				JSONNode* root = libJSON::Parse(result);
-				JSONNode* response = root->GetNode("response");
-				if (response->GetNode("success")->NodeAsString() == "false") 
+					// {"response":{"success":"true","scores":[{"score":"1416","sort":"1416","extra_data":"","user":"","user_id":"","guest":"Ashley","stored":"6 months ago"},{"score":"537","sort":"537","extra_data":"","user":"","user_id":"","guest":"Ted","stored":"1 year ago"},
+					JSONNode* root = libJSON::Parse(result);
+					JSONNode* response = root->GetNode("response");
+					if (response->GetNode("success")->NodeAsString() == "false") 
+					{
+						gjHighscoreSubmitResult* res = gjHighscoreSubmitResult_create();
+						res->success = false;
+						strncpy(res->message, response->GetNode("message")->NodeAsString().c_str(), 255);
+
+						gamejolt->m_callbackAddMutex->lock();
+						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_SUBMIT_RESULT, res);
+						gamejolt->m_callbacks.push_back(cb);
+						gamejolt->m_callbackAddMutex->unlock();
+
+						return;
+					}
+				} 
+				else if (gamejolt->m_format == GJ_FORMAT_XML) 
 				{
-					gjHighscoreSubmitResult* res = gjHighscoreSubmitResult_create();
-					res->success = false;
-					strncpy(res->message, response->GetNode("message")->NodeAsString().c_str(), 255);
+					if (result.substr(0, 1) != "<") 
+					{
+						gjHighscoreSubmitResult* res = gjHighscoreSubmitResult_create();
+						res->success = false;
+						strncpy(res->message, "API did not return XML.", 255);
 
-					gamejolt->m_callbackAddMutex->lock();
-					gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_SUBMIT_RESULT, res);
-					gamejolt->m_callbacks.push_back(cb);
-					gamejolt->m_callbackAddMutex->unlock();
+						gamejolt->m_callbackAddMutex->lock();
+						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_SUBMIT_RESULT, res);
+						gamejolt->m_callbacks.push_back(cb);
+						gamejolt->m_callbackAddMutex->unlock();
+						return;	
+					}
 
-					return;
+					vector<char> xml_copy = vector<char>(result.begin(), result.end());
+					xml_copy.push_back('\0');
+					
+					xml_document<> xmldocument;
+					xmldocument.parse<0>((char*) &xml_copy[0]);
+
+					xml_node<>* root = xmldocument.first_node("response");
+					string successStr = rapidXmlUtil_value(root->first_node("success")); 
+
+					bool success = Cast::boolFromString( successStr );
+					if (!success) {
+						gjHighscoreSubmitResult* res = gjHighscoreSubmitResult_create();
+						res->success = false; 
+						strncpy(res->message, rapidXmlUtil_value(root->first_node("message")).c_str(), 255);
+						
+						gamejolt->m_callbackAddMutex->lock();
+						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_SUBMIT_RESULT, res);
+						gamejolt->m_callbacks.push_back(cb);
+						gamejolt->m_callbackAddMutex->unlock();
+
+						return;
+					}
+
 				}
 
 				// We are go! 
@@ -610,6 +734,7 @@ namespace ARK {
 			}
 			void API::getHighscoresInternal(API* gamejolt, string result, gjUrlRequest* req) { // static.
 				
+				ARK2D::getLog()->v("getHighscoresInternal");
 				// Check for errors
 				if (req->request->hasError()) 
 				{
@@ -629,56 +754,276 @@ namespace ARK {
 				
 				gamejolt->removeRequest(req);
 				
-				if (result.substr(0, 1) != "{") 
+				gjHighscoresResult* res = NULL;
+				if (gamejolt->m_format == GJ_FORMAT_JSON)
 				{
-					gjHighscoresResult* res = gjHighscoresResult_create(0);
-					res->success = false;
-					strncpy(res->message, "API did not return JSON.", 255);
+					// Make sure we have JSON response.
+					if (result.substr(0, 1) != "{") 
+					{
+						gjHighscoresResult* res = gjHighscoresResult_create(0);
+						res->success = false;
+						strncpy(res->message, "API did not return JSON.", 255);
 
-					gamejolt->m_callbackAddMutex->lock();
-					gjCallback* cb = gjCallback_create(GJ_HIGHSCORES_RESULT, res);
-					gamejolt->m_callbacks.push_back(cb);
-					gamejolt->m_callbackAddMutex->unlock();
-					return;	
+						gamejolt->m_callbackAddMutex->lock();
+						gjCallback* cb = gjCallback_create(GJ_HIGHSCORES_RESULT, res);
+						gamejolt->m_callbacks.push_back(cb);
+						gamejolt->m_callbackAddMutex->unlock();
+						return;	
+					} 
+
+					// {"response":{"success":"true","scores":[{"score":"1416","sort":"1416","extra_data":"","user":"","user_id":"","guest":"Ashley","stored":"6 months ago"},{"score":"537","sort":"537","extra_data":"","user":"","user_id":"","guest":"Ted","stored":"1 year ago"},
+					ARK2D::getLog()->v("parse json");
+					JSONNode* root = libJSON::Parse(result);
+					if (root == NULL) {
+						gjHighscoresResult* res = gjHighscoresResult_create(0);
+						res->success = false;
+						strncpy(res->message, "API could not parse JSON.", 255);
+					}
+
+					JSONNode* response = root->GetNode("response");
+					ARK2D::getLog()->v("did");
+					if (response->GetNode("success")->NodeAsString() == "false") 
+					{
+						gjHighscoresResult* res = gjHighscoresResult_create(0);
+						res->success = false;
+						strncpy(res->message, response->GetNode("message")->NodeAsString().c_str(), 255);
+
+						gamejolt->m_callbackAddMutex->lock();
+						gjCallback* cb = gjCallback_create(GJ_HIGHSCORES_RESULT, res);
+						gamejolt->m_callbacks.push_back(cb);
+						gamejolt->m_callbackAddMutex->unlock();
+
+						return;
+					}
+
+					// We are go! 
+					JSONNode* scores = response->GetNode("scores");
+					res = gjHighscoresResult_create(scores->NodeSize());
+					res->success = true;
+
+					for(unsigned int i = 0; i < scores->NodeSize(); i++) {
+						JSONNode* score = scores->Children[i];
+						
+						res->scores[i] = gjHighscore_create();
+						res->scores[i]->userid = Cast::fromString<unsigned int>(score->GetNode("user_id")->NodeAsString());
+						memcpy(res->scores[i]->username, score->GetNode("user")->NodeAsString().c_str(), 255);
+						memcpy(res->scores[i]->guestname, score->GetNode("guest")->NodeAsString().c_str(), 255);
+						res->scores[i]->guest = (score->GetNode("guest")->NodeAsString().length() > 0);
+						res->scores[i]->globalRank = 1;
+						res->scores[i]->score = Cast::fromString<unsigned int>(score->GetNode("score")->NodeAsString());
+					}
+				} 
+				else if (gamejolt->m_format == GJ_FORMAT_XML) 
+				{
+					// Make sure we have XML
+					if (result.substr(0, 1) != "<") 
+					{
+						gjHighscoresResult* res = gjHighscoresResult_create(0);
+						res->success = false;
+						strncpy(res->message, "API did not return XML.", 255);
+
+						gamejolt->m_callbackAddMutex->lock();
+						gjCallback* cb = gjCallback_create(GJ_HIGHSCORES_RESULT, res);
+						gamejolt->m_callbacks.push_back(cb);
+						gamejolt->m_callbackAddMutex->unlock();
+						return;	
+					} 
+					
+					// <?xml version="1.0" encoding="UTF-8"?><response><success><![CDATA[true]]></success><scores><score><score>8</score><sort>8</sort><extra_data></extra_data><user></user><user_id></user_id><guest><![CDATA[Player]]></guest><stored><![CDATA[6 minutes ago]]></stored></score></scores></response>
+					vector<char> xml_copy = vector<char>(result.begin(), result.end());
+					xml_copy.push_back('\0');
+					
+					xml_document<> xmldocument;
+					xmldocument.parse<0>((char*) &xml_copy[0]);
+
+					xml_node<>* root = xmldocument.first_node("response");
+					string successStr = rapidXmlUtil_value(root->first_node("success")); 
+
+					bool success = Cast::boolFromString( successStr );
+					if (!success) {
+						gjHighscoresResult* res = gjHighscoresResult_create(0);
+						res->success = false; 
+
+						if (root->first_node("message") == NULL) { 
+							strncpy(res->message, "Success was false but error message was empty.", 255);
+						} else {
+							strncpy(res->message, rapidXmlUtil_value(root->first_node("message")).c_str(), 255);
+							ARK2D::getLog()->i("done strncpy");
+						}
+
+						gamejolt->m_callbackAddMutex->lock();
+						gjCallback* cb = gjCallback_create(GJ_HIGHSCORES_RESULT, res);
+						gamejolt->m_callbacks.push_back(cb);
+						gamejolt->m_callbackAddMutex->unlock();
+
+						return;
+					}
+
+					
+					// We are go!
+					unsigned int numScores = rapidXmlUtil_countChildren(root->first_node("scores"), "score");
+					res = gjHighscoresResult_create(numScores);
+					res->success = true;
+					
+					unsigned int i = 0;
+					xml_node<>* scores = root->first_node("scores");
+					xml_node<>* score = 0;
+					for (score = scores->first_node("score");
+						score != NULL;
+						score = score->next_sibling("score")) 
+					{
+						res->scores[i] = gjHighscore_create();
+						res->scores[i]->userid = Cast::fromString<unsigned int>( rapidXmlUtil_value(score->first_node("user_id")) );
+						strncpy(res->scores[i]->username, rapidXmlUtil_value(score->first_node("user")).c_str(), 255);
+						strncpy(res->scores[i]->guestname, rapidXmlUtil_value(score->first_node("guest")).c_str(), 255);
+						res->scores[i]->guest = rapidXmlUtil_value(score->first_node("guest")).length() > 0;
+						res->scores[i]->globalRank = 1;
+						res->scores[i]->score = Cast::fromString<unsigned int>( rapidXmlUtil_value(score->first_node("score")) );
+						i++;
+					}
+					
 				}
+ 
+				// Add a callback to execute on the main thread. 
+				gamejolt->m_callbackAddMutex->lock();
+				gjCallback* cb = gjCallback_create(GJ_HIGHSCORES_RESULT, res);
+				gamejolt->m_callbacks.push_back(cb);
+				gamejolt->m_callbackAddMutex->unlock();
+			}
 
-				// {"response":{"success":"true","scores":[{"score":"1416","sort":"1416","extra_data":"","user":"","user_id":"","guest":"Ashley","stored":"6 months ago"},{"score":"537","sort":"537","extra_data":"","user":"","user_id":"","guest":"Ted","stored":"1 year ago"},
-				JSONNode* root = libJSON::Parse(result);
-				JSONNode* response = root->GetNode("response");
-				if (response->GetNode("success")->NodeAsString() == "false") 
+			void API::getRank(unsigned int tableId, signed int score) {
+				map<string, string> params;
+				params["table_id"] = Cast::toString<unsigned int>(tableId);
+				params["sort"] = Cast::toString<signed int>(score);
+				
+				string requestUrl = url("scores/get-rank/", params, false, true);
+
+				params["signature"] = md5(requestUrl);
+				requestUrl = url("scores/get-rank/", params, false, false);
+
+				ARK2D::getLog()->v("-- request url -- ");
+				ARK2D::getLog()->v(requestUrl); 
+
+				gjUrlRequest* req = gjUrlRequest_create();
+				gjUrlRequest_setUrl(req, requestUrl.c_str());
+				gjUrlRequest_start(req, (void*) &getRankInternal, this);
+				m_requests.push_back(req);
+			}
+			void API::getRankInternal(API* gamejolt, string result, gjUrlRequest* req) {
+
+				// Check for errors
+				if (req->request->hasError()) 
 				{
-					gjHighscoresResult* res = gjHighscoresResult_create(0);
+					gjHighscoreRankResult* res = gjHighscoreRankResult_create();
 					res->success = false;
-					strncpy(res->message, response->GetNode("message")->NodeAsString().c_str(), 255);
+					strncpy(res->message, req->request->getError().c_str(), 255);
+
+					gamejolt->removeRequest(req);
 
 					gamejolt->m_callbackAddMutex->lock();
-					gjCallback* cb = gjCallback_create(GJ_HIGHSCORES_RESULT, res);
+					gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_RANK_RESULT, res);
 					gamejolt->m_callbacks.push_back(cb);
 					gamejolt->m_callbackAddMutex->unlock();
 
 					return;
 				}
+				
+				gamejolt->removeRequest(req);
 
-				// We are go! 
-				JSONNode* scores = response->GetNode("scores");
-				gjHighscoresResult* res = gjHighscoresResult_create(scores->NodeSize());
-				res->success = true;
-
-				for(unsigned int i = 0; i < scores->NodeSize(); i++) {
-					JSONNode* score = scores->Children[i];
+				gjHighscoreRankResult* res = NULL;
+				if (gamejolt->m_format == GJ_FORMAT_JSON) 
+				{
 					
-					res->scores[i] = gjHighscore_create();
-					res->scores[i]->userid = Cast::fromString<unsigned int>(score->GetNode("user_id")->NodeAsString());
-					memcpy(res->scores[i]->username, score->GetNode("user")->NodeAsString().c_str(), 255);
-					memcpy(res->scores[i]->guestname, score->GetNode("guest")->NodeAsString().c_str(), 255);
-					res->scores[i]->guest = (score->GetNode("guest")->NodeAsString().length() > 0);
-					res->scores[i]->globalRank = 1;
-					res->scores[i]->score = Cast::fromString<unsigned int>(score->GetNode("score")->NodeAsString());
+					if (result.substr(0, 1) != "{") 
+					{
+						res = gjHighscoreRankResult_create();
+						res->success = false;
+						strncpy(res->message, "API did not return JSON.", 255);
+
+						gamejolt->m_callbackAddMutex->lock();
+						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_RANK_RESULT, res);
+						gamejolt->m_callbacks.push_back(cb);
+						gamejolt->m_callbackAddMutex->unlock();
+						return;	
+					}
+
+					// {"response":{"success":"true","scores":[{"score":"1416","sort":"1416","extra_data":"","user":"","user_id":"","guest":"Ashley","stored":"6 months ago"},{"score":"537","sort":"537","extra_data":"","user":"","user_id":"","guest":"Ted","stored":"1 year ago"},
+					JSONNode* root = libJSON::Parse(result);
+					JSONNode* response = root->GetNode("response");
+					if (response->GetNode("success")->NodeAsString() == "false") 
+					{
+						res = gjHighscoreRankResult_create();
+						res->success = false;
+						strncpy(res->message, response->GetNode("message")->NodeAsString().c_str(), 255);
+
+						gamejolt->m_callbackAddMutex->lock();
+						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_RANK_RESULT, res);
+						gamejolt->m_callbacks.push_back(cb);
+						gamejolt->m_callbackAddMutex->unlock();
+
+						return;
+					}
+
+					// We are go! 
+					res = gjHighscoreRankResult_create();
+					res->success = true;
+					res->rank = response->GetNode("rank")->NodeAsInt();
+				} 
+				else if (gamejolt->m_format == GJ_FORMAT_XML)
+				{
+					if (result.substr(0, 1) != "<") 
+					{
+						res = gjHighscoreRankResult_create();
+						res->success = false;
+						strncpy(res->message, "API did not return XML.", 255);
+
+						gamejolt->m_callbackAddMutex->lock();
+						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_RANK_RESULT, res);
+						gamejolt->m_callbacks.push_back(cb);
+						gamejolt->m_callbackAddMutex->unlock();
+						return;	
+					}
+
+					vector<char> xml_copy = vector<char>(result.begin(), result.end());
+					xml_copy.push_back('\0');
+					
+					xml_document<> xmldocument;
+					xmldocument.parse<0>((char*) &xml_copy[0]);
+
+					xml_node<>* root = xmldocument.first_node("response");
+					string successStr = rapidXmlUtil_value(root->first_node("success")); 
+
+					bool success = Cast::boolFromString( successStr );
+					if (!success) {
+						gjHighscoreRankResult* res = gjHighscoreRankResult_create();
+						res->success = false; 
+
+						if (root->first_node("message") == NULL) { 
+							strncpy(res->message, "Success was false but error message was empty.", 255);
+						} else {
+							strncpy(res->message, rapidXmlUtil_value(root->first_node("message")).c_str(), 255);
+							ARK2D::getLog()->i("done strncpy");
+						}
+
+						gamejolt->m_callbackAddMutex->lock();
+						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_RANK_RESULT, res);
+						gamejolt->m_callbacks.push_back(cb);
+						gamejolt->m_callbackAddMutex->unlock();
+
+						return;
+					}
+
+					
+					// We are go!
+					res = gjHighscoreRankResult_create();
+					res->success = true;
+					res->rank = Cast::fromString<unsigned int>( rapidXmlUtil_value(root->first_node("rank")) );
+	
 				}
 
 				// Add a callback to execute on the main thread. 
 				gamejolt->m_callbackAddMutex->lock();
-				gjCallback* cb = gjCallback_create(GJ_HIGHSCORES_RESULT, res);
+				gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_RANK_RESULT, res);
 				gamejolt->m_callbacks.push_back(cb);
 				gamejolt->m_callbackAddMutex->unlock();
 			}
@@ -1243,7 +1588,11 @@ namespace ARK {
 				
 				string user_token("");
 				map<string, string>::iterator it;
-				params["format"] = "json";
+				if (m_format == GJ_FORMAT_JSON) { 
+					params["format"] = "json";
+				} else if (m_format == GJ_FORMAT_XML) {
+					params["format"] = "xml";
+				}
 				for (it = params.begin(); it != params.end(); it++ ) {
 					string key = it->first;
 					string value = it->second;

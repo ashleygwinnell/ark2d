@@ -101,24 +101,25 @@ namespace ARK {
 
 	   if (m_resizeBehaviour == RESIZE_BEHAVIOUR_SCALE) {
 
-	   		if (getOrientation() == ORIENTATION_LANDSCAPE) {
+	   		/*if (getOrientation() == ORIENTATION_LANDSCAPE) {
 				
-
+	   			ARK2D::getLog()->v(StringUtil::appendf("PASSED IN WIDTH: ", width));
+				ARK2D::getLog()->v(StringUtil::appendf("PASSED IN HEIGHT: ", height));
 				m_width = height;
 				m_height = width;
 
 				m_screenWidth = height;
 				m_screenHeight = width; 
  
-				m_scaleX = (float) m_width / (float) m_originalWidth;
-				m_scaleY = (float) m_height / (float) m_originalHeight; 
+				m_scaleX = (float) m_width / (float) m_originalWidth;//Width
+				m_scaleY = (float) m_height / (float) m_originalHeight;//Height; 
 
-				ARK2D::getLog()->v("RESIZE!"); 
+				ARK2D::getLog()->v("SET SIZE NO CALLBACK!"); 
 				ARK2D::getLog()->v(StringUtil::appendf("Width: ", m_width));
 				ARK2D::getLog()->v(StringUtil::appendf("Height: ", m_height));
 				ARK2D::getLog()->v(StringUtil::appendf("Scale X: ", m_scaleX));
 				ARK2D::getLog()->v(StringUtil::appendf("Scale Y: ", m_scaleY));
-   			} else {
+   			} else {*/
    				m_scaleX = (float) width / (float) m_originalWidth;
 				m_scaleY = (float) height / (float) m_originalHeight; 
 
@@ -127,7 +128,7 @@ namespace ARK {
 
 				m_screenWidth = width;
 				m_screenHeight = height;
-   			}
+   			//}
 
    			if (m_scaleX > m_scaleY) {
 				m_scale = m_scaleY; 

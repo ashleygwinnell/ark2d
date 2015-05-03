@@ -74,7 +74,10 @@ namespace ARK {
 			keyNames(), 
 			keyChars(),
 			mouse_x(0), 
-			mouse_y(0) 
+			mouse_y(0),
+			pressedEvents(),
+			releasedEvents(),
+			m_touchPointers()
 		{
 			keyNames[Input::MOUSE_BUTTON_LEFT] = "left mouse button";
 			keyNames[Input::MOUSE_BUTTON_MIDDLE] = "middle mouse button";
@@ -133,6 +136,45 @@ namespace ARK {
 			keyNames[Input::KEY_Z] = keyChars[Input::KEY_Z] = "z";
 
 		}
+
+		// --------------------------------------------------
+		// MULTI TOUCH!
+		// --------------------------------------------------
+		Pointer::Pointer() {
+			#ifdef ARK2D_IPHONE
+				data = NULL;
+			#endif
+		}
+		float Pointer::getX() {
+			return x;
+		}
+		float Pointer::getY() {
+			return y;
+		}
+		signed int Input::addTouch(Pointer pointer) {
+			m_touchPointers.push_back(pointer);
+			return (signed int) m_touchPointers.size()-1;
+		}
+		void Input::removeTouch(int index) {
+			m_touchPointers.erase(m_touchPointers.begin() + index);
+		}
+		signed int Input::countTouches() {
+			return (signed int) m_touchPointers.size();
+		}
+		Pointer* Input::getTouch(signed int index) {
+			return &m_touchPointers.at(index);
+		}
+		#ifdef ARK2D_IPHONE
+			signed int Input::getTouchByInternalData(void* d) {
+				for(signed int i = 0; i < m_touchPointers.size(); ++i) {
+					if (d == m_touchPointers[i].data) {
+						return i;
+					}
+				}
+				//ARK2D::getLog()->w("could not get touch by internal data.");
+				return -1;
+			}
+		#endif
 
 		// --------
 		// Game pads!!!

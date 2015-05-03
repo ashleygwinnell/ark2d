@@ -59,6 +59,8 @@ namespace ARK {
 					DWORD m_id;
 					HANDLE m_handle;
 
+					static void initThread(void* obj);
+
 				public:
 					HDC m_deviceContext;
 					HGLRC m_renderingContext;

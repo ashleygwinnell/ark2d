@@ -35,30 +35,30 @@ namespace ARK {
 					mapping.vendorId  = pad->GetNode("vendorId")->NodeAsInt();
 					mapping.productId  = pad->GetNode("productId")->NodeAsInt();
 					
-					mapping.buttons[Gamepad::DPAD_LEFT]  = pad->GetNode("buttons")->GetNode("DPAD_LEFT")->NodeAsInt();
-					mapping.buttons[Gamepad::DPAD_RIGHT] = pad->GetNode("buttons")->GetNode("DPAD_RIGHT")->NodeAsInt();
-					mapping.buttons[Gamepad::DPAD_UP] 	 = pad->GetNode("buttons")->GetNode("DPAD_UP")->NodeAsInt();
-					mapping.buttons[Gamepad::DPAD_DOWN]  = pad->GetNode("buttons")->GetNode("DPAD_DOWN")->NodeAsInt();
-					mapping.buttons[Gamepad::BUTTON_A]   = pad->GetNode("buttons")->GetNode("A")->NodeAsInt();
-					mapping.buttons[Gamepad::BUTTON_B]  = pad->GetNode("buttons")->GetNode("B")->NodeAsInt();
-					mapping.buttons[Gamepad::BUTTON_X]  = pad->GetNode("buttons")->GetNode("X")->NodeAsInt();
-					mapping.buttons[Gamepad::BUTTON_Y]  = pad->GetNode("buttons")->GetNode("Y")->NodeAsInt();
-					mapping.buttons[Gamepad::BUTTON_LBUMPER]  = pad->GetNode("buttons")->GetNode("LBUMPER")->NodeAsInt();
-					mapping.buttons[Gamepad::BUTTON_RBUMPER]  = pad->GetNode("buttons")->GetNode("RBUMPER")->NodeAsInt();
-					mapping.buttons[Gamepad::BUTTON_LTRIGGER]  = pad->GetNode("buttons")->GetNode("LTRIGGER")->NodeAsInt();
-					mapping.buttons[Gamepad::BUTTON_RTRIGGER]  = pad->GetNode("buttons")->GetNode("RTRIGGER")->NodeAsInt();
-					mapping.buttons[Gamepad::BUTTON_L3]  = pad->GetNode("buttons")->GetNode("L3")->NodeAsInt();
-					mapping.buttons[Gamepad::BUTTON_R3]  = pad->GetNode("buttons")->GetNode("R3")->NodeAsInt();
-					mapping.buttons[Gamepad::BUTTON_BACK]  = pad->GetNode("buttons")->GetNode("BACK")->NodeAsInt();
-					mapping.buttons[Gamepad::BUTTON_START] = pad->GetNode("buttons")->GetNode("START")->NodeAsInt();
-					mapping.buttons[Gamepad::BUTTON_ACTIVATE] = pad->GetNode("buttons")->GetNode("ACTIVATE")->NodeAsInt();
+					mapping.buttons[(unsigned int) Gamepad::DPAD_LEFT]  = pad->GetNode("buttons")->GetNode("DPAD_LEFT")->NodeAsInt();
+					mapping.buttons[(unsigned int) Gamepad::DPAD_RIGHT] = pad->GetNode("buttons")->GetNode("DPAD_RIGHT")->NodeAsInt();
+					mapping.buttons[(unsigned int) Gamepad::DPAD_UP] 	 = pad->GetNode("buttons")->GetNode("DPAD_UP")->NodeAsInt();
+					mapping.buttons[(unsigned int) Gamepad::DPAD_DOWN]  = pad->GetNode("buttons")->GetNode("DPAD_DOWN")->NodeAsInt();
+					mapping.buttons[(unsigned int) Gamepad::BUTTON_A]   = pad->GetNode("buttons")->GetNode("A")->NodeAsInt();
+					mapping.buttons[(unsigned int) Gamepad::BUTTON_B]  = pad->GetNode("buttons")->GetNode("B")->NodeAsInt();
+					mapping.buttons[(unsigned int) Gamepad::BUTTON_X]  = pad->GetNode("buttons")->GetNode("X")->NodeAsInt();
+					mapping.buttons[(unsigned int) Gamepad::BUTTON_Y]  = pad->GetNode("buttons")->GetNode("Y")->NodeAsInt();
+					mapping.buttons[(unsigned int) Gamepad::BUTTON_LBUMPER]  = pad->GetNode("buttons")->GetNode("LBUMPER")->NodeAsInt();
+					mapping.buttons[(unsigned int) Gamepad::BUTTON_RBUMPER]  = pad->GetNode("buttons")->GetNode("RBUMPER")->NodeAsInt();
+					mapping.buttons[(unsigned int) Gamepad::BUTTON_LTRIGGER]  = pad->GetNode("buttons")->GetNode("LTRIGGER")->NodeAsInt();
+					mapping.buttons[(unsigned int) Gamepad::BUTTON_RTRIGGER]  = pad->GetNode("buttons")->GetNode("RTRIGGER")->NodeAsInt();
+					mapping.buttons[(unsigned int) Gamepad::BUTTON_L3]  = pad->GetNode("buttons")->GetNode("L3")->NodeAsInt();
+					mapping.buttons[(unsigned int) Gamepad::BUTTON_R3]  = pad->GetNode("buttons")->GetNode("R3")->NodeAsInt();
+					mapping.buttons[(unsigned int) Gamepad::BUTTON_BACK]  = pad->GetNode("buttons")->GetNode("BACK")->NodeAsInt();
+					mapping.buttons[(unsigned int) Gamepad::BUTTON_START] = pad->GetNode("buttons")->GetNode("START")->NodeAsInt();
+					mapping.buttons[(unsigned int) Gamepad::BUTTON_ACTIVATE] = pad->GetNode("buttons")->GetNode("ACTIVATE")->NodeAsInt();
 
-					mapping.axes[Gamepad::ANALOG_STICK_1_X] = pad->GetNode("axes")->GetNode("LX")->NodeAsInt();
-					mapping.axes[Gamepad::ANALOG_STICK_1_Y] = pad->GetNode("axes")->GetNode("LY")->NodeAsInt();
-					mapping.axes[Gamepad::ANALOG_STICK_2_X] = pad->GetNode("axes")->GetNode("RX")->NodeAsInt();
-					mapping.axes[Gamepad::ANALOG_STICK_2_Y] = pad->GetNode("axes")->GetNode("RY")->NodeAsInt();
-					mapping.axes[Gamepad::TRIGGER_1] = pad->GetNode("axes")->GetNode("LT")->NodeAsInt();
-					mapping.axes[Gamepad::TRIGGER_2] = pad->GetNode("axes")->GetNode("RT")->NodeAsInt();
+					mapping.axes[(unsigned int) Gamepad::ANALOG_STICK_1_X] = pad->GetNode("axes")->GetNode("LX")->NodeAsInt();
+					mapping.axes[(unsigned int) Gamepad::ANALOG_STICK_1_Y] = pad->GetNode("axes")->GetNode("LY")->NodeAsInt();
+					mapping.axes[(unsigned int) Gamepad::ANALOG_STICK_2_X] = pad->GetNode("axes")->GetNode("RX")->NodeAsInt();
+					mapping.axes[(unsigned int) Gamepad::ANALOG_STICK_2_Y] = pad->GetNode("axes")->GetNode("RY")->NodeAsInt();
+					mapping.axes[(unsigned int) Gamepad::TRIGGER_1] = pad->GetNode("axes")->GetNode("LT")->NodeAsInt();
+					mapping.axes[(unsigned int) Gamepad::TRIGGER_2] = pad->GetNode("axes")->GetNode("RT")->NodeAsInt();
 
 					map<unsigned int, signed int>::iterator it;
 					for(it = mapping.buttons.begin(); it != mapping.buttons.end(); it++) {

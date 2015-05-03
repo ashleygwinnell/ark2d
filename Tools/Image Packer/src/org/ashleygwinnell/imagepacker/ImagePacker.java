@@ -179,14 +179,14 @@ public class ImagePacker {
 			
 			for (int i = 0; i < m_images.size(); i++) {
 				Image c = m_images.get(i);
-				json += "	{";
+				json += "	{" + CRLF;
 				json += "		\"filename\": \"" + c.getNameNoExtension() + "\"," + CRLF;
 				json += "		\"frame\": {\"x\":" + c.x + ",\"y\":" + c.y + ",\"w\":" + c.getWidth() + ",\"h\":" + c.getHeight() + "}, " + CRLF;
 				json += "		\"rotated\": " + c.isRotated() + ", " + CRLF;
 				json += "		\"trimmed\": false, " + CRLF;
 				json += "		\"spriteSourceSize\": {\"x\":" + c.x + ",\"y\":" + c.y + ",\"w\":" + c.getWidth() + ",\"h\":" + c.getHeight() + "}, " + CRLF;
 				json += "		\"sourceSize\": {\"w\":" + c.getWidth() + ",\"h\":" + c.getHeight() + "} " + CRLF;
-				json += "}";
+				json += "}" + CRLF;;
 				if (i != m_images.size() - 1) {
 					json += ",";
 				}

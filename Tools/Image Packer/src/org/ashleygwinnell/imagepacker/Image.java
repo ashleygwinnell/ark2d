@@ -32,7 +32,7 @@ public class Image {
 		y = 0;
 		
 		m_image = img;
-		m_name = f.getName();
+		m_name = f.getName().replace('\\', '/');
 		m_path = f.getAbsolutePath();
 		m_width = img.getWidth(null);
 		m_height = img.getHeight(null);
@@ -61,7 +61,7 @@ public class Image {
 	}
 	
 	public void setName(String name) {
-		m_name = name;
+		m_name = name.replace('\\', '/');
 	}
 	public String getName() {
 		return m_name;

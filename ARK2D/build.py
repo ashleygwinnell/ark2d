@@ -1071,10 +1071,10 @@ class ARK2DBuildSystem:
 		print("ark2d dir: " + self.ark2d_dir);
 
 		# open config
-		f = open(self.ark2d_dir + "/config.json", "r");
-		fcontents = f.read();
-		f.close(); 
-		self.config = json.loads(fcontents);
+		#f = open(self.ark2d_dir + "/config.json", "r");
+		#fcontents = f.read();
+		#f.close(); 
+		#self.config = json.loads(fcontents);
 
 		if (self.building_library):
 			print("Building Windows dll.");
@@ -1180,6 +1180,10 @@ class ARK2DBuildSystem:
 			# modify sln strings
 			print("Configuring sln file...");
 			sln_contents = self.str_replace(sln_contents, [("%GAME_SHORT_NAME%", game_name_safe)]);
+
+			# make spritesheets
+			print("Generating spritesheets...");
+			self.generateSpriteSheets();
 
 			# resources to copy to game project. gotta do this early to generate the VS project
 			game_resources_list = [];
@@ -3131,7 +3135,7 @@ build:
 
 
 	def generateSpriteSheets(self):
-		#print(self.config);
+		# print(self.config);
 		if ("resources" in self.config and "spritesheets" in self.config["resources"]):
 
 			#load cache file
@@ -3222,13 +3226,18 @@ build:
 		fcontents = f.read();
 		f.close(); 
 		config = json.loads(fcontents);
+		
+
+
 
 		gyp_executable = config['osx']['gyp_executable']; 
 
-		f = open(self.game_dir + "/config.json", "r");
-		fcontents = f.read();
-		f.close(); 
-		config = json.loads(fcontents);
+		#f = open(self.game_dir + "/config.json", "r");
+		#fcontents = f.read();
+		#f.close(); 
+		#config = json.loads(fcontents);
+
+		print('hello');
 
 		if (self.building_library):
 
@@ -3451,6 +3460,8 @@ build:
 			exit(0);
 
 		else:
+
+
 
 
 			mkdirs = [];
@@ -4246,7 +4257,7 @@ build:
 	          	'$(SDKROOT)/System/Library/Frameworks/UIKit.framework',
 	          	self.ark2d_dir + '/lib/iphone/libfreetype.a',
 	          	self.ark2d_dir + '/lib/iphone/libGoogleAnalyticsServices.a',
-	          	self.ark2d_dir + '/build/iphone/DerivedData/ark2d/Build/Products/Default-iphoneos/libark2d-iPhone.a'
+	          	self.ark2d_dir + '/build/ios/DerivedData/ark2d/Build/Products/Default-iphoneos/libark2d-iPhone.a'
 			];
 
 			print("Add libraries to project ")
@@ -4730,7 +4741,7 @@ build:
 
 						
 						icongenstr = str(json.dumps(icongenarr, separators=(',',':'))).replace("\"", "\\\"");
-						icongenLINE = "java -jar -Xmx512m " + self.ark2d_dir + "/../Tools/ARK2D\ Image\ Resizer/build/jar/Resizer.jar \"" + icongenstr + "\"";
+						icongenLINE = "java -jar -Xmx512m " + self.ark2d_dir + "/../Tools/ARK2D\ Image\ Resizer/build/jar/ImageResizer.jar \"" + icongenstr + "\"";
 						print(icongenLINE);
 						subprocess.call([icongenLINE], shell=True); 
 
@@ -4861,7 +4872,7 @@ build:
 						defaultsgenarr.extend([defaultsgenobj]);
 
 						defaultsgenstr = str(json.dumps(defaultsgenarr, separators=(',',':'))).replace("\"", "\\\"");
-						defaultsgenLINE = "java -jar -Xmx512m " + self.ark2d_dir + "/../Tools/ARK2D\ Image\ Resizer/build/jar/Resizer.jar \"" + defaultsgenstr + "\"";
+						defaultsgenLINE = "java -jar -Xmx512m " + self.ark2d_dir + "/../Tools/ARK2D\ Image\ Resizer/build/jar/ImageResizer.jar \"" + defaultsgenstr + "\"";
 						print(defaultsgenLINE);
 						subprocess.call([defaultsgenLINE], shell=True); 
 					pass;

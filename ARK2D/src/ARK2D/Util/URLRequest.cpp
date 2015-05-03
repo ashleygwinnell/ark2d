@@ -35,6 +35,7 @@ namespace ARK {
 
 			if (s_curlInitted == false) {
 				#if !defined(ARK2D_ANDROID) && !defined(ARK2D_IPHONE) && !defined(ARK2D_FLASCC) && !defined(ARK2D_WINDOWS_PHONE_8)
+					ARK2D::getLog()->i("init curl");
 					s_curl = curl_easy_init();
 					if (!s_curl) {
 						ErrorDialog::createAndShow("could not init libcurl");
@@ -89,7 +90,7 @@ namespace ARK {
 			m_callbackExtra = callbackExtra;
 			//m_callbackExtras = callbackExtras;
 			//m_callbackExtrasSize = callbackExtrasSize;
-
+ 
 			m_thread = new Thread(); 
 			m_thread->init((void*) &s_startThreaded, this);
 			m_thread->start();
@@ -100,7 +101,7 @@ namespace ARK {
 		void URLRequest::s_startThreaded(void* u) {
 			
 
-			#ifdef ARK2D_WINDOWS_PHONE_8
+			#if defined(ARK2D_WINDOWS_PHONE_8)
 
 				s_startThreadedMutex->lock();
 
@@ -168,6 +169,7 @@ namespace ARK {
 		
 		}
 		void URLRequest::doCallbackWithResult(string result) {
+			ARK2D::getLog()->v("doCallbackWithResult");
 			if (m_callback != NULL) {
 				if (m_callbackObj == NULL) { 
 					void (*pt)(string) = (void(*)(string)) m_callback;
@@ -484,15 +486,15 @@ namespace ARK {
 				
 
 
-			#elif defined(ARK2D_WINDOWS) 
-				ARK2D::getLog()->e("URLRequests currently broken on Windows...?");
-				m_error = "Not Implemented!";
-				return "Not Implemented!"; 
+			//#elif defined(ARK2D_WINDOWS) 
+			//	m_error = "Synchronous API not possible. Do threaded request!";
+			//	ARK2D::getLog()->e(m_error);
+			//	return "Not Implemented!"; 
             #else
  
-				String returnString("");
+				//String returnString("");
 				CURLcode res;
-
+ 
 				curl_easy_setopt(s_curl, CURLOPT_NOPROGRESS, 1);
 				#ifndef ARK2D_WINDOWS	
 					curl_easy_setopt(s_curl, CURLOPT_TIMEOUT, (long) m_timeout);
@@ -551,19 +553,25 @@ namespace ARK {
 				
 
 				if (http_code != 200) {
-					m_error = StringUtil::append("error http code: ", (int) http_code);
-					ARK2D::getLog()->e(m_error);
+					if (http_code == 0) {
+						m_error = "No internet connection. Please try again.";
+						ARK2D::getLog()->e(m_error);
+					} else { 
+						m_error = StringUtil::append("error http code: ", (int) http_code);
+						ARK2D::getLog()->e(m_error);
+					}
 				}
 				//returnString += (int) http_code;
 
-
+				ARK2D::getLog()->v(m_response);
 
 				//returnString += ", ";
 				//returnString += res;
 				//returnString += ", ";
-				returnString += m_response;
+				//returnString += m_response;
 				//returnString += ".";
-				return returnString.get();
+				//return returnString.get();
+				return m_response;
 			#endif
 			return "";
 		}
@@ -585,8 +593,8 @@ namespace ARK {
 			memset(buf, '\0', size*nmemb+1);
 			size_t i = 0;
 			for(;  i < nmemb ; i++) {
-				#ifdef ARK2D_WINDOWS_PHONE_8
-					strncpy_s(pbuf, size, (const char*) ptr, size);
+				#if defined( ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_WINDOWS)
+					strncpy_s(pbuf, size*nmemb+1, (char*) ptr, size);
 				#else
 					strncpy(pbuf, (char*) ptr, size);
 				#endif
