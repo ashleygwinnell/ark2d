@@ -42,6 +42,7 @@ namespace ARK {
 				} 
 			#elif defined(ARK2D_WINDOWS)
 				MessageBox(NULL, message.c_str(), NULL, MB_OK | MB_ICONEXCLAMATION);
+				ARK2D::getLog()->e(message); 
 			#elif defined(ARK2D_UBUNTU_LINUX)
 				ARK2D::getLog()->e(message); 
 				

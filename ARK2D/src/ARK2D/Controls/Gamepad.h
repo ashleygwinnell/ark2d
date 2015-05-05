@@ -73,9 +73,9 @@ namespace ARK {
 
 		class GamepadListener {
 			public:
-				virtual void buttonPressed(unsigned int button) = 0;
-				virtual void buttonReleased(unsigned int button) = 0;
-				virtual void axisMoved(unsigned int axis, float value) = 0;
+				virtual void buttonPressed(Gamepad* gamepad, unsigned int button) = 0;
+				virtual void buttonReleased(Gamepad* gamepad, unsigned int button) = 0;
+				virtual void axisMoved(Gamepad* gamepad, unsigned int axis, float value) = 0;
 		};
 
 
@@ -87,10 +87,13 @@ namespace ARK {
 				string name;
 				unsigned int vendorId;
 				unsigned int productId;  
-				std::map<unsigned int, signed int> buttons;
+				std::map<unsigned int, signed int> buttons; // Gamepad::BUTTON_A -> SomeController::BUTTON_A.
 				std::map<unsigned int, signed int> axes;
-				std::map<signed int, unsigned int> buttonsInverse;
+				std::map<signed int, unsigned int> buttonsInverse; // SomeController::BUTTON_A -> Gamepad::BUTTON_A.
 				std::map<signed int, unsigned int> axesInverse;
+				void toInverse();
+				void toRegular(); 
+				string toString();
 
 		};
 

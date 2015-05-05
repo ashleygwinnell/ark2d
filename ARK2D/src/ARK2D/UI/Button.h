@@ -80,6 +80,8 @@ namespace ARK {
 						&& isPointerOver()) {
 							m_state = STATE_DOWN;
 							setFocussed(true);
+
+							//ARK2D::getLog()->e("set state to down");
 					}
 				}
 
@@ -88,14 +90,18 @@ namespace ARK {
 
 					Input* i = ARK2D::getInput();
 					if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT) {
+						//ARK2D::getLog()->e("released");
 						if (isPointerOver()) {
 							if (m_state == STATE_DOWN) {
 								m_state = STATE_OVER;
 								doEvent();
+								//ARK2D::getLog()->e("doEvent");
 							}
+							//ARK2D::getLog()->e(StringUtil::append("state: ", m_state));
 						} else {
 							m_state = STATE_OFF;
 							setFocussed(false);
+							//ARK2D::getLog()->e("pointer wasn't over..?");
 						}
 					}
 				}
@@ -167,6 +173,7 @@ namespace ARK {
 					renderOverlay();
 
 					//AbstractUIComponent::postRender();
+					g->setDrawColor(Color::white);
 				}
 				virtual void renderBackground() {
 					Renderer* g = ARK2D::getRenderer();

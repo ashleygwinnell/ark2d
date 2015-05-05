@@ -60,15 +60,7 @@ namespace ARK {
 					mapping.axes[(unsigned int) Gamepad::TRIGGER_1] = pad->GetNode("axes")->GetNode("LT")->NodeAsInt();
 					mapping.axes[(unsigned int) Gamepad::TRIGGER_2] = pad->GetNode("axes")->GetNode("RT")->NodeAsInt();
 
-					map<unsigned int, signed int>::iterator it;
-					for(it = mapping.buttons.begin(); it != mapping.buttons.end(); it++) {
-						mapping.buttonsInverse[it->second] = it->first;
-					}
-
-					map<unsigned int, signed int>::iterator it2;
-					for(it2 = mapping.axes.begin(); it2 != mapping.axes.end(); it2++) {
-						mapping.axesInverse[it2->second] = it2->first;
-					}
+					mapping.toInverse();
 
 					s_gamepadMapping->push_back(mapping);
 					
@@ -76,6 +68,74 @@ namespace ARK {
 
 				
 			} 
+		}
+		void GamepadMapping::toInverse() {
+			map<unsigned int, signed int>::iterator it;
+			for(it = buttons.begin(); it != buttons.end(); it++) {
+				buttonsInverse[it->second] = it->first;
+			}
+
+			map<unsigned int, signed int>::iterator it2;
+			for(it2 = axes.begin(); it2 != axes.end(); it2++) {
+				axesInverse[it2->second] = it2->first;
+			}
+		}
+		void GamepadMapping::toRegular() {
+			map<signed int, unsigned int>::iterator it;
+			for(it = buttonsInverse.begin(); it != buttonsInverse.end(); it++) {
+				buttons[it->second] = it->first;
+			}
+
+			map<signed int, unsigned int>::iterator it2;
+			for(it2 = axesInverse.begin(); it2 != axesInverse.end(); it2++) {
+				axes[it2->second] = it2->first;
+			}
+		}
+		string GamepadMapping::toString() {
+			string nl = "\r\n";
+			string s = "{"; s += nl; 
+
+				s += "	\"name\": \""; s += name; s += "\", "; s += nl;
+				s += "	\"vendorId\": "; s += Cast::toString<unsigned int>(vendorId); s += ", "; s += nl;
+				s += "	\"productId\": "; s += Cast::toString<unsigned int>(productId); s += ", "; s += nl;
+
+				s += "	\"buttons\": { "; s += nl;
+
+					s += "		\"DPAD_LEFT\": "; s += Cast::toString<signed int>( buttons[(signed int) Gamepad::DPAD_LEFT] ); s += ", "; s += nl;
+					s += "		\"DPAD_RIGHT\": "; s += Cast::toString<signed int>( buttons[(signed int) Gamepad::DPAD_RIGHT] ); s += ", "; s += nl;
+					s += "		\"DPAD_UP\": "; s += Cast::toString<signed int>( buttons[(signed int) Gamepad::DPAD_UP] ); s += ", "; s += nl;
+					s += "		\"DPAD_DOWN\": "; s += Cast::toString<signed int>( buttons[(signed int) Gamepad::DPAD_DOWN] ); s += ", "; s += nl;
+					s += "		\"A\": "; s += Cast::toString<signed int>( buttons[(signed int) Gamepad::BUTTON_A] ); s += ", "; s += nl;
+					s += "		\"B\": "; s += Cast::toString<signed int>( buttons[(signed int) Gamepad::BUTTON_B] ); s += ", "; s += nl;
+					s += "		\"X\": "; s += Cast::toString<signed int>( buttons[(signed int) Gamepad::BUTTON_X] ); s += ", "; s += nl;
+					s += "		\"Y\": "; s += Cast::toString<signed int>( buttons[(signed int) Gamepad::BUTTON_Y] ); s += ", "; s += nl;
+					s += "		\"LBUMPER\": "; s += Cast::toString<signed int>( buttons[(signed int) Gamepad::BUTTON_LBUMPER] ); s += ", "; s += nl;
+					s += "		\"RBUMPER\": "; s += Cast::toString<signed int>( buttons[(signed int) Gamepad::BUTTON_RBUMPER] ); s += ", "; s += nl;
+					s += "		\"LTRIGGER\": "; s += Cast::toString<signed int>( buttons[(signed int) Gamepad::BUTTON_LTRIGGER] ); s += ", "; s += nl;
+					s += "		\"RTRIGGER\": "; s += Cast::toString<signed int>( buttons[(signed int) Gamepad::BUTTON_RTRIGGER] ); s += ", "; s += nl;
+					s += "		\"L3\": "; s += Cast::toString<signed int>( buttons[(signed int) Gamepad::BUTTON_L3] ); s += ", "; s += nl;
+					s += "		\"R3\": "; s += Cast::toString<signed int>( buttons[(signed int) Gamepad::BUTTON_R3] ); s += ", "; s += nl;
+					s += "		\"BACK\": "; s += Cast::toString<signed int>( buttons[(signed int) Gamepad::BUTTON_BACK] ); s += ", "; s += nl;
+					s += "		\"START\": "; s += Cast::toString<signed int>( buttons[(signed int) Gamepad::BUTTON_START] ); s += ", "; s += nl;
+					s += "		\"ACTIVATE\": "; s += Cast::toString<signed int>( buttons[(signed int) Gamepad::BUTTON_ACTIVATE] ); s += " "; s += nl;
+
+				s += "	},"; s += nl;
+				
+				s += "	\"axes\": { "; s += nl;
+
+					s += "		\"LX\": "; s += Cast::toString<signed int>( axes[(signed int) Gamepad::ANALOG_STICK_1_X] ); s += ", "; s += nl;
+					s += "		\"LY\": "; s += Cast::toString<signed int>( axes[(signed int) Gamepad::ANALOG_STICK_1_Y] ); s += ", "; s += nl;
+					s += "		\"RX\": "; s += Cast::toString<signed int>( axes[(signed int) Gamepad::ANALOG_STICK_2_X] ); s += ", "; s += nl;
+					s += "		\"RY\": "; s += Cast::toString<signed int>( axes[(signed int) Gamepad::ANALOG_STICK_2_Y] ); s += ", "; s += nl;
+					s += "		\"LT\": "; s += Cast::toString<signed int>( axes[(signed int) Gamepad::TRIGGER_1] ); s += ", "; s += nl;
+					s += "		\"RT\": "; s += Cast::toString<signed int>( axes[(signed int) Gamepad::TRIGGER_2] ); s += " "; s += nl;
+
+				s += "	}"; s += nl;
+			s += "}"; 
+			return s;
+
+			
+		
 		}
 
 		Gamepad::Gamepad():   
@@ -210,7 +270,7 @@ namespace ARK {
 				GamepadListener* gl = NULL;
 				gl = dynamic_cast<GamepadListener*>(g);
 				if (gl != NULL) {
-					gl->buttonPressed(b);
+					gl->buttonPressed(this, b);
 				}
 			#endif
 		} 
@@ -256,7 +316,7 @@ namespace ARK {
 				GamepadListener* gl = NULL;
 				gl = dynamic_cast<GamepadListener*>(g);
 				if (gl != NULL) {
-					gl->buttonReleased(b); 
+					gl->buttonReleased(this, b); 
 				}
 			#endif
 		}
@@ -360,11 +420,13 @@ namespace ARK {
 			if (s_gamepadMapping == NULL) { ARK2D::getLog()->e("GamepadMapping not initialised."); return button; }
 
 			#if defined(ARK2D_WINDOWS)
+				bool foundControllerMapping = false;
 				unsigned int len = s_gamepadMapping->size();
 				for(unsigned int i = 0; i < len; ++i) {
 					const GamepadMapping& mapping = s_gamepadMapping->at(i);
 					if (mapping.vendorId == gamepad->vendorId && 
 						mapping.productId == gamepad->productId) {
+						foundControllerMapping = true;
 
 						map<signed int, unsigned int>::const_iterator it = mapping.buttonsInverse.find(button);
 						if (it != mapping.buttonsInverse.end()) {
@@ -372,8 +434,11 @@ namespace ARK {
 						}
 					}
 				}
+				//if (!foundControllerMapping) {
+					//ARK2D::getLog()->w("Mapping not found for this controller/button.");
+				//}
 
-				bool isSaitekCyborgRumble = StringUtil::str_contains(gamepad->name, "Saitek Cyborg Rumble Pad");
+				/*bool isSaitekCyborgRumble = StringUtil::str_contains(gamepad->name, "Saitek Cyborg Rumble Pad");
 				if (isSaitekCyborgRumble) { 
 					switch (button) {
 						case 1:
@@ -385,7 +450,7 @@ namespace ARK {
 						case 3:
 							return BUTTON_Y;
 					}
-				}
+				}*/
 			#elif defined(ARK2D_ANDROID)
 				if (ARK2D::getContainer()->getPlatformSpecific()->getPluggable()->firetv_isAmazonFireTV()) {
 					switch(button) {

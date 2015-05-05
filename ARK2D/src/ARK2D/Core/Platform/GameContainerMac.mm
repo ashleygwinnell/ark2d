@@ -272,10 +272,6 @@
 					//setSize();
 					resizeBehaviour((int) m_originalWidth, (int) m_originalHeight);
 					
-					
-
-		    		
-
 					int width = (signed int) getWidth();
 					int height = (signed int) getHeight();
 

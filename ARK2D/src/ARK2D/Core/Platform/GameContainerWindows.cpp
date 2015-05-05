@@ -830,7 +830,7 @@
 						GamepadListener* gl = NULL;
 						gl = dynamic_cast<GamepadListener*>(g);
 						if (gl != NULL) {
-							gl->axisMoved(axisIndex, axis->value);
+							gl->axisMoved(gamepad, axisIndex, axis->value);
 						}
 
 
@@ -1027,7 +1027,7 @@
 
 									unsigned int triggerIndex = (newId == Gamepad::BUTTON_LBUMPER) ? Gamepad::TRIGGER_1 : Gamepad::TRIGGER_2;
 
-									bool b = !!(info.dwButtons & (1 << newId));
+									bool b = !!(info.dwButtons & (1 << but->id));
 
 									//if (b == true && (!p->isButtonDown(newId) && p->getAxisValue(triggerIndex) < 0.5f ) ) {
 									//	p->pressButton(newId);
@@ -1044,15 +1044,15 @@
 											p->releaseButton(newId);
 										}
 									}
-
+ 
 
 								} else { 
 
-									bool b = !!(info.dwButtons & (1 << newId));
+									bool b = !!(info.dwButtons & (1 << but->id));
 
 									if (b == true && p->isButtonDown(newId) == false) {
 
-										ARK2D::getLog()->i(StringUtil::append("old button id: ", buttonIndex));
+										ARK2D::getLog()->i(StringUtil::append("old button id: ", but->id));
 										ARK2D::getLog()->i(StringUtil::append("new button id: ", newId)); 
 
 										p->pressButton(newId);

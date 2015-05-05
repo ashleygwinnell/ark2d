@@ -11,11 +11,348 @@
 namespace ARK {
 	namespace Tests {
 
+		ARK::Tests::GamepadsTest* gamepadsTest;
+
+		GamepadConfigureGameState::GamepadConfigureGameState(): GameState() {
+
+		}
+		void GamepadConfigureGameState::enter(GameContainer* container, StateBasedGame* game, GameState* from) { 
+
+			Gamepad* gamepad = ARK2D::getInput()->getGamepads()->at(m_gamepadIndex);
+			m_mapping = GamepadMapping();
+			m_mapping.name = gamepad->getName();
+			m_mapping.vendorId = gamepad->vendorId;
+			m_mapping.productId = gamepad->productId;
+
+			m_mapping.buttons[(unsigned int) Gamepad::BUTTON_ACTIVATE] = -1;
+			m_mapping.buttons[(unsigned int) Gamepad::BUTTON_LTRIGGER] = -1;
+			m_mapping.buttons[(unsigned int) Gamepad::BUTTON_RTRIGGER] = -1;
+		}
+		void GamepadConfigureGameState::leave(GameContainer* container, StateBasedGame* game, GameState* to) { }
+
+		unsigned int GamepadConfigureGameState::id() { return 1; }
+		void GamepadConfigureGameState::init(GameContainer* container, StateBasedGame* game) {
+			m_gamepadIndex = -1;
+			m_state = STATE_A; 
+
+			m_axisChangedCooldown = 0.0f;
+		}
+		void GamepadConfigureGameState::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {
+			if (m_axisChangedCooldown > 0.0f) {
+				m_axisChangedCooldown += timer->getDelta();
+				if (m_axisChangedCooldown > 0.5f) {
+					m_axisChangedCooldown = 0.0f;
+				}
+			}
+
+			Input* in = ARK2D::getInput();
+			if (in->isKeyPressed(Input::KEY_ESCAPE)) {
+				gamepadsTest->enterState((unsigned int) 0); 
+				return;
+			}
+			if (in->isKeyPressed(Input::KEY_ENTER)) {
+				switch(m_state) {
+					case STATE_A: { m_mapping.buttons[(unsigned int) Gamepad::BUTTON_A] = -1; break; }
+					case STATE_B: {	m_mapping.buttons[(unsigned int) Gamepad::BUTTON_B] = -1; break; }
+					case STATE_X: { m_mapping.buttons[(unsigned int) Gamepad::BUTTON_X] = -1; break; }
+					case STATE_Y: { m_mapping.buttons[(unsigned int) Gamepad::BUTTON_Y] = -1; break; }
+					case STATE_DPAD_UP: { m_mapping.buttons[(unsigned int) Gamepad::DPAD_UP] = -1; break; }
+					case STATE_DPAD_DOWN: { m_mapping.buttons[(unsigned int) Gamepad::DPAD_DOWN] = -1; break; }
+					case STATE_DPAD_LEFT: { m_mapping.buttons[(unsigned int) Gamepad::DPAD_LEFT] = -1; break; }
+					case STATE_DPAD_RIGHT: { m_mapping.buttons[(unsigned int) Gamepad::DPAD_RIGHT] = -1; break; }
+					case STATE_LBUMPER: { m_mapping.buttons[(unsigned int) Gamepad::BUTTON_LBUMPER] = -1; break; }
+					case STATE_RBUMPER: { m_mapping.buttons[(unsigned int) Gamepad::BUTTON_RBUMPER] = -1; break; }
+					case STATE_L3: { m_mapping.buttons[(unsigned int) Gamepad::BUTTON_L3] = -1; break; }
+					case STATE_R3: { m_mapping.buttons[(unsigned int) Gamepad::BUTTON_R3] = -1; break; }
+					case STATE_LSTICK_X: { m_mapping.axes[(unsigned int) Gamepad::ANALOG_STICK_1_X] = -1; break; }
+					case STATE_LSTICK_Y: { m_mapping.axes[(unsigned int) Gamepad::ANALOG_STICK_1_Y] = -1; break; }
+					case STATE_RSTICK_X: { m_mapping.axes[(unsigned int) Gamepad::ANALOG_STICK_2_X] = -1; break; }
+					case STATE_RSTICK_Y: { m_mapping.axes[(unsigned int) Gamepad::ANALOG_STICK_2_Y] = -1; break; }
+					case STATE_LTRIGGER: { m_mapping.axes[(unsigned int) Gamepad::TRIGGER_1] = -1; break; }
+					case STATE_RTRIGGER: { m_mapping.axes[(unsigned int) Gamepad::TRIGGER_2] = -1; break; }
+					case STATE_BACK: { m_mapping.buttons[(unsigned int) Gamepad::BUTTON_BACK] = -1; break; }
+					case STATE_START: { m_mapping.buttons[(unsigned int) Gamepad::BUTTON_START] = -1; break; }
+				}
+				m_state++;
+				stateChanged();
+			}
+		}
+		void GamepadConfigureGameState::render(GameContainer* container, StateBasedGame* game, Renderer* r) {
+			r->setDrawColor(Color::white);
+			r->setFont(r->getDefaultFont());
+
+			r->drawString("Configuring controller...", 20, 20);
+
+			
+
+			float commandX = container->getWidth() * 0.5f;
+			float commandY = container->getHeight() * 0.5f;
+			float commandScale = 2.0f;
+
+			if (m_axisChangedCooldown > 0.0f) {
+				r->drawString("processing...", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, 1.0f);
+				return;
+			}
+
+			r->drawString("Hit ENTER to skip this button/axis!", container->getWidth()-30, container->getHeight()-30, Renderer::ALIGN_RIGHT, Renderer::ALIGN_BOTTOM, 0.0, 1.0f);
+
+			switch(m_state) {
+				case STATE_A: {
+					r->drawString("Press A", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
+					break;
+				}
+				case STATE_B: {
+					r->drawString("Press B", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
+					break;
+				}
+				case STATE_X: {
+					r->drawString("Press X", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
+					break;
+				}
+				case STATE_Y: {
+					r->drawString("Press Y", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
+					break;
+				}
+				case STATE_DPAD_UP: {
+					r->drawString("Press DPAD-UP", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
+					break;
+				}
+				case STATE_DPAD_DOWN: {
+					r->drawString("Press DPAD-DOWN", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
+					break;
+				}
+				case STATE_DPAD_LEFT: {
+					r->drawString("Press DPAD-LEFT", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
+					break;
+				}
+				case STATE_DPAD_RIGHT: {
+					r->drawString("Press DPAD-RIGHT", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
+					break;
+				}
+				case STATE_LBUMPER: {
+					r->drawString("Press LEFT BUMPER", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
+					break;
+				}
+				case STATE_RBUMPER: {
+					r->drawString("Press RIGHT BUMPER", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
+					break;
+				}
+				case STATE_LTRIGGER: {
+					r->drawString("Move LEFT TRIGGER", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
+					break;
+				}
+				case STATE_RTRIGGER: {
+					r->drawString("Move RIGHT TRIGGER", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
+					break;
+				}
+				case STATE_LSTICK_X: {
+					r->drawString("Move LEFT STICK: left and right", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
+					break;
+				}
+				case STATE_LSTICK_Y: {
+					r->drawString("Move LEFT STICK: up and down", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
+					break;
+				}
+				case STATE_RSTICK_X: {
+					r->drawString("Move RIGHT STICK: left and right", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
+					break;
+				}
+				case STATE_RSTICK_Y: {
+					r->drawString("Move RIGHT STICK: up and down", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
+					break;
+				}
+				case STATE_L3: {
+					r->drawString("Press LEFT STICK in", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
+					break;
+				}
+				case STATE_R3: {
+					r->drawString("Press RIGHT STICK in", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
+					break;
+				}
+				case STATE_BACK: {
+					r->drawString("Press BACK / SELECT", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
+					break;
+				}
+				case STATE_START: {
+					r->drawString("Press START", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
+					break;
+				}
+			}
+		}
+		void GamepadConfigureGameState::stateChanged() {
+			ARK2D::getLog()->w(StringUtil::append("state: ", m_state));
+			if (m_state == STATE_END) {
+				// add config to ark2d.
+				m_mapping.toInverse();
+				ErrorDialog::createAndShow(m_mapping.toString());
+
+				//Dialog::openInputDialog(0, "config:", m_mapping.toString());
+
+				Gamepad::s_gamepadMapping->push_back(m_mapping);
+			
+				// go back to controller state to test everything.
+				gamepadsTest->enterState((unsigned int) 0); 
+			}
+		}
+		void GamepadConfigureGameState::buttonPressed(Gamepad* gamepad, unsigned int button) {
+			
+		}
+		void GamepadConfigureGameState::buttonReleased(Gamepad* gamepad, unsigned int button) { 
+			bool done = false;
+
+			if (m_axisChangedCooldown > 0.0) { return; }
+			if (gamepad != ARK2D::getInput()->getGamepadByIndex(m_gamepadIndex)) { 
+				ARK2D::getLog()->w("Got input from wrong gamepad.");
+				return; 
+			}
+
+			switch(m_state) {
+				case STATE_A: { 
+					m_mapping.buttons[(unsigned int) Gamepad::BUTTON_A] = button;
+					done = true;
+					break;
+				}
+				case STATE_B: {
+					m_mapping.buttons[(unsigned int) Gamepad::BUTTON_B] = button;
+					done = true;
+					break;
+				}
+				case STATE_X: {
+					m_mapping.buttons[(unsigned int) Gamepad::BUTTON_X] = button;
+					done = true;
+					break;
+				}
+				case STATE_Y: {
+					m_mapping.buttons[(unsigned int) Gamepad::BUTTON_Y] = button;
+					done = true;
+					break;
+				}
+				case STATE_DPAD_UP: {
+					m_mapping.buttons[(unsigned int) Gamepad::DPAD_UP] = button;
+					done = true;
+					break;
+				}
+				case STATE_DPAD_DOWN: {
+					m_mapping.buttons[(unsigned int) Gamepad::DPAD_DOWN] = button;
+					done = true;
+					break;
+				}
+				case STATE_DPAD_LEFT: {
+					m_mapping.buttons[(unsigned int) Gamepad::DPAD_LEFT] = button;
+					done = true;
+					break;
+				}
+				case STATE_DPAD_RIGHT: {
+					m_mapping.buttons[(unsigned int) Gamepad::DPAD_RIGHT] = button;
+					done = true;
+					break;
+				}
+				case STATE_LBUMPER: {
+					m_mapping.buttons[(unsigned int) Gamepad::BUTTON_LBUMPER] = button;
+					done = true;
+					break;
+				}
+				case STATE_RBUMPER: {
+					m_mapping.buttons[(unsigned int) Gamepad::BUTTON_RBUMPER] = button;
+					done = true;
+					break;
+				}
+				case STATE_L3: {
+					m_mapping.buttons[(unsigned int) Gamepad::BUTTON_L3] = button;
+					done = true;
+					break;
+				}
+				case STATE_R3: {
+					m_mapping.buttons[(unsigned int) Gamepad::BUTTON_R3] = button;
+					done = true;
+					break;
+				}
+				case STATE_BACK: {
+					m_mapping.buttons[(unsigned int) Gamepad::BUTTON_BACK] = button;
+					done = true;
+					break;
+				}
+				case STATE_START: {
+					m_mapping.buttons[(unsigned int) Gamepad::BUTTON_START] = button;
+					done = true;
+					break;
+				}
+
+			}
+
+			if (done) {
+				m_state++;
+				stateChanged();
+			}
+
+		}
+		void GamepadConfigureGameState::axisMoved(Gamepad* gamepad, unsigned int axis, float value) { 
+			if (m_axisChangedCooldown > 0.0) { return; }
+
+			if (gamepad != ARK2D::getInput()->getGamepadByIndex(m_gamepadIndex)) { 
+				ARK2D::getLog()->w("Got input from wrong gamepad.");
+				return; 
+			}
+			if (value > -0.2f && value < 0.2f) { return; }
+
+			bool done = false;
+			switch(m_state) {
+				case STATE_LSTICK_X: { 
+					m_mapping.axes[(unsigned int) Gamepad::ANALOG_STICK_1_X] = axis;
+					done = true;
+					break;
+				}
+				case STATE_LSTICK_Y: { 
+					m_mapping.axes[(unsigned int) Gamepad::ANALOG_STICK_1_Y] = axis;
+					done = true;
+					break;
+				}
+				case STATE_RSTICK_X: { 
+					m_mapping.axes[(unsigned int) Gamepad::ANALOG_STICK_2_X] = axis;
+					done = true;
+					break;
+				}
+				case STATE_RSTICK_Y: { 
+					m_mapping.axes[(unsigned int) Gamepad::ANALOG_STICK_2_Y] = axis;
+					done = true;
+					break;
+				}
+				case STATE_LTRIGGER: { 
+					m_mapping.axes[(unsigned int) Gamepad::TRIGGER_1] = axis;
+					done = true;
+					break;
+				}
+				case STATE_RTRIGGER: { 
+					m_mapping.axes[(unsigned int) Gamepad::TRIGGER_2] = axis;
+					done = true;
+					break;
+				}
+			}
+
+			if (done) {
+				m_axisChangedCooldown = 0.01f;
+				m_state++;
+				stateChanged();
+			}
+		}
+
+		void GamepadConfigureGameState::keyPressed(unsigned int key) { }
+		void GamepadConfigureGameState::keyReleased(unsigned int key) { }
+		void GamepadConfigureGameState::mouseMoved(int x, int y, int oldx, int oldy) { }
+		GamepadConfigureGameState::~GamepadConfigureGameState() {
+
+		}
+
+
+
+
+
+
+
 
 		GamepadsTestGameState::GamepadsTestGameState(): GameState() {
 
 		}
-
 		void GamepadsTestGameState::enter(GameContainer* container, StateBasedGame* game, GameState* from) { }
 		void GamepadsTestGameState::leave(GameContainer* container, StateBasedGame* game, GameState* to) { }
 
@@ -29,6 +366,14 @@ namespace ARK {
 		void alertAxesCheckboxEvent() {
 
 		}
+		void configureButtonEvent() {
+			GamepadsTestGameState* test = dynamic_cast<GamepadsTestGameState*>( gamepadsTest->getState(0) );
+			GamepadConfigureGameState* configure = dynamic_cast<GamepadConfigureGameState*>( gamepadsTest->getState(1) );
+			configure->m_gamepadIndex = test->m_gamepadIndex;
+			configure->m_state = GamepadConfigureGameState::STATE_A;
+			gamepadsTest->enterState(configure);
+		}
+
 
 		void GamepadsTestGameState::init(GameContainer* container, StateBasedGame* game) {
 			m_gamepadIndex = 0;
@@ -45,6 +390,13 @@ namespace ARK {
 
 			m_alertButtons->setLocationByCenter(container->getWidth() - 50, 50);
 			m_alertAxes->setLocationByCenter(container->getWidth() - 50, 100);
+
+            m_autoConfig = new ARK::UI::Button();
+			m_autoConfig->setText("Configure");
+			m_autoConfig->setSize(100, 30);
+			m_autoConfig->setEvent((void*) &configureButtonEvent);
+			m_autoConfig->setMargin(10);
+			m_autoConfig->setLocationByCenter(container->getWidth() - 85, 150);
 		}
 		void GamepadsTestGameState::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {
 
@@ -91,6 +443,7 @@ namespace ARK {
 			}
 			
 		}
+
 		void GamepadsTestGameState::render(GameContainer* container, StateBasedGame* game, Renderer* r) {
 			r->setDrawColor(Color::white);
 			r->setFont(r->getDefaultFont());
@@ -101,24 +454,24 @@ namespace ARK {
 
 				r->setDrawColor(Color::white);  
 				r->setFont(r->getDefaultFont());
-				r->drawString(StringUtil::append("gamepads connected: ", i->getGamepads()->size()), 50, 20);
-				r->drawString(StringUtil::append("gamepad: ", m_gamepadIndex), 50, 40);
+				r->drawString(StringUtil::append("gamepads connected: ", i->getGamepads()->size()), 30, 20);
+				r->drawString(StringUtil::append("gamepad: ", m_gamepadIndex), 30, 40);
 				
-				r->drawString(StringUtil::append("name: ", p1->getName()), 50, 70);
-				r->drawString(StringUtil::append("vendor id: ", p1->vendorId), 50, 90);
-				r->drawString(StringUtil::append("product id: ", p1->productId), 50, 110);
+				r->drawString(StringUtil::append("name: ", p1->getName()), 30, 70);
+				r->drawString(StringUtil::append("vendor id: ", p1->vendorId), 30, 90);
+				r->drawString(StringUtil::append("product id: ", p1->productId), 30, 110);
 
-				r->drawString(StringUtil::append("num buttons: ", p1->numButtons), 50, 140);
-				r->drawString(StringUtil::append("num axes: ", p1->numAxes), 50, 160);
-				r->drawString(StringUtil::append("num axes 2: ", p1->axes.size()), 50, 180);
+				r->drawString(StringUtil::append("num buttons: ", p1->numButtons), 30, 140);
+				r->drawString(StringUtil::append("num axes: ", p1->numAxes), 30, 160);
+				r->drawString(StringUtil::append("num axes 2: ", p1->axes.size()), 30, 180);
 				//r->drawString(StringUtil::append("axis 1: ", p1->axes.at(0)->value), 30, 180);
 				//r->drawString(StringUtil::append("axis 2: ", p1->axes.at(1)->value), 30, 210);
-				
+				float rootX = -20.0f;
 		 		float rootY = 250.0f;
 				// left stick
 				float x = p1->getAxisValue(Gamepad::ANALOG_STICK_1_X);
 				float y = p1->getAxisValue(Gamepad::ANALOG_STICK_1_Y);// axes.at(1)->value;
-				float cx = 200.0f;
+				float cx = rootX + 300.0f;
 				float cy = rootY + 150; 
 				float rd = 60.0f;
 				r->setDrawColor(Color::white);
@@ -129,7 +482,7 @@ namespace ARK {
 				// right stick
 				x = p1->getAxisValue(Gamepad::ANALOG_STICK_2_X); //p1->axes.at(2)->value;
 				y = p1->getAxisValue(Gamepad::ANALOG_STICK_2_Y); //p1->axes.at(3)->value;
-				cx = 400.0f;
+				cx = rootX + 500.0f;
 				cy = rootY + 150; 
 				r->setDrawColor(Color::white);
 				r->drawCircle(cx, cy, (int) rd, (int)rd);
@@ -141,24 +494,24 @@ namespace ARK {
 		 
 				// left trigger  
 				float trigger1 = p1->getAxisValue(Gamepad::TRIGGER_1); //(p1->axes.at(4)->value + 1.0f)/2.0f;
-				r->drawRect(100, rootY, 100, 20); 
-				r->fillRect(100, rootY, int(100 * trigger1), 20);  
+				r->drawRect(rootX + 200, rootY, 100, 20); 
+				r->fillRect(rootX + 200, rootY, int(100 * trigger1), 20);  
 
 				// right trigger 
 				float trigger2 = p1->getAxisValue(Gamepad::TRIGGER_2);//(p1->axes.at(5)->value + 1.0f)/2.0f;
-				r->drawRect(400, rootY, 100, 20);
-				r->fillRect(400, rootY, int(100 * trigger2), 20);
+				r->drawRect(rootX + 500, rootY, 100, 20);
+				r->fillRect(rootX + 500, rootY, int(100 * trigger2), 20);
 
 
 				// left bumper
 				r->setDrawColor(Color::white);
 				if (p1->isButtonDown(Gamepad::BUTTON_LBUMPER)) { r->setDrawColor(Color::red); }
-				r->fillRect(100, rootY+30, 50, 20);
+				r->fillRect(rootX + 200, rootY+30, 50, 20);
 
 				// right bumper
 				r->setDrawColor(Color::white);
 				if (p1->isButtonDown(Gamepad::BUTTON_RBUMPER)) { r->setDrawColor(Color::red); }
-				r->fillRect(450, rootY+30, 50, 20); 
+				r->fillRect(rootX + 550, rootY+30, 50, 20); 
 
 
 				//r->drawString(StringUtil::append("logical min: ", p1->axes.at(0)->logicalMin), 30, 390);
@@ -176,60 +529,61 @@ namespace ARK {
 				// dpad
 				r->setDrawColor(Color::white);
 				if (p1->isButtonDown(Gamepad::DPAD_UP)) { r->setDrawColor(Color::red); }
-				r->fillRect(100 - 10, rootY+200, 20, 20); // up
+				r->fillRect(rootX + 200 - 10, rootY+200, 20, 20); // up
 
 				r->setDrawColor(Color::white);
 				if (p1->isButtonDown(Gamepad::DPAD_LEFT)) { r->setDrawColor(Color::red); }
-				r->fillRect(75 - 10, rootY+225, 20, 20); // left
+				r->fillRect(rootX + 175 - 10, rootY+225, 20, 20); // left
 
 			 	r->setDrawColor(Color::white);
 				if (p1->isButtonDown(Gamepad::DPAD_RIGHT)) { r->setDrawColor(Color::red); }
-				r->fillRect(125 - 10, rootY+225, 20, 20); // right
+				r->fillRect(rootX + 225 - 10, rootY+225, 20, 20); // right
 			
 				r->setDrawColor(Color::white);
 				if (p1->isButtonDown(Gamepad::DPAD_DOWN)) { r->setDrawColor(Color::red); }
-				r->fillRect(100 - 10, rootY+250, 20, 20); // down
+				r->fillRect(rootX + 200 - 10, rootY+250, 20, 20); // down
 
 				// middle buttons
 				r->setDrawColor(Color::white);
 				if (p1->isButtonDown(Gamepad::BUTTON_BACK)) { r->setDrawColor(Color::red); }
-				r->fillRect(250 - 10, rootY+70, 20, 20);
+				r->fillRect(rootX + 350 - 10, rootY+70, 20, 20);
 
 				r->setDrawColor(Color::white);
 				if (p1->isButtonDown(Gamepad::BUTTON_ACTIVATE)) { r->setDrawColor(Color::green); }
-				r->fillRect(300 - 10, rootY+70, 20, 20);
+				r->fillRect(rootX + 400 - 10, rootY+70, 20, 20);
 
 				r->setDrawColor(Color::white);
 				if (p1->isButtonDown(Gamepad::BUTTON_START)) { r->setDrawColor(Color::red); }
-				r->fillRect(350 - 10, rootY+70, 20, 20);
+				r->fillRect(rootX + 450 - 10, rootY+70, 20, 20);
 
 
 				// A button
 				r->setDrawColor(Color::white);
-				r->drawCircle(500.0f, rootY+250.0f, 20, 20); 
+				r->drawCircle(rootX + 600.0f, rootY+250.0f, 20, 20); 
 				if (p1->isButtonDown(Gamepad::BUTTON_A)) { r->setDrawColor(Color::green); }
-				r->drawCircle(500.0f, rootY+250.0f, 20, 20); 
+				r->drawCircle(rootX + 600.0f, rootY+250.0f, 20, 20); 
 				
 				// B button
 				r->setDrawColor(Color::white);
-				r->drawCircle(525.0f, rootY+225.0f, 20, 20); 
+				r->drawCircle(rootX + 625.0f, rootY+225.0f, 20, 20); 
 				if (p1->isButtonDown(Gamepad::BUTTON_B)) { r->setDrawColor(Color::red); }
-				r->drawCircle(525.0f, rootY+225.0f, 20, 20); 
+				r->drawCircle(rootX + 625.0f, rootY+225.0f, 20, 20); 
 
 				// X button
 				r->setDrawColor(Color::white);
-				r->drawCircle(475.0f, rootY+225.0f, 20, 20); 
+				r->drawCircle(rootX + 575.0f, rootY+225.0f, 20, 20); 
 				if (p1->isButtonDown(Gamepad::BUTTON_X)) { r->setDrawColor(Color::blue); }
-				r->drawCircle(475.0f, rootY+225.0f, 20, 20); 
+				r->drawCircle(rootX + 575.0f, rootY+225.0f, 20, 20); 
 
 				// Y button
 				r->setDrawColor(Color::white);
-				r->drawCircle(500.0f, rootY+200.0f, 20, 20); 
+				r->drawCircle(rootX + 600.0f, rootY+200.0f, 20, 20); 
 				if (p1->isButtonDown(Gamepad::BUTTON_Y)) { r->setDrawColor(Color::yellow); }
-				r->drawCircle(500.0f, rootY+200.0f, 20, 20); 
+				r->drawCircle(rootX + 600.0f, rootY+200.0f, 20, 20); 
 
 				m_alertButtons->render();
 				m_alertAxes->render();
+				m_autoConfig->render();
 
 				r->drawString("Alert Buttons: ", container->getWidth() - 80, 50,  Renderer::ALIGN_RIGHT, Renderer::ALIGN_CENTER);	
 				r->drawString("Alert Axes: ",    container->getWidth() - 80, 100, Renderer::ALIGN_RIGHT, Renderer::ALIGN_CENTER);	
@@ -245,14 +599,33 @@ namespace ARK {
 		void GamepadsTestGameState::keyPressed(unsigned int key) {
 			m_alertButtons->keyPressed(key);
 			m_alertAxes->keyPressed(key);
+			m_autoConfig->keyPressed(key);
 		}
 		void GamepadsTestGameState::keyReleased(unsigned int key) {
 			m_alertButtons->keyReleased(key);
 			m_alertAxes->keyReleased(key);
+			m_autoConfig->keyReleased(key);
 		}
 		void GamepadsTestGameState::mouseMoved(int x, int y, int oldx, int oldy) {
 			m_alertButtons->mouseMoved(x, y, oldx, oldy);
 			m_alertAxes->mouseMoved(x, y, oldx, oldy);
+			m_autoConfig->mouseMoved(x, y, oldx, oldy);
+		}
+
+		void GamepadsTestGameState::buttonPressed(Gamepad* gamepad, unsigned int button) {
+			if (m_alertButtons->isChecked()) {
+				ErrorDialog::createAndShow(StringUtil::append("button pressed: ", button));
+			}
+		}
+		void GamepadsTestGameState::buttonReleased(Gamepad* gamepad, unsigned int button) { 
+
+		}
+		void GamepadsTestGameState::axisMoved(Gamepad* gamepad, unsigned int axis, float value) { 
+			if (m_alertAxes->isChecked()) { 
+				if (value > 0.75f || value < -0.75f) {
+					ErrorDialog::createAndShow(StringUtil::append("axis moved: ", axis));
+				}
+			}
 		}
 
 		GamepadsTestGameState::~GamepadsTestGameState() {
@@ -275,6 +648,7 @@ namespace ARK {
 		void GamepadsTest::initStates(GameContainer* container) {
 			ARK2D::getLog()->setFilter(Log::TYPE_INFORMATION);
 			addState(new GamepadsTestGameState());
+			addState(new GamepadConfigureGameState());
 			enterState((unsigned int) 0);
 		} 
 		void GamepadsTest::update(GameContainer* container, GameTimer* timer) {
@@ -300,27 +674,29 @@ namespace ARK {
 
 		}
 
-		void GamepadsTest::buttonPressed(unsigned int button) {
-			GamepadsTestGameState* state = dynamic_cast<GamepadsTestGameState*>(getState(0));
-			if (state->m_alertButtons->isChecked()) {
-				ErrorDialog::createAndShow(StringUtil::append("button pressed: ", button));
+		void GamepadsTest::buttonPressed(Gamepad* gamepad, unsigned int button) {
+			GamepadListener* stateListener = dynamic_cast<GamepadListener*>( getCurrentState() );
+			if (stateListener != NULL) { 
+				stateListener->buttonPressed(gamepad, button);
 			}
 		}
-		void GamepadsTest::buttonReleased(unsigned int button) { 
-
+		void GamepadsTest::buttonReleased(Gamepad* gamepad, unsigned int button) { 
+			GamepadListener* stateListener = dynamic_cast<GamepadListener*>( getCurrentState() );
+			if (stateListener != NULL) { 
+				stateListener->buttonReleased(gamepad, button);
+			}
 		}
-		void GamepadsTest::axisMoved(unsigned int axis, float value) { 
-			GamepadsTestGameState* state = dynamic_cast<GamepadsTestGameState*>(getState(0));
-			if (state->m_alertAxes->isChecked()) { 
-				if (value > 0.75f || value < -0.75f) {
-					ErrorDialog::createAndShow(StringUtil::append("axis moved: ", axis));
-				}
+		void GamepadsTest::axisMoved(Gamepad* gamepad, unsigned int axis, float value) { 
+			GamepadListener* stateListener = dynamic_cast<GamepadListener*>( getCurrentState() );
+			if (stateListener != NULL) { 
+				stateListener->axisMoved(gamepad, axis, value);
 			}
 		}
 
 		int GamepadsTest::start() {
-			ARK::Tests::GamepadsTest* test = new ARK::Tests::GamepadsTest();
-			GameContainer* container = new GameContainer(*test, 800, 600, 32, false);
+			gamepadsTest = new ARK::Tests::GamepadsTest();
+			GameContainer* container = new GameContainer(*gamepadsTest, 800, 600, 32, false);
+			container->setClearColor(Color::black);
 			container->start();
 			return 0;
 		}

@@ -111,12 +111,12 @@ namespace ARK {
 		void AbstractUIComponent::setParent(AbstractUIComponent* p) { m_parent = p; }
 		bool AbstractUIComponent::hasParent() { return (m_parent!=NULL); }
 		int AbstractUIComponent::getOnScreenX() {
-			if (!hasParent()) { return getX(); }
+			if (!hasParent()) { return getMinX(); }
 
 			int thisx = m_x;
 			AbstractUIComponent* thisParent = m_parent;
 			while(thisParent != NULL) {
-				thisx += thisParent->getX();
+				thisx += thisParent->getMinX();
 				thisParent = thisParent->getParent();
 			}
 			return thisx;
