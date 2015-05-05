@@ -239,10 +239,9 @@ namespace ARK {
 				#ifdef NO_FIXED_FUNCTION_PIPELINE
 					RendererStats::s_shaderSwaps++;
 
-					unsigned int shaderId = Renderer::s_shaderBasicGeometry->getId();
-					glUseProgram(shaderId);
-					s_shaderId = shaderId;
+					Renderer::s_shaderBasicGeometry->bind(); 
 					RendererStats::s_glCalls++;
+					s_shaderId = Renderer::s_shaderBasicGeometry->getId();
 
 					#if defined(ARK2D_OPENGL_ES_2_0)
 						glEnableVertexAttribArray(Renderer::s_shaderBasicGeometry_VertexPosition);
@@ -277,10 +276,9 @@ namespace ARK {
 				#ifdef NO_FIXED_FUNCTION_PIPELINE
 					RendererStats::s_shaderSwaps++;
 
-					unsigned int shaderId = Renderer::s_shaderBasicTexture->getId();
-					glUseProgram(shaderId);
-					s_shaderId = shaderId;
+					Renderer::s_shaderBasicTexture->bind();
 					RendererStats::s_glCalls++;
+					s_shaderId = Renderer::s_shaderBasicTexture->getId();
 
 					#if defined(ARK2D_OPENGL_ES_2_0)
 						glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexPosition);
@@ -5556,6 +5554,8 @@ namespace ARK {
 					s_vboQuadColors->bind();
 					s_vboQuadColors->setData(&rawColors[0]);
 					glVertexAttribPointer(Renderer::s_shaderBasicGeometry_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, 0); //&rawColors); 
+
+ 					//s_shaderCurrent->predraw();
 					
 					glUniformMatrix4fv(Renderer::s_shaderBasicGeometry_ModelViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODELVIEW)->pointer());
 					glUniformMatrix4fv(Renderer::s_shaderBasicGeometry_ProjectionMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_PROJECTION)->pointer());

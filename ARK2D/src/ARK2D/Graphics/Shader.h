@@ -89,6 +89,7 @@ namespace ARK {
 				int getInittedVariable(string s);
 
 				virtual void bind();
+				virtual void predraw(); // set any extra vbos/data prior to drawing.
 				virtual void unbind();
 				
 				virtual ~Shader();

@@ -614,7 +614,7 @@ namespace ARK {
 		
 
 		
-
+ 
 		void Shader::bind() {
 			#ifdef SHADER_SUPPORT
 				#if defined(ARK2D_RENDERER_OPENGL)
@@ -627,6 +627,10 @@ namespace ARK {
 				#endif
 				RendererStats::s_glCalls++;
 			#endif
+		}
+		
+		void Shader::predraw() {
+
 		}
 
 		void Shader::unbind() {

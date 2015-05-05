@@ -1,0 +1,15 @@
+#version 130
+precision highp float;
+
+uniform sampler2D ark_TextureId;
+
+in vec2 ark_VertexTexCoordOut;
+in vec4 ark_VertexColorOut;
+
+out vec4 ark_FragColor;
+
+void main(void)
+{
+	vec4 col = vec4(ark_VertexColorOut.r, ark_VertexColorOut.g, ark_VertexColorOut.b, texture(ark_TextureId, ark_VertexTexCoordOut).a * ark_VertexColorOut.a);
+	ark_FragColor = col;
+}

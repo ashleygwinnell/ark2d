@@ -1,0 +1,14 @@
+#version 100
+precision highp float;
+
+uniform sampler2D ark_TextureId;
+
+varying highp vec2 ark_VertexTexCoordOut;
+varying lowp vec4 ark_VertexColorOut;
+varying lowp vec4 ark_FragColor;
+
+void main(void)
+{
+	vec4 col = vec4(ark_VertexColorOut.r, ark_VertexColorOut.g, ark_VertexColorOut.b, texture2D(ark_TextureId, ark_VertexTexCoordOut).a * ark_VertexColorOut.a);
+	gl_FragColor = col;
+}
