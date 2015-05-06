@@ -61,6 +61,9 @@
 				static pSDARP3 MyGetAutoRotationState = NULL;
 				//#endif // #if (WINVER <= 0x0601)
 
+				typedef BOOL(WINAPI *pSDARP4)(HWND window, ULONG flags);
+				static pSDARP4 MyRegisterTouchWindow = NULL;
+
 
 			using namespace std;
 
@@ -214,6 +217,7 @@
 						bool mySetDisplayAutoRotationPreferences(MY_ORIENTATION_PREFERENCE pref);
 						bool myGetDisplayAutoRotationPreferences(MY_ORIENTATION_PREFERENCE* pref);
 						bool myGetAutoRotationState(AR_STATE* state);
+						bool myRegisterTouchWindow(HWND wnd, ULONG flags);
 
 						static void* getARK2DResource(int resourceId, int resourceType);
 						static GameContainerARK2DResource getARK2DResourceWithLength(int resourceId, int resourceType);

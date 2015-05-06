@@ -84,6 +84,13 @@
 				return false;
 				//MyGetDisplayAutoRotationPreferences
 			}
+			bool GameContainerPlatform::myRegisterTouchWindow(HWND wnd, ULONG flags) {
+				MyRegisterTouchWindow = (pSDARP4)GetProcAddress(GetModuleHandle(TEXT("user32.dll")), "RegisterTouchWindow");
+				if (MyRegisterTouchWindow) {
+					return MyRegisterTouchWindow(wnd, flags);
+				}
+				return false;
+			}
 
 
 			LRESULT CALLBACK GameContainerPlatform::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -304,49 +311,72 @@
 									    thisx /= m_container->getScale();
 									    thisy /= m_container->getScale();
 
-										Input* i = ARK2D::getInput(); 
-
-										i->mouse_x = (int) thisx;
-										i->mouse_y = (int) thisy;
-
+										Input* in = ARK2D::getInput(); 
+										//ARK2D::getLog()->e(StringUtil::append("index: ", index));
+										//ARK2D::getLog()->e(StringUtil::append("ti.dwID: ", ti.dwID));
 										
-										if (ti.dwFlags & TOUCHEVENTF_DOWN) {    
-					          				ARK2D::getLog()->e("touch down");
-											m_container->m_input.pressKey(Input::MOUSE_BUTTON_LEFT);
-					          			}
-					          			else if (ti.dwFlags & TOUCHEVENTF_UP) {
-							            	//points[index][0] = -1;
-							            	//points[index][1] = -1;   
-							            	ARK2D::getLog()->e("touch up");
-							            	m_container->m_input.releaseKey(Input::MOUSE_BUTTON_LEFT);
+					          			if (ti.dwFlags & TOUCHEVENTF_DOWN) {
+											int fingerID = in->getTouchByInternalData(ti.dwID);
+											if (fingerID == -1) {
+								          		ARK::Controls::Pointer p;
+												p.x = thisx;
+												p.y = thisy;
+												p.data = ti.dwID;
+												fingerID = in->addTouch(p);
+												//ARK2D::getLog()->v("add touch point");
 
+												if (in->countTouches() == 1) {
+													in->mouse_x = (int) thisx;
+													in->mouse_y = (int) thisy;
+													m_container->m_input.pressKey(Input::MOUSE_BUTTON_LEFT);
+												}
+											}
+										} 
+										if (ti.dwFlags & TOUCHEVENTF_UP) {
 							            	// 2-in-one handling: if in desktop mode, switch to touch mode. 
 							            	// Your game must handle the case where player taps to confirm state change 
 							            	// but actually wants desktop mode.
 							            	//switchToTabletMode(true);
 							            	m_container->setTouchMode(true);
 
+
+							            	int fingerID = in->getTouchByInternalData(ti.dwID);
+											if (fingerID != -1) {
+												// mimic mouse
+												if (fingerID == 0) {
+													in->mouse_x = (int) thisx;
+													in->mouse_y = (int) thisy;
+													m_container->m_input.releaseKey(Input::MOUSE_BUTTON_LEFT);
+												}
+												in->removeTouch(fingerID);
+								               // ARK2D::getLog()->v("remove touch point");
+											} 
 										}
-
 										if (ti.dwFlags & TOUCHEVENTF_MOVE) {
+											// found a touch. Is it already on our list?
+											int fingerID = in->getTouchByInternalData(ti.dwID);
+											if (fingerID != -1) {
 
-											
-							            	//points[index][0] = ptInput.x;
-							            	//points[index][1] = ptInput.y;                
-							            	
-											//POINTS mouseXY = MAKEPOINTS(lParam);
+												//ARK2D::getLog()->v("touch moved");
+												// mimic mouse
+												if (fingerID == 0) {
+													in->mouse_x = (int) thisx;
+													in->mouse_y = (int) thisy;
+													//ARK2D::getLog()->e(StringUtil::append("touch moved thisx: ", thisx));
+													//ARK2D::getLog()->e(StringUtil::append("touch moved thisy: ", thisy));
 
-											//float thisx = mouseXY.x;
-										    //float thisy = mouseXY.y;
-											ARK2D::getLog()->e(StringUtil::append("touch moved thisx: ", thisx));
-											ARK2D::getLog()->e(StringUtil::append("touch moved thisy: ", thisy));
-											
-											ARK2D::getLog()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
-											ARK2D::getGame()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
+													ARK2D::getLog()->mouseMoved((int)thisx, (int)thisy, in->mouse_x, in->mouse_y);
+													ARK2D::getGame()->mouseMoved((int)thisx, (int)thisy, in->mouse_x, in->mouse_y);
+												}
+												in->m_touchPointers[fingerID].x = thisx;
+												in->m_touchPointers[fingerID].y = thisy;
+												in->m_touchPointers[fingerID].data = ti.dwID;
+											}
+								            
+								            
+										}
+										
 
-											
-
-							          	}
 
 										
 					        		}
@@ -2856,6 +2886,7 @@
 				ARK2D::getLog()->i("done.");
 
 
+				
 
 				ARK2D::getLog()->i("Initialising Window... ");
 				ARK2D::getLog()->i("Show..."); 
@@ -2867,7 +2898,7 @@
 					SetForegroundWindow(m_platformSpecific.m_hWindow);
 					SetFocus(m_platformSpecific.m_hWindow);
 				#endif
-				
+					m_platformSpecific.myRegisterTouchWindow(m_platformSpecific.m_hWindow, 0);
 
 				ARK2D::getLog()->i("Update...");
 				UpdateWindow(m_platformSpecific.m_hWindow);
@@ -2877,6 +2908,8 @@
 
 
 				m_bRunning = true;
+
+				
 
 				ARK2D::getLog()->i("Initialising ");
 				ARK2D::getLog()->i(m_game.getTitle());

@@ -99,8 +99,10 @@ namespace ARK {
 			public:
 				float x;
 				float y;
-				#ifdef ARK2D_IPHONE
+				#if defined(ARK2D_IPHONE)
 					void* data;
+				#elif defined(ARK2D_WINDOWS)
+					DWORD data;
 				#endif
 			public:
 				Pointer();
@@ -451,8 +453,10 @@ namespace ARK {
 				void removeTouch(int index);
 				signed int countTouches();
 				Pointer* getTouch(signed int index);
-				#ifdef ARK2D_IPHONE
+				#if defined(ARK2D_IPHONE)
 					signed int getTouchByInternalData(void* d);
+				#elif defined(ARK2D_WINDOWS)
+					signed int getTouchByInternalData(unsigned int d);
 				#endif 
 
 

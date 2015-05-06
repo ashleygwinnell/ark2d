@@ -58,6 +58,7 @@ namespace ARK {
 				static void openBrowserToURL(string url);
 				static void openGalleryToImageUrl(string url);
 				static void openGooglePlayStore(string packageName);
+				static bool openSoftwareKeyboard();
 
 				static string getOSUsername(); // TODO: not sure where to put this. would seem odd in a class by itself, no?
 

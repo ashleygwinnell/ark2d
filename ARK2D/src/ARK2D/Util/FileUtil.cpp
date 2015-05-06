@@ -25,6 +25,7 @@
 #elif defined(ARK2D_WINDOWS) && defined(ARK2D_WINDOWS_VS)
 	#include <direct.h>  
 	#include <windows.h>
+	#include <Shlobj.h>
 	#define GetCurrentDirectoryMacro _getcwd
 	#define DIRECTORY_SEPARATOR "\\"
 #else
@@ -391,6 +392,45 @@ namespace ARK {
 
 				ARK2D::getLog()->v("Done!");
 			#endif
+		}
+		bool FileUtil::openSoftwareKeyboard() {
+			#if defined(ARK2D_WINDOWS)
+
+				// https://software.intel.com/en-us/blogs/2013/06/11/touch-keyboard-access-for-windows-8-desktop-apps
+				// From Intel example.
+				// The recommended way to invoke the Win8 touch keyboard is to derive an editable control from 
+				// the TextAutomationPeer class in .NET and allow the OSK to automatically show/hide the keyboard
+				// as focus goes in/out of the control.  
+				//
+				// Assuming the above recommendation isn't feasible, it is possible to force show the
+				// touch keyboard by launching the executable via ShellExecute().  
+
+				// https://msdn.microsoft.com/en-us/library/bb762204(VS.85).aspx
+				// TODO: don't hardcore C:/
+				TCHAR pf[MAX_PATH];
+				SHGetSpecialFolderPath(0, pf, CSIDL_PROGRAM_FILES, FALSE ); 
+				string programFilesPath(pf);
+				ARK2D::getLog()->e(programFilesPath);
+
+				// This is (the default) full path to the touch keyboard for Win7 / Win8
+				string cmdLine("C:\\Program Files\\Common Files\\Microsoft Shared\\ink\\tabtip.exe");
+				HINSTANCE result = ShellExecute( NULL,
+				                                 NULL,
+				                                 cmdLine.c_str(),
+				                                 NULL,
+				                                 NULL,
+				                                 SW_SHOW );
+				// result is not a true HINSTANCE, just an error code.  result > 32 is success.
+				return ((int) result > 32);
+
+
+			#elif defined(ARK2D_ANDROID)
+				GameContainer* container = ARK2D::getContainer();
+				container->getPlatformSpecific()->openSoftwareKeyboard();
+				return true;
+			#endif
+			ARK2D::getLog()->e("openSoftwareKeyboard not implemented on this platform.");
+			return false;
 		}
  
 

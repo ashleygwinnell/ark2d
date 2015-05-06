@@ -164,7 +164,7 @@ namespace ARK {
 		Pointer* Input::getTouch(signed int index) {
 			return &m_touchPointers.at(index);
 		}
-		#ifdef ARK2D_IPHONE
+		#if defined(ARK2D_IPHONE)
 			signed int Input::getTouchByInternalData(void* d) {
 				for(signed int i = 0; i < m_touchPointers.size(); ++i) {
 					if (d == m_touchPointers[i].data) {
@@ -172,6 +172,15 @@ namespace ARK {
 					}
 				}
 				//ARK2D::getLog()->w("could not get touch by internal data.");
+				return -1;
+			}
+		#elif defined(ARK2D_WINDOWS)
+			signed int Input::getTouchByInternalData(unsigned int d) {
+				for(signed int i = 0; i < m_touchPointers.size(); ++i) {
+					if (d == m_touchPointers[i].data) {
+						return i;
+					}
+				}
 				return -1;
 			}
 		#endif
