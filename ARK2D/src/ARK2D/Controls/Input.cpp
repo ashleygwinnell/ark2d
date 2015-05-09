@@ -191,6 +191,9 @@ namespace ARK {
 		vector<Gamepad*>* Input::getGamepads() {
 			return m_container->getGamepads();
 		}
+		signed int Input::countGamepads() {
+			return m_container->getGamepads()->size();
+		}
 		Gamepad* Input::getGamepad(unsigned int id) {
 			vector<Gamepad*>* gamepads = m_container->getGamepads();
 			for(unsigned int i = 0; i < gamepads->size(); ++i) {

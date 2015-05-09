@@ -435,6 +435,7 @@ namespace ARK {
 				int getMouseY() const;
 
 				vector<Gamepad*>* getGamepads();
+				signed int countGamepads();
 				Gamepad* getGamepad(unsigned int id);
 				Gamepad* getGamepadByIndex(unsigned int index);
 

@@ -258,7 +258,11 @@ namespace ARK {
 			m_willLoadDefaultFont = b;
 		}
 
-		void ARK::Core::GameContainer::resizeBehaviour(int width, int height) {
+		void ARK::Core::GameContainer::resizeBehaviourNoCallback(int width, int height) {
+			resizeBehaviour(width, height, true);
+		}
+		void ARK::Core::GameContainer::resizeBehaviour(int width, int height, bool docallback) {
+
 			if (m_resizeBehaviour == RESIZE_BEHAVIOUR_SCALE) 
 		    {
 		    	if (m_orientationInverted) {
@@ -323,7 +327,9 @@ namespace ARK {
 		    	//ARK2D::getRenderer()->setScissorTestEnabled(false);
 		    	//ARK2D::getRenderer()->scissor(0,0,width,height);
 		    }
-		    ARK2D::s_game->resize(this, width, height);
+		    if (docallback) { 
+		    	ARK2D::s_game->resize(this, width, height);
+		    }
 		}
 
 

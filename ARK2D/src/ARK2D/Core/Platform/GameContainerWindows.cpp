@@ -414,6 +414,7 @@
 						} else if (wParam == VK_SHIFT) {
 							m_container->m_input.pressKey(Input::KEY_LSHIFT);
 						} else {
+							//ARK2D::getLog()->w(StringUtil::append("pressed key: ", wParam));
 							m_container->m_input.pressKey(wParam);
 						} 
 						break;
@@ -662,11 +663,11 @@
 				return NULL;
 			}
 
-			void GameContainer::setSize(int width, int height) {
+			void GameContainer::setSize(int width, int height, bool docallback) {
 				
 				if (width == (signed int) m_width && height == (signed int) m_height) { return; }
 
-				resizeBehaviour(width, height);
+				resizeBehaviour(width, height, docallback);
 
 				resizeWindowToFitViewport();
 			}
@@ -2953,6 +2954,7 @@
 					}
 
 					//ARK2D::getLog()->v("Gamepads");
+					initGamepads(); // enabled hotplugging!
 					processGamepadInput();
 
 					// read appropriate counter

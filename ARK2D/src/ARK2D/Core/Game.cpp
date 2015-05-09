@@ -266,6 +266,9 @@ namespace ARK {
                 	float ty = float(container->getDynamicHeight() - (float(container->getHeight())*container->getScale()))/2;
                 	container->m_translateX = (int) tx;
                 	container->m_translateY = (int) ty;
+
+                	ARK2D::getLog()->i(StringUtil::append("translate x: ", tx));
+                	ARK2D::getLog()->i(StringUtil::append("translate y: ", ty));
                 }
 
                 Renderer* r = ARK2D::getRenderer();

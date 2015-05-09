@@ -33,7 +33,7 @@ namespace ARK {
 			
 			float screenRatio = localWidth / localHeight;
 			//ARK2D::getLog()->e(StringUtil::appendf("screenratio: ", screenRatio));
-			if (screenRatio == 1.8f) { 
+			if (screenRatio == 1.8f) {  
 				s_fullscreen320x480 = true; 
 				s_fullscreen320x480_translateX = (864-320)/2;
 

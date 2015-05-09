@@ -95,8 +95,8 @@ namespace ARK {
 				bool isTouchMode();
 				void setTouchMode(bool tm);
 
-				void setSize(int width, int height);
-				#if defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE)
+				void setSize(int width, int height, bool docallback = true);
+				#if defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE) || defined(ARK2D_DESKTOP)
 					// does the setSize without calling game::resize. 
 					// so the game can adjust without infinitely recursively looping.
 					void setSizeNoCallback(int width, int height);
@@ -172,7 +172,8 @@ namespace ARK {
 		#endif
 
 	//	#if (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS) || defined(ARK2D_FLASCC) || defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
-				void resizeBehaviour(int width, int height);
+				void resizeBehaviourNoCallback(int width, int height);
+				void resizeBehaviour(int width, int height, bool docallback=true);
 	//	#endif
 
 				void close() const;

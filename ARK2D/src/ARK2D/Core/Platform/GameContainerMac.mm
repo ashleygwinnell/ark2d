@@ -187,8 +187,10 @@
 		
 			} 
 			
-			
-			void ARK::Core::GameContainer::setSize(int width, int height) {
+			void ARK::Core::GameContainer::setSizeNoCallback(int width, int height) {
+				setSize(width, height, false);
+			}
+			void ARK::Core::GameContainer::setSize(int width, int height, bool docallback) {
 
 				if (width == (signed int) m_width && height == (signed int) m_height) { return; }
 
@@ -215,7 +217,7 @@
 				
 
 			
-			    resizeBehaviour(width, height);
+			    resizeBehaviour(width, height, docallback);
 
 			    [[window contentView] setFrame: windowViewRect ];
 				//[[window contentView] setFrame: NSRectToCGRect(windowViewRect) ];
