@@ -86,6 +86,11 @@
         [self dismissViewControllerAnimated:YES completion:nil];
     }
 
+    - (void)didReceiveMemoryWarning 
+    {
+        ErrorDialog::createAndShow("Low memory!");
+    }
+
 @end 
 
 // ----------------------------

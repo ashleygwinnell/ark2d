@@ -1272,10 +1272,10 @@
 				return true;
 			}
  
-			void GameContainer::setSize(int width, int height) {
+			void GameContainer::setSize(int width, int height, bool docallback) {
 				if (width == (signed int) m_width && height == (signed int) m_height) { return; }
 
-				resizeBehaviour(width, height); 
+				resizeBehaviour(width, height, docallback); 
 				resizeWindowToFitViewport();
 
 				//ARK2D::getLog()->w(StringUtil::appendf("tx: ", getTranslateX()));

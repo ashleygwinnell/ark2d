@@ -64,6 +64,12 @@
 				typedef BOOL(WINAPI *pSDARP4)(HWND window, ULONG flags);
 				static pSDARP4 MyRegisterTouchWindow = NULL;
 
+				typedef BOOL (WINAPI* pGetTouchInputInfo)(HTOUCHINPUT, UINT, PTOUCHINPUT, int);
+				static pGetTouchInputInfo MyGetTouchInputInfo = NULL;
+
+				typedef bool (WINAPI pCloseTouchInputHandle)(HTOUCHINPUT hTouchInput);
+				static pCloseTouchInputHandle MyCloseTouchInputHandle = NULL;
+
 
 			using namespace std;
 
@@ -218,6 +224,8 @@
 						bool myGetDisplayAutoRotationPreferences(MY_ORIENTATION_PREFERENCE* pref);
 						bool myGetAutoRotationState(AR_STATE* state);
 						bool myRegisterTouchWindow(HWND wnd, ULONG flags);
+						bool myGetTouchInputInfo(HTOUCHINPUT hTouchInput, UINT cInputs, PTOUCHINPUT pInputs, int cbSize);
+						bool myCloseTouchInputHandle(HTOUCHINPUT hTouchInput);
 
 						static void* getARK2DResource(int resourceId, int resourceType);
 						static GameContainerARK2DResource getARK2DResourceWithLength(int resourceId, int resourceType);

@@ -456,7 +456,16 @@ namespace ARK {
 				return "Unknown";
 			#elif defined(ARK2D_UBUNTU_LINUX)
 				// TODO: linux support for this function.
-				return "Linux User";
+				char u[256];
+				int v = getlogin_r(u, 255);
+				if (v != 0) {
+		            return "Linux User";
+		        }
+		        return string((const char*) u);
+		    #elif defined(ARK2D_IPHONE)
+		        NSString* name = [[UIDevice currentDevice] name];
+                string c_username = string([name UTF8String]);
+                return c_username;
 			#endif
 			return "Unknown";
 		}

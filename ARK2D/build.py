@@ -412,12 +412,12 @@ class ARK2DBuildSystem:
 
 		arkh  = ""; 
 		arkh += "#if defined(ARK2D_WINDOWS) || defined(ARK2D_ANDROID_ON_WINDOWS) || defined(ARK2D_WINDOWS_PHONE_8) " + nl;
-		arkh += "	#include \"" + self.str_replace(a.ark2d_dir, [("\\", "\\\\")]) + "\\\\src\\\\ARK.h\"" + nl;
+		arkh += "	#include \"" + self.str_replace(self.ark_config['windows']['ark2d_dir'], [("\\", "\\\\")]) + "\\\\src\\\\ARK.h\"" + nl;
 		arkh += "#elif defined(ARK2D_MACINTOSH) || defined(ARK2D_ANDROID_ON_MACINTOSH) || defined(ARK2D_EMSCRIPTEN_JS_ON_MACINTOSH) || defined(ARK2D_IPHONE) " + nl;
-		arkh += "	#include \"" + a.ark2d_dir + "/src/ARK.h\"" + nl;
+		arkh += "	#include \"" + self.ark_config['osx']['ark2d_dir'] + "/src/ARK.h\"" + nl;
 		arkh += "#elif defined(ARK2D_UBUNTU_LINUX) " + nl;
 		#if "linux" in config:
-		arkh += "	#include \"" + a.ark2d_dir + "/src/ARK.h\"" + nl;
+		arkh += "	#include \"" + self.ark_config['linux']['ark2d_dir'] + "/src/ARK.h\"" + nl;
 		arkh += "#endif" + nl;
 		f = open(floc, "w");
 		f.write(arkh);
@@ -2612,6 +2612,8 @@ build:
 		mkdirs.extend(self.mkdirs);
 
 		if self.building_game:
+			self.generateARKH(root_dir + "/src/ARK.h");
+
 			mkdirs.extend([root_dir + "/build/" + self.output + "/data"]);
 			mkdirs.extend([root_dir + "/build/" + self.output + "/data/ark2d"]);
 			mkdirs.extend([root_dir + "/data/ark2d"]);
@@ -6287,6 +6289,13 @@ if __name__ == "__main__":
 			print("---");
 			print("current file:" + ark2d_dir);
 			print("current working directory:" + dir);
+
+			print("---");
+			print("Opening ark2d config file: ");
+			f = open(ark2d_dir + "/config.json");
+			fcontents = f.read();
+			f.close();
+			ark_config = json.loads(fcontents);
 			
 			print("---");
 			print("Opening game config file: ");
@@ -6336,6 +6345,7 @@ if __name__ == "__main__":
 			a.game_mkdirs = game_config['mkdirs'];
 			a.build_artifact = "";
 			a.config = game_config;
+			a.ark_config = ark_config
 			a.game_config = game_config;
 			a.target_config = target_config;
 

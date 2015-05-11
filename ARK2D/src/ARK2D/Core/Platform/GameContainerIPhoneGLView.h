@@ -103,6 +103,8 @@
     - (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller;
     - (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController;
 
+    - (void)didReceiveMemoryWarning;
+
 @end
  
 @interface GameContainerIPhoneGLView : UIView 

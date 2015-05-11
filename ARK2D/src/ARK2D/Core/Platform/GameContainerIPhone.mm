@@ -177,7 +177,7 @@ namespace ARK {
  
 	}
 	
-	void ARK::Core::GameContainer::setSize(int width, int height) {
+	void ARK::Core::GameContainer::setSize(int width, int height, bool docallback) {
 		setSizeNoCallback(width, height);
         ARK2D::s_game->resize(this, m_width, m_height);
 	}

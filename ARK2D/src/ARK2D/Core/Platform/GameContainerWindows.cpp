@@ -91,6 +91,21 @@
 				}
 				return false;
 			}
+			// https://gist.github.com/paulhoux/1341083
+			bool GameContainerPlatform::myGetTouchInputInfo(HTOUCHINPUT hTouchInput, UINT cInputs, PTOUCHINPUT pInputs, int cbSize) {
+				MyGetTouchInputInfo = (pGetTouchInputInfo) GetProcAddress(GetModuleHandle(TEXT("user32.dll")), "GetTouchInputInfo");
+				if (MyGetTouchInputInfo) {
+					return MyGetTouchInputInfo(hTouchInput, cInputs, pInputs, cbSize);
+				}
+				return false;
+			}
+			bool GameContainerPlatform::myCloseTouchInputHandle(HTOUCHINPUT hTouchInput) {
+				MyCloseTouchInputHandle = (pCloseTouchInputHandle) GetProcAddress(GetModuleHandle(TEXT("user32.dll")), "CloseTouchInputHandle");
+				if (MyCloseTouchInputHandle) {
+					return MyCloseTouchInputHandle(hTouchInput);
+				}
+				return false;
+			}
 
 
 			LRESULT CALLBACK GameContainerPlatform::WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -284,7 +299,7 @@
 						cInputs = LOWORD(wParam);
 					  	pInputs = new TOUCHINPUT[cInputs];
 						if (pInputs){
-					    	if (GetTouchInputInfo((HTOUCHINPUT)lParam, cInputs, pInputs, sizeof(TOUCHINPUT))){
+					    	if (myGetTouchInputInfo((HTOUCHINPUT)lParam, cInputs, pInputs, sizeof(TOUCHINPUT))){
 					      		for (int i=0; i < static_cast<INT>(cInputs); i++) {
 					        		TOUCHINPUT ti = pInputs[i];
 					        		index = __GetContactIndex(ti.dwID);
@@ -385,7 +400,7 @@
 					      		bHandled = true;
 					    	}
 					    	// If you handled the message and don't want anything else done with it, you can close it
-					    	CloseTouchInputHandle((HTOUCHINPUT)lParam);
+					    	myCloseTouchInputHandle((HTOUCHINPUT)lParam);
 					    	delete [] pInputs;
 						} else {
 							// Handle the error here 
