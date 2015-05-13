@@ -206,8 +206,8 @@
 					pthread_mutexattr_settype(&recursiveLock, PTHREAD_MUTEX_RECURSIVE);
 					pthread_mutex_init(&devicesMutex, &recursiveLock);
 					pthread_mutex_init(&eventQueueMutex, &recursiveLock);
-					m_initialisedGamepads = true;
 					detectGamepads();
+					m_initialisedGamepads = true;
 				}
 			}
 			
@@ -232,9 +232,9 @@
 				time_t currentTime;
 				static time_t lastInputStatTime;
 				
-				if (!m_initialisedGamepads) {
-					return;
-				}
+				//if (!m_initialisedGamepads) {
+				//	return;
+				//}
 				
 				pthread_mutex_lock(&devicesMutex);
 				 
@@ -532,16 +532,21 @@
 				pthread_mutex_lock(&devicesMutex);
 				for (gamepadIndex = 0; gamepadIndex < numDevices; gamepadIndex++) {
 					if (container->m_gamepads[gamepadIndex] == device) {
-						unsigned int gamepadIndex2;
+						/*unsigned int gamepadIndex2;
 						
 						numDevices--;
 						for (gamepadIndex2 = gamepadIndex; gamepadIndex2 < numDevices; gamepadIndex2++) {
 							Gamepad* pad2 = container->m_gamepads[gamepadIndex2 + 1];
 							container->m_gamepads[gamepadIndex2] = pad2;
 						}
-						gamepadIndex--;
+						gamepadIndex--;*/
+						container->m_gamepads.erase(container->m_gamepads.begin() + gamepadIndex);
+						numDevices--;
+						break;
 					}
 				}
+
+
 				pthread_mutex_unlock(&devicesMutex);
 				
 				return NULL;
@@ -863,16 +868,18 @@
 					}
 
 
-					ARK2D::getLog()->v("Tick");
+					//ARK2D::getLog()->v("Tick");
 					m_timer.tick();
 
 					//ARK2D::getLog()->v("Update Gamepads"); 
 					//processGamepadInput();
 
-					ARK2D::getLog()->v("Update Log");
+					//ARK2D::getLog()->v("Update Log");
 					ARK2D::getLog()->update();
 
-					ARK2D::getLog()->v("Update Game");
+					m_platformSpecific.detectGamepads();
+
+					//ARK2D::getLog()->v("Update Game");
 					m_game.preUpdate(this, &m_timer);
 					m_game.update(this, &m_timer);
 					m_game.postUpdate(this, &m_timer);
@@ -882,17 +889,17 @@
 					}
 					Image::showAnyGlErrorAndExit();
 
-					ARK2D::getLog()->v("Render Reset");
+					//ARK2D::getLog()->v("Render Reset");
 					RendererStats::reset();
 					glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-					ARK2D::getLog()->v("Pre-render Game");
+					//ARK2D::getLog()->v("Pre-render Game");
 					m_game.preRender(this, &m_graphics);
-					ARK2D::getLog()->v("Render Game");
+					//ARK2D::getLog()->v("Render Game");
 					m_game.render(this, &m_graphics);
-					ARK2D::getLog()->v("Render Log");
+					//ARK2D::getLog()->v("Render Log");
 					ARK2D::getLog()->render(this, &m_graphics);
-					ARK2D::getLog()->v("Post-render Game"); 
+					//ARK2D::getLog()->v("Post-render Game"); 
 					m_game.postRender(this, &m_graphics); 
 					Image::showAnyGlErrorAndExit();
 

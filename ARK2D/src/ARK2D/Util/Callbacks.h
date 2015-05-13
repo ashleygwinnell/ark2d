@@ -56,6 +56,7 @@ namespace ARK {
 				static const unsigned int CALLBACK_WINDOWS_TABLETMODE_STARTED = 71;
 				static const unsigned int CALLBACK_WINDOWS_DESKTOPMODE_STARTED = 72;
 				static const unsigned int CALLBACK_WINDOWS_ORIENTATION_CHANGED = 73;
+				static const unsigned int CALLBACK_WINDOWS_TOUCHMODE_CHANGED = 74;
 
 				static const unsigned int CALLBACK_GAMEJOLT_OVERLAY_EDITNAME = 80;
 				static const unsigned int CALLBACK_GAMEJOLT_OVERLAY_EDITTOKEN = 81;

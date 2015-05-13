@@ -67,7 +67,7 @@
 				typedef BOOL (WINAPI* pGetTouchInputInfo)(HTOUCHINPUT, UINT, PTOUCHINPUT, int);
 				static pGetTouchInputInfo MyGetTouchInputInfo = NULL;
 
-				typedef bool (WINAPI pCloseTouchInputHandle)(HTOUCHINPUT hTouchInput);
+				typedef bool (WINAPI* pCloseTouchInputHandle)(HTOUCHINPUT hTouchInput);
 				static pCloseTouchInputHandle MyCloseTouchInputHandle = NULL;
 
 

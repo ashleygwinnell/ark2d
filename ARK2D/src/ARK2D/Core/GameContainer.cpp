@@ -29,6 +29,8 @@
 	#include "Platform/GameContainerWindowsPhone8.h"
 #endif
 
+#include "../Util/Callbacks.h"
+
 namespace ARK {
 	namespace Core { 
 
@@ -378,7 +380,11 @@ namespace ARK {
 			return m_touchMode; 
 		}
 		void GameContainer::setTouchMode(bool tm) {
+			bool previous = m_touchMode;
 			m_touchMode = tm;
+			if (previous != tm) {
+				Callbacks::invoke(Callbacks::CALLBACK_WINDOWS_TOUCHMODE_CHANGED);
+			}
 		}
 
 		void GameContainer::saveScreenshot(string filename) {

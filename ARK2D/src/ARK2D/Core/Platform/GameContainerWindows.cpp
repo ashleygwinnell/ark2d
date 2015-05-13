@@ -226,6 +226,9 @@
 							glViewport(0, 0, newWidth, newHeight);
 						#endif
 						m_container->m_game.resize(m_container, newWidth, newHeight);*/
+							if (m_container->isFullscreen()) {
+								m_container->setSize(m_container->getScreenWidth(), m_container->getScreenHeight(), true);
+							}
 
 						return 0;
 					}
