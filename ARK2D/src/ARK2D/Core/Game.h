@@ -4,12 +4,14 @@
  *      Author: Ashley Gwinnell
  */
 
-#ifndef GAME_H_
-#define GAME_H_
+#ifndef ARK_CORE_GAME_H_
+#define ARK_CORE_GAME_H_
 
 
 #include "../Includes.h"
 #include "../Namespaces.h"
+
+#include "../Controls/Gamepad.h"
 
 namespace ARK {
 	namespace Core {
@@ -19,7 +21,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class ARK2D_API Game  {
+		class ARK2D_API Game : public GamepadListener {
 			public:
 
 				Game(string title);
@@ -48,6 +50,11 @@ namespace ARK {
 				virtual void mouseMoved(int x, int y, int oldx, int oldy);
 
 				// Gamepad Listener
+				virtual void gamepadConnected(Gamepad* gamepad);
+				virtual void gamepadDisconnected(Gamepad* gamepad);
+				virtual void buttonPressed(Gamepad* gamepad, unsigned int button);
+				virtual void buttonReleased(Gamepad* gamepad, unsigned int button);
+				virtual void axisMoved(Gamepad* gamepad, unsigned int axis, float value);
 
 				// Orientation Listener
 				virtual void orientationChanged(int orientation);
@@ -62,4 +69,4 @@ namespace ARK {
 	}
 }
 
-#endif /* GAME_H_ */
+#endif /* ARK_CORE_GAME_H_ */

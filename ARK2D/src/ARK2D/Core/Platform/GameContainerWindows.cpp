@@ -637,7 +637,7 @@
 				m_platformSpecific.refreshScreenResolutionRect();
 
 				m_platformSpecific.m_twoInOneState = GameContainerPlatform::TWOINONESTATE_UNKNOWN;
-
+				m_platformSpecific.m_hotplugGamepadsTimer = 0.0f;
 				
 
 				ARK2D::getRenderer()->preinit();
@@ -908,6 +908,16 @@
 					result = joyGetPosEx(p->id, &info);
 					if (result == JOYERR_UNPLUGGED) {
 						m_gamepads.erase(m_gamepads.begin() + i);
+
+						// Give event to game
+						Game* g = ARK2D::getGame();
+						GamepadListener* gl = NULL;
+						gl = dynamic_cast<GamepadListener*>(g);
+						if (gl != NULL) {
+							gl->gamepadDisconnected(p);
+						}
+						//i = 0;
+
 					} else if (result == JOYERR_NOERROR) {
 
 						//handleAxisChange(device, devicePrivate->xAxisIndex, info.dwXpos);
@@ -1376,6 +1386,14 @@
 
 							ARK2D::getLog()->i(gamepad->toString());
 							m_gamepads.push_back(gamepad);
+
+							// Give event to game
+							Game* g = ARK2D::getGame();
+							GamepadListener* gl = NULL;
+							gl = dynamic_cast<GamepadListener*>(g);
+							if (gl != NULL) {
+								gl->gamepadConnected(gamepad);
+							}
 
 							actualJoyId++;
 
@@ -2971,8 +2989,11 @@
 						DispatchMessage(&msg);
 					}
 
-					//ARK2D::getLog()->v("Gamepads");
-					initGamepads(); // enabled hotplugging!
+					m_platformSpecific.m_hotplugGamepadsTimer += m_timer.getDelta();
+					if (m_platformSpecific.m_hotplugGamepadsTimer >= 1.0f) {
+						initGamepads();
+						m_platformSpecific.m_hotplugGamepadsTimer -= 1.0f;
+					}
 					processGamepadInput();
 
 					// read appropriate counter
@@ -3043,6 +3064,8 @@
 					//}
 					//ARK2D::getLog()->v("Update Log");
 					ARK2D::getLog()->update();
+
+
 
 					//int delta = (int) (m_timer.getDelta() * 1000);
 					//ARK2D::getLog()->v("Update Game");

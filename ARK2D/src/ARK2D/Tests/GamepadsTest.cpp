@@ -194,6 +194,12 @@ namespace ARK {
 				gamepadsTest->enterState((unsigned int) 0); 
 			}
 		}
+		void GamepadConfigureGameState::gamepadConnected(Gamepad* gamepad) {
+			ARK2D::getLog()->i(StringUtil::append("gamepad connected: ", gamepad->getId()));
+		}
+		void GamepadConfigureGameState::gamepadDisconnected(Gamepad* gamepad) {
+			ARK2D::getLog()->i(StringUtil::append("gamepad disconnected: ", gamepad->getId()));
+		}
 		void GamepadConfigureGameState::buttonPressed(Gamepad* gamepad, unsigned int button) {
 			
 		}
@@ -612,6 +618,12 @@ namespace ARK {
 			m_autoConfig->mouseMoved(x, y, oldx, oldy);
 		}
 
+		void GamepadsTestGameState::gamepadConnected(Gamepad* gamepad) {
+			ARK2D::getLog()->i(StringUtil::append("gamepad connected: ", gamepad->getId()));
+		}
+		void GamepadsTestGameState::gamepadDisconnected(Gamepad* gamepad) {
+			ARK2D::getLog()->i(StringUtil::append("gamepad disconnected: ", gamepad->getId()));
+		}
 		void GamepadsTestGameState::buttonPressed(Gamepad* gamepad, unsigned int button) {
 			if (m_alertButtons->isChecked()) {
 				ErrorDialog::createAndShow(StringUtil::append("button pressed: ", button));
@@ -674,24 +686,7 @@ namespace ARK {
 
 		}
 
-		void GamepadsTest::buttonPressed(Gamepad* gamepad, unsigned int button) {
-			GamepadListener* stateListener = dynamic_cast<GamepadListener*>( getCurrentState() );
-			if (stateListener != NULL) { 
-				stateListener->buttonPressed(gamepad, button);
-			}
-		}
-		void GamepadsTest::buttonReleased(Gamepad* gamepad, unsigned int button) { 
-			GamepadListener* stateListener = dynamic_cast<GamepadListener*>( getCurrentState() );
-			if (stateListener != NULL) { 
-				stateListener->buttonReleased(gamepad, button);
-			}
-		}
-		void GamepadsTest::axisMoved(Gamepad* gamepad, unsigned int axis, float value) { 
-			GamepadListener* stateListener = dynamic_cast<GamepadListener*>( getCurrentState() );
-			if (stateListener != NULL) { 
-				stateListener->axisMoved(gamepad, axis, value);
-			}
-		}
+		
 
 		int GamepadsTest::start() {
 			gamepadsTest = new ARK::Tests::GamepadsTest();

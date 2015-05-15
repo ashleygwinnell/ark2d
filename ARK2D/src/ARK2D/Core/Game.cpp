@@ -320,15 +320,24 @@ namespace ARK {
 		}
 
 
+		// key listener
 		void Game::keyPressed(unsigned int key) {
 
 		}
 		void Game::keyReleased(unsigned int key) {
 
 		}
+		// mouse listener
 		void Game::mouseMoved(int x, int y, int oldx, int oldy) {
 
 		}
+
+		// gamepad listener 
+		void Game::gamepadConnected(Gamepad* gamepad) { }
+		void Game::gamepadDisconnected(Gamepad* gamepad) { }
+		void Game::buttonPressed(Gamepad* gamepad, unsigned int button) { }
+		void Game::buttonReleased(Gamepad* gamepad, unsigned int button) { }
+		void Game::axisMoved(Gamepad* gamepad, unsigned int axis, float value) { }
 
 		void Game::orientationChanged(int orientation) {
 

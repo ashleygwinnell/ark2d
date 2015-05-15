@@ -57,6 +57,8 @@ namespace ARK {
 				virtual void keyReleased(unsigned int key);
 				virtual void mouseMoved(int x, int y, int oldx, int oldy);
 
+				virtual void gamepadConnected(Gamepad* gamepad);
+				virtual void gamepadDisconnected(Gamepad* gamepad);
 				virtual void buttonPressed(Gamepad* gamepad, unsigned int button);
 				virtual void buttonReleased(Gamepad* gamepad, unsigned int button);
 				virtual void axisMoved(Gamepad* gamepad, unsigned int axis, float value);
@@ -85,6 +87,8 @@ namespace ARK {
 				virtual void keyReleased(unsigned int key);
 				virtual void mouseMoved(int x, int y, int oldx, int oldy);
 
+				virtual void gamepadConnected(Gamepad* gamepad);
+				virtual void gamepadDisconnected(Gamepad* gamepad);
 				virtual void buttonPressed(Gamepad* gamepad, unsigned int button);
 				virtual void buttonReleased(Gamepad* gamepad, unsigned int button);
 				virtual void axisMoved(Gamepad* gamepad, unsigned int axis, float value);
@@ -92,7 +96,7 @@ namespace ARK {
 				virtual ~GamepadsTestGameState();
 		};
 
-		class ARK2D_API GamepadsTest : public StateBasedGame, public GamepadListener {
+		class ARK2D_API GamepadsTest : public StateBasedGame {
 			public:
 				GamepadsTest();
 
@@ -101,10 +105,6 @@ namespace ARK {
 				virtual void render(GameContainer* container, Renderer* r);
 				virtual void resize(GameContainer* container, int width, int height);
 
-				virtual void buttonPressed(Gamepad* gamepad, unsigned int button);
-				virtual void buttonReleased(Gamepad* gamepad, unsigned int button);
-				virtual void axisMoved(Gamepad* gamepad, unsigned int axis, float value);
-	
 				static int start();
 
 				virtual ~GamepadsTest();

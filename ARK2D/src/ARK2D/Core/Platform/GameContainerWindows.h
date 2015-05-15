@@ -181,6 +181,8 @@
 						double time_factor;    // Time Scaling Factor
 						LONGLONG last_time;    // Previous timer value
 
+						float m_hotplugGamepadsTimer;
+
 						vector<GameContainerDisplayMode> m_availableDisplayModes;
 						GameContainerDisplayMode* findDisplayMode(unsigned int w, unsigned int h, unsigned int bpp);
 

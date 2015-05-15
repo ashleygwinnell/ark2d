@@ -381,7 +381,15 @@
 							//	Gamepad_deviceAttachCallback(gamepad, Gamepad_deviceAttachContext);
 							//}
 							ARK2D::getLog()->i(StringUtil::append("Gamepad attached: ", gamepad->description));
-							
+
+							// Give event to game
+							Game* g = ARK2D::getGame();
+							GamepadListener* gl = NULL;
+							gl = dynamic_cast<GamepadListener*>(g);
+							if (gl != NULL) {
+								gl->gamepadDisconnected(gamepad);
+							}
+								
 							pthread_create(&gamepad->thread, NULL, &deviceThread, gamepad);
 						}
 					}
@@ -540,8 +548,18 @@
 							container->m_gamepads[gamepadIndex2] = pad2;
 						}
 						gamepadIndex--;*/
+						Gamepad* pad = container->m_gamepads[gamepadIndex];
 						container->m_gamepads.erase(container->m_gamepads.begin() + gamepadIndex);
 						numDevices--;
+
+						// Give event to game
+						Game* g = ARK2D::getGame();
+						GamepadListener* gl = NULL;
+						gl = dynamic_cast<GamepadListener*>(g);
+						if (gl != NULL) {
+							gl->gamepadDisconnected(pad);
+						}
+
 						break;
 					}
 				}

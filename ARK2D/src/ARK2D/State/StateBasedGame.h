@@ -79,6 +79,12 @@ namespace ARK {
 				virtual void keyPressed(unsigned int key);
 				virtual void keyReleased(unsigned int key);
 				virtual void mouseMoved(int x, int y, int oldx, int oldy);
+
+				virtual void gamepadConnected(Gamepad* gamepad);
+				virtual void gamepadDisconnected(Gamepad* gamepad);
+				virtual void buttonPressed(Gamepad* gamepad, unsigned int button);
+				virtual void buttonReleased(Gamepad* gamepad, unsigned int button);
+				virtual void axisMoved(Gamepad* gamepad, unsigned int axis, float value);
 				
 				virtual void orientationChanged(int orientation);
 

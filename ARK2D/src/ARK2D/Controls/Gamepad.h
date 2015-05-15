@@ -73,6 +73,8 @@ namespace ARK {
 
 		class GamepadListener {
 			public:
+				virtual void gamepadConnected(Gamepad* gamepad) = 0;
+				virtual void gamepadDisconnected(Gamepad* gamepad) = 0;
 				virtual void buttonPressed(Gamepad* gamepad, unsigned int button) = 0;
 				virtual void buttonReleased(Gamepad* gamepad, unsigned int button) = 0;
 				virtual void axisMoved(Gamepad* gamepad, unsigned int axis, float value) = 0;

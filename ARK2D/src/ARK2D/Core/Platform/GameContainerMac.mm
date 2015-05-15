@@ -709,6 +709,14 @@
 
 				ARK2D::getLog()->v(StringUtil::append("Adding Gamepad: ", gamepad->name));
 				ARK2D::getContainer()->getGamepads()->push_back(gamepad);
+
+				// Give event to game
+				Game* g = ARK2D::getGame();
+				GamepadListener* gl = NULL;
+				gl = dynamic_cast<GamepadListener*>(g);
+				if (gl != NULL) {
+					gl->gamepadConnected(gamepad);
+				}
 				
 				/*queuedEvent.dispatcher = Gamepad_eventDispatcher();
 				queuedEvent.eventType = GAMEPAD_EVENT_DEVICE_ATTACHED;
@@ -735,8 +743,18 @@
 						//Gamepad_eventDispatcher()->dispatchEvent(Gamepad_eventDispatcher(), GAMEPAD_EVENT_DEVICE_REMOVED, devices[deviceIndex]);
 						
 						ARK2D::getLog()->i(StringUtil::append("Dispose gamepad: ", pad->id));
+
 						disposeDevice(pad); 
 						container->getGamepads()->erase(container->getGamepads()->begin() + deviceIndex);
+
+						// Give event to game
+						Game* g = ARK2D::getGame();
+						GamepadListener* gl = NULL;
+						gl = dynamic_cast<GamepadListener*>(g);
+						if (gl != NULL) {
+							gl->gamepadDisconnected(pad);
+						}
+
 
 						//numDevices--;
 						//for (; deviceIndex < numDevices; deviceIndex++) {
