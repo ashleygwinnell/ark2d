@@ -3335,6 +3335,7 @@ build:
 	        	'$(SDKROOT)/System/Library/Frameworks/OpenGL.framework',
 	        	'$(SDKROOT)/System/Library/Frameworks/ApplicationServices.framework'];
 			gypfiletargetcondition['include_dirs'] = [
+				'../../src/ARK2D/vendor/angelscript',
 				'../../src/ARK2D/vendor/iphone',
 				'../../src/ARK2D/vendor/spine/includes',
 			];
@@ -3532,6 +3533,7 @@ build:
 	          	#config['osx']['ark2d_dir'] + '/lib/osx/freetype/libfreetype.a',
 	          	#config['osx']['ark2d_dir'] + '/lib/osx/libcurl.a',
 	          	#config['osx']['ark2d_dir'] + '/build/xcode/XcodeData/ark2d/Build/Products/Default/libark2d-OSX.dylib'
+	          	self.ark2d_dir + '/lib/osx/libangelscript.a',
 	          	self.game_dir + '/build/' + self.output + '/data/ark2d/libark2d.dylib'
 			]; 
 			gypfiletargetcondition['link_settings']['libraries'] = self.addLibrariesToArray(gypfiletargetcondition['link_settings']['libraries'], self.libs);

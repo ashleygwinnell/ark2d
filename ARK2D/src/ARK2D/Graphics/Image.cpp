@@ -701,6 +701,9 @@ namespace ARK {
 					int e = glGetError();
 					if (e != GL_NO_ERROR) { 
 						ARK2D::getLog()->e("Definitely a GL error. :( ");
+						ARK2D::getLog()->e("Renderer state:" );
+						ARK2D::getLog()->e(ARK2D::getRenderer()->toString());
+
 						RendererStats::s_glCalls++;
 						string s = getGlErrorString(e);
 						s += " : ";
@@ -1787,6 +1790,8 @@ namespace ARK {
 
 					RendererState::start(RendererState::TEXTURE, m_texture->m_id);
 					#if defined(ARK2D_OPENGL_3_2)
+
+						showAnyGlErrorAndExitMacro();
 						
 						Renderer::s_vaoQuad->bind();
 						glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexPosition);
@@ -1816,7 +1821,11 @@ namespace ARK {
 						glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ModelViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODELVIEW)->pointer());
 						glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ProjectionMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_PROJECTION)->pointer());
 
+						showAnyGlErrorAndExitMacro();
+
 						glUniform1i(Renderer::s_shaderBasicTexture_TextureId, 0); 
+
+						showAnyGlErrorAndExitMacro();
 
 						glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 

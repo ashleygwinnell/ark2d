@@ -565,6 +565,8 @@ namespace ARK {
 				void __internalsDrawArray_triangles(int first, int amount);
 				static void __internalsDXUpdateMatrices();
 
+				string toString();
+
 			private:
 				ARK::Font::Font* m_DefaultFont;
 				ARK::Font::Font* m_Font;

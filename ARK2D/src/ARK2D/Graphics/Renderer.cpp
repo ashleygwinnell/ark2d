@@ -6080,5 +6080,19 @@ namespace ARK {
 			#endif
 			RendererStats::s_glCalls++;
 		}
+
+		string Renderer::toString() {
+			string s = "";
+			s += StringUtil::append("RendererState::s_renderMode: ", RendererState::s_renderMode);
+			s += ", \n";
+			s += StringUtil::append("RendererState::s_textureId: ", RendererState::s_textureId);
+			s += ", \n";
+			s += StringUtil::append("RendererState::s_shaderId: ", RendererState::s_shaderId);
+			//s += ", \n";
+			//s += StringUtil::append("RendererState::s_multitextureId0: ", RendererState::s_multitextureId0);
+			s += ", \n";
+            s += StringUtil::append("Renderer::batching: ", Cast::boolToString(isBatching()));
+			return s;
+		}
 	}
 }

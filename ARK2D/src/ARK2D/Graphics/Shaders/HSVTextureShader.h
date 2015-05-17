@@ -27,6 +27,7 @@ namespace ARK {
 
 				Shader* m_shaderBasicTexture;
 				QuadVBO* m_vbo; 
+				unsigned int m_shaderBasicTexture_TextureId;
 				unsigned int m_shaderBasicTexture_ModelViewMatrix;
 				unsigned int m_shaderBasicTexture_ProjectionMatrix;
 				unsigned int m_shaderBasicTexture_VertexPositionIn;

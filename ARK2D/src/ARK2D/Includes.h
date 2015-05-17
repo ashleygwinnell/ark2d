@@ -461,6 +461,11 @@
 
  		#include "vendor/libcurl/curl.h"
  		#include "vendor/spine/includes/spine/spine.h"
+ 		
+ 		#include "vendor/angelscript/angelscript.h"
+ 		#include "vendor/angelscript/add_on/scriptstdstring/scriptstdstring.h"
+ 		#include "vendor/angelscript/add_on/scriptarray/scriptarray.h"
+ 		#include "vendor/angelscript/add_on/scriptbuilder/scriptbuilder.h"
  		//#include "vendor/spine/SpineSkeleton.h"
 
  	#elif defined(__linux__)

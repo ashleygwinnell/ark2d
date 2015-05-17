@@ -184,6 +184,7 @@
 			"src/ARK2D/Tests/ParticlesTest.cpp",
 			"src/ARK2D/Tests/UITest.cpp",
 			"src/ARK2D/Tests/NetTest.cpp",
+			"src/ARK2D/Tests/ShaderTest.cpp",
 
 			"src/ARK2D/Threading/Thread.cpp",
 			"src/ARK2D/Threading/Mutex.cpp",
@@ -246,6 +247,11 @@
 			
 			"src/ARK2D/Util/Containers/Pool.cpp",
 			"src/ARK2D/Util/Containers/Vector.cpp",
+
+			"src/ARK2D/vendor/angelscript/add_on/scriptstdstring/scriptstdstring.cpp",
+			"src/ARK2D/vendor/angelscript/add_on/scriptstdstring/scriptstdstring_utils.cpp",
+			"src/ARK2D/vendor/angelscript/add_on/scriptarray/scriptarray.cpp",
+			"src/ARK2D/vendor/angelscript/add_on/scriptbuilder/scriptbuilder.cpp",
 
 			"src/ARK2D/vendor/FileInterface.cpp",
 			"src/ARK2D/vendor/libJSON/JSON_Worker.cpp",

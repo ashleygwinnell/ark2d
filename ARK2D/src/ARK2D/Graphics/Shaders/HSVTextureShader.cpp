@@ -73,6 +73,7 @@ namespace ARK {
 
 			RendererState::start(RendererState::NONE);
 			m_shaderBasicTexture 					= Renderer::s_shaderBasicTexture;
+			m_shaderBasicTexture_TextureId			= Renderer::s_shaderBasicTexture_TextureId;
 			m_shaderBasicTexture_ModelViewMatrix	= Renderer::s_shaderBasicTexture_ModelViewMatrix;
 			m_shaderBasicTexture_ProjectionMatrix 	= Renderer::s_shaderBasicTexture_ProjectionMatrix;
 			m_shaderBasicTexture_VertexPositionIn 	= Renderer::s_shaderBasicTexture_VertexPosition;
@@ -80,14 +81,16 @@ namespace ARK {
 			m_shaderBasicTexture_VertexColorIn 		= Renderer::s_shaderBasicTexture_VertexColorIn;
 			
 			Renderer::s_shaderBasicTexture 						= this;
+			Renderer::s_shaderBasicTexture_TextureId 			= _TextureId;
 			Renderer::s_shaderBasicTexture_ModelViewMatrix 		= _ModelViewMatrix;
 			Renderer::s_shaderBasicTexture_ProjectionMatrix 	= _ProjectionMatrix;
 			Renderer::s_shaderBasicTexture_VertexPosition		= _VertexPositionIn;
 			Renderer::s_shaderBasicTexture_VertexTexCoordIn		= _VertexTexCoordIn;
 			Renderer::s_shaderBasicTexture_VertexColorIn 		= _VertexColorIn;
-		}
+		} 
 		void HSVTextureShader::stop() {
 			Renderer::s_shaderBasicTexture 						= m_shaderBasicTexture;
+			Renderer::s_shaderBasicTexture_TextureId 			= m_shaderBasicTexture_TextureId;
 			Renderer::s_shaderBasicTexture_ModelViewMatrix 		= m_shaderBasicTexture_ModelViewMatrix;
 			Renderer::s_shaderBasicTexture_ProjectionMatrix 	= m_shaderBasicTexture_ProjectionMatrix;
 			Renderer::s_shaderBasicTexture_VertexPosition		= m_shaderBasicTexture_VertexPositionIn;

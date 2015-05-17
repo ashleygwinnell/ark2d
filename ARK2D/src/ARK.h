@@ -191,6 +191,7 @@
 #include "ARK2D/Tests/NetTest.h"
 #include "ARK2D/Tests/ParticlesTest.h"
 #include "ARK2D/Tests/UITest.h"
+#include "ARK2D/Tests/ShaderTest.h"
 
 // Spine
 #include "ARK2D/vendor/spine/SpineSkeleton.h"
