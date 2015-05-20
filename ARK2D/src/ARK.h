@@ -109,6 +109,7 @@
 
 // Utils
 #include "ARK2D/Util/AnalyticsUtil.h"
+#include "ARK2D/Util/AngelScriptUtil.h"
 #include "ARK2D/Util/GameCenterUtil.h"
 #include "ARK2D/Util/ICloudUtil.h"
 #include "ARK2D/Util/GooglePlayGameServicesUtil.h"

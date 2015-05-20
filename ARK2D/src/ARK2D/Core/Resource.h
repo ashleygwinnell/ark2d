@@ -88,6 +88,7 @@ namespace ARK {
 				SpriteSheetDescription* asSpriteSheetDescription();
 				KeyPairFile* asKeyPairFile();
 				ARK::Spine::Skeleton* asSkeleton();
+				Resource& operator=(const Resource& r);
 				virtual ~Resource();
 
 

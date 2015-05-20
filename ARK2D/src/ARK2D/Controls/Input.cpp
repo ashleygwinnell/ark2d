@@ -64,6 +64,10 @@ namespace ARK {
 			const int Input::KEY_X;
 			const int Input::KEY_Y;
 			const int Input::KEY_Z;
+			const int Input::KEY_LEFT;
+			const int Input::KEY_RIGHT;
+			const int Input::KEY_UP;
+			const int Input::KEY_DOWN;
 		#endif
 
 		const char* Input::s_keyboardState = new char[256];

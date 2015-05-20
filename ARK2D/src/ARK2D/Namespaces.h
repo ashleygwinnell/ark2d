@@ -189,6 +189,7 @@ namespace ARK {
 	}
 	//! Contains miscellaneous classes for mathematical functions, logging, etc.
 	namespace Util {
+		class AngelScriptUtil;
 		class AnalyticsUtil;
 		class GooglePlayGameServicesUtil;
 		class Log;

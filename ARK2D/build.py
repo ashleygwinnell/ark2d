@@ -3533,7 +3533,7 @@ build:
 	          	#config['osx']['ark2d_dir'] + '/lib/osx/freetype/libfreetype.a',
 	          	#config['osx']['ark2d_dir'] + '/lib/osx/libcurl.a',
 	          	#config['osx']['ark2d_dir'] + '/build/xcode/XcodeData/ark2d/Build/Products/Default/libark2d-OSX.dylib'
-	          	self.ark2d_dir + '/lib/osx/libangelscript.a',
+	          	#self.ark2d_dir + '/lib/osx/libangelscript.a',
 	          	self.game_dir + '/build/' + self.output + '/data/ark2d/libark2d.dylib'
 			]; 
 			gypfiletargetcondition['link_settings']['libraries'] = self.addLibrariesToArray(gypfiletargetcondition['link_settings']['libraries'], self.libs);
@@ -3564,7 +3564,7 @@ build:
 			# we can set any of these! 
 			# https://developer.apple.com/library/mac/documentation/DeveloperTools/Reference/XcodeBuildSettingRef/1-Build_Setting_Reference/build_setting_ref.html 
 			gypfiletargetcondition['xcode_settings'] = {};
-			gypfiletargetcondition['xcode_settings']['ARCHS'] = "i386 x86_64"; 
+			gypfiletargetcondition['xcode_settings']['ARCHS'] = "$(ARCHS_STANDARD)"; #"i386 x86_64"; # or  $(ARCHS_STANDARD_32_64_BIT)
 			gypfiletargetcondition['xcode_settings']['SDKROOT'] = "macosx";
 			gypfiletargetcondition['xcode_settings']['GCC_PREPROCESSOR_DEFINITIONS'] = "ARK2D_MACINTOSH ARK2D_DESKTOP";
 			gypfiletargetcondition['xcode_settings']['GCC_OPTIMIZATION_LEVEL'] = "0";

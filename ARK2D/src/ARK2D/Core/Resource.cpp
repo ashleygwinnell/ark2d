@@ -709,6 +709,9 @@ namespace ARK {
 		String* Resource::asString() {
 			return dynamic_cast<String*>(this);
 		}
+        Resource& Resource::operator=(const Resource& r) {
+			return *this;
+		}
 
 		Resource::~Resource() {
 
