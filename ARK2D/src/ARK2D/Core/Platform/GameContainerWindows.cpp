@@ -1156,7 +1156,7 @@
 				} else {
 					//cout << numPadsSupported << " gamepads supported." << endl;
 
-					for (unsigned int i = 0; i < numPadsSupported; i++)
+					for (unsigned int i = 0; i < numPadsSupported && i < 10; i++)
 					{
 						JOYINFOEX info;
 						JOYCAPS caps;
@@ -1172,7 +1172,7 @@
 							//cout << "Reading gamepad " << joystickId << endl;
 
 							bool duplicate = false;
-							for (unsigned int j = 0; j < numPadsSupported; j++) 
+							for (unsigned int j = 0; j < numPadsSupported && j < 10; j++) 
 							{
 								#ifdef EXCEPTIONS_AVAILABLE
 									try {

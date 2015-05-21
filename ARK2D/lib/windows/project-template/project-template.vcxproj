@@ -63,14 +63,15 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>%ARK2D_DIR%\build\windows\Debug\libARK2D.lib%ADDITIONAL_DOTLIB_FILES%</AdditionalDependencies>
+      <AdditionalDependencies>%ARK2D_DIR%\build\windows\Debug\libARK2D.lib;msvcrtd.lib;libcmtd.lib%ADDITIONAL_DOTLIB_FILES%</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <IgnoreSpecificDefaultLibraries>msvcrt.lib;msvcprt.lib;libcmtd.lib</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib;msvcr120.lib;msvcprt.lib;libcmt.lib</IgnoreSpecificDefaultLibraries>
+      <AdditionalOptions>/verbose:lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>%ARK2D_DIR%\src;%ARK2D_DIR%\src\ARK2D;%ARK2D_DIR%\src\ARK2D\vendor\windows;%ARK2D_DIR%\src\ARK2D\vendor\spine\includes;%ARK2D_DIR%\lib\windows\includes;%ADDITIONAL_INCLUDE_DIRECTORIES%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -91,7 +92,7 @@
       <MinimalRebuild>true</MinimalRebuild>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>%ARK2D_DIR%\build\windows\Release\libARK2D.lib;msvcrt.lib%ADDITIONAL_DOTLIB_FILES%</AdditionalDependencies>
+      <AdditionalDependencies>%ARK2D_DIR%\build\windows\Development\libARK2D.lib;msvcrt.lib%ADDITIONAL_DOTLIB_FILES%</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <SubSystem>Windows</SubSystem>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>

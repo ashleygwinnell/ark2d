@@ -4,6 +4,7 @@
 #include "../ARK2D.h"
 #include "Log.h"
 #include "../Core/GameContainer.h"
+#include "../Util/Containers/Pool.h"
 
 asIScriptEngine* AngelScriptUtil::s_engine = NULL;
 
@@ -15,8 +16,15 @@ void AngelScriptUtil_MessageCallback(const asSMessageInfo* msg, void *param) {
 	else if( msg->type == asMSGTYPE_INFORMATION ) 
 		type = "INFO";
 
-	printf("%s (%d, %d) : %s : %s\n", msg->section, msg->row, msg->col, type, msg->message);
+	 
 
+	stringstream text;
+	text << msg->section << "(" << msg->row << ", " << msg->col << " : " << type << " : " << msg->message;
+	ARK2D::getLog()->i(text.str());
+	if (msg->type == asMSGTYPE_ERROR) {
+		ErrorDialog::createAndShow(text.str());
+	}
+	//printf("%s (%d, %d) : %s : %s\n", msg->section, msg->row, msg->col, type, msg->message);
 }
 void AngelScriptUtil_Print(const string& s) {
 	ARK2D::getLog()->i(s);
@@ -29,6 +37,95 @@ asIScriptEngine* AngelScriptUtil::restart() {
 	}
 	return getEngine();
 }
+
+//Resource* Resource_Get_Generic(asIScriptGeneric* gen)
+//{
+//	string s = gen->GetArgTypeId(0);
+//	return Resource::get("");
+//}
+
+template <class T>
+class MyTestClass {
+	public:
+		MyTestClass() {
+
+		}
+		void hello() {
+
+		}
+		~MyTestClass() {
+
+		}
+};
+
+void AngelScriptUtil::exceptionCheckInternal(string file, signed int line, asIScriptContext* ctx, asIScriptFunction* func, signed int r) {
+	if (r != asEXECUTION_FINISHED) 
+	{
+		// The execution didn't complete as expected. Determine what happened.
+		if (r == asEXECUTION_EXCEPTION) 
+		{
+			// An exception occurred, let the script writer know what happened so it can be corrected.
+			ErrorDialog::createAndShow(StringUtil::append("An AngelScript exception occurred. Please correct the code and try again: ", ctx->GetExceptionString()));
+			ErrorDialog::createAndShow(AngelScriptUtil::getExceptionInfo(ctx, true));
+		}
+		else {
+			ErrorDialog::createAndShow(StringUtil::append("An AngelScript exception occured, but we don't know why.", r));
+		}
+	}
+} 
+
+void AngelScriptUtil::assertInternal(string file, signed int line, signed int r) {
+	if (r < 0) {
+		stringstream out;
+		out << "assert failed: " << r << ". line: " << line << ". file: " << file;
+		ErrorDialog::createAndShow(out.str());
+		//assert(false);
+		exit(0);
+	}
+}
+
+string AngelScriptUtil::getExceptionInfo(asIScriptContext *ctx, bool showStack)
+{
+	if( ctx->GetState() != asEXECUTION_EXCEPTION ) return "";
+
+	stringstream text;
+
+	const asIScriptFunction *function = ctx->GetExceptionFunction();
+	text << "func: " << function->GetDeclaration() << "\n";
+	text << "modl: " << function->GetModuleName() << "\n";
+	text << "sect: " << function->GetScriptSectionName() << "\n";
+	text << "line: " << ctx->GetExceptionLineNumber() << "\n";
+	text << "desc: " << ctx->GetExceptionString() << "\n";
+
+	if( showStack )
+	{
+		text << "--- call stack ---\n";
+		for( asUINT n = 1; n < ctx->GetCallstackSize(); n++ )
+		{
+			function = ctx->GetFunction(n);
+			if( function )
+			{
+				if( function->GetFuncType() == asFUNC_SCRIPT )
+				{
+					text << function->GetScriptSectionName() << " (" << ctx->GetLineNumber(n) << "): " << function->GetDeclaration() << "\n";
+				}
+				else
+				{
+					// The context is being reused by the application for a nested call
+					text << "{...application...}: " << function->GetDeclaration() << "\n";
+				}
+			}
+			else
+			{
+				// The context is being reused by the script engine for a nested call
+				text << "{...script engine...}\n";
+			}
+		}
+	}
+
+	return text.str();
+}
+
 asIScriptEngine* AngelScriptUtil::getEngine() {
 	if (s_engine == NULL)
 	{
@@ -89,11 +186,19 @@ asIScriptEngine* AngelScriptUtil::getEngine() {
 		r = s_engine->RegisterObjectMethod("Renderer", "void fillCircle(float x, float y, int radius, int points)", asMETHOD(Renderer,fillCircle), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Renderer", "void setDrawColorf(float r, float g, float b, float a)", asMETHOD(Renderer, setDrawColorf), asCALL_THISCALL); assert( r >= 0 );
 
-		// Globals
-		r = s_engine->RegisterGlobalFunction("Resource@ get(const string &in)", asFUNCTIONPR(Resource::get, (string), Resource*), asCALL_CDECL); assert( r >= 0 );
-		r = s_engine->RegisterGlobalFunction("Input@ getInput()", asFUNCTIONPR(ARK2D::getInput, (void), Input*), asCALL_CDECL); assert( r >= 0 );
-		r = s_engine->RegisterGlobalFunction("void error(const string &in)", asFUNCTIONPR(ErrorDialog::createAndShow, (string), void), asCALL_CDECL); assert( r >= 0 );
+		// Pools
+		r = s_engine->RegisterObjectType("Pool<class T>", 0, asOBJ_REF | asOBJ_NOCOUNT | asOBJ_TEMPLATE); assert(r >= 0);
+		r = s_engine->RegisterObjectType("PoolIterator<class T>", 0, asOBJ_REF | asOBJ_NOCOUNT | asOBJ_TEMPLATE); assert(r >= 0);
+        r = s_engine->RegisterObjectMethod("Pool<T>", "PoolIterator<T>@ iterator()", asMETHOD(Pool<const char*>, newiteratorref), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("PoolIterator<T>", "T@ next()", asMETHOD(PoolIterator<const char*>, next), asCALL_THISCALL); assert( r >= 0 );
 
+		//r = s_engine->RegisterObjectBehaviour("Pool<T>", asBEHAVE_FACTORY, "Pool<T>@ f(int&in)", asFUNCTIONPR(myTemplateFactory, (asIObjectType*), Pool*), asCALL_CDECL); assert( r >= 0 );
+
+		// Globals
+		r = s_engine->RegisterGlobalFunction("Resource@ getResource(const string)", asFUNCTIONPR(Resource::get, (string), Resource*), asCALL_CDECL); assert(r >= 0);
+		r = s_engine->RegisterGlobalFunction("Input@ getInput()", asFUNCTIONPR(ARK2D::getInput, (void), Input*), asCALL_CDECL); assert( r >= 0 );
+		r = s_engine->RegisterGlobalFunction("void error(const string)", asFUNCTIONPR(ErrorDialog::createAndShow, (string), void), asCALL_CDECL); assert( r >= 0 );
+		 
 	}
 	return s_engine;
 

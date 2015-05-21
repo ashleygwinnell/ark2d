@@ -1173,10 +1173,13 @@ class ARK2DBuildSystem:
 			print("Making sln and vcxproj...");
 			f1 = open(self.ark2d_dir + "\\lib\\windows\\project-template\\project-template.sln", "r");
 			f2 = open(self.ark2d_dir + "/lib/windows/project-template/project-template.vcxproj", "r");
+			f3 = open(self.ark2d_dir + "/lib/windows/project-template/project-template.vcxproj.user", "r");
 			sln_contents = f1.read();
 			vcxproj_contents = f2.read(); 
+			vcxprojuser_contents = f3.read(); 
 			f1.close(); 
 			f2.close(); 
+			f3.close(); 
 
 			# modify sln strings
 			print("Configuring sln file...");
@@ -1290,14 +1293,20 @@ class ARK2DBuildSystem:
 			f1.write(vcxproj_contents);
 			f1.close();
 
+			# write vcxproj.user file
+			print("Write vcxproj.user file...");
+			f1 = open(output_folder + "/" + game_name_safe + ".vcxproj.user", "w");
+			f1.write(vcxprojuser_contents);
+			f1.close();
+
 			
 			# copy resources in to wp8 game project folder.
 			print("Copying ark2d data in...");
 			shutil.copytree(self.ark2d_dir + "/data/", game_resources_dir + "/ark2d/");
 
 			print("Copying data in..."); 
-			# shutil.copytree(game_resources_dir, output_folder + "/Debug/data"); ## disable this until it works
-			shutil.copytree(game_resources_dir, output_folder + "/Development/data");
+			#shutil.copytree(game_resources_dir, output_folder + "/Development/data");
+			shutil.copytree(game_resources_dir, output_folder + "/Debug/data"); ## disable this until it works
 			shutil.copytree(game_resources_dir, output_folder + "/Release/data/");
 
 			
@@ -1307,18 +1316,18 @@ class ARK2DBuildSystem:
 
 			
 			# DLLs
-			# shutil.copy(self.ark2d_dir + "\\build\\windows\\Debug\\libARK2D.dll", self.game_dir + "\\" + self.build_folder + self.ds + self.output + self.ds + "Debug\\libARK2D.dll");
-			# shutil.copy(self.ark2d_dir + "\\build\\windows\\Debug\\libARK2D.lib", self.game_dir + "\\" + self.build_folder + self.ds + self.output + self.ds + "Debug\\libARK2D.lib");
+			shutil.copy(self.ark2d_dir + "\\build\\windows\\Debug\\libARK2D.dll", self.game_dir + "\\" + self.build_folder + self.ds + self.output + self.ds + "Debug\\libARK2D.dll");
+			shutil.copy(self.ark2d_dir + "\\build\\windows\\Debug\\libARK2D.lib", self.game_dir + "\\" + self.build_folder + self.ds + self.output + self.ds + "Debug\\libARK2D.lib");
 
-			shutil.copy(self.ark2d_dir + "\\build\\windows\\Development\\libARK2D.dll", self.game_dir + "\\" + self.build_folder + self.ds + self.output + self.ds + "Development\\libARK2D.dll");
-			shutil.copy(self.ark2d_dir + "\\build\\windows\\Development\\libARK2D.lib", self.game_dir + "\\" + self.build_folder + self.ds + self.output + self.ds + "Development\\libARK2D.lib");
+			#shutil.copy(self.ark2d_dir + "\\build\\windows\\Development\\libARK2D.dll", self.game_dir + "\\" + self.build_folder + self.ds + self.output + self.ds + "Development\\libARK2D.dll");
+			#shutil.copy(self.ark2d_dir + "\\build\\windows\\Development\\libARK2D.lib", self.game_dir + "\\" + self.build_folder + self.ds + self.output + self.ds + "Development\\libARK2D.lib");
 
 			shutil.copy(self.ark2d_dir + "\\build\\windows\\Release\\libARK2D.dll", self.game_dir + "\\" + self.build_folder + self.ds + self.output + self.ds + "Release\\libARK2D.dll");
 			shutil.copy(self.ark2d_dir + "\\build\\windows\\Release\\libARK2D.lib", self.game_dir + "\\" + self.build_folder + self.ds + self.output + self.ds + "Release\\libARK2D.lib");
 
 			# ARK Dependency DLLs
 			# debug 
-			"""
+			
 			shutil.copy(self.ark2d_dir + "\\lib\\windows\\alut.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\alut.dll");
 			shutil.copy(self.ark2d_dir + "\\lib\\windows\\freetype6.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\freetype6.dll");
 			shutil.copy(self.ark2d_dir + "\\lib\\windows\\glew32.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\glew32.dll");
@@ -1326,13 +1335,15 @@ class ARK2DBuildSystem:
 			shutil.copy(self.ark2d_dir + "\\lib\\windows\\wrap_oal.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\wrap_oal.dll");
 			shutil.copy(self.ark2d_dir + "\\lib\\windows\\zlib1.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\zlib1.dll");
 			shutil.copy(self.ark2d_dir + "\\lib\\windows\\OpenAL32.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\OpenAL32.dll");
-				#shutil.copy(self.ark2d_dir + "\\lib\\windows\\vs2013\\x86\\msvcr120d.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.platform + "\\Debug\\msvcr120d.dll");
-				#shutil.copy(self.ark2d_dir + "\\lib\\windows\\vs2013\\x86\\msvcp120d.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.platform + "\\Debug\\msvcp120d.dll");
-			shutil.copy(self.ark2d_dir + "\\lib\\windows\\vs2013\\x86\\msvcr120.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\msvcr120.dll");
-			shutil.copy(self.ark2d_dir + "\\lib\\windows\\vs2013\\x86\\msvcp120.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\msvcp120.dll");
-			"""
+			shutil.copy(self.ark2d_dir + "\\lib\\windows\\vs2013\\x86\\msvcr120d.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.platform + "\\Debug\\msvcr120d.dll");
+			shutil.copy(self.ark2d_dir + "\\lib\\windows\\vs2013\\x86\\msvcp120d.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.platform + "\\Debug\\msvcp120d.dll");
+			#shutil.copy(self.ark2d_dir + "\\lib\\windows\\vs2013\\x86\\msvcr120.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\msvcr120.dll");
+			#shutil.copy(self.ark2d_dir + "\\lib\\windows\\vs2013\\x86\\msvcp120.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\msvcp120.dll");
+			shutil.copy(self.ark2d_dir + "\\lib\\windows\\angelscript\\angelscriptd.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\angelscriptd.dll");
+			
 
 			#development 
+			"""
 			shutil.copy(self.ark2d_dir + "\\lib\\windows\\alut.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Development\\alut.dll");
 			shutil.copy(self.ark2d_dir + "\\lib\\windows\\freetype6.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Development\\freetype6.dll");
 			shutil.copy(self.ark2d_dir + "\\lib\\windows\\glew32.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Development\\glew32.dll");
@@ -1342,6 +1353,8 @@ class ARK2DBuildSystem:
 			shutil.copy(self.ark2d_dir + "\\lib\\windows\\OpenAL32.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Development\\OpenAL32.dll");
 			shutil.copy(self.ark2d_dir + "\\lib\\windows\\vs2013\\x86\\msvcr120.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Development\\msvcr120.dll");
 			shutil.copy(self.ark2d_dir + "\\lib\\windows\\vs2013\\x86\\msvcp120.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Development\\msvcp120.dll");
+			shutil.copy(self.ark2d_dir + "\\lib\\windows\\angelscript\\angelscript.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Development\\angelscript.dll");
+			"""
 		
 			#release 
 			shutil.copy(self.ark2d_dir + "\\lib\\windows\\alut.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Release\\alut.dll");
@@ -1353,13 +1366,14 @@ class ARK2DBuildSystem:
 			shutil.copy(self.ark2d_dir + "\\lib\\windows\\OpenAL32.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Release\\OpenAL32.dll");
 			shutil.copy(self.ark2d_dir + "\\lib\\windows\\vs2013\\x86\\msvcr120.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Release\\msvcr120.dll");
 			shutil.copy(self.ark2d_dir + "\\lib\\windows\\vs2013\\x86\\msvcp120.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Release\\msvcp120.dll");
+			shutil.copy(self.ark2d_dir + "\\lib\\windows\\angelscript\\angelscript.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Release\\angelscript.dll");
 		
 			# copy any other dll dependencies...
 			for extradll in extra_dlls: 
 				print(extradll);
 				extradll_name = self.get_str_filename(extradll);
-				# shutil.copy(extradll, self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\" + extradll_name);
-				shutil.copy(extradll, self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Development\\" + extradll_name);
+				# shutil.copy(extradll, self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Development\\" + extradll_name);
+				shutil.copy(extradll, self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\" + extradll_name);
 				shutil.copy(extradll, self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Release\\" + extradll_name);
 
 

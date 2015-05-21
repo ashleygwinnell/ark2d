@@ -357,6 +357,7 @@
 				#define ARK2D_API __declspec( dllexport )				
 			#else
 				#define ARK2D_API __declspec( dllimport )
+				#define ANGELSCRIPT_DLL_LIBRARY_IMPORT
 			#endif 
 
 			#if defined(ARK2D_WINDOWS_VS)
@@ -412,6 +413,13 @@
 		//#include <GL/glu.h> 
  
 		#include "Common/Audio.h"
+
+	
+		
+		#include "vendor/angelscript/angelscript.h"
+ 		#include "vendor/angelscript/add_on/scriptstdstring/scriptstdstring.h"
+ 		#include "vendor/angelscript/add_on/scriptarray/scriptarray.h"
+ 		#include "vendor/angelscript/add_on/scriptbuilder/scriptbuilder.h"
 		
 
  		#include "vendor/libcurl-windows/curl.h"
@@ -509,6 +517,11 @@
 		#include <fcntl.h>
 		
 		#include "vendor/libcurl/curl.h"
+
+		#include "vendor/angelscript/angelscript.h"
+ 		#include "vendor/angelscript/add_on/scriptstdstring/scriptstdstring.h"
+ 		#include "vendor/angelscript/add_on/scriptarray/scriptarray.h"
+ 		#include "vendor/angelscript/add_on/scriptbuilder/scriptbuilder.h"
 
  		using namespace std;
 

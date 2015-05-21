@@ -218,6 +218,7 @@
 			"src/ARK2D/UI/Slider.cpp", 
 
 			"src/ARK2D/Util/AnalyticsUtil.cpp",
+			"src/ARK2D/Util/AngelScriptUtil.cpp",
 			"src/ARK2D/Util/ArcadeHighscoreInput.cpp",
 			"src/ARK2D/Util/Callbacks.cpp",
 			"src/ARK2D/Util/CameraShake.cpp",
