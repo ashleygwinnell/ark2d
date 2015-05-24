@@ -3,6 +3,7 @@
 
 #include "../ARK2D.h"
 #include "Log.h"
+#include "KeyPairFile.h"
 #include "../Core/GameContainer.h"
 #include "../Util/Containers/Pool.h"
 
@@ -155,9 +156,15 @@ asIScriptEngine* AngelScriptUtil::getEngine() {
 		// Image resource
 		r = s_engine->RegisterObjectType("Image", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Resource", "Image@ asImage()", asMETHOD(Resource, asImage), asCALL_THISCALL); assert( r >= 0 );
-		r = s_engine->RegisterObjectMethod("Image", "Image@ opAssign(Image@ &in)", asMETHOD(Image, operator=), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Image", "int getWidth()", asMETHOD(Image, getWidth), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Image", "int getHeight()", asMETHOD(Image, getHeight), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Image", "Image@ rotate(double)", asMETHODPR(Image, rotate, (double), Image*), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Image", "Image@ scale(float, float)", asMETHODPR(Image, scale, (float, float), Image*), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Image", "Image@ flip(bool, bool)", asMETHODPR(Image, flip, (bool, bool), Image*), asCALL_THISCALL); assert( r >= 0 );		
 		r = s_engine->RegisterObjectMethod("Image", "void draw(float, float)", asMETHODPR(Image, draw, (float, float), void), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Image", "void drawCentered(float, float)", asMETHODPR(Image, drawCentered, (float, float), void), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Image", "void drawCenteredScaled(float, float, float, float)", asMETHODPR(Image, drawCenteredScaled, (float, float, float, float), void), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Image", "Image@ opAssign(Image@ &in)", asMETHOD(Image, operator=), asCALL_THISCALL); assert( r >= 0 );
 
 		// Sound resource
 		r = s_engine->RegisterObjectType("Sound", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
@@ -166,14 +173,87 @@ asIScriptEngine* AngelScriptUtil::getEngine() {
 
 		// Input
 		r = s_engine->RegisterObjectType("Input", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
-		r = s_engine->RegisterObjectMethod("Input", "bool isKeyDown(uint)", asMETHODPR(Input, isKeyDown, (unsigned int), bool), asCALL_THISCALL); assert( r >= 0 );
-		r = s_engine->RegisterObjectMethod("Input", "bool isKeyPressed(uint)", asMETHODPR(Input, isKeyPressed, (unsigned int), bool), asCALL_THISCALL); assert( r >= 0 );
-		r = s_engine->RegisterObjectMethod("Input", "bool isKeyReleased(uint)", asMETHODPR(Input, isKeyReleased, (unsigned int), bool), asCALL_THISCALL); assert( r >= 0 );
-        r = s_engine->RegisterGlobalProperty("uint KEY_LEFT", (void*) &Input::KEY_LEFT); assert( r >= 0 );
+		r = s_engine->RegisterObjectType("Gamepad", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
+		r = s_engine->RegisterGlobalProperty("uint KEY_LEFT", (void*) &Input::KEY_LEFT); assert( r >= 0 );
         r = s_engine->RegisterGlobalProperty("uint KEY_RIGHT", (void*) &Input::KEY_RIGHT); assert( r >= 0 );
         r = s_engine->RegisterGlobalProperty("uint KEY_UP", (void*) &Input::KEY_UP); assert( r >= 0 );
         r = s_engine->RegisterGlobalProperty("uint KEY_DOWN", (void*) &Input::KEY_DOWN); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_A", (void*) &Input::KEY_A); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_B", (void*) &Input::KEY_B); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_C", (void*) &Input::KEY_C); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_D", (void*) &Input::KEY_D); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_E", (void*) &Input::KEY_E); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_F", (void*) &Input::KEY_F); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_G", (void*) &Input::KEY_G); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_H", (void*) &Input::KEY_H); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_I", (void*) &Input::KEY_I); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_J", (void*) &Input::KEY_J); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_K", (void*) &Input::KEY_K); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_L", (void*) &Input::KEY_L); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_M", (void*) &Input::KEY_M); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_N", (void*) &Input::KEY_N); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_O", (void*) &Input::KEY_O); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_P", (void*) &Input::KEY_P); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_Q", (void*) &Input::KEY_Q); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_R", (void*) &Input::KEY_R); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_S", (void*) &Input::KEY_S); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_T", (void*) &Input::KEY_T); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_U", (void*) &Input::KEY_U); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_V", (void*) &Input::KEY_V); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_W", (void*) &Input::KEY_W); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_X", (void*) &Input::KEY_X); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_Y", (void*) &Input::KEY_Y); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_Z", (void*) &Input::KEY_Z); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_0", (void*) &Input::KEY_0); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_1", (void*) &Input::KEY_1); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_2", (void*) &Input::KEY_2); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_3", (void*) &Input::KEY_3); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_4", (void*) &Input::KEY_4); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_5", (void*) &Input::KEY_5); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_6", (void*) &Input::KEY_6); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_7", (void*) &Input::KEY_7); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_8", (void*) &Input::KEY_8); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_9", (void*) &Input::KEY_9); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_F1", (void*) &Input::KEY_F1); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_F2", (void*) &Input::KEY_F2); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_F3", (void*) &Input::KEY_F3); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_F4", (void*) &Input::KEY_F4); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_F5", (void*) &Input::KEY_F5); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_F6", (void*) &Input::KEY_F6); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_F7", (void*) &Input::KEY_F7); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_F8", (void*) &Input::KEY_F8); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_F9", (void*) &Input::KEY_F9); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_F10", (void*) &Input::KEY_F10); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_F11", (void*) &Input::KEY_F11); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_F12", (void*) &Input::KEY_F12); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_LSHIFT", (void*) &Input::KEY_LSHIFT); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_LCONTROL", (void*) &Input::KEY_LCONTROL); assert( r >= 0 );
         r = s_engine->RegisterGlobalProperty("uint KEY_SPACE", (void*) &Input::KEY_SPACE); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_ENTER", (void*) &Input::KEY_ENTER); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_TAB", (void*) &Input::KEY_TAB); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_BACKSPACE", (void*) &Input::KEY_BACKSPACE); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint KEY_INSERT", (void*) &Input::KEY_INSERT); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint MOUSE_BUTTON_LEFT", (void*) &Input::MOUSE_BUTTON_LEFT); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint MOUSE_BUTTON_RIGHT", (void*) &Input::MOUSE_BUTTON_RIGHT); assert( r >= 0 );
+        r = s_engine->RegisterGlobalProperty("uint MOBILE_BACK", (void*) &Input::MOBILE_BACK); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("Input", "bool isKeyDown(uint)", asMETHODPR(Input, isKeyDown, (unsigned int), bool), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Input", "bool isKeyPressed(uint)", asMETHODPR(Input, isKeyPressed, (unsigned int), bool), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Input", "bool isKeyReleased(uint)", asMETHODPR(Input, isKeyReleased, (unsigned int), bool), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("Input", "int getMouseX()", asMETHOD(Input, getMouseX), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("Input", "int getMouseY()", asMETHOD(Input, getMouseY), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("Input", "bool isAnyGamepadButtonPressed()", asMETHOD(Input, isAnyGamepadButtonPressed), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("Input", "int countGamepads()", asMETHOD(Input, countGamepads), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("Input", "Gamepad@ getGamepad(uint id)", asMETHOD(Input, getGamepad), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("Input", "Gamepad@ getGamepadByIndex(uint id)", asMETHOD(Input, getGamepadByIndex), asCALL_THISCALL); assert( r >= 0 );
+
+        // Gamepads
+        r = s_engine->RegisterObjectMethod("Gamepad", "bool isButtonPressed(uint button)", asMETHOD(Gamepad, isButtonPressed), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("Gamepad", "bool isButtonReleased(uint button)", asMETHOD(Gamepad, isButtonReleased), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("Gamepad", "bool isButtonDown(uint button)", asMETHOD(Gamepad, isButtonDown), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("Gamepad", "bool isAnyButtonPressed()", asMETHOD(Gamepad, isAnyButtonPressed), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("Gamepad", "float getAxisValue()", asMETHOD(Gamepad, getAxisValue), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("Gamepad", "string getName()", asMETHOD(Gamepad, getName), asCALL_THISCALL); assert( r >= 0 );
+
 
         // Timer
         r = s_engine->RegisterObjectType("Timer", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
@@ -182,9 +262,33 @@ asIScriptEngine* AngelScriptUtil::getEngine() {
 
 		// Renderer
 		r = s_engine->RegisterObjectType("Renderer", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Renderer", "void pushMatrix()", asMETHOD(Renderer, pushMatrix), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Renderer", "void popMatrix()", asMETHOD(Renderer, popMatrix), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Renderer", "void translate(float x, float y, float z)", asMETHODPR(Renderer, translate, (float, float, float) const, void), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Renderer", "void scale(float x, float y, float z)", asMETHODPR(Renderer, scale, (float, float ,float) const, void), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Renderer", "void rotate(float degrees)", asMETHODPR(Renderer, rotate, (float) const, void), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Renderer", "void fillRect(float x, float y, int width, int height)", asMETHOD(Renderer,fillRect), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Renderer", "void fillCircle(float x, float y, int radius, int points)", asMETHOD(Renderer,fillCircle), asCALL_THISCALL); assert( r >= 0 );
-		r = s_engine->RegisterObjectMethod("Renderer", "void setDrawColorf(float r, float g, float b, float a)", asMETHOD(Renderer, setDrawColorf), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Renderer", "void drawLine(float x1, float y1, float x2, float y2)", asMETHODPR(Renderer, drawLine, (float, float, float, float) const, void), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Renderer", "void setDrawColor(float r, float g, float b, float a)", asMETHODPR(Renderer, setDrawColorf, (float, float, float, float), void), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Renderer", "void setDrawColor(string hex)", asMETHODPR(Renderer, setDrawColor, (string), void), asCALL_THISCALL); assert( r >= 0 );
+
+		// Simple key/pair save data.
+		r = s_engine->RegisterObjectType("KeyPairFile", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Resource", "KeyPairFile@ asKeyPairFile()", asMETHOD(Resource, asKeyPairFile), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("KeyPairFile", "void save()", asMETHOD(KeyPairFile, save), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("KeyPairFile", "void clear()", asMETHOD(KeyPairFile, clear), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("KeyPairFile", "void clearUnsaved()", asMETHOD(KeyPairFile, clearUnsaved), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("KeyPairFile", "void set(string key, string val)", asMETHODPR(KeyPairFile, set, (string, string), void), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("KeyPairFile", "void set(string key, bool val)", asMETHODPR(KeyPairFile, set, (string, bool), void), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("KeyPairFile", "void set(string key, uint val)", asMETHODPR(KeyPairFile, set, (string, unsigned int), void), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("KeyPairFile", "void set(string key, float val)", asMETHODPR(KeyPairFile, set, (string, float), void), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("KeyPairFile", "bool getBoolean(string key, bool defaultValue)", asMETHODPR(KeyPairFile, getBoolean, (string, bool), bool), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("KeyPairFile", "uint getInteger(string key, uint defaultValue)", asMETHODPR(KeyPairFile, getInteger, (string, unsigned int), unsigned int), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("KeyPairFile", "float getFloat(string key, float defaultValue)", asMETHODPR(KeyPairFile, getFloat, (string, float), float), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("KeyPairFile", "string getString(string key, string defaultValue)", asMETHODPR(KeyPairFile, getString, (string, string), string), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("KeyPairFile", "string toString()", asMETHOD(KeyPairFile, toString), asCALL_THISCALL); assert( r >= 0 );
+
 
 		// Pools
 		r = s_engine->RegisterObjectType("Pool<class T>", 0, asOBJ_REF | asOBJ_NOCOUNT | asOBJ_TEMPLATE); assert(r >= 0);

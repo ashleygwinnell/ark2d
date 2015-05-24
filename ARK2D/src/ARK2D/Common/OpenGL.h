@@ -140,9 +140,9 @@
 
 	#elif defined(ARK2D_RENDERER_DIRECTX)
 
-	#include <string>
-#include <iostream>
-	using namespace std;
+		#include <string>
+		#include <iostream>
+		using namespace std;
 
 		typedef struct {
 			DirectX::XMFLOAT4 vertex;

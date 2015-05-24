@@ -63,6 +63,8 @@ namespace ARK {
 
 				m_Width = tga->getWidth();
 				m_Height = tga->getHeight();
+				m_originalWidth = m_Width;
+				m_originalHeight = m_Height;
 
 				ARK2D::getLog()->v(StringUtil::append("width: ", m_Width));
 				ARK2D::getLog()->v(StringUtil::append("height: ", m_Height));
@@ -193,6 +195,8 @@ namespace ARK {
 				BMPImage* bmp = loadBMP();
 				m_Width = bmp->Width;
 				m_Height = bmp->Height;
+				m_originalWidth = m_Width;
+				m_originalHeight = m_Height;
 
 
 				// generate a new Raster from the BMP information. this one has an alpha channel!
@@ -315,6 +319,8 @@ namespace ARK {
 
 					m_Width = bswap16(width);
 					m_Height = bswap16(height);
+					m_originalWidth = m_Width;
+					m_originalHeight = m_Height;
 
 					ARK2D::getLog()->v(StringUtil::append("w: ", m_Width));
 					ARK2D::getLog()->v(StringUtil::append("h: ", m_Height));
@@ -383,6 +389,8 @@ namespace ARK {
 				unsigned char* pixelData = (unsigned char*) png->getImageData();
 				m_Width = png->getWidth();
 				m_Height = png->getHeight();
+				m_originalWidth = m_Width;
+				m_originalHeight = m_Height;
 
 				//std::cout << "w: " << m_Width << " h: " << m_Height << std::endl;
 
@@ -899,6 +907,8 @@ namespace ARK {
 			texture_offset_y_bl(1.0f),
 			texture_offset_x_br(1.0f),
 			texture_offset_y_br(1.0f),
+			texture_source_w(256.0f),
+			texture_source_h(256.0f),
 			m_CenterX(0),
 			m_CenterY(0),
 			m_tl_corner_color(),
@@ -932,6 +942,8 @@ namespace ARK {
 			texture_offset_y_bl(1.0f),
 			texture_offset_x_br(1.0f),
 			texture_offset_y_br(1.0f),
+			texture_source_w(256.0f),
+			texture_source_h(256.0f),
 			m_CenterX(0),
 			m_CenterY(0),
 			m_tl_corner_color(),
@@ -973,6 +985,8 @@ namespace ARK {
 			texture_offset_y_bl(1.0f),
 			texture_offset_x_br(1.0f),
 			texture_offset_y_br(1.0f),
+			texture_source_w(256.0f),
+			texture_source_h(256.0f),
 			m_CenterX(0),
 			m_CenterY(0),
 			m_tl_corner_color(),
@@ -1011,6 +1025,8 @@ namespace ARK {
 			texture_offset_y_bl(1.0f),
 			texture_offset_x_br(1.0f),
 			texture_offset_y_br(1.0f),
+			texture_source_w(256.0f),
+			texture_source_h(256.0f),
 			m_CenterX(0),
 			m_CenterY(0),
 			m_tl_corner_color(),
@@ -1048,6 +1064,8 @@ namespace ARK {
 			texture_offset_y_bl(1.0f),
 			texture_offset_x_br(1.0f),
 			texture_offset_y_br(1.0f),
+			texture_source_w(256.0f),
+			texture_source_h(256.0f),
 			m_CenterX(0),
 			m_CenterY(0),
 			m_tl_corner_color(),
@@ -1086,6 +1104,8 @@ namespace ARK {
 			texture_offset_y_bl(1.0f),
 			texture_offset_x_br(1.0f),
 			texture_offset_y_br(1.0f),
+			texture_source_w(256.0f),
+			texture_source_h(256.0f),
 			m_CenterX(0),
 			m_CenterY(0), 
 			m_tl_corner_color(),
@@ -1133,18 +1153,20 @@ namespace ARK {
 		double Image::getRotation() {
 			return m_Rotation;
 		}
-		void Image::setRotation(double angle) {
+		Image* Image::setRotation(double angle) {
 			m_Rotation = angle;
 			m_dirty = true;
+			return this;
 		}
 		Image* Image::rotate(double angle) {
 			m_Rotation += angle;
 			m_dirty = true;
 			return this;
 		}
-		void Image::setCenterOfRotation(int x, int y) {
+		Image* Image::setCenterOfRotation(int x, int y) {
 			m_CenterX = x;
 			m_CenterY = y;
+			return this;
 		}
 		void Image::setWidth(int w) {
 			m_Width = w;
@@ -1178,9 +1200,13 @@ namespace ARK {
 				sub->texture_offset_y_bl = t2;
 				sub->texture_offset_x_br = t5;
 				sub->texture_offset_y_br = t6;
+				sub->texture_source_w = texture_source_w;
+				sub->texture_source_h = texture_source_h;
 
 				sub->setWidth(desc.getHeight());
 				sub->setHeight(desc.getWidth());
+				sub->m_originalWidth = sub->m_Width;
+				sub->m_originalHeight = sub->m_Height;
 				sub->clean();
 				return sub;
 			} 
@@ -1241,9 +1267,13 @@ namespace ARK {
 			sub->texture_offset_y_bl = newTextureOffsetY+newTextureHeight;
 			sub->texture_offset_x_br = newTextureOffsetX+newTextureWidth;
 			sub->texture_offset_y_br = newTextureOffsetY+newTextureHeight;
+			sub->texture_source_w = texture_source_w;
+			sub->texture_source_h = texture_source_h;
 			
 			sub->setWidth(width);
 			sub->setHeight(height);
+			sub->m_originalWidth = width;
+			sub->m_originalHeight = height;
 			sub->clean();
 			return sub;
 
@@ -1284,9 +1314,13 @@ namespace ARK {
 			sub->texture_offset_y_bl = texture_offset_y_bl;
 			sub->texture_offset_x_br = texture_offset_x_br;
 			sub->texture_offset_y_br = texture_offset_y_br;
+			sub->texture_source_w = texture_source_w;
+			sub->texture_source_h = texture_source_h;
 
 			sub->setWidth(int(m_Width));
 			sub->setHeight(int(m_Height));
+			sub->m_originalWidth = sub->m_Width;
+			sub->m_originalHeight = sub->m_Height;
 			sub->clean(); 
 			return sub;
 		}
@@ -1308,8 +1342,12 @@ namespace ARK {
 			sub->texture_offset_y_bl = texture_offset_y_bl;
 			sub->texture_offset_x_br = texture_offset_x_br;
 			sub->texture_offset_y_br = texture_offset_y_br;
+			sub->texture_source_w = texture_source_w;
+			sub->texture_source_h = texture_source_h;
 			sub->setWidth((int) m_Width * x);
 			sub->setHeight((int) m_Height * y);
+			sub->m_originalWidth = sub->m_Width;
+			sub->m_originalHeight = sub->m_Height;
 			sub->clean();
 			return sub;
 		}
@@ -1330,8 +1368,12 @@ namespace ARK {
 			sub->texture_offset_y_bl = texture_offset_y_bl;
 			sub->texture_offset_x_br = texture_offset_x_br;
 			sub->texture_offset_y_br = texture_offset_y_br;
+			sub->texture_source_w = texture_source_w;
+			sub->texture_source_h = texture_source_h;
 			sub->setWidth((int)(m_Width * x));
 			sub->setHeight((int)(m_Height * y));
+			sub->m_originalWidth = sub->m_Width;
+			sub->m_originalHeight = sub->m_Height;
 			sub->clean();
 			return sub;
 		}
@@ -1379,6 +1421,11 @@ namespace ARK {
 			}
 			return this;
 		}
+		Image* Image::setScale(float x, float y) {
+			m_Width = m_originalWidth * x;
+			m_Height = m_originalHeight * y;
+			return this;
+		}
 		
 		Image* Image::getFlippedCopy(bool horizontal_flip, bool vertical_flip) {
 			Image* sub = new Image();
@@ -1396,10 +1443,14 @@ namespace ARK {
 			sub->texture_offset_y_bl = texture_offset_y_bl;
 			sub->texture_offset_x_br = texture_offset_x_br;
 			sub->texture_offset_y_br = texture_offset_y_br;
+			sub->texture_source_w = texture_source_w;
+			sub->texture_source_h = texture_source_h;
 			sub->m_CenterX = m_CenterX;
 			sub->m_CenterY = m_CenterY;
 			sub->setWidth((int) m_Width);
 			sub->setHeight((int) m_Height);
+			sub->m_originalWidth = m_Width;
+			sub->m_originalHeight = m_Height;
 			
 			
 			sub->flip(horizontal_flip, vertical_flip);
@@ -1416,9 +1467,10 @@ namespace ARK {
 			return sub;
 		}
 
-		void Image::setAlpha(float f) {
+		Image* Image::setAlpha(float f) {
 			m_alpha = f;
 			m_dirty = true;
+			return this;
 		}
 		float Image::getAlpha() const {
 			return m_alpha;

@@ -8,7 +8,8 @@
 #ifndef MATHUTIL_H_
 #define MATHUTIL_H_
 
-#include "../ARK2D.h"
+//#include "../ARK2D.h"
+#include "../Common/DLL.h"
 
 #include "../Geometry/Vector2.h"
 #include "../Geometry/Vector3.h"
@@ -367,6 +368,89 @@ namespace ARK {
 					}
 					return det;
 				}
+
+				static float linearInterpolation(float* values, unsigned int length, float k) {
+
+					unsigned int m = length - 1;
+					float f = m * k;
+					unsigned int i = floor(f);
+
+					if (k < 0) {
+						return linear(values[0], values[1], f);
+					}
+
+					if (k > 1) {
+						return linear(values[m], values[m - 1], m - f);
+					}
+
+					return linear(values[i], values[i + 1 > m ? m : i + 1], f - i);
+				}
+
+
+				static float bezierInterpolation(float* values, unsigned int length, float k) {
+
+					float result = 0;
+					unsigned int n = length - 1;
+
+					for (unsigned int i = 0; i <= n; ++i) {
+                        float fi = float(i);
+						result += pow(1 - k, n - fi) * pow(k, fi) * values[i] * bernstein(n, i);
+					}
+
+					return result;
+				}
+
+				static float catmullRomInterpolation(float* values, unsigned int length, float k)
+				{
+					unsigned int m = length - 1;
+					float f = m * k;
+					signed int i = floor(f);
+
+					if (values[0] == values[m]) {
+						if (k < 0) {
+							i = floor(f = m * (1 + k));
+						}
+						return catmullRom(values[(i - 1 + m) % m], values[i], values[(i + 1) % m], values[(i + 2) % m], f - i);
+					}
+					
+					if (k < 0) {
+						return values[0] - (catmullRom(values[0], values[0], values[1], values[1], -f) - values[0]);
+					}
+
+					if (k > 1) {
+						return values[m] - (catmullRom(values[m], values[m], values[m - 1], values[m - 1], f - m) - values[m]);
+					}
+
+					return catmullRom(values[i ? i - 1 : 0], values[i], values[m < i + 1 ? m : i + 1], values[m < i + 2 ? m : i + 2], f - i);
+				}
+
+				static float catmullRom(float p0, float p1, float p2, float p3, float t) 
+				{
+					float v0 = (p2 - p0) * 0.5;
+					float v1 = (p3 - p1) * 0.5;
+					float t2 = t * t;
+					float t3 = t * t2;
+					return (2 * p1 - 2 * p2 + v0 + v1) * t3 + (-3 * p1 + 3 * p2 - 2 * v0 - v1) * t2 + v0 * t + p1;
+				}
+
+				static float factorial(signed int value) {
+					if (value == 0) {
+						return 1;
+					}
+
+					signed int res = value;
+					while(--value) {
+						res *= value;
+					}
+					return res;
+				}
+				static float bernstein(signed int n, signed int i) {
+        			return factorial(n) / factorial(i) / factorial(n - i);
+    			}
+    			static float linear(float p0, float p1, float t) {
+        			return (p1 - p0) * t + p0;	
+    			}
+				
 
 		};
 

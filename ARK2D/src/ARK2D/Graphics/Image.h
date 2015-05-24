@@ -15,14 +15,6 @@
 #include <string>
 using namespace std;
 
-/*#include "Renderer.h"
-
-#include "../ARK2D.h"
-
-#include "Color.h"
-#include "SpriteSheetDescriptionItem.h"*/
-
-
 #include "../Core/Resource.h"
 #include "Color.h"
 #include "ImageIO/TargaImage.h"
@@ -44,6 +36,11 @@ namespace ARK {
 				std::string filename;
 				float m_Width;
 				float m_Height;
+
+				// The dimensions of the sprite (usually in a spritesheet). 
+				// We need this so we can change the dimensions by a scale value.
+				float m_originalWidth; 
+				float m_originalHeight; 
 
 				Texture* m_texture;
 				unsigned int texture_temp;
@@ -73,6 +70,8 @@ namespace ARK {
 				float texture_offset_y_bl;
 				float texture_offset_x_br;
 				float texture_offset_y_br;
+				float texture_source_w;
+				float texture_source_h;
 
 				float m_CenterX; // used for rotation
 				float m_CenterY;
@@ -118,7 +117,7 @@ namespace ARK {
 				unsigned int getHeight() const;
 				double getRotation();
 
-				void setAlpha(float f);
+				Image* setAlpha(float f);
 				float getAlpha() const;
 
 				void setColor(Color* c); // color overrides alpha... or does it now?
@@ -127,10 +126,6 @@ namespace ARK {
 
 
 				inline Texture* getTexture() { return m_texture; };
-				//inline float getTextureX() { return texture_offset_x; };
-				//inline float getTextureY() { return texture_offset_y; };
-				//inline float getTextureW() { return texture_width; };
-				//inline float getTextureH() { return texture_height; };
 				inline float getTextureX() { return texture_offset_x_tl; };
 				inline float getTextureY() { return texture_offset_y_tl; };
 				float getTextureW() const;
@@ -143,22 +138,28 @@ namespace ARK {
 				inline float getTextureY_bl() { return texture_offset_y_bl; };
 				inline float getTextureX_br() { return texture_offset_x_br; };
 				inline float getTextureY_br() { return texture_offset_y_br; };
+				
+				// This is the texture width that never changes!
+				inline float getSourceWidth() const { return texture_source_w; }
+				inline float getSourceHeight() const { return texture_source_h; }
 
 
 				void setDirty(bool b);
 				void clean();
 
-				void setCenterOfRotation(int x, int y);
+				Image* setCenterOfRotation(int x, int y);
 				inline int getCenterOfRotationX() { return (int) m_CenterX; }
 				inline int getCenterOfRotationY() { return (int) m_CenterY; }
-				void setRotation(double angle);
-				Image* rotate(double angle); // return reference to self
+				
+				Image* rotate(double angle); // return self
+				Image* setRotation(double angle);
 
 				Image* scale(float x, float y); // returns self.
+				Image* setScale(float x, float y);
+
 				Image* flip(bool flipx, bool flipy); // return self.
-
 				Image* setFlipped(bool flipx, bool flipy);
-
+				
 				Image* getSubImage(const SpriteSheetDescription* desc, const char* item);
 				Image* getSubImage(const SpriteSheetDescriptionItem& desc);
 				Image* getSubImage(int x, int y, int width, int height) const;

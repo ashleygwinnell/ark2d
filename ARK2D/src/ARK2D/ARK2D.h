@@ -11,28 +11,11 @@
 #include "Includes.h"
 #include "Namespaces.h"
 
-//#if (defined(_MSC_FULL_VER) || defined(_MSC_VER) || defined(ARK2D_WINDOWS_PHONE_8))
-/*#if (defined(_MSC_FULL_VER) || defined(_MSC_VER)) && defined(ARK2D_WINDOWS_PHONE_8)
-
-	#if !defined( ARK2D_MISSING_C99_FUNCTIONS )
-		#define ARK2D_MISSING_C99_FUNCTIONS true
-		#define ARK2D_MISSING_C99_FUNCTIONDEFINITIONS true
-
-		ARK2D_API double round( double number ); // { return number < 0.0 ? ceil(number - 0.5) : floor(number + 0.5); }
-		ARK2D_API double log2( double n ); // { return log( n ) / log( 2 ); }
-		 
-	#endif
-
-#endif*/
-
-
 /*!
  * \brief Main static way of accessing global variables such as container, game, input and log.
  *
  * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
  */
-
-
 
 class ARK2D_API ARK2D {
 	friend class ARK::Core::GameContainer;

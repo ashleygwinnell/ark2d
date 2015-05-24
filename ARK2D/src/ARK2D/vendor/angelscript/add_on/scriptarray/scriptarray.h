@@ -1,13 +1,7 @@
 #ifndef SCRIPTARRAY_H
 #define SCRIPTARRAY_H
 
-#ifdef ARK2D_WINDOWS
-	#ifdef ARK2D_WINDOWS_DLL // abc.dll source code will define this macro before including this header
-		#define ARK2D_API __declspec( dllexport )				
-	#else
-		#define ARK2D_API __declspec( dllimport )
-	#endif 
-#endif
+#include "../../../../Common/DLL.h"
 
 #ifndef ANGELSCRIPT_H 
 // Avoid having to inform include path if header is already include before

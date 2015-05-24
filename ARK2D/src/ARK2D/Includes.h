@@ -14,8 +14,7 @@
 			#define ARK2D_FLASCC
 		#endif
 
- 		#define ARK2D_API 
-		#define STL_AVAILABLE
+ 		#define STL_AVAILABLE
 		#define EXCEPTIONS_AVAILABLE
  		#include <AS3/AS3.h>
  		//#include <AS3/AS3++.h>
@@ -55,7 +54,6 @@
 
  	#elif defined(ARK2D_EMSCRIPTEN_JS)
 
- 		#define ARK2D_API 
  		#define STL_AVAILABLE
 		//#define EXCEPTIONS_AVAILABLE
 		#define JSON_SAFE
@@ -90,7 +88,6 @@
  		using namespace std;
 
 	#elif defined(ARK2D_ANDROID)
- 		#define ARK2D_API 
  		#define STL_AVAILABLE
  		//#define EXCEPTIONS_AVAILABLE
  		#define JSON_SAFE
@@ -124,8 +121,7 @@
 
 	#elif defined(ARK2D_IPHONE)
 
-	 	#define ARK2D_API 
- 		#define STL_AVAILABLE
+	 	#define STL_AVAILABLE
 		#define EXCEPTIONS_AVAILABLE
 		#define JSON_SAFE
 
@@ -249,14 +245,6 @@
 		// netcode
 		//#include "Net/Includes.h"
  
-		#ifdef ARK2D_WINDOWS_DLL // abc.dll source code will define this macro before including this header
-			#define ARK2D_API __declspec( dllexport )				
-			//#define ARK2D_STATICVAR __declspec( dllimport )				
-		#else
-			#define ARK2D_API __declspec( dllimport )
-			//#define ARK2D_STATICVAR 
-		#endif 
-
 		#ifndef Assert
 			#if defined( ARK2D_DEBUG )
 				#define Assert(b) do {if (!(b)) {OutputDebugStringA("Assert: " #b "\n");}} while(0)
@@ -335,7 +323,6 @@
 
 		#ifdef __GNUC__
 			#include <sys/time.h>
- 			#define ARK2D_API 
  		#elif (defined(_MSC_FULL_VER) || defined(_MSC_VER))
 
  			#define ARK2D_WINDOWS_VS
@@ -353,10 +340,7 @@
  			#define snprintf _snprintf
 
 
- 			#ifdef ARK2D_WINDOWS_DLL // abc.dll source code will define this macro before including this header
-				#define ARK2D_API __declspec( dllexport )				
-			#else
-				#define ARK2D_API __declspec( dllimport )
+ 			#ifndef ARK2D_WINDOWS_DLL // abc.dll source code will define this macro before including this header
 				#define ANGELSCRIPT_DLL_LIBRARY_IMPORT
 			#endif 
 
@@ -436,8 +420,6 @@
  		#define STL_AVAILABLE
 		#define EXCEPTIONS_AVAILABLE
 
-		#define ARK2D_API
-		
 		//#include "Common/OpenGL.h"
 
 		//#include <Cocoa/Cocoa.h>
@@ -480,11 +462,6 @@
 		//#define ARK2D_UBUNTU_LINUX
 		#define STL_AVAILABLE
 		#define EXCEPTIONS_AVAILABLE
-
-		#define ARK2D_API 
-		
-
-
 
 		#include "Common/Audio.h"
 		#include "Common/OpenGL.h"

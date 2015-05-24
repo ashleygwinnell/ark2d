@@ -5,23 +5,10 @@
  *      Author: Ashley
  */
 
-#ifndef EVENT_H_
-#define EVENT_H_
+#ifndef ARK_CORE_EVENT_H_
+#define ARK_CORE_EVENT_H_
 
-#include "../Includes.h"
-
-// Reducing includes reduces file size.
-//  #define ARK2D_API 
-// #if defined(ARK2D_WINDOWS)
-
-//  	#ifdef ARK2D_WINDOWS_DLL // abc.dll source code will define this macro before including this header
-// 		#define ARK2D_API __declspec( dllexport )				
-// 		//#define ARK2D_STATICVAR __declspec( dllimport )				
-// 	#else
-// 		#define ARK2D_API __declspec( dllimport )
-// 		//#define ARK2D_STATICVAR 
-// 	#endif 
-// #endif
+#include "../Common/DLL.h"
 
 namespace ARK {
 	namespace Core {
@@ -45,4 +32,4 @@ namespace ARK {
 	}
 }
 
-#endif /* EVENT_H_ */
+#endif /* ARK_CORE_EVENT_H_ */
