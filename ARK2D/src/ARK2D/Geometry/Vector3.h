@@ -65,6 +65,10 @@ namespace ARK {
 					m_y = y;
 					m_z = z;
 				}
+				void set(T x, T y) {
+					m_x = x;
+					m_y = y;
+				}
 
 				void adjustX(T x) {
 					m_x += x;
@@ -91,6 +95,11 @@ namespace ARK {
 					m_z += z;
 					return this;
 				}
+				Vector3* add(T x, T y) {
+					m_x += x;
+					m_y += y;
+					return this;
+				}
 				Vector3* addX(T x) {
 					m_x += x;
 					return this;
@@ -111,6 +120,7 @@ namespace ARK {
 				Vector3* multiply(T x, T y, T z) {
 					m_x *= x;
 					m_y *= y;
+					m_z *= z;
 					return this;
 				}
 				void multiplyX(T x) {

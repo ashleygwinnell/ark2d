@@ -163,6 +163,9 @@
 			"src/ARK2D/Particles/ParticleIO.cpp",
 			"src/ARK2D/Particles/ParticlePool.cpp",
 			"src/ARK2D/Particles/ParticleSystem.cpp",
+			
+			"src/ARK2D/SceneGraph/Scene.cpp",
+
 			"src/ARK2D/State/GameState.cpp",
 			"src/ARK2D/State/IntelligentGameState.cpp",
 			"src/ARK2D/State/VideoGameState.cpp",

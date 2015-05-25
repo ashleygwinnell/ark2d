@@ -129,6 +129,14 @@ namespace ARK {
 		class AStarNode;
 	}
 	
+	//! Classes for Scenegraphs
+	namespace SceneGraph {
+		class Scene;
+		class SceneNode;
+		class SceneGroup;
+		class SceneImage;
+	}
+
 	//! Classes for skeletal animations
 	namespace Spine {
 		class Skeleton;
@@ -242,6 +250,7 @@ using namespace ARK::Net;
 using namespace ARK::Path;
 using namespace ARK::Pathfinding;
 using namespace ARK::Particles;
+using namespace ARK::SceneGraph;
 using namespace ARK::Spine;
 using namespace ARK::State;
 using namespace ARK::State::Transition;

@@ -31,7 +31,9 @@ namespace ARK {
 
 			public:
 				static void assertInternal(string file, signed int line, signed int r);
+				static void functionCheckInternal(string file, signed int line, asIScriptFunction* func, string decl);
 				static void exceptionCheckInternal(string file, signed int line, asIScriptContext* ctx, asIScriptFunction* func, signed int r);
+				
 				
 		};
 
@@ -39,6 +41,8 @@ namespace ARK {
 }
 
 #define AngelScriptUtil_assert(r) AngelScriptUtil::assertInternal(__FILE__, __LINE__, r);
+#define AngelScriptUtil_functionCheck(func, s) AngelScriptUtil::functionCheckInternal(__FILE__, __LINE__, func, s);
 #define AngelScriptUtil_execeptionCheck(ctx, func, r) AngelScriptUtil::exceptionCheckInternal(__FILE__, __LINE__, ctx, func, r);
+int AngelScriptUtil_IncludeCallback(const char* include, const char* from, CScriptBuilder* builder, void* userParam);
 
 #endif

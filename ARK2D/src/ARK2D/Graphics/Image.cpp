@@ -888,6 +888,7 @@ namespace ARK {
 
 		Image::Image():
 			ARK::Core::Resource(),
+			ARK::SceneGraph::SceneNode(SceneNode::TYPE_IMAGE, "image"),
 			m_data(NULL),
 			m_dataLength(0),
 			m_resourceType(0),
@@ -915,7 +916,6 @@ namespace ARK {
 			m_tr_corner_color(),
 			m_alpha(1.0f),
 			m_color(NULL),
-			m_Rotation(0),
 			m_dirty(false)
 		{
 			clean();
@@ -923,6 +923,7 @@ namespace ARK {
 
 		Image::Image(unsigned int resource, unsigned int resourceType):
 			ARK::Core::Resource(),
+			ARK::SceneGraph::SceneNode(SceneNode::TYPE_IMAGE, "image"),
 			m_data(NULL),
 			m_dataLength(0),
 			m_resourceType(resourceType),
@@ -950,7 +951,6 @@ namespace ARK {
 			m_tr_corner_color(),
 			m_alpha(1.0f),
 			m_color(NULL),
-			m_Rotation(0),
 			m_dirty(false)
 		{
 			ARK2D::getLog()->v("Loading Image from resource. "); //std::cout << "Loading Image from resource. " << std::endl;
@@ -964,6 +964,7 @@ namespace ARK {
 
 		Image::Image(void* data, unsigned int resourceType, string file):
 			ARK::Core::Resource(),
+			ARK::SceneGraph::SceneNode(SceneNode::TYPE_IMAGE, file),
 			m_data(data),
 			m_dataLength(0),
 			m_resourceType(resourceType),
@@ -993,7 +994,6 @@ namespace ARK {
 			m_tr_corner_color(),
 			m_alpha(1.0f),
 			m_color(NULL),
-			m_Rotation(0),
 			m_dirty(false)
 		{
 			ARK2D::getLog()->v("Loading Image from data. ");
@@ -1004,6 +1004,7 @@ namespace ARK {
 
 		Image::Image(void* data, unsigned int dataLength, unsigned int resourceType, string file):
 			ARK::Core::Resource(),
+			ARK::SceneGraph::SceneNode(SceneNode::TYPE_IMAGE, file),
 			m_data(data),
 			m_dataLength(dataLength),
 			m_resourceType(resourceType),
@@ -1033,7 +1034,6 @@ namespace ARK {
 			m_tr_corner_color(),
 			m_alpha(1.0f),
 			m_color(NULL),
-			m_Rotation(0),
 			m_dirty(false)
 		{
 			ARK2D::getLog()->v("Loading Image from data. ");
@@ -1044,6 +1044,7 @@ namespace ARK {
 
 		Image::Image(const std::string& fname):
 			ARK::Core::Resource(),
+			ARK::SceneGraph::SceneNode(SceneNode::TYPE_IMAGE, fname),
 			m_data(NULL),
 			m_resourceType(0),
 			filename(fname),
@@ -1072,7 +1073,6 @@ namespace ARK {
 			m_tr_corner_color(),
 			m_alpha(1.0f),
 			m_color(NULL),
-			m_Rotation(0),
 			m_dirty(false)
 		{
 			this->texture_temp = this->load(); // this sets the width and height too! :)
@@ -1084,6 +1084,7 @@ namespace ARK {
 
 		Image::Image(const std::string& fname, const Color& mask) :
 			ARK::Core::Resource(),
+			ARK::SceneGraph::SceneNode(SceneNode::TYPE_IMAGE, fname),
 			m_data(NULL), 
 			m_resourceType(0), 
 			filename(fname),
@@ -1112,7 +1113,6 @@ namespace ARK {
 			m_tr_corner_color(),
 			m_alpha(1.0f),
 			m_color(NULL),
-			m_Rotation(0), 
 			m_dirty(false)
 		{
 			this->texture_temp = this->load(mask); // this sets the width and height too! :)
@@ -1150,16 +1150,14 @@ namespace ARK {
 		unsigned int Image::getHeight() const {
 			return (unsigned int) m_Height;
 		}
-		double Image::getRotation() {
-			return m_Rotation;
-		}
-		Image* Image::setRotation(double angle) {
-			m_Rotation = angle;
+		
+		SceneNode* Image::setRotation(double angle) {
+            SceneNode::setRotation(angle);
 			m_dirty = true;
 			return this;
 		}
-		Image* Image::rotate(double angle) {
-			m_Rotation += angle;
+		SceneNode* Image::rotate(double angle) {
+			SceneNode::rotation += angle;
 			m_dirty = true;
 			return this;
 		}
@@ -1290,11 +1288,18 @@ namespace ARK {
 			return sub;*/
 		}
 
-		Image* Image::scale(float x, float y) {
+		SceneNode* Image::scale(float x, float y) {
+            SceneNode::scale.multiply(x, y, 1);
 			m_Width = (float(m_Width) * x);
 			m_Height = (float(m_Height) * y);
 			clean();
-			
+			return this;
+		}
+		SceneNode* Image::setScale(float x, float y) {
+			SceneNode::scale.set(x, y);
+			m_Width = m_originalWidth * x;
+			m_Height = m_originalHeight * y;
+			clean();
 			return this;
 		}
  
@@ -1421,11 +1426,7 @@ namespace ARK {
 			}
 			return this;
 		}
-		Image* Image::setScale(float x, float y) {
-			m_Width = m_originalWidth * x;
-			m_Height = m_originalHeight * y;
-			return this;
-		}
+		
 		
 		Image* Image::getFlippedCopy(bool horizontal_flip, bool vertical_flip) {
 			Image* sub = new Image();
@@ -1684,7 +1685,7 @@ namespace ARK {
 		void Image::draw(float x, float y) {
 
 			//ARK2D::getLog()->v("temp: 0");
-			showAnyGlErrorAndExitMacro();
+			//showAnyGlErrorAndExitMacro();
 
 			Renderer* r = ARK2D::getRenderer();
 
@@ -1717,7 +1718,10 @@ namespace ARK {
 					a   = (unsigned char) (m_color->getAlphac() * (m_alpha * r->getDrawColor().getAlphaf()) );
 				}
 
-				MathUtil::rotateQuadAroundPoint(batch_rawVertices, x + m_CenterX, y + m_CenterY, m_Rotation);
+				if (SceneNode::rotation != 0) { 
+					MathUtil::rotateQuadAroundPoint(batch_rawVertices, x + m_CenterX, y + m_CenterY, SceneNode::rotation);
+				}
+				
 				Renderer::getBatch()->addTexturedQuad(
 					m_texture->getId(), 
 					batch_rawVertices[0], batch_rawVertices[1], 
@@ -1764,9 +1768,9 @@ namespace ARK {
 			//ARK2D::getLog()->v("temp: 2");
 
 			// rotation
-			if (m_Rotation != 0) {
+			if (SceneNode::rotation != 0) {
 				r->translate(x + m_CenterX, y + m_CenterY);
-				r->rotate((float) m_Rotation);
+				r->rotate((float) SceneNode::rotation);
 				r->translate((x + m_CenterX) * -1, (y + m_CenterY) * -1);
 			}
 
@@ -1997,9 +2001,9 @@ namespace ARK {
 
 			r->popMatrix();
 
-			if (m_Rotation != 0) {
+			if (SceneNode::rotation != 0) {
 				r->translate(x + m_CenterX, y + m_CenterY);
-				r->rotate(float(m_Rotation * -1));
+				r->rotate(float(SceneNode::rotation * -1));
 				r->translate((x + m_CenterX) * -1, (y + m_CenterY) * -1);
 			}
 
@@ -2537,6 +2541,27 @@ namespace ARK {
 
 		Image::~Image() {
 			//glDeleteTextures( 1, &texture );
+		}
+
+		void Image::render() {
+			Renderer* r = ARK2D::getRenderer();
+			r->pushMatrix();
+			r->translate(position.getX(), position.getY(), position.getZ());
+            r->rotate(float(SceneNode::rotation));
+            
+            double tempRotation = SceneNode::rotation;
+            SceneNode::rotation = 0.0f;
+            draw(
+				pivot.getX() * -1.0f * m_Width,// * SceneNode::scale.getX(),
+				pivot.getY() * -1.0f * m_Height,// * SceneNode::scale.getY(),
+				m_Width,// * SceneNode::scale.getX(),
+				m_Height// * SceneNode::scale.getY()
+			);
+			SceneNode::rotation = tempRotation;
+			
+			r->popMatrix();
+			
+			SceneNode::render();
 		}
 
 		// http://stackoverflow.com/questions/2008842/creating-and-loading-pngs-in-rgba4444-rgba5551-for-opengl

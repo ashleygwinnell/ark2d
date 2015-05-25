@@ -30,6 +30,7 @@ namespace ARK {
 		{
 			public: 
 				static unsigned int s_glCalls;
+				//static unsigned int s_glDrawCalls;
 				static unsigned int s_lines;
 				static unsigned int s_tris;
 				static unsigned int s_textureSwaps;	
@@ -187,6 +188,7 @@ namespace ARK {
 				vector<RendererBatchItem_TexTri> textris;
 				unsigned int m_type;
 				unsigned int m_textureId;
+				unsigned int m_shaderId;
 
 			public:
 				RendererBatchItem();

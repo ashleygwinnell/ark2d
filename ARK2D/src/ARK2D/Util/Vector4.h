@@ -104,6 +104,22 @@ namespace ARK {
 					return this;
 				}
 
+				// Multiply
+				Vector4* multiply(Vector4<T>& v) {
+					return multiply(v.getX(), v.getY(), v.getZ(), v.getW());
+				}
+				Vector4* multiply(Vector4<T>* v) {
+					return multiply(v->getX(), v->getY(), v->getZ(), v->getW());
+				}
+				Vector4* multiply(T x, T y, T z, T w) {
+					row[0] *= x;
+					row[1] *= y;
+					row[2] *= z;
+					row[3] *= w;
+					return this;
+				}
+				
+
 				void toValue(T v) {
 					row[0] = v;
 					row[1] = v;
@@ -138,6 +154,33 @@ namespace ARK {
 				Vector4<T> operator+=(const Vector4<T>& other) { 
 					add(other[0], other[1], other[2], other[3]);  
 					return *this; 
+				}
+				Vector4<T> operator*=(const Vector4<T>& other) { 
+					multiply(other[0], other[1], other[2], other[3]);  
+					return *this; 
+				}
+				Vector4<T> operator*=(float other) { 
+					multiply(other, other, other, other);  
+					return *this; 
+				}
+				Vector4<T> operator*(float other) { 
+					multiply(other, other, other, other);  
+					return *this; 
+				}
+				Vector4<T> operator*=(const Matrix44<T>& m) {
+                    Vector4<T>::multMatrix44(row[0], row[1], row[2], row[3], m);
+				    return *this;
+				}
+
+				static void multMatrix44(float& x, float& y, float& z, float& w, const Matrix44<T>& m) {
+					T newX = x*m[0][0] + y*m[1][0] + z*m[2][0] + w*m[3][0];
+                    T newY = x*m[0][1] + y*m[1][1] + z*m[2][1] + w*m[3][1];
+                    T newZ = x*m[0][2] + y*m[1][2] + z*m[2][2] + w*m[3][2];
+                    T newW = x*m[0][3] + y*m[1][3] + z*m[2][3] + w*m[3][3];
+                    x = newX;
+                    y = newY;
+                    z = newZ;
+                    w = newW;
 				}
 				
 				~Vector4() {

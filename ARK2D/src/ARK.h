@@ -181,6 +181,9 @@
 // Pathfinding
 #include "ARK2D/Pathfinding/AStar.h"
 
+// Scenegraph
+#include "ARK2D/SceneGraph/Scene.h"
+
 // Tools
 #include "ARK2D/Tools/Packer.h"
 

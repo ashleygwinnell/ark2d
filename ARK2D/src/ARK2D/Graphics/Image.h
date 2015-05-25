@@ -20,11 +20,12 @@ using namespace std;
 #include "ImageIO/TargaImage.h"
 #include "ImageIO/BMPImage.h"
 #include "ImageIO/PNGImage.h"
+#include "../SceneGraph/Scene.h"
 
 namespace ARK {
 	namespace Graphics {
 
-		class ARK2D_API Image : public ARK::Core::Resource {
+		class ARK2D_API Image : public ARK::Core::Resource, public ARK::SceneGraph::SceneNode {
 			friend class TextureStore;
 			friend class ARK::Core::Resource;
 			private:
@@ -83,8 +84,7 @@ namespace ARK {
 				Color* m_color;
 
 
-				double m_Rotation;
-
+				
 				
 
 				//#if defined(ARK2D_OPENGL_ES_2_0)
@@ -151,11 +151,11 @@ namespace ARK {
 				inline int getCenterOfRotationX() { return (int) m_CenterX; }
 				inline int getCenterOfRotationY() { return (int) m_CenterY; }
 				
-				Image* rotate(double angle); // return self
-				Image* setRotation(double angle);
+				virtual SceneNode* rotate(double angle); // return self
+				virtual SceneNode* setRotation(double angle);
 
-				Image* scale(float x, float y); // returns self.
-				Image* setScale(float x, float y);
+				virtual SceneNode* scale(float x, float y); // returns self.
+				virtual SceneNode* setScale(float x, float y);
 
 				Image* flip(bool flipx, bool flipy); // return self.
 				Image* setFlipped(bool flipx, bool flipy);
@@ -207,6 +207,9 @@ namespace ARK {
 					static Image* getDummy();
 
 					virtual ~Image();
+
+				// SceneGraph
+					virtual void render();
 		};
 	}
 }

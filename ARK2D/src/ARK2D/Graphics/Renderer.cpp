@@ -35,6 +35,14 @@
 namespace ARK {  
 	namespace Graphics {
 
+		#if !defined(ARK2D_WINDOWS_VS) // && !defined(ARK2D_UBUNTU_LINUX)
+			const int Renderer::ALIGN_LEFT; 
+			const int Renderer::ALIGN_RIGHT;
+			const int Renderer::ALIGN_TOP;
+			const int Renderer::ALIGN_BOTTOM;
+			const int Renderer::ALIGN_CENTER;
+		#endif
+
 		#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH) || (defined(ARK2D_WINDOWS) && defined(ARK2D_RENDERER_OPENGL)) || defined(ARK2D_UBUNTU_LINUX) || defined(ARK2D_EMSCRIPTEN_JS) )
 			
 			bool Renderer::gluCheckExtensionARK(const GLubyte* extName, const GLubyte* extString) { 
@@ -108,6 +116,7 @@ namespace ARK {
 
 		// renderer statistics
 		unsigned int RendererStats::s_glCalls = 0;
+		//unsigned int RendererStats::s_glDrawCalls = 0;
 		unsigned int RendererStats::s_lines = 0;
 		unsigned int RendererStats::s_tris = 0;
 		unsigned int RendererStats::s_textureSwaps = 0;	
@@ -119,6 +128,7 @@ namespace ARK {
 		}
 		void RendererStats::reset() {
 			s_glCalls = 0;
+			//s_glDrawCalls = 0;
 			s_lines = 0;
 			s_tris = 0;
 			s_textureSwaps = 0;
@@ -767,7 +777,17 @@ namespace ARK {
 			textureData(),
 			colorData()
 		{
+ 
+		}
 
+		inline void multiplymatrixtest(float& x, float& y, float& z, Matrix44<float>* m) {
+			/*Vector4<float> p(x, y, z, 1);
+            p *= *m;
+			x = p[0] / p[3];
+			y = p[1] / p[3];
+			z = p[2] / p[3];*/
+			float w = 1.0f;
+			Vector4<float>::multMatrix44(x, y, z, w, *m);
 		}
 		
 		RendererBatch::RendererBatch():
@@ -814,6 +834,14 @@ namespace ARK {
 			RendererBatchItem* item = &items.at(items.size()-1);
 			item->m_type = RendererBatchItem::TYPE_GEOMETRY_TRIS;
 			item->m_textureId = 0;
+			item->m_shaderId = 0;
+
+			// Multiply coordinates by top matrix.
+			float z = 1.0f;
+			Matrix44<float>* cur = Renderer::getMatrix()->current();
+			multiplymatrixtest(x1, y1, z, cur);
+			multiplymatrixtest(x2, y2, z, cur);
+			multiplymatrixtest(x3, y3, z, cur);
 
 			RendererBatchItem_GeomTri one;
 			one.vertexData[0] = x1;
@@ -847,12 +875,23 @@ namespace ARK {
 			unsigned char c3r, unsigned char c3g, unsigned char c3b, unsigned char c3a,
 			unsigned char c4r, unsigned char c4g, unsigned char c4b, unsigned char c4a) 
 		{
-			if (items.size() == 0 || items.at(items.size()-1).m_type == RendererBatchItem::TYPE_TEXTURE_TRIS) {
+			if (items.size() == 0 || 
+				items.at(items.size()-1).m_type == RendererBatchItem::TYPE_TEXTURE_TRIS
+				) {
 				items.push_back(RendererBatchItem());
 			}
 			RendererBatchItem* item = &items.at(items.size()-1);
 			item->m_type = RendererBatchItem::TYPE_GEOMETRY_TRIS;
 			item->m_textureId = 0;
+			item->m_shaderId = 0;
+
+			// Multiply coordinates by top matrix.
+			float z = 1.0f;
+			Matrix44<float>* cur = Renderer::getMatrix()->current();
+			multiplymatrixtest(x1, y1, z, cur);
+			multiplymatrixtest(x2, y2, z, cur);
+			multiplymatrixtest(x3, y3, z, cur);
+			multiplymatrixtest(x4, y4, z, cur);
 
 			RendererBatchItem_GeomTri one;
 			one.vertexData[0] = x1;
@@ -920,13 +959,25 @@ namespace ARK {
 			unsigned char c2r, unsigned char c2g, unsigned char c2b, unsigned char c2a,
 			unsigned char c3r, unsigned char c3g, unsigned char c3b, unsigned char c3a) 
 		{
-			if (items.size() == 0 || items.at(items.size()-1).m_type == RendererBatchItem::TYPE_GEOMETRY_TRIS || items.at(items.size()-1).m_textureId != texId) {
+			if (items.size() == 0 || 
+				items.at(items.size()-1).m_type == RendererBatchItem::TYPE_GEOMETRY_TRIS || 
+				items.at(items.size()-1).m_textureId != texId ||
+                items.at(items.size()-1).m_shaderId != RendererState::s_shaderId
+				) {
 				items.push_back(RendererBatchItem());
 			}
 
 			RendererBatchItem* item = &items.at(items.size()-1);
 			item->m_type = RendererBatchItem::TYPE_TEXTURE_TRIS;
 			item->m_textureId = texId;
+			item->m_shaderId = RendererState::s_shaderId;
+
+			// Multiply coordinates by top matrix.
+			float z = 1.0f;
+			Matrix44<float>* cur = Renderer::getMatrix()->current();
+			multiplymatrixtest(x1, y1, z, cur);
+			multiplymatrixtest(x2, y2, z, cur);
+			multiplymatrixtest(x3, y3, z, cur);
 
 			RendererBatchItem_TexTri one;
 			one.vertexData[0] = x1;
@@ -976,6 +1027,7 @@ namespace ARK {
 				colors[20], colors[21], colors[22], colors[23] 
 			); 
 		} 
+		
 		void RendererBatch::addTexturedQuad(
 			unsigned int texId,  
 			float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, 
@@ -991,6 +1043,15 @@ namespace ARK {
 			RendererBatchItem* item = &items.at(items.size()-1);
 			item->m_type = RendererBatchItem::TYPE_TEXTURE_TRIS;
 			item->m_textureId = texId;
+			item->m_shaderId = RendererState::s_shaderId;
+
+			// Multiply coordinates by top matrix.
+			float z = 1.0f;
+			Matrix44<float>* cur = Renderer::getMatrix()->current();
+			multiplymatrixtest(x1, y1, z, cur);
+			multiplymatrixtest(x2, y2, z, cur);
+			multiplymatrixtest(x3, y3, z, cur);
+			multiplymatrixtest(x4, y4, z, cur);
 
 			RendererBatchItem_TexTri one;
 			one.vertexData[0] = x1;

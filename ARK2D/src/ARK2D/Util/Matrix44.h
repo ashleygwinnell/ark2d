@@ -323,7 +323,7 @@ namespace ARK {
 					MathUtil::crossvec3(&ux, &uy, &uz, sx, sy, sz, fx, fy, fz);
 
 					Matrix44<float> lookAtMatrix;
-					lookAtMatrix.identity();
+					//lookAtMatrix.identity(); // this is done in constructor
 
 					lookAtMatrix[0][0] = sx;
 					lookAtMatrix[1][0] = sy;
@@ -360,7 +360,7 @@ namespace ARK {
 				static Matrix44<T> createTranslateMatrix(float x, float y, float z) {
 					// http://en.wikipedia.org/wiki/Translation_(geometry)
 					Matrix44<float> translateMatrix;
-					translateMatrix.identity();
+					//translateMatrix.identity(); // this is done in constructor
 					translateMatrix[3][0] = x;
 					translateMatrix[3][1] = y;
 					translateMatrix[3][2] = z;
@@ -375,7 +375,7 @@ namespace ARK {
 				static Matrix44<T> createScaleMatrix(float x, float y, float z) {
 					// http://en.wikipedia.org/wiki/Scaling_(geometry)
 					Matrix44<float> scaleMatrix;
-					scaleMatrix.identity();
+					//scaleMatrix.identity(); // this is done in constructor
 					scaleMatrix[0][0] = x;
 					scaleMatrix[1][1] = y;
 					scaleMatrix[2][2] = z;

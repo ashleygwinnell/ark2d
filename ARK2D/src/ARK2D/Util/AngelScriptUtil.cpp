@@ -4,6 +4,8 @@
 #include "../ARK2D.h"
 #include "Log.h"
 #include "KeyPairFile.h"
+#include "BMFont.h"
+#include "../Graphics/Renderer.h"
 #include "../Core/GameContainer.h"
 #include "../Util/Containers/Pool.h"
 
@@ -27,6 +29,29 @@ void AngelScriptUtil_MessageCallback(const asSMessageInfo* msg, void *param) {
 	}
 	//printf("%s (%d, %d) : %s : %s\n", msg->section, msg->row, msg->col, type, msg->message);
 }
+
+int AngelScriptUtil_IncludeCallback(const char* include, const char* from, CScriptBuilder* builder, void* userParam) {
+
+	if (!Resource::exists(include)) {
+		stringstream s; s << "Include file '" << include << "' does not exist.";
+		ARK2D::getLog()->e(s.str());
+		return -1;
+	}
+
+	String* s = Resource::get(include)->asString();
+	if (s == NULL) { return -1; }
+
+	string script = s->getc();
+	int r = builder->AddSectionFromMemory(include, script.c_str());
+	AngelScriptUtil_assert(r);
+
+	delete s;
+	s = NULL;
+
+	return 1;
+}
+
+
 void AngelScriptUtil_Print(const string& s) {
 	ARK2D::getLog()->i(s);
 }
@@ -38,6 +63,8 @@ asIScriptEngine* AngelScriptUtil::restart() {
 	}
 	return getEngine();
 }
+
+
 
 //Resource* Resource_Get_Generic(asIScriptGeneric* gen)
 //{
@@ -58,6 +85,18 @@ class MyTestClass {
 
 		}
 };
+
+void AngelScriptUtil::functionCheckInternal(string file, signed int line, asIScriptFunction* func, string decl) {
+	if( func == 0 )
+	{
+		// The function couldn't be found. Instruct the script writer to include the expected function in the script.
+		stringstream s;
+		s << "The script must have the function '" << decl << "'. Please add it and try again.";
+		ErrorDialog::createAndShow(s.str());
+		exit(0);
+        return;
+	}
+} 
 
 void AngelScriptUtil::exceptionCheckInternal(string file, signed int line, asIScriptContext* ctx, asIScriptFunction* func, signed int r) {
 	if (r != asEXECUTION_FINISHED) 
@@ -158,13 +197,29 @@ asIScriptEngine* AngelScriptUtil::getEngine() {
 		r = s_engine->RegisterObjectMethod("Resource", "Image@ asImage()", asMETHOD(Resource, asImage), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Image", "int getWidth()", asMETHOD(Image, getWidth), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Image", "int getHeight()", asMETHOD(Image, getHeight), asCALL_THISCALL); assert( r >= 0 );
-		r = s_engine->RegisterObjectMethod("Image", "Image@ rotate(double)", asMETHODPR(Image, rotate, (double), Image*), asCALL_THISCALL); assert( r >= 0 );
-		r = s_engine->RegisterObjectMethod("Image", "Image@ scale(float, float)", asMETHODPR(Image, scale, (float, float), Image*), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Image", "Image@ rotate(double)", asMETHODPR(Image, rotate, (double), SceneNode*), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Image", "Image@ scale(float, float)", asMETHODPR(Image, scale, (float, float), SceneNode*), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Image", "Image@ flip(bool, bool)", asMETHODPR(Image, flip, (bool, bool), Image*), asCALL_THISCALL); assert( r >= 0 );		
 		r = s_engine->RegisterObjectMethod("Image", "void draw(float, float)", asMETHODPR(Image, draw, (float, float), void), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Image", "void drawCentered(float, float)", asMETHODPR(Image, drawCentered, (float, float), void), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Image", "void drawCenteredScaled(float, float, float, float)", asMETHODPR(Image, drawCenteredScaled, (float, float, float, float), void), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Image", "Image@ opAssign(Image@ &in)", asMETHOD(Image, operator=), asCALL_THISCALL); assert( r >= 0 );
+
+		// Spritesheet
+		r = s_engine->RegisterObjectType("SpriteSheet", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Resource", "SpriteSheet@ asSpriteSheet()", asMETHOD(Resource, asSpriteSheetDescription), asCALL_THISCALL); assert( r >= 0 );
+		// SpriteSheetStore::addSheet(SpriteSheetDescription* desc, Image* sheet);
+
+		// Font/s
+		r = s_engine->RegisterObjectType("Font", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Resource", "Font@ asFont()", asMETHOD(Resource, asFont), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectType("BMFont", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Font", "BMFont@ asBMFont()", asMETHOD(ARK::Font::Font, asBMFont), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("BMFont", "uint getStringWidth(const string)", asMETHOD(ARK::Font::BMFont, getStringWidth), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("BMFont", "uint getStringHeight(const string)", asMETHOD(ARK::Font::BMFont, getStringHeight), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("BMFont", "uint getLineHeight()", asMETHOD(ARK::Font::BMFont, getLineHeight), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("BMFont", "void drawString(const string, float, float, int = -1, int = -1, float = 0.0f, float = 1.0f)", asMETHODPR(ARK::Font::BMFont, drawString, (const string, float, float, int, int, float, float), void), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("BMFont", "Image@ getImage()", asMETHOD(ARK::Font::BMFont, getImage), asCALL_THISCALL); assert( r >= 0 );
 
 		// Sound resource
 		r = s_engine->RegisterObjectType("Sound", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
@@ -272,6 +327,12 @@ asIScriptEngine* AngelScriptUtil::getEngine() {
 		r = s_engine->RegisterObjectMethod("Renderer", "void drawLine(float x1, float y1, float x2, float y2)", asMETHODPR(Renderer, drawLine, (float, float, float, float) const, void), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Renderer", "void setDrawColor(float r, float g, float b, float a)", asMETHODPR(Renderer, setDrawColorf, (float, float, float, float), void), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Renderer", "void setDrawColor(string hex)", asMETHODPR(Renderer, setDrawColor, (string), void), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterGlobalProperty("int ALIGN_LEFT", (void*) &ARK::Graphics::Renderer::ALIGN_LEFT); assert( r >= 0 );
+		r = s_engine->RegisterGlobalProperty("int ALIGN_RIGHT", (void*) &Renderer::ALIGN_RIGHT); assert( r >= 0 );
+		r = s_engine->RegisterGlobalProperty("int ALIGN_CENTER", (void*) &Renderer::ALIGN_CENTER); assert( r >= 0 );
+		r = s_engine->RegisterGlobalProperty("int ALIGN_TOP", (void*) &Renderer::ALIGN_TOP); assert( r >= 0 );
+		r = s_engine->RegisterGlobalProperty("int ALIGN_BOTTOM", (void*) &Renderer::ALIGN_BOTTOM); assert( r >= 0 );
+
 
 		// Simple key/pair save data.
 		r = s_engine->RegisterObjectType("KeyPairFile", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
