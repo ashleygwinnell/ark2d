@@ -112,9 +112,9 @@ namespace ARK {
 						}
 						void setUsingList(bool b) {
 							
-							if (m_active->isUsingList() && !b) {
+							if (m_active.isUsingList() && !b) {
 								// TODO: move items from lst to vec.
-							} else if (!m_active->isUsingList() && b) {
+							} else if (!m_active.isUsingList() && b) {
 								// TODO: move items from vec to lst.
 							}
 							

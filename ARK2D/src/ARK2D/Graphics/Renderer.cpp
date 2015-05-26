@@ -427,6 +427,9 @@ namespace ARK {
 		bool MatrixStack::isDirty() {
 			return m_dirty;
 		}
+		unsigned int MatrixStack::height() {
+			return m_stack.size();
+		}
 
 		Matrix44<float>* MatrixStack::current() {
 			return &m_stack[m_stackIndex];
@@ -792,9 +795,16 @@ namespace ARK {
 		
 		RendererBatch::RendererBatch():
 			items(),
-			enabled(false)
+			enabled(false),
+			startedAtMatrixIndex(0)
 		{
 
+		}
+		void RendererBatch::setEnabled(bool b) { 
+			enabled = b; 
+			if (b) {
+				startedAtMatrixIndex = Renderer::getMatrix()->height();
+			}
 		}
 		void RendererBatch::addGeometryTri(float* verts, unsigned char* colors) 
 		{
@@ -836,12 +846,14 @@ namespace ARK {
 			item->m_textureId = 0;
 			item->m_shaderId = 0;
 
-			// Multiply coordinates by top matrix.
-			float z = 1.0f;
-			Matrix44<float>* cur = Renderer::getMatrix()->current();
-			multiplymatrixtest(x1, y1, z, cur);
-			multiplymatrixtest(x2, y2, z, cur);
-			multiplymatrixtest(x3, y3, z, cur);
+            if (startedAtMatrixIndex != Renderer::getMatrix()->height()) {
+				// Multiply coordinates by top matrix.
+				float z = 1.0f;
+				Matrix44<float>* cur = Renderer::getMatrix()->current();
+				multiplymatrixtest(x1, y1, z, cur);
+				multiplymatrixtest(x2, y2, z, cur);
+				multiplymatrixtest(x3, y3, z, cur);
+			}
 
 			RendererBatchItem_GeomTri one;
 			one.vertexData[0] = x1;
@@ -885,13 +897,15 @@ namespace ARK {
 			item->m_textureId = 0;
 			item->m_shaderId = 0;
 
-			// Multiply coordinates by top matrix.
-			float z = 1.0f;
-			Matrix44<float>* cur = Renderer::getMatrix()->current();
-			multiplymatrixtest(x1, y1, z, cur);
-			multiplymatrixtest(x2, y2, z, cur);
-			multiplymatrixtest(x3, y3, z, cur);
-			multiplymatrixtest(x4, y4, z, cur);
+            if (startedAtMatrixIndex != Renderer::getMatrix()->height()) {
+				// Multiply coordinates by top matrix.
+				float z = 1.0f;
+				Matrix44<float>* cur = Renderer::getMatrix()->current();
+				multiplymatrixtest(x1, y1, z, cur);
+				multiplymatrixtest(x2, y2, z, cur);
+				multiplymatrixtest(x3, y3, z, cur);
+				multiplymatrixtest(x4, y4, z, cur);
+			}
 
 			RendererBatchItem_GeomTri one;
 			one.vertexData[0] = x1;
@@ -972,12 +986,14 @@ namespace ARK {
 			item->m_textureId = texId;
 			item->m_shaderId = RendererState::s_shaderId;
 
-			// Multiply coordinates by top matrix.
-			float z = 1.0f;
-			Matrix44<float>* cur = Renderer::getMatrix()->current();
-			multiplymatrixtest(x1, y1, z, cur);
-			multiplymatrixtest(x2, y2, z, cur);
-			multiplymatrixtest(x3, y3, z, cur);
+            if (startedAtMatrixIndex != Renderer::getMatrix()->height()) {
+				// Multiply coordinates by top matrix.
+				float z = 1.0f;
+				Matrix44<float>* cur = Renderer::getMatrix()->current();
+				multiplymatrixtest(x1, y1, z, cur);
+				multiplymatrixtest(x2, y2, z, cur);
+				multiplymatrixtest(x3, y3, z, cur);
+			}
 
 			RendererBatchItem_TexTri one;
 			one.vertexData[0] = x1;
@@ -1045,13 +1061,15 @@ namespace ARK {
 			item->m_textureId = texId;
 			item->m_shaderId = RendererState::s_shaderId;
 
-			// Multiply coordinates by top matrix.
-			float z = 1.0f;
-			Matrix44<float>* cur = Renderer::getMatrix()->current();
-			multiplymatrixtest(x1, y1, z, cur);
-			multiplymatrixtest(x2, y2, z, cur);
-			multiplymatrixtest(x3, y3, z, cur);
-			multiplymatrixtest(x4, y4, z, cur);
+            if (startedAtMatrixIndex != Renderer::getMatrix()->height()) { 
+				// Multiply coordinates by top matrix.
+				float z = 1.0f;
+				Matrix44<float>* cur = Renderer::getMatrix()->current();
+				multiplymatrixtest(x1, y1, z, cur);
+				multiplymatrixtest(x2, y2, z, cur);
+				multiplymatrixtest(x3, y3, z, cur);
+				multiplymatrixtest(x4, y4, z, cur);
+			}
 
 			RendererBatchItem_TexTri one;
 			one.vertexData[0] = x1;

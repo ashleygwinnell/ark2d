@@ -104,6 +104,7 @@ namespace ARK {
 				void toStringDialog();
 				bool isDirty();
 				void setDirty(bool b);
+				unsigned int height();
 				virtual ~MatrixStack();
 
 				
@@ -205,10 +206,13 @@ namespace ARK {
 				vector<RendererBatchItem> items;
 				bool enabled;
 
+				// We don't need to do matrix multiplication if we don't change the matrices.
+				unsigned int startedAtMatrixIndex; 
+
 			public:
 				RendererBatch();
 				inline bool isEnabled() { return enabled; }
-				void setEnabled(bool b) { enabled = b; }
+				void setEnabled(bool b);
 
 				void addGeometryTri(float* verts, unsigned char* colors);
 				void addGeometryTri(

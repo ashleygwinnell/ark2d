@@ -115,7 +115,6 @@ namespace ARK {
 				Image(const std::string& fname, const Color& mask);
 				unsigned int getWidth() const;
 				unsigned int getHeight() const;
-				double getRotation();
 
 				Image* setAlpha(float f);
 				float getAlpha() const;
