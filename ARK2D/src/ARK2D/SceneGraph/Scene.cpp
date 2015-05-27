@@ -19,7 +19,7 @@ namespace ARK {
 
 		}
 		SceneNode::SceneNode(unsigned int nodeType, string nodeName):
-			parent(NULL),
+			parent(NULL), 
 			name(nodeName),
 			children(),
 			pivot(0, 0, 0),

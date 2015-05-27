@@ -500,6 +500,8 @@ namespace ARK {
 					rawColors[vertc+22] = color_b;
 					rawColors[vertc+23] = color_a;
 
+					// multiply position coordinates
+
 					drawx += XAdvance;
 					
 				}

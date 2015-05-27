@@ -19,12 +19,12 @@ BEGIN_AS_NAMESPACE
 
 #if AS_USE_STRINGPOOL == 1
 
-// By keeping the literal strings in a pool the application
+// By keeping the literal strings in a pool the application 
 // performance is improved as there are less string copies created.
 
 // The string pool will be kept as user data in the engine. We'll
 // need a specific type to identify the string pool user data.
-// We just define a number here that we assume nobody else is using for
+// We just define a number here that we assume nobody else is using for 
 // object type user data. The add-ons have reserved the numbers 1000
 // through 1999 for this purpose, so we should be fine.
 const asPWORD STRING_POOL = 1001;

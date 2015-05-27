@@ -22,7 +22,7 @@ BEGIN_AS_NAMESPACE
 // array<string>@ string::split(const string &in delim) const
 static CScriptArray *StringSplit(const string &delim, const string &str)
 {
-	// Obtain a pointer to the engine
+	// Obtain a pointer to the engine 
 	asIScriptContext *ctx = asGetActiveContext();
 	asIScriptEngine *engine = ctx->GetEngine();
 

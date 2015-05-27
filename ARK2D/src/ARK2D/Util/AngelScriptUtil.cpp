@@ -4,7 +4,7 @@
 #include "../ARK2D.h"
 #include "Log.h"
 #include "KeyPairFile.h"
-#include "BMFont.h"
+#include "../Font/BMFont.h"
 #include "../Graphics/Renderer.h"
 #include "../Core/GameContainer.h"
 #include "../Util/Containers/Pool.h"

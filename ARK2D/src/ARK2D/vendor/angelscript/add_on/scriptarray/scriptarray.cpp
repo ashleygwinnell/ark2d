@@ -16,7 +16,7 @@ BEGIN_AS_NAMESPACE
 
 // Set the default memory routines
 // Use the angelscript engine's memory routines by default
-static asALLOCFUNC_t userAlloc = asAllocMem;
+static asALLOCFUNC_t userAlloc = asAllocMem; 
 static asFREEFUNC_t  userFree  = asFreeMem;
 
 // Allows the application to set which memory routines should be used by the array object

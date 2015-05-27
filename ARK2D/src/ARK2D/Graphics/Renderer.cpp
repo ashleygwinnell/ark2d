@@ -428,7 +428,7 @@ namespace ARK {
 			return m_dirty;
 		}
 		unsigned int MatrixStack::height() {
-			return m_stack.size();
+			return m_stackIndex; // m_stack.size();
 		}
 
 		Matrix44<float>* MatrixStack::current() {
@@ -802,8 +802,14 @@ namespace ARK {
 		}
 		void RendererBatch::setEnabled(bool b) { 
 			enabled = b; 
+
+			MatrixStack* ms = Renderer::getMatrix();
 			if (b) {
-				startedAtMatrixIndex = Renderer::getMatrix()->height();
+				ms->pushMatrix();
+				ms->identity();
+				startedAtMatrixIndex = ms->height();
+			} else {
+				ms->popMatrix();
 			}
 		}
 		void RendererBatch::addGeometryTri(float* verts, unsigned char* colors) 
@@ -1053,7 +1059,11 @@ namespace ARK {
 			unsigned char c3r, unsigned char c3g, unsigned char c3b, unsigned char c3a,
 			unsigned char c4r, unsigned char c4g, unsigned char c4b, unsigned char c4a) {
 
-			if (items.size() == 0 || items.at(items.size()-1).m_type == RendererBatchItem::TYPE_GEOMETRY_TRIS || items.at(items.size()-1).m_textureId != texId) {
+			if (items.size() == 0 || 
+				items.at(items.size()-1).m_type == RendererBatchItem::TYPE_GEOMETRY_TRIS ||
+				items.at(items.size()-1).m_textureId != texId ||
+				items.at(items.size()-1).m_shaderId != RendererState::s_shaderId
+				) {
 				items.push_back(RendererBatchItem());
 			}
 			RendererBatchItem* item = &items.at(items.size()-1);
@@ -4478,10 +4488,12 @@ namespace ARK {
 
 		void Renderer::texturedQuads(unsigned int texId, float* verts, float* texcoords, unsigned char* colors, unsigned int count) 
 		{
+			// WRONG: tl, tr, bl, br
+			// CORRECT tl, tr, bl, bl, tr, br.
 			if (Renderer::isBatching()) { 
 				for(unsigned int i = 0; i < count; i++) { 
-					s_batch->addTexturedQuad(texId, &verts[i*6], &texcoords[i*6], &colors[i*12]);
-					/*const int ii = i * 12; 
+					//s_batch->addTexturedQuad(texId, &verts[i*6], &texcoords[i*6], &colors[i*12]);
+					const int ii = i * 12; 
 					const int iii = i * 24;
 					s_batch->addTexturedQuad(
 						texId, 
@@ -4497,7 +4509,7 @@ namespace ARK {
 						colors[iii+4], colors[iii+5], colors[iii+6], colors[iii+7],
 						colors[iii+8], colors[iii+9], colors[iii+10], colors[iii+11],
 						colors[iii+20], colors[iii+21], colors[iii+22], colors[iii+23]
-					);*/
+					);
 				}
 				return;
 			}

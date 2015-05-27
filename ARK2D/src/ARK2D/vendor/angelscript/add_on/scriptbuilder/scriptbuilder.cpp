@@ -17,7 +17,7 @@ using namespace std;
 
 BEGIN_AS_NAMESPACE
 
-// Helper functions
+// Helper functions 
 static string GetCurrentDir();
 static string GetAbsolutePath(const string &path);
 

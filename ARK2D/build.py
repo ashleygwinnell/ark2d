@@ -235,6 +235,7 @@ class ARK2DBuildSystem:
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Particles",
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Path",
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Pathfinding",
+			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "SceneGraph",
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "State",
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "State" + self.ds + "Transition",
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Tests",
@@ -246,6 +247,11 @@ class ARK2DBuildSystem:
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Util",
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Util" + self.ds + "Containers",
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor",
+			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "angelscript",
+			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "angelscript" + self.ds + "add_on",
+			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "angelscript" + self.ds + "add_on" + self.ds + "scriptarray",
+			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "angelscript" + self.ds + "add_on" + self.ds + "scriptbuilder",
+			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "angelscript" + self.ds + "add_on" + self.ds + "scriptstdstring",
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "libJSON",
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "lpng151",
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "ogg130",
@@ -2685,6 +2691,7 @@ build:
 				compileStr += " -O3 ";
 
 			compileStr += " -I /usr/include ";
+			compileStr += " -I " + self.ark2d_dir + "/src/ARK2D/vendor/angelscript ";
 			compileStr += " -I " + self.ark2d_dir + "/src/ARK2D/vendor/iphone ";
 			compileStr += " -I " + self.ark2d_dir + "/src/ARK2D/vendor/spine/includes ";
 			compileStr += " -I " + self.ark2d_dir + "/lib/ubuntu-linux/include ";
@@ -2725,6 +2732,7 @@ build:
 				srcFileNew = srcFile[0:srcFileIndex] + ".o";
 
 				linkStr += self.ark2d_dir + "/" + self.build_folder + "/" + self.platform + "/" + srcFileNew + " ";
+			linkStr += self.ark2d_dir + "/lib/ubuntu-linux/libangelscript.a ";
 
 			print(linkStr);
 			os.system(linkStr);
@@ -2759,11 +2767,12 @@ build:
 
 			executableStr += " -L" + root_dir + "/" + self.build_folder + "/" + self.output + " ";
 			executableStr += " -lark2d -lstdc++ ";
-			executableStr += " -lm -lGL -lalut -lcurl -lGLU ";
+			executableStr += " -lm -lGL -lalut -lcurl -lGLU -lgcc ";
 			if (useSDL2):
 				executableStr += " -lSDL2 ";
 			else:
 				executableStr += " -lXinerama ";
+
 
 			#if "libs" in self.config['linux']:
 			#	for libhere in self.config['linux']['libs']:
@@ -2775,6 +2784,8 @@ build:
 				print(libhere_name);
 				if (libhere_name.find(".") == -1):
 					executableStr += " -l" + libhere_name + " ";
+
+			#executableStr += " -Wl,-Bstatic -langelscript ";#" -Wl,-Bdynamic  ";
 
 
 			print(executableStr);
@@ -2818,6 +2829,8 @@ build:
 				os.system("cp -r /usr/lib/x86_64-linux-gnu/libffi.so " + root_dir + "/build/" + self.output + "/libffi.so ");
 				os.system("cp -r /usr/lib/x86_64-linux-gnu/libffi.so.6 " + root_dir + "/build/" + self.output + "/libffi.so.6 ");
 				os.system("cp -r /usr/lib/x86_64-linux-gnu/libffi.so.6.0.1 " + root_dir + "/build/" + self.output + "/libffi.so.6.0.1 ");
+
+				#os.system("cp -r " + self.ark2d_dir + "/lib/ubuntu-linux/libangelscript_s.so " + root_dir + "/build/" + self.output + "/libangelscript_s.so ");
 
 			print("-------------------------");
 			print("Copying Game Data Files ");
