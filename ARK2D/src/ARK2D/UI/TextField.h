@@ -66,6 +66,7 @@ namespace ARK {
 				static const unsigned int RESTRICT_NUMERIC = 2;
 				static const unsigned int RESTRICT_ALPHANUMERIC = 3;
 				static const unsigned int RESTRICT_ALPHANUMERIC_SPACES = 4;
+				static const unsigned int RESTRICT_BASIC_PROGRAMMING = 5;
 
 				TextField();
 				void setText(string s);

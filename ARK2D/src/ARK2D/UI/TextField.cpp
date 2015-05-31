@@ -19,7 +19,7 @@ namespace ARK {
 			m_textAlignY(0),
 			m_multiline(false),
 			m_wrap(false),
-			m_maxLength(10),
+			m_maxLength(0),
 			m_textColor(Color::white),
 			m_caretColor(Color::white_50a),
 			m_restrictCharacters(RESTRICT_NONE)
@@ -304,23 +304,134 @@ namespace ARK {
 						clearSelection();
 					}
 					cursorRight();
+				} else if ((key == (unsigned int) Input::KEY_UP) && m_multiline) {
+					// Find what line the cursor is on.
+					// Find how far the cursor is through this line. (how_far_in)
+					signed int how_far_in = -1;
+					signed int prev_line_at = -1;
+					signed int prev_line_length = 0;
+					string s = m_text.getc();
+					for(signed int i = m_cursorPosition - 1; i >= 0; i--) {
+						if (s[i] == '\n') {
+							if (how_far_in == -1) { 
+								how_far_in = m_cursorPosition - i - 1; 
+								prev_line_at = i;
+							} else {
+								prev_line_length = prev_line_at - i - 1;
+								break;
+							}
+						} else if (i == 0) {
+							if (prev_line_at != -1) {
+								prev_line_length = prev_line_at;
+							} else {
+								how_far_in = m_cursorPosition;
+								prev_line_at = 0;
+							}
+						}
+					}
+					ARK2D::getLog()->v(StringUtil::append("m_cursorPosition: ", m_cursorPosition));
+					ARK2D::getLog()->v(StringUtil::append("how_far_in: ", how_far_in));
+					ARK2D::getLog()->v(StringUtil::append("prev_line_at: ", prev_line_at));
+					ARK2D::getLog()->v(StringUtil::append("prev_line_length: ", prev_line_length));
+					
+					// no previous line. must be at the top line. 
+					if (how_far_in == -1 || prev_line_at == -1) {
+						
+					} else if (how_far_in != -1 && prev_line_at == 0) { // first line
+						m_cursorPosition = 0;
+					} else { 
+
+						int newpos = m_cursorPosition;
+						newpos -= how_far_in; 									// back to start of current line
+						newpos -= 1; 											// to end of previous line (\n)
+						if (how_far_in < prev_line_length) { 
+							newpos -= prev_line_length - how_far_in;	// move cursor in, but only if we have to. (i.e. previous line is longer.)
+						}
+						m_cursorPosition = newpos;								// huzzah, end result 
+					}
+					ARK2D::getLog()->v(StringUtil::append("new m_cursorPosition: ", m_cursorPosition));
+
+				} else if ((key == (unsigned int) Input::KEY_DOWN) && m_multiline) {
+					// Find what line the cursor is on.
+					// Find how far the cursor is through this line. (how_far_in)
+					string s = m_text.getc();
+					signed int how_far_in = -1;
+					signed int curr_line_at = -1;
+					for(signed int i = m_cursorPosition - 1; i >= 0; i--) {
+						if (s[i] == '\n' && how_far_in == -1) {
+							how_far_in = m_cursorPosition - i - 1; 
+							curr_line_at = i+1;
+							break;
+						} else if (i == 0 && how_far_in == -1) {
+							how_far_in = m_cursorPosition;
+							curr_line_at = 0;
+						}
+					}
+					if (m_cursorPosition == 0) {
+						how_far_in = 0;
+						curr_line_at = 0;
+					}
+					signed int current_line_length = -1;
+					for(signed int i = curr_line_at; i < s.length(); i++) {
+						if (s[i] == '\n' && current_line_length == -1) {
+							current_line_length = i - curr_line_at;
+							break;
+						} else if (i == s.length()-1 && current_line_length == -1) {
+							current_line_length = s.length() - curr_line_at;
+						}
+					}
+					signed int next_line_start = curr_line_at + current_line_length + 1;
+					signed int next_line_length = -1;
+					for(signed int i = next_line_start; i < s.length(); i++) {
+						if (s[i] == '\n' && next_line_length == -1) {
+							next_line_length = i - next_line_start;
+							break;
+						} else if (i == s.length()-1 && next_line_length == -1) {
+							next_line_length = s.length() - next_line_start;
+						}
+					}
+					ARK2D::getLog()->v(StringUtil::append("m_cursorPosition: ", m_cursorPosition));
+					ARK2D::getLog()->v(StringUtil::append("how_far_in: ", how_far_in));
+					ARK2D::getLog()->v(StringUtil::append("curr_line_at: ", curr_line_at));
+					ARK2D::getLog()->v(StringUtil::append("current_line_length: ", current_line_length));
+					ARK2D::getLog()->v(StringUtil::append("next_line_start: ", next_line_start));
+					ARK2D::getLog()->v(StringUtil::append("next_line_length: ", next_line_length));
+					
+					int newpos = m_cursorPosition;
+					newpos -= how_far_in; 									// back to start of current line
+					newpos += current_line_length; 							// end of current line.
+					newpos += 1; 											// start of next line.
+					newpos += std::min(how_far_in, next_line_length);	// move cursor in, but only if we have to. (i.e. previous line is longer.)
+					m_cursorPosition = newpos;	
+
+
+					ARK2D::getLog()->v(StringUtil::append("new m_cursorPosition: ", m_cursorPosition));
+
 				} else if ((key == (unsigned int) Input::KEY_ENTER) && m_multiline) {
 					m_text.insert("\n", m_cursorPosition);
 					cursorRight();
 					clearSelection();
 				} else if (k.length() > 0) {
 
-					if (m_text.length() >= m_maxLength) {
+					if (m_maxLength > 0 && m_text.length() >= m_maxLength) {
 						return;
 					}
 
 					// do restrictions
 
-					if (m_restrictCharacters == RESTRICT_ALPHANUMERIC || m_restrictCharacters == RESTRICT_ALPHANUMERIC_SPACES) {
+					if (m_restrictCharacters == RESTRICT_ALPHANUMERIC || 
+						m_restrictCharacters == RESTRICT_ALPHANUMERIC_SPACES || 
+						m_restrictCharacters == RESTRICT_BASIC_PROGRAMMING
+						) {
+
 						string allowedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+						
 						if (m_restrictCharacters == RESTRICT_ALPHANUMERIC_SPACES) {
 							allowedCharacters += " ";
+						} else if (m_restrictCharacters == RESTRICT_BASIC_PROGRAMMING) {
+							allowedCharacters += " +-*/<>=_[](){};:?\"!&|%\n\t\r.,#";
 						}
+
 
 						if (allowedCharacters.find(k) == string::npos) {
 							return;
