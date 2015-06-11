@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<string name="menu_thank_you" lang="turkish">Teşekürler!</string>
+	<string name="menu_are_you_sure" lang="turkish">Emin misinz?</string>
+	<string name="game_mission_objective_plural" lang="turkish">Görev Hedefleri</string>
+	<string name="menu_load" lang="turkish">Yükle</string>
+	<string name="menu_no" lang="turkish">Hayir</string>
+	<string name="error_connection_lost" lang="turkish">Bağlantı kesildi.</string>
+	<string name="menu_new_game" lang="turkish">Yeni Oyun</string>
+	<string name="menu_goodbye" lang="turkish">Güle güle!</string>
+	<string name="menu_save_game" lang="turkish">Oyunu kaydet</string>
+	<string name="menu_exit_question" lang="turkish">Oyundan çıkılsın mı?</string>
+	<string name="menu_return_main" lang="turkish">Ana Menü'ye geri dön</string>
+	<string name="error_server" lang="turkish">Sunucuya bağlanamıyor.</string>
+	<string name="menu_return_main_question" lang="turkish">Ana Menü'ye geri dönülsün mü?</string>
+	<string name="menu_options_difficulty" lang="turkish">Zorluk Ayarları</string>
+	<string name="game_victory" lang="turkish">Galibiyet</string>
+	<string name="error_no_games_found" lang="turkish">Oyun bulunamadı.</string>
+	<string name="error_opponent_disc" lang="turkish">Rakibiniz bağlantiyi kesdi.</string>
+	<string name="menu_easy" lang="turkish">Kolay</string>
+	<string name="error_teammate_disc" lang="turkish">Takım arkadaşınız bağlantiyi kesdi.</string>
+	<string name="menu_very_hard" lang="turkish">Çok Zor</string>
+	<string name="menu_load_game" lang="turkish">Oyun yükle</string>
+	<string name="error_player_disc" lang="turkish">Diğer oyuncu bağlantiyi kesdi.</string>
+	<string name="menu_desktop_question" lang="turkish">Masaüstüne çıkılsın mı?</string>
+	<string name="menu_desktop" lang="turkish">Masaüstüne çıkış</string>
+	<string name="menu_save" lang="turkish">Kaydet</string>
+	<string name="menu_no_caps" lang="turkish">HAYİR</string>
+	<string name="menu_exit" lang="turkish">Çıkış</string>
+	<string name="game_you_won" lang="turkish">Sen kazandın!</string>
+	<string name="menu_insane" lang="turkish">Deli</string>
+	<string name="menu_medium" lang="turkish">Orta</string>
+	<string name="menu_sound" lang="turkish">Ses</string>
+	<string name="game_you_died" lang="turkish">Sen öldün!</string>
+	<string name="game_defeat" lang="turkish">Mağlubiyet</string>
+	<string name="menu_options_graphics" lang="turkish">Video Ayarları</string>
+	<string name="menu_impossible" lang="turkish">İmkansız</string>
+	<string name="game_you_lost" lang="turkish">Sen kaybettin!</string>
+	<string name="menu_yes" lang="turkish">Evet</string>
+	<string name="menu_yes_caps" lang="turkish">EVET</string>
+	<string name="game_mission_objective" lang="turkish">Görev Hedefi</string>
+	<string name="game_game_over" lang="turkish">Oyun bitti!</string>
+	<string name="menu_continue" lang="turkish">Devam et</string>
+	<string name="menu_return" lang="turkish">Geri Dön</string>
+	<string name="menu_very_easy" lang="turkish">Çok Kolay</string>
+	<string name="menu_single_player" lang="turkish">Tek oyuncu</string>
+	<string name="error_generic" lang="turkish">Bir hata oluştu.</string>
+	<string name="menu_continue_question" lang="turkish">Devam edilsin mi?</string>
+	<string name="menu_options_sound" lang="turkish">Ses Ayarları</string>
+	<string name="error_save_corrupted" lang="turkish">Kayıt bozuk.</string>
+	<string name="menu_options" lang="turkish">Ayarlar</string>
+	<string name="menu_options_gameplay" lang="turkish">Oyun Ayarları</string>
+	<string name="menu_saving" lang="turkish">Kaydedilior</string>
+	<string name="game_objective_plural" lang="turkish">Hedefler</string>
+	<string name="menu_hard" lang="turkish">Zor</string>
+	<string name="game_objective" lang="turkish">Hedef</string>
+	<string name="menu_quit_confirm" lang="turkish">Çıkmak istediğinizden emin misiniz?</string>
+	<string name="error_code" lang="turkish">Hata kodu:</string>
+	<string name="menu_main_menu" lang="turkish">Ana Menü</string>
+</strings>

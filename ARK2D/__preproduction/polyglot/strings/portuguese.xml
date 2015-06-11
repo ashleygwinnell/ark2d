@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<string name="game_transgender" lang="portuguese">Transgênero</string>
+	<string name="game_woman" lang="portuguese">Mulher</string>
+	<string name="game_you_win" lang="portuguese">Você venceu!</string>
+	<string name="menu_local_multiplayer" lang="portuguese">Multijogador local</string>
+	<string name="menu_press_start" lang="portuguese">Pressione Start</string>
+	<string name="menu_load" lang="portuguese">Carregar</string>
+	<string name="menu_nope" lang="portuguese">Não</string>
+	<string name="game_inventory_full" lang="portuguese">Inventário Cheio</string>
+	<string name="game_enemy_plural" lang="portuguese">Inimigos</string>
+	<string name="menu_cooperative" lang="portuguese">Cooperativo</string>
+	<string name="game_assist" lang="portuguese">Assistência</string>
+	<string name="game_ammunition" lang="portuguese">Munição</string>
+	<string name="menu_load_game" lang="portuguese">Carregar Jogo</string>
+	<string name="menu_desktop_question" lang="portuguese">Sair para a área de trabalho?</string>
+	<string name="menu_options_sound" lang="portuguese">Opções de Som</string>
+	<string name="menu_hard" lang="portuguese">Difícil</string>
+	<string name="menu_exit" lang="portuguese">Sair</string>
+	<string name="menu_sound" lang="portuguese">Som</string>
+	<string name="game_dragon" lang="portuguese">Dragão</string>
+	<string name="error_no_games_found" lang="portuguese">Nenhum jogo encontrado.</string>
+	<string name="menu_video_quality" lang="portuguese">Qualidade</string>
+	<string name="game_respawn_question" lang="portuguese">Reviver?</string>
+	<string name="menu_yes" lang="portuguese">Sim</string>
+	<string name="game_defeated" lang="portuguese">Você foi derrotado.</string>
+	<string name="menu_continue" lang="portuguese">Continuar</string>
+	<string name="menu_loading" lang="portuguese">Carregando...</string>
+	<string name="error_generic" lang="portuguese">Ocorreu um erro.</string>
+	<string name="menu_options" lang="portuguese">Opções</string>
+	<string name="game_male" lang="portuguese">Masculino</string>
+	<string name="game_objective_plural" lang="portuguese">Objetivo</string>
+	<string name="game_you_cannot_carry" lang="portuguese">Você não pode carregar mais nada.</string>
+	<string name="game_female" lang="portuguese">Feminino</string>
+	<string name="game_objective" lang="portuguese">Objetivo</string>
+	<string name="menu_quit_confirm" lang="portuguese">Você tem certeza de que quer sair?</string>
+	<string name="menu_options_sound_volume" lang="portuguese">Volume</string>
+	<string name="error_code" lang="portuguese">Código de erro:</string>
+	<string name="menu_main_menu" lang="portuguese">Menu Principal</string>
+	<string name="game_locked" lang="portuguese">Trancado</string>
+	<string name="game_mission_objective_plural" lang="portuguese">Objetivos da missão</string>
+	<string name="menu_coop" lang="portuguese">Co-op</string>
+	<string name="error_connection_lost" lang="portuguese">Conexão perdida.</string>
+	<string name="game_match" lang="portuguese">Partida</string>
+	<string name="menu_quit_question" lang="portuguese">Sair?</string>
+	<string name="menu_save_game" lang="portuguese">Salvar Jogo</string>
+	<string name="menu_exit_question" lang="portuguese">Sair?</string>
+	<string name="menu_deathmatch" lang="portuguese">Mata-mata</string>
+	<string name="game_time" lang="portuguese">Tempo</string>
+	<string name="game_zombie" lang="portuguese">Zumbi</string>
+	<string name="game_defeat" lang="portuguese">Derrota</string>
+	<string name="game_game_over" lang="portuguese">Fim de jogo!</string>
+	<string name="menu_desktop" lang="portuguese">Sair para a área de trabalho</string>
+	<string name="menu_save" lang="portuguese">Salvar</string>
+	<string name="menu_options_video" lang="portuguese">Opções de Vídeo</string>
+	<string name="game_inventory_capacity" lang="portuguese">Capacidade do Inventário</string>
+	<string name="game_respawn" lang="portuguese">Reviver</string>
+	<string name="menu_yes_caps" lang="portuguese">SIM</string>
+	<string name="menu_options_graphics" lang="portuguese">Opções Gráficas</string>
+	<string name="menu_difficulty" lang="portuguese">Dificuldade</string>
+	<string name="game_inventory" lang="portuguese">Inventário</string>
+	<string name="game_wins" lang="portuguese">Vitórias</string>
+	<string name="game_woman_plural" lang="portuguese">Mulheres</string>
+	<string name="menu_splitscreen" lang="portuguese">Tela dividida</string>
+	<string name="menu_single_player" lang="portuguese">Um jogador</string>
+	<string name="menu_multiplayer" lang="portuguese">Multijogador</string>
+	<string name="game_game_over_caps" lang="portuguese">FIM DE JOGO!</string>
+	<string name="game_respawn_in" lang="portuguese">Revivendo em:</string>
+	<string name="game_kills" lang="portuguese">Mortes</string>
+	<string name="game_bullet" lang="portuguese">Bala</string>
+	<string name="game_enemy_female_plural" lang="portuguese">Inimigos</string>
+	<string name="menu_pause" lang="portuguese">Pausa</string>
+	<string name="menu_thank_you" lang="portuguese">Obrigado!</string>
+	<string name="game_kill" lang="portuguese">Morte</string>
+	<string name="menu_no" lang="portuguese">Não</string>
+	<string name="menu_new_game" lang="portuguese">Novo Jogo</string>
+	<string name="menu_online_multiplayer" lang="portuguese">Multijogador em rede</string>
+	<string name="game_lives" lang="portuguese">Vidas</string>
+	<string name="game_health" lang="portuguese">Vida</string>
+	<string name="error_opponent_disc" lang="portuguese">Seu oponente foi desconectado.</string>
+	<string name="error_player_disc" lang="portuguese">O outro jogador foi desconectado.</string>
+	<string name="error_server" lang="portuguese">Não foi possível conectar-se ao servidor.</string>
+	<string name="game_you_are_dead" lang="portuguese">Você está morto./Você está morta.</string>
+	<string name="game_key" lang="portuguese">Chave</string>
+	<string name="menu_are_you_sure" lang="portuguese">Você tem certeza?</string>
+	<string name="menu_goodbye" lang="portuguese">Adeus!</string>
+	<string name="game_you_lose" lang="portuguese">Você perdeu!</string>
+	<string name="game_man" lang="portuguese">Homem</string>
+	<string name="menu_impossible" lang="portuguese">Impossível</string>
+	<string name="menu_options_network" lang="portuguese">Opções de Rede</string>
+	<string name="game_you_lost" lang="portuguese">Você perdeu!</string>
+	<string name="game_zombie_plural" lang="portuguese">Zumbis</string>
+	<string name="error_save_corrupted" lang="portuguese">Arquivo de jogo salvo corrompido.</string>
+	<string name="game_enemy" lang="portuguese">Inimigo</string>
+	<string name="menu_options_gameplay" lang="portuguese">Opções de Jogo</string>
+	<string name="menu_press_start_continue" lang="portuguese">Pressione Start para continuar</string>
+	<string name="menu_video" lang="portuguese">Opções de Vídeo</string>
+	<string name="game_respawning" lang="portuguese">Revivendo</string>
+	<string name="game_bullet_plural" lang="portuguese">Balas</string>
+	<string name="game_dragon_plural" lang="portuguese">Dragões</string>
+	<string name="menu_press_any" lang="portuguese">Pressione qualquer botão</string>
+	<string name="menu_please_wait" lang="portuguese">Por favor aguarde...</string>
+	<string name="game_you_won" lang="portuguese">Você ganhou!</string>
+	<string name="game_losses" lang="portuguese">Derrotas</string>
+	<string name="game_armor" lang="portuguese">Armadura</string>
+	<string name="menu_quit" lang="portuguese">Sair</string>
+	<string name="menu_press_any_continue" lang="portuguese">Pressione qualquer botão para continuar</string>
+	<string name="menu_return_main" lang="portuguese">Retornar ao Menu Principal</string>
+	<string name="menu_return_main_question" lang="portuguese">Retornar ao Menu Principal?</string>
+	<string name="menu_options_difficulty" lang="portuguese">Opções de Dificuldade</string>
+	<string name="game_victory" lang="portuguese">Vitória</string>
+	<string name="menu_easy" lang="portuguese">Fácil</string>
+	<string name="error_teammate_disc" lang="portuguese">Seu companheiro de equipe foi desconectado.</string>
+	<string name="menu_very_hard" lang="portuguese">Muito Difícil</string>
+	<string name="game_death_plural" lang="portuguese">Mortes</string>
+	<string name="game_shield" lang="portuguese">Escudo</string>
+	<string name="game_man_plural" lang="portuguese">Homens</string>
+	<string name="game_round" lang="portuguese">Rodada</string>
+	<string name="menu_no_caps" lang="portuguese">NÃO</string>
+	<string name="game_death" lang="portuguese">Morte</string>
+	<string name="menu_insane" lang="portuguese">Insano</string>
+	<string name="menu_medium" lang="portuguese">Médio</string>
+	<string name="game_you_died" lang="portuguese">Você morreu.</string>
+	<string name="game_mission_objective" lang="portuguese">Objetivo da missão</string>
+	<string name="menu_versus" lang="portuguese">Versus</string>
+	<string name="menu_graphics" lang="portuguese">Opções Gráficas</string>
+	<string name="menu_return" lang="portuguese">Retornar</string>
+	<string name="menu_very_easy" lang="portuguese">Muito Fácil</string>
+	<string name="game_ammo" lang="portuguese">Munição</string>
+	<string name="game_enemy_female" lang="portuguese">Inimigo</string>
+	<string name="menu_yeah" lang="portuguese">Sim</string>
+	<string name="game_shields" lang="portuguese">Escudos</string>
+	<string name="menu_saving" lang="portuguese">Salvando...</string>
+	<string name="menu_continue_question" lang="portuguese">Continuar?</string>
+	<string name="game_assists" lang="portuguese">Assistências</string>
+</strings>

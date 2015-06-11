@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<string name="game_transgender" lang="hebrew">טרנסג'נדר</string>
+	<string name="game_woman" lang="hebrew">אשה</string>
+	<string name="game_you_win" lang="hebrew">ניצחת!</string>
+	<string name="menu_local_multiplayer" lang="hebrew">משחק רשת פנימי</string>
+	<string name="menu_press_start" lang="hebrew">לחץ התחל</string>
+	<string name="menu_load" lang="hebrew">טען</string>
+	<string name="menu_nope" lang="hebrew">לא נראה לי</string>
+	<string name="game_inventory_full" lang="hebrew">אין מקום במלאי</string>
+	<string name="game_enemy_plural" lang="hebrew">אויבים</string>
+	<string name="menu_cooperative" lang="hebrew">שיתוף פעולה</string>
+	<string name="game_game_over_caps" lang="hebrew">המשחק נגמר!</string>
+	<string name="game_ammunition" lang="hebrew">תחמושת</string>
+	<string name="menu_load_game" lang="hebrew">טען משחק שמור</string>
+	<string name="menu_desktop_question" lang="hebrew">לצאת לשולחן העבודה?</string>
+	<string name="menu_options_sound" lang="hebrew">אפשרויות קול</string>
+	<string name="menu_hard" lang="hebrew">קשה</string>
+	<string name="menu_exit" lang="hebrew">יציאה</string>
+	<string name="menu_sound" lang="hebrew">קול</string>
+	<string name="game_dragon" lang="hebrew">דרקון</string>
+	<string name="error_no_games_found" lang="hebrew">לא נמצאו משחקים שמורים</string>
+	<string name="game_respawn_question" lang="hebrew">להתחיל מחדש?</string>
+	<string name="menu_yes" lang="hebrew">כן</string>
+	<string name="game_defeated" lang="hebrew">הובסת...</string>
+	<string name="menu_continue" lang="hebrew">המשך</string>
+	<string name="error_generic" lang="hebrew">ארעה טעות.</string>
+	<string name="menu_options" lang="hebrew">אפשרויות</string>
+	<string name="game_male" lang="hebrew">זכר</string>
+	<string name="game_objective_plural" lang="hebrew">מטרות</string>
+	<string name="game_you_cannot_carry" lang="hebrew">אתה לא יכול לשאת עוד.</string>
+	<string name="game_female" lang="hebrew">נקבה</string>
+	<string name="game_objective" lang="hebrew">מטרה</string>
+	<string name="menu_quit_confirm" lang="hebrew">אתה בטוח שאתה רוצה להפסיק?</string>
+	<string name="error_code" lang="hebrew">טעות מספר:</string>
+	<string name="menu_main_menu" lang="hebrew">מסך ראשי</string>
+	<string name="game_locked" lang="hebrew">נעול</string>
+	<string name="game_mission_objective_plural" lang="hebrew">מטרות המשימה</string>
+	<string name="menu_coop" lang="hebrew">שת"פ</string>
+	<string name="error_connection_lost" lang="hebrew">החיבור לרשת אבד.</string>
+	<string name="game_match" lang="hebrew">משחקון</string>
+	<string name="menu_quit_question" lang="hebrew">להפסיק?</string>
+	<string name="menu_save_game" lang="hebrew">שמור את המשחק</string>
+	<string name="menu_exit_question" lang="hebrew">לצאת?</string>
+	<string name="menu_deathmatch" lang="hebrew">כולם נגד כולם</string>
+	<string name="game_time" lang="hebrew">זמן שעבר</string>
+	<string name="game_zombie" lang="hebrew">זומבי</string>
+	<string name="game_defeat" lang="hebrew">תבוסה...</string>
+	<string name="game_game_over" lang="hebrew">המשחק נגמר</string>
+	<string name="menu_desktop" lang="hebrew">יציאה לשולחן העבודה</string>
+	<string name="menu_save" lang="hebrew">שמור</string>
+	<string name="menu_options_video" lang="hebrew">אפשרויות וידאו</string>
+	<string name="game_inventory_capacity" lang="hebrew">תפוסת מלאי</string>
+	<string name="game_respawn" lang="hebrew">התחל מחדש</string>
+	<string name="menu_yes_caps" lang="hebrew">כן</string>
+	<string name="menu_options_graphics" lang="hebrew">אפשרויות גרפיקה</string>
+	<string name="menu_difficulty" lang="hebrew">רמת קושי</string>
+	<string name="game_inventory" lang="hebrew">מלאי</string>
+	<string name="game_wins" lang="hebrew">ניצחונות</string>
+	<string name="game_woman_plural" lang="hebrew">נשים</string>
+	<string name="menu_splitscreen" lang="hebrew">מסך מפוצל</string>
+	<string name="menu_single_player" lang="hebrew">משחק יחיד</string>
+	<string name="menu_multiplayer" lang="hebrew">משחק רשת</string>
+	<string name="game_assist" lang="hebrew">הגשת עזרה</string>
+	<string name="game_respawn_in" lang="hebrew">מתחיל מחדש בעוד </string>
+	<string name="game_kills" lang="hebrew">הריגות</string>
+	<string name="game_bullet" lang="hebrew">כדור</string>
+	<string name="game_enemy_female_plural" lang="hebrew">אויבות</string>
+	<string name="menu_pause" lang="hebrew">השהה</string>
+	<string name="menu_thank_you" lang="hebrew">תודה!</string>
+	<string name="game_kill" lang="hebrew">הריגה</string>
+	<string name="menu_no" lang="hebrew">לא</string>
+	<string name="menu_new_game" lang="hebrew">משחק חדש</string>
+	<string name="menu_online_multiplayer" lang="hebrew">משחק רשת חיצוני</string>
+	<string name="game_lives" lang="hebrew">חיים</string>
+	<string name="game_health" lang="hebrew">בריאות</string>
+	<string name="error_opponent_disc" lang="hebrew">היריב התנתק מהרשת.</string>
+	<string name="error_player_disc" lang="hebrew">השחקן התנתק מהרשת.</string>
+	<string name="error_server" lang="hebrew">אי אפשר להתחבר לשרת.</string>
+	<string name="game_you_are_dead" lang="hebrew">אתה מת.</string>
+	<string name="game_key" lang="hebrew">מפתח</string>
+	<string name="menu_are_you_sure" lang="hebrew">אתה בטוח?</string>
+	<string name="menu_goodbye" lang="hebrew">להתראות!</string>
+	<string name="game_you_lose" lang="hebrew">הפסדת...</string>
+	<string name="game_man" lang="hebrew">גבר</string>
+	<string name="menu_impossible" lang="hebrew">בלתי אפשרי</string>
+	<string name="menu_options_network" lang="hebrew">אפשרויות רשת</string>
+	<string name="game_you_lost" lang="hebrew">הפסדת...</string>
+	<string name="game_zombie_plural" lang="hebrew">זומבים</string>
+	<string name="error_save_corrupted" lang="hebrew">הקובץ השמור פגום.</string>
+	<string name="game_enemy" lang="hebrew">אויב</string>
+	<string name="menu_options_gameplay" lang="hebrew">אפשרויות משחק</string>
+	<string name="menu_press_start_continue" lang="hebrew"> כדי להמשיך לחץ התחל</string>
+	<string name="menu_video" lang="hebrew">וידאו</string>
+	<string name="game_respawning" lang="hebrew">מתחיל מחדש...</string>
+	<string name="game_bullet_plural" lang="hebrew">כדורים</string>
+	<string name="game_dragon_plural" lang="hebrew">דרקונים</string>
+	<string name="menu_press_any" lang="hebrew">כדי להתחיל לחץ על אחד מהמקשים</string>
+	<string name="game_you_won" lang="hebrew">ניצחת!</string>
+	<string name="game_losses" lang="hebrew">הפסדים</string>
+	<string name="game_armor" lang="hebrew">שריון</string>
+	<string name="menu_quit" lang="hebrew">הפסק</string>
+	<string name="menu_press_any_continue" lang="hebrew">כדי להמשיך לחץ על אחד מהמקשים </string>
+	<string name="menu_return_main" lang="hebrew">חזור למסך הראשי</string>
+	<string name="menu_return_main_question" lang="hebrew">לחזור למסך הראשי?</string>
+	<string name="menu_options_difficulty" lang="hebrew">אפשרויות רמת קושי</string>
+	<string name="game_victory" lang="hebrew">ניצחון!</string>
+	<string name="menu_easy" lang="hebrew">קל</string>
+	<string name="error_teammate_disc" lang="hebrew">החבר לקבוצה התנתק מהרשת.</string>
+	<string name="menu_very_hard" lang="hebrew">קשה במיוחד</string>
+	<string name="game_death_plural" lang="hebrew">מקרי מוות</string>
+	<string name="game_shield" lang="hebrew">מגן אנרגיה</string>
+	<string name="game_man_plural" lang="hebrew">גברים</string>
+	<string name="game_round" lang="hebrew">סיבוב</string>
+	<string name="menu_no_caps" lang="hebrew">לא</string>
+	<string name="game_death" lang="hebrew">מוות</string>
+	<string name="menu_insane" lang="hebrew">מטורף</string>
+	<string name="menu_medium" lang="hebrew">לא קל</string>
+	<string name="game_you_died" lang="hebrew">נהרגת!</string>
+	<string name="game_mission_objective" lang="hebrew">מטרת המשימה</string>
+	<string name="menu_versus" lang="hebrew">אחד מול השני</string>
+	<string name="menu_graphics" lang="hebrew">גרפיקה</string>
+	<string name="menu_return" lang="hebrew">חזור</string>
+	<string name="menu_very_easy" lang="hebrew">קל מאוד</string>
+	<string name="game_ammo" lang="hebrew">תחמושת</string>
+	<string name="game_enemy_female" lang="hebrew">אויבת</string>
+	<string name="menu_yeah" lang="hebrew">כן, בסדר</string>
+	<string name="game_shields" lang="hebrew">מגיני אנרגיה</string>
+	<string name="menu_saving" lang="hebrew">שומר...</string>
+	<string name="menu_continue_question" lang="hebrew">להמשיך?</string>
+	<string name="game_assists" lang="hebrew">הגשות עזרה</string>
+</strings>

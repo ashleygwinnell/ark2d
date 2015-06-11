@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<string name="game_transgender" lang="russian">Трансгендер</string>
+	<string name="game_woman" lang="russian">Женщина</string>
+	<string name="game_you_win" lang="russian">Вы выиграли!</string>
+	<string name="menu_local_multiplayer" lang="russian">Многопользовательская игра в локальной сети</string>
+	<string name="menu_press_start" lang="russian">Нажмите Старт</string>
+	<string name="menu_load" lang="russian">Загрузить</string>
+	<string name="menu_nope" lang="russian">Не-а</string>
+	<string name="game_inventory_full" lang="russian">Инвентарь полон</string>
+	<string name="game_enemy_plural" lang="russian">Враги</string>
+	<string name="menu_cooperative" lang="russian">Совместное прохождение</string>
+	<string name="game_assist" lang="russian">Помогли</string>
+	<string name="game_ammunition" lang="russian">Боеприпасы</string>
+	<string name="menu_load_game" lang="russian">Загрузить игру</string>
+	<string name="menu_desktop_question" lang="russian">Выйти на рабочий стол?</string>
+	<string name="menu_options_sound" lang="russian">Настройки звука</string>
+	<string name="menu_hard" lang="russian">Сложно</string>
+	<string name="menu_exit" lang="russian">Выход</string>
+	<string name="menu_sound" lang="russian">Звук</string>
+	<string name="game_dragon" lang="russian">Дракон</string>
+	<string name="error_no_games_found" lang="russian">Сохранённые игры не найдены</string>
+	<string name="menu_video_quality" lang="russian">Качество</string>
+	<string name="menu_yes" lang="russian">Да</string>
+	<string name="game_defeated" lang="russian">Вы потерпели поражение</string>
+	<string name="menu_continue" lang="russian">Продолжить игру</string>
+	<string name="menu_loading" lang="russian">Загрузка…</string>
+	<string name="error_generic" lang="russian">Произошла ошибка</string>
+	<string name="menu_options" lang="russian">Настройки</string>
+	<string name="game_male" lang="russian">Мужчина</string>
+	<string name="game_objective_plural" lang="russian">Задачи</string>
+	<string name="game_you_cannot_carry" lang="russian">Вы не можете нести больше</string>
+	<string name="game_female" lang="russian">Женщина</string>
+	<string name="game_objective" lang="russian">Задача</string>
+	<string name="menu_quit_confirm" lang="russian">Вы действительно хотите выйти?</string>
+	<string name="menu_options_sound_volume" lang="russian">Громкость</string>
+	<string name="error_code" lang="russian">Код ошибки:</string>
+	<string name="menu_main_menu" lang="russian">Главное меню</string>
+	<string name="game_locked" lang="russian">Закрыто</string>
+	<string name="game_mission_objective_plural" lang="russian">Задачи мисси</string>
+	<string name="menu_coop" lang="russian">Co-op</string>
+	<string name="error_connection_lost" lang="russian">Соединение утеряно</string>
+	<string name="game_match" lang="russian">Матч</string>
+	<string name="menu_quit_question" lang="russian">Выйти из игры?</string>
+	<string name="menu_save_game" lang="russian">Сохранить игру</string>
+	<string name="menu_exit_question" lang="russian">Выйти?</string>
+	<string name="game_ammo" lang="russian">Б/П</string>
+	<string name="game_time" lang="russian">Время</string>
+	<string name="game_zombie" lang="russian">Зомби</string>
+	<string name="game_defeat" lang="russian">Поражение</string>
+	<string name="game_game_over" lang="russian">Конец игры!</string>
+	<string name="menu_desktop" lang="russian">Выйти на рабочий стол</string>
+	<string name="menu_save" lang="russian">Сохранить</string>
+	<string name="menu_options_video" lang="russian">Настройки видео</string>
+	<string name="game_inventory_capacity" lang="russian">Вместимость инвентаря</string>
+	<string name="menu_yes_caps" lang="russian">ДА</string>
+	<string name="menu_options_graphics" lang="russian">Настройки графики</string>
+	<string name="menu_difficulty" lang="russian">Сложность</string>
+	<string name="game_inventory" lang="russian">Инвентарь</string>
+	<string name="game_wins" lang="russian">Победы</string>
+	<string name="game_woman_plural" lang="russian">Женщины</string>
+	<string name="menu_splitscreen" lang="russian">Игра с разделением экрана</string>
+	<string name="menu_single_player" lang="russian">Одиночная игра</string>
+	<string name="menu_multiplayer" lang="russian">Многопользовательская игра</string>
+	<string name="game_game_over_caps" lang="russian">КОНЕЦ ИГРЫ!</string>
+	<string name="game_kills" lang="russian">Убил</string>
+	<string name="game_bullet" lang="russian">Пуля</string>
+	<string name="game_enemy_female_plural" lang="russian">Враги</string>
+	<string name="menu_pause" lang="russian">Пауза</string>
+	<string name="menu_thank_you" lang="russian">Спасибо!</string>
+	<string name="game_kill" lang="russian">Убили</string>
+	<string name="menu_no" lang="russian">Нет</string>
+	<string name="menu_new_game" lang="russian">Новая игра</string>
+	<string name="menu_online_multiplayer" lang="russian">Многопользовательская игра онлайн</string>
+	<string name="game_lives" lang="russian">Жизни</string>
+	<string name="game_health" lang="russian">Здоровье</string>
+	<string name="error_opponent_disc" lang="russian">Противник отключился</string>
+	<string name="error_player_disc" lang="russian">Другой игрок отключился</string>
+	<string name="error_server" lang="russian">Не удалось подключиться к серверу</string>
+	<string name="game_you_are_dead" lang="russian">Вы мертвы</string>
+	<string name="game_key" lang="russian">Ключ</string>
+	<string name="menu_are_you_sure" lang="russian">Вы уверены?</string>
+	<string name="menu_goodbye" lang="russian">До свидания!</string>
+	<string name="game_you_lose" lang="russian">Вы проиграли</string>
+	<string name="game_man" lang="russian">Мужчина</string>
+	<string name="menu_impossible" lang="russian">Невозможно</string>
+	<string name="menu_options_network" lang="russian">Настройки сети</string>
+	<string name="game_you_lost" lang="russian">Вы проиграли!</string>
+	<string name="game_zombie_plural" lang="russian">Зомби</string>
+	<string name="error_save_corrupted" lang="russian">Файл с сохранённой игрой повреждён</string>
+	<string name="game_enemy" lang="russian">Враг</string>
+	<string name="menu_options_gameplay" lang="russian">Настройки игры</string>
+	<string name="menu_press_start_continue" lang="russian">Нажмите Старт, чтобы продолжить</string>
+	<string name="menu_video" lang="russian">Видео</string>
+	<string name="game_bullet_plural" lang="russian">Пули</string>
+	<string name="game_dragon_plural" lang="russian">Драконы</string>
+	<string name="menu_press_any" lang="russian">Нажмите любую клавишу</string>
+	<string name="menu_please_wait" lang="russian">Пожалуйста, подождите…</string>
+	<string name="game_you_won" lang="russian">Вы выиграли!</string>
+	<string name="game_losses" lang="russian">Поражения</string>
+	<string name="game_armor" lang="russian">Броня</string>
+	<string name="menu_quit" lang="russian">Выйти из игру</string>
+	<string name="menu_press_any_continue" lang="russian">Нажмите любую клавишу, чтобы продолжить</string>
+	<string name="menu_return_main" lang="russian">Вернуться в главное меню</string>
+	<string name="menu_return_main_question" lang="russian">Вернуться в главное меню?</string>
+	<string name="menu_options_difficulty" lang="russian">Настройки сложности</string>
+	<string name="game_victory" lang="russian">Победа</string>
+	<string name="menu_easy" lang="russian">Просто</string>
+	<string name="error_teammate_disc" lang="russian">Партнёр по команде отключился</string>
+	<string name="menu_very_hard" lang="russian">Очень сложно</string>
+	<string name="game_death_plural" lang="russian">Смерти</string>
+	<string name="game_shield" lang="russian">Щит</string>
+	<string name="game_man_plural" lang="russian">Мужчины</string>
+	<string name="game_round" lang="russian">Раунд</string>
+	<string name="menu_no_caps" lang="russian">НЕТ</string>
+	<string name="game_death" lang="russian">Смерть</string>
+	<string name="menu_insane" lang="russian">Безумно</string>
+	<string name="menu_medium" lang="russian">Средне</string>
+	<string name="game_you_died" lang="russian">Вы умерли</string>
+	<string name="game_mission_objective" lang="russian">Задача миссии</string>
+	<string name="menu_versus" lang="russian">против</string>
+	<string name="menu_graphics" lang="russian">Графика</string>
+	<string name="menu_return" lang="russian">Назад</string>
+	<string name="menu_very_easy" lang="russian">Очень просто</string>
+	<string name="game_enemy_female" lang="russian">Враг</string>
+	<string name="menu_yeah" lang="russian">Ага</string>
+	<string name="game_shields" lang="russian">Щиты</string>
+	<string name="menu_saving" lang="russian">Сохранение…</string>
+	<string name="menu_continue_question" lang="russian">Продолжить игру?</string>
+	<string name="game_assists" lang="russian">Помог</string>
+</strings>

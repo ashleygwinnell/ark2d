@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<string name="game_you_lost" lang="dutch">Je hebt verloren!</string>
+	<string name="game_woman" lang="dutch">Vrouw</string>
+	<string name="game_you_win" lang="dutch">Je wint!</string>
+	<string name="menu_local_multiplayer" lang="dutch">Lokale Multiplayer</string>
+	<string name="menu_press_start" lang="dutch">Druk op Start</string>
+	<string name="menu_load" lang="dutch">Laden</string>
+	<string name="menu_nope" lang="dutch">Nope</string>
+	<string name="game_enemy_plural" lang="dutch">Vijanden</string>
+	<string name="game_ammunition" lang="dutch">Munitie</string>
+	<string name="menu_load_game" lang="dutch">Laad spel</string>
+	<string name="menu_desktop_question" lang="dutch">Sluiten naar bureaublad?</string>
+	<string name="menu_options_sound" lang="dutch">Geluidsinstellingen</string>
+	<string name="menu_hard" lang="dutch">Moeilijk</string>
+	<string name="menu_exit" lang="dutch">Aflsuiten</string>
+	<string name="menu_sound" lang="dutch">Geluid</string>
+	<string name="game_dragon" lang="dutch">Draak</string>
+	<string name="menu_video_quality" lang="dutch">Kwaliteit</string>
+	<string name="menu_yes" lang="dutch">Ja</string>
+	<string name="menu_continue" lang="dutch">Doorgaan</string>
+	<string name="menu_loading" lang="dutch">Laden...</string>
+	<string name="menu_options" lang="dutch">Instellingen</string>
+	<string name="game_male" lang="dutch">Man</string>
+	<string name="game_objective_plural" lang="dutch">Doelen</string>
+	<string name="game_female" lang="dutch">Vrouw</string>
+	<string name="game_objective" lang="dutch">Doel</string>
+	<string name="menu_quit_confirm" lang="dutch">Weet je zeker dat je wilt stoppen?</string>
+	<string name="menu_options_sound_volume" lang="dutch">Volume</string>
+	<string name="menu_main_menu" lang="dutch">Hoofdmenu</string>
+	<string name="game_mission_objective_plural" lang="dutch">Missie doelen</string>
+	<string name="menu_please_wait" lang="dutch">Even geduld...</string>
+	<string name="menu_quit_question" lang="dutch">Stoppen?</string>
+	<string name="menu_save_game" lang="dutch">Sla spel op</string>
+	<string name="menu_exit_question" lang="dutch">Afsluiten?</string>
+	<string name="game_time" lang="dutch">Tijd</string>
+	<string name="game_zombie" lang="dutch">Zombie</string>
+	<string name="menu_continue_question" lang="dutch">Doorgaan?</string>
+	<string name="game_defeat" lang="dutch">Nederlaag</string>
+	<string name="menu_desktop" lang="dutch">Sluiten naar bureaublad</string>
+	<string name="menu_save" lang="dutch">Opslaan</string>
+	<string name="menu_options_video" lang="dutch">Video opties</string>
+	<string name="menu_yes_caps" lang="dutch">JA</string>
+	<string name="menu_options_graphics" lang="dutch">Beeldinstellingen</string>
+	<string name="menu_difficulty" lang="dutch">Moeilijkheid</string>
+	<string name="game_woman_plural" lang="dutch">Vrouwen</string>
+	<string name="menu_single_player" lang="dutch">Een speler</string>
+	<string name="menu_multiplayer" lang="dutch">Meerdere spelers</string>
+	<string name="game_bullet" lang="dutch">Kogel</string>
+	<string name="game_enemy_female_plural" lang="dutch">Vijanden</string>
+	<string name="menu_pause" lang="dutch">Pauzeren</string>
+	<string name="menu_thank_you" lang="dutch">Bedankt!</string>
+	<string name="menu_no" lang="dutch">Nee</string>
+	<string name="menu_new_game" lang="dutch">Nieuw spel</string>
+	<string name="menu_online_multiplayer" lang="dutch">Online Multiplayer</string>
+	<string name="game_you_are_dead" lang="dutch">Je bent dood.</string>
+	<string name="game_key" lang="dutch">Sleutel</string>
+	<string name="menu_are_you_sure" lang="dutch">Weet je dit zeker?</string>
+	<string name="menu_goodbye" lang="dutch">Vaarwel!</string>
+	<string name="game_you_lose" lang="dutch">Je verliest!</string>
+	<string name="game_man" lang="dutch">Man</string>
+	<string name="menu_impossible" lang="dutch">Onmogelijk</string>
+	<string name="menu_options_network" lang="dutch">Netwerkinstellingen</string>
+	<string name="game_transgender" lang="dutch">Transgender</string>
+	<string name="game_zombie_plural" lang="dutch">Zombies</string>
+	<string name="game_enemy" lang="dutch">Vijand</string>
+	<string name="menu_options_gameplay" lang="dutch">Spelinstellingen</string>
+	<string name="menu_press_start_continue" lang="dutch">Druk op start om door te gaan</string>
+	<string name="menu_video" lang="dutch">Video opties</string>
+	<string name="game_bullet_plural" lang="dutch">Kogels</string>
+	<string name="game_dragon_plural" lang="dutch">Draken</string>
+	<string name="menu_press_any" lang="dutch">Druk op een knop</string>
+	<string name="game_you_won" lang="dutch">Je hebt gewonnen!</string>
+	<string name="game_armor" lang="dutch">Pantser</string>
+	<string name="menu_quit" lang="dutch">Stoppen</string>
+	<string name="menu_press_any_continue" lang="dutch">Drup op een knop om door te gaan</string>
+	<string name="menu_return_main" lang="dutch">Terug naar hoofdmenu</string>
+	<string name="menu_return_main_question" lang="dutch">Terug naar hoofdmenu?</string>
+	<string name="menu_options_difficulty" lang="dutch">Moeilijkheidsinstellingen</string>
+	<string name="menu_easy" lang="dutch">Makkelijk</string>
+	<string name="menu_very_hard" lang="dutch">Zeer moeilijk</string>
+	<string name="game_shield" lang="dutch">Schild</string>
+	<string name="game_man_plural" lang="dutch">Mannen</string>
+	<string name="menu_no_caps" lang="dutch">NEE</string>
+	<string name="menu_insane" lang="dutch">Krankzinnig</string>
+	<string name="menu_medium" lang="dutch">Normaal</string>
+	<string name="game_you_died" lang="dutch">Je bent dood gegaan.</string>
+	<string name="game_mission_objective" lang="dutch">Missie doel</string>
+	<string name="menu_graphics" lang="dutch">Beeld</string>
+	<string name="menu_return" lang="dutch">Terug</string>
+	<string name="menu_very_easy" lang="dutch">Zeer makkelijk</string>
+	<string name="game_enemy_female" lang="dutch">Vijand</string>
+	<string name="menu_yeah" lang="dutch">Jup</string>
+	<string name="game_shields" lang="dutch">Schilden</string>
+	<string name="menu_saving" lang="dutch">Opslaan...</string>
+	<string name="game_victory" lang="dutch">Overwinning</string>
+</strings>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<string name="game_transgender" lang="arabic">متحوّل</string>
+	<string name="game_woman" lang="arabic">امرأة</string>
+	<string name="game_you_win" lang="arabic">انت تربح!</string>
+	<string name="menu_local_multiplayer" lang="arabic">عدة لاعبين محلي</string>
+	<string name="menu_press_start" lang="arabic">اضغط ابدأ</string>
+	<string name="menu_load" lang="arabic">تحميل</string>
+	<string name="menu_nope" lang="arabic">ابدا</string>
+	<string name="game_inventory_full" lang="arabic">الحقيبة ممتلئة</string>
+	<string name="game_enemy_plural" lang="arabic">الاعداء</string>
+	<string name="menu_cooperative" lang="arabic">تعاوني</string>
+	<string name="game_game_over_caps" lang="arabic">انتهت اللعبة!</string>
+	<string name="game_ammunition" lang="arabic">التعداد</string>
+	<string name="menu_load_game" lang="arabic">تحميل اللعبة</string>
+	<string name="menu_desktop_question" lang="arabic">الخروج لسطح المكتب؟</string>
+	<string name="menu_options_sound" lang="arabic">خيارات الصوت</string>
+	<string name="menu_hard" lang="arabic">صعب</string>
+	<string name="menu_exit" lang="arabic">خروج</string>
+	<string name="menu_sound" lang="arabic">الصوت</string>
+	<string name="game_dragon" lang="arabic">تنين</string>
+	<string name="error_no_games_found" lang="arabic">لا يوجد العاب.</string>
+	<string name="game_respawn_question" lang="arabic">اعادة الاسقاط؟</string>
+	<string name="menu_yes" lang="arabic">نعم</string>
+	<string name="game_defeated" lang="arabic">لقد خسرت</string>
+	<string name="menu_continue" lang="arabic">متابعة</string>
+	<string name="error_generic" lang="arabic">حصل خطأ ما</string>
+	<string name="menu_options" lang="arabic">خيارات</string>
+	<string name="game_male" lang="arabic">ذكر</string>
+	<string name="game_objective_plural" lang="arabic">الاهداف</string>
+	<string name="game_you_cannot_carry" lang="arabic">لا يمكنك حمل المزيد</string>
+	<string name="game_female" lang="arabic">انثى</string>
+	<string name="game_objective" lang="arabic">الهدف</string>
+	<string name="menu_quit_confirm" lang="arabic">هل انت متأكد من الانهاء؟</string>
+	<string name="error_code" lang="arabic">خطأ رقم:</string>
+	<string name="menu_main_menu" lang="arabic">القائمة الرئيسية</string>
+	<string name="game_locked" lang="arabic">مغلق</string>
+	<string name="game_mission_objective_plural" lang="arabic">اهداف المهمة</string>
+	<string name="menu_coop" lang="arabic">تعاوني</string>
+	<string name="error_connection_lost" lang="arabic">خطأ بالاتصال</string>
+	<string name="game_match" lang="arabic">مباراة</string>
+	<string name="menu_quit_question" lang="arabic">انهاء؟</string>
+	<string name="menu_save_game" lang="arabic">حفظ اللعبة</string>
+	<string name="menu_exit_question" lang="arabic">خروج؟</string>
+	<string name="menu_deathmatch" lang="arabic">لعبة حتى الموت</string>
+	<string name="game_time" lang="arabic">الوقت</string>
+	<string name="game_zombie" lang="arabic">زومبي</string>
+	<string name="game_defeat" lang="arabic">الخسارة</string>
+	<string name="game_game_over" lang="arabic">انتهت اللعبة!</string>
+	<string name="menu_desktop" lang="arabic">الخروج لسطح المكتب</string>
+	<string name="menu_save" lang="arabic">حفظ</string>
+	<string name="menu_options_video" lang="arabic">خيارات الفيديو</string>
+	<string name="game_inventory_capacity" lang="arabic">حمل الحقيبة</string>
+	<string name="game_respawn" lang="arabic">اسقاط</string>
+	<string name="menu_yes_caps" lang="arabic">نعم</string>
+	<string name="menu_options_graphics" lang="arabic">خيارات الرسوميات</string>
+	<string name="menu_difficulty" lang="arabic">الصعوبة</string>
+	<string name="game_inventory" lang="arabic">الحقيبة</string>
+	<string name="game_wins" lang="arabic">الانتصارات</string>
+	<string name="game_woman_plural" lang="arabic">نساء</string>
+	<string name="menu_splitscreen" lang="arabic">اقتسام الشاشة</string>
+	<string name="menu_single_player" lang="arabic">لاعب واحد</string>
+	<string name="menu_multiplayer" lang="arabic">عدة لاعبين</string>
+	<string name="game_assist" lang="arabic">مساعد</string>
+	<string name="game_respawn_in" lang="arabic">الاسقاط في:</string>
+	<string name="game_kills" lang="arabic">القتلى</string>
+	<string name="game_bullet" lang="arabic">رصاصة</string>
+	<string name="game_enemy_female_plural" lang="arabic">الاعداء</string>
+	<string name="menu_pause" lang="arabic">ايقاف</string>
+	<string name="menu_thank_you" lang="arabic">شكرا لك!</string>
+	<string name="game_kill" lang="arabic">الفتل</string>
+	<string name="menu_no" lang="arabic">لا</string>
+	<string name="menu_new_game" lang="arabic">لعبة جديدة</string>
+	<string name="menu_online_multiplayer" lang="arabic">عدة لاعبين اونلاين</string>
+	<string name="game_lives" lang="arabic">الارواح</string>
+	<string name="game_health" lang="arabic">الصحة</string>
+	<string name="error_opponent_disc" lang="arabic">خصمك فقد الاتصال</string>
+	<string name="error_player_disc" lang="arabic">اللاعب الاخر فقط الاتصال</string>
+	<string name="error_server" lang="arabic">تعذر الاتصال بالمخدم</string>
+	<string name="game_you_are_dead" lang="arabic">انت ميت.</string>
+	<string name="game_key" lang="arabic">مفتاح</string>
+	<string name="menu_are_you_sure" lang="arabic">هل انت متأكد؟</string>
+	<string name="menu_goodbye" lang="arabic">مع السلامة!</string>
+	<string name="game_you_lose" lang="arabic">انت تخسر!</string>
+	<string name="game_man" lang="arabic">رجل</string>
+	<string name="menu_impossible" lang="arabic">مستحيل</string>
+	<string name="menu_options_network" lang="arabic">خيارات الشبكة</string>
+	<string name="game_you_lost" lang="arabic">لقد خسرت!</string>
+	<string name="game_zombie_plural" lang="arabic">زومبيون</string>
+	<string name="error_save_corrupted" lang="arabic">ملف الحفظ تالف.</string>
+	<string name="game_enemy" lang="arabic">العدو</string>
+	<string name="menu_options_gameplay" lang="arabic">خيارات اللعب</string>
+	<string name="menu_press_start_continue" lang="arabic">اضغط ابدأ للمتابعة</string>
+	<string name="menu_video" lang="arabic">الفيديو</string>
+	<string name="game_respawning" lang="arabic">جاري الاسقاط</string>
+	<string name="game_bullet_plural" lang="arabic">رصاصات</string>
+	<string name="game_dragon_plural" lang="arabic">تنانين</string>
+	<string name="menu_press_any" lang="arabic">اضغط على أي مفتاح</string>
+	<string name="game_you_won" lang="arabic">لقد ربحت</string>
+	<string name="game_losses" lang="arabic">الخسارات</string>
+	<string name="game_armor" lang="arabic">الدرع</string>
+	<string name="menu_quit" lang="arabic">انهاء</string>
+	<string name="menu_press_any_continue" lang="arabic">اضغط على أي مفتاح للمتابعة</string>
+	<string name="menu_return_main" lang="arabic">العودة للقائمة الرئيسية</string>
+	<string name="menu_return_main_question" lang="arabic">العودة للقائمة الرئيسية؟</string>
+	<string name="menu_options_difficulty" lang="arabic">خيارات الصعوبة</string>
+	<string name="game_victory" lang="arabic">النصر</string>
+	<string name="menu_easy" lang="arabic">سهل</string>
+	<string name="error_teammate_disc" lang="arabic">صديقك فقد الاتصال</string>
+	<string name="menu_very_hard" lang="arabic">صعب جدا</string>
+	<string name="game_death_plural" lang="arabic">الموتى</string>
+	<string name="game_shield" lang="arabic">الدرع</string>
+	<string name="game_man_plural" lang="arabic">رجال</string>
+	<string name="game_round" lang="arabic">دورة</string>
+	<string name="menu_no_caps" lang="arabic">لا</string>
+	<string name="game_death" lang="arabic">الموت</string>
+	<string name="menu_insane" lang="arabic">مجنون</string>
+	<string name="menu_medium" lang="arabic">متوسط</string>
+	<string name="game_you_died" lang="arabic">لقد مت.</string>
+	<string name="game_mission_objective" lang="arabic">هدف المهمة</string>
+	<string name="menu_versus" lang="arabic">ضد</string>
+	<string name="menu_graphics" lang="arabic">الرسوميات</string>
+	<string name="menu_return" lang="arabic">العودة</string>
+	<string name="menu_very_easy" lang="arabic">سهل جدا</string>
+	<string name="game_ammo" lang="arabic">الرصاص</string>
+	<string name="game_enemy_female" lang="arabic">العدو</string>
+	<string name="menu_yeah" lang="arabic">بالتأكيد</string>
+	<string name="game_shields" lang="arabic">الدروع</string>
+	<string name="menu_saving" lang="arabic">جاري الحفظ...</string>
+	<string name="menu_continue_question" lang="arabic">متابعة؟</string>
+	<string name="game_assists" lang="arabic">المساعدون</string>
+</strings>

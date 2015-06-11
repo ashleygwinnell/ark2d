@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<string name="game_transgender" lang="french_fr">Transsexuel</string>
+	<string name="game_woman" lang="french_fr">Femme</string>
+	<string name="game_you_win" lang="french_fr">Vous gagnez !</string>
+	<string name="menu_local_multiplayer" lang="french_fr">Multijoueur local</string>
+	<string name="menu_press_start" lang="french_fr">Appuyez sur Start</string>
+	<string name="menu_load" lang="french_fr">Charger</string>
+	<string name="menu_nope" lang="french_fr">Non</string>
+	<string name="game_inventory_full" lang="french_fr">Inventaire plein</string>
+	<string name="game_enemy_plural" lang="french_fr">Ennemis</string>
+	<string name="menu_cooperative" lang="french_fr">Coopératif</string>
+	<string name="game_assist" lang="french_fr">Aide</string>
+	<string name="game_ammunition" lang="french_fr">Munitions</string>
+	<string name="menu_load_game" lang="french_fr">Charger une partie</string>
+	<string name="menu_desktop_question" lang="french_fr">Sortir vers le bureau?</string>
+	<string name="menu_options_sound" lang="french_fr">Options sonores</string>
+	<string name="menu_hard" lang="french_fr">Difficile</string>
+	<string name="menu_exit" lang="french_fr">Sortir</string>
+	<string name="menu_sound" lang="french_fr">Son</string>
+	<string name="game_dragon" lang="french_fr">Dragon</string>
+	<string name="error_no_games_found" lang="french_fr">Aucun jeu trouvé.</string>
+	<string name="game_respawn_question" lang="french_fr">Réapparaître ?</string>
+	<string name="menu_yes" lang="french_fr">Oui</string>
+	<string name="game_defeated" lang="french_fr">Vous avez été vaincu.</string>
+	<string name="menu_continue" lang="french_fr">Continuer</string>
+	<string name="error_generic" lang="french_fr">Une erreur s'est produite.</string>
+	<string name="menu_options" lang="french_fr">Options</string>
+	<string name="game_male" lang="french_fr">Mâle</string>
+	<string name="game_objective_plural" lang="french_fr">Objectifs</string>
+	<string name="game_you_cannot_carry" lang="french_fr">Vous ne pouvez pas transporter plus</string>
+	<string name="game_female" lang="french_fr">Femelle</string>
+	<string name="game_objective" lang="french_fr">Objectif</string>
+	<string name="menu_quit_confirm" lang="french_fr">Êtes-vous certain de vouloir quitter ?</string>
+	<string name="error_code" lang="french_fr">Code d'erreur :</string>
+	<string name="menu_main_menu" lang="french_fr">Menu principal</string>
+	<string name="game_locked" lang="french_fr">Bloqué</string>
+	<string name="game_mission_objective_plural" lang="french_fr">Objectifs de la mission</string>
+	<string name="menu_coop" lang="french_fr">Co-op</string>
+	<string name="error_connection_lost" lang="french_fr">Connexion perdue.</string>
+	<string name="game_match" lang="french_fr">Match</string>
+	<string name="menu_quit_question" lang="french_fr">Quitter ?</string>
+	<string name="menu_save_game" lang="french_fr">Sauvegarder une partie</string>
+	<string name="menu_exit_question" lang="french_fr">Sortir?</string>
+	<string name="menu_deathmatch" lang="french_fr">Match à mort</string>
+	<string name="game_time" lang="french_fr">Temps</string>
+	<string name="game_zombie" lang="french_fr">Zombie</string>
+	<string name="game_defeat" lang="french_fr">Défaite</string>
+	<string name="game_game_over" lang="french_fr">Jeu terminé !</string>
+	<string name="menu_desktop" lang="french_fr">Sortir vers le bureau</string>
+	<string name="menu_save" lang="french_fr">Sauvegarder</string>
+	<string name="menu_options_video" lang="french_fr">Options vidéo</string>
+	<string name="game_inventory_capacity" lang="french_fr">Capacité de l'inventaire</string>
+	<string name="game_respawn" lang="french_fr">Réapparaître</string>
+	<string name="menu_yes_caps" lang="french_fr">OUI</string>
+	<string name="menu_options_graphics" lang="french_fr">Options graphiques</string>
+	<string name="menu_difficulty" lang="french_fr">Difficulté</string>
+	<string name="game_inventory" lang="french_fr">Inventaire</string>
+	<string name="game_wins" lang="french_fr">Victoires</string>
+	<string name="game_woman_plural" lang="french_fr">Femmes</string>
+	<string name="menu_splitscreen" lang="french_fr">Écran divisée</string>
+	<string name="menu_single_player" lang="french_fr">Solo</string>
+	<string name="menu_multiplayer" lang="french_fr">Multijoueur</string>
+	<string name="game_game_over_caps" lang="french_fr">JEU TERMINÉ !</string>
+	<string name="game_respawn_in" lang="french_fr">Réapparition dans :</string>
+	<string name="game_kills" lang="french_fr">Meurtres</string>
+	<string name="game_bullet" lang="french_fr">Balle</string>
+	<string name="game_enemy_female_plural" lang="french_fr">Ennemies</string>
+	<string name="menu_thank_you" lang="french_fr">Merci !</string>
+	<string name="game_kill" lang="french_fr">Meurtre</string>
+	<string name="menu_no" lang="french_fr">Non</string>
+	<string name="menu_new_game" lang="french_fr">Nouvelle partie</string>
+	<string name="menu_online_multiplayer" lang="french_fr">Multijoueur en ligne</string>
+	<string name="game_lives" lang="french_fr">Vies</string>
+	<string name="game_health" lang="french_fr">Santé</string>
+	<string name="error_opponent_disc" lang="french_fr">Votre adversaire s'est déconnecté.</string>
+	<string name="error_player_disc" lang="french_fr">L'autre joueur s'est déconnecté.</string>
+	<string name="error_server" lang="french_fr">Impossible de se connecter au serveur.</string>
+	<string name="game_you_are_dead" lang="french_fr">Vous êtes mort.</string>
+	<string name="game_key" lang="french_fr">Clé</string>
+	<string name="menu_are_you_sure" lang="french_fr">Êtes-vous certain ?</string>
+	<string name="menu_goodbye" lang="french_fr">Au revoir !</string>
+	<string name="game_you_lose" lang="french_fr">Vous perdez !</string>
+	<string name="game_man" lang="french_fr">Homme</string>
+	<string name="menu_impossible" lang="french_fr">Impossible</string>
+	<string name="menu_options_network" lang="french_fr">Options de réseau</string>
+	<string name="game_you_lost" lang="french_fr">Vous avez perdu !</string>
+	<string name="game_zombie_plural" lang="french_fr">Zombies</string>
+	<string name="error_save_corrupted" lang="french_fr">Fichier de sauvegarde corrompu.</string>
+	<string name="game_enemy" lang="french_fr">Ennemi</string>
+	<string name="menu_options_gameplay" lang="french_fr">Options de jeu</string>
+	<string name="menu_press_start_continue" lang="french_fr">Appuyez sur Start pour continuer</string>
+	<string name="menu_video" lang="french_fr">Vidéo</string>
+	<string name="game_respawning" lang="french_fr">Réapparition</string>
+	<string name="game_bullet_plural" lang="french_fr">Balles</string>
+	<string name="menu_press_any" lang="french_fr">Appuyez sur une touche</string>
+	<string name="game_you_won" lang="french_fr">Vous avez gagné !</string>
+	<string name="game_losses" lang="french_fr">Défaites</string>
+	<string name="game_armor" lang="french_fr">Armure</string>
+	<string name="menu_quit" lang="french_fr">Quitter</string>
+	<string name="menu_press_any_continue" lang="french_fr">Appuyez sur une touche pour continuer</string>
+	<string name="menu_return_main" lang="french_fr">Retourner au menu principal</string>
+	<string name="menu_return_main_question" lang="french_fr">Retourner au menu principal ?</string>
+	<string name="menu_options_difficulty" lang="french_fr">Options de difficulté</string>
+	<string name="game_victory" lang="french_fr">Victoire</string>
+	<string name="menu_easy" lang="french_fr">Facile</string>
+	<string name="error_teammate_disc" lang="french_fr">Votre coéquipier s'est déconnecté.</string>
+	<string name="menu_very_hard" lang="french_fr">Très difficile</string>
+	<string name="game_death_plural" lang="french_fr">Morts</string>
+	<string name="game_shield" lang="french_fr">Bouclier</string>
+	<string name="game_man_plural" lang="french_fr">Hommes</string>
+	<string name="game_round" lang="french_fr">Tour</string>
+	<string name="menu_no_caps" lang="french_fr">NON</string>
+	<string name="game_death" lang="french_fr">Mort</string>
+	<string name="menu_insane" lang="french_fr">Dément</string>
+	<string name="menu_medium" lang="french_fr">Moyen</string>
+	<string name="game_you_died" lang="french_fr">Vous êtes mort.</string>
+	<string name="game_mission_objective" lang="french_fr">Objectif de la mission</string>
+	<string name="menu_versus" lang="french_fr">Versus</string>
+	<string name="menu_graphics" lang="french_fr">Graphismes</string>
+	<string name="menu_return" lang="french_fr">Retour</string>
+	<string name="menu_very_easy" lang="french_fr">Très facile</string>
+	<string name="game_ammo" lang="french_fr">Munitions</string>
+	<string name="game_enemy_female" lang="french_fr">Ennemie</string>
+	<string name="menu_yeah" lang="french_fr">Ouais</string>
+	<string name="game_shields" lang="french_fr">Boucliers</string>
+	<string name="menu_saving" lang="french_fr">Sauvegarde en cours...</string>
+	<string name="menu_continue_question" lang="french_fr">Continuer ?</string>
+	<string name="game_assists" lang="french_fr">Aides</string>
+</strings>

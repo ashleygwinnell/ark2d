@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<string name="menu_press_any" lang="french_ca">Appuyez sur une touche</string>
+	<string name="menu_thank_you" lang="french_ca">Merci!</string>
+	<string name="menu_hard" lang="french_ca">Difficile</string>
+	<string name="menu_local_multiplayer" lang="french_ca">Multijoueur local</string>
+	<string name="menu_press_start" lang="french_ca">Appuyez sur Start</string>
+	<string name="menu_load" lang="french_ca">Charger</string>
+	<string name="menu_coop" lang="french_ca">Co-op</string>
+	<string name="menu_nope" lang="french_ca">Non</string>
+	<string name="menu_no" lang="french_ca">Non</string>
+	<string name="menu_cooperative" lang="french_ca">Coopérative</string>
+	<string name="menu_new_game" lang="french_ca">Nouvelle partie</string>
+	<string name="menu_goodbye" lang="french_ca">Bye!</string>
+	<string name="menu_save_game" lang="french_ca">Sauvegarder une partie</string>
+	<string name="menu_quit" lang="french_ca">Quitter</string>
+	<string name="menu_press_any_continue" lang="french_ca">Appuyez sur une touche pour continuer</string>
+	<string name="menu_return_main" lang="french_ca">Retourner au menu principal</string>
+	<string name="menu_press_start_continue" lang="french_ca">Appuyez sur Start pour continuer</string>
+	<string name="menu_return_main_question" lang="french_ca">Retourner au menu principal?</string>
+	<string name="menu_options_difficulty" lang="french_ca">Options de difficulté</string>
+	<string name="menu_easy" lang="french_ca">Facile</string>
+	<string name="menu_quit_question" lang="french_ca">Quitter?</string>
+	<string name="menu_very_hard" lang="french_ca">Très difficile</string>
+	<string name="menu_load_game" lang="french_ca">Charger une partie</string>
+	<string name="menu_desktop_question" lang="french_ca">Sortir vers le bureau?</string>
+	<string name="menu_desktop" lang="french_ca">Sortir vers le bureau</string>
+	<string name="menu_save" lang="french_ca">Sauvegarder</string>
+	<string name="menu_no_caps" lang="french_ca">NON</string>
+	<string name="menu_options_video" lang="french_ca">Options vidéo</string>
+	<string name="menu_exit" lang="french_ca">Sortir</string>
+	<string name="menu_are_you_sure" lang="french_ca">Êtes-vous certain?</string>
+	<string name="menu_insane" lang="french_ca">Dément</string>
+	<string name="menu_medium" lang="french_ca">Moyen</string>
+	<string name="menu_versus" lang="french_ca">Versus</string>
+	<string name="menu_impossible" lang="french_ca">Impossible</string>
+	<string name="menu_options_network" lang="french_ca">Options de réseau</string>
+	<string name="menu_yes" lang="french_ca">Oui</string>
+	<string name="menu_yes_caps" lang="french_ca">OUI</string>
+	<string name="menu_online_multiplayer" lang="french_ca">Multijoueur en ligne</string>
+	<string name="menu_difficulty" lang="french_ca">Difficulté</string>
+	<string name="menu_multiplayer" lang="french_ca">Multijoueur</string>
+	<string name="menu_continue" lang="french_ca">Continuer</string>
+	<string name="menu_exit_question" lang="french_ca">Sortir?</string>
+	<string name="menu_return" lang="french_ca">Retour</string>
+	<string name="menu_very_easy" lang="french_ca">Très facile</string>
+	<string name="menu_splitscreen" lang="french_ca">Écran divisée</string>
+	<string name="menu_deathmatch" lang="french_ca">Match à mort</string>
+	<string name="menu_single_player" lang="french_ca">Solo</string>
+	<string name="menu_yeah" lang="french_ca">Ouais</string>
+	<string name="menu_options_sound" lang="french_ca">Options sonores</string>
+	<string name="menu_options" lang="french_ca">Options</string>
+	<string name="menu_options_gameplay" lang="french_ca">Options de jeu</string>
+	<string name="menu_saving" lang="french_ca">Sauvegarde en cours...</string>
+	<string name="menu_video" lang="french_ca">Vidéo</string>
+	<string name="menu_continue_question" lang="french_ca">Continuer?</string>
+	<string name="menu_quit_confirm" lang="french_ca">Êtes-vous certain de vouloir quitter?</string>
+	<string name="menu_main_menu" lang="french_ca">Menu principal</string>
+</strings>

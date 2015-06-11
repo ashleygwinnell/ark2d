@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<string name="game_transgender" lang="spanish">Transexual</string>
+	<string name="game_woman" lang="spanish">Mujer</string>
+	<string name="game_you_win" lang="spanish">¡Usted gana!</string>
+	<string name="menu_local_multiplayer" lang="spanish">Multijugador Local</string>
+	<string name="menu_press_start" lang="spanish">Presiona Comenzar</string>
+	<string name="menu_load" lang="spanish">Cargar</string>
+	<string name="menu_nope" lang="spanish">Nah</string>
+	<string name="game_inventory_full" lang="spanish">Inventario lleno</string>
+	<string name="game_enemy_plural" lang="spanish">Enemigos</string>
+	<string name="menu_cooperative" lang="spanish">Cooperativo</string>
+	<string name="game_assist" lang="spanish">Asistencia</string>
+	<string name="game_ammunition" lang="spanish">Municiones</string>
+	<string name="menu_load_game" lang="spanish">Cargar Juego</string>
+	<string name="menu_desktop_question" lang="spanish">¿Salir al escritorio?</string>
+	<string name="menu_options_sound" lang="spanish">Opciones de sonido</string>
+	<string name="menu_hard" lang="spanish">Dificil</string>
+	<string name="menu_exit" lang="spanish">Salir</string>
+	<string name="game_dragon" lang="spanish">Dragón</string>
+	<string name="error_no_games_found" lang="spanish">No se encontraron juegos</string>
+	<string name="game_respawn_question" lang="spanish">¿Revivir?</string>
+	<string name="menu_yes" lang="spanish">Si</string>
+	<string name="game_defeated" lang="spanish">Fuiste derrotado</string>
+	<string name="menu_continue" lang="spanish">Continuar</string>
+	<string name="error_generic" lang="spanish">Ha ocurrido un error</string>
+	<string name="menu_options" lang="spanish">Opciones</string>
+	<string name="game_male" lang="spanish">Masculino</string>
+	<string name="game_objective_plural" lang="spanish">Objetivos</string>
+	<string name="game_you_cannot_carry" lang="spanish">No puedes llevar nada más</string>
+	<string name="game_female" lang="spanish">Femenino</string>
+	<string name="game_objective" lang="spanish">Objetivo</string>
+	<string name="menu_quit_confirm" lang="spanish">¿Está seguro de querer cerrar?</string>
+	<string name="error_code" lang="spanish">Código de erorr:</string>
+	<string name="menu_main_menu" lang="spanish">Menu principal</string>
+	<string name="game_locked" lang="spanish">Bloqueado</string>
+	<string name="game_mission_objective_plural" lang="spanish">Objetivos de la misión</string>
+	<string name="menu_coop" lang="spanish">Co-op</string>
+	<string name="error_connection_lost" lang="spanish">Conexión perdida</string>
+	<string name="game_match" lang="spanish">Encuentro</string>
+	<string name="menu_quit_question" lang="spanish">¿Cerrar?</string>
+	<string name="menu_save_game" lang="spanish">Guardar Juego</string>
+	<string name="menu_exit_question" lang="spanish">¿Salir?</string>
+	<string name="menu_deathmatch" lang="spanish">Encuentro a muerte</string>
+	<string name="game_time" lang="spanish">Tiempo</string>
+	<string name="game_zombie" lang="spanish">Zombi</string>
+	<string name="game_defeat" lang="spanish">Derrota</string>
+	<string name="game_game_over" lang="spanish">Juego terminado</string>
+	<string name="menu_desktop" lang="spanish">Salir al escritorio</string>
+	<string name="menu_save" lang="spanish">Guardar</string>
+	<string name="menu_options_video" lang="spanish">Opciones de video</string>
+	<string name="game_inventory_capacity" lang="spanish">Capacidad del inventario</string>
+	<string name="game_respawn" lang="spanish">Revivir</string>
+	<string name="menu_yes_caps" lang="spanish">SI</string>
+	<string name="menu_online_multiplayer" lang="spanish">Multijugador Online</string>
+	<string name="menu_difficulty" lang="spanish">Dificultad</string>
+	<string name="game_inventory" lang="spanish">Inventario</string>
+	<string name="game_wins" lang="spanish">Ganadas</string>
+	<string name="game_woman_plural" lang="spanish">Mujeres</string>
+	<string name="menu_splitscreen" lang="spanish">Pantalla compartida</string>
+	<string name="menu_single_player" lang="spanish">Solo</string>
+	<string name="menu_multiplayer" lang="spanish">Multijugador</string>
+	<string name="game_game_over_caps" lang="spanish">JUEGO TERMINADO</string>
+	<string name="game_respawn_in" lang="spanish">Reviviendo en:</string>
+	<string name="game_kills" lang="spanish">Matados</string>
+	<string name="game_bullet" lang="spanish">Bala</string>
+	<string name="game_enemy_female_plural" lang="spanish">Enemigas</string>
+	<string name="menu_thank_you" lang="spanish">¡Gracias!</string>
+	<string name="game_kill" lang="spanish">Matado</string>
+	<string name="menu_no" lang="spanish">No</string>
+	<string name="menu_new_game" lang="spanish">Juego nuevo</string>
+	<string name="game_lives" lang="spanish">Vidas</string>
+	<string name="game_health" lang="spanish">Vida</string>
+	<string name="error_opponent_disc" lang="spanish">Tu oponente se ha desconectado</string>
+	<string name="error_player_disc" lang="spanish">El otro jugador se ha desconectado</string>
+	<string name="error_server" lang="spanish">No se pudo conectar con el servidor</string>
+	<string name="game_you_are_dead" lang="spanish">Estás muerto</string>
+	<string name="game_key" lang="spanish">Tecla</string>
+	<string name="menu_are_you_sure" lang="spanish">¿Está seguro?</string>
+	<string name="menu_goodbye" lang="spanish">¡Adios!</string>
+	<string name="game_you_lose" lang="spanish">¡Usted pierde!</string>
+	<string name="game_man" lang="spanish">Hombre</string>
+	<string name="menu_impossible" lang="spanish">Imposible</string>
+	<string name="menu_options_network" lang="spanish">Opciones de conexión</string>
+	<string name="game_you_lost" lang="spanish">¡Usted perdió!</string>
+	<string name="game_zombie_plural" lang="spanish">Zombis</string>
+	<string name="error_save_corrupted" lang="spanish">Achivo de guardado corrupto</string>
+	<string name="game_enemy" lang="spanish">Enemigo</string>
+	<string name="menu_options_gameplay" lang="spanish">Opciones de juego</string>
+	<string name="menu_press_start_continue" lang="spanish">Presiona Comenzar para continuar</string>
+	<string name="game_respawning" lang="spanish">Reviviendo</string>
+	<string name="game_bullet_plural" lang="spanish">Balas</string>
+	<string name="menu_press_any" lang="spanish">Presiona cualquier tecla</string>
+	<string name="game_you_won" lang="spanish">¡Usted ganó!</string>
+	<string name="game_losses" lang="spanish">Perdidas</string>
+	<string name="game_armor" lang="spanish">Armadura</string>
+	<string name="menu_quit" lang="spanish">Cerrar</string>
+	<string name="menu_press_any_continue" lang="spanish">Presiona cualquier tecla para continuar</string>
+	<string name="menu_return_main" lang="spanish">Volver al menu principal</string>
+	<string name="menu_return_main_question" lang="spanish">¿Volver al menu principal?</string>
+	<string name="menu_options_difficulty" lang="spanish">Opciones de dificultad</string>
+	<string name="game_victory" lang="spanish">Victoria</string>
+	<string name="menu_easy" lang="spanish">Facil</string>
+	<string name="error_teammate_disc" lang="spanish">Tu compañero se ha desconectado</string>
+	<string name="menu_very_hard" lang="spanish">Muy dificil</string>
+	<string name="game_death_plural" lang="spanish">Muertes</string>
+	<string name="game_shield" lang="spanish">Escudo</string>
+	<string name="game_man_plural" lang="spanish">Hombres</string>
+	<string name="game_round" lang="spanish">Ronda</string>
+	<string name="menu_no_caps" lang="spanish">NO</string>
+	<string name="game_death" lang="spanish">Muerte</string>
+	<string name="menu_insane" lang="spanish">Enfermizo</string>
+	<string name="menu_medium" lang="spanish">Intermedio</string>
+	<string name="game_you_died" lang="spanish">Has muerto</string>
+	<string name="game_mission_objective" lang="spanish">Objetivo de la misión</string>
+	<string name="menu_versus" lang="spanish">Enfrentado</string>
+	<string name="menu_return" lang="spanish">Volver</string>
+	<string name="menu_very_easy" lang="spanish">Muy fácil</string>
+	<string name="game_enemy_female" lang="spanish">Enemiga</string>
+	<string name="menu_yeah" lang="spanish">Seh</string>
+	<string name="game_shields" lang="spanish">Escudos</string>
+	<string name="menu_saving" lang="spanish">Guardando...</string>
+	<string name="menu_continue_question" lang="spanish">¿Continuar?</string>
+	<string name="game_assists" lang="spanish">Asistencias</string>
+</strings>

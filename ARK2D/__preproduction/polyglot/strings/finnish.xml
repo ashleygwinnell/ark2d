@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<string name="game_transgender" lang="finnish">Transseksuaali</string>
+	<string name="game_woman" lang="finnish">Nainen</string>
+	<string name="game_you_win" lang="finnish">Sinä voitit!</string>
+	<string name="menu_local_multiplayer" lang="finnish">Paikallinen moninpeli</string>
+	<string name="menu_press_start" lang="finnish">Paina Start</string>
+	<string name="menu_load" lang="finnish">Lataa</string>
+	<string name="menu_nope" lang="finnish">Ei</string>
+	<string name="game_match" lang="finnish">Erä</string>
+	<string name="game_enemy_plural" lang="finnish">Vastustajat</string>
+	<string name="menu_cooperative" lang="finnish">Yhteistyö</string>
+	<string name="game_game_over_caps" lang="finnish">PELI LOPPU!</string>
+	<string name="game_ammunition" lang="finnish">Ammukset</string>
+	<string name="menu_load_game" lang="finnish">Lataa peli</string>
+	<string name="menu_desktop_question" lang="finnish">Poistu työpöydälle?</string>
+	<string name="menu_options_sound" lang="finnish">Ääniasetukset</string>
+	<string name="menu_hard" lang="finnish">Vaikea</string>
+	<string name="menu_exit" lang="finnish">Lopeta</string>
+	<string name="menu_sound" lang="finnish">Ääni</string>
+	<string name="game_dragon" lang="finnish">Lohikäärme</string>
+	<string name="error_no_games_found" lang="finnish">Pelejä ei löytynyt.</string>
+	<string name="game_respawn_question" lang="finnish">Synny uudestaan?</string>
+	<string name="menu_yes" lang="finnish">Kyllä</string>
+	<string name="game_defeated" lang="finnish">Sinut on voitettu</string>
+	<string name="menu_continue" lang="finnish">Jatka</string>
+	<string name="error_generic" lang="finnish">On tapahtunut virhe.</string>
+	<string name="menu_options" lang="finnish">Asetukset</string>
+	<string name="game_male" lang="finnish">Mies</string>
+	<string name="game_objective_plural" lang="finnish">Tavoitteet</string>
+	<string name="game_you_cannot_carry" lang="finnish">Et voi kataa enempää</string>
+	<string name="game_female" lang="finnish">Nainen</string>
+	<string name="game_objective" lang="finnish">Tavoite</string>
+	<string name="menu_quit_confirm" lang="finnish">Haluatko varmasti lopettaa?</string>
+	<string name="error_code" lang="finnish">Virhekoodi: </string>
+	<string name="menu_main_menu" lang="finnish">Palaa valikkoon</string>
+	<string name="game_locked" lang="finnish">Lukittu</string>
+	<string name="game_mission_objective_plural" lang="finnish">Tehtävän tavoitteet</string>
+	<string name="menu_coop" lang="finnish">Co-op
+</string>
+	<string name="error_connection_lost" lang="finnish">Yhteys menetetty.</string>
+	<string name="menu_quit_question" lang="finnish">Lopeta?</string>
+	<string name="menu_save_game" lang="finnish">Tallenna peli</string>
+	<string name="menu_exit_question" lang="finnish">Lopeta?</string>
+	<string name="menu_deathmatch" lang="finnish">Deathmatch</string>
+	<string name="game_time" lang="finnish">Aika</string>
+	<string name="game_zombie" lang="finnish">Zombie</string>
+	<string name="game_defeat" lang="finnish">Häviö</string>
+	<string name="game_game_over" lang="finnish">Peli loppu!</string>
+	<string name="menu_desktop" lang="finnish">Poistu työpöydälle</string>
+	<string name="menu_save" lang="finnish">Tallenna</string>
+	<string name="menu_options_video" lang="finnish">Videoasetukset</string>
+	<string name="game_respawn" lang="finnish">Synny uudestaan</string>
+	<string name="menu_yes_caps" lang="finnish">KYLLÄ</string>
+	<string name="menu_options_graphics" lang="finnish">Grafiikan asetukset</string>
+	<string name="menu_difficulty" lang="finnish">Vaikeus</string>
+	<string name="game_wins" lang="finnish">Voitot</string>
+	<string name="game_woman_plural" lang="finnish">Naiset</string>
+	<string name="menu_splitscreen" lang="finnish">Jaettu näyttö</string>
+	<string name="menu_single_player" lang="finnish">Yksinpeli</string>
+	<string name="menu_multiplayer" lang="finnish">Moninpeli</string>
+	<string name="game_assist" lang="finnish">Avustus</string>
+	<string name="game_kills" lang="finnish">Tapot</string>
+	<string name="game_bullet" lang="finnish">Luoti</string>
+	<string name="game_enemy_female_plural" lang="finnish">Vastustajat</string>
+	<string name="menu_pause" lang="finnish">Pysäytä</string>
+	<string name="menu_thank_you" lang="finnish">Kiitos!</string>
+	<string name="game_kill" lang="finnish">Tappo</string>
+	<string name="menu_no" lang="finnish">Ei</string>
+	<string name="menu_new_game" lang="finnish">Uusi Peli</string>
+	<string name="menu_online_multiplayer" lang="finnish">Internet Moninpeli</string>
+	<string name="game_lives" lang="finnish">Elämät</string>
+	<string name="game_health" lang="finnish">Terveys</string>
+	<string name="error_opponent_disc" lang="finnish">Vastustajasi on menettänyt yhteyden.</string>
+	<string name="error_player_disc" lang="finnish">Toinen pelaaja on menettänyt yhteyden.</string>
+	<string name="error_server" lang="finnish">Palvelimeen ei saada yhteyttä.</string>
+	<string name="game_you_are_dead" lang="finnish">Olet kuollut</string>
+	<string name="game_key" lang="finnish">Avain</string>
+	<string name="menu_are_you_sure" lang="finnish">Oletko varma?</string>
+	<string name="menu_goodbye" lang="finnish">Näkemiin!</string>
+	<string name="game_you_lose" lang="finnish">Sinä hävisit!</string>
+	<string name="game_man" lang="finnish">Mies</string>
+	<string name="menu_impossible" lang="finnish">Mahdoton</string>
+	<string name="menu_options_network" lang="finnish">Verkkoasetukset</string>
+	<string name="game_you_lost" lang="finnish">Sinä hävisit!</string>
+	<string name="game_zombie_plural" lang="finnish">Zombie</string>
+	<string name="error_save_corrupted" lang="finnish">Tallennus on virheellinen.</string>
+	<string name="game_enemy" lang="finnish">Vastustaja</string>
+	<string name="menu_options_gameplay" lang="finnish">Peliasetukset</string>
+	<string name="menu_press_start_continue" lang="finnish">Paina Start jatkaaksesi</string>
+	<string name="menu_video" lang="finnish">Video</string>
+	<string name="game_respawning" lang="finnish">Synnytään uudestaan</string>
+	<string name="game_bullet_plural" lang="finnish">Luodit</string>
+	<string name="menu_press_any" lang="finnish">Paina mitä tahansa näppäintä</string>
+	<string name="game_you_won" lang="finnish">Sinä voitit!</string>
+	<string name="game_losses" lang="finnish">Häviöt</string>
+	<string name="game_armor" lang="finnish">Panssari</string>
+	<string name="menu_quit" lang="finnish">Lopeta</string>
+	<string name="menu_press_any_continue" lang="finnish">Paina mitä tahansa näppäintä jatkaaksesi</string>
+	<string name="menu_return_main" lang="finnish">Palaa päävalikkoon</string>
+	<string name="menu_return_main_question" lang="finnish">Palaa päävalikkoon?</string>
+	<string name="menu_options_difficulty" lang="finnish">Vaikeustaso</string>
+	<string name="game_victory" lang="finnish">Voitto</string>
+	<string name="menu_easy" lang="finnish">Helppo</string>
+	<string name="error_teammate_disc" lang="finnish">Pelikaverisi on menettänyt yhteyden.</string>
+	<string name="menu_very_hard" lang="finnish">Erittäin vaikea</string>
+	<string name="game_death_plural" lang="finnish">Kuolema</string>
+	<string name="game_shield" lang="finnish">Kilpi</string>
+	<string name="game_man_plural" lang="finnish">Miehet</string>
+	<string name="game_round" lang="finnish">Erä</string>
+	<string name="menu_no_caps" lang="finnish">EI</string>
+	<string name="game_death" lang="finnish">Kuolema</string>
+	<string name="menu_insane" lang="finnish">Älytön</string>
+	<string name="menu_medium" lang="finnish">Keskitaso</string>
+	<string name="game_you_died" lang="finnish">Kuolit</string>
+	<string name="game_mission_objective" lang="finnish">Tehtävän tavoite</string>
+	<string name="menu_versus" lang="finnish">Vastakkain</string>
+	<string name="menu_graphics" lang="finnish">Grafiikka</string>
+	<string name="menu_return" lang="finnish">Palaa</string>
+	<string name="menu_very_easy" lang="finnish">Erittäin helppo</string>
+	<string name="game_ammo" lang="finnish">Ammukset</string>
+	<string name="game_enemy_female" lang="finnish">Vatustaja</string>
+	<string name="menu_yeah" lang="finnish">Joo</string>
+	<string name="game_shields" lang="finnish">Kilvet</string>
+	<string name="menu_saving" lang="finnish">Tallennetaan...</string>
+	<string name="menu_continue_question" lang="finnish">Jatka?</string>
+	<string name="game_assists" lang="finnish">Avustukset</string>
+</strings>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<string name="game_woman" lang="norwegian">Kvinne</string>
+	<string name="game_you_win" lang="norwegian">Du vinner!</string>
+	<string name="menu_local_multiplayer" lang="norwegian">Lokal flere spiller</string>
+	<string name="menu_press_start" lang="norwegian">Trykk Start</string>
+	<string name="menu_load" lang="norwegian">Laste Opp</string>
+	<string name="menu_nope" lang="norwegian">Nei</string>
+	<string name="game_wins" lang="norwegian">Vinner</string>
+	<string name="menu_load_game" lang="norwegian">Laste Opp Spill</string>
+	<string name="menu_desktop_question" lang="norwegian">Avslutt til skrivebordet?</string>
+	<string name="menu_options_sound" lang="norwegian">Lydinnstillinger</string>
+	<string name="menu_hard" lang="norwegian">Vanskelig</string>
+	<string name="menu_exit" lang="norwegian">Avslutt</string>
+	<string name="menu_sound" lang="norwegian">Lyd</string>
+	<string name="game_dragon" lang="norwegian">Drage</string>
+	<string name="menu_video_quality" lang="norwegian">Kvalitet</string>
+	<string name="menu_yes" lang="norwegian">Ja</string>
+	<string name="menu_continue" lang="norwegian">Gå Videre</string>
+	<string name="menu_loading" lang="norwegian">Laster...</string>
+	<string name="error_generic" lang="norwegian">Det har skjedd en feil.</string>
+	<string name="menu_options" lang="norwegian">Innstillinger</string>
+	<string name="game_objective_plural" lang="norwegian">Mål</string>
+	<string name="game_you_cannot_carry" lang="norwegian">Du kan ikke fortsette lengre.</string>
+	<string name="game_objective" lang="norwegian">Mål</string>
+	<string name="menu_quit_confirm" lang="norwegian">Er du sikker du vill avslutte?</string>
+	<string name="menu_options_sound_volume" lang="norwegian">Volum</string>
+	<string name="menu_main_menu" lang="norwegian">Hoved Meny</string>
+	<string name="menu_coop" lang="norwegian">Co-op</string>
+	<string name="error_connection_lost" lang="norwegian">Mistet forbindelsen.</string>
+	<string name="menu_quit_question" lang="norwegian">Avslutt?</string>
+	<string name="menu_save_game" lang="norwegian">Lagre Spill</string>
+	<string name="menu_exit_question" lang="norwegian">Avslutt?</string>
+	<string name="menu_deathmatch" lang="norwegian">Dødsmatch</string>
+	<string name="game_time" lang="norwegian">Tid</string>
+	<string name="menu_desktop" lang="norwegian">Avslutt til skrivebordet</string>
+	<string name="menu_save" lang="norwegian">Lagre</string>
+	<string name="menu_options_video" lang="norwegian">Videoinnstillinger</string>
+	<string name="menu_yes_caps" lang="norwegian">JA</string>
+	<string name="menu_online_multiplayer" lang="norwegian">Online flere spiller</string>
+	<string name="menu_difficulty" lang="norwegian">Vanskelighetsgrad</string>
+	<string name="game_woman_plural" lang="norwegian">Kvinner</string>
+	<string name="menu_splitscreen" lang="norwegian">Delt Skjerm</string>
+	<string name="menu_single_player" lang="norwegian">Enkeltspiller</string>
+	<string name="menu_multiplayer" lang="norwegian">Flerspiller</string>
+	<string name="game_bullet" lang="norwegian">Kule</string>
+	<string name="menu_pause" lang="norwegian">Pause</string>
+	<string name="menu_thank_you" lang="norwegian">Takk!</string>
+	<string name="menu_no" lang="norwegian">Nei</string>
+	<string name="menu_new_game" lang="norwegian">Nytt Spill</string>
+	<string name="game_lives" lang="norwegian">Liv</string>
+	<string name="error_opponent_disc" lang="norwegian">Din motstander har frakoblet.</string>
+	<string name="error_server" lang="norwegian">Kan ikke koble til serveren.</string>
+	<string name="game_key" lang="norwegian">Nøkkel</string>
+	<string name="menu_are_you_sure" lang="norwegian">Er du sikker?</string>
+	<string name="menu_goodbye" lang="norwegian">Ha det!</string>
+	<string name="game_you_lose" lang="norwegian">Du taper!</string>
+	<string name="game_man" lang="norwegian">Mann</string>
+	<string name="menu_impossible" lang="norwegian">Umulig</string>
+	<string name="menu_options_network" lang="norwegian">Nettverksinnstillinger</string>
+	<string name="game_you_lost" lang="norwegian">Du tapte!</string>
+	<string name="menu_options_gameplay" lang="norwegian">Spillinnstillinger</string>
+	<string name="menu_press_start_continue" lang="norwegian">Trykk Start for å gå videre</string>
+	<string name="menu_video" lang="norwegian">Video</string>
+	<string name="game_bullet_plural" lang="norwegian">Kuler</string>
+	<string name="menu_press_any" lang="norwegian">Trykk en knapp</string>
+	<string name="menu_please_wait" lang="norwegian">Venligst vent...</string>
+	<string name="game_you_won" lang="norwegian">Du vant!</string>
+	<string name="game_losses" lang="norwegian">Taper</string>
+	<string name="menu_quit" lang="norwegian">Avslutt</string>
+	<string name="menu_press_any_continue" lang="norwegian">Trykk en knapp for å gå videre</string>
+	<string name="menu_return_main" lang="norwegian">Gå til hoved meny</string>
+	<string name="menu_return_main_question" lang="norwegian">Ga til hoved menyen?</string>
+	<string name="menu_options_difficulty" lang="norwegian">Vanskelighetsgradinnstillinger</string>
+	<string name="menu_easy" lang="norwegian">Enkelt</string>
+	<string name="error_teammate_disc" lang="norwegian">Din medspiller har frakoblet.</string>
+	<string name="menu_very_hard" lang="norwegian">Veldig Vanskelig</string>
+	<string name="game_man_plural" lang="norwegian">Menn</string>
+	<string name="game_round" lang="norwegian">Runde</string>
+	<string name="menu_no_caps" lang="norwegian">NEI</string>
+	<string name="game_death" lang="norwegian">Død</string>
+	<string name="menu_medium" lang="norwegian">Middels</string>
+	<string name="menu_options_graphics" lang="norwegian">Grafiske Innstillinger</string>
+	<string name="menu_graphics" lang="norwegian">Grafik</string>
+	<string name="menu_return" lang="norwegian">Gå tilbake</string>
+	<string name="menu_very_easy" lang="norwegian">Veldig Enkelt</string>
+	<string name="menu_yeah" lang="norwegian">Ja</string>
+	<string name="menu_saving" lang="norwegian">Lagrer...</string>
+	<string name="menu_continue_question" lang="norwegian">Gå Videre?</string>
+</strings>

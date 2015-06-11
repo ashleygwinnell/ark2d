@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<string name="game_transgender" lang="english_us">Transgender</string>
+	<string name="game_woman" lang="english_us">Woman</string>
+	<string name="game_you_win" lang="english_us">You win!</string>
+	<string name="menu_local_multiplayer" lang="english_us">Local Multiplayer</string>
+	<string name="menu_press_start" lang="english_us">Press Start</string>
+	<string name="menu_load" lang="english_us">Load</string>
+	<string name="menu_nope" lang="english_us">Nope</string>
+	<string name="game_inventory_full" lang="english_us">Inventory Full</string>
+	<string name="game_enemy_plural" lang="english_us">Enemies</string>
+	<string name="menu_cooperative" lang="english_us">Cooperative</string>
+	<string name="game_assist" lang="english_us">Assist</string>
+	<string name="game_ammunition" lang="english_us">Ammunition</string>
+	<string name="menu_load_game" lang="english_us">Load Game</string>
+	<string name="menu_desktop_question" lang="english_us">Exit to Desktop?</string>
+	<string name="menu_options_sound" lang="english_us">Sound Options</string>
+	<string name="menu_hard" lang="english_us">Hard</string>
+	<string name="menu_exit" lang="english_us">Exit</string>
+	<string name="menu_sound" lang="english_us">Sound</string>
+	<string name="game_dragon" lang="english_us">Dragon</string>
+	<string name="error_no_games_found" lang="english_us">No games found.</string>
+	<string name="menu_video_quality" lang="english_us">Quality</string>
+	<string name="game_respawn_question" lang="english_us">Respawn?</string>
+	<string name="menu_yes" lang="english_us">Yes</string>
+	<string name="game_defeated" lang="english_us">You have been defeated.</string>
+	<string name="menu_continue" lang="english_us">Continue</string>
+	<string name="menu_loading" lang="english_us">Loading...</string>
+	<string name="error_generic" lang="english_us">An error has occured.</string>
+	<string name="menu_options" lang="english_us">Options</string>
+	<string name="game_male" lang="english_us">Male</string>
+	<string name="game_objective_plural" lang="english_us">Objectives</string>
+	<string name="game_you_cannot_carry" lang="english_us">You cannot carry any more.</string>
+	<string name="game_female" lang="english_us">Female</string>
+	<string name="game_objective" lang="english_us">Objective</string>
+	<string name="menu_quit_confirm" lang="english_us">Are you sure you want to quit?</string>
+	<string name="menu_options_sound_volume" lang="english_us">Volume</string>
+	<string name="error_code" lang="english_us">Error code:</string>
+	<string name="menu_main_menu" lang="english_us">Main Menu</string>
+	<string name="game_locked" lang="english_us">Locked</string>
+	<string name="game_mission_objective_plural" lang="english_us">Mission Objectives</string>
+	<string name="menu_coop" lang="english_us">Co-op</string>
+	<string name="error_connection_lost" lang="english_us">Connection lost.</string>
+	<string name="game_match" lang="english_us">Match</string>
+	<string name="menu_quit_question" lang="english_us">Quit?</string>
+	<string name="menu_save_game" lang="english_us">Save Game</string>
+	<string name="menu_exit_question" lang="english_us">Exit?</string>
+	<string name="menu_deathmatch" lang="english_us">Deathmatch</string>
+	<string name="game_time" lang="english_us">Time</string>
+	<string name="game_zombie" lang="english_us">Zombie</string>
+	<string name="game_defeat" lang="english_us">Defeat</string>
+	<string name="game_game_over" lang="english_us">Game over!</string>
+	<string name="menu_desktop" lang="english_us">Exit to Desktop</string>
+	<string name="menu_save" lang="english_us">Save</string>
+	<string name="menu_options_video" lang="english_us">Video Options</string>
+	<string name="game_inventory_capacity" lang="english_us">Inventory Capacity</string>
+	<string name="game_respawn" lang="english_us">Respawn</string>
+	<string name="menu_yes_caps" lang="english_us">YES</string>
+	<string name="menu_options_graphics" lang="english_us">Graphics Options</string>
+	<string name="menu_difficulty" lang="english_us">Difficulty</string>
+	<string name="game_inventory" lang="english_us">Inventory</string>
+	<string name="game_wins" lang="english_us">Wins</string>
+	<string name="game_woman_plural" lang="english_us">Women</string>
+	<string name="menu_splitscreen" lang="english_us">Splitscreen</string>
+	<string name="menu_single_player" lang="english_us">Single player</string>
+	<string name="menu_multiplayer" lang="english_us">Multiplayer</string>
+	<string name="game_game_over_caps" lang="english_us">GAME OVER!</string>
+	<string name="game_respawn_in" lang="english_us">Respawn in:</string>
+	<string name="game_kills" lang="english_us">Kills</string>
+	<string name="game_bullet" lang="english_us">Bullet</string>
+	<string name="game_enemy_female_plural" lang="english_us">Enemies</string>
+	<string name="menu_pause" lang="english_us">Pause</string>
+	<string name="menu_thank_you" lang="english_us">Thank you!</string>
+	<string name="game_kill" lang="english_us">Kill</string>
+	<string name="menu_no" lang="english_us">No</string>
+	<string name="menu_new_game" lang="english_us">New Game</string>
+	<string name="menu_online_multiplayer" lang="english_us">Online Multiplayer</string>
+	<string name="game_lives" lang="english_us">Lives</string>
+	<string name="game_health" lang="english_us">Health</string>
+	<string name="error_opponent_disc" lang="english_us">Your opponent has disconnected.</string>
+	<string name="error_player_disc" lang="english_us">The other player has disconnected.</string>
+	<string name="error_server" lang="english_us">Cannot connect to server.</string>
+	<string name="game_you_are_dead" lang="english_us">You are dead.</string>
+	<string name="game_key" lang="english_us">Key</string>
+	<string name="menu_are_you_sure" lang="english_us">Are you sure?</string>
+	<string name="menu_goodbye" lang="english_us">Goodbye!</string>
+	<string name="game_you_lose" lang="english_us">You lose!</string>
+	<string name="game_man" lang="english_us">Man</string>
+	<string name="menu_impossible" lang="english_us">Impossible</string>
+	<string name="menu_options_network" lang="english_us">Network Options</string>
+	<string name="game_you_lost" lang="english_us">You lost!</string>
+	<string name="game_zombie_plural" lang="english_us">Zombies</string>
+	<string name="error_save_corrupted" lang="english_us">Save file corrupted.</string>
+	<string name="game_enemy" lang="english_us">Enemy</string>
+	<string name="menu_options_gameplay" lang="english_us">Gameplay Options</string>
+	<string name="menu_press_start_continue" lang="english_us">Press Start to continue</string>
+	<string name="menu_video" lang="english_us">Video Options</string>
+	<string name="game_respawning" lang="english_us">Respawning</string>
+	<string name="game_bullet_plural" lang="english_us">Bullets</string>
+	<string name="game_dragon_plural" lang="english_us">Dragons</string>
+	<string name="menu_press_any" lang="english_us">Press any key</string>
+	<string name="menu_please_wait" lang="english_us">Please wait...</string>
+	<string name="game_you_won" lang="english_us">You won!</string>
+	<string name="game_losses" lang="english_us">Losses</string>
+	<string name="game_armor" lang="english_us">Armor</string>
+	<string name="menu_quit" lang="english_us">Quit</string>
+	<string name="menu_press_any_continue" lang="english_us">Press any key to continue</string>
+	<string name="menu_return_main" lang="english_us">Return to Main Menu</string>
+	<string name="menu_return_main_question" lang="english_us">Return to Main Menu?</string>
+	<string name="menu_options_difficulty" lang="english_us">Difficulty Options</string>
+	<string name="game_victory" lang="english_us">Victory</string>
+	<string name="menu_easy" lang="english_us">Easy</string>
+	<string name="error_teammate_disc" lang="english_us">Your teammate has disconnected.</string>
+	<string name="menu_very_hard" lang="english_us">Very Hard</string>
+	<string name="game_death_plural" lang="english_us">Deaths</string>
+	<string name="game_shield" lang="english_us">Shield</string>
+	<string name="game_man_plural" lang="english_us">Men</string>
+	<string name="game_round" lang="english_us">Round</string>
+	<string name="menu_no_caps" lang="english_us">NO</string>
+	<string name="game_death" lang="english_us">Death</string>
+	<string name="menu_insane" lang="english_us">Insane</string>
+	<string name="menu_medium" lang="english_us">Medium</string>
+	<string name="game_you_died" lang="english_us">You died.</string>
+	<string name="game_mission_objective" lang="english_us">Mission Objective</string>
+	<string name="menu_versus" lang="english_us">Versus</string>
+	<string name="menu_graphics" lang="english_us">Graphics Options</string>
+	<string name="menu_return" lang="english_us">Return</string>
+	<string name="menu_very_easy" lang="english_us">Very Easy</string>
+	<string name="game_ammo" lang="english_us">Ammo</string>
+	<string name="game_enemy_female" lang="english_us">Enemy</string>
+	<string name="menu_yeah" lang="english_us">Yeah</string>
+	<string name="game_shields" lang="english_us">Shields</string>
+	<string name="menu_saving" lang="english_us">Saving...</string>
+	<string name="menu_continue_question" lang="english_us">Continue?</string>
+	<string name="game_assists" lang="english_us">Assists</string>
+</strings>

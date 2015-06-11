@@ -1,0 +1,62 @@
+STRING ID,DESCRIPTION,ENGLISH (US),ENGLISH (UK),FRANÇAIS,FRANÇAIS (QUÉBEC),ESPAÑOL,DEUTSCH,ITALIANO,PORTUGUÊS,РУССКИЙ,ΕΛΛΗΝΙΚΑ,TURKISH,DANSK / DANISH,NORWEGIAN (NB),SWEDISH,DUTCH,العربية,简体中文(ZH_CN),FINNISH,"עברית / Hebrew
+"
+GAME_YOU_WIN,,You win!,You win!,Vous gagnez !,,¡Usted gana!,Sie gewinnen!,Vittoria!,Você venceu!,Вы выиграли!,Κέρδισες!,,Du vinder!,Du vinner!,Du vinner!,Je wint!,انت تربح!,你赢了！,Sinä voitit!,ניצחת!
+GAME_YOU_LOSE,,You lose!,You lose!,Vous perdez !,,¡Usted pierde!,Sie verlieren!,Sconfitta!,Você perdeu!,Вы проиграли,Έχασες!,,Du taber!,Du taper!,Du förlorar!,Je verliest!,انت تخسر!,你输了！,Sinä hävisit!,הפסדת...
+GAME_YOU_WON,,You won!,You won!,Vous avez gagné !,,¡Usted ganó!,Sie haben gewonnen!,Hai vinto!,Você ganhou!,Вы выиграли!,Κέρδισες!,Sen kazandın!,Du vandt!,Du vant!,Du vann!,Je hebt gewonnen!,لقد ربحت,你赢了！,Sinä voitit!,ניצחת!
+GAME_YOU_LOST,,You lost!,You lost!,Vous avez perdu !,,¡Usted perdió!,Sie haben verloren!,Hai perso!,Você perdeu!,Вы проиграли!,Έχασες!,Sen kaybettin!,Du tabte!,Du tapte!,Du förlorade!,Je hebt verloren!,لقد خسرت!,你输了！,Sinä hävisit!,הפסדת...
+GAME_GAME_OVER,,Game over!,Game over!,Jeu terminé !,,Juego terminado,Spiel vorbei!,Fine partita,Fim de jogo!,Конец игры!,Τέλος παιχνιδιού,Oyun bitti!,Game over!,,Game over!,,انتهت اللعبة!,游戏结束！,Peli loppu!,המשחק נגמר
+GAME_GAME_OVER_CAPS,,GAME OVER!,GAME OVER!,JEU TERMINÉ !,,JUEGO TERMINADO,SPIEL VORBEI!,FINE PARTITA!,FIM DE JOGO!,КОНЕЦ ИГРЫ!,ΤΕΛΟΣ ΠΑΙΧΝΙΔΙΟΥ!,,GAME OVER!,,GAME OVER!,,انتهت اللعبة!,游戏结束！,PELI LOPPU!,המשחק נגמר!
+GAME_VICTORY,,Victory,Victory,Victoire,,Victoria,Sieg,Vittoria!,Vitória,Победа,Νίκη,Galibiyet,Sejr,,Seger,Overwinning,النصر,胜利,Voitto,ניצחון!
+GAME_DEFEAT,,Defeat,Defeat,Défaite,,Derrota,Niederlage,Sconfitta!,Derrota,Поражение,Ήττα,Mağlubiyet,Nederlag,,Nederlag,Nederlaag,الخسارة,失败,Häviö,תבוסה...
+GAME_DEFEATED,,You have been defeated.,You have been defeated.,Vous avez été vaincu.,,Fuiste derrotado,Sie wurden besiegt.,Sei stato sconfitto,Você foi derrotado.,Вы потерпели поражение,Νικήθηκες.,,Du er blevet besejret,,Du har blivit besegrad,,لقد خسرت,你被击败了。,Sinut on voitettu,הובסת...
+GAME_OBJECTIVE,,Objective,Objective,Objectif,,Objetivo,Ziel,Obiettivo,Objetivo,Задача,Στόχος,Hedef,Mål,Mål,Mål,Doel,الهدف,目标,Tavoite,מטרה
+GAME_OBJECTIVE_PLURAL,,Objectives,Objectives,Objectifs,,Objetivos,Ziele,Obiettivi,Objetivo,Задачи,Στόχοι,Hedefler,Mål,Mål,Mål,Doelen,الاهداف,目标,Tavoitteet,מטרות
+GAME_MISSION_OBJECTIVE,,Mission Objective,Mission Objective,Objectif de la mission,,Objetivo de la misión,Missionsziel,Obiettivo della missione,Objetivo da missão,Задача миссии,Στόχος αποστολής,Görev Hedefi,Missionsmål,,Uppdragsmål,Missie doel,هدف المهمة,任务目标,Tehtävän tavoite,מטרת המשימה
+GAME_MISSION_OBJECTIVE_PLURAL,,Mission Objectives,Mission Objectives,Objectifs de la mission,,Objetivos de la misión,Missionsziele,Obiettivi di missione,Objetivos da missão,Задачи мисси,Στόχοι αποστολής,Görev Hedefleri,Missionsmål,,Uppdragsmål,Missie doelen,اهداف المهمة,任务目标,Tehtävän tavoitteet,מטרות המשימה
+GAME_YOU_ARE_DEAD,,You are dead.,You are dead.,Vous êtes mort.,,Estás muerto,Sie sind tot.,Sei morto,Você está morto./Você está morta.,Вы мертвы,Είσαι νεκρός.,,Du er død.,,Du är död.,Je bent dood.,انت ميت.,你死了。,Olet kuollut,אתה מת.
+GAME_YOU_DIED,,You died.,You died.,Vous êtes mort.,,Has muerto,Sie sind gestorben.,Sei morto,Você morreu.,Вы умерли,Πέθανες.,Sen öldün!,Du døde.,,Du dog.,Je bent dood gegaan.,لقد مت.,你死了。,Kuolit,נהרגת!
+GAME_DEATH,,Death,Death,Mort,,Muerte,Tod,Morte,Morte,Смерть,Θάνατος,,Død,Død,Död,,الموت,死亡,Kuolema,מוות
+GAME_DEATH_PLURAL,,Deaths,Deaths,Morts,,Muertes,Tode,Morti,Mortes,Смерти,Θάνατοι,,Dødsfald,,Dödsfall,,الموتى,死亡,Kuolema,מקרי מוות
+GAME_KILL,,Kill,Kill,Meurtre,,Matado,Tötung,Uccisione,Morte,Убили,Φόνος,,Drab,,Döda,,الفتل,击杀,Tappo,הריגה
+GAME_KILLS,,Kills,Kills,Meurtres,,Matados,Tötungen,Uccisioni,Mortes,Убил,Φόνοι,,Drab,,Dödade,,القتلى,击杀,Tapot,הריגות
+GAME_ASSIST,,Assist,Assist,Aide,,Asistencia,Beihilfe ,Assist,Assistência,Помогли,Βοήθεια,,Assist,,Assist,,مساعد,协助,Avustus,הגשת עזרה
+GAME_ASSISTS,,Assists,Assists,Aides,,Asistencias,Beihilfen ,Assist,Assistências,Помог,Βοήθειες,,Assists,,Assists,,المساعدون,协助,Avustukset,הגשות עזרה
+GAME_RESPAWN,,Respawn,Respawn,Réapparaître,,Revivir,Wiederbelebung,Respawn,Reviver,,Ανάσταση,,Genopstå,,Återuppstå,,اسقاط,重生,Synny uudestaan,התחל מחדש
+GAME_RESPAWNING,,Respawning,Respawning,Réapparition,,Reviviendo,Wiederbeleben,Respawning,Revivendo,,Ανασταίνεσαι,,Genopstår,,Återuppstår,,جاري الاسقاط,重生中,Synnytään uudestaan,מתחיל מחדש...
+GAME_RESPAWN_IN,,Respawn in:,Respawn in:,Réapparition dans :,,Reviviendo en:,Wiederbeleben in:,Respawn in:,Revivendo em:,,Ανάσταση σε:,,Genopstår om:,,Återuppstår om:,,الاسقاط في:,于此之后重生：,,מתחיל מחדש בעוד 
+GAME_RESPAWN_QUESTION,,Respawn?,Respawn?,Réapparaître ?,,¿Revivir?,Wiederbeleben?,Respawn?,Reviver?,,Ανάσταση;,,Genopstå?,,Återuppstå?,,اعادة الاسقاط؟,重生？,Synny uudestaan?,להתחיל מחדש?
+GAME_LOCKED,,Locked,Locked,Bloqué,,Bloqueado,Gesperrt,Bloccato,Trancado,Закрыто,Κλειδωμένο,,Låst,,Låst,,مغلق,锁定,Lukittu,נעול
+GAME_INVENTORY,,Inventory,Inventory,Inventaire,,Inventario,Inventar,Inventario,Inventário,Инвентарь,Απόθεμα,,Inventar,,Inventarie,,الحقيبة,装备栏,,מלאי
+GAME_INVENTORY_CAPACITY,,Inventory Capacity,Inventory Capacity,Capacité de l'inventaire,,Capacidad del inventario,Inventarkapazität,Capacità dell' inventario,Capacidade do Inventário,Вместимость инвентаря,Χωρητικότητα αποθέματος,,Inventar kapacitet,,Inventariekapacitet,,حمل الحقيبة,装备容量,,תפוסת מלאי
+GAME_INVENTORY_FULL,,Inventory Full,Inventory Full,Inventaire plein,,Inventario lleno,Inventar voll,Inventario pieno,Inventário Cheio,Инвентарь полон,Το απόθεμα είναι γεμάτο,,Inventar er fuldt,,Inventariet är fullt,,الحقيبة ممتلئة,装备已满,,אין מקום במלאי
+GAME_YOU_CANNOT_CARRY,,You cannot carry any more.,You cannot carry any more.,Vous ne pouvez pas transporter plus,,No puedes llevar nada más,Sie können nichts mehr tragen.,Non puoi portare altro.,Você não pode carregar mais nada.,Вы не можете нести больше,Δεν μπορείς να κουβαλήσεις τίποτε άλλο,,Du kan ikke bære mere.,Du kan ikke fortsette lengre.,Du kan inte bära mer,,لا يمكنك حمل المزيد,你不能再拿起东西了。,Et voi kataa enempää,אתה לא יכול לשאת עוד.
+GAME_ROUND,,Round,Round,Tour,,Ronda,Runde,Round,Rodada,Раунд,Γύρος,,Runde,Runde,Runda,,دورة,回合,Erä,סיבוב
+GAME_MATCH,,Match,Match,Match,,Encuentro,Spiel,Incontro,Partida,Матч,Αγώνας,,Kamp,,Match,,مباراة,比赛,Erä,משחקון
+GAME_WINS,,Wins,Wins,Victoires,,Ganadas,Siege,Vittorie,Vitórias,Победы,Νίκες,,Sejre,Vinner,Vinster,,الانتصارات,获胜,Voitot,ניצחונות
+GAME_LOSSES,,Losses,Losses,Défaites,,Perdidas,Niederlagen,Sconfitte,Derrotas,Поражения,Ήττες,,Nederlag,Taper,Förluster,,الخسارات,失败,Häviöt,הפסדים
+GAME_KEY,,Key,Key,Clé,,Tecla,Schlüssel,Chiave,Chave,Ключ,Κλειδί,,Nøgle,Nøkkel,Nyckel,Sleutel,مفتاح,钥匙,Avain,מפתח
+GAME_LIVES,,Lives,Lives,Vies,,Vidas,Leben,Vite,Vidas,Жизни,Ζωές,,Liv,Liv,Liv,,الارواح,生命,Elämät,חיים
+GAME_HEALTH,,Health,Health,Santé,,Vida,Gesundheit,Salute,Vida,Здоровье,Υγεία,,Liv,,Hälsa,,الصحة,健康值,Terveys,בריאות
+GAME_AMMUNITION,,Ammunition,Ammunition,Munitions,,Municiones,Munition,Munizioni,Munição,Боеприпасы,Πυρομαχικά,,Ammunition,,Ammunition,Munitie,التعداد,弹药值,Ammukset,תחמושת
+GAME_AMMO,,Ammo,Ammo,Munitions,,,Muni,Munizioni,Munição,Б/П,Πυρομαχικά,,Ammo,,Ammo,,الرصاص,弹药,Ammukset,תחמושת
+GAME_BULLET,,Bullet,Bullet,Balle,,Bala,Patrone,Proiettile,Bala,Пуля,Σφαίρα,,Kugle,Kule,Kula,Kogel,رصاصة,子弹,Luoti,כדור
+GAME_BULLET_PLURAL,,Bullets,Bullets,Balles,,Balas,Patronen,Proiettili,Balas,Пули,Σφαίρες,,Kugler,Kuler,Kulor,Kogels,رصاصات,子弹,Luodit,כדורים
+GAME_ARMOR,,Armor,Armour,Armure,,Armadura,Rüstung,Armatura,Armadura,Броня,Πανοπλία,,Rustning,,Rustning,Pantser,الدرع,护甲,Panssari,שריון
+GAME_SHIELD,"sci-fi energy shield, not medieval knight thing",Shield,Shield,Bouclier,,Escudo,Schild,Scudo,Escudo,Щит,Ασπίδα,,Skjold,,Sköld,Schild,الدرع,护罩,Kilpi,מגן אנרגיה
+GAME_SHIELDS,"sci-fi energy shield, not medieval knight thing",Shields,Shields,Boucliers,,Escudos,Schilder,Scudi,Escudos,Щиты,Ασπίδες,,Skjolde,,Sköldar,Schilden,الدروع,护罩,Kilvet,מגיני אנרגיה
+GAME_ENEMY,,Enemy,Enemy,Ennemi,,Enemigo,Gegner,Nemico,Inimigo,Враг,Εχθρός,,Fjende,,Fiende,Vijand,العدو,敌人,Vastustaja,אויב
+GAME_ENEMY_PLURAL,,Enemies,Enemies,Ennemis,,Enemigos,Gegner,Nemici,Inimigos,Враги,Εχθροί,,Fjender,,Fiender,Vijanden,الاعداء,敌人,Vastustajat,אויבים
+GAME_ENEMY_FEMALE,,Enemy,Enemy,Ennemie,,Enemiga,Gegnerin,Nemica,Inimigo,Враг,Εχθρός,,Fjende,,Fiende,Vijand,العدو,敌人,Vatustaja,אויבת
+GAME_ENEMY_FEMALE_PLURAL,,Enemies,Enemies,Ennemies,,Enemigas,Gegnerinnen,Nemiche,Inimigos,Враги,Εχθροί,,Fjender,,Fiender,Vijanden,الاعداء,敌人,Vastustajat,אויבות
+GAME_MALE,,Male,Male,Mâle,,Masculino,Männlich,Maschio,Masculino,Мужчина,Αρσενικό,,Mandlig,,Manlig,Man,ذكر,男性,Mies,זכר
+GAME_FEMALE,,Female,Female,Femelle,,Femenino,Weiblich,Femmina,Feminino,Женщина,Θηλυκό,,Kvindelig,,Kvinnlig,Vrouw,انثى,女性,Nainen,נקבה
+GAME_TRANSGENDER,,Transgender,Transgender,Transsexuel,,Transexual,Transsexuell,Trans,Transgênero,Трансгендер,Διαφυλικό,,Transsexuel,,Transsexuell,Transgender,متحوّل,跨性别,Transseksuaali,טרנסג'נדר
+GAME_MAN,,Man,Man,Homme,,Hombre,Mann,Uomo,Homem,Мужчина,Άντρας,,Mand,Mann,Man,Man,رجل,男人,Mies,גבר
+GAME_MAN_PLURAL,,Men,Men,Hommes,,Hombres,Männer,Uomini,Homens,Мужчины,Άντρες,,Mænd,Menn,Män,Mannen,رجال,男人,Miehet,גברים
+GAME_WOMAN,,Woman,Woman,Femme,,Mujer,Frau,Donna,Mulher,Женщина,Γυναίκα,,Kvinde,Kvinne,Kvinna,Vrouw,امرأة,女人,Nainen,אשה
+GAME_WOMAN_PLURAL,,Women,Women,Femmes,,Mujeres,Frauen,Donne,Mulheres,Женщины,Γυναίκες,,Kvinder,Kvinner,Kvinnor,Vrouwen,نساء,女人,Naiset,נשים
+GAME_DRAGON,,Dragon,Dragon,Dragon,,Dragón,Drache,Drago,Dragão,Дракон,Δράκος,,Drage,Drage,Drake,Draak,تنين,龙,Lohikäärme,דרקון
+GAME_DRAGON_PLURAL,,Dragons,Dragons,,,,Drachen,Draghi,Dragões,Драконы,,,Drager,,Drakar,Draken,تنانين,龙,,דרקונים
+GAME_ZOMBIE,,Zombie,Zombie,Zombie,,Zombi,Zombie,Zombie,Zumbi,Зомби,Ζόμπι,,Zombie,,Zombie,Zombie,زومبي,僵尸,Zombie,זומבי
+GAME_ZOMBIE_PLURAL,,Zombies,Zombies,Zombies,,Zombis,Zombies,Zombie,Zumbis,Зомби,Ζόμπι,,Zombier,,Zombier,Zombies,زومبيون,僵尸,Zombie,זומבים
+GAME_TIME,For countdown timers or elapsed time,Time,Time,Temps,,Tiempo,Zeit,Tempo,Tempo,Время,Χρόνος,,Tid,Tid,Tid,Tijd,الوقت,时间,Aika,זמן שעבר

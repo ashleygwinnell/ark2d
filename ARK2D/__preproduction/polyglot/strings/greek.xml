@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<string name="game_transgender" lang="greek">Διαφυλικό</string>
+	<string name="game_woman" lang="greek">Γυναίκα</string>
+	<string name="game_you_win" lang="greek">Κέρδισες!</string>
+	<string name="menu_local_multiplayer" lang="greek">Πολλοί τοπικοί παίχτες</string>
+	<string name="menu_press_start" lang="greek">Πάτα Έναρξη</string>
+	<string name="menu_load" lang="greek">Φόρτωσε</string>
+	<string name="menu_nope" lang="greek">Μπα</string>
+	<string name="game_inventory_full" lang="greek">Το απόθεμα είναι γεμάτο</string>
+	<string name="game_enemy_plural" lang="greek">Εχθροί</string>
+	<string name="menu_cooperative" lang="greek">Συνεργατικό</string>
+	<string name="game_assist" lang="greek">Βοήθεια</string>
+	<string name="game_ammunition" lang="greek">Πυρομαχικά</string>
+	<string name="menu_load_game" lang="greek">Φόρτωσε παιχνίδι</string>
+	<string name="menu_desktop_question" lang="greek">Να επιστρέψω στο περιβάλλον εργασίας;</string>
+	<string name="menu_options_sound" lang="greek">Επιλογές ήχου</string>
+	<string name="menu_hard" lang="greek">Δύσκολο</string>
+	<string name="menu_exit" lang="greek">Έξοδος</string>
+	<string name="menu_sound" lang="greek">Ήχος</string>
+	<string name="game_dragon" lang="greek">Δράκος</string>
+	<string name="error_no_games_found" lang="greek">Δεν βρέθηκαν παιχνίδια.</string>
+	<string name="game_respawn_question" lang="greek">Ανάσταση;</string>
+	<string name="menu_yes" lang="greek">Ναι</string>
+	<string name="game_defeated" lang="greek">Νικήθηκες.</string>
+	<string name="menu_continue" lang="greek">Συνέχεια</string>
+	<string name="error_generic" lang="greek">Γενικό σφάλμα.</string>
+	<string name="menu_options" lang="greek">Επιλογές</string>
+	<string name="game_male" lang="greek">Αρσενικό</string>
+	<string name="game_objective_plural" lang="greek">Στόχοι</string>
+	<string name="game_you_cannot_carry" lang="greek">Δεν μπορείς να κουβαλήσεις τίποτε άλλο</string>
+	<string name="game_female" lang="greek">Θηλυκό</string>
+	<string name="game_objective" lang="greek">Στόχος</string>
+	<string name="menu_quit_confirm" lang="greek">Είσαστε σίγουρος ότι θέλετε να εγκαταλείψετε;</string>
+	<string name="error_code" lang="greek">Κωδικός σφάλματος:</string>
+	<string name="menu_main_menu" lang="greek">Κεντιρκό Μενού</string>
+	<string name="game_locked" lang="greek">Κλειδωμένο</string>
+	<string name="game_mission_objective_plural" lang="greek">Στόχοι αποστολής</string>
+	<string name="menu_coop" lang="greek">Συνεργατικό</string>
+	<string name="error_connection_lost" lang="greek">Χάθηκε η σύνδεση.</string>
+	<string name="game_match" lang="greek">Αγώνας</string>
+	<string name="menu_quit_question" lang="greek">Έξοδος;</string>
+	<string name="menu_save_game" lang="greek">Αποθήκευσε παιχνίδι</string>
+	<string name="menu_exit_question" lang="greek">Έξοδος;</string>
+	<string name="menu_deathmatch" lang="greek">Αγώνας μέχρι θανάτου</string>
+	<string name="game_time" lang="greek">Χρόνος</string>
+	<string name="game_zombie" lang="greek">Ζόμπι</string>
+	<string name="game_defeat" lang="greek">Ήττα</string>
+	<string name="game_game_over" lang="greek">Τέλος παιχνιδιού</string>
+	<string name="menu_desktop" lang="greek">Επιστροφή στο περιβάλλον εργασίας</string>
+	<string name="menu_save" lang="greek">Αποθήκευσε</string>
+	<string name="menu_options_video" lang="greek">Επιλογές βίντεο</string>
+	<string name="game_inventory_capacity" lang="greek">Χωρητικότητα αποθέματος</string>
+	<string name="game_respawn" lang="greek">Ανάσταση</string>
+	<string name="menu_yes_caps" lang="greek">ΝΑΙ</string>
+	<string name="menu_options_graphics" lang="greek">Επιλογές γραφικών</string>
+	<string name="menu_difficulty" lang="greek">Δυσκολία</string>
+	<string name="game_inventory" lang="greek">Απόθεμα</string>
+	<string name="game_wins" lang="greek">Νίκες</string>
+	<string name="game_woman_plural" lang="greek">Γυναίκες</string>
+	<string name="menu_splitscreen" lang="greek">Χωρισμένη οθόνη</string>
+	<string name="menu_single_player" lang="greek">Ένας παίχτης</string>
+	<string name="menu_multiplayer" lang="greek">Πολλοί παίχτες</string>
+	<string name="game_game_over_caps" lang="greek">ΤΕΛΟΣ ΠΑΙΧΝΙΔΙΟΥ!</string>
+	<string name="game_respawn_in" lang="greek">Ανάσταση σε:</string>
+	<string name="game_kills" lang="greek">Φόνοι</string>
+	<string name="game_bullet" lang="greek">Σφαίρα</string>
+	<string name="game_enemy_female_plural" lang="greek">Εχθροί</string>
+	<string name="menu_thank_you" lang="greek">Ευχαριστώ!</string>
+	<string name="game_kill" lang="greek">Φόνος</string>
+	<string name="menu_no" lang="greek">Όχι</string>
+	<string name="menu_new_game" lang="greek">Νέο παιχνίδι</string>
+	<string name="menu_online_multiplayer" lang="greek">Πολλοί δικτυακοί παίχτες</string>
+	<string name="game_lives" lang="greek">Ζωές</string>
+	<string name="game_health" lang="greek">Υγεία</string>
+	<string name="error_opponent_disc" lang="greek">Ο αντίπαλός σου αποσυνδέθηκε.</string>
+	<string name="error_player_disc" lang="greek">Ο άλλος παίχτης αποσυνδέθηκε.</string>
+	<string name="error_server" lang="greek">Δεν μπορώ να συνδεθώ στον διακομιστή.</string>
+	<string name="game_you_are_dead" lang="greek">Είσαι νεκρός.</string>
+	<string name="game_key" lang="greek">Κλειδί</string>
+	<string name="menu_are_you_sure" lang="greek">Είσαστε σίγουρος;</string>
+	<string name="menu_goodbye" lang="greek">Αντίο!</string>
+	<string name="game_you_lose" lang="greek">Έχασες!</string>
+	<string name="game_man" lang="greek">Άντρας</string>
+	<string name="menu_impossible" lang="greek">Ακατόρθωτα δύσκολο</string>
+	<string name="menu_options_network" lang="greek">Επιλογές δικτύου</string>
+	<string name="game_you_lost" lang="greek">Έχασες!</string>
+	<string name="game_zombie_plural" lang="greek">Ζόμπι</string>
+	<string name="error_save_corrupted" lang="greek">Το αποθηκευμένο αρχείο είναι κατεστραμμένο.</string>
+	<string name="game_enemy" lang="greek">Εχθρός</string>
+	<string name="menu_options_gameplay" lang="greek">Επιλογές παιχνιδιού</string>
+	<string name="menu_press_start_continue" lang="greek">Πάτα Έναρξη για να συνεχίσεις</string>
+	<string name="menu_video" lang="greek">Βίντεο</string>
+	<string name="game_respawning" lang="greek">Ανασταίνεσαι</string>
+	<string name="game_bullet_plural" lang="greek">Σφαίρες</string>
+	<string name="menu_press_any" lang="greek">Πάτα ένα πλήκτρο</string>
+	<string name="game_you_won" lang="greek">Κέρδισες!</string>
+	<string name="game_losses" lang="greek">Ήττες</string>
+	<string name="game_armor" lang="greek">Πανοπλία</string>
+	<string name="menu_quit" lang="greek">Έξοδος</string>
+	<string name="menu_press_any_continue" lang="greek">Πάτα ένα πλήκτρο για να συνεχίσεις</string>
+	<string name="menu_return_main" lang="greek">Επιστροφή στο Κεντρικό Μενού</string>
+	<string name="menu_return_main_question" lang="greek">Επιστροφή στο Κεντρικό Μενού;</string>
+	<string name="menu_options_difficulty" lang="greek">Επιλογές δυσκολίας</string>
+	<string name="game_victory" lang="greek">Νίκη</string>
+	<string name="menu_easy" lang="greek">Εύκολο</string>
+	<string name="error_teammate_disc" lang="greek">Ο συμπαίχτης σου αποσυνθέθηκε.</string>
+	<string name="menu_very_hard" lang="greek">Πολύ δύσκολο</string>
+	<string name="game_death_plural" lang="greek">Θάνατοι</string>
+	<string name="game_shield" lang="greek">Ασπίδα</string>
+	<string name="game_man_plural" lang="greek">Άντρες</string>
+	<string name="game_round" lang="greek">Γύρος</string>
+	<string name="menu_no_caps" lang="greek">ΟΧΙ</string>
+	<string name="game_death" lang="greek">Θάνατος</string>
+	<string name="menu_insane" lang="greek">Τρελά δύσκολο</string>
+	<string name="menu_medium" lang="greek">Μέτριο</string>
+	<string name="game_you_died" lang="greek">Πέθανες.</string>
+	<string name="game_mission_objective" lang="greek">Στόχος αποστολής</string>
+	<string name="menu_versus" lang="greek">Αντίπαλοι</string>
+	<string name="menu_graphics" lang="greek">Γραφικά</string>
+	<string name="menu_return" lang="greek">Επιστροφή</string>
+	<string name="menu_very_easy" lang="greek">Πολύ εύκολο</string>
+	<string name="game_ammo" lang="greek">Πυρομαχικά</string>
+	<string name="game_enemy_female" lang="greek">Εχθρός</string>
+	<string name="menu_yeah" lang="greek">Ναι</string>
+	<string name="game_shields" lang="greek">Ασπίδες</string>
+	<string name="menu_saving" lang="greek">Αποθηκεύω...</string>
+	<string name="menu_continue_question" lang="greek">Συνέχεια;</string>
+	<string name="game_assists" lang="greek">Βοήθειες</string>
+</strings>

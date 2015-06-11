@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<string name="menu_yeah" lang="japanese">うん</string>
+	<string name="menu_nope" lang="japanese">ううん</string>
+	<string name="menu_no" lang="japanese">いいえ</string>
+	<string name="menu_yes_caps" lang="japanese">はい</string>
+	<string name="menu_no_caps" lang="japanese">いいえ</string>
+</strings>

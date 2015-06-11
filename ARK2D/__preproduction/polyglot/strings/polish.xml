@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<string name="menu_press_any" lang="polish">Naciśnij dowolnyklawisz</string>
+	<string name="menu_thank_you" lang="polish">Dziekuje!</string>
+	<string name="menu_are_you_sure" lang="polish">Czy jesteś pewien?</string>
+	<string name="menu_local_multiplayer" lang="polish">Gra wieloosobowa - lokalnie</string>
+	<string name="menu_press_start" lang="polish">Naciśnij Start</string>
+	<string name="menu_load" lang="polish">Wczytaj</string>
+	<string name="menu_coop" lang="polish">Współpraca</string>
+	<string name="menu_no" lang="polish">Nie</string>
+	<string name="menu_versus" lang="polish">Kontra</string>
+	<string name="menu_graphics" lang="polish">Ustawienia grafiki</string>
+	<string name="menu_quit_question" lang="polish">Wyjść?</string>
+	<string name="menu_goodbye" lang="polish">Do zobaczenia!</string>
+	<string name="menu_save_game" lang="polish">Zapisz grę</string>
+	<string name="menu_quit" lang="polish">Wyjdź</string>
+	<string name="menu_press_any_continue" lang="polish">Naciśnij dowolny klawisz, aby kontynuować</string>
+	<string name="menu_return_main" lang="polish">Wróć do menu głównego</string>
+	<string name="menu_press_start_continue" lang="polish">Naciśnij Start, aby kontynuować</string>
+	<string name="menu_return_main_question" lang="polish">Wrócić do menu głównego?</string>
+	<string name="menu_options_difficulty" lang="polish">Ustawienia trudności</string>
+	<string name="menu_cooperative" lang="polish">Współpraca</string>
+	<string name="menu_easy" lang="polish">Łatwy</string>
+	<string name="menu_new_game" lang="polish">Nowa gra</string>
+	<string name="menu_very_hard" lang="polish">Bardzo trudny</string>
+	<string name="menu_load_game" lang="polish">Wczytaj grę</string>
+	<string name="menu_desktop_question" lang="polish">Wyjść do pulpitu?</string>
+	<string name="menu_desktop" lang="polish">Wyjdź do pulpitu</string>
+	<string name="menu_save" lang="polish">Zapisz</string>
+	<string name="menu_no_caps" lang="polish">NIE</string>
+	<string name="menu_options_video" lang="polish">Ustawienia wideo</string>
+	<string name="menu_exit" lang="polish">Wyjdź</string>
+	<string name="menu_insane" lang="polish">Szalony</string>
+	<string name="menu_medium" lang="polish">Średni</string>
+	<string name="menu_sound" lang="polish">Dźwiek</string>
+	<string name="menu_options_graphics" lang="polish">Ustawienia grafiki</string>
+	<string name="menu_impossible" lang="polish">Niemożliwy</string>
+	<string name="menu_options_network" lang="polish">Ustawienia sieciowe</string>
+	<string name="menu_yes" lang="polish">Tak</string>
+	<string name="menu_yes_caps" lang="polish">TAK</string>
+	<string name="menu_online_multiplayer" lang="polish">Gra online</string>
+	<string name="menu_difficulty" lang="polish">Poziom trudności</string>
+	<string name="menu_multiplayer" lang="polish">Gra wieloosobowa</string>
+	<string name="menu_continue" lang="polish">Kontynuuj</string>
+	<string name="menu_exit_question" lang="polish">Wyjść?</string>
+	<string name="menu_return" lang="polish">Wróć</string>
+	<string name="menu_very_easy" lang="polish">Bardzo łatwy</string>
+	<string name="menu_splitscreen" lang="polish">Podzielony ekran</string>
+	<string name="menu_deathmatch" lang="polish">Deathmatch</string>
+	<string name="menu_single_player" lang="polish">Jeden gracz</string>
+	<string name="menu_continue_question" lang="polish">Kontynuować?</string>
+	<string name="menu_options_sound" lang="polish">Ustawienia dźwieku</string>
+	<string name="menu_options" lang="polish">Ustawienia</string>
+	<string name="menu_options_gameplay" lang="polish">Ustawienia gry</string>
+	<string name="menu_saving" lang="polish">Zapisywanie...</string>
+	<string name="menu_video" lang="polish">Ustawienia wideo</string>
+	<string name="menu_hard" lang="polish">Trudny</string>
+	<string name="menu_quit_confirm" lang="polish">Czy na pewno chcesz wyjść?</string>
+	<string name="menu_main_menu" lang="polish">Menu główne</string>
+</strings>

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+	<string name="game_transgender" lang="swedish">Transsexuell</string>
+	<string name="game_woman" lang="swedish">Kvinna</string>
+	<string name="game_you_win" lang="swedish">Du vinner!</string>
+	<string name="menu_local_multiplayer" lang="swedish">Lokalt flerspelarläge</string>
+	<string name="menu_press_start" lang="swedish">Tryck start</string>
+	<string name="menu_load" lang="swedish">Ladda</string>
+	<string name="menu_nope" lang="swedish">Nej</string>
+	<string name="game_inventory_full" lang="swedish">Inventariet är fullt</string>
+	<string name="game_enemy_plural" lang="swedish">Fiender</string>
+	<string name="menu_cooperative" lang="swedish">Kooperativt</string>
+	<string name="game_assist" lang="swedish">Assist</string>
+	<string name="game_ammunition" lang="swedish">Ammunition</string>
+	<string name="menu_load_game" lang="swedish">Ladda spel</string>
+	<string name="menu_desktop_question" lang="swedish">Avsluta till skrivbordet?</string>
+	<string name="menu_options_sound" lang="swedish">Ljudinställningar</string>
+	<string name="menu_hard" lang="swedish">Svårt</string>
+	<string name="menu_exit" lang="swedish">Avsluta</string>
+	<string name="menu_sound" lang="swedish">Ljud</string>
+	<string name="game_dragon" lang="swedish">Drake</string>
+	<string name="error_no_games_found" lang="swedish">Inga sparade spel hittades.</string>
+	<string name="game_respawn_question" lang="swedish">Återuppstå?</string>
+	<string name="menu_yes" lang="swedish">Ja</string>
+	<string name="game_defeated" lang="swedish">Du har blivit besegrad</string>
+	<string name="menu_continue" lang="swedish">Fortsätt</string>
+	<string name="menu_loading" lang="swedish">Laddar...</string>
+	<string name="error_generic" lang="swedish">Ett fel har uppstått.</string>
+	<string name="menu_options" lang="swedish">Inställningar</string>
+	<string name="game_male" lang="swedish">Manlig</string>
+	<string name="game_objective_plural" lang="swedish">Mål</string>
+	<string name="game_you_cannot_carry" lang="swedish">Du kan inte bära mer</string>
+	<string name="game_female" lang="swedish">Kvinnlig</string>
+	<string name="game_objective" lang="swedish">Mål</string>
+	<string name="menu_quit_confirm" lang="swedish">Är du säker på att du vill avsluta?</string>
+	<string name="menu_options_sound_volume" lang="swedish">Volym</string>
+	<string name="error_code" lang="swedish">Felkod:</string>
+	<string name="menu_main_menu" lang="swedish">Huvudmeny</string>
+	<string name="game_locked" lang="swedish">Låst</string>
+	<string name="game_mission_objective_plural" lang="swedish">Uppdragsmål</string>
+	<string name="menu_coop" lang="swedish">Co-op
+</string>
+	<string name="error_connection_lost" lang="swedish">Anslutningen bröts.</string>
+	<string name="game_match" lang="swedish">Match</string>
+	<string name="menu_quit_question" lang="swedish">Avsluta?</string>
+	<string name="menu_save_game" lang="swedish">Spara spel</string>
+	<string name="menu_exit_question" lang="swedish">Avsluta?</string>
+	<string name="menu_deathmatch" lang="swedish">Dödsmatch</string>
+	<string name="game_time" lang="swedish">Tid</string>
+	<string name="game_zombie" lang="swedish">Zombie</string>
+	<string name="game_defeat" lang="swedish">Nederlag</string>
+	<string name="game_game_over" lang="swedish">Game over!</string>
+	<string name="menu_desktop" lang="swedish">Avsluta till skrivbordet</string>
+	<string name="menu_save" lang="swedish">Spara</string>
+	<string name="menu_options_video" lang="swedish">Videoinställningar</string>
+	<string name="game_inventory_capacity" lang="swedish">Inventariekapacitet</string>
+	<string name="game_respawn" lang="swedish">Återuppstå</string>
+	<string name="menu_yes_caps" lang="swedish">JA</string>
+	<string name="menu_options_graphics" lang="swedish">Grafikinställningar</string>
+	<string name="menu_difficulty" lang="swedish">Svårighetsgrad</string>
+	<string name="game_inventory" lang="swedish">Inventarie</string>
+	<string name="game_wins" lang="swedish">Vinster</string>
+	<string name="game_woman_plural" lang="swedish">Kvinnor</string>
+	<string name="menu_splitscreen" lang="swedish">Delad skärm</string>
+	<string name="menu_single_player" lang="swedish">En spelare</string>
+	<string name="menu_multiplayer" lang="swedish">Flera spelare</string>
+	<string name="game_game_over_caps" lang="swedish">GAME OVER!</string>
+	<string name="game_respawn_in" lang="swedish">Återuppstår om:</string>
+	<string name="game_kills" lang="swedish">Dödade</string>
+	<string name="game_bullet" lang="swedish">Kula</string>
+	<string name="game_enemy_female_plural" lang="swedish">Fiender</string>
+	<string name="menu_pause" lang="swedish">Pausa</string>
+	<string name="menu_thank_you" lang="swedish">Tack!</string>
+	<string name="game_kill" lang="swedish">Döda</string>
+	<string name="menu_no" lang="swedish">Nej</string>
+	<string name="menu_new_game" lang="swedish">Nytt spel</string>
+	<string name="menu_online_multiplayer" lang="swedish">Online-flerspelarläge</string>
+	<string name="game_lives" lang="swedish">Liv</string>
+	<string name="game_health" lang="swedish">Hälsa</string>
+	<string name="error_opponent_disc" lang="swedish">Din motspelare har kopplat ifrån.</string>
+	<string name="error_player_disc" lang="swedish">Den andra spelaren har kopplat ifrån.</string>
+	<string name="error_server" lang="swedish">Kan inte ansluta till servern.</string>
+	<string name="game_you_are_dead" lang="swedish">Du är död.</string>
+	<string name="game_key" lang="swedish">Nyckel</string>
+	<string name="menu_are_you_sure" lang="swedish">Är du säker?</string>
+	<string name="menu_goodbye" lang="swedish">Farväl!</string>
+	<string name="game_you_lose" lang="swedish">Du förlorar!</string>
+	<string name="game_man" lang="swedish">Man</string>
+	<string name="menu_impossible" lang="swedish">Omöjligt</string>
+	<string name="menu_options_network" lang="swedish">Nätverksinställningar</string>
+	<string name="game_you_lost" lang="swedish">Du förlorade!</string>
+	<string name="game_zombie_plural" lang="swedish">Zombier</string>
+	<string name="error_save_corrupted" lang="swedish">Sparfilen blev korrupt.</string>
+	<string name="game_enemy" lang="swedish">Fiende</string>
+	<string name="menu_options_gameplay" lang="swedish">Spelinställningar</string>
+	<string name="menu_press_start_continue" lang="swedish">Tryck start för att fortsätta</string>
+	<string name="menu_video" lang="swedish">Video</string>
+	<string name="game_respawning" lang="swedish">Återuppstår</string>
+	<string name="game_bullet_plural" lang="swedish">Kulor</string>
+	<string name="game_dragon_plural" lang="swedish">Drakar</string>
+	<string name="menu_press_any" lang="swedish">Tryck på valfri knapp</string>
+	<string name="menu_please_wait" lang="swedish">Var vänlig vänta...</string>
+	<string name="game_you_won" lang="swedish">Du vann!</string>
+	<string name="game_losses" lang="swedish">Förluster</string>
+	<string name="game_armor" lang="swedish">Rustning</string>
+	<string name="menu_quit" lang="swedish">Avsluta</string>
+	<string name="menu_press_any_continue" lang="swedish">Tryck på valfri knapp för att fortsätta</string>
+	<string name="menu_return_main" lang="swedish">Återgå till huvudmeny</string>
+	<string name="menu_return_main_question" lang="swedish">Återgå till huvudmeny?</string>
+	<string name="menu_options_difficulty" lang="swedish">Svårighetsgradsinställningar</string>
+	<string name="game_victory" lang="swedish">Seger</string>
+	<string name="menu_easy" lang="swedish">Lätt</string>
+	<string name="error_teammate_disc" lang="swedish">Din medspelare har kopplat ifrån.</string>
+	<string name="menu_very_hard" lang="swedish">Väldigt svårt</string>
+	<string name="game_death_plural" lang="swedish">Dödsfall</string>
+	<string name="game_shield" lang="swedish">Sköld</string>
+	<string name="game_man_plural" lang="swedish">Män</string>
+	<string name="game_round" lang="swedish">Runda</string>
+	<string name="menu_no_caps" lang="swedish">NEJ</string>
+	<string name="game_death" lang="swedish">Död</string>
+	<string name="menu_insane" lang="swedish">Galet</string>
+	<string name="menu_medium" lang="swedish">Lagom svårt</string>
+	<string name="game_you_died" lang="swedish">Du dog.</string>
+	<string name="game_mission_objective" lang="swedish">Uppdragsmål</string>
+	<string name="menu_versus" lang="swedish">Kontra</string>
+	<string name="menu_graphics" lang="swedish">Grafik</string>
+	<string name="menu_return" lang="swedish">Återgå</string>
+	<string name="menu_very_easy" lang="swedish">Väldigt lätt</string>
+	<string name="game_ammo" lang="swedish">Ammo</string>
+	<string name="game_enemy_female" lang="swedish">Fiende</string>
+	<string name="menu_yeah" lang="swedish">Japp</string>
+	<string name="game_shields" lang="swedish">Sköldar</string>
+	<string name="menu_saving" lang="swedish">Sparar...</string>
+	<string name="menu_continue_question" lang="swedish">Fortsätta?</string>
+	<string name="game_assists" lang="swedish">Assists</string>
+</strings>
