@@ -332,12 +332,12 @@ namespace ARK {
 			//r->fillRect(0, 0, container->getWidth(), container->getHeight());
 
 			ARK::Font::Font* defaultFont = r->getDefaultFont();
-			if (defaultFont != NULL) {
-				r->setDrawColor(Color::white);
-				r->setFont(defaultFont);
-			} else {
+			if (defaultFont == NULL) {
 				defaultFont = oldFont;
-			}
+			} 
+
+			r->setDrawColor(Color::white);
+			r->setFont(defaultFont);
 
 			// Adjust game speed
 			r->drawString(StringUtil::appendf("Game Speed: ", m_gameSpeedSlider->getActualValue()), 10, 10, Renderer::ALIGN_LEFT, Renderer::ALIGN_CENTER, 0.0f, 0.5f);
@@ -414,6 +414,8 @@ namespace ARK {
 				y += defaultFont->getLineHeight() * 0.5f;
 			}*/
 
+			r->setDrawColor(Color::white);
+			r->setFont(defaultFont);
 			m_scene->render();
 
 

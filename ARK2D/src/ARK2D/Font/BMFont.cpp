@@ -589,17 +589,16 @@ namespace ARK {
 
             char* str_i = (char*) Str.c_str();
             char* end = str_i+strlen(str_i)+1;
- 			unsigned int len = StringUtil::utf8strlen(str_i);
+ 			signed int len = StringUtil::utf8strlen(str_i);
             
-            unsigned int i = 0;
-			unsigned int total = 0;
-			do
-			{
+            unsigned int total = 0;
+			for (unsigned int i = 0; i < len; i++ )
+            {
 				uint32_t charid = utf8::next(str_i, end);
 				if (charid == 0) { continue; }
+
 				total += m_Charset.Chars[charid].XAdvance;
 			}
-			while (str_i < end);
 
 			total += (len-1) * m_kerning;
 			return total;

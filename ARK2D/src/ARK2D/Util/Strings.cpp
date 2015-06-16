@@ -77,7 +77,10 @@ namespace ARK {
 					{
 						xml_attribute<char>* lang = groupNode->first_attribute("lang");
 						unsigned int languageInteger = textLanguageToConstLanguage(lang->value());
-						m_data[languageInteger] = map<string, string>();
+						
+						if (m_data.find(languageInteger) == m_data.end()) {
+							m_data[languageInteger] = map<string, string>();
+						}
 
 						xml_node<char>* stringNode = 0;
 						for (stringNode = groupNode->first_node("string");

@@ -56,17 +56,29 @@ namespace ARK {
 							string soundEventData = string(event->stringValue);
 							if (soundEventData.length() > 0) {
 								ARK2D::getLog()->e("We have string event data.");
-								vector<string> items = StringUtil::split(soundEventData, ",");
-								for (unsigned int i = 0; i < items.size(); ++i) {
-									vector<string> val = StringUtil::split(items[i], "=");
 
+								vector<string> items = StringUtil::split(soundEventData, ",");
+								
+								if (items.size() > 0) {
+									for (unsigned int i = 0; i < items.size(); ++i) {
+										vector<string> val = StringUtil::split(items[i], "=");
+
+										if (val[1] == "true") {
+											params[val[0]] = 1.0f;
+										} else {
+											params[val[0]] = Cast::fromString<float>(val[1]);
+										}
+									}
+								} else {
+									vector<string> val = StringUtil::split(soundEventData, "=");
 									if (val[1] == "true") {
 										params[val[0]] = 1.0f;
 									} else {
 										params[val[0]] = Cast::fromString<float>(val[1]);
 									}
-									
 								}
+
+								
 								
 							} else {
 								ARK2D::getLog()->e("We had string event data but it was empty.");
