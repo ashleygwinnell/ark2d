@@ -212,7 +212,7 @@ namespace ARK {
 			public:
 				RendererBatch();
 				inline bool isEnabled() { return enabled; }
-				void setEnabled(bool b);
+				void setEnabled(bool b, bool fromSceneGraph = false);
 
 				void addGeometryTri(float* verts, unsigned char* colors);
 				void addGeometryTri(

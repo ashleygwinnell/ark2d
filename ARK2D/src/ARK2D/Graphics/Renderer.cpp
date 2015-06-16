@@ -18,6 +18,7 @@
 #include "../Geometry/Circle.h"
 #include "../Geometry/Polygon.h"
 #include "../Geometry/Line.h" 
+#include "../Geometry/Cube.h" 
 
 #include "../Util/Cast.h"
 
@@ -800,17 +801,22 @@ namespace ARK {
 		{
 
 		}
-		void RendererBatch::setEnabled(bool b) { 
+		void RendererBatch::setEnabled(bool b, bool fromSceneGraph) { 
+			bool wasEnabled = enabled;
 			enabled = b; 
 
+			
 			MatrixStack* ms = Renderer::getMatrix();
-			if (b) {
+			if (!wasEnabled && b) {
 				ms->pushMatrix();
-				ms->identity();
+				if (fromSceneGraph) { 
+					ms->identity();
+				}
 				startedAtMatrixIndex = ms->height();
-			} else {
+			} else if (wasEnabled && !b) {
 				ms->popMatrix();
 			}
+
 		}
 		void RendererBatch::addGeometryTri(float* verts, unsigned char* colors) 
 		{
@@ -2350,7 +2356,7 @@ namespace ARK {
 			//m_Font->asBMFont()->getImage()->draw(x, y);
 			m_Font->drawString(str, x, y); 
 		}
-		void Renderer::drawString(const std::string str, float x, float y, signed int alignX, signed int alignY, float rotation, float sc) 
+		void Renderer::drawString(const string str, float x, float y, signed int alignX, signed int alignY, float rotation, float sc) 
 		{
 			if (m_Font == NULL && m_DefaultFont == NULL) { return; }
 			
@@ -2424,6 +2430,7 @@ namespace ARK {
 
 
 			pushMatrix();
+			if (isBatching()) { getMatrix()->identity(); }
 			translate(x, y); 
 
 			bool doRot = false;

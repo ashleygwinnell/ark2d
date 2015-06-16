@@ -43,6 +43,15 @@ namespace ARK {
 					 stream << t;
 					 return stream.str();
 				}
+            
+                // template<class T>
+                // static wstring toWideString(const T& t)
+                // {
+                    
+                //     wstringstream stream;
+                //     stream << t;
+                //     return stream.str();
+                // }
 
 				//template <class T>
 				//static string toString(bool b) {
@@ -51,6 +60,9 @@ namespace ARK {
 				static string boolToString(bool b) {
 					return (b) ? string("true") : string("false");	
 				}
+				// static wstring boolToWideString(bool b) {
+				// 	return (b) ? wstring(L"true") : wstring(L"false");	
+				// }
 
 				template<class T>
 				static T fromString(const string& s)
@@ -62,6 +74,9 @@ namespace ARK {
 				};
 				static bool boolFromString(string s) {
 					return (s == "true")?true:false;
+				}
+				static bool boolFromString(wstring s) {
+					return (s == L"true")?true:false;
 				}
 				static bool boolFromString(const char* str) {
 					return (strcmp(str, "true") == 0)?true:false;

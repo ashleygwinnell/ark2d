@@ -34,6 +34,7 @@ namespace ARK {
 			public:
 
 				ComboBoxItem();
+				ComboBoxItem(string text, string value);
 				void setText(string t);
 				const string& getText();
 

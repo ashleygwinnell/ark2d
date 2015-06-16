@@ -166,6 +166,38 @@ string AngelScriptUtil::getExceptionInfo(asIScriptContext *ctx, bool showStack)
 	return text.str();
 }
 
+void AngelScriptUtil::compileAndRunOnce(string moduleName, string sourceFile, string functionDecl) 
+{
+	asIScriptEngine* engine = AngelScriptUtil::getEngine();
+   	
+	CScriptBuilder builder;
+	int r = builder.StartNewModule(engine, moduleName.c_str());
+	AngelScriptUtil_assert(r);
+    
+   	builder.SetIncludeCallback(AngelScriptUtil_IncludeCallback, NULL);
+
+	string script = Resource::get(sourceFile)->asString()->getc();
+	r = builder.AddSectionFromMemory(sourceFile.c_str(), script.c_str());
+	AngelScriptUtil_assert(r);
+
+	r = builder.BuildModule(); 
+	AngelScriptUtil_assert(r);
+
+	// Now we run it.
+	// Find the function that is to be called. 
+	asIScriptModule* mod = engine->GetModule(moduleName.c_str());
+	asIScriptFunction* func = mod->GetFunctionByDecl(functionDecl.c_str());
+	AngelScriptUtil_functionCheck(func, functionDecl);
+
+	// Create our context, prepare it, and then execute
+	asIScriptContext *ctx = engine->CreateContext();
+	ctx->Prepare(func); 
+	r = ctx->Execute();
+	AngelScriptUtil_execeptionCheck(ctx, func, r);
+	ctx->Release();
+
+}
+
 asIScriptEngine* AngelScriptUtil::getEngine() {
 	if (s_engine == NULL)
 	{
@@ -215,8 +247,8 @@ asIScriptEngine* AngelScriptUtil::getEngine() {
 		r = s_engine->RegisterObjectMethod("Resource", "Font@ asFont()", asMETHOD(Resource, asFont), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectType("BMFont", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Font", "BMFont@ asBMFont()", asMETHOD(ARK::Font::Font, asBMFont), asCALL_THISCALL); assert( r >= 0 );
-        r = s_engine->RegisterObjectMethod("BMFont", "uint getStringWidth(const string)", asMETHOD(ARK::Font::BMFont, getStringWidth), asCALL_THISCALL); assert( r >= 0 );
-		r = s_engine->RegisterObjectMethod("BMFont", "uint getStringHeight(const string)", asMETHOD(ARK::Font::BMFont, getStringHeight), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("BMFont", "uint getStringWidth(const string)", asMETHODPR(ARK::Font::BMFont, getStringWidth, (const string&) const, unsigned int), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("BMFont", "uint getStringHeight(const string)", asMETHODPR(ARK::Font::BMFont, getStringHeight, (const string&) const, unsigned int), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("BMFont", "uint getLineHeight()", asMETHOD(ARK::Font::BMFont, getLineHeight), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("BMFont", "void drawString(const string, float, float, int = -1, int = -1, float = 0.0f, float = 1.0f)", asMETHODPR(ARK::Font::BMFont, drawString, (const string, float, float, int, int, float, float), void), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("BMFont", "Image@ getImage()", asMETHOD(ARK::Font::BMFont, getImage), asCALL_THISCALL); assert( r >= 0 );

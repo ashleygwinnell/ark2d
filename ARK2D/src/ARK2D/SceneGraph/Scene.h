@@ -50,6 +50,10 @@ namespace ARK {
 				virtual void update();
 				virtual void render();
 
+				virtual void keyPressed(unsigned int key);
+				virtual void keyReleased(unsigned int key);
+				virtual void mouseMoved(int x, int y, int oldx, int oldy);
+
 				virtual void onAdded(SceneNode* newparent);
 		};
 
@@ -69,6 +73,10 @@ namespace ARK {
 				SceneNode* getChildByName(string n);
 				void update();
 				void render();
+
+				virtual void keyPressed(unsigned int key);
+				virtual void keyReleased(unsigned int key);
+				virtual void mouseMoved(int x, int y, int oldx, int oldy);
 		};
 	}
 }

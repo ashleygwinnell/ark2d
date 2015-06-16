@@ -13,6 +13,7 @@ namespace ARK {
 	namespace UI {
 		ComboBox::ComboBox():
 			AbstractUIComponent(),
+			SceneNode(),
 			m_items(),
 			m_selected(NULL),
 			m_open(false),

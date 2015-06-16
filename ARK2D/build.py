@@ -260,6 +260,8 @@ class ARK2DBuildSystem:
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "spine" + self.ds + "src",
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "vorbis132",
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "vorbis132" + self.ds + "modes",
+			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "utf8",
+			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "utf8" + self.ds + "utf8",
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "zlib123"
 		]);
 		
@@ -3163,6 +3165,22 @@ build:
 				f.close();
 
 
+	def generateStrings(self):
+		if ("resources" in self.config and "strings" in self.config["resources"]):
+
+			print("Generating Strings files...");
+
+			if (sys.platform == "win32"):
+				print("TODO win32");
+			else:
+				stringsJSON = str(json.dumps(self.config["resources"]["strings"], separators=(',',':')));#.replace("\"", "\\\"");
+				compileLine = r"python " + self.ark2d_dir + r"/__preproduction/polyglot/build.py '" + stringsJSON + r"' ";
+
+				print(compileLine);
+				subprocess.call([compileLine], shell=True);
+			
+			
+
 
 	def generateSpriteSheets(self):
 		# print(self.config);
@@ -3335,7 +3353,8 @@ build:
 				'$(SDKROOT)/System/Library/Frameworks/QuartzCore.framework',
 				'$(SDKROOT)/System/Library/Frameworks/OpenGL.framework',
 				'$(SDKROOT)/System/Library/Frameworks/OpenAL.framework',#,
-				'$(SDKROOT)/System/Library/Frameworks/QTKit.framework'#,
+				'$(SDKROOT)/System/Library/Frameworks/QTKit.framework',
+				config['osx']['ark2d_dir'] + "/lib/osx/libangelscript.a"#,
 			#	config['osx']['ark2d_dir'] + "/lib/osx/freetype/libfreetype.a",
 			#	config['osx']['ark2d_dir'] + "/lib/osx/libcurl.a" 
 			];
@@ -3349,6 +3368,7 @@ build:
 				"-lcurl",
 				"-lz",
 				"-L" + self.ark2d_dir + "/lib/osx",
+				"-langelscript"
 				#"-L/usr/lib"
 			]; 
 
@@ -3878,6 +3898,9 @@ build:
  
 			print("generating/updating spritesheets");
 			self.generateSpriteSheets();
+
+			print("generating/updating strings");
+			self.generateStrings();
 
 			#copy ark2d resources in to project data folder.
 			print("Copy game resources in to xcode dir");

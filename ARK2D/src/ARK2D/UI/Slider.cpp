@@ -14,6 +14,7 @@ namespace ARK {
 
 		Slider::Slider(): 
 			AbstractUIComponent(),
+			SceneNode(),
 			m_buttonLocation(40, 4),
 			
 			bar(NULL),

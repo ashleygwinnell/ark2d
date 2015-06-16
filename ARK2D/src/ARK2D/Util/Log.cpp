@@ -47,6 +47,8 @@ namespace ARK {
 			}
  			m_backgroundColor = new Color(Color::black_50a);
 
+ 			m_scene = new Scene();
+
 			m_gameSpeedSlider = new ARK::UI::Slider();
 			m_gameSpeedSlider->setSize(240, 3);
 			m_gameSpeedSlider->setLocation(20, 30);
@@ -239,6 +241,7 @@ namespace ARK {
 		void Log::t(string s) {
 			message(s, TYPE_THREAD);
 		}
+
 		
 		void Log::e(String s) {
 			message(s.get(), TYPE_ERROR);
@@ -411,7 +414,7 @@ namespace ARK {
 				y += defaultFont->getLineHeight() * 0.5f;
 			}*/
 
-
+			m_scene->render();
 
 
 			r->setDrawColor(oldColor);
@@ -422,18 +425,24 @@ namespace ARK {
 			if (!m_visible) { return; }
 			m_gameSpeedSlider->keyPressed(key);
 			m_expoCheckbox->keyPressed(key);
+			m_scene->keyPressed(key);
 		}
 		void Log::keyReleased(unsigned int key) {
 			if (!m_visible) { return; }
 			m_gameSpeedSlider->keyReleased(key);
 			m_expoCheckbox->keyReleased(key);
+			m_scene->keyReleased(key);
 		}
 		void Log::mouseMoved(int x, int y, int oldx, int oldy) {
 			if (!m_visible) { return; }
 			m_gameSpeedSlider->mouseMoved(x, y, oldx, oldy);
 			m_expoCheckbox->mouseMoved(x, y, oldx, oldy);
+			m_scene->mouseMoved(x, y, oldx, oldy);
 		}
 
+   		wstring Log::getTypeWString(unsigned int type) {
+            return StringUtil::stringToWstring(getTypeString(type));
+        }
 		string Log::getTypeString(unsigned int type) {
 			#if defined(ARK2D_ANDROID)
 				switch(type) {

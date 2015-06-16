@@ -98,7 +98,7 @@ namespace ARK {
 					return m_height;
 				}
 				virtual T getDepth() {
-					return m_z;
+					return m_depth;
 				}
 
 				virtual void setX(T x) {
@@ -107,8 +107,8 @@ namespace ARK {
 				virtual void setY(T y) {
 					m_y = y;
 				}
-				virtual void setZ(T y) {
-					m_y = y;
+				virtual void setZ(T z) {
+					m_z = z;
 				}
 				virtual void setLocation(T x, T y) {
 					m_x = x;
@@ -117,7 +117,7 @@ namespace ARK {
 				virtual void setLocation(T x, T y, T z) {
 					m_x = x;
 					m_y = y;
-					m_z = y;
+					m_z = z;
 				}
 				virtual void setLocationByCenter(T x, T y) {
 					m_x = x - (m_width/2);
@@ -161,7 +161,7 @@ namespace ARK {
 
 					if (alignZ == Renderer::ALIGN_CENTER) { 
 						z -= m_depth / 2.0f;
-					} else if (alignY == Renderer::ALIGN_END || alignY == Renderer::ALIGN_BOTTOM) {
+					} else if (alignZ == Renderer::ALIGN_END || alignZ == Renderer::ALIGN_BOTTOM) {
 						z -= m_depth;
 					} 
 					
@@ -196,7 +196,7 @@ namespace ARK {
 					m_height = (int) h;
 				}
 				virtual void setDepth(T h) {
-					m_height = (int) h;
+					m_depth = (int) h; 
 				}
 				virtual void setSize(T w, T h) {
 					m_width = (int) w;
@@ -247,11 +247,11 @@ namespace ARK {
 					}
 
 					// Polygon
-					Polygon<T>* poly = NULL;
-					poly = dynamic_cast<Polygon<T>* >(s);
-					if (poly != NULL) {
-						return Shape<T>::collision_polygonRectangle(poly, this);
-					}
+					//Polygon<T>* poly = NULL;
+					//poly = dynamic_cast<Polygon<T>* >(s);
+					//if (poly != NULL) {
+					//	return Shape<T>::collision_polygonRectangle(poly, this);
+					//}
 
 					return false;
 				}

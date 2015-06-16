@@ -76,7 +76,8 @@
 		"osx": [
 			"curl",
 			"freetype",
-			"bz2"
+			"bz2",
+			"angelscript"
 		],
 		"ios": [
 			"freetype"
@@ -242,6 +243,7 @@
 			"src/ARK2D/Util/SocialUtil.cpp",
 			"src/ARK2D/Util/StringStore.cpp",
 			"src/ARK2D/Util/StringUtil.cpp",
+			"src/ARK2D/Util/Strings.cpp",
 			"src/ARK2D/Util/URLRequest.cpp",
 			"src/ARK2D/Util/Validation.cpp",
 			"src/ARK2D/Util/Vector4.cpp",

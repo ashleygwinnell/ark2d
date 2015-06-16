@@ -47,6 +47,7 @@ namespace ARK {
 				
 
 				
+				static file_get_contents_binary_result file_get_contents_utf8binary(string filename);
 				static file_get_contents_binary_result file_get_contents_binary(string filename);
 				static file_get_contents_text_result file_get_contents_text(string filename);
 				

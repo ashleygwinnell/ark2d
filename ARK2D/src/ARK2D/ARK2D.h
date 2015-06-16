@@ -29,6 +29,7 @@ class ARK2D_API ARK2D {
 		static Input* getInput();
 		static GameTimer* getTimer();
 		static Log* getLog();
+		static Strings* getStrings();
 		static unsigned int getPlatform();
 		static std::string getPlatformString();
 
@@ -65,6 +66,7 @@ class ARK2D_API ARK2D {
 		static Renderer* s_graphics;
 		static Input* s_input;
 		static Log* s_log;
+		static Strings* s_strings;
 		static bool s_debug;
 		static bool s_expo;
 		static bool s_steam;

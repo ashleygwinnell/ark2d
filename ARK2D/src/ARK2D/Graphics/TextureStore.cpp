@@ -37,12 +37,18 @@ namespace ARK {
 		void TextureStore::removeTexture(string s) {
 			map<string, Texture*>::iterator it;
 			it = m_map.find(s);
-			unsigned int id = it->second->m_id;
-			m_map.erase(it);
+			if (it != m_map.end()) { 
+				unsigned int id = it->second->m_id;
+				m_map.erase(it);
 
-			map<unsigned int, Texture*>::iterator it2;
-			it2 = m_mapById.find(id);
-			m_mapById.erase(it2);
+				map<unsigned int, Texture*>::iterator it2;
+				it2 = m_mapById.find(id);
+				if (it2 != m_mapById.end()) {
+					m_mapById.erase(it2);
+				}
+			}
+
+			
 		}
 		Texture* TextureStore::getTexture(string ref) {
 			return m_map[ref];

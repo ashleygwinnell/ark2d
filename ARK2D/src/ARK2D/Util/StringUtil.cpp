@@ -195,6 +195,12 @@ namespace ARK {
 			}
 		}
 
+		int StringUtil::utf8strlen(const char* s) {
+			int len = 0;
+			while (*s) len += (*s++ & 0xc0) != 0x80;
+			return len;
+		}
+
 
 
 		/*
@@ -549,6 +555,19 @@ namespace ARK {
 				newString += ((unsigned char)thisChar >> amount) | (thisChar << (8-amount));
 			}
 			return newString;
+		}
+
+		std::wstring StringUtil::stringToWstring(const string& s) {
+			
+			std::wstring ws(s.size(), L' '); // Overestimate number of code points.
+			ws.resize(mbstowcs(&ws[0], s.c_str(), s.size()));
+			return ws;
+		}
+		std::string StringUtil::wstringToString(const wstring& s) {
+			
+			std::string ws(s.size(), ' '); // Overestimate number of code points.
+			ws.resize(wcstombs(&ws[0], s.c_str(), s.size()));
+			return ws;
 		}
 
 		string StringUtil::getExtension(string s) {

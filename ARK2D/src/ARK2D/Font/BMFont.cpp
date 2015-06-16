@@ -15,7 +15,7 @@
 #include "../Graphics/Image.h"
 #include "../Graphics/Texture.h"
 #include "../Core/GameContainer.h"
-
+#include "../vendor/utf8/utf8.h"
 
 
 namespace ARK {
@@ -269,6 +269,7 @@ namespace ARK {
 								if (CharID > 255) {
 									// no non-ascii (only 255 or below) plz
 									//std::cout << "bad char: " << CharID << ". skipping..." << std::endl;
+									ARK2D::getLog()->w(StringUtil::append("Warning. Font includes character above ASCII values: ", CharID));
 									skippingLine = true;
 									continue;
 								}
@@ -314,14 +315,16 @@ namespace ARK {
 			return true;
 		}
 
-		void BMFont::drawString(const std::string str, float x, float y, signed int alignX, signed int alignY, float rotation, float scale) {
+
+		
+
+		void BMFont::drawString(const string str, float x, float y, signed int alignX, signed int alignY, float rotation, float scale) {
 			Renderer* r = ARK2D::getRenderer();
 			r->setFont(this); 
 			r->drawString(str, x, y, alignX, alignY, rotation, scale);
 		}
 
-		// remember that u and v are width and height, respectively.
-		void BMFont::drawString(const string& Str, int drawx, int drawy) 
+		void BMFont::drawString(const string& Str, int drawx, int drawy)
 		{
 			if (m_loaded == false) { return; } 
 			if (Str.length() == 0) { return; }
@@ -407,9 +410,42 @@ namespace ARK {
 					return;
 				}*/
 
-				for( signed int i = 0; i < (signed int) Str.length(); ++i )
-				{
-					int charid = (int) Str[i];
+				//signed int i = 0;
+				//std::wstring::const_iterator pos = Str.begin();
+				//while (pos != Str.end())
+//				char* u8Str = (char*) Str.c_str();
+//				unsigned int len2 = utf8string::u8_strlen(u8Str);
+
+//				unsigned int len = Str.length();
+
+
+//				ARK2D::getLog()->e(Str);
+//                ARK2D::getLog()->e(Cast::toString<unsigned int>(len));
+//				ARK2D::getLog()->e(Cast::toString<unsigned int>(len2));
+            
+                char* str = (char*)Str.c_str();    // utf-8 string
+                char* str_i = str;                  // string iterator
+                char* end = str+strlen(str)+1;      // end iterator
+
+                signed int len = StringUtil::utf8strlen(str);
+				//signed int i = 0;
+              //  unsigned int charid;
+				//for(signed int i = 0; i < len; ++i)
+				for(signed int i = 0; i < len; ++i) { 
+					//charid = utf8string::u8_nextchar(u8Str, &i);
+                    uint32_t charid = utf8::next(str_i, end);
+
+					//if (i == len) {
+					if (charid == 0) {
+						continue;
+					}
+
+
+					//int charid = (int) *pos;
+					//unsigned int charid = utf8string::u8_nextchar(u8Str, &i);
+					//unsigned int charid = Str[i];
+
+					//ARK2D::getLog()->e(Cast::toWideString<int>(charid));
 					CharX = m_Charset.Chars[charid].x;
 					CharY = m_Charset.Chars[charid].y;
 					Width = m_Charset.Chars[charid].Width;
@@ -503,8 +539,15 @@ namespace ARK {
 					// multiply position coordinates
 
 					drawx += XAdvance;
+					//++pos;
+					//++i;
+					//i++;
 					
-				}
+                } //while ( str_i < end );
+
+				//for( signed int i = 0; i < (signed int) Str.length(); ++i )
+				//{
+				//}
 				r->texturedQuads(m_Image->getTexture()->getId(), rawVertices, rawTextureCoords, rawColors, Str.length());	
 			
 				//#ifdef ARK2D_WINDOWS_VS
@@ -518,7 +561,7 @@ namespace ARK {
 				m_Image->drawSubImageStart();
 				for( unsigned int i = 0; i < Str.length(); ++i )
 				{
-					int charid = (int) Str[i];
+					int charid = (int) Str.at(i);
 					CharX = m_Charset.Chars[charid].x;
 					CharY = m_Charset.Chars[charid].y;
 					Width = m_Charset.Chars[charid].Width;
@@ -541,29 +584,46 @@ namespace ARK {
 			m_kerning = k;
 		}
  
-		unsigned int BMFont::getStringWidth(const string& Str) const {
-			if (m_loaded == false) { return 0; }
+ 		unsigned int BMFont::getStringWidth(const string& Str) const {
+ 			if (m_loaded == false) { return 0; }
 
+            char* str_i = (char*) Str.c_str();
+            char* end = str_i+strlen(str_i)+1;
+ 			unsigned int len = StringUtil::utf8strlen(str_i);
+            
+            unsigned int i = 0;
 			unsigned int total = 0;
-			for (unsigned int i = 0; i < Str.length(); i++ ) {
-				//total += m_Charset.Chars[(int) Str[i]].Width;
-				//total += m_Charset.Chars[(int) Str[i]].XOffset;
-				total += m_Charset.Chars[(int) Str[i]].XAdvance;
+			do
+			{
+				uint32_t charid = utf8::next(str_i, end);
+				if (charid == 0) { continue; }
+				total += m_Charset.Chars[charid].XAdvance;
 			}
-			total += (Str.length()-1) * m_kerning;
+			while (str_i < end);
+
+			total += (len-1) * m_kerning;
 			return total;
-		}
+ 		}
 		unsigned int BMFont::getStringHeight(const string& Str) const {
 			if (m_loaded == false) { return 0; }
+            
+            char* str_i = (char*) Str.c_str();
+            char* end = str_i+strlen(str_i)+1;
+            unsigned int len = StringUtil::utf8strlen(str_i);
 
 			unsigned int max = 0;
-			for (unsigned int i = 0; i < Str.length(); i++ ) {
-				if ((m_Charset.Chars[(int) Str[i]].Height + m_Charset.Chars[(int) Str[i]].YOffset) > max) {
-					max = (m_Charset.Chars[(int) Str[i]].Height + m_Charset.Chars[(int) Str[i]].YOffset);
+			for (unsigned int i = 0; i < len; i++ )
+            {
+                uint32_t charid = utf8::next(str_i, end);
+                if (charid == 0) { continue; }
+                
+				if ((m_Charset.Chars[charid].Height + m_Charset.Chars[charid].YOffset) > max) {
+					max = (m_Charset.Chars[charid].Height + m_Charset.Chars[charid].YOffset);
 				}
 			}
 			return max;
 		}
+		
 		unsigned int BMFont::getLineHeight() const {
 			if (m_loaded == false) { return 0; }
 

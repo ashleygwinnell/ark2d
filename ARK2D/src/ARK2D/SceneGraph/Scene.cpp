@@ -101,7 +101,21 @@ namespace ARK {
 
 		}
 
-
+		void SceneNode::keyPressed(unsigned int key) { 
+			for(unsigned int i = 0; i < children.size(); ++i) {
+				children[i]->keyPressed(key);
+			}
+		}
+		void SceneNode::keyReleased(unsigned int key) { 
+			for(unsigned int i = 0; i < children.size(); ++i) {
+				children[i]->keyReleased(key);
+			}
+		}
+		void SceneNode::mouseMoved(int x, int y, int oldx, int oldy) { 
+			for(unsigned int i = 0; i < children.size(); ++i) {
+				children[i]->mouseMoved(x, y, oldx, oldy);
+			}
+		} 
 
 
 
@@ -140,11 +154,20 @@ namespace ARK {
 		void Scene::render() {
 			if (root != NULL) { 
 				Renderer* r = ARK2D::getRenderer();
-				r->getBatch()->setEnabled(true);
+				r->getBatch()->setEnabled(true, true);
 				root->render();
 				r->getBatch()->render();
-				r->getBatch()->setEnabled(false);
+				r->getBatch()->setEnabled(false, true);
 			}
+		}
+		void Scene::keyPressed(unsigned int key) { 
+			root->keyPressed(key);
+		}
+		void Scene::keyReleased(unsigned int key) { 
+			root->keyReleased(key);
+		}
+		void Scene::mouseMoved(int x, int y, int oldx, int oldy) { 
+			root->mouseMoved(x, y, oldx, oldy);
 		}
 
 	}

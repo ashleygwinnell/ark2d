@@ -9,6 +9,7 @@
 #include "Util/Log.h"
 #include "Core/GameContainer.h"
 #include "Util/FileUtil.h"
+#include "Util/Strings.h"
 
 #if defined( ARK2D_MISSING_C99_FUNCTIONS ) && defined( ARK2D_MISSING_C99_FUNCTIONDEFINITIONS )
  	double round( double number ) { return number < 0.0 ? ceil(number - 0.5) : floor(number + 0.5); }
@@ -20,6 +21,7 @@ Game* ARK2D::s_game = 0;
 Renderer* ARK2D::s_graphics = 0; 
 Input* ARK2D::s_input = 0;  
 Log* ARK2D::s_log = 0;
+Strings* ARK2D::s_strings = 0;
 bool ARK2D::s_debug = false;
 bool ARK2D::s_expo = false;
 bool ARK2D::s_steam = false;
@@ -79,6 +81,12 @@ Log* ARK2D::getLog() {
 		s_log = Log::getInstance();
 	} 
 	return s_log;
+}
+Strings* ARK2D::getStrings() {
+	if (s_strings == NULL) {
+        s_strings = ARK::Util::Strings::getInstance();
+	}
+	return s_strings;
 }
 
 bool ARK2D::isDebug() {

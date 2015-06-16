@@ -201,6 +201,7 @@ namespace ARK {
 		class AnalyticsUtil;
 		class GooglePlayGameServicesUtil;
 		class Log;
+   		class Strings;
 		class CameraShake;
 		class Cast;
 		class FileUtil;

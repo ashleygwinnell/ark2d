@@ -166,6 +166,13 @@ namespace ARK {
 						return Shape<T>::collision_polygonRectangle(poly, this);
 					}
 
+					// Cube
+                    /*ARK::Geometry::Cube<T>* cube = NULL;
+					cube = dynamic_cast<ARK::Geometry::Cube<T>* >(s);
+					if (cube != NULL) {
+						return Shape<T>::collision_cubeRectangle(cube, this);
+					}*/
+
 					return false;
 				}
 				virtual void resolve(Shape<T>* s) {

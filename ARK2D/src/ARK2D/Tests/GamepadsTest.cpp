@@ -13,7 +13,10 @@ namespace ARK {
 
 		ARK::Tests::GamepadsTest* gamepadsTest;
 
-		GamepadConfigureGameState::GamepadConfigureGameState(): GameState() {
+		GamepadConfigureGameState::GamepadConfigureGameState(unsigned int stateId): 
+			GameState(),
+			m_stateId(stateId),
+			m_returnToStateId(0) {
 
 		}
 		void GamepadConfigureGameState::enter(GameContainer* container, StateBasedGame* game, GameState* from) { 
@@ -30,7 +33,7 @@ namespace ARK {
 		}
 		void GamepadConfigureGameState::leave(GameContainer* container, StateBasedGame* game, GameState* to) { }
 
-		unsigned int GamepadConfigureGameState::id() { return 1; }
+		unsigned int GamepadConfigureGameState::id() { return m_stateId; }
 		void GamepadConfigureGameState::init(GameContainer* container, StateBasedGame* game) {
 			m_gamepadIndex = -1;
 			m_state = STATE_A; 
@@ -86,13 +89,15 @@ namespace ARK {
 			
 
 			float commandX = container->getWidth() * 0.5f;
-			float commandY = container->getHeight() * 0.5f;
+			float commandY = container->getHeight() * 0.3f;
 			float commandScale = 2.0f;
 
 			if (m_axisChangedCooldown > 0.0f) {
 				r->drawString("processing...", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, 1.0f);
 				return;
 			}
+			Gamepad* p1 = ARK2D::getInput()->getGamepadByIndex(m_gamepadIndex);
+			GamepadsTestGameState::renderGamepad(p1, container->getWidth()*0.5f, container->getHeight()*0.7f);
 
 			r->drawString("Hit ENTER to skip this button/axis!", container->getWidth()-30, container->getHeight()-30, Renderer::ALIGN_RIGHT, Renderer::ALIGN_BOTTOM, 0.0, 1.0f);
 
@@ -184,14 +189,17 @@ namespace ARK {
 			if (m_state == STATE_END) {
 				// add config to ark2d.
 				m_mapping.toInverse();
-				ErrorDialog::createAndShow(m_mapping.toString());
+				string mappingStr = m_mapping.toString();
+				ARK2D::getLog()->i(StringUtil::append("mapping: ", mappingStr));
+				ErrorDialog::createAndShow(mappingStr);
 
 				//Dialog::openInputDialog(0, "config:", m_mapping.toString());
-
+				ARK2D::getLog()->i("pushing...");
 				Gamepad::s_gamepadMapping->push_back(m_mapping);
 			
 				// go back to controller state to test everything.
-				gamepadsTest->enterState((unsigned int) 0); 
+				ARK2D::getLog()->i("entering state...");
+				gamepadsTest->enterState((unsigned int) m_returnToStateId); 
 			}
 		}
 		void GamepadConfigureGameState::gamepadConnected(Gamepad* gamepad) {
@@ -450,6 +458,126 @@ namespace ARK {
 			
 		}
 
+		void GamepadsTestGameState::renderGamepad(Gamepad* p1, float rootX, float rootY) 
+		{
+			// rootX/Y is the center C/Y.
+			// make rootX the leftest X;
+			rootX -= 400;
+			rootY -= 150;
+			Renderer* r = ARK2D::getRenderer();
+			// left stick
+			float x = p1->getAxisValue(Gamepad::ANALOG_STICK_1_X);
+			float y = p1->getAxisValue(Gamepad::ANALOG_STICK_1_Y);// axes.at(1)->value;
+			float cx = rootX + 300.0f;
+			float cy = rootY + 150; 
+			float rd = 60.0f;
+			r->setDrawColor(Color::white);
+			r->drawCircle(cx, cy, (int) rd, (int) rd);
+			if (p1->isButtonDown(Gamepad::BUTTON_L3)) { r->setDrawColor(Color::red); }
+			r->fillRect(cx + (rd*x) - 10, cy + (rd*y) - 10, 20, 20);
+
+			// right stick
+			x = p1->getAxisValue(Gamepad::ANALOG_STICK_2_X); //p1->axes.at(2)->value;
+			y = p1->getAxisValue(Gamepad::ANALOG_STICK_2_Y); //p1->axes.at(3)->value;
+			cx = rootX + 500.0f;
+			cy = rootY + 150; 
+			r->setDrawColor(Color::white);
+			r->drawCircle(cx, cy, (int) rd, (int)rd);
+			if (p1->isButtonDown(Gamepad::BUTTON_R3)) { r->setDrawColor(Color::red); }
+			r->fillRect(cx + (rd*x) - 10, cy + (rd*y) - 10, 20, 20);
+			
+			// reset color 
+			r->setDrawColor(Color::white);
+	 
+			// left trigger  
+			float trigger1 = p1->getAxisValue(Gamepad::TRIGGER_1); //(p1->axes.at(4)->value + 1.0f)/2.0f;
+			r->drawRect(rootX + 200, rootY, 100, 20); 
+			r->fillRect(rootX + 200, rootY, int(100 * trigger1), 20);  
+
+			// right trigger 
+			float trigger2 = p1->getAxisValue(Gamepad::TRIGGER_2);//(p1->axes.at(5)->value + 1.0f)/2.0f;
+			r->drawRect(rootX + 500, rootY, 100, 20);
+			r->fillRect(rootX + 500, rootY, int(100 * trigger2), 20);
+
+
+			// left bumper
+			r->setDrawColor(Color::white);
+			if (p1->isButtonDown(Gamepad::BUTTON_LBUMPER)) { r->setDrawColor(Color::red); }
+			r->fillRect(rootX + 200, rootY+30, 50, 20);
+
+			// right bumper
+			r->setDrawColor(Color::white);
+			if (p1->isButtonDown(Gamepad::BUTTON_RBUMPER)) { r->setDrawColor(Color::red); }
+			r->fillRect(rootX + 550, rootY+30, 50, 20); 
+
+
+			//r->drawString(StringUtil::append("logical min: ", p1->axes.at(0)->logicalMin), 30, 390);
+			//r->drawString(StringUtil::append("logical max: ", p1->axes.at(0)->logicalMax), 30, 420);
+			//r->drawString(StringUtil::append("null state?: ", p1->axes.at(0)->isHatSwitch), 30, 450);
+			//
+			//r->drawString(StringUtil::append("logical min: ", p1->axes.at(4)->logicalMin), 200, 30);
+			//r->drawString(StringUtil::append("logical max: ", p1->axes.at(4)->logicalMax), 200, 60);
+			//r->drawString(StringUtil::append("null state?: ", p1->axes.at(4)->isHatSwitch), 30, 90);
+			//r->drawString(StringUtil::append("val: ", p1->axes.at(4)->value), 200, 90);
+
+			
+			
+			
+			// dpad
+			r->setDrawColor(Color::white);
+			if (p1->isButtonDown(Gamepad::DPAD_UP)) { r->setDrawColor(Color::red); }
+			r->fillRect(rootX + 200 - 10, rootY+200, 20, 20); // up
+
+			r->setDrawColor(Color::white);
+			if (p1->isButtonDown(Gamepad::DPAD_LEFT)) { r->setDrawColor(Color::red); }
+			r->fillRect(rootX + 175 - 10, rootY+225, 20, 20); // left
+
+		 	r->setDrawColor(Color::white);
+			if (p1->isButtonDown(Gamepad::DPAD_RIGHT)) { r->setDrawColor(Color::red); }
+			r->fillRect(rootX + 225 - 10, rootY+225, 20, 20); // right
+		
+			r->setDrawColor(Color::white);
+			if (p1->isButtonDown(Gamepad::DPAD_DOWN)) { r->setDrawColor(Color::red); }
+			r->fillRect(rootX + 200 - 10, rootY+250, 20, 20); // down
+
+			// middle buttons
+			r->setDrawColor(Color::white);
+			if (p1->isButtonDown(Gamepad::BUTTON_BACK)) { r->setDrawColor(Color::red); }
+			r->fillRect(rootX + 350 - 10, rootY+70, 20, 20);
+
+			r->setDrawColor(Color::white);
+			if (p1->isButtonDown(Gamepad::BUTTON_ACTIVATE)) { r->setDrawColor(Color::green); }
+			r->fillRect(rootX + 400 - 10, rootY+70, 20, 20);
+
+			r->setDrawColor(Color::white);
+			if (p1->isButtonDown(Gamepad::BUTTON_START)) { r->setDrawColor(Color::red); }
+			r->fillRect(rootX + 450 - 10, rootY+70, 20, 20);
+
+
+			// A button
+			r->setDrawColor(Color::white);
+			r->drawCircle(rootX + 600.0f, rootY+250.0f, 20, 20); 
+			if (p1->isButtonDown(Gamepad::BUTTON_A)) { r->setDrawColor(Color::green); }
+			r->drawCircle(rootX + 600.0f, rootY+250.0f, 20, 20); 
+			
+			// B button
+			r->setDrawColor(Color::white);
+			r->drawCircle(rootX + 625.0f, rootY+225.0f, 20, 20); 
+			if (p1->isButtonDown(Gamepad::BUTTON_B)) { r->setDrawColor(Color::red); }
+			r->drawCircle(rootX + 625.0f, rootY+225.0f, 20, 20); 
+
+			// X button
+			r->setDrawColor(Color::white);
+			r->drawCircle(rootX + 575.0f, rootY+225.0f, 20, 20); 
+			if (p1->isButtonDown(Gamepad::BUTTON_X)) { r->setDrawColor(Color::blue); }
+			r->drawCircle(rootX + 575.0f, rootY+225.0f, 20, 20); 
+
+			// Y button
+			r->setDrawColor(Color::white);
+			r->drawCircle(rootX + 600.0f, rootY+200.0f, 20, 20); 
+			if (p1->isButtonDown(Gamepad::BUTTON_Y)) { r->setDrawColor(Color::yellow); }
+			r->drawCircle(rootX + 600.0f, rootY+200.0f, 20, 20); 
+		}
 		void GamepadsTestGameState::render(GameContainer* container, StateBasedGame* game, Renderer* r) {
 			r->setDrawColor(Color::white);
 			r->setFont(r->getDefaultFont());
@@ -472,120 +600,7 @@ namespace ARK {
 				r->drawString(StringUtil::append("num axes 2: ", p1->axes.size()), 30, 180);
 				//r->drawString(StringUtil::append("axis 1: ", p1->axes.at(0)->value), 30, 180);
 				//r->drawString(StringUtil::append("axis 2: ", p1->axes.at(1)->value), 30, 210);
-				float rootX = -20.0f;
-		 		float rootY = 250.0f;
-				// left stick
-				float x = p1->getAxisValue(Gamepad::ANALOG_STICK_1_X);
-				float y = p1->getAxisValue(Gamepad::ANALOG_STICK_1_Y);// axes.at(1)->value;
-				float cx = rootX + 300.0f;
-				float cy = rootY + 150; 
-				float rd = 60.0f;
-				r->setDrawColor(Color::white);
-				r->drawCircle(cx, cy, (int) rd, (int) rd);
-				if (p1->isButtonDown(Gamepad::BUTTON_L3)) { r->setDrawColor(Color::red); }
-				r->fillRect(cx + (rd*x) - 10, cy + (rd*y) - 10, 20, 20);
-
-				// right stick
-				x = p1->getAxisValue(Gamepad::ANALOG_STICK_2_X); //p1->axes.at(2)->value;
-				y = p1->getAxisValue(Gamepad::ANALOG_STICK_2_Y); //p1->axes.at(3)->value;
-				cx = rootX + 500.0f;
-				cy = rootY + 150; 
-				r->setDrawColor(Color::white);
-				r->drawCircle(cx, cy, (int) rd, (int)rd);
-				if (p1->isButtonDown(Gamepad::BUTTON_R3)) { r->setDrawColor(Color::red); }
-				r->fillRect(cx + (rd*x) - 10, cy + (rd*y) - 10, 20, 20);
-				
-				// reset color 
-				r->setDrawColor(Color::white);
-		 
-				// left trigger  
-				float trigger1 = p1->getAxisValue(Gamepad::TRIGGER_1); //(p1->axes.at(4)->value + 1.0f)/2.0f;
-				r->drawRect(rootX + 200, rootY, 100, 20); 
-				r->fillRect(rootX + 200, rootY, int(100 * trigger1), 20);  
-
-				// right trigger 
-				float trigger2 = p1->getAxisValue(Gamepad::TRIGGER_2);//(p1->axes.at(5)->value + 1.0f)/2.0f;
-				r->drawRect(rootX + 500, rootY, 100, 20);
-				r->fillRect(rootX + 500, rootY, int(100 * trigger2), 20);
-
-
-				// left bumper
-				r->setDrawColor(Color::white);
-				if (p1->isButtonDown(Gamepad::BUTTON_LBUMPER)) { r->setDrawColor(Color::red); }
-				r->fillRect(rootX + 200, rootY+30, 50, 20);
-
-				// right bumper
-				r->setDrawColor(Color::white);
-				if (p1->isButtonDown(Gamepad::BUTTON_RBUMPER)) { r->setDrawColor(Color::red); }
-				r->fillRect(rootX + 550, rootY+30, 50, 20); 
-
-
-				//r->drawString(StringUtil::append("logical min: ", p1->axes.at(0)->logicalMin), 30, 390);
-				//r->drawString(StringUtil::append("logical max: ", p1->axes.at(0)->logicalMax), 30, 420);
-				//r->drawString(StringUtil::append("null state?: ", p1->axes.at(0)->isHatSwitch), 30, 450);
-				//
-				//r->drawString(StringUtil::append("logical min: ", p1->axes.at(4)->logicalMin), 200, 30);
-				//r->drawString(StringUtil::append("logical max: ", p1->axes.at(4)->logicalMax), 200, 60);
-				//r->drawString(StringUtil::append("null state?: ", p1->axes.at(4)->isHatSwitch), 30, 90);
-				//r->drawString(StringUtil::append("val: ", p1->axes.at(4)->value), 200, 90);
-
-				
-				
-				
-				// dpad
-				r->setDrawColor(Color::white);
-				if (p1->isButtonDown(Gamepad::DPAD_UP)) { r->setDrawColor(Color::red); }
-				r->fillRect(rootX + 200 - 10, rootY+200, 20, 20); // up
-
-				r->setDrawColor(Color::white);
-				if (p1->isButtonDown(Gamepad::DPAD_LEFT)) { r->setDrawColor(Color::red); }
-				r->fillRect(rootX + 175 - 10, rootY+225, 20, 20); // left
-
-			 	r->setDrawColor(Color::white);
-				if (p1->isButtonDown(Gamepad::DPAD_RIGHT)) { r->setDrawColor(Color::red); }
-				r->fillRect(rootX + 225 - 10, rootY+225, 20, 20); // right
-			
-				r->setDrawColor(Color::white);
-				if (p1->isButtonDown(Gamepad::DPAD_DOWN)) { r->setDrawColor(Color::red); }
-				r->fillRect(rootX + 200 - 10, rootY+250, 20, 20); // down
-
-				// middle buttons
-				r->setDrawColor(Color::white);
-				if (p1->isButtonDown(Gamepad::BUTTON_BACK)) { r->setDrawColor(Color::red); }
-				r->fillRect(rootX + 350 - 10, rootY+70, 20, 20);
-
-				r->setDrawColor(Color::white);
-				if (p1->isButtonDown(Gamepad::BUTTON_ACTIVATE)) { r->setDrawColor(Color::green); }
-				r->fillRect(rootX + 400 - 10, rootY+70, 20, 20);
-
-				r->setDrawColor(Color::white);
-				if (p1->isButtonDown(Gamepad::BUTTON_START)) { r->setDrawColor(Color::red); }
-				r->fillRect(rootX + 450 - 10, rootY+70, 20, 20);
-
-
-				// A button
-				r->setDrawColor(Color::white);
-				r->drawCircle(rootX + 600.0f, rootY+250.0f, 20, 20); 
-				if (p1->isButtonDown(Gamepad::BUTTON_A)) { r->setDrawColor(Color::green); }
-				r->drawCircle(rootX + 600.0f, rootY+250.0f, 20, 20); 
-				
-				// B button
-				r->setDrawColor(Color::white);
-				r->drawCircle(rootX + 625.0f, rootY+225.0f, 20, 20); 
-				if (p1->isButtonDown(Gamepad::BUTTON_B)) { r->setDrawColor(Color::red); }
-				r->drawCircle(rootX + 625.0f, rootY+225.0f, 20, 20); 
-
-				// X button
-				r->setDrawColor(Color::white);
-				r->drawCircle(rootX + 575.0f, rootY+225.0f, 20, 20); 
-				if (p1->isButtonDown(Gamepad::BUTTON_X)) { r->setDrawColor(Color::blue); }
-				r->drawCircle(rootX + 575.0f, rootY+225.0f, 20, 20); 
-
-				// Y button
-				r->setDrawColor(Color::white);
-				r->drawCircle(rootX + 600.0f, rootY+200.0f, 20, 20); 
-				if (p1->isButtonDown(Gamepad::BUTTON_Y)) { r->setDrawColor(Color::yellow); }
-				r->drawCircle(rootX + 600.0f, rootY+200.0f, 20, 20); 
+				renderGamepad(p1, container->getWidth()*0.5f, container->getHeight()*0.7f);
 
 				m_alertButtons->render();
 				m_alertAxes->render();
@@ -660,7 +675,7 @@ namespace ARK {
 		void GamepadsTest::initStates(GameContainer* container) {
 			ARK2D::getLog()->setFilter(Log::TYPE_INFORMATION);
 			addState(new GamepadsTestGameState());
-			addState(new GamepadConfigureGameState());
+			addState(new GamepadConfigureGameState(1));
 			enterState((unsigned int) 0);
 		} 
 		void GamepadsTest::update(GameContainer* container, GameTimer* timer) {

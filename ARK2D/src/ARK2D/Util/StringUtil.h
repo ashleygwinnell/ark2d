@@ -63,6 +63,8 @@ namespace ARK {
 
 				static string zeropad(int number, int digits);
 
+				static int utf8strlen(const char* s);
+
 				static void trimLeft(string& str, const char* chars2remove);
 				static void trimRight(string& str, const char* chars2remove);
 				static void trim(string& str, const char* chars2remove);
@@ -87,6 +89,10 @@ namespace ARK {
 
 				static string restrictToAlphanumericsSpaces(string str);
 				static string restrictToCharset(string str, vector<char> chars);
+
+				// Dont use wstrings.
+				static wstring stringToWstring(const string& str);
+				static string wstringToString(const wstring& str);
 
 				template <class T> 
 				static string getDenomination(T value) {

@@ -75,6 +75,8 @@
 				m_willLoadDefaultFont(true),
 				m_platformSpecific()
 				{
+					locale::global(locale(""));
+
 					NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 					
 					m_platformSpecific.m_container = this;
@@ -770,6 +772,8 @@
 			void ARK::Core::GameContainer::initGamepads() {
 				if (m_platformSpecific.m_hidManager == NULL) {
 					ARK2D::getLog()->v("HID Manager was NULL. Initialising...");
+
+					Gamepad::initMapping();
 
 					Gamepad::s_nextGamepadId = 0;
 

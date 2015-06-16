@@ -6,6 +6,34 @@
  */
 
 #include "API.h"
+#include "../../vendor/rapidxml/ark_rapidxml_util.hpp"	
+
+ /* template<class Str=std::string, class Ch=char>
+	class rapidxml_myutil { 
+		public:
+
+		// Rapid XML util
+		static Str rapidXmlUtil_value(rapidxml::xml_node<Ch>* node) {
+			Str val = node->value();
+			if (val.length() == 0) {
+				if (node->first_node() != NULL) {
+					val = node->first_node()->value();
+				}
+			}
+			return val;
+		}
+		static unsigned int rapidXmlUtil_countChildren(rapidxml::xml_node<Ch>* node, Str childname) {
+			unsigned int i = 0;
+		    rapidxml::xml_node<Ch>* child = 0;
+			for (child = node->first_node(childname.c_str());
+				child != NULL;
+				child = child->next_sibling(childname.c_str())) {
+				i++;
+			}
+			return i;
+		}
+
+	};*/
 
 namespace ARK {
 	namespace GJ {
@@ -45,27 +73,7 @@ namespace ARK {
 			}
 			// 
 
-			// Rapid XML util
-			string rapidXmlUtil_value(xml_node<>* node) {
-				string val = node->value();
-				if (val.length() == 0) {
-					if (node->first_node() != NULL) {
-						val = node->first_node()->value();
-					}
-				}
-				return val;
-			}
-			unsigned int rapidXmlUtil_countChildren(xml_node<>* node, string childname) {
-				unsigned int i = 0;
-				xml_node<>* child = 0;
-				for (child = node->first_node(childname.c_str());
-					child != NULL;
-					child = child->next_sibling(childname.c_str())) {
-					i++;
-				}
-				return i;
-
-			}
+			
 
 			// ------------------------------------------------------------------
 			// Objects (Highscore, Achievement, User)
@@ -675,7 +683,7 @@ namespace ARK {
 						gamejolt->m_callbackAddMutex->unlock();
 						return;	
 					}
-
+ 
 					vector<char> xml_copy = vector<char>(result.begin(), result.end());
 					xml_copy.push_back('\0');
 					
@@ -683,13 +691,13 @@ namespace ARK {
 					xmldocument.parse<0>((char*) &xml_copy[0]);
 
 					xml_node<>* root = xmldocument.first_node("response");
-					string successStr = rapidXmlUtil_value(root->first_node("success")); 
+					string successStr = rapidxml_myutil<string,char>::rapidXmlUtil_value(root->first_node("success"));
 
 					bool success = Cast::boolFromString( successStr );
 					if (!success) {
 						gjHighscoreSubmitResult* res = gjHighscoreSubmitResult_create();
 						res->success = false; 
-						strncpy(res->message, rapidXmlUtil_value(root->first_node("message")).c_str(), 255);
+                        strncpy(res->message, rapidxml_myutil<string,char>::rapidXmlUtil_value(root->first_node("message")).c_str(), 255);
 						
 						gamejolt->m_callbackAddMutex->lock();
 						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_SUBMIT_RESULT, res);
@@ -837,7 +845,7 @@ namespace ARK {
 					xmldocument.parse<0>((char*) &xml_copy[0]);
 
 					xml_node<>* root = xmldocument.first_node("response");
-					string successStr = rapidXmlUtil_value(root->first_node("success")); 
+                    string successStr = rapidxml_myutil<string,char>::rapidXmlUtil_value(root->first_node("success"));
 
 					bool success = Cast::boolFromString( successStr );
 					if (!success) {
@@ -847,7 +855,7 @@ namespace ARK {
 						if (root->first_node("message") == NULL) { 
 							strncpy(res->message, "Success was false but error message was empty.", 255);
 						} else {
-							strncpy(res->message, rapidXmlUtil_value(root->first_node("message")).c_str(), 255);
+							strncpy(res->message, rapidxml_myutil<string,char>::rapidXmlUtil_value(root->first_node("message")).c_str(), 255);
 							ARK2D::getLog()->i("done strncpy");
 						}
 
@@ -861,7 +869,7 @@ namespace ARK {
 
 					
 					// We are go!
-					unsigned int numScores = rapidXmlUtil_countChildren(root->first_node("scores"), "score");
+					unsigned int numScores = rapidxml_myutil<string,char>::rapidXmlUtil_countChildren(root->first_node("scores"), "score");
 					res = gjHighscoresResult_create(numScores);
 					res->success = true;
 					
@@ -873,12 +881,12 @@ namespace ARK {
 						score = score->next_sibling("score")) 
 					{
 						res->scores[i] = gjHighscore_create();
-						res->scores[i]->userid = Cast::fromString<unsigned int>( rapidXmlUtil_value(score->first_node("user_id")) );
-						strncpy(res->scores[i]->username, rapidXmlUtil_value(score->first_node("user")).c_str(), 255);
-						strncpy(res->scores[i]->guestname, rapidXmlUtil_value(score->first_node("guest")).c_str(), 255);
-						res->scores[i]->guest = rapidXmlUtil_value(score->first_node("guest")).length() > 0;
+						res->scores[i]->userid = Cast::fromString<unsigned int>( rapidxml_myutil<string,char>::rapidXmlUtil_value(score->first_node("user_id")) );
+						strncpy(res->scores[i]->username, rapidxml_myutil<string,char>::rapidXmlUtil_value(score->first_node("user")).c_str(), 255);
+						strncpy(res->scores[i]->guestname, rapidxml_myutil<string,char>::rapidXmlUtil_value(score->first_node("guest")).c_str(), 255);
+						res->scores[i]->guest = rapidxml_myutil<string,char>::rapidXmlUtil_value(score->first_node("guest")).length() > 0;
 						res->scores[i]->globalRank = 1;
-						res->scores[i]->score = Cast::fromString<unsigned int>( rapidXmlUtil_value(score->first_node("score")) );
+						res->scores[i]->score = Cast::fromString<unsigned int>( rapidxml_myutil<string,char>::rapidXmlUtil_value(score->first_node("score")) );
 						i++;
 					}
 					
@@ -991,7 +999,7 @@ namespace ARK {
 					xmldocument.parse<0>((char*) &xml_copy[0]);
 
 					xml_node<>* root = xmldocument.first_node("response");
-					string successStr = rapidXmlUtil_value(root->first_node("success")); 
+					string successStr = rapidxml_myutil<string,char>::rapidXmlUtil_value(root->first_node("success"));
 
 					bool success = Cast::boolFromString( successStr );
 					if (!success) {
@@ -1001,7 +1009,7 @@ namespace ARK {
 						if (root->first_node("message") == NULL) { 
 							strncpy(res->message, "Success was false but error message was empty.", 255);
 						} else {
-							strncpy(res->message, rapidXmlUtil_value(root->first_node("message")).c_str(), 255);
+							strncpy(res->message, rapidxml_myutil<string,char>::rapidXmlUtil_value(root->first_node("message")).c_str(), 255);
 							ARK2D::getLog()->i("done strncpy");
 						}
 
@@ -1017,7 +1025,7 @@ namespace ARK {
 					// We are go!
 					res = gjHighscoreRankResult_create();
 					res->success = true;
-					res->rank = Cast::fromString<unsigned int>( rapidXmlUtil_value(root->first_node("rank")) );
+					res->rank = Cast::fromString<unsigned int>( rapidxml_myutil<string,char>::rapidXmlUtil_value(root->first_node("rank")) );
 	
 				}
 

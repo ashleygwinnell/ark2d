@@ -15,12 +15,13 @@
 #include "../Core/String.h"
 #include "../Controls/Input.h"
 #include "../Graphics/Renderer.h"
+#include "../SceneGraph/Scene.h"
 
 
 namespace ARK {
 	namespace UI {
 		
-		class ARK2D_API Slider : public AbstractUIComponent { 
+		class ARK2D_API Slider : public AbstractUIComponent, public SceneNode { 
 			public:
 
 				Vector2<float> m_buttonLocation;

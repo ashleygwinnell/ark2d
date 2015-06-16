@@ -134,6 +134,7 @@
 #include "ARK2D/Util/StringStore.h"
 #include "ARK2D/Util/SocialUtil.h"
 #include "ARK2D/Util/SAT.h"
+#include "ARK2D/Util/Strings.h"
 #include "ARK2D/Util/URLRequest.h"
 #include "ARK2D/Util/Vibrator.h"
 

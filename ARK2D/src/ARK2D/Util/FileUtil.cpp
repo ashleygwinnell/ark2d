@@ -178,26 +178,61 @@ namespace ARK {
 			//ARK2D::getLog()->v("pre return");
 			return r;
 
-			/*char* fileUncompressed = (char*) malloc((int) fileStats.size);
-			int fileUncompressedPointer = 0;
-			unsigned int fileUncompressedBufferSize = 4096;
-			if (fileUncompressedBufferSize > (int) fileStats.size) {
-				fileUncompressedBufferSize = (int) fileStats.size;
-			}
-			for(signed int i = 0; i < (int) fileStats.size; i += fileUncompressedBufferSize) {
-				char fileUncompressedBuffer[fileUncompressedBufferSize];
-				signed int done = zip_fread(file, &fileUncompressedBuffer, fileUncompressedBufferSize);
-				if (done == -1) { break; }
-				memcpy(fileUncompressed + i, &fileUncompressedBuffer[0], done);
-			}
-			zip_fclose(file);*/
+		}
 
-			/*RawDataReturns* rt = new RawDataReturns();
-			rt->data = (void*) fileUncompressed;
-			rt->size = (int) fileStats.size;
-			return rt;*/
+		// TODO: We don't know if this converts from UTF-16BE or UTF-16LE or anything. 
+		// Generally, always use UTF-8 file types.
+		file_get_contents_binary_result FileUtil::file_get_contents_utf8binary(string filename)
+		{ 
+			// Prepend shit for each OS.
+			filename = StringUtil::internalOSAppends(filename);
 
-			//return StringUtil::file_get_contents(filename.c_str()).c_str();
+			//ARK2D::getLog()->v("pre fopen");
+			FILE* file = NULL;// fopen(filename.c_str(), "rt");
+			#if defined( ARK2D_WINDOWS_PHONE_8 )
+				fopen_s(&file, filename.c_str(), "rt, ccs=UTF-8");
+			#else
+				file = fopen(filename.c_str(), "rt, ccs=UTF-8");
+			#endif
+
+			if (file == NULL) {
+				string str = "Could not open file ["; str += filename; str += "] as it does not exist.";
+				ARK2D::getLog()->e(str);
+				file_get_contents_binary_result r;
+				r.data = NULL;
+				r.len = 0;
+				return r;
+			}
+
+			//ARK2D::getLog()->v("pre seeking");
+			fseek(file, 0, SEEK_END);
+			int count = ftell(file);
+			int allcount = count;
+
+			//ARK2D::getLog()->v("pre rewind");
+			rewind(file);
+
+			// ***********************
+			//! @todo: memory management: memory leak. yay.
+			// *************************
+			char* data = NULL; //new char[count];
+
+			//ARK2D::getLog()->v("pre count/malloc"); 
+			if (count > 0) {
+				data = (char*) malloc(sizeof(char) * (count));
+				count = fread(data, sizeof(char), count, file);
+			}
+
+			//ARK2D::getLog()->v("pre fclose");
+			fclose(file);
+
+			file_get_contents_binary_result r;
+			r.data = data; 
+			r.len = allcount; 
+ 
+			//ARK2D::getLog()->v("pre return");
+			return r;
+
 		}
 
 		file_get_contents_text_result FileUtil::file_get_contents_text(string filename)

@@ -24,6 +24,7 @@ namespace ARK {
 		        static asIScriptEngine* s_engine;
 				static asIScriptEngine* getEngine();
 				static asIScriptEngine* restart(); 
+				static void compileAndRunOnce(string moduleName, string sourceFile, string functionDecl);
 				
 
 				// Format the details of the script exception into a human readable text

@@ -20,6 +20,14 @@ namespace ARK {
 			m_state(Button::STATE_OFF) {
 			m_width = 20;
 		}
+		ComboBoxItem::ComboBoxItem(string text, string value):
+			AbstractUIComponent(),
+			parent(NULL),
+			m_text(text),
+			m_value(value),
+			m_state(Button::STATE_OFF) {
+			m_width = 20;
+		}
 
 		void ComboBoxItem::setText(string t) {
 			m_text = t;
@@ -43,8 +51,8 @@ namespace ARK {
 				//if (GigaRectangle<int>::s_contains(m_x, m_y, (signed int) (m_width), (signed int)(m_height), (signed int) (i->getMouseX()), (signed int) (i->getMouseY()))) {
 					parent->m_selected = this;
 					if (parent->m_itemChangedEvent != NULL) {
-						void (*pt)() = (void(*)()) parent->m_itemChangedEvent;
-						pt();
+						void (*pt)(ComboBox*) = (void(*)(ComboBox*)) parent->m_itemChangedEvent;
+						pt(parent);
 					}
 				}
 			}

@@ -17,6 +17,8 @@ namespace ARK {
 			public:
 				GamepadMapping m_mapping;
 				signed int m_gamepadIndex;
+				unsigned int m_stateId;
+				unsigned int m_returnToStateId;
 				unsigned int m_state;
 				static const unsigned int STATE_A = 0;
 				static const unsigned int STATE_B = 1;
@@ -43,7 +45,7 @@ namespace ARK {
 				float m_axisChangedCooldown;
 				
 			public:
-				GamepadConfigureGameState();
+				GamepadConfigureGameState(unsigned int stateId);
 				void enter(GameContainer* container, StateBasedGame* game, GameState* from);
 				void leave(GameContainer* container, StateBasedGame* game, GameState* to);
 
@@ -82,6 +84,7 @@ namespace ARK {
 				void init(GameContainer* container, StateBasedGame* game);
 				void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
 				void render(GameContainer* container, StateBasedGame* game, Renderer* r);
+				static void renderGamepad(Gamepad* g, float rootX, float rootY);
 
 				virtual void keyPressed(unsigned int key);
 				virtual void keyReleased(unsigned int key);

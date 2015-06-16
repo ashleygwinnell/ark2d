@@ -97,6 +97,7 @@ namespace ARK {
 				Color* m_backgroundColor;
 				ARK::UI::Slider* m_gameSpeedSlider;
 				ARK::UI::CheckBox* m_expoCheckbox;
+				ARK::SceneGraph::Scene* m_scene;
 
 			public:
 				Log();
@@ -132,6 +133,8 @@ namespace ARK {
 				// only shows log statements lower than this value.
 				void setFilter(unsigned int level); 
 				unsigned int getFilter();
+
+				Scene* getScene() { return m_scene; }
 				
 				void update();
 				void render(GameContainer* container, Renderer* r);
@@ -147,6 +150,7 @@ namespace ARK {
 
 			protected:
 				string getTypeString(unsigned int type);
+				wstring getTypeWString(unsigned int type);
 		};
 
 	}

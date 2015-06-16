@@ -201,6 +201,8 @@
 
 			void GameContainerPlatform::initGamepads() {
 				if (!m_initialisedGamepads) {
+					Gamepad::initMapping();
+
 					pthread_mutexattr_t recursiveLock;
 					pthread_mutexattr_init(&recursiveLock);
 					pthread_mutexattr_settype(&recursiveLock, PTHREAD_MUTEX_RECURSIVE);
