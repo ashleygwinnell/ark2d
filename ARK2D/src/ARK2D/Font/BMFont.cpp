@@ -592,7 +592,7 @@ namespace ARK {
  			signed int len = StringUtil::utf8strlen(str_i);
             
             unsigned int total = 0;
-			for (unsigned int i = 0; i < len; i++ )
+			for (signed int i = 0; i < len; i++ )
             {
 				uint32_t charid = utf8::next(str_i, end);
 				if (charid == 0) { continue; }

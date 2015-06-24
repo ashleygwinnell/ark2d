@@ -1,6 +1,7 @@
 package org.ashleygwinnell.imagepacker;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -8,6 +9,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.imageio.ImageIO;
 
@@ -26,6 +29,7 @@ public class ImagePacker {
 	private String m_exportName;
 	private String m_exportFolder;
 	private ExportFormat m_exportFormat;
+	private ExportImageFormat m_exportImageFormat = ExportImageFormat.PNG;
 	
 	private int m_innerHeight = 0;
 	
@@ -98,6 +102,9 @@ public class ImagePacker {
 	public void setExportName(String s) {
 		m_exportName = s;
 	}
+	public void setExportImageFormat(ExportImageFormat e) {
+		m_exportImageFormat = e;
+	}
 	
 	public void setSpacing(int s) {
 		m_spacing = s;
@@ -119,10 +126,16 @@ public class ImagePacker {
 		
 		
 		// write image.
-		BufferedImage bi = new BufferedImage(m_maxTextureWidth, thisHeight, BufferedImage.TYPE_4BYTE_ABGR);
+		BufferedImage bi = null;
+		if (m_exportImageFormat == ExportImageFormat.PNG) {
+			bi = new BufferedImage(m_maxTextureWidth, thisHeight, BufferedImage.TYPE_4BYTE_ABGR);
+		} else if (m_exportImageFormat == ExportImageFormat.JPG) {
+			bi = new BufferedImage(m_maxTextureWidth, thisHeight, BufferedImage.TYPE_INT_RGB);
+		} 
 		Graphics2D g2d = bi.createGraphics();
 		for (int i = 0; i < m_images.size(); i++) {
 			Image c = m_images.get(i);
+			if (!c.m_hasBeenLaid) { continue; }
 			if (c.isRotated()) {
 				g2d.translate(c.x, c.y);
 				g2d.rotate(Math.toRadians(90), 0, 0);
@@ -143,7 +156,7 @@ public class ImagePacker {
 		}
 	//	WritableRaster out = bi.copyData(null);
 		try {
-			ImageIO.write(bi, "png", new File(m_exportFolder + "/" + m_exportName + ".png"));
+			ImageIO.write(bi, m_exportImageFormat.toString(), new File(m_exportFolder + "/" + m_exportName + "." + m_exportImageFormat.toString().toLowerCase()));
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
@@ -265,9 +278,134 @@ public class ImagePacker {
 	}
 	
 	private void layoutImagesImpl() throws Exception {
-		forcePackStrategy();
-		//flowStrategy();
+		// forcePackStrategy();
+		// flowStrategy();
+		cornersStrategy();
 	}
+	
+	// Pack items next to top-right corners & bottom-left corners of other images.
+	private void cornersStrategy() throws Exception {
+		// Sort the images from largest to smallest.
+		ArrayList<Image> sorted = sortByArea();
+		Image smallest = sorted.get(sorted.size()-1);
+		
+		//Collections.reverse(sorted);
+		
+		// Starting point.
+		ArrayList<Point> points = new ArrayList<Point>();
+		points.add(new Point(0, 0));
+		
+		 /*Comparator for sorting the list by roll no*/
+	    Comparator<Point> portSort = new Comparator<Point>() {
+			public int compare(Point s1, Point s2) {
+			   /*For ascending order*/
+			   return s1.y-s2.y;
+			   /*For descending order*/
+			   //rollno2-rollno1;
+		   }
+		};
+			
+		// Lay them all out.
+		boolean tryRotation = false;
+		int curIndex = 0;
+		while (curIndex < sorted.size())
+		{
+			Image one = sorted.get(curIndex);
+			System.out.println(one.getName());
+			
+			boolean laid = false;
+			// For each point, see if it fits there.
+			for(int i = 0; i < points.size(); i++) {
+				one.x = points.get(i).x;
+				one.y = points.get(i).y;
+				
+				boolean canFitHere = true;
+				for (int j = 0; j < sorted.size(); j++) { 
+					Image other = sorted.get(j);
+					if (one.equals(other) || !other.m_hasBeenLaid) { continue; } // Skip ones not placed and itself.
+					if (one.collides(other)) {
+						canFitHere = false;
+						break;
+					}
+				}
+				
+				if (canFitHere) { // check it doesn't go off the edges eh?
+					if (one.x + one.m_width + m_spacing >= m_maxTextureWidth// || 
+							//one.y + one.m_height + m_spacing >= m_maxTextureHeight
+							) {
+						canFitHere = false;
+					}
+				}
+				
+				if (canFitHere) {
+					// Place it here.
+					one.m_hasBeenLaid = true;
+					laid = true;
+					curIndex++;
+					
+					tryRotation = false;
+					
+					
+					// Point to the bottom.
+					Point bottomPoint = new Point(one.x, one.y + one.m_height + m_spacing+m_spacing + 1);
+					//if (bottomPoint.y < m_maxTextureHeight) {
+						//System.out.println("Placed ")
+						points.add(bottomPoint);
+					//}
+
+					// Point to the right.
+					Point rightPoint = new Point(one.x + one.m_width + m_spacing+m_spacing + 1, one.y);
+					if (rightPoint.x < m_maxTextureWidth) { 
+						points.add(rightPoint);
+					}
+					points.sort(portSort);;
+											
+					if (bottomPoint.y > m_innerHeight) {
+						m_innerHeight = bottomPoint.y;
+					}
+					
+					break;
+				}
+			}
+			
+			if (!laid && !tryRotation) {
+				System.out.println("Trying rotation." + points.size());
+				tryRotation = true;
+				one.rotate();
+				continue; 
+			}
+			
+			if (!laid && tryRotation) {
+				//throw new Exception("The images do not fit in to this texture. :(");
+				
+				System.out.println("-----Leaving out graphic: " + one.getName());
+				one.m_hasBeenLaid = false;
+				tryRotation = false;
+				
+				// Point to the right.
+				/*Point rightPoint = new Point(one.x + one.m_width + m_spacing, one.y);
+				if (rightPoint.x < m_maxTextureWidth) { 
+					points.add(rightPoint);
+				}
+				
+				// Point to the bottom.
+				Point bottomPoint = new Point(one.x, one.y + one.m_height + m_spacing);
+				//if (bottomPoint.y < m_maxTextureHeight) {
+					points.add(bottomPoint);
+				//}
+				
+				if (bottomPoint.y > m_innerHeight) {
+					m_innerHeight = bottomPoint.y;
+				}*/
+				
+				curIndex++;
+			}
+			
+			
+		}
+	}
+	
+	// Very very slow, but the most packing efficient.
 	private void forcePackStrategy() throws Exception {
 		
 		// Sort the images from largest to smallest.
@@ -282,6 +420,7 @@ public class ImagePacker {
 		int curIndex = 0;
 		while (curIndex < sorted.size())
 		{
+			
 			if (curIndex >= sorted.size());
 			Image one = sorted.get(curIndex);
 			one.x = curx;
@@ -345,6 +484,8 @@ public class ImagePacker {
 				if (cury + one.m_height + m_spacing > m_innerHeight) {
 					m_innerHeight = cury + one.m_height + m_spacing;
 				}
+				curx = 0;
+				cury = 0;
 			}
 		}
 	}
@@ -477,11 +618,21 @@ public class ImagePacker {
 			ExportFormat f = ExportFormat.valueOf(o.getString("format"));
 			packer.setExportFormat(f);
 			
+			
+			try {
+				ExportImageFormat iff = ExportImageFormat.valueOf(o.getString("imageformat").toUpperCase());
+				packer.setExportImageFormat(iff);
+			} catch(org.json.JSONException e) {
+				// don't worry about it.
+			}
+			
 			packer.pack();
 		}
 		
 	}
 	
+	
+
 	/**
 	 * Arg passed in is JSON.
 	 * @param args
