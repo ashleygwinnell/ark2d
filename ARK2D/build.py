@@ -1074,6 +1074,76 @@ class ARK2DBuildSystem:
 			print("Cannot build games for Windows Store yet.");
 
 		pass;
+	def startXboxOne(self):
+		print("Building for Current Platform (" + self.platform + ")");
+		
+		#if (self.building_library):
+		if True:
+
+			output_folder = self.ark2d_dir + "/build/xbone";
+
+			# make directories
+			mkdirs = [];
+			mkdirs.extend(self.mkdirs);
+			self.makeDirectories(mkdirs);
+
+			sln_contents = ""; ####
+			vcxproj_contents = "";
+
+			# dll sln and vcxproj files
+			f1 = open(self.ark2d_dir + "/lib/xbone/project-template/project-template.sln", "r");
+			f2 = open(self.ark2d_dir + "/lib/xbone/project-template/project-template.vcxproj", "r");
+			sln_contents = f1.read();
+			vcxproj_contents = f2.read();
+			f1.close(); 
+			f2.close(); 
+
+			# modify sln/vcxproj files
+			vcxproj_headerfiles = "";
+			vcxproj_sourcefiles = "";
+			for srcfile in self.src_files:  
+
+				#check if src file has a corresponding .h file. add that to the project...
+				findex = srcfile.rfind('.');
+				h_ext = srcfile[findex+1:len(srcfile)];
+				newfh = srcfile[0:findex] + ".h";
+				newfhfull = self.ark2d_dir + self.ds + newfh; 
+				if (os.path.exists(newfhfull)): 
+					vcxproj_headerfiles += "<ClInclude Include=\"../../"+newfh+"\" /> \n";
+
+				if h_ext == "c" or h_ext == "cpp":
+					vcxproj_sourcefiles += "<ClCompile Include=\"../../"+srcfile+"\" /> \n";
+
+				
+			game_name_safe = "libARK2D";
+
+			sln_contents = self.str_replace(sln_contents, [("%GAME_SHORT_NAME%", game_name_safe)]);
+
+			vcxproj_contents = self.str_replace(vcxproj_contents, [("%COMPILE_HEADER_FILES%", vcxproj_headerfiles)]);
+			vcxproj_contents = self.str_replace(vcxproj_contents, [("%COMPILE_SOURCE_FILES%", vcxproj_sourcefiles)]);
+			vcxproj_contents = self.str_replace(vcxproj_contents, [("%ARK2D_DIR%", self.ark2d_dir)]);
+			vcxproj_contents = self.str_replace(vcxproj_contents, [("%GAME_SHORT_NAME%", game_name_safe)]);
+			vcxproj_contents = self.str_replace(vcxproj_contents, [("%GAME_RESOURCES%", "")]);
+			#vcxproj_contents = self.str_replace(vcxproj_contents, [("%GAME_IMAGE_RESOURCES%", game_image_resources_str)]);
+			#vcxproj_contents = self.str_replace(vcxproj_contents, [("%COMPILE_HEADER_FILES%", vcxproj_headerfiles)]);
+			#vcxproj_contents = self.str_replace(vcxproj_contents, [("%COMPILE_SOURCE_FILES%", vcxproj_sourcefiles)]);
+			vcxproj_contents = self.str_replace(vcxproj_contents, [("%ADDITIONAL_PREPROCESSOR_DEFINITIONS%", "")]);
+			vcxproj_contents = self.str_replace(vcxproj_contents, [("%ADDITIONAL_INCLUDE_DIRECTORIES%", "")]);
+			vcxproj_contents = self.str_replace(vcxproj_contents, [("%ADDITIONAL_DOTLIB_FILES%", "")]);
+
+
+			# write sln file
+			print("Write sln file...");
+			f1 = open(output_folder + "/libARK2D.sln", "w");
+			f1.write(sln_contents);
+			f1.close();
+
+			# write vcxproj file
+			print("Write vcxproj file...");
+			f1 = open(output_folder + "/libARK2D.vcxproj", "w");
+			f1.write(vcxproj_contents);
+			f1.close();
+
 
 	def startWindowsVS2(self):
 		print("Building for Current Platform (" + self.platform + ")");
@@ -6216,6 +6286,8 @@ build:
 			self.startWindowsStore();
 		elif (self.platform == "windows-phone"):
 			self.startWindowsPhone();
+		elif (self.platform == "xbone"):
+			self.startXboxOne();
 		#elif(self.platform == "osx"):
 		#	self.startMac();
 		elif(self.platform == "ubuntu-linux" or self.platform == "linux"):
@@ -6572,6 +6644,8 @@ if __name__ == "__main__":
 			a.platform = 'windows-phone';
 		elif (target=='windows-store'):
 			a.platform = 'windows-store';
+		elif (target=='xbox-one'):
+			a.platform = 'xbone';
 		elif (target=='linux' or target=='ubuntu-linux'):
 			a.platform = 'linux';
 		elif (target=='html5' or target=='emscripten'): 

@@ -9,6 +9,9 @@
 		ARK2D_DX11_GEOM_VS 	ARK2D_RESOURCE_TYPE_SHADER 	"D:\\Dropbox\\ark2d\\ARK2D\\build\\windows-vs\\Default\\geometry-dx11-vertex.cso"
 		ARK2D_DX11_GEOM_PS 	ARK2D_RESOURCE_TYPE_SHADER 	"D:\\Dropbox\\ark2d\\ARK2D\\build\\windows-vs\\Default\\geometry-dx11-pixel.cso"
 	#endif
+#elif defined(ARK2D_XBOXONE)
+	ARK2D_DX11_GEOM_VS 	ARK2D_RESOURCE_TYPE_SHADER 	"D:\\Dropbox\\ark2d\\ARK2D\\build\\xbone\\Default\\geometry-dx11-vertex.cso"
+	ARK2D_DX11_GEOM_PS 	ARK2D_RESOURCE_TYPE_SHADER 	"D:\\Dropbox\\ark2d\\ARK2D\\build\\xbone\\Default\\geometry-dx11-pixel.cso"
 #endif
 
 #ifdef ARK2D_WINDOWS 

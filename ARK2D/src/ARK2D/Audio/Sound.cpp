@@ -71,9 +71,9 @@
 
 namespace ARK {
 	namespace Audio {
-		ALfloat Sound::ListenerPos[3] = { 0.0, 0.0, 0.0 };
-		ALfloat Sound::ListenerVel[3] = { 0.0, 0.0, 0.0 };
-		ALfloat Sound::ListenerOri[6] = { 0.0, 0.0, -1.0, 0.0, 1.0, 0.0 };
+		float Sound::ListenerPos[3] = { 0.0, 0.0, 0.0 };
+		float Sound::ListenerVel[3] = { 0.0, 0.0, 0.0 };
+		float Sound::ListenerOri[6] = { 0.0, 0.0, -1.0, 0.0, 1.0, 0.0 };
 
 		//unsigned int Sound::DEFAULT_GROUP_ID = 0;
 		//void Sound::setDefaultGroupId(unsigned int id) {
@@ -388,7 +388,7 @@ namespace ARK {
 				    ARK2D::getLog()->v("success! :D");
 					return true;
 				
-			#elif defined(ARK2D_WINDOWS_PHONE_8)
+			#elif defined(ARK2D_XAUDIO2)
  				//ARK2D::getLog()->w("Sound::load Not implemented");
 
 				// Load Sound contents!
@@ -514,7 +514,7 @@ namespace ARK {
 		void Sound::miscerror(string ss) {
 			#if defined(ARK2D_FLASCC)
 
-			#elif defined(ARK2D_WINDOWS_PHONE_8)
+			#elif defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE)
 
 			#else
 				ALenum s = alGetError();
@@ -578,7 +578,7 @@ namespace ARK {
 
 				// Some vars!
 				const unsigned int BUFFER_SIZE = 32768; // 32kb buffer
-				ALenum format;
+				unsigned int format;
 				//ALsizei frequency;
 				unsigned long frequency;
 				int bitStream;
@@ -695,7 +695,7 @@ namespace ARK {
 
 				//std::cout << "5" << std::endl;
 
-				#ifdef ARK2D_WINDOWS_PHONE_8
+				#if defined(ARK2D_XAUDIO2)
 					format = 0;
 				#else
 					if (oggInfo->channels == 1) {
@@ -804,7 +804,7 @@ namespace ARK {
 				//std::cout << "pcmtotal: " << ov_pcm_total(&oggFile, -1) << std::endl;
 
 
-				#if defined(ARK2D_WINDOWS_PHONE_8)
+				#if defined(ARK2D_XAUDIO2)
 
 					unsigned int ubps = 16;// ogg is always 16 bit. (unsigned int)oggInfo->rate; //bps;
 					unsigned int ubyps = (unsigned int) ubps / 8;
@@ -887,7 +887,7 @@ namespace ARK {
 			#endif 
 		}
 		void Sound::clearErrors() {
-			#if defined(ARK2D_WINDOWS_PHONE_8)
+			#if defined(ARK2D_XAUDIO2)
 				// things
 			#else
 				alGetError();
@@ -948,7 +948,7 @@ namespace ARK {
 
 				return true;
 
-			#elif (defined(ARK2D_ANDROID) || defined(ARK2D_MACINTOSH) || defined(ARK2D_IPHONE) || defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_UBUNTU_LINUX)) 
+			#elif (defined(ARK2D_ANDROID) || defined(ARK2D_MACINTOSH) || defined(ARK2D_IPHONE) || defined(ARK2D_XAUDIO2) || defined(ARK2D_UBUNTU_LINUX)) 
 
 				// References
 				// -  http://ccrma.stanford.edu/courses/422/projects/WaveFormat/
@@ -960,7 +960,7 @@ namespace ARK {
 				const unsigned int BUFFER_SIZE = 32768;     // 32 KB buffers
 				long bytes;
 				vector <char> data;
-				ALenum format;
+				unsigned int format;
 				//ALsizei freq;
 				unsigned int freq;
 
@@ -1132,7 +1132,7 @@ namespace ARK {
 				} 
 				unsigned short bps = wav_readByte16(buffer16);
 
-				#if defined(ARK2D_WINDOWS_PHONE_8)
+				#if defined(ARK2D_XAUDIO2)
 					format = 0;
 				#else
 					if (channels == 1) {
@@ -1234,7 +1234,7 @@ namespace ARK {
 				//f = NULL;
 				fi = NULL;
 
-				#if defined(ARK2D_WINDOWS_PHONE_8)
+				#if defined(ARK2D_XAUDIO2)
 					unsigned int ubps = (unsigned int) bps;
 					unsigned int ubyps = (unsigned int)bps / 8;
 					unsigned int uchannels = (unsigned int) channels;
@@ -1343,7 +1343,7 @@ namespace ARK {
 		void Sound::setOffset(float seconds) {
 			#if defined(ARK2D_FLASCC) 
 
-			#elif defined(ARK2D_WINDOWS_PHONE_8) 
+			#elif defined(ARK2D_XAUDIO2) 
 
 			#else 
 				alSourcef(Source, AL_SEC_OFFSET, seconds);
@@ -1352,7 +1352,7 @@ namespace ARK {
 		float Sound::getOffset() {
 			#if defined(ARK2D_FLASCC) 
 
-			#elif defined(ARK2D_WINDOWS_PHONE_8)
+			#elif defined(ARK2D_XAUDIO2)
 				return 0.0f;
 			#else 
 				float seconds;
@@ -1386,7 +1386,7 @@ namespace ARK {
 					m_flascc_pausePosition = 0;
 					play();
 				}
-			#elif defined(ARK2D_WINDOWS_PHONE_8)
+			#elif defined(ARK2D_XAUDIO2)
 				if (m_xaSource == NULL) { return; }
 				if (isPlaying()) {
 					stop();
@@ -1427,7 +1427,7 @@ namespace ARK {
 				);
 				return (playing == 1);*/
 				return m_flascc_isSoundPlaying;
-			#elif defined(ARK2D_WINDOWS_PHONE_8)
+			#elif defined(ARK2D_XAUDIO2)
 				if (m_xaSource == NULL) { return false; }
 
 				//XAUDIO2_VOICE_STATE state;
@@ -1454,7 +1454,7 @@ namespace ARK {
 					m_flascc_isSoundPlaying = false;
 					m_flascc_channel->stop();
 				}
-			#elif defined(ARK2D_WINDOWS_PHONE_8)
+			#elif defined(ARK2D_XAUDIO2)
 				if (m_xaSource == NULL) { return; }
 				m_xaSource->Stop(0); // XAUDIO2_PLAY_TAILS
 				m_xaSource->FlushSourceBuffers();
@@ -1478,7 +1478,7 @@ namespace ARK {
 					m_flascc_pausePosition = m_flascc_channel->position; 
       				m_flascc_channel->stop(); 
       			}
-      		#elif defined(ARK2D_WINDOWS_PHONE_8)
+      		#elif defined(ARK2D_XAUDIO2)
       			//ARK2D::getLog()->w("Sound::pause Not implemented");
       			if (m_xaSource == NULL) { return; }
 				
@@ -1517,7 +1517,7 @@ namespace ARK {
           				m_flascc_channel->soundTransform = m_flascc_transform;
         			//}
       			//}
-          	#elif defined(ARK2D_WINDOWS_PHONE_8)
+          	#elif defined(ARK2D_XAUDIO2)
 				if (m_xaSource == NULL) { return; }
 				m_xaSource->SetVolume(m_volume);
 			#else 
@@ -1533,7 +1533,7 @@ namespace ARK {
 
 			#if defined(ARK2D_FLASCC) 
 
-			#elif defined(ARK2D_WINDOWS_PHONE_8)
+			#elif defined(ARK2D_XAUDIO2)
 				ARK2D::getLog()->w("Sound::setPitch Not implemented");
 			#else 
 				alSourcef(Source, AL_PITCH, pitch);
@@ -1544,7 +1544,7 @@ namespace ARK {
 			SourcePos[0] = pan;
 			#if defined(ARK2D_FLASCC) 
 
-			#elif defined(ARK2D_WINDOWS_PHONE_8)
+			#elif defined(ARK2D_XAUDIO2)
 				ARK2D::getLog()->w("Sound::setPanning Not implemented");
 			#else 
 				alSourcefv(Source, AL_POSITION, SourcePos);
@@ -1559,13 +1559,13 @@ namespace ARK {
 			return m_groupId;
 		}
 
-		string Sound::getALErrorString(ALenum err) {
+		string Sound::getALErrorString(unsigned int err) {
 			return getALErrorStringStatic(err);
 		}
-		string Sound::getALErrorStringStatic(ALenum err) {
+		string Sound::getALErrorStringStatic(unsigned int err) {
 			#if defined(ARK2D_FLASCC) 
 				return string("UNKNOWN_ERROR");
-			#elif defined(ARK2D_WINDOWS_PHONE_8)
+			#elif defined(ARK2D_XAUDIO2)
 				return string("UNKNOWN_ERROR");
 			#else 
 				switch(err)
@@ -1595,7 +1595,7 @@ namespace ARK {
 		string Sound::getOggErrorString(int code) {
 			#if defined(ARK2D_FLASCC) 
 				return "";
-			#elif defined(ARK2D_WINDOWS_PHONE_8)
+			#elif defined(ARK2D_XAUDIO2)
 				ARK2D::getLog()->w("Sound::getOggErrorString Not implemented");
 				return "";
 			#else 
@@ -1634,7 +1634,7 @@ namespace ARK {
 		void Sound::deinit() {
 			#if defined(ARK2D_FLASCC) 
 
-			#elif defined(ARK2D_WINDOWS_PHONE_8) 
+			#elif defined(ARK2D_XAUDIO2) 
 				ARK2D::getLog()->w("Sound::deinit not implemented");
 			#else 
 				ARK2D::getLog()->v("Deinitialising Sound: OpenAL bits. ");

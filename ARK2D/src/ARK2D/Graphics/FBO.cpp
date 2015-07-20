@@ -17,7 +17,8 @@ namespace ARK {
  
 		FBO::FBO():
 			m_dummy(false),
-			m_clearScreenOnBind(true)
+			m_clearScreenOnBind(true),
+			clearColor()
 		{
 			_internalId = _internalIdCount;
 			_internalIdCount++;
@@ -30,7 +31,8 @@ namespace ARK {
 		}
 		FBO::FBO(bool dummy):
 			m_dummy(dummy),
-			m_clearScreenOnBind(true)
+			m_clearScreenOnBind(true),
+			clearColor()
 		{
 			_internalId = _internalIdCount;
 			_internalIdCount++;
@@ -76,6 +78,9 @@ namespace ARK {
 		void FBO::init() 
 		{
 			if (!isSupported()) { return; }
+
+			Color c = ARK2D::getContainer()->getClearColor();
+			clearColor.set(c.getRedf(), c.getGreenf(), c.getBluef(), c.getAlphaf());
 
 			#ifdef ARK2D_RENDERER_OPENGL
 
@@ -262,9 +267,9 @@ namespace ARK {
 					//glViewport(0, 0, ww, wh);
 					 
 					//Color c = ARK2D::getRenderer()->getClearColor();
-					Color c = ARK2D::getContainer()->getClearColor();
+					//Color c = ARK2D::getContainer()->getClearColor();
 
-					glClearColor (c.getRedf(), c.getGreenf(), c.getBluef(), c.getAlphaf()); // Set the clear colour  
+					glClearColor (clearColor.getRedf(), clearColor.getGreenf(), clearColor.getBluef(), clearColor.getAlphaf()); // Set the clear colour  
 					if (m_clearScreenOnBind) { 
 						glClear (GL_COLOR_BUFFER_BIT);// | GL_DEPTH_BUFFER_BIT); // Clear the depth and colour buffers  
 					}
@@ -340,6 +345,9 @@ namespace ARK {
 						r->popMatrix();
 
 						glViewport(0, 0, ARK2D::getContainer()->getDynamicWidth(),  ARK2D::getContainer()->getDynamicHeight());
+
+						Color c = ARK2D::getContainer()->getClearColor(); 
+						glClearColor (c.getRedf(), c.getGreenf(), c.getBluef(), c.getAlphaf());
 						
 						#ifdef ARK2D_IPHONE
 							glBindFramebufferARK(GL_FRAMEBUFFER_ARK, ARK2D::getContainer()->m_platformSpecific._viewFrameBuffer); // Unbind our texture  

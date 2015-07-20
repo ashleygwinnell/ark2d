@@ -151,6 +151,8 @@ namespace ARK {
 				}
 				virtual void render() {
 
+					if (!m_visible) { return; }
+
 					//AbstractUIComponent::preRender();
 
 					Renderer* g = ARK2D::getRenderer();

@@ -295,35 +295,35 @@ namespace ARK {
 			m_current_state->mouseMoved(x, y, oldx, oldy);
 		} 
 
-		void StateBasedGame::gamepadConnected(Gamepad* gamepad) {
+		void StateBasedGame::gamepadConnected(ARK::Controls::Gamepad* gamepad) {
 			Game::gamepadConnected(gamepad);
 			if (m_loading_state != NULL && m_loading_state->isLoading()) { return; }
 
 			GamepadListener* l = dynamic_cast<GamepadListener*>(m_current_state);
 			if (l != NULL) { l->gamepadConnected(gamepad); }
 		}
-		void StateBasedGame::gamepadDisconnected(Gamepad* gamepad) {
+		void StateBasedGame::gamepadDisconnected(ARK::Controls::Gamepad* gamepad) {
 			Game::gamepadDisconnected(gamepad);
 			if (m_loading_state != NULL && m_loading_state->isLoading()) { return; }
 
 			GamepadListener* l = dynamic_cast<GamepadListener*>(m_current_state);
 			if (l != NULL) { l->gamepadDisconnected(gamepad); }
 		}
-		void StateBasedGame::buttonPressed(Gamepad* gamepad, unsigned int button) {
+		void StateBasedGame::buttonPressed(ARK::Controls::Gamepad* gamepad, unsigned int button) {
 			Game::buttonPressed(gamepad, button);
 			if (m_loading_state != NULL && m_loading_state->isLoading()) { return; }
 
 			GamepadListener* l = dynamic_cast<GamepadListener*>(m_current_state);
 			if (l != NULL) { l->buttonPressed(gamepad, button); }
 		}
-		void StateBasedGame::buttonReleased(Gamepad* gamepad, unsigned int button) {
+		void StateBasedGame::buttonReleased(ARK::Controls::Gamepad* gamepad, unsigned int button) {
 			Game::buttonReleased(gamepad, button);
 			if (m_loading_state != NULL && m_loading_state->isLoading()) { return; }
 
 			GamepadListener* l = dynamic_cast<GamepadListener*>(m_current_state);
 			if (l != NULL) { l->buttonReleased(gamepad, button); }
 		}
-		void StateBasedGame::axisMoved(Gamepad* gamepad, unsigned int axis, float value) {
+		void StateBasedGame::axisMoved(ARK::Controls::Gamepad* gamepad, unsigned int axis, float value) {
 			Game::axisMoved(gamepad, axis, value);
 			if (m_loading_state != NULL && m_loading_state->isLoading()) { return; }
 

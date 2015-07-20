@@ -55,6 +55,8 @@
 	#include "Platform/GameContainerMac.h"
 #elif defined(ARK2D_WINDOWS_PHONE_8)
 	#include "Platform/GameContainerWindowsPhone8.h"
+#elif defined(ARK2D_XBOXONE)
+	#include "Platform/GameContainerXboxOne.h"
 #endif
 
 using namespace std;
@@ -139,7 +141,7 @@ namespace ARK {
 				float getTranslateY() const;
 				void setTranslateX(float f) { m_translateX = f; }
 				void setTranslateY(float f) { m_translateY = f; }
-				vector<Gamepad*>* getGamepads();
+				vector<ARK::Controls::Gamepad*>* getGamepads();
 
 				// always ends in the trailing slash.
 				string getResourcePath() const;
@@ -218,7 +220,7 @@ namespace ARK {
 				Game& m_game;
 				Input m_input;
 				Renderer m_graphics;
-				vector<Gamepad*> m_gamepads;
+				vector<ARK::Controls::Gamepad*> m_gamepads;
 
 				string m_strTitle;
 

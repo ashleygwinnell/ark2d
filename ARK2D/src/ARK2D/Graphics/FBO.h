@@ -2,6 +2,7 @@
 #define ARK_GRAPHICS_FBO_H_
 
 #include "../Includes.h"
+#include "../Graphics/Color.h"
 
 
 namespace ARK { 
@@ -30,6 +31,9 @@ namespace ARK {
 
 				bool m_dummy; 
 				bool m_clearScreenOnBind;
+
+			public:
+				Color clearColor;
 
 			public:
 				FBO();	

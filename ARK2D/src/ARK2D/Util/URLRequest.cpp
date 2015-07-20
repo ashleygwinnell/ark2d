@@ -10,7 +10,7 @@
 namespace ARK {  
 	namespace Util {
 
-		#if !defined(ARK2D_ANDROID) && !defined(ARK2D_IPHONE) && !defined(ARK2D_WINDOWS_PHONE_8)
+		#if !defined(ARK2D_ANDROID) && !defined(ARK2D_IPHONE) && !defined(ARK2D_WINDOWS_PHONE_8) && !defined(ARK2D_XBOXONE)
 			CURL* URLRequest::s_curl = NULL;
 		#endif
 		bool URLRequest::s_curlInitted = false;
@@ -34,7 +34,7 @@ namespace ARK {
 			m_threaded = s_isThreadedOverride;
 
 			if (s_curlInitted == false) {
-				#if !defined(ARK2D_ANDROID) && !defined(ARK2D_IPHONE) && !defined(ARK2D_FLASCC) && !defined(ARK2D_WINDOWS_PHONE_8)
+				#if !defined(ARK2D_ANDROID) && !defined(ARK2D_IPHONE) && !defined(ARK2D_FLASCC) && !defined(ARK2D_WINDOWS_PHONE_8) && !defined(ARK2D_XBOXONE)
 					ARK2D::getLog()->i("init curl");
 					s_curl = curl_easy_init();
 					if (!s_curl) {
@@ -479,7 +479,7 @@ namespace ARK {
 				free(wordptrs);
 				return m_response;*/
 
-			#elif defined(ARK2D_WINDOWS_PHONE_8)
+			#elif defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE)
 				m_error = "Synchronous API not possible. Do threaded request!";
 				return "Not Implemented!"; 
 
@@ -580,28 +580,39 @@ namespace ARK {
 		}
 
 		size_t URLRequest::writeFunction(void *ptr, size_t size, size_t nmemb) {
-			#ifdef ARK2D_WINDOWS_VS
-				char* buf = (char*) alloca(size*nmemb+1);
-				
+			
+			#if defined( ARK2D_WINDOWS_PHONE_8 ) || defined(ARK2D_WINDOWS)
+				//string newbuff = string(buf);
+				m_response.append((char*) ptr, size * nmemb);
+				//free(buf);
+			#else
+
+			unsigned int bufsize = size*nmemb + 1;
+			#if defined( ARK2D_WINDOWS_PHONE_8 ) || defined(ARK2D_WINDOWS)
+				char* buf = (char*)alloca(bufsize);
 			#else 
-				char buf[size*nmemb+1];
-				
+				char buf[size*nmemb + 1];
 			#endif 
-			
-			
+
+
+
 			char* pbuf = &buf[0];
-			memset(buf, '\0', size*nmemb+1);
+			memset(buf, '\0', bufsize);
 			size_t i = 0;
-			for(;  i < nmemb ; i++) {
-				#if defined( ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_WINDOWS)
-					strncpy_s(pbuf, size*nmemb+1, (char*) ptr, size);
-				#else
-					strncpy(pbuf, (char*) ptr, size);
-				#endif
+			for (; i < nmemb; i++) {
+			#if defined( ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_WINDOWS)
+				strncpy_s(pbuf, bufsize, (char*)ptr, size);
+			#else
+				strncpy(pbuf, (char*)ptr, size);
+			#endif
 				pbuf += size;
-				ptr = ((char*) ptr) + size;
+				ptr = ((char*)ptr) + size;
 			}
-			m_response += string(buf);
+
+
+				m_response += string(buf);
+			#endif
+
 			return size * nmemb;
 		}
 

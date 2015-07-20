@@ -216,7 +216,7 @@ namespace ARK {
 		void GameContainer::deinitGamepads() {
 
 		}
-		vector<Gamepad*>* GameContainer::getGamepads() {
+		vector<ARK::Controls::Gamepad*>* GameContainer::getGamepads() {
 			return &m_gamepads; 
 		}
 

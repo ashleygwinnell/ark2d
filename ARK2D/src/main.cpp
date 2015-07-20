@@ -9,7 +9,11 @@
  #include <AS3/AS3.h>
 #endif
 
-#if defined(ARK2D_WINDOWS_PHONE_8)
+#if defined(ARK2D_XBOXONE)
+//#include <pch.h>
+#endif
+
+#if defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE)
 	int main(Platform::Array<Platform::String^>^ args) {
 		return 0;
 	}

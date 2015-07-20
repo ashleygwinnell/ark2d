@@ -30,7 +30,7 @@
  	//using namespace AS3::ui;
 #endif
 
-#if defined(ARK2D_WINDOWS_PHONE_8)
+#if defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE)
 
 class Xaudio2VoiceCallback : public IXAudio2VoiceCallback
 {
@@ -121,10 +121,10 @@ namespace ARK {
 				int m_preloadedDataLength;
 
 				// Buffers hold sound data.
-				ALuint Buffer;
+				unsigned int Buffer;
 
 				// Sources are points emitting sound.
-				ALuint Source;
+				unsigned int Source;
 
 				// FLASCC
 				#if defined(ARK2D_FLASCC)
@@ -141,25 +141,25 @@ namespace ARK {
 				#endif
 
 				// Position of the source sound.
-				ALfloat SourcePos[3]; // = { 0.0, 0.0, 0.0 };
+				float SourcePos[3]; // = { 0.0, 0.0, 0.0 };
 
 				// Velocity of the source sound.
-				ALfloat SourceVel[3]; // = { 0.0, 0.0, 0.0 };
+				float SourceVel[3]; // = { 0.0, 0.0, 0.0 };
 
 				// Position of the Listener.
 			private:
-				static ALfloat ListenerPos[3]; // = { 0.0, 0.0, 0.0 };
+				static float ListenerPos[3]; // = { 0.0, 0.0, 0.0 };
 
 				// Velocity of the Listener.
-				static ALfloat ListenerVel[3]; // = { 0.0, 0.0, 0.0 };
+				static float ListenerVel[3]; // = { 0.0, 0.0, 0.0 };
 
 				// Orientation of the Listener. (first 3 elements are "at", second 3 are "up"):; Also note that these should be units of '1'.
-				static ALfloat ListenerOri[6]; // = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
+				static float ListenerOri[6]; // = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
 			
 			protected:
 				// Volume, no need to store internally to be honest, but keep it simples, yarp!
-				ALfloat m_volume;
-				ALfloat m_pitch;
+				float m_volume;
+				float m_pitch;
 
 
 
@@ -176,19 +176,19 @@ namespace ARK {
 
 			protected:
 				void miscerror(string ss);
-				string getALErrorString(ALenum err);
+				string getALErrorString(unsigned int err);
 				string getOggErrorString(int code);
 
 				void deinit();
 
-				static string getALErrorStringStatic(ALenum err);
+				static string getALErrorStringStatic(unsigned int err);
 				
 				static unsigned short wav_readByte16(const unsigned char buffer[2]);
 				static unsigned int wav_readByte32(const unsigned char buffer[4]);
 
 			public:
 				// WP8
-				#if defined(ARK2D_WINDOWS_PHONE_8)
+				#if defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE)
 					static IXAudio2* s_engine;
 					static IXAudio2MasteringVoice* s_master;
 					static void initialiseXAudio();

@@ -137,6 +137,8 @@
 #include "ARK2D/Util/Strings.h"
 #include "ARK2D/Util/URLRequest.h"
 #include "ARK2D/Util/Vibrator.h"
+#include "ARK2D/Util/Wobble.h"
+
 
 // JSON Implementation
 #include "ARK2D/Includes.h"

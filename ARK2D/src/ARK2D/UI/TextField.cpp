@@ -19,12 +19,17 @@ namespace ARK {
 			m_textAlignY(0),
 			m_multiline(false),
 			m_wrap(false),
+			m_password(false),
 			m_maxLength(0),
 			m_textColor(Color::white),
 			m_caretColor(Color::white_50a),
 			m_restrictCharacters(RESTRICT_NONE)
 			{
 
+		}
+
+		void TextField::setPasswordField(bool b) {
+			m_password = b;
 		}
 
 		void TextField::setText(string s) {
@@ -162,8 +167,17 @@ namespace ARK {
 
 
 			if (m_multiline == false || (m_multiline == true && !m_text.contains("\n"))) {
+				
+				string t = m_text.get();
+				if (m_password) {
+					string newt = "";
+					for(unsigned int i = 0; i < t.length(); i++) {
+						newt += "*";
+					}
+					t = newt;
+				}
 				g->setDrawColor(m_textColor);
-				g->drawString(m_text.get(), x, y);
+				g->drawString(t, x, y);
 			} else {
 
 
@@ -206,6 +220,9 @@ namespace ARK {
 			}
 			return false;
 		}
+		void TextField::keyReleased(unsigned int key) {
+			
+		}
 		void TextField::keyPressed(unsigned int key) {
 			Input* i = ARK2D::getInput();
 
@@ -225,6 +242,7 @@ namespace ARK {
 				} else {
 					setFocussed(false);
 				}
+				return;
 			}
 
 

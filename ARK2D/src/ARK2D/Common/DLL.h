@@ -21,8 +21,8 @@
 		#else
 			#define ARK2D_API __declspec( dllimport )
 		#endif 
-	#elif defined(_WIN32) && (defined(_MSC_FULL_VER) || defined(_MSC_VER))
-		#ifdef ARK2D_WINDOWS_DLL 
+	#elif (defined(_WIN32) && (defined(_MSC_FULL_VER) || defined(_MSC_VER))) || defined(ARK2D_XBOXONE)
+		#if defined(ARK2D_WINDOWS_DLL) || defined(ARK2D_XBOXONE_DLL)
 			#define ARK2D_API __declspec( dllexport )		
 		#else
 			#define ARK2D_API __declspec( dllimport )

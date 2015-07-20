@@ -50,11 +50,11 @@ namespace ARK {
 				virtual void mouseMoved(int x, int y, int oldx, int oldy);
 
 				// Gamepad Listener
-				virtual void gamepadConnected(Gamepad* gamepad);
-				virtual void gamepadDisconnected(Gamepad* gamepad);
-				virtual void buttonPressed(Gamepad* gamepad, unsigned int button);
-				virtual void buttonReleased(Gamepad* gamepad, unsigned int button);
-				virtual void axisMoved(Gamepad* gamepad, unsigned int axis, float value);
+				virtual void gamepadConnected(ARK::Controls::Gamepad* gamepad);
+				virtual void gamepadDisconnected(ARK::Controls::Gamepad* gamepad);
+				virtual void buttonPressed(ARK::Controls::Gamepad* gamepad, unsigned int button);
+				virtual void buttonReleased(ARK::Controls::Gamepad* gamepad, unsigned int button);
+				virtual void axisMoved(ARK::Controls::Gamepad* gamepad, unsigned int axis, float value);
 
 				// Orientation Listener
 				virtual void orientationChanged(int orientation);

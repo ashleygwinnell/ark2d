@@ -19,7 +19,9 @@ namespace ARK {
 
 			class ARK2D_API GJTextField : public ARK::UI::TextField {
 				public:
+					float caretTimer;
 					GJTextField();
+					void update();
 					virtual void renderBackground(); 
 					virtual void renderText(int x, int y);
 					virtual void renderOverlay();
@@ -77,7 +79,9 @@ namespace ARK {
 
 			class ARK2D_API GJLoginState : public GameState {
 				public:
+					float m_iconX;
 					float m_iconY;
+					float m_iconScale;
 					GJTextField* username;
 					GJTextField* usertoken;
 					GJButton* close;
@@ -279,6 +283,9 @@ namespace ARK {
 					ARK::Font::BMFont* font;
 					KeyPairFile* file;
 
+					float m_sessionPingTimer;
+					float m_sessionPingDuration;
+
 					float m_openTimer;
 					float m_openDuration;
 					unsigned int m_openState;
@@ -313,6 +320,8 @@ namespace ARK {
 
 					void renderBackground();
 					void renderForeground();
+
+					bool isLoggedIn();
 
 					virtual void keyPressed(unsigned int key);
 					virtual void keyReleased(unsigned int key);

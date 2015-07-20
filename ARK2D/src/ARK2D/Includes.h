@@ -173,6 +173,81 @@
         //typedef unsigned int ALenum;
         //typedef float ALfloat;
 
+    #elif defined(_XBOX_ONE)
+
+ 		#define STL_AVAILABLE
+		#define EXCEPTIONS_AVAILABLE
+		#define JSON_SAFE
+
+		#define ARK2D_MISSING_C99_FUNCTIONS
+		#define ARK2D_MISSING_C99_FUNCTIONDEFINITIONS
+
+ 		#include "Common/DLL.h"
+		#include <xdk.h>
+		#include <winsock2.h>
+
+ 		
+		#include <windows.h>
+		#include <wrl.h>
+
+		#include <vector>
+		#include <list>
+		#include <map>
+		#include <set>
+
+		#include <stdlib.h>
+		#include <string>
+		#include <time.h>
+
+
+		#include <cstdlib> 
+		#include <fstream> 
+		 
+		#include <math.h>
+		#include <cmath>
+		#include <iostream>
+
+		#include "Common/OpenGL.h"
+		#include "Common/Audio.h"
+
+		#ifdef min 
+			#undef min
+		#endif 
+		 
+		#ifdef max
+			#undef max
+		#endif
+
+		#ifndef Assert
+			#if defined( ARK2D_DEBUG )
+				#define Assert(b) do {if (!(b)) {OutputDebugStringA("Assert: " #b "\n");}} while(0)
+			#else
+				#define Assert(b)
+			#endif //DEBUG || _DEBUG
+		#endif 
+
+		#ifndef ARK2D_WINDOWS_DLL // abc.dll source code will define this macro before including this header
+			#define ANGELSCRIPT_DLL_LIBRARY_IMPORT
+		#endif 
+
+ 		#include "vendor/angelscript/angelscript.h"
+ 		#include "vendor/angelscript/add_on/scriptstdstring/scriptstdstring.h"
+ 		#include "vendor/angelscript/add_on/scriptarray/scriptarray.h"
+ 		#include "vendor/angelscript/add_on/scriptbuilder/scriptbuilder.h"
+
+ 		typedef unsigned char GLubyte;
+		typedef unsigned int GLsizei;
+		typedef int socklen_t;
+
+		#include <memory>
+		#include <ppl.h>
+		#include <ppltasks.h>
+
+		#ifdef __cplusplus_winrt
+			#include <agile.h>
+			#include <collection.h> 
+		#endif
+
  	#elif defined(ARK2D_WINDOWS_PHONE_8)
 
  		#define STL_AVAILABLE
@@ -197,7 +272,6 @@
 
 
 		#include <cstdlib> 
-		//#include <cstring>
 		#include <fstream> 
 		 
 		#include <math.h>

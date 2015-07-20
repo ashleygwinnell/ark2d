@@ -12,7 +12,7 @@
 #include "../Includes.h"
 #include "../Util/Log.h"
 
-#ifdef _WIN32
+#ifdef ARK2D_WINDOWS
 	#include <windows.h>
 	#include <mmsystem.h>
 	#include <winbase.h> 

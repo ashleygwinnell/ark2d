@@ -87,7 +87,7 @@ namespace ARK {
 			private:
 				static bool s_curlInitted;
 				static bool s_isThreadedOverride;
-				#if !defined(ARK2D_ANDROID) && !defined(ARK2D_IPHONE)  && !defined(ARK2D_WINDOWS_PHONE_8)
+				#if !defined(ARK2D_ANDROID) && !defined(ARK2D_IPHONE)  && !defined(ARK2D_WINDOWS_PHONE_8) && !defined(ARK2D_XBOXONE)
 					static CURL* s_curl;
 				#endif
 				static size_t s_curlWriteDataFunction(void *ptr, size_t size, size_t nmemb, void* cls);

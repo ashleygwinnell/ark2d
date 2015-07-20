@@ -25,7 +25,7 @@
 		//#pragma comment( lib, "wsock32.lib" )
 		#pragma comment(lib, "ws2_32.lib")
 
-		#ifdef ARK2D_WINDOWS_DLL
+		#if defined(ARK2D_WINDOWS_DLL) || defined(ARK2D_XBOXONE_DLL)
 			#define ARK2D_API __declspec( dllexport )
 		#else
 			#define ARK2D_API __declspec( dllimport )

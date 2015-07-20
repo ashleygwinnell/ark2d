@@ -349,7 +349,7 @@ namespace ARK {
 				return ARK2D::getContainer()->m_platformSpecific.m_pluggable->m_keyChar;
 
 
-			#elif defined( __WIN32 )
+			#elif defined( ARK2D_WINDOWS )
 
 				if (key == (unsigned int) MOUSE_BUTTON_LEFT // left mouse
 					|| key == (unsigned int) MOUSE_BUTTON_RIGHT // right mouse
@@ -357,6 +357,8 @@ namespace ARK {
 					|| key == (unsigned int) KEY_BACKSPACE // backspace
 					|| key == (unsigned int) KEY_DELETE // backspace
 					|| key == (unsigned int) KEY_SHIFT // shift
+					|| key == (unsigned int) KEY_LSHIFT // shift
+					|| key == (unsigned int) KEY_RSHIFT // shift
 					|| key == (unsigned int) KEY_CONTROL // ctrl
 					|| key == (unsigned int) KEY_CAPSLOCK // caps
 					|| key == (unsigned int) KEY_LWIN // lwin
@@ -377,11 +379,21 @@ namespace ARK {
 					return string("");
 				}
 
-				unsigned char* out = new unsigned char[2];
+				unsigned char* out = new unsigned char[3];
 				out[1] = '\0';
+				
 				GetKeyboardState((BYTE*) s_keyboardState);
-				ToAscii(key, MapVirtualKey(key, MAPVK_VK_TO_VSC), (BYTE*) s_keyboardState, (WORD*) out, 0);
+				int didConvert = ToAscii(key, MapVirtualKey(key, MAPVK_VK_TO_VSC), (BYTE*) s_keyboardState, (WORD*) out, 0);
+				
 
+				if (didConvert == 0) {
+					ARK2D::getLog()->e("could not convert key code. returning from map. ");
+					map<int, string>::iterator it = keyChars.find(key);
+					if (it != keyChars.end()) {
+						return keyChars[key];
+					}
+					return "";
+				}
 
 				//std::cout << out << " - " << (unsigned int)(out[0]) << " - " << key << std::endl;
 				string returnString = "";
@@ -399,7 +411,12 @@ namespace ARK {
 					returnString.append((char*)out);
 				}
 
+				//ARK2D::getLog()->e(StringUtil::append("char length: ", returnString.length()));
+
 				delete out;
+
+				
+
 				return returnString;
 
 			#elif defined(ARK2D_MACINTOSH)

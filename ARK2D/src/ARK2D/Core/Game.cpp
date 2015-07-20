@@ -333,11 +333,11 @@ namespace ARK {
 		}
 
 		// gamepad listener 
-		void Game::gamepadConnected(Gamepad* gamepad) { }
-		void Game::gamepadDisconnected(Gamepad* gamepad) { }
-		void Game::buttonPressed(Gamepad* gamepad, unsigned int button) { }
-		void Game::buttonReleased(Gamepad* gamepad, unsigned int button) { }
-		void Game::axisMoved(Gamepad* gamepad, unsigned int axis, float value) { }
+		void Game::gamepadConnected(ARK::Controls::Gamepad* gamepad) { }
+		void Game::gamepadDisconnected(ARK::Controls::Gamepad* gamepad) { }
+		void Game::buttonPressed(ARK::Controls::Gamepad* gamepad, unsigned int button) { }
+		void Game::buttonReleased(ARK::Controls::Gamepad* gamepad, unsigned int button) { }
+		void Game::axisMoved(ARK::Controls::Gamepad* gamepad, unsigned int axis, float value) { }
 
 		void Game::orientationChanged(int orientation) {
 

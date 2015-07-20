@@ -8,7 +8,7 @@
 #include "FTFont.h"
 #include "../Graphics/Renderer.h"
 
-#if !defined(ARK2D_WINDOWS_PHONE_8) && !defined(ARK2D_WINDOWS) && !defined(ARK2D_UBUNTU_LINUX) && !defined(ARK2D_EMSCRIPTEN_JS) && !defined(ARK2D_ANDROID)
+#if !defined(ARK2D_WINDOWS_PHONE_8) && !defined(ARK2D_WINDOWS) && !defined(ARK2D_UBUNTU_LINUX) && !defined(ARK2D_EMSCRIPTEN_JS) && !defined(ARK2D_ANDROID) && !defined(ARK2D_XBOXONE)
 
 	namespace ARK {
 		namespace Font {

@@ -44,6 +44,7 @@ namespace ARK {
 
 				bool m_multiline;
 				bool m_wrap;
+				bool m_password;
 
 				unsigned int m_maxLength;
 				Color m_textColor;
@@ -74,6 +75,8 @@ namespace ARK {
 				void setText(float f);
 				const String& getText();
 
+				void setPasswordField(bool b);
+
 				void setMultiline(bool b);
 				void setTextAlignY(signed int align);
 
@@ -89,6 +92,7 @@ namespace ARK {
 
 				bool hasSelection();
 				void keyPressed(unsigned int key);
+				void keyReleased(unsigned int key);
 
 				void clearSelection();
 				void cursorLeft();

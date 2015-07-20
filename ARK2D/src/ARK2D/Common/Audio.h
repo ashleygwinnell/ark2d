@@ -18,9 +18,14 @@
 		#include <OpenAL/al.h>
 		#include <OpenAL/alc.h>
 	#elif defined(ARK2D_WINDOWS_PHONE_8)
+ 		#define ARK2D_XAUDIO2
  		// Had to add !defined(_M_ARM) to vorbis/os.h
 		#include <mfmediaengine.h>
 		#include <xaudio2.h>
+	#elif defined(ARK2D_XBOXONE)
+		#define ARK2D_XAUDIO2
+		#include <xaudio2.h>
+		#include <xma2defs.h>
 	#elif defined(_WIN32) || defined(ARK2D_WINDOWS)
 		#include <AL/AL.h>
 		#include <AL/ALc.h>

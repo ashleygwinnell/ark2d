@@ -53,6 +53,15 @@
 
 		#include <d3d11.h>
 		#include <DirectXMath.h> 
+	#elif defined(ARK2D_XBOXONE)
+		#define ARK2D_RENDERER_DIRECTX
+
+		#define FBO_SUPPORT true
+		#define SHADER_SUPPORT true
+		#define NO_FIXED_FUNCTION_PIPELINE true
+
+		#include <d3d11_x.h>
+		#include <DirectXMath.h> 
 	#elif defined(_WIN32) || defined(ARK2D_WINDOWS)
 		#define ARK2D_OPENGL_3_2
 		#define ARK2D_RENDERER_OPENGL

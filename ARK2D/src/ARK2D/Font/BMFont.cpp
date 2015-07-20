@@ -343,9 +343,9 @@ namespace ARK {
 					float* rawTextureCoords = (float*)alloca(numVerts * sizeof(float));
 					unsigned char* rawColors = (unsigned char*)alloca(numCVerts * sizeof(unsigned char));
 
-					Assert(rawVertices);
-					Assert(rawTextureCoords);
-					Assert(rawColors);
+					//Assert(rawVertices);
+					//Assert(rawTextureCoords);
+					//Assert(rawColors);
 				#else
 					float rawVertices[numVerts];
 					float rawTextureCoords[numVerts];

@@ -44,7 +44,9 @@ namespace ARK {
 			const int Renderer::ALIGN_CENTER;
 		#endif
 
-		#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH) || (defined(ARK2D_WINDOWS) && defined(ARK2D_RENDERER_OPENGL)) || defined(ARK2D_UBUNTU_LINUX) || defined(ARK2D_EMSCRIPTEN_JS) )
+		#ifdef ARK2D_RENDERER_DIRECTX
+
+		#elif (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH) || (defined(ARK2D_WINDOWS) && defined(ARK2D_RENDERER_OPENGL)) || defined(ARK2D_UBUNTU_LINUX) || defined(ARK2D_EMSCRIPTEN_JS) )
 			
 			bool Renderer::gluCheckExtensionARK(const GLubyte* extName, const GLubyte* extString) { 
 				GLboolean flag=GL_FALSE;
@@ -2500,10 +2502,10 @@ namespace ARK {
 			#endif
 		}
 
-		void Renderer::drawLine(float x1, float y1, float x2, float y2) const {
-			drawLine((int)x1,(int)y1,(int)x2,(int)y2);
-		}
 		void Renderer::drawLine(int x1, int y1, int x2, int y2) const {
+			drawLine((float)x1,(float)y1,(float)x2,(float)y2);
+		}
+		void Renderer::drawLine(float x1, float y1, float x2, float y2) const {
 			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE) || defined(ARK2D_FLASCC) || defined(NO_FIXED_FUNCTION_PIPELINE) || defined(ARK2D_WINDOWS))
 				float angle = MathUtil::anglef(x1, y1, x2, y2, true);
 

@@ -12,7 +12,7 @@
 #include "../Includes.h"
 #include "../Util/Containers/Vector.h"
 
-#if (defined (ARK2D_WINDOWS) || defined(ARK2D_WINDOWS_PHONE_8))
+#if (defined (ARK2D_WINDOWS) || defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE))
 	#include <windows.h>
 #else
 	#include <pthread.h>
@@ -65,7 +65,7 @@ namespace ARK {
 					HDC m_deviceContext;
 					HGLRC m_renderingContext;
 			
-			#elif defined(ARK2D_WINDOWS_PHONE_8)
+			#elif defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE)
 
 				void* m_functionPointer;
 				void* m_classPointer;

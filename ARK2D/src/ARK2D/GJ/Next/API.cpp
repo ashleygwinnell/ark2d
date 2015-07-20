@@ -522,41 +522,85 @@ namespace ARK {
 					return;
 				}
 				
-				if (result.substr(0, 1) != "{") 
+				if (gamejolt->m_format == GJ_FORMAT_JSON) 
 				{
-					gjUsersAuthResult* res = gjUsersAuthResult_create();
-					res->success = false;
-					strncpy(res->message, "API did not return JSON.", 255);
+					if (result.substr(0, 1) != "{") 
+					{
+						gjUsersAuthResult* res = gjUsersAuthResult_create();
+						res->success = false;
+						strncpy(res->message, "API did not return JSON.", 255);
 
-					gjUsersAuthRequestAttachment_dispose((gjUsersAuthRequestAttachment*) req->attachment);
-					gamejolt->removeRequest(req);
+						gjUsersAuthRequestAttachment_dispose((gjUsersAuthRequestAttachment*) req->attachment);
+						gamejolt->removeRequest(req);
 
-					gamejolt->m_callbackAddMutex->lock();
-					gjCallback* cb = gjCallback_create(GJ_USERS_AUTH_RESULT, res);
-					gamejolt->m_callbacks.push_back(cb);
-					gamejolt->m_callbackAddMutex->unlock();
-					return;	
-				}
+						gamejolt->m_callbackAddMutex->lock();
+						gjCallback* cb = gjCallback_create(GJ_USERS_AUTH_RESULT, res);
+						gamejolt->m_callbacks.push_back(cb);
+						gamejolt->m_callbackAddMutex->unlock();
+						return;	
+					}
 
-				JSONNode* root = libJSON::Parse(result);
-				JSONNode* response = root->GetNode("response");
-				if (response->GetNode("success")->NodeAsString() == "false") 
+					JSONNode* root = libJSON::Parse(result);
+					JSONNode* response = root->GetNode("response");
+					if (response->GetNode("success")->NodeAsString() == "false") 
+					{
+						gjUsersAuthResult* res = gjUsersAuthResult_create();
+						res->success = false;
+						strncpy(res->message, response->GetNode("message")->NodeAsString().c_str(), 255);
+
+						gjUsersAuthRequestAttachment_dispose((gjUsersAuthRequestAttachment*) req->attachment);
+						gamejolt->removeRequest(req);
+
+						gamejolt->m_callbackAddMutex->lock();
+						gjCallback* cb = gjCallback_create(GJ_USERS_AUTH_RESULT, res);
+						gamejolt->m_callbacks.push_back(cb);
+						gamejolt->m_callbackAddMutex->unlock();
+
+						return;
+					}
+				} 
+				else if (gamejolt->m_format == GJ_FORMAT_XML) 
 				{
-					gjUsersAuthResult* res = gjUsersAuthResult_create();
-					res->success = false;
-					strncpy(res->message, response->GetNode("message")->NodeAsString().c_str(), 255);
+					if (result.substr(0, 1) != "<") 
+					{
+						gjUsersAuthResult* res = gjUsersAuthResult_create();
+						res->success = false;
+						strncpy(res->message, "API did not return XML.", 255);
 
-					gjUsersAuthRequestAttachment_dispose((gjUsersAuthRequestAttachment*) req->attachment);
-					gamejolt->removeRequest(req);
+						gjUsersAuthRequestAttachment_dispose((gjUsersAuthRequestAttachment*) req->attachment);
+						gamejolt->removeRequest(req);
 
-					gamejolt->m_callbackAddMutex->lock();
-					gjCallback* cb = gjCallback_create(GJ_USERS_AUTH_RESULT, res);
-					gamejolt->m_callbacks.push_back(cb);
-					gamejolt->m_callbackAddMutex->unlock();
+						gamejolt->m_callbackAddMutex->lock();
+						gjCallback* cb = gjCallback_create(GJ_USERS_AUTH_RESULT, res);
+						gamejolt->m_callbacks.push_back(cb);
+						gamejolt->m_callbackAddMutex->unlock();
+						return;	
+					}
+ 
+					vector<char> xml_copy = vector<char>(result.begin(), result.end());
+					xml_copy.push_back('\0');
+					
+					xml_document<> xmldocument;
+					xmldocument.parse<0>((char*) &xml_copy[0]);
 
-					return;
-				}
+					xml_node<>* root = xmldocument.first_node("response");
+					string successStr = rapidxml_myutil<string,char>::rapidXmlUtil_value(root->first_node("success"));
 
+					bool success = Cast::boolFromString( successStr );
+					if (!success) {
+						gjUsersAuthResult* res = gjUsersAuthResult_create();
+						res->success = false; 
+                        strncpy(res->message, rapidxml_myutil<string,char>::rapidXmlUtil_value(root->first_node("message")).c_str(), 255);
+						
+						gamejolt->m_callbackAddMutex->lock();
+						gjCallback* cb = gjCallback_create(GJ_USERS_AUTH_RESULT, res);
+						gamejolt->m_callbacks.push_back(cb);
+						gamejolt->m_callbackAddMutex->unlock();
+
+						return;
+					}
+
+				} 
 				// We are go! 
 				gjUsersAuthRequestAttachment* attachment = (gjUsersAuthRequestAttachment*) req->attachment;
 				gjUsersAuthResult* res = gjUsersAuthResult_create();
@@ -643,7 +687,7 @@ namespace ARK {
 					{
 						gjHighscoreSubmitResult* res = gjHighscoreSubmitResult_create();
 						res->success = false;
-						strncpy(res->message, "API did not return JSON.", 255);
+						strncpy(res->message, StringUtil::append("API did not return JSON.", result.substr(0, 200)).c_str(), 255);
 
 						gamejolt->m_callbackAddMutex->lock();
 						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_SUBMIT_RESULT, res);
@@ -1071,48 +1115,120 @@ namespace ARK {
 				
 				api->removeRequest(req);
 				
-				if (result.substr(0, 1) != "{") 
+				gjHighscoreTablesResult* res = NULL;
+				if (api->m_format == GJ_FORMAT_JSON) 
 				{
-					gjHighscoreTablesResult* res = gjHighscoreTablesResult_create(0);
-					res->success = false;
-					strncpy(res->message, "API did not return JSON.", 255);
+					if (result.substr(0, 1) != "{") 
+					{
+						gjHighscoreTablesResult* res = gjHighscoreTablesResult_create(0);
+						res->success = false;
+						strncpy(res->message, "API did not return JSON.", 255);
 
-					api->m_callbackAddMutex->lock();
-					gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_TABLES_RESULT, res);
-					api->m_callbacks.push_back(cb);
-					api->m_callbackAddMutex->unlock();
-					return;	
-				}
+						api->m_callbackAddMutex->lock();
+						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_TABLES_RESULT, res);
+						api->m_callbacks.push_back(cb);
+						api->m_callbackAddMutex->unlock();
+						return;	
+					}
 
-				JSONNode* root = libJSON::Parse(result);
-				JSONNode* response = root->GetNode("response");
-				if (response->GetNode("success")->NodeAsString() == "false") 
+					JSONNode* root = libJSON::Parse(result);
+					JSONNode* response = root->GetNode("response");
+					if (response->GetNode("success")->NodeAsString() == "false") 
+					{
+						gjHighscoreTablesResult* res = gjHighscoreTablesResult_create(0);
+						res->success = false;
+						strncpy(res->message, response->GetNode("message")->NodeAsString().c_str(), 255);
+
+						api->m_callbackAddMutex->lock();
+						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_TABLES_RESULT, res);
+						api->m_callbacks.push_back(cb);
+						api->m_callbackAddMutex->unlock();
+
+						return;
+					}
+
+					// We are go! 
+					JSONNode* tables = response->GetNode("tables");
+					res = gjHighscoreTablesResult_create(tables->NodeSize());
+					res->success = true;
+
+					for(unsigned int i = 0; i < tables->NodeSize(); i++) {
+						JSONNode* table = tables->Children[i];
+						
+						res->tables[i] = gjHighscoreTable_create();
+						res->tables[i]->id = Cast::fromString<unsigned int>(table->GetNode("id")->NodeAsString());
+						strncpy(res->tables[i]->name, table->GetNode("name")->NodeAsString().c_str(), 255);
+						strncpy(res->tables[i]->description, table->GetNode("description")->NodeAsString().c_str(), 1024);
+						res->tables[i]->primary = Cast::boolFromString(table->GetNode("primary")->NodeAsString());
+					}
+				} 
+				else if (api->m_format == GJ_FORMAT_XML)
 				{
-					gjHighscoreTablesResult* res = gjHighscoreTablesResult_create(0);
-					res->success = false;
-					strncpy(res->message, response->GetNode("message")->NodeAsString().c_str(), 255);
+					if (result.substr(0, 1) != "<") 
+					{
+						res = gjHighscoreTablesResult_create(0);
+						res->success = false;
+						strncpy(res->message, "API did not return XML.", 255);
 
-					api->m_callbackAddMutex->lock();
-					gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_TABLES_RESULT, res);
-					api->m_callbacks.push_back(cb);
-					api->m_callbackAddMutex->unlock();
+						api->m_callbackAddMutex->lock();
+						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_TABLES_RESULT, res);
+						api->m_callbacks.push_back(cb);
+						api->m_callbackAddMutex->unlock();
+						return;	
+					}
 
-					return;
-				}
-
-				// We are go! 
-				JSONNode* tables = response->GetNode("tables");
-				gjHighscoreTablesResult* res = gjHighscoreTablesResult_create(tables->NodeSize());
-				res->success = true;
-
-				for(unsigned int i = 0; i < tables->NodeSize(); i++) {
-					JSONNode* table = tables->Children[i];
+					vector<char> xml_copy = vector<char>(result.begin(), result.end());
+					xml_copy.push_back('\0');
 					
-					res->tables[i] = gjHighscoreTable_create();
-					res->tables[i]->id = Cast::fromString<unsigned int>(table->GetNode("id")->NodeAsString());
-					strncpy(res->tables[i]->name, table->GetNode("name")->NodeAsString().c_str(), 255);
-					strncpy(res->tables[i]->description, table->GetNode("description")->NodeAsString().c_str(), 1024);
-					res->tables[i]->primary = Cast::boolFromString(table->GetNode("primary")->NodeAsString());
+					xml_document<> xmldocument;
+					xmldocument.parse<0>((char*) &xml_copy[0]);
+
+					xml_node<>* root = xmldocument.first_node("response");
+                    string successStr = rapidxml_myutil<string,char>::rapidXmlUtil_value(root->first_node("success"));
+
+					bool success = Cast::boolFromString( successStr );
+					if (!success) {
+						gjHighscoreTablesResult* res = gjHighscoreTablesResult_create(0);
+						res->success = false; 
+
+						if (root->first_node("message") == NULL) { 
+							strncpy(res->message, "Success was false but error message was empty.", 255);
+						} else {
+							strncpy(res->message, rapidxml_myutil<string,char>::rapidXmlUtil_value(root->first_node("message")).c_str(), 255);
+							//ARK2D::getLog()->i("done strncpy");
+						}
+
+						api->m_callbackAddMutex->lock();
+						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_TABLES_RESULT, res);
+						api->m_callbacks.push_back(cb);
+						api->m_callbackAddMutex->unlock();
+
+						return;
+					}
+
+					
+					// We are go!
+					unsigned int numTables = rapidxml_myutil<string,char>::rapidXmlUtil_countChildren(root->first_node("tables"), "table");
+					res = gjHighscoreTablesResult_create(numTables);
+					res->success = true;
+					
+					unsigned int i = 0;
+					xml_node<>* tables = root->first_node("tables");
+					xml_node<>* table = 0;
+					for (table = tables->first_node("table");
+						table != NULL;
+						table = table->next_sibling("table")) 
+					{
+						res->tables[i] = gjHighscoreTable_create();
+						res->tables[i]->id = Cast::fromString<unsigned int>( rapidxml_myutil<string,char>::rapidXmlUtil_value(table->first_node("id")) );
+						strncpy(res->tables[i]->name, rapidxml_myutil<string,char>::rapidXmlUtil_value(table->first_node("name")).c_str() , 255);
+						strncpy(res->tables[i]->description, rapidxml_myutil<string,char>::rapidXmlUtil_value(table->first_node("description")).c_str(), 1024);
+						res->tables[i]->primary = Cast::boolFromString( rapidxml_myutil<string,char>::rapidXmlUtil_value(table->first_node("primary")).c_str() );
+
+						i++;
+					}
+
+
 				}
 
 				// Add a callback to execute on the main thread. 

@@ -293,11 +293,11 @@ namespace ARK {
 				if (i->isKeyPressed(Input::KEY_D) && i->isKeyDown(Input::KEY_SPACE) && i->isKeyDown(Input::KEY_9)) {
 					m_visible = !m_visible;
 				} 
-			//#elif defined(ARK2D_WINDOWS)
-			//	Input* i = ARK2D::getInput();
-			//	if (i->isKeyPressed(Input::KEY_D) && i->isKeyDown(Input::KEY_A)) {
-			//		m_visible = !m_visible;
-			//	}
+			#elif defined(ARK2D_WINDOWS)
+				Input* i = ARK2D::getInput();
+				if (i->isKeyPressed(Input::KEY_D) && i->isKeyDown(Input::KEY_LSHIFT) && i->isKeyDown(Input::KEY_LCONTROL)) {
+					m_visible = !m_visible;
+				}
 			#else 
 				Input* i = ARK2D::getInput();
 				if (i->isKeyPressed(Input::KEY_D) && i->isKeyDown(Input::KEY_LSHIFT)) {

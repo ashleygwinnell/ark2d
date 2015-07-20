@@ -270,7 +270,7 @@ namespace ARK {
 			public:
 
 			// GL bits. :| 
-			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH) || defined(ARK2D_UBUNTU_LINUX) || defined(ARK2D_EMSCRIPTEN_JS) || (defined(ARK2D_WINDOWS) && defined(ARK2D_RENDERER_OPENGL)))
+			#if ( defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH) || defined(ARK2D_UBUNTU_LINUX) || defined(ARK2D_EMSCRIPTEN_JS) || (defined(ARK2D_WINDOWS) && defined(ARK2D_RENDERER_OPENGL)))
 
 				#define GL_FRAMEBUFFER_ARK GL_FRAMEBUFFER
 				#define GL_COLOR_ATTACHMENT0_ARK GL_COLOR_ATTACHMENT0

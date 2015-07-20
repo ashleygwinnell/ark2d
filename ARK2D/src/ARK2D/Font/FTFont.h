@@ -10,7 +10,7 @@
 
 #include "../ARK2D.h"
 
- #if !defined(ARK2D_WINDOWS_PHONE_8) && !defined(ARK2D_WINDOWS) && !defined(ARK2D_UBUNTU_LINUX) && !defined(ARK2D_EMSCRIPTEN_JS) && !defined(ARK2D_ANDROID)
+ #if !defined(ARK2D_WINDOWS_PHONE_8) && !defined(ARK2D_WINDOWS) && !defined(ARK2D_UBUNTU_LINUX) && !defined(ARK2D_EMSCRIPTEN_JS) && !defined(ARK2D_ANDROID) && !defined(ARK2D_XBOXONE)
 
 		// FreeType Headers
 		#if (defined(ARK2D_IPHONE) || defined(ARK2D_ANDROID) || defined(ARK2D_WINDOWS) || defined(ARK2D_MACINTOSH) || defined(ARK2D_FLASCC) || defined(ARK2D_WINDOWS_PHONE_8))

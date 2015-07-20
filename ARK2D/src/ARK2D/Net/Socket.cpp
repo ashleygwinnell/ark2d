@@ -164,18 +164,22 @@ namespace ARK {
 			assert( data );
 			assert( size > 0 );
 		
-			if ( socket == 0 ) { 
+			if ( m_socket == 0 ) {
 				return false;
 			}
 			
 			#if defined(ARK2D_WINDOWS)
-			typedef int socklen_t;
+                typedef int socklen_t;
 			#endif
 			
 			sockaddr_in from;
 			socklen_t fromLength = sizeof( from );
 
-			int received_bytes = recvfrom( m_socket, (char*)data, size, 0, (sockaddr*)&from, &fromLength );
+			#if defined(ARK2D_WINDOWS)
+				int received_bytes = recvfrom( m_socket, (char*)data, size, 0, (sockaddr*)&from, (int*) &fromLength );
+			#else
+				int received_bytes = recvfrom( m_socket, (char*)data, size, 0, (sockaddr*)&from, (unsigned int*) &fromLength );
+			#endif
 
 			if ( received_bytes <= 0 )
 				return 0;

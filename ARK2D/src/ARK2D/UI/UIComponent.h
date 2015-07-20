@@ -30,10 +30,25 @@ namespace ARK {
 				void setFocussed(bool b) { 
 					setFocussed(b, false);
 				}
-				void setFocussed(bool b, bool secondPass) {
-					if (s_currentFocus != NULL && secondPass == false) { s_currentFocus->setFocussed(false, true); }
+				void setFocussed(bool b, bool secondPass) { // not sure what this secondpass thing does any more! 
+					/*if (s_currentFocus != NULL && secondPass == false) { 
+						s_currentFocus->setFocussed(false, true); 
+					}
 					m_focussed = b; 
-					if (b) { s_currentFocus = this; } 
+
+					if (b) { 
+						s_currentFocus = this; 
+					}*/
+					if (s_currentFocus != NULL && b) {
+						s_currentFocus->setFocussed(false); 
+					}
+
+					if (b) {
+						s_currentFocus = this;
+					}
+					m_focussed = b; 
+					
+
 				}
 				bool isFocussed() { return m_focussed; }
 				virtual float getX() = 0;

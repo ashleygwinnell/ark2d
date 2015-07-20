@@ -107,9 +107,16 @@ namespace ARK {
 			}
 
 			GJTextField::GJTextField():
-				ARK::UI::TextField()
+				ARK::UI::TextField(),
+				caretTimer(0.0f)
 			{
 
+			}
+			void GJTextField::update() {
+				caretTimer += ARK2D::getTimer()->getDelta();
+				if (caretTimer > 1.0f) {
+					caretTimer -= 1.0f;
+				}
 			}
 			void GJTextField::renderBackground() {
 				ARK::GJ::Next::GameJolt* gj = ARK::GJ::Next::GameJolt::getInstance();
@@ -131,7 +138,9 @@ namespace ARK {
 			void GJTextField::renderCaret(int x1, int y1, int x2, int y2) {
 			 	x1 += 10;
 				x2 += 10;
-			 	TextField::renderCaret(x1, y1, x2, y2);
+				if (caretTimer < 0.5f) { 
+			 		TextField::renderCaret(x1, y1, x2, y2);
+			 	}
 			}
 			void GJTextField::renderOverlay() {
 
@@ -617,11 +626,13 @@ namespace ARK {
 
 				username = new GJTextField();
 				username->setSize(280, 40);
-				username->setText("Gwinnell");
+				username->setText("");
+				username->setFocussed(true);
 
 				usertoken = new GJTextField();
 				usertoken->setSize(280, 40);
-				usertoken->setText("b945a5");
+				usertoken->setText("");
+				usertoken->setPasswordField(true);
 
 				//Dialog::openInputDialog(Callbacks::CALLBACK_GAMEJOLT_OVERLAY_EDITNAME, "Edit Username:", "");
 				//Dialog::openInputDialog(Callbacks::CALLBACK_GAMEJOLT_OVERLAY_EDITTOKEN, "Edit Token:", "");
@@ -658,22 +669,45 @@ namespace ARK {
 				FileUtil::openBrowserToURL("http://gamejolt.com/auth/sign_up/");
 			}
 			void GJLoginState::onHelp(GJLoginState* ls) {
-				FileUtil::openBrowserToURL("http://help.gamejolt.com/game-tokens");
+				FileUtil::openBrowserToURL("http://help.gamejolt.com/tokens");
 			}
 			void GJLoginState::onClose(GJLoginState* ls) {
 				ARK::GJ::Next::GameJolt::getInstance()->close();
 			}
 			void GJLoginState::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {
 				Input* in = ARK2D::getInput();
-				if (in->isKeyPressed(Input::MOBILE_BACK) || in->isKeyPressed(Input::KEY_BACKSPACE)) { close->doEvent(); }
+				if (in->isKeyPressed(Input::MOBILE_BACK) || in->isKeyPressed(Input::KEY_ESCAPE)) { close->doEvent(); }
 
+				username->update();
+				usertoken->update();
+
+				m_iconX = container->getWidth()*0.5f;
 				m_iconY = DisplayUtil::adjustY(80);
+				m_iconScale = 6.0f;
 				username->setLocation(20, DisplayUtil::adjustY2(165));	
 				usertoken->setLocation(20, DisplayUtil::adjustY2(230));	
 				login->setLocation(20, DisplayUtil::adjustY2(300));	
 				signup->setLocation(20, DisplayUtil::adjustY2(350));	
 				help->setLocation(container->getWidth() - 20 - 80, container->getHeight() - 20 - 40);	
 				close->setLocation(20, container->getHeight() - 20 - 40);
+
+				if (container->getWidth() > container->getHeight()) {
+       				ARK::GJ::Next::GameJolt* gj = ARK::GJ::Next::GameJolt::getInstance();
+       				m_iconScale = 9.0f;
+					m_iconX = (container->getWidth()*0.499f) - (gj->icon->getWidth()*m_iconScale*0.5f) - 20;
+					m_iconY = container->getHeight()*0.5f;
+
+					username->setX( (container->getWidth()*0.499f) + 10 );	
+					usertoken->setX( (container->getWidth()*0.499f) + 10 );	
+					login->setX( (container->getWidth()*0.499f) + 10 );	
+					signup->setX( (container->getWidth()*0.499f) + 10 );
+
+					float ch = container->getHeight() * 0.5f;
+					username->setY( ch - 100 );	 
+					usertoken->setY( ch - 35 );	
+					login->setY( ch + 20);	
+					signup->setY( ch + 70 );
+				}
 			}
 			void GJLoginState::onLoginFailed(string message) {
 				//ErrorDialog::createAndShow(message);
@@ -691,6 +725,8 @@ namespace ARK {
 				gj->file->add("usertoken", gj->api->m_userToken);
 				gj->file->save();
 
+				gj->api->sessionOpen();
+
 				if (gj->getCurrentState() == this) {
 					gj->enterState(ARK::GJ::Next::GameJolt::STATE_OVERVIEW);
 				}
@@ -699,8 +735,14 @@ namespace ARK {
 				ARK::GJ::Next::GameJolt* gj = ARK::GJ::Next::GameJolt::getInstance();
 				float alpha = gj->getAlpha();
 
+				if (container->getWidth() > container->getHeight()) {
+
+				} else {
+
+				}
+
 				r->setDrawColorf(1.0f, 1.0f, 1.0f, alpha);
-				gj->icon->drawCenteredScaled(container->getWidth()/2, m_iconY, 6.0f, 6.0f);
+				gj->icon->drawCenteredScaled(m_iconX, m_iconY, m_iconScale, m_iconScale);
 
 				r->setDrawColorf(1.0f, 1.0f, 1.0f, alpha);
 				r->drawString("USERNAME: ", username->getMinX(), username->getMinY() - 5, Renderer::ALIGN_LEFT, Renderer::ALIGN_BOTTOM, 0.0f, 0.5f);
@@ -763,21 +805,21 @@ namespace ARK {
 			void GJOverviewState::init(GameContainer* container, StateBasedGame* game) {
 				achievements = new GJButton();
 				achievements->setText("TROPHIES");
-				achievements->setSize(280, 40);
+				achievements->setSize(container->getWidth()-40, 40);
 				
 				achievements->setEvent((void*) onAchievements);
 				achievements->setEventObj(this);
 
 				leaderboards = new GJButton();
 				leaderboards->setText("LEADERBOARDS");
-				leaderboards->setSize(280, 40);
+				leaderboards->setSize(container->getWidth()-40, 40);
 				
 				leaderboards->setEvent((void*) onLeaderboards);
 				leaderboards->setEventObj(this);
 
 				stats = new GJButton();
 				stats->setText("STATS");
-				stats->setSize(280, 40);
+				stats->setSize(container->getWidth()-40, 40);
 				stats->setEvent((void*) onStats);
 				stats->setEventObj(this);
 
@@ -816,6 +858,8 @@ namespace ARK {
 				gj->file->add("username", "");
 				gj->file->add("usertoken", "");
 				gj->file->save();
+
+				gj->api->sessionClose();
 
 				ARK::GJ::Next::GameJolt::getInstance()->api->logout();
 				ARK::GJ::Next::GameJolt::getInstance()->enterState(ARK::GJ::Next::GameJolt::STATE_LOGIN);
@@ -1069,8 +1113,8 @@ namespace ARK {
 						scrollablePanel->setHeight(y + 90 - offsetY, container->getHeight());
 
 					}
-					if (achievements->achievementsCount == 0) {
-						r->drawString("NO ACHIEVEMENTS", container->getWidth()/2, (container->getHeight() / 2), Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER);
+					if (achievements->achievementsCount == 0) { 
+						r->drawString("NO TROPHIES!", container->getWidth()/2, (container->getHeight() / 2), Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER);
 					}
 				} else {
 					r->drawString("LOADING...", container->getWidth()/2, (container->getHeight() / 2), Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER);
@@ -1254,6 +1298,10 @@ namespace ARK {
 
 			}
 			gjHighscoreTable* GJLeaderboardsState::findTableById(unsigned int tableId) {
+				if (tables == NULL) { 
+					ARK2D::getLog()->e(StringUtil::append("could not findTableById. tables not loaded?: ", tableId));
+					return NULL; 
+				}
 				for(unsigned int i = 0; i < tables->tablesCount; ++i) {
 					if (tableId == tables->tables[i]->id) {
 						return tables->tables[i];
@@ -1347,7 +1395,7 @@ namespace ARK {
 				if (scores != NULL && timestamp > 0) { 
 
 
-						r->setDrawColorf(1.0f, 1.0f, 1.0f, gj->getAlpha());
+					r->setDrawColorf(1.0f, 1.0f, 1.0f, gj->getAlpha());
 					float startY = scrollablePanel->getOffsetY();
 
 					GJLeaderboardsState* parentState = (GJLeaderboardsState*) ARK::GJ::Next::GameJolt::getInstance()->getState(ARK::GJ::Next::GameJolt::STATE_LEADERBOARDS);
@@ -1364,8 +1412,9 @@ namespace ARK {
 						while (r->getFont()->getStringWidth(name) > 120) {
 							name = name.substr(0, name.length() - 1);
 						}
-						r->drawString(name, 175, y + 12, Renderer::ALIGN_RIGHT, Renderer::ALIGN_TOP);
-						r->drawString(Cast::toString<unsigned int>(scores->scores[i]->score), 185, y + 12, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f );
+						float middle = (container->getWidth()*0.5f);//+15.0f;
+						r->drawString(name, middle - 10, y + 12, Renderer::ALIGN_RIGHT, Renderer::ALIGN_TOP);
+						r->drawString(Cast::toString<unsigned int>(scores->scores[i]->score), middle+10, y + 12, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f );
 						y += 30;
 
 						
@@ -1500,7 +1549,9 @@ namespace ARK {
 			GameJolt::GameJolt(int gameId, string gameKey):
 				StateBasedGame("Game Jolt"),
 				api(NULL),
-				m_loggedin(false)
+				m_loggedin(false),
+				m_sessionPingTimer(0.0f),
+				m_sessionPingDuration(30.0f)
 			{
 				api = new API(gameId, gameKey);
 				api->m_overlayListener = __internalGameJoltOverlayListener;
@@ -1603,8 +1654,13 @@ namespace ARK {
 			void GameJolt::showHighscoreTable(unsigned int id) {
 				if (m_loggedin) {
 					GJLeaderboardsState* ls = (GJLeaderboardsState*) getState(STATE_LEADERBOARD);
-					if (ls->findTableById(id) != NULL) { 
-						enterState(STATE_LEADERBOARD);
+					if (ls != NULL && ls->findTableById(id) != NULL) { 
+						
+						GJLeaderboardState* leaderboardState = (GJLeaderboardState*) getState(ARK::GJ::Next::GameJolt::STATE_LEADERBOARD);
+						leaderboardState->setTableId(id);
+						enterState(leaderboardState);
+
+						//enterState(STATE_LEADERBOARD);
 					} else {
 						enterState(STATE_LEADERBOARDS);
 					}
@@ -1647,13 +1703,25 @@ namespace ARK {
 						}
 					}
 				}
+
+				if (m_loggedin) {
+					m_sessionPingTimer += timer->getDelta();
+					if (m_sessionPingTimer >= m_sessionPingDuration) {
+						m_sessionPingTimer -= m_sessionPingDuration;
+						api->sessionPing(true);
+					}
+				}
 			}
 			void GameJolt::render(GameContainer* container, Renderer* g) {
+                ARK::Font::Font* previousFont = g->getFont();
+
 				g->setFont(font);
 
 				preRender(container, g);
 				StateBasedGame::render(container, g);
 				postRender(container, g);
+
+				g->setFont(previousFont);
 			}
 			void GameJolt::preRender(GameContainer* container, Renderer* r) {
 				r->setDrawColorf(0.05f, 0.05f, 0.05f, 0.8f * getAlpha());
@@ -1691,6 +1759,9 @@ namespace ARK {
 					return true;
 				}
 				return false;
+			}
+			bool GameJolt::isLoggedIn() {
+				return m_loggedin;
 			}
 
 			void GameJolt::keyPressed(unsigned int key) {

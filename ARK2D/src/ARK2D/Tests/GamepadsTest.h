@@ -59,11 +59,11 @@ namespace ARK {
 				virtual void keyReleased(unsigned int key);
 				virtual void mouseMoved(int x, int y, int oldx, int oldy);
 
-				virtual void gamepadConnected(Gamepad* gamepad);
-				virtual void gamepadDisconnected(Gamepad* gamepad);
-				virtual void buttonPressed(Gamepad* gamepad, unsigned int button);
-				virtual void buttonReleased(Gamepad* gamepad, unsigned int button);
-				virtual void axisMoved(Gamepad* gamepad, unsigned int axis, float value);
+				virtual void gamepadConnected(ARK::Controls::Gamepad* gamepad);
+				virtual void gamepadDisconnected(ARK::Controls::Gamepad* gamepad);
+				virtual void buttonPressed(ARK::Controls::Gamepad* gamepad, unsigned int button);
+				virtual void buttonReleased(ARK::Controls::Gamepad* gamepad, unsigned int button);
+				virtual void axisMoved(ARK::Controls::Gamepad* gamepad, unsigned int axis, float value);
 
 				virtual ~GamepadConfigureGameState();
 		};
@@ -84,17 +84,17 @@ namespace ARK {
 				void init(GameContainer* container, StateBasedGame* game);
 				void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
 				void render(GameContainer* container, StateBasedGame* game, Renderer* r);
-				static void renderGamepad(Gamepad* g, float rootX, float rootY);
+				static void renderGamepad(ARK::Controls::Gamepad* g, float rootX, float rootY);
 
 				virtual void keyPressed(unsigned int key);
 				virtual void keyReleased(unsigned int key);
 				virtual void mouseMoved(int x, int y, int oldx, int oldy);
 
-				virtual void gamepadConnected(Gamepad* gamepad);
-				virtual void gamepadDisconnected(Gamepad* gamepad);
-				virtual void buttonPressed(Gamepad* gamepad, unsigned int button);
-				virtual void buttonReleased(Gamepad* gamepad, unsigned int button);
-				virtual void axisMoved(Gamepad* gamepad, unsigned int axis, float value);
+				virtual void gamepadConnected(ARK::Controls::Gamepad* gamepad);
+				virtual void gamepadDisconnected(ARK::Controls::Gamepad* gamepad);
+				virtual void buttonPressed(ARK::Controls::Gamepad* gamepad, unsigned int button);
+				virtual void buttonReleased(ARK::Controls::Gamepad* gamepad, unsigned int button);
+				virtual void axisMoved(ARK::Controls::Gamepad* gamepad, unsigned int axis, float value);
 
 				virtual ~GamepadsTestGameState();
 		};

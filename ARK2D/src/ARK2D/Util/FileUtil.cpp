@@ -17,10 +17,15 @@
 #include "../Core/String.h"
 #include "Callbacks.h"
 
-#if ( defined(ARK2D_WINDOWS_PHONE_8) )
+#if defined(ARK2D_WINDOWS_PHONE_8)
  	#include <direct.h> 
 	#include <windows.h>
 	#define GetCurrentDirectoryMacro _getcwd
+	#define DIRECTORY_SEPARATOR "\\"
+#elif defined(ARK2D_XBOXONE)
+ 	#include <direct.h> 
+	#include <windows.h>
+	#define GetCurrentDirectoryMacro GetCurrentDirectory
 	#define DIRECTORY_SEPARATOR "\\"
 #elif defined(ARK2D_WINDOWS) && defined(ARK2D_WINDOWS_VS)
 	#include <direct.h>  
@@ -256,7 +261,7 @@ namespace ARK {
 		}
 
 		string FileUtil::getCurrentDirectory() {
-			#if defined(ARK2D_WINDOWS_PHONE_8) || ( defined(ARK2D_WINDOWS) && defined(ARK2D_WINDOWS_VS) )
+			#if defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE) || ( defined(ARK2D_WINDOWS) && defined(ARK2D_WINDOWS_VS) )
 				return "";
 			#else  
 				char currentPath[FILENAME_MAX];

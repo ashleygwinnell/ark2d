@@ -59,6 +59,9 @@ class ARK2D_API ARK2D {
 		static const unsigned int PLATFORM_BROWSER_FLASCC = 5;
 		static const unsigned int PLATFORM_WINDOWS_PHONE_8 = 6;
 		static const unsigned int PLATFORM_LINUX = 7;
+		static const unsigned int PLATFORM_XBOXONE = 8;
+		static const unsigned int PLATFORM_PS4 = 9;
+		static const unsigned int PLATFORM_WIIU = 10;
 
 	private:
 		static GameContainer* s_container;

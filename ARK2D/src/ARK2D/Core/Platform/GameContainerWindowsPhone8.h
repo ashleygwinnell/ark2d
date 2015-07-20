@@ -11,7 +11,7 @@
 
 #include "../../ARK2D.h"
 
-	#ifdef ARK2D_WINDOWS_PHONE_8
+	#if defined(ARK2D_WINDOWS_PHONE_8)
 
 			#include "../../Windres.h"
 			#include "../../Includes.h"
@@ -29,7 +29,7 @@
  			using namespace Windows::UI::Core;
  			using namespace Windows::Foundation;
 			using namespace Windows::Graphics::Display;
-
+			using namespace Windows::Foundation;
 
 
 			namespace ARK {
