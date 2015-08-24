@@ -286,8 +286,12 @@ public class ImagePacker {
 	// Pack items next to top-right corners & bottom-left corners of other images.
 	private void cornersStrategy() throws Exception {
 		// Sort the images from largest to smallest.
-		ArrayList<Image> sorted = sortByArea();
-		Image smallest = sorted.get(sorted.size()-1);
+		//ArrayList<Image> sorted = sortByArea();
+		ArrayList<Image> sorted = new ArrayList<Image>();
+		for(int i = 0; i < m_images.size(); i++) { sorted.add(m_images.get(i));	}
+		Collections.sort(sorted, new ImageSizeComparator());
+		
+		//Image smallest = sorted.get(sorted.size()-1);
 		
 		//Collections.reverse(sorted);
 		
@@ -532,7 +536,15 @@ public class ImagePacker {
 		}
 	}
 	
+	private class ImageSizeComparator implements Comparator<Image> {
+	    @Override
+	    public int compare(Image o1, Image o2) { 
+	        return (o1.getWidth() * o1.getHeight() < o2.getWidth() * o2.getHeight())?1:-1; //true; //o1.getStartDate().compareTo(o2.getStartDate());
+	    }
+	}
+	
 	private ArrayList<Image> sortByArea() throws Exception {
+		
 		int maxpixels = 1;
 		ArrayList<Image> sorted = new ArrayList<Image>();
 		for (int i = 0; i < m_images.size(); i++) {
