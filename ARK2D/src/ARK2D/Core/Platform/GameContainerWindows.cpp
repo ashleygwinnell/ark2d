@@ -2991,7 +2991,8 @@
 
 					m_platformSpecific.m_hotplugGamepadsTimer += m_timer.getDelta();
 					if (m_platformSpecific.m_hotplugGamepadsTimer >= 1.0f) {
-						initGamepads();
+						// initGamepads();
+						// hotplugging disabled... :( 
 						m_platformSpecific.m_hotplugGamepadsTimer -= 1.0f;
 					}
 					processGamepadInput();

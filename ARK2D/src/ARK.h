@@ -30,6 +30,7 @@
 #include "ARK2D/Geometry/Circle.h"
 #include "ARK2D/Geometry/Line.h" 
 #include "ARK2D/Geometry/Transform.h" 
+#include "ARK2D/Geometry/AdvancedPolygon.h" 
 
 // Game Jolt
 #include "ARK2D/GJ/GameJolt.h"
@@ -199,6 +200,7 @@
 #include "ARK2D/Tests/ParticlesTest.h"
 #include "ARK2D/Tests/UITest.h"
 #include "ARK2D/Tests/ShaderTest.h"
+#include "ARK2D/Tests/PathfindingTest.h"
 
 // Spine
 #include "ARK2D/vendor/spine/SpineSkeleton.h"

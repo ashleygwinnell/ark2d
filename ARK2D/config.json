@@ -141,6 +141,7 @@
 			"src/ARK2D/Geometry/Circle.cpp",
 			"src/ARK2D/Geometry/Polygon.cpp",
 			"src/ARK2D/Geometry/Line.cpp",
+			"src/ARK2D/Geometry/AdvancedPolygon.cpp",
 
 			"src/ARK2D/Net/Address.cpp",
 			"src/ARK2D/Net/Connection.cpp",
@@ -186,6 +187,7 @@
 			"src/ARK2D/Tests/GamepadsTest.cpp",
 			"src/ARK2D/Tests/TransitionTest.cpp",
 			"src/ARK2D/Tests/ParticlesTest.cpp",
+			"src/ARK2D/Tests/PathfindingTest.cpp",
 			"src/ARK2D/Tests/UITest.cpp",
 			"src/ARK2D/Tests/NetTest.cpp",
 			"src/ARK2D/Tests/ShaderTest.cpp",

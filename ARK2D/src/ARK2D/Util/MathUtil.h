@@ -310,6 +310,113 @@ namespace ARK {
 
 				}
 
+				static bool isVertexConcave(vector<Vector2<float> >* vertices, int vertex)
+				{
+					Vector2<float>* current = &vertices->at(vertex);
+					Vector2<float>* next = &vertices->at((vertex + 1) % vertices->size());
+					Vector2<float>* previous = &vertices->at(vertex == 0 ? vertices->size() - 1 : vertex - 1);
+
+					Vector2<float> left(current->getX() - previous->getX(), current->getY() - previous->getY());
+					Vector2<float> right(next->getX() - current->getX(), next->getY() - current->getY());
+
+					float cross = (left.getX() * right.getY()) - (left.getY() * right.getX());
+
+					return cross < 0;
+				}
+
+				static bool isVertexInsidePolygon(vector<Vector2<float> >* polygon, Vector2<float>* position, bool toleranceOnOutside = true)
+				{
+					Vector2<float>* point = position;
+
+					const float epsilon = 0.5f;
+
+					bool inside = false;
+
+					// Must have 3 or more edges
+					if (polygon->size() < 3) return false;
+
+					Vector2<float>* oldPoint = &polygon->at(polygon->size() - 1);
+					float oldSqDist = (float)MathUtil::distanceSquared(oldPoint->getX(), oldPoint->getY(), point->getX(), point->getY());
+
+					for (int i = 0; i < polygon->size(); i++)
+					{
+						Vector2<float>* newPoint = &polygon->at(i);
+						float newSqDist = (float)MathUtil::distanceSquared(newPoint->getX(), newPoint->getY(), point->getX(), point->getY());  //Vector2.DistanceSquared(newPoint, point);
+
+						if (oldSqDist + newSqDist + 2.0f * sqrt(oldSqDist * newSqDist) - float(MathUtil::distanceSquared(newPoint->getX(), newPoint->getY(), oldPoint->getX(), oldPoint->getY())) < epsilon) //  Vector2.DistanceSquared(newPoint, oldPoint) < epsilon)
+							return toleranceOnOutside;
+
+						Vector2<float>* left;
+						Vector2<float>* right;
+						if (newPoint->getX() > oldPoint->getX())
+						{
+							left = oldPoint;
+							right = newPoint;
+						}
+						else
+						{
+							left = newPoint;
+							right = oldPoint;
+						}
+
+						if (left->getX() < point->getX() && point->getX() <= right->getX() && (point->getY() - left->getY()) * (right->getX() - left->getX()) < (right->getY() - left->getY()) * (point->getX() - left->getX()))
+							inside = !inside;
+
+						oldPoint = newPoint;
+						oldSqDist = newSqDist;
+					}
+
+					return inside;
+				}
+
+				static bool isInLineOfSight(vector<Vector2<float> >* polygon, Vector2<float>* start, Vector2<float>* end)
+				{
+					// Not in LOS if any of the ends is outside the polygon
+					if (!isVertexInsidePolygon(polygon, start) || !isVertexInsidePolygon(polygon, end)) return false;
+
+					// In LOS if it's the same start and end location
+					float epsilon = 0.5f;
+					float dist = MathUtil::distance(start->getX(), start->getY(), end->getX(), end->getY());
+					if (dist < epsilon) return true;
+
+					// Not in LOS if any edge is intersected by the start-end line segment
+					for (int i = 0; i < polygon->size(); i++) {
+						if (LineSegmentsCross(start, end, &polygon->at(i), &polygon->at((i + 1) % polygon->size()))) {
+							return false;
+						}
+					}
+
+					// Finally the middle point in the segment determines if in LOS or not
+					Vector2<float> middle((start->getX() + end->getX()) * 0.5f, (start->getY() + end->getY()) * 0.5f);
+					return isVertexInsidePolygon(polygon, &middle);
+				}
+
+				static bool LineSegmentsCross(float ax, float ay, float bx, float by, float cx, float cy, float dx, float dy)
+				{
+					float denominator = ((bx - ax) * (dy - cy)) - ((by - ay) * (dx - cx));
+
+					if (denominator == 0) {
+						return false;
+					}
+
+					float numerator1 = ((ay - cy) * (dx - cx)) - ((ax - cx) * (dy - cy));
+
+					float numerator2 = ((ay - cy) * (bx - ax)) - ((ax - cx) * (by - ay));
+
+					if (numerator1 == 0 || numerator2 == 0) {
+						return false;
+					}
+
+					float r = numerator1 / denominator;
+					float s = numerator2 / denominator;
+
+					return (r > 0 && r < 1) && (s > 0 && s < 1);
+				}
+				static bool LineSegmentsCross(Vector2<float>* a, Vector2<float>* b, Vector2<float>* c, Vector2<float>* d)
+				{
+					return LineSegmentsCross(a->getX(), a->getY(), b->getX(), b->getY(), c->getX(), c->getY(), d->getX(), d->getY());
+				}
+
 				static void normalizevec3(float* resultX, float* resultY, float* resultZ, float x1, float y1, float z1) {
 					float sqr = x1 * x1 + y1 * y1 + z1 * z1;
 					float l = sqrt(sqr);

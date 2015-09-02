@@ -214,6 +214,7 @@ namespace ARK {
 		class Vibrator;
 		class Callback;
 		class DisplayUtil;
+		class Wobble;
 
 		template <class T>
 		class Matrix44;

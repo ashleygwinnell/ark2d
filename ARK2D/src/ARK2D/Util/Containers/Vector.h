@@ -347,13 +347,14 @@ namespace ARK {
 					}
 					void removeByIndex(unsigned int i) {
 						#if !defined(STL_AVAILABLE)
-
-						#else
 							m_size--;
+						#else
 							if (!usingList) {
+								m_size--;
 								vec.erase(vec.begin() + i);
 								return;
 							}
+							m_size--;
 							typename list<T>::iterator it = lst.begin();
 							advance(it, i);
 							lst.erase(it);
@@ -366,11 +367,12 @@ namespace ARK {
 						#if !defined(STL_AVAILABLE)
 						#else
 							if (!usingList) {
-								m_size--;
+								
 								typename vector<T>::iterator it = vec.begin();
 								while (it != vec.end()) {
 									T obj = (*it);
 									if (obj == o) {
+										m_size--;
 										it = vec.erase(it);
 										break;
 									} else {
@@ -380,11 +382,12 @@ namespace ARK {
 								return;
 							}
 
-							m_size--;
+							
 							typename list<T>::iterator it = lst.begin();
 							while (it != lst.end()) {
 								T obj = (*it);
 								if (obj == o) {
+									m_size--;
 									it = lst.erase(it);
 									break;
 								} else {
@@ -431,7 +434,7 @@ namespace ARK {
 
 					void clear() {
 						#if !defined(STL_AVAILABLE)
-
+							m_size = 0;
 						#else
 							m_size = 0;
 							if (!usingList) {

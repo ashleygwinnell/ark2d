@@ -11,8 +11,83 @@ namespace ARK {
 	namespace Pathfinding {
 
 
-		bool DefaultAStarDataMap::isBlocked(AStar* map, unsigned int x, unsigned int y) {
+		bool DefaultAStarDataMap::isBlocked(AStar* map, float x, float y) {
 			return map->getNode(x, y)->isBlocked();
+		}
+
+		AStar::AStar():
+			m_heuristic( NULL ),  
+			m_dataMap( NULL ),
+			m_closedSet(), 
+			m_openSet(),  
+			m_nodes(),
+			m_width(0),   
+			m_height(0),      
+			m_current(NULL),
+			m_sourceX(0),       
+			m_sourceY(0), 
+			m_distance(0),
+			m_x(0.0f),
+			m_y(0.0f),
+			m_eachSize(1),
+			m_gridBased(false),
+			m_gridAllowDiagonal(false) 
+		{
+			init(); 
+		}
+		
+		AStar::AStar(AdvancedPolygon* poly):
+			m_heuristic( NULL ),  
+			m_dataMap( NULL ),
+			m_closedSet(), 
+			m_openSet(),  
+			m_nodes(),
+			m_width(0),   
+			m_height(0),      
+			m_current(NULL),
+			m_sourceX(0),       
+			m_sourceY(0), 
+			m_distance(0),
+			m_x(0.0f),
+			m_y(0.0f),
+			m_eachSize(1),
+			m_gridBased(false),
+			m_gridAllowDiagonal(false) 
+		{
+			init();
+
+			// Reset graph / neighbours / visible nodes.
+			//for (unsigned int i = 0; i < pathfindingGraph->countNodes(); i++){
+			//	pathfindingGraph->getNode(i)->m_neighbours.clear();
+			//}
+			//pathfindingGraph->reset();
+
+			// Create a graph node for each concave vertex of the polygon. 
+			// If the polygon has holes, then you should also include the convex vertices of the hole polygons.
+			for (int i = 0; i < poly->outers.size(); i++) {
+				for (int j = 0; j < poly->outers[i].getPoints()->size(); j++) {
+					Vector2<float>* point = poly->outers[i].getPoint(j);
+					bool concave = MathUtil::isVertexConcave(poly->outers[i].getPoints(), j);
+					if (!concave) {
+						addNode(point->getX(), point->getY());
+					}
+				}
+			}
+			for (int i = 0; i < poly->holes.size(); i++) {
+				for (int j = 0; j < poly->holes[i].getPoints()->size(); j++) {
+					Vector2<float>* point = poly->holes[i].getPoint(j);
+					bool concave = MathUtil::isVertexConcave(poly->holes[i].getPoints(), j);
+					if (concave) {
+						addNode(point->getX(), point->getY());
+					}
+				}
+			}
+
+			// Run a line-of-sight algorithm between each pair of graph nodes and link those which are in direct line-of-sight from each other.
+			for (unsigned int i = 0; i < m_nodes.size(); i++) {
+				AStarNode* start = m_nodes.get(i);
+				calculateNeighboursForNode(start, poly);
+			}
 		}
 
 		AStar::AStar(unsigned int width, unsigned int height):
@@ -20,7 +95,6 @@ namespace ARK {
 			m_dataMap( NULL ),
 			m_closedSet(), 
 			m_openSet(),  
-			m_allowDiagonal(true),
 			m_nodes(),
 			m_width(width),   
 			m_height(height),      
@@ -30,7 +104,9 @@ namespace ARK {
 			m_distance(0),
 			m_x(0.0f),
 			m_y(0.0f),
-			m_eachSize(1)
+			m_eachSize(1),
+			m_gridBased(true),
+			m_gridAllowDiagonal(true)
 		{
 			init();  
 		} 
@@ -40,7 +116,6 @@ namespace ARK {
 			m_dataMap( NULL ), 
 			m_closedSet(),
 			m_openSet(),
-			m_allowDiagonal(true),  
 			m_nodes(),
 			m_width(width),  
 			m_height(height),     
@@ -50,7 +125,9 @@ namespace ARK {
 			m_distance(0),
 			m_x(x),
 			m_y(y),
-			m_eachSize(eachSize)
+			m_eachSize(eachSize),
+			m_gridBased(true),
+			m_gridAllowDiagonal(true)
 		{
 			init();
 		}
@@ -83,6 +160,52 @@ namespace ARK {
 			}
 			m_dataMap = map;
 		}
+		AStarNode* AStar::addNode(float x, float y) {
+			AStarNode* node = new AStarNode(x, y);
+			m_nodes.add(node);
+			return node;
+		}
+		void AStar::processNeighbours() {
+			// grid based system.
+			if (m_gridBased) { 
+				for(unsigned int i = 0; i < m_nodes.size(); ++i) 
+				{
+					AStarNode* node = m_nodes.get(i);
+
+					// use the grid to check neighbours
+					for (signed int x = -1; x < 2; x++) 
+					{
+						for (signed int y = -1; y < 2; y++) 
+						{
+							// current tile. 
+							if ((x == 0) && (y == 0)) {
+								continue;
+							}
+							// if we're not allowing diaganol movement then only one of x or y can be set
+							if (!m_gridAllowDiagonal) {
+								if ((x != 0) && (y != 0)) {
+									continue;
+								}
+							}
+							signed int neighbourX = x + node->m_x;
+							signed int neighbourY = y + node->m_y;
+							if (neighbourX < 0 || neighbourY < 0 || neighbourX >= m_width || neighbourY >= m_height) { continue; }
+
+							AStarNode* neighbour = getNode(neighbourX, neighbourY);
+							if (neighbour != NULL) {
+								node->m_neighbours.push_back(neighbour);
+							}
+
+						}
+					}
+
+
+				}
+			} else {
+				// points of visibility graph / way-point graph
+				// do this in your code.
+			}
+		}
 
 		void AStar::reset() {
 			// reset the A* pathfinding state.
@@ -92,26 +215,43 @@ namespace ARK {
 			m_distance = 0;
 
 			m_latestPath.clear();
-			for(unsigned int i = 0; i < m_nodes.size(); ++i) {
+
+			
+			for (unsigned int i = 0; i < m_nodes.size(); i++) {
 				m_nodes.get(i)->reset();
+			}
+			if (!m_gridBased) {
+				m_nodes.clear();
 			}
 		} 
 
 		void AStar::setAllowDiagonal(bool b) {
-			m_allowDiagonal = b;
+			m_gridAllowDiagonal = b;
 		}
 
 		bool AStar::findPath(unsigned int sourceX, unsigned int sourceY, unsigned int targetX, unsigned int targetY) 
 		{
+			return findPath(getNode(sourceX, sourceY), getNode(targetX, targetY));
+		}
+		bool AStar::findPath(AStarNode* source, AStarNode* target) {
 			// reset the A* pathfinding state.
 			m_current = NULL;
-			m_sourceX = sourceX;
-			m_sourceY = sourceY;
 			m_distance = 0; 
-
 			m_latestPath.clear();
 
-			if (getNode(targetX, targetY)->isBlocked()) {
+			if (source == NULL) {
+				ARK2D::getLog()->w("Source was not on the grid or was null.");
+				return false;
+			}
+			if (target == NULL) {
+				ARK2D::getLog()->w("Target was not on the grid or was null.");
+				return false;
+			}
+
+			m_sourceX = source->m_x;
+			m_sourceY = source->m_y;
+
+			if (target->isBlocked()) {
 				ARK2D::getLog()->w("Target is blocked");
 				return false; // m_latestPath;
 			}
@@ -125,19 +265,19 @@ namespace ARK {
 			}
 
 			// set initial state 
-			getNode(sourceX, sourceY)->m_cost = 0;
-			getNode(sourceX, sourceY)->m_depth = 0;
+			source->m_cost = 0;
+			source->m_depth = 0;
 			m_closedSet.clear();
 			m_openSet.clear();
-			addNodeToOpen(getNode(sourceX, sourceY));
+			addNodeToOpen(source);
 
-			getNode(targetX, targetY)->m_parent = NULL;
+			target->m_parent = NULL;
 
 			unsigned int maxDepth = 0;
 			while ((maxDepth < s_maxSearchDistance) && (m_openSet.size() != 0)) 
 			{
-				unsigned int lx = sourceX;
-				unsigned int ly = sourceY;
+				unsigned int lx = source->m_x;
+				unsigned int ly = source->m_y;
 				if (m_current != NULL) {
 					lx = m_current->m_x;
 					ly = m_current->m_y;
@@ -146,8 +286,8 @@ namespace ARK {
 				m_current = getFirstNodeInOpen();
 				m_distance = m_current->m_depth;
 
-				if (m_current == getNode(targetX, targetY)) {
-					if (isValidLocation(lx, ly, targetX, targetY)) {
+				if (m_current == target) {
+					if (isValidLocation(lx, ly, target->m_x, target->m_y)) {
 						break;
 					}
 				}
@@ -155,65 +295,57 @@ namespace ARK {
 				removeNodeFromOpen(m_current);
 				addNodeToClosed(m_current);
 
-				for (signed int x = -1; x < 2; x++) {
-					for (signed int y = -1; y < 2; y++) {
+				// iterate neighbours
+				for (signed int i = 0; i < m_current->m_neighbours.size(); i++)
+				{
+					AStarNode* neighbour = m_current->m_neighbours[i];
+						
+					// determine the location of the neighbour and evaluate it
+					//signed int xp = node->m_x + m_current->m_x;
+					//signed int yp = node->m_y + m_current->m_y;
 
-						// current tile. 
-						if ((x == 0) && (y == 0)) {
-							continue;
-						} 
+					if (isValidLocation(m_current->m_x, m_current->m_y, neighbour->m_x, neighbour->m_y)) {
 
-						// if we're not allowing diaganol movement then only one of x or y can be set
-						if (!m_allowDiagonal) {
-							if ((x != 0) && (y != 0)) {
-								continue;
+						// the cost to get to this node is cost the current plus the movement
+						// cost to reach this node. Note that the heursitic value is only used
+						// in the sorted open list
+						float nextStepCost = m_current->m_cost + getMovementCost(m_current->m_x, m_current->m_y, neighbour->m_x, neighbour->m_y);
+						//AStarNode* neighbour = getNode(xp, yp);
+						//map.pathFinderVisited(xp, yp);
+
+						// if the new cost we've determined for this node is lower than 
+						// it has been previously makes sure the node hasn't been discarded. We've
+						// determined that there might have been a better path to get to
+						// this node so it needs to be re-evaluated
+						if (nextStepCost < neighbour->m_cost) {
+							if (neighbour->m_open) {
+								removeNodeFromOpen(neighbour);
 							}
-						} 
-
-						// determine the location of the neighbour and evaluate it
-						int xp = x + m_current->m_x;
-						int yp = y + m_current->m_y;
-
-						if (isValidLocation(m_current->m_x, m_current->m_y, xp, yp)) {
-
-							// the cost to get to this node is cost the current plus the movement
-							// cost to reach this node. Note that the heursitic value is only used
-							// in the sorted open list
-							float nextStepCost = m_current->m_cost + getMovementCost(m_current->m_x, m_current->m_y, xp, yp);
-							AStarNode* neighbour = getNode(xp, yp);
-							//map.pathFinderVisited(xp, yp);
-
-							// if the new cost we've determined for this node is lower than 
-							// it has been previously makes sure the node hasn't been discarded. We've
-							// determined that there might have been a better path to get to
-							// this node so it needs to be re-evaluated
-							if (nextStepCost < neighbour->m_cost) {
-								if (neighbour->m_open) {
-							    	removeNodeFromOpen(neighbour);
-								}
-							    if (neighbour->m_closed) {
-							    	removeNodeFromClosed(neighbour);
-								}
+							if (neighbour->m_closed) {
+								removeNodeFromClosed(neighbour);
 							}
-
-							// if the node hasn't already been processed and discarded then
-							// reset it's cost to our current cost and add it as a next possible
-							// step (i.e. to the open list)
-							if (!neighbour->m_open && !neighbour->m_closed) {
-								neighbour->m_cost = nextStepCost;
-								neighbour->m_heuristic = getHeuristicCost(xp, yp, targetX, targetY);
-								maxDepth = max(maxDepth, neighbour->setParent(m_current));
-								addNodeToOpen(neighbour);
-							} 
-
 						}
+
+						// if the node hasn't already been processed and discarded then
+						// reset it's cost to our current cost and add it as a next possible
+						// step (i.e. to the open list)
+						if (!neighbour->m_open && !neighbour->m_closed) {
+							neighbour->m_cost = nextStepCost;
+							neighbour->m_heuristic = getHeuristicCost(neighbour->m_x, neighbour->m_y, target->m_x, target->m_y);
+							maxDepth = max(maxDepth, neighbour->setParent(m_current));
+							addNodeToOpen(neighbour);
+						}
+
 					}
+						
 				}
+
+				
 			}
 		 
 			// since we've got an empty open list or we've run out of search 
 			// there was no path. Just return null
-			if (getNode(targetX, targetY)->m_parent == NULL) {
+			if (target->m_parent == NULL) {
 				ARK2D::getLog()->w("no valid path to this location.");
 				m_latestPath.clear(); 
 				return false; //m_latestPath;
@@ -223,20 +355,28 @@ namespace ARK {
 			// At this point we've definitely found a path so we can uses the parent
 			// references of the nodes to find out way from the target location back
 			// to the start recording the nodes on the way.
-			AStarNode* target = getNode(targetX, targetY);
-			while (target != getNode(sourceX, sourceY)) {
+			while (target != source) {
 				m_latestPath.add(Vector2<int>(target->m_x, target->m_y) ); 
 				target = target->m_parent;
 			} 
-			m_latestPath.add( Vector2<int>(sourceX,sourceY) ); 
+			m_latestPath.add( Vector2<int>(source->m_x, source->m_y) ); 
 
 			m_latestPath.reverse();
 
 			// thats it, we have our path 
 			return true; //m_latestPath;
-		}
+		} 
+		
 		Vector<Vector2<int> > AStar::getLatestPath() {
 			return m_latestPath;  
+		}
+
+		// to add temporary nodes for POV-graph pathfinding
+		void AStar::addNode(AStarNode* node) {
+			m_nodes.add(node);
+		}
+		void AStar::removeNode(AStarNode* node) {
+			m_nodes.removeByValue(node);
 		}
 
 		/*PathGroup* AStar::getLatestPathLine() { 
@@ -357,13 +497,34 @@ namespace ARK {
 			AStarUtil::removeAdjacent(this, m_latestPath);
 		}
 
-
-		AStarNode* AStar::getNode(unsigned int x, unsigned int y) {
-			// we don't have a 2d array, so figure this shit out.
-			unsigned int id = (y * m_width) + x;
-			return m_nodes.get(id);
+		AStarNode* AStar::getNode(unsigned int index) {
+			return m_nodes.get(index);
+		}
+		unsigned int AStar::countNodes() {
+			return m_nodes.size();
 		}
 
+		AStarNode* AStar::getNode(float x, float y) {
+			if (!m_gridBased) {
+				for(unsigned int i = 0; i < m_nodes.size(); i++) {
+					AStarNode* one = m_nodes.get(i);
+					if (one->m_x == x && one->m_y == y) {
+						return one;
+					}
+				}
+				ARK2D::getLog()->w("Could not AStar::getNode()");
+				return NULL;
+			}
+			// we don't have a 2d array, so figure this shit out.
+			unsigned int ux = (unsigned int) x;
+			unsigned int uy = (unsigned int) y;
+			unsigned int index = (uy * m_width) + ux;
+			if (index < 0 || index >= m_nodes.size()) { return NULL;  }
+
+			//ARK2D::getLog()->v(StringUtil::append("Getting Node at index: ", index));
+			return m_nodes.get(index);
+		}
+	
 		AStarNode* AStar::getFirstNodeInOpen() {
 			return m_openSet.first();
 		}
@@ -387,20 +548,29 @@ namespace ARK {
 		}
 
 
-		bool AStar::isValidLocation(unsigned int sourceX, unsigned int sourceY, unsigned int x, unsigned int y) {
-			// TODO: rewrite so it's not backwards. 
+		bool AStar::isValidLocation(float sourceX, float sourceY, float x, float y) {
 
-			bool invalid = ((signed int) x < 0) || ((signed int) y < 0) || (x >= m_width) || (y >= m_height);
+			if (!m_gridBased) { 
+				AStarNode* node = getNode(x, y);
+				return (node != NULL);
+			}
+
+			// TODO: rewrite so it's not backwards. 
+			signed int iSourceX = (signed int) sourceX;
+			signed int iSourceY = (signed int) sourceY;
+			signed int ix = (signed int) x;
+			signed int iy = (signed int) y;
+			bool invalid = (ix < 0) || (iy < 0) || (ix >= m_width) || (iy >= m_height);
 
 			if ((!invalid) && ((sourceX != x) || (sourceY != y))) {
 				//this.mover = mover;
-				m_sourceX = sourceX;
-				m_sourceY = sourceY;
+				m_sourceX = iSourceX;
+				m_sourceY = iSourceY;
 				invalid = getNode(x, y)->isBlocked(); // map.blocked(this, x, y);
 			}
 			return !invalid;
 		}
-		float AStar::getMovementCost(unsigned int sourceX, unsigned int sourceY, unsigned int x, unsigned int y) {
+		float AStar::getMovementCost(float sourceX, float sourceY, float x, float y) {
 			m_sourceX = sourceX;
 			m_sourceY = sourceY;
 
@@ -409,9 +579,48 @@ namespace ARK {
 			//return map.getCost(this, tx, ty);
 			return 1.0f;
 		}
-		float AStar::getHeuristicCost(unsigned int x, unsigned int y, unsigned int tx, int unsigned ty) {
+		float AStar::getHeuristicCost(float x, float y, float tx, float ty) {
 			// A heuristic that uses the tile that is closest to the target as the next best tile.
 			return m_heuristic->getCost(this, x, y, tx, ty);
+		}
+
+		void AStar::clearNeighboursFromNodesThatConnectTo(AStarNode* node) {
+			// We also have to clear all the other points that connect to the source and target. doh! 
+			for (unsigned int j = 0; j < m_nodes.size(); j++)
+			{
+				AStarNode* end = m_nodes.get(j);
+				if (node == end) { continue; }
+
+				for (unsigned int i = 0; i < end->m_neighbours.size(); i++) {
+					if (end->m_neighbours[i] == node) {
+						end->m_neighbours.erase(end->m_neighbours.begin() + i);
+						break;
+					}
+				}
+			}
+		}
+		void AStar::calculateNeighboursForNode(AStarNode* start, AdvancedPolygon* polygon) {
+			for (unsigned int j = 0; j < m_nodes.size(); j++)
+			{
+				AStarNode* end = m_nodes.get(j);
+				if (start == end) { continue; }
+
+				bool directLineOfSight = true;
+
+				for (unsigned int k = 0; k < polygon->lines.size(); k++) {
+					ARK::Geometry::Line<float>* line = &polygon->lines[k];
+					bool collides = MathUtil::LineSegmentsCross(start->m_x, start->m_y, end->m_x, end->m_y, line->getStart()->getX(), line->getStart()->getY(), line->getEnd()->getX(), line->getEnd()->getY());
+					if (collides) { 
+						directLineOfSight = false; 
+						break; 
+					}
+				}
+
+				if (directLineOfSight) {
+					start->m_neighbours.push_back(end);
+					end->m_neighbours.push_back(start);
+				}
+			}
 		}
 
 
@@ -475,10 +684,10 @@ namespace ARK {
 			// Catmull-rom render of latestPath.
 			if (m_latestPath.size() > 0)
 			{
-				Vector<Vector2<int> > catmullPoints = m_latestPath;
+				/*Vector<Vector2<int> > catmullPoints = m_latestPath;
 				catmullPoints.add(0, Vector2<int>(catmullPoints.first().getX(), catmullPoints.first().getY()) );
 				catmullPoints.add(catmullPoints.size(), Vector2<int>(catmullPoints.last().getX(), catmullPoints.last().getY()) );
-				catmullPoints.add(catmullPoints.size(), Vector2<int>(catmullPoints.last().getX(), catmullPoints.last().getY()) );
+				catmullPoints.add(catmullPoints.size(), Vector2<int>(catmullPoints.last().getX(), catmullPoints.last().getY()) );*/
 
 				/*Vector<Vector2<int> > catmullPoints;
 				catmullPoints.add( Vector2<int>(0, 0) );

@@ -17,23 +17,24 @@ using namespace ARK::Core;
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     // Insert code here to initialize your application
-    printf("finished launching \r\n");
+    NSLog(@"finished launching \r\n");
 }
  
 - (void)applicationDidHide:(NSNotification *)notification {
-    printf("closed application\r\n");
+  NSLog(@"closed application\r\n");
 }
 
 - (void)applicationWillHide:(NSNotification *)notification {
-    printf("will hide now kthx\r\n");
-}
+    NSLog(@"will hide now\r\n");
+}@
 
 - (void) applicationWillTerminate:(NSNotification *)notification {
-    printf("will now terminate kthx\r\n");
+    NSLog(@"will now terminate\r\n");
 }
 
 -(void) applicationDidResignActive:(NSNotification *)notification {
     //printf("resigned active");
+    NSLog(@"DidResignActive\r\n");
 }
 
 

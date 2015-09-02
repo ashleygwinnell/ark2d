@@ -9,6 +9,7 @@
 #include "../Includes.h"
 #include "../Namespaces.h"
 #include "../Util/Containers/Vector.h"
+#include "../Geometry/AdvancedPolygon.h"
 
 /**
  * A* path finder implementation.
@@ -25,14 +26,14 @@ namespace ARK {
 
 		class ARK2D_API AStarHeuristic {
 			public:
-				virtual float getCost(AStar* map, unsigned int x, unsigned int y, unsigned int tx, unsigned int ty) = 0;
+				virtual float getCost(AStar* map, float x, float y, float tx, float ty) = 0;
 				virtual ~AStarHeuristic() {}
 		};
 
 		// A heuristic that uses the tile that is closest to the target as the next best tile.
 		class ARK2D_API ClosestHeuristic : public AStarHeuristic {
 			public:
-				virtual float getCost(AStar* map, unsigned int x, unsigned int y, unsigned int tx, unsigned int ty) 
+				virtual float getCost(AStar* map, float x, float y, float tx, float ty) 
 				{
 					float dx = tx - x;
 					float dy = ty - y;
@@ -45,7 +46,7 @@ namespace ARK {
 		// In this case the sqrt is removed and the distance squared is used instead.
 		class ARK2D_API ClosestSquaredHeuristic : public AStarHeuristic {
 			public:
-				virtual float getCost(AStar* map, unsigned int x, unsigned int y, unsigned int tx, unsigned int ty) 
+				virtual float getCost(AStar* map, float x, float y, float tx, float ty) 
 				{
 					float dx = tx - x;
 					float dy = ty - y;
@@ -62,7 +63,7 @@ namespace ARK {
 					m_minimumCost(minimumCost) { 
 
 				}
-				virtual float getCost(AStar* map, unsigned int x, unsigned int y, unsigned int tx, unsigned int ty) 
+				virtual float getCost(AStar* map, float x, float y, float tx, float ty) 
 				{
 					return m_minimumCost * (abs(float(x)-float(tx)) + abs(float(y)-float(ty)));
 				}
@@ -70,7 +71,7 @@ namespace ARK {
 
 		class ARK2D_API DiagonalShortcutHeuristic : public AStarHeuristic {
 			public:
-				virtual float getCost(AStar* map, unsigned int x, unsigned int y, unsigned int tx, unsigned int ty) 
+				virtual float getCost(AStar* map, float x, float y, float tx, float ty) 
 				{
 					float xDistance = abs(float(x)-float(tx));
 					float yDistance = abs(float(y)-float(ty));
@@ -83,13 +84,13 @@ namespace ARK {
 
 		class ARK2D_API AStarDataMap {
 			public:
-				virtual bool isBlocked(AStar* map, unsigned int x, unsigned int y) = 0;
+				virtual bool isBlocked(AStar* map, float x, float y) = 0;
 				virtual ~AStarDataMap() {}
 		};
 
 		class ARK2D_API DefaultAStarDataMap : public AStarDataMap {
 			public:
-				virtual bool isBlocked(AStar* map, unsigned int x, unsigned int y);
+				virtual bool isBlocked(AStar* map, float x, float y);
 		}; 
 
 		/* Coefficients for Matrix M */
@@ -124,8 +125,8 @@ namespace ARK {
 
 		class ARK2D_API AStarNode {
 			public:
-				unsigned int m_x;
-				unsigned int m_y;
+				float m_x;
+				float m_y;
 				unsigned int m_cost;
 				unsigned int m_depth;
 				AStarNode* m_parent; 
@@ -133,8 +134,9 @@ namespace ARK {
 				bool m_open;
 				bool m_closed;
 				bool m_blocked; // can this block be moved in to? 
+				vector<AStarNode*> m_neighbours;
 
-				AStarNode(unsigned int x, unsigned int y):
+				AStarNode(float x, float y):
 					m_x(x),
 					m_y(y),
 					m_cost(0),
@@ -143,7 +145,8 @@ namespace ARK {
 					m_heuristic(0.0f),
 					m_open(false),
 					m_closed(false),
-					m_blocked(false) { 
+					m_blocked(false),
+					m_neighbours() { 
 
 				}
 				unsigned int setParent(AStarNode* parent) {
@@ -164,6 +167,8 @@ namespace ARK {
 					return 0;
 				}
 				void reset() {
+					m_heuristic = 0.0f;
+					m_parent = NULL;
 					m_closed = false;
 					m_open = false;
 					m_cost = 0;
@@ -225,8 +230,6 @@ namespace ARK {
 				Vector<AStarNode*> m_closedSet;
 				PriorityAStarNodeList m_openSet;
 
-				bool m_allowDiagonal;
-
 				Vector<AStarNode*> m_nodes;
 				unsigned int m_width;
 				unsigned int m_height;
@@ -244,17 +247,24 @@ namespace ARK {
 				float m_y;
 				float m_eachSize;
 
+				bool m_gridBased;
+				bool m_gridAllowDiagonal;
+
 			public: 
 
+				AStar();
+				AStar(AdvancedPolygon* poly);
 				AStar(unsigned int width, unsigned int height);
 				AStar(unsigned int width, unsigned int height, float x, float y, float eachSize);
 
-				void init();
+				void init(); 
 				void setHeuristic(AStarHeuristic* h);
 				void setDataMap(AStarDataMap* map);
+				void processNeighbours();
 
 				void setAllowDiagonal(bool b);
 
+				bool findPath(AStarNode* start, AStarNode* destination);
 				bool findPath(unsigned int sourceX, unsigned int sourceY, unsigned int targetX, unsigned int targetY);
 				Vector<Vector2<int> > getLatestPath();
 				//PathGroup* getLatestPathLine();
@@ -262,6 +272,9 @@ namespace ARK {
 
 				void randomiseAdjacent();
 				void removeAdjacent();
+				
+				void addNode(AStarNode* node); // to add temporary nodes for POV-graph pathfinding
+				void removeNode(AStarNode* node);
 
 				void reset();
 
@@ -271,17 +284,25 @@ namespace ARK {
 				inline unsigned int getHeight() { return m_height; }
 				inline float getEachSize() { return m_eachSize; }
 
-				AStarNode* getNode(unsigned int x, unsigned int y);
+				AStarNode* addNode(float x, float y);
+				AStarNode* getNode(float x, float y);
 				AStarNode* getFirstNodeInOpen();
 				void addNodeToOpen(AStarNode* node);
 		        void addNodeToClosed(AStarNode* node);
 		        void removeNodeFromOpen(AStarNode* node);
 		        void removeNodeFromClosed(AStarNode* node);
 
-		        bool isValidLocation(unsigned int sourceX, unsigned int sourceY, unsigned int x, unsigned int y);
-		        float getMovementCost(unsigned int sourceX, unsigned int sourceY, unsigned int x, unsigned int y);
-				float getHeuristicCost(unsigned int x, unsigned int y, unsigned int tx, int unsigned ty);
+				AStarNode* getNode(unsigned int index);
+				unsigned int countNodes();
+
+		        bool isValidLocation(float sourceX, float sourceY, float x, float y);
+		        float getMovementCost(float sourceX,float sourceY, float x, float y);
+				float getHeuristicCost(float x, float y, float tx, float ty);
 		 
+		 		// visibility graph calculations
+				void clearNeighboursFromNodesThatConnectTo(AStarNode* node);
+				void calculateNeighboursForNode(AStarNode* start, AdvancedPolygon* polygon);
+
 				void render();
 				void render(float x, float y);
 
@@ -338,6 +359,7 @@ namespace ARK {
 				
 				virtual ~AStar();
 		};
+
 
 		class ARK2D_API AStarUtil {
 			public:
