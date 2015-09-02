@@ -3458,7 +3458,7 @@ build:
 			];
 			
 			gypfiletargetcondition['xcode_settings'] = {};
-			gypfiletargetcondition['xcode_settings']['ARCHS'] = "i386 x86_64"; 
+			gypfiletargetcondition['xcode_settings']['ARCHS'] = "$(ARCHS_STANDARD)";#"i386 x86_64"; 
 			gypfiletargetcondition['xcode_settings']['MAC_OS_X_VERSION_MIN_REQUIRED'] = '1070';
 			gypfiletargetcondition['xcode_settings']['SDKROOT'] = "macosx"; 
 			#gypfiletargetcondition['xcode_settings']['TARGETED_DEVICE_FAMILY'] = "1,2";

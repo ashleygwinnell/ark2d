@@ -67,8 +67,8 @@ namespace ARK {
 			for (int i = 0; i < poly->outers.size(); i++) {
 				for (int j = 0; j < poly->outers[i].getPoints()->size(); j++) {
 					Vector2<float>* point = poly->outers[i].getPoint(j);
-					bool concave = MathUtil::isVertexConcave(poly->outers[i].getPoints(), j);
-					if (!concave) {
+					bool convex = MathUtil::isVertexConvex(poly->outers[i].getPoints(), j);
+					if (!convex) {
 						addNode(point->getX(), point->getY());
 					}
 				}
@@ -76,8 +76,8 @@ namespace ARK {
 			for (int i = 0; i < poly->holes.size(); i++) {
 				for (int j = 0; j < poly->holes[i].getPoints()->size(); j++) {
 					Vector2<float>* point = poly->holes[i].getPoint(j);
-					bool concave = MathUtil::isVertexConcave(poly->holes[i].getPoints(), j);
-					if (concave) {
+					bool convex = MathUtil::isVertexConvex(poly->holes[i].getPoints(), j);
+					if (convex) {
 						addNode(point->getX(), point->getY());
 					}
 				}
@@ -632,37 +632,72 @@ namespace ARK {
 			Renderer* r = ARK2D::getRenderer();
 			float alpha = 0.5f;
 
-			//float oneWidth = float(container->getWidth()) / float(m_width);
-			//float oneHeight = float(container->getHeight()) / float(m_height);
-			float oneSize = m_eachSize; //(oneWidth < oneHeight) ? oneWidth : oneHeight;
+			if (m_gridBased) { 
 
-			for(unsigned int x = 0; x < m_width; ++x) {
-				for(unsigned int y = 0; y < m_height; ++y) {
-					AStarNode* node = getNode(x, y);
+				//float oneWidth = float(container->getWidth()) / float(m_width);
+				//float oneHeight = float(container->getHeight()) / float(m_height);
+				float oneSize = m_eachSize; //(oneWidth < oneHeight) ? oneWidth : oneHeight;
 
-					float renderX = drawX + (x * oneSize); 
-					float renderY = drawY + (y * oneSize);
+				for(unsigned int x = 0; x < m_width; ++x) {
+					for(unsigned int y = 0; y < m_height; ++y) {
+						AStarNode* node = getNode(x, y);
 
-					if (node->isBlocked()) {
-						r->setDrawColorf(1.0f, 0.0f, 0.0f, alpha);
-					} else {
-						r->setDrawColorf(0.1f, 0.1f, 0.1f, alpha);
+						float renderX = drawX + (x * oneSize); 
+						float renderY = drawY + (y * oneSize);
+
+						if (node->isBlocked()) {
+							r->setDrawColorf(1.0f, 0.0f, 0.0f, alpha);
+						} else {
+							r->setDrawColorf(0.1f, 0.1f, 0.1f, alpha);
+						}
+
+						r->fillRect(renderX, renderY, oneSize, oneSize);
+					}
+				}
+
+				r->setDrawColorf(0.0f, 1.0f, 0.0f, alpha);
+				for(unsigned int i = 0; i < m_latestPath.size(); ++i) {
+					r->fillRect(
+						drawX + (m_latestPath.get(i).getX() * oneSize), 
+						drawY + (m_latestPath.get(i).getY() * oneSize), 
+						oneSize, 
+						oneSize
+					); 
+				}
+			} 
+			// node / visibility based
+			else {
+
+				//ARK2D::getLog()->e(StringUtil::append("nodes size:", m_nodes.size()));
+				for (unsigned int i = 0; i < m_nodes.size(); i++) {
+					AStarNode* start = m_nodes.get(i); //->getNode(i);
+					for (unsigned int j = 0; j < start->m_neighbours.size(); j++) {
+						r->setDrawColor(Color::grey);
+						r->drawLine(start->m_x, start->m_y, start->m_neighbours[j]->m_x, start->m_neighbours[j]->m_y);
 					}
 
-					r->fillRect(renderX, renderY, oneSize, oneSize);
+					r->setDrawColor(Color::yellow);
+					r->drawCircle(start->m_x, start->m_y, 14, 12);
 				}
-			}
 
-			r->setDrawColorf(0.0f, 1.0f, 0.0f, alpha);
-			for(unsigned int i = 0; i < m_latestPath.size(); ++i) {
-				r->fillRect(
-					drawX + (m_latestPath.get(i).getX() * oneSize), 
-					drawY + (m_latestPath.get(i).getY() * oneSize), 
-					oneSize, 
-					oneSize
-				); 
-			}
+				r->setLineWidth(2);
+				r->setDrawColor(Color::magenta);
+				Vector<Vector2<int> >& path = m_latestPath;
+				if (path.size() > 2) {
+					//ARK2D::getLog()->e(StringUtil::append("size:", path.size()));
+					for (unsigned int i = 0; i < path.size() - 1; i++) {
+						Vector2<int> p = path.getr(i);
+						Vector2<int> p2 = path.getr((i + 1) % path.size());
+						r->drawLine(
+							p.getX(), p.getY(),
+							p2.getX(), p2.getY()
+						);
+						//r->fillCircle(p.getX(), p.getY(), 10, 10);
+					}
+				}
+				r->setLineWidth(1);
 
+			}
 
 			/*r->setDrawColorf(1.0f, 0.0f, 1.0f, alpha);
 			r->fillRect(

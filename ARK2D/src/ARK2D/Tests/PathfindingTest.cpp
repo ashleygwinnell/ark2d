@@ -147,34 +147,7 @@ namespace ARK {
 				r->setDrawColor(Color::red);
 				r->fillCircle(pathfindingGraphTarget->m_x, pathfindingGraphTarget->m_y, 5, 14);
 
-				ARK2D::getLog()->e(StringUtil::append("nodes size:", pathfindingGraph->countNodes()));
-				for (unsigned int i = 0; i < pathfindingGraph->countNodes(); i++) {
-					AStarNode* start = pathfindingGraph->getNode(i);
-					for (unsigned int j = 0; j < start->m_neighbours.size(); j++) {
-						r->setDrawColor(Color::grey);
-						r->drawLine(start->m_x, start->m_y, start->m_neighbours[j]->m_x, start->m_neighbours[j]->m_y);
-					}
-
-					r->setDrawColor(Color::yellow);
-					r->drawCircle(start->m_x, start->m_y, 14, 12);
-				}
-
-				r->setLineWidth(2);
-				r->setDrawColor(Color::magenta);
-				Vector<Vector2<int> >& path = pathfindingGraph->getLatestPath();
-				if (path.size() > 2) {
-					ARK2D::getLog()->e(StringUtil::append("size:", path.size()));
-					for (unsigned int i = 0; i < path.size() - 1; i++) {
-						Vector2<int> p = path.getr(i);
-						Vector2<int> p2 = path.getr((i + 1) % path.size());
-						r->drawLine(
-							p.getX(), p.getY(),
-							p2.getX(), p2.getY()
-						);
-						//r->fillCircle(p.getX(), p.getY(), 10, 10);
-					}
-				}
-				r->setLineWidth(1);
+				pathfindingGraph->render();
 			}
 		}
 

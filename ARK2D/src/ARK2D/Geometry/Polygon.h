@@ -66,6 +66,15 @@ namespace ARK {
 				virtual void addPoint(T x, T y) {
 					m_points.push_back(Vector2<T>(x, y));
 				}
+				virtual bool addPointIfNotExists(T x, T y) {
+					for(unsigned int i = 0; i < m_points.size(); ++i) {
+						if (m_points[i].getX() == x && m_points[i].getY() == y) {
+							return false;
+						}
+					}
+					addPoint(x, y);
+					return true;
+				}
 				virtual vector<Vector2<T> >* getPoints() {
 					return &m_points;
 				}
@@ -202,6 +211,14 @@ namespace ARK {
 					}
 
 					return false;
+				}
+				bool isConvex() { // 
+					for (unsigned int i = 0; i < m_points.size(); i++) {
+						if (!MathUtil::isVertexConvex(&m_points, i)) { 
+							return false;
+						}
+					}
+					return true;
 				}
 				virtual void resolve(Shape<T>* s) {
 

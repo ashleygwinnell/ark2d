@@ -12,7 +12,7 @@ void AdvancedPolygon::updateLines() {
 
 	for (unsigned int i = 0; i < holes.size(); i++)
 	{
-		vector<Vector2<float>>* poly = holes[i].getPoints();
+		vector<Vector2<float> >* poly = holes[i].getPoints();
 		for (unsigned int j = 0; j < poly->size(); j++) {
 			Vector2<float>* start = &poly->at(j);
 			Vector2<float>* end = &poly->at((j + 1) % poly->size());
@@ -24,7 +24,7 @@ void AdvancedPolygon::updateLines() {
 
 	for (unsigned int i = 0; i < outers.size(); i++)
 	{
-		vector<Vector2<float>>* poly = outers[i].getPoints();
+		vector<Vector2<float> >* poly = outers[i].getPoints();
 		for (unsigned int j = 0; j < poly->size(); j++) {
 			Vector2<float>* start = &poly->at(j);
 			Vector2<float>* end = &poly->at((j + 1) % poly->size());
@@ -60,15 +60,18 @@ void AdvancedPolygon::renderInner(ARK::Geometry::Polygon<float>* sp, bool hole)
 
 	for (unsigned int j = 0; j < sp->getPoints()->size(); j++)
 	{
-		bool concave = MathUtil::isVertexConcave(sp->getPoints(), j);
-		if (hole) { concave = !concave; }
+		bool convex = MathUtil::isVertexConvex(sp->getPoints(), j);
+		if (hole) { convex = !convex; }
 
 		ARK::Geometry::Vector2<float>* point = sp->getPoint(j);
 		r->setDrawColor(Color::white);
+		if (hole) { r->setDrawColor(Color::red); }
 		r->drawCircle(point->getX(), point->getY(), 5, 12);
-		if (concave) {
+		if (convex) {
 			r->setDrawColor(Color::cyan);
+			r->setLineWidth(2);
 			r->drawCircle(point->getX(), point->getY(), 9, 12);
+			r->setLineWidth(1);
 		}
 
 		/*bool los = InLineOfSight(sp->getPoints(), &pos, sp->getPoint(j));
@@ -102,6 +105,7 @@ void AdvancedPolygon::renderInner(ARK::Geometry::Polygon<float>* sp, bool hole)
 		MathUtil::moveAngle(spx2, spy2, spAngle - 180, (spHalfDistance*spModifier*-1.0f) + 4);
 
 		r->setDrawColor(Color::white);
+		if (hole) { r->setDrawColor(Color::red); }
 		r->setLineWidth(1);
 		r->drawLine(spx, spy, spx2, spy2);
 

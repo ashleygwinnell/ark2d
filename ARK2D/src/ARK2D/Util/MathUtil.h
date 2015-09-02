@@ -310,17 +310,28 @@ namespace ARK {
 
 				}
 
-				static bool isVertexConcave(vector<Vector2<float> >* vertices, int vertex)
+				static bool isVertexConvex(vector<Vector2<float> >* vertices, int vertex)
 				{
 					Vector2<float>* current = &vertices->at(vertex);
 					Vector2<float>* next = &vertices->at((vertex + 1) % vertices->size());
 					Vector2<float>* previous = &vertices->at(vertex == 0 ? vertices->size() - 1 : vertex - 1);
 
-					Vector2<float> left(current->getX() - previous->getX(), current->getY() - previous->getY());
+					/*Vector2<float> left(current->getX() - previous->getX(), current->getY() - previous->getY());
 					Vector2<float> right(next->getX() - current->getX(), next->getY() - current->getY());
 
 					float cross = (left.getX() * right.getY()) - (left.getY() * right.getX());
 
+					return cross < 0;*/
+					return isVertexConvex(current->getX(), current->getY(), previous->getX(), previous->getY(), next->getX(), next->getY());
+				}
+				static bool isVertexConvex(float x, float y, float previousX, float previousY, float nextX, float nextY)
+				{
+					float leftX = x - previousX;
+					float leftY = y - previousY;
+					float rightX = nextX - x;
+					float rightY = nextY - y;
+
+					float cross = (leftX * rightY) - (leftY * rightX);
 					return cross < 0;
 				}
 

@@ -26,7 +26,7 @@ using namespace ARK::Core;
 
 - (void)applicationWillHide:(NSNotification *)notification {
     NSLog(@"will hide now\r\n");
-}@
+}
 
 - (void) applicationWillTerminate:(NSNotification *)notification {
     NSLog(@"will now terminate\r\n");
