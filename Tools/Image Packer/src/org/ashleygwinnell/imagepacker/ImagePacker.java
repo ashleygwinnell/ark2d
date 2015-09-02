@@ -349,6 +349,10 @@ public class ImagePacker {
 					
 					tryRotation = false;
 					
+					// Point to the left side of the image.
+					Point leftPoint = new Point(0, one.y + one.m_height + m_spacing+m_spacing + 1);
+					points.add(leftPoint);
+					
 					
 					// Point to the bottom.
 					Point bottomPoint = new Point(one.x, one.y + one.m_height + m_spacing+m_spacing + 1);
@@ -363,6 +367,8 @@ public class ImagePacker {
 						points.add(rightPoint);
 					}
 					points.sort(portSort);;
+					
+					
 											
 					if (bottomPoint.y > m_innerHeight) {
 						m_innerHeight = bottomPoint.y;
