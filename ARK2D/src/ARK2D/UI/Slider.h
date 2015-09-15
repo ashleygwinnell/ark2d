@@ -61,9 +61,9 @@ namespace ARK {
 				void setBounds(float x, float y, float w, float h);
 				void setButtonPosition(float percentage); // from 0 - 1. TODO: take in to account low/high value
 
-				virtual void keyPressed(unsigned int key);
-				virtual void keyReleased(unsigned int key);
-				virtual void mouseMoved(int x, int y, int oldx, int oldy);
+				virtual bool keyPressed(unsigned int key);
+				virtual bool keyReleased(unsigned int key);
+				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
 				virtual ~Slider();
 

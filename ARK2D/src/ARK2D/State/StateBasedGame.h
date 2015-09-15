@@ -76,9 +76,9 @@ namespace ARK {
 				virtual void pause(); // android events
 				virtual void resume();
 
-				virtual void keyPressed(unsigned int key);
-				virtual void keyReleased(unsigned int key);
-				virtual void mouseMoved(int x, int y, int oldx, int oldy);
+				virtual bool keyPressed(unsigned int key);
+				virtual bool keyReleased(unsigned int key);
+				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
 				virtual void gamepadConnected(ARK::Controls::Gamepad* gamepad);
 				virtual void gamepadDisconnected(ARK::Controls::Gamepad* gamepad);

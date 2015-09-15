@@ -164,9 +164,9 @@ namespace ARK {
 			}
 		}
 
-		void AbstractUIComponent::keyPressed(unsigned int key) { }
-		void AbstractUIComponent::keyReleased(unsigned int key) { }
-		void AbstractUIComponent::mouseMoved(int x, int y, int oldx, int oldy) { }
+        bool AbstractUIComponent::keyPressed(unsigned int key) { return false; }
+        bool AbstractUIComponent::keyReleased(unsigned int key) { return false; }
+        bool AbstractUIComponent::mouseMoved(int x, int y, int oldx, int oldy) { return false; }
 
 		bool AbstractUIComponent::isMouseInBounds() {
 			Input* i = ARK2D::getInput();

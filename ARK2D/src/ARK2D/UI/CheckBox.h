@@ -41,9 +41,9 @@ namespace ARK {
 				virtual void renderBackground();
 				virtual void renderOverlay();
 
-				virtual void keyPressed(unsigned int key);
-				virtual void keyReleased(unsigned int key);
-				virtual void mouseMoved(int x, int y, int oldx, int oldy);
+				virtual bool keyPressed(unsigned int key);
+				virtual bool keyReleased(unsigned int key);
+				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
 				virtual ~CheckBox();
 		};

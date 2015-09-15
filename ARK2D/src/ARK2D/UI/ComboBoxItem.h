@@ -46,8 +46,9 @@ namespace ARK {
 				void render();
 				void renderBackground();
 				void renderOverlay();
-				void keyPressed(unsigned int key);
-				void mouseMoved(int x, int y, int oldx, int oldy);
+				virtual bool keyPressed(unsigned int key);
+				virtual bool keyReleased(unsigned int key);
+				bool mouseMoved(int x, int y, int oldx, int oldy);
 		};
 	}
 }

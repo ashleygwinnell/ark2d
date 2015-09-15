@@ -38,10 +38,12 @@ namespace ARK {
 		}
 
 		void UITestGameState::init(GameContainer* container, StateBasedGame* game) {
-			Panel* root = new Panel();
-			root->setSize(container->getWidth(), container->getHeight());
-			root->setShowBorder(false);
+//			Panel* root = new Panel();
+//			root->setSize(container->getWidth(), container->getHeight());
+//			root->setShowBorder(false);
 
+            SceneNode* root = m_rootUIComponent;
+            
 			rightPanel = new ScrollPanel();
 			rightPanel->setLocation(50, 50);
 			rightPanel->setWidth(container->getWidth()/2);
@@ -101,7 +103,7 @@ namespace ARK {
 			rightPanel->add(button);
 
 
-			root->add(rightPanel);
+			root->addChild(rightPanel);
 
 			m_rootUIComponent = root;
 		}

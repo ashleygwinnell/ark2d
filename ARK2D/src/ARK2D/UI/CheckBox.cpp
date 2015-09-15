@@ -70,33 +70,39 @@ namespace ARK {
 			g->setDrawColor(Color::white);  
 		}
 
-		void CheckBox::keyPressed(unsigned int key) {
+		bool CheckBox::keyPressed(unsigned int key) {
 			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT && isMouseInBounds()) {
 				m_state = STATE_DOWN;
 				setFocussed(true);
+                return true;
 			}
+            return false;
 		}
 
-		void CheckBox::keyReleased(unsigned int key) {
+		bool CheckBox::keyReleased(unsigned int key) {
 			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT && isMouseInBounds()) {
 				if (m_state == STATE_DOWN) {
 					m_state = STATE_OVER;
 					m_checked = !m_checked;
 					doStateChangedEvent();
+                    return true;
 				}
 			} else {
 				m_state = STATE_OFF;
 				setFocussed(false);
 			}
+            return false;
 		}
 
-		void CheckBox::mouseMoved(int x, int y, int oldx, int oldy) {
-			if (m_state == STATE_DOWN) { return; }
+		bool CheckBox::mouseMoved(int x, int y, int oldx, int oldy) {
+			if (m_state == STATE_DOWN) { return false; }
 			if (isMouseInBounds()) {
 				m_state = STATE_OVER;
+                return true;
 			} else {
 				m_state = STATE_OFF;
-			}
+            }
+            return false;
 		}
 
 

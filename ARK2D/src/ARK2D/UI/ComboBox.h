@@ -37,6 +37,8 @@ namespace ARK {
 				void* m_itemChangedEvent;
 				int m_originalHeight;
 
+				
+
 			public:
 				ComboBox();
 				void addItem(ComboBoxItem* cbi);
@@ -46,14 +48,16 @@ namespace ARK {
 				ComboBoxItem* getSelected();
 				void setSelectedByValue(string value);
 				void setSize(unsigned int w, unsigned int h);
-				void keyPressed(unsigned int key);
-				void keyReleased(unsigned int key);
-				void mouseMoved(int x, int y, int oldx, int oldy);
+
 				void render();
 				void renderBackground();
 				void renderArrow();
 				void renderText(int x, int y);
 				void renderOverlay();
+            
+                bool keyPressed(unsigned int key);
+                bool keyReleased(unsigned int key);
+                bool mouseMoved(int x, int y, int oldx, int oldy);
 
 		};
 	}

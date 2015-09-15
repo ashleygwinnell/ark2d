@@ -48,14 +48,14 @@ namespace ARK {
 			GameState::leave(container, game, to);
 		}
 
-		void IntelligentGameState::keyPressed(unsigned int key) {
-			GameState::keyPressed(key);
+		bool IntelligentGameState::keyPressed(unsigned int key) {
+			return GameState::keyPressed(key);
 		}
-		void IntelligentGameState::keyReleased(unsigned int key) {
-			GameState::keyReleased(key);
+		bool IntelligentGameState::keyReleased(unsigned int key) {
+			return GameState::keyReleased(key);
 		}
-		void IntelligentGameState::mouseMoved(int x, int y, int oldx, int oldy) {
-			GameState::mouseMoved(x, y, oldx, oldy);
+		bool IntelligentGameState::mouseMoved(int x, int y, int oldx, int oldy) {
+			return GameState::mouseMoved(x, y, oldx, oldy);
 		}
 
 		void IntelligentGameState::init(GameContainer* container, StateBasedGame* game) {

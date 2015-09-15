@@ -18,7 +18,8 @@ namespace ARK {
 			m_selected(NULL),
 			m_open(false),
 			m_state(Button::STATE_OFF),
-			m_itemChangedEvent(NULL) {
+			m_itemChangedEvent(NULL)
+			{
 
 		}
 		void ComboBox::addItem(ComboBoxItem* cbi) {
@@ -42,6 +43,11 @@ namespace ARK {
 				m_height = newHeight;
 			} else {
 				m_height = m_originalHeight;
+
+				// state state to off for all children
+				for(unsigned int i = 0; i < m_items.size(); i++) {
+					m_items[i]->m_state = Button::STATE_OFF;
+				}
 			}
 		}
 		bool ComboBox::isOpen() {
@@ -67,37 +73,81 @@ namespace ARK {
 			m_originalHeight = h;
 		}
 
-		void ComboBox::keyPressed(unsigned int key) {
+		bool ComboBox::keyPressed(unsigned int key) {
 			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT) {
 
-				if (m_open) {
-					for(unsigned int i = 0; i < m_items.size(); i++) {
-						m_items.at(i)->keyPressed(key);
-					}
-				}
+				if (m_state == Button::STATE_OVER) {
+                    m_state = Button::STATE_DOWN;
+				} 
+                
+                if (m_open) {
+                	bool consumed = false;
+                    for(unsigned int i = 0; i < m_items.size(); i++) {
+                        if (m_items.at(i)->keyPressed(key)) { consumed = true; } 
+                    }
+                    if (consumed) return consumed;
+                }
+                return m_state == Button::STATE_DOWN;
+			}
+			return false;
+            
 
-				if (isMouseInBounds()) {
+		}
+		bool ComboBox::keyReleased(unsigned int key) {
+            if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT) {
+
+            	if (isMouseInBounds() && m_state == Button::STATE_DOWN) {
+
+            		bool consumed = false;
+            		if (m_open) {
+						
+	        			for(unsigned int i = 0; i < m_items.size(); i++) {
+	                	    if (m_items.at(i)->keyReleased(key)) { 
+	                	    	consumed = true;
+	                	    }
+	                	}
+	                	
+	                }
+
 					setOpen(!isOpen());
+					m_state = (isMouseInBounds())?Button::STATE_OVER:Button::STATE_OFF;
+					if (consumed) {
+						return consumed;
+					}
 				} else {
 					setOpen(false);
+					m_state = Button::STATE_OFF;
 				}
-
+				
 			}
-
-		}
-		void ComboBox::mouseMoved(int x, int y, int oldx, int oldy) {
-			if (isMouseInBounds()) {
-				m_state = Button::STATE_OVER;
-			} else {
-				m_state = Button::STATE_OFF;
-			}
-			for(unsigned int i = 0; i < m_items.size(); i++) {
-				m_items.at(i)->mouseMoved(x,y,oldx,oldy);
-			}
-		}
-		void ComboBox::keyReleased(unsigned int key) {
+            return false;
 
 		}
+		bool ComboBox::mouseMoved(int x, int y, int oldx, int oldy) {
+			bool mib = isMouseInBounds();
+	//		ARK2D::getLog()->e(StringUtil::append("mib: ", mib));
+	//		ARK2D::getLog()->e(StringUtil::append("m_state: ", m_state));
+
+			if (m_state != Button::STATE_DOWN) { 
+				if (mib) {
+					m_state = Button::STATE_OVER;
+				} else {
+					m_state = Button::STATE_OFF;
+				}
+			}
+			if (m_open) {
+				bool consumed = false;
+				for(unsigned int i = 0; i < m_items.size(); i++) {
+					if (m_items.at(i)->mouseMoved(x,y,oldx,oldy)) {
+						consumed = true;
+						//break;
+					}
+				}
+				if (consumed) return consumed;;
+			}
+            return (m_state == Button::STATE_OVER || m_state == Button::STATE_DOWN);
+		}
+		
 		void ComboBox::render() {
 			renderBackground();
 			renderArrow();
@@ -105,7 +155,13 @@ namespace ARK {
 
 			Renderer* g = ARK2D::getRenderer();
 			if (m_selected != NULL) {
-				g->drawString(m_selected->m_text, m_x, m_y);
+				float tx = m_x;
+				float ty = m_y;
+				if (m_state == Button::STATE_DOWN || m_open) {
+					tx += 2;
+					ty += 2;
+				}
+				g->drawString(m_selected->m_text, tx, ty);
 			}
 
 			if (m_open) {
@@ -138,7 +194,7 @@ namespace ARK {
 		void ComboBox::renderOverlay() {
 			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white);
-			if (m_state == Button::STATE_OVER) {
+			if (m_state == Button::STATE_OVER || m_state == Button::STATE_DOWN || m_open) {
 				g->setDrawColor(Color::white_50a);
 			}
 			g->drawRect(m_x, m_y, m_width, m_height);

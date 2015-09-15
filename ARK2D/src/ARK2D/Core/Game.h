@@ -11,6 +11,7 @@
 #include "../Includes.h"
 #include "../Namespaces.h"
 
+#include "../Controls/KeyListener.h"
 #include "../Controls/Gamepad.h"
 
 namespace ARK {
@@ -21,7 +22,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class ARK2D_API Game : public GamepadListener {
+		class ARK2D_API Game : public GamepadListener, public KeyListener/*, public MouseListener*/ {
 			public:
 
 				Game(string title);
@@ -43,11 +44,11 @@ namespace ARK {
 				virtual void resume();
 
 				// Key Listener
-				virtual void keyPressed(unsigned int key);
-				virtual void keyReleased(unsigned int key);
+				virtual bool keyPressed(unsigned int key);
+				virtual bool keyReleased(unsigned int key);
 
 				// Mouse Listener
-				virtual void mouseMoved(int x, int y, int oldx, int oldy);
+				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
 				// Gamepad Listener
 				virtual void gamepadConnected(ARK::Controls::Gamepad* gamepad);

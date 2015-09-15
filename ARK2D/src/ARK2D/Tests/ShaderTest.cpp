@@ -99,20 +99,23 @@ namespace ARK {
 			shader->stop();
 			showAnyGlErrorAndExitMacro();
 		}
-		void HSVShaderTestGameState::keyPressed(unsigned int key) { 
-			m_sliderHue->keyPressed(key);
-			m_sliderSaturation->keyPressed(key);
-			m_sliderValue->keyPressed(key);
+		bool HSVShaderTestGameState::keyPressed(unsigned int key) {
+			if (m_sliderHue->keyPressed(key)) return true;
+            if (m_sliderSaturation->keyPressed(key)) return true;
+            if (m_sliderValue->keyPressed(key)) return true;
+            return false;
 		}
-		void HSVShaderTestGameState::keyReleased(unsigned int key) { 
-			m_sliderHue->keyReleased(key);
-			m_sliderSaturation->keyReleased(key);
-			m_sliderValue->keyReleased(key);
+		bool HSVShaderTestGameState::keyReleased(unsigned int key) {
+            if (m_sliderHue->keyReleased(key)) return true;
+            if (m_sliderSaturation->keyReleased(key)) return true;
+            if (m_sliderValue->keyReleased(key)) return true;
+            return false;
 		}
-		void HSVShaderTestGameState::mouseMoved(int x, int y, int oldx, int oldy) { 
-			m_sliderHue->mouseMoved(x, y, oldx, oldy);
-			m_sliderSaturation->mouseMoved(x, y, oldx, oldy);
-			m_sliderValue->mouseMoved(x, y, oldx, oldy);
+		bool HSVShaderTestGameState::mouseMoved(int x, int y, int oldx, int oldy) {
+            if (m_sliderHue->mouseMoved(x, y, oldx, oldy)) return true;
+            if (m_sliderSaturation->mouseMoved(x, y, oldx, oldy)) return true;
+            if (m_sliderValue->mouseMoved(x, y, oldx, oldy)) return true;
+            return false;
 		}
 		HSVShaderTestGameState::~HSVShaderTestGameState() {
 

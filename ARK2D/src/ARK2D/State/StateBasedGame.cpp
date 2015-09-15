@@ -276,23 +276,23 @@ namespace ARK {
 		}
 
 
-		void StateBasedGame::keyPressed(unsigned int key) {
-			Game::keyPressed(key);
-			if (m_loading_state != NULL && m_loading_state->isLoading()) { return; }
+		bool StateBasedGame::keyPressed(unsigned int key) {
+            if (Game::keyPressed(key)) return true;
+            if (m_loading_state != NULL && m_loading_state->isLoading()) { return false; }
 			
-			m_current_state->keyPressed(key);
+			return m_current_state->keyPressed(key);
 		}
-		void StateBasedGame::keyReleased(unsigned int key) {
-			Game::keyReleased(key);
-			if (m_loading_state != NULL && m_loading_state->isLoading()) { return; }
+		bool StateBasedGame::keyReleased(unsigned int key) {
+            if (Game::keyReleased(key)) return true;
+			if (m_loading_state != NULL && m_loading_state->isLoading()) { return false; }
 
-			m_current_state->keyReleased(key);
+            return m_current_state->keyReleased(key);
 		}
-		void StateBasedGame::mouseMoved(int x, int y, int oldx, int oldy) {
-			Game::mouseMoved(x, y, oldx, oldy);
-			if (m_loading_state != NULL && m_loading_state->isLoading()) { return; }
+		bool StateBasedGame::mouseMoved(int x, int y, int oldx, int oldy) {
+            if (Game::mouseMoved(x, y, oldx, oldy)) return true;
+			if (m_loading_state != NULL && m_loading_state->isLoading()) { return false; }
 
-			m_current_state->mouseMoved(x, y, oldx, oldy);
+			return m_current_state->mouseMoved(x, y, oldx, oldy);
 		} 
 
 		void StateBasedGame::gamepadConnected(ARK::Controls::Gamepad* gamepad) {

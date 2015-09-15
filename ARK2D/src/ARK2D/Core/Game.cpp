@@ -321,14 +321,14 @@ namespace ARK {
 
 
 		// key listener
-		void Game::keyPressed(unsigned int key) {
+		bool Game::keyPressed(unsigned int key) {
 
 		}
-		void Game::keyReleased(unsigned int key) {
+		bool Game::keyReleased(unsigned int key) {
 
 		}
 		// mouse listener
-		void Game::mouseMoved(int x, int y, int oldx, int oldy) {
+		bool Game::mouseMoved(int x, int y, int oldx, int oldy) {
 
 		}
 

@@ -220,10 +220,10 @@ namespace ARK {
 			}
 			return false;
 		}
-		void TextField::keyReleased(unsigned int key) {
-			
+		bool TextField::keyReleased(unsigned int key) {
+            return false;
 		}
-		void TextField::keyPressed(unsigned int key) {
+		bool TextField::keyPressed(unsigned int key) {
 			Input* i = ARK2D::getInput();
 
 			string k = i->getKeyChar(key);
@@ -239,10 +239,11 @@ namespace ARK {
 					//UIComponent::s_currentFocus = this;
 					ARK2D::getLog()->e("focussed");
 					setFocussed(true);
+                    return true;
 				} else {
 					setFocussed(false);
 				}
-				return;
+				return false;
 			}
 
 
@@ -263,6 +264,7 @@ namespace ARK {
 						m_text.remove(m_cursorPosition-1, 1);
 						cursorLeft();
 					}
+                    return true;
 				} else if (key == (unsigned int) Input::KEY_DELETE) {
 					if (hasSelection()) {
 						int l = m_selectedTo - m_selectedFrom;
@@ -277,10 +279,13 @@ namespace ARK {
 					} else {
 						m_text.remove(m_cursorPosition, 1);
 					}
+                    return true;
 				} else if (key == (unsigned int) Input::KEY_HOME) {
 					m_cursorPosition = 0;
+                    return true;
 				} else if (key == (unsigned int) Input::KEY_END) {
 					m_cursorPosition = m_text.length();
+                    return true;
 				} else if (key == (unsigned int) Input::KEY_LEFT) {
 					if (i->isKeyDown(Input::KEY_SHIFT)) {
 						if (m_selectedDir == 1) {
@@ -301,6 +306,7 @@ namespace ARK {
 						clearSelection();
 					}
 					cursorLeft();
+                    return true;
 				} else if (key == (unsigned int) Input::KEY_RIGHT) {
 					if (i->isKeyDown(Input::KEY_SHIFT)) {
 						if (m_selectedDir == -1) {
@@ -322,6 +328,7 @@ namespace ARK {
 						clearSelection();
 					}
 					cursorRight();
+                    return true;
 				} else if ((key == (unsigned int) Input::KEY_UP) && m_multiline) {
 					// Find what line the cursor is on.
 					// Find how far the cursor is through this line. (how_far_in)
@@ -368,6 +375,7 @@ namespace ARK {
 						m_cursorPosition = newpos;								// huzzah, end result 
 					}
 					ARK2D::getLog()->v(StringUtil::append("new m_cursorPosition: ", m_cursorPosition));
+                    return true;
 
 				} else if ((key == (unsigned int) Input::KEY_DOWN) && m_multiline) {
 					// Find what line the cursor is on.
@@ -424,15 +432,17 @@ namespace ARK {
 
 
 					ARK2D::getLog()->v(StringUtil::append("new m_cursorPosition: ", m_cursorPosition));
+                    return true;
 
 				} else if ((key == (unsigned int) Input::KEY_ENTER) && m_multiline) {
 					m_text.insert("\n", m_cursorPosition);
 					cursorRight();
 					clearSelection();
+                    return true;
 				} else if (k.length() > 0) {
 
 					if (m_maxLength > 0 && m_text.length() >= m_maxLength) {
-						return;
+						return true;
 					}
 
 					// do restrictions
@@ -452,17 +462,18 @@ namespace ARK {
 
 
 						if (allowedCharacters.find(k) == string::npos) {
-							return;
+							return true;
 						}
 					}
 
 					m_text.insert(k, m_cursorPosition);
 					cursorRight();
 					clearSelection();
+                    return true;
 				}
 			}
 
-
+            return false;
 
 
 		}

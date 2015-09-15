@@ -47,9 +47,9 @@ namespace ARK {
 				void downButtonPressed();
 
 
-				void keyPressed(unsigned int key);
-				void keyReleased(unsigned int key);
-				void mouseMoved(int x, int y, int oldx, int oldy);
+				bool keyPressed(unsigned int key);
+				bool keyReleased(unsigned int key);
+				bool mouseMoved(int x, int y, int oldx, int oldy);
 
 		};
 	}

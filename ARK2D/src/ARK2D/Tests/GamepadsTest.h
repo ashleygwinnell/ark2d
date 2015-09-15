@@ -55,9 +55,9 @@ namespace ARK {
 				void render(GameContainer* container, StateBasedGame* game, Renderer* r);
 
 				void stateChanged();
-				virtual void keyPressed(unsigned int key);
-				virtual void keyReleased(unsigned int key);
-				virtual void mouseMoved(int x, int y, int oldx, int oldy);
+				virtual bool keyPressed(unsigned int key);
+				virtual bool keyReleased(unsigned int key);
+				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
 				virtual void gamepadConnected(ARK::Controls::Gamepad* gamepad);
 				virtual void gamepadDisconnected(ARK::Controls::Gamepad* gamepad);
@@ -86,9 +86,9 @@ namespace ARK {
 				void render(GameContainer* container, StateBasedGame* game, Renderer* r);
 				static void renderGamepad(ARK::Controls::Gamepad* g, float rootX, float rootY);
 
-				virtual void keyPressed(unsigned int key);
-				virtual void keyReleased(unsigned int key);
-				virtual void mouseMoved(int x, int y, int oldx, int oldy);
+				virtual bool keyPressed(unsigned int key);
+				virtual bool keyReleased(unsigned int key);
+				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
 				virtual void gamepadConnected(ARK::Controls::Gamepad* gamepad);
 				virtual void gamepadDisconnected(ARK::Controls::Gamepad* gamepad);

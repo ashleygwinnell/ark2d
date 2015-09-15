@@ -4,12 +4,12 @@
 SimpleTextField::SimpleTextField(): TextField() {
 	TextField::setRestrictedCharacterSet(TextField::RESTRICT_ALPHANUMERIC);
 }
-void SimpleTextField::keyPressed(unsigned int key) {
+bool SimpleTextField::keyPressed(unsigned int key) {
 	if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT) {
-		return;
+		return false;
 	}
 	//setFocussed(true); 
-	TextField::keyPressed(key);
+    return TextField::keyPressed(key);
 }
 void SimpleTextField::render() { 
 	int x = m_x + (m_width/2);

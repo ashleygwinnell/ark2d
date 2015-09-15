@@ -350,9 +350,9 @@ namespace ARK {
 			}
 		}
 
-		void GamepadConfigureGameState::keyPressed(unsigned int key) { }
-		void GamepadConfigureGameState::keyReleased(unsigned int key) { }
-		void GamepadConfigureGameState::mouseMoved(int x, int y, int oldx, int oldy) { }
+        bool GamepadConfigureGameState::keyPressed(unsigned int key) { return false;}
+        bool GamepadConfigureGameState::keyReleased(unsigned int key) { return false; }
+        bool GamepadConfigureGameState::mouseMoved(int x, int y, int oldx, int oldy) { return false; }
 		GamepadConfigureGameState::~GamepadConfigureGameState() {
 
 		}
@@ -422,6 +422,9 @@ namespace ARK {
 					//m_sound->play();
 				} 
 
+				if (p1->isButtonPressed(ARK::Controls::Gamepad::BUTTON_START)) {
+					ARK2D::getLog()->i("START PRESSED");
+				}
 				if (p1->isButtonPressed(ARK::Controls::Gamepad::BUTTON_A)) {
 
 					ARK2D::getLog()->v("Printing Axes");
@@ -617,20 +620,23 @@ namespace ARK {
 			}
 		}
 
-		void GamepadsTestGameState::keyPressed(unsigned int key) {
-			m_alertButtons->keyPressed(key);
-			m_alertAxes->keyPressed(key);
-			m_autoConfig->keyPressed(key);
+		bool GamepadsTestGameState::keyPressed(unsigned int key) {
+            if (m_alertButtons->keyPressed(key)) return true;
+			if (m_alertAxes->keyPressed(key)) return true;
+			if (m_autoConfig->keyPressed(key)) return true;
+            return false;
 		}
-		void GamepadsTestGameState::keyReleased(unsigned int key) {
-			m_alertButtons->keyReleased(key);
-			m_alertAxes->keyReleased(key);
-			m_autoConfig->keyReleased(key);
+		bool GamepadsTestGameState::keyReleased(unsigned int key) {
+			if (m_alertButtons->keyReleased(key)) return true;
+			if (m_alertAxes->keyReleased(key)) return true;
+			if (m_autoConfig->keyReleased(key)) return true;
+            return false;
 		}
-		void GamepadsTestGameState::mouseMoved(int x, int y, int oldx, int oldy) {
-			m_alertButtons->mouseMoved(x, y, oldx, oldy);
-			m_alertAxes->mouseMoved(x, y, oldx, oldy);
-			m_autoConfig->mouseMoved(x, y, oldx, oldy);
+		bool GamepadsTestGameState::mouseMoved(int x, int y, int oldx, int oldy) {
+			if (m_alertButtons->mouseMoved(x, y, oldx, oldy)) return true;
+			if (m_alertAxes->mouseMoved(x, y, oldx, oldy)) return true;
+			if (m_autoConfig->mouseMoved(x, y, oldx, oldy)) return true;
+            return false;
 		}
 
 		void GamepadsTestGameState::gamepadConnected(ARK::Controls::Gamepad* gamepad) {

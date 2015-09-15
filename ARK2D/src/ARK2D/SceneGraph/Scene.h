@@ -12,11 +12,12 @@
 #include <string>
 #include <vector>
 #include "../Geometry/Vector3.h"
+#include "../Controls/KeyListener.h"
 
 namespace ARK {
 	namespace SceneGraph {
 
-		class ARK2D_API SceneNode {
+		class ARK2D_API SceneNode : public KeyListener {
 			public:
 				static const unsigned int TYPE_NODE = 0;
 				static const unsigned int TYPE_GROUP = 1;
@@ -50,9 +51,9 @@ namespace ARK {
 				virtual void update();
 				virtual void render();
 
-				virtual void keyPressed(unsigned int key);
-				virtual void keyReleased(unsigned int key);
-				virtual void mouseMoved(int x, int y, int oldx, int oldy);
+				virtual bool keyPressed(unsigned int key);
+				virtual bool keyReleased(unsigned int key);
+				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
 				virtual void onAdded(SceneNode* newparent);
 		};
@@ -62,7 +63,7 @@ namespace ARK {
 		};
 		
 
-		class ARK2D_API Scene {
+		class ARK2D_API Scene : public KeyListener {
 			public: 
 				SceneNode* root;
 				Scene();
@@ -74,9 +75,9 @@ namespace ARK {
 				void update();
 				void render();
 
-				virtual void keyPressed(unsigned int key);
-				virtual void keyReleased(unsigned int key);
-				virtual void mouseMoved(int x, int y, int oldx, int oldy);
+				virtual bool keyPressed(unsigned int key);
+				virtual bool keyReleased(unsigned int key);
+				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 		};
 	}
 }

@@ -5,8 +5,8 @@
  *      Author: Ashley
  */
 
-#ifndef KEYLISTENER_H_
-#define KEYLISTENER_H_
+#ifndef ARK_CONTROLS_KEYLISTENER_H_
+#define ARK_CONTROLS_KEYLISTENER_H_
 
 namespace ARK {
 	namespace Controls {
@@ -19,8 +19,8 @@ namespace ARK {
 		 */
 		class KeyListener {
 			public:
-				virtual void keyPressed(int key, char c) = 0;
-				virtual void keyReleased(int key, char c) = 0;
+				virtual bool keyPressed(unsigned int key) = 0; // return true if event consumed. otherwise return false.
+				virtual bool keyReleased(unsigned int key) = 0;
 		};
 
 	}

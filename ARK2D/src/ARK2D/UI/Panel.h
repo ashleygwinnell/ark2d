@@ -29,7 +29,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class ARK2D_API Panel : public AbstractUIComponent {
+		class ARK2D_API Panel : public AbstractUIComponent, public SceneNode {
 			public:
 				vector<AbstractUIComponent*> m_children;
 				bool m_translate;
@@ -45,9 +45,9 @@ namespace ARK {
 				virtual void renderChildren();
 				virtual void renderBorder();
 
-				virtual void keyPressed(unsigned int key);
-				virtual void keyReleased(unsigned int key);
-				virtual void mouseMoved(int x, int y, int oldx, int oldy);
+				virtual bool keyPressed(unsigned int key);
+				virtual bool keyReleased(unsigned int key);
+				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
 				virtual ~Panel();
 		};

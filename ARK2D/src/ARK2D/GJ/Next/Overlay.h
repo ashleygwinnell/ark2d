@@ -71,9 +71,9 @@ namespace ARK {
 					//void render();
 					virtual ~GJScrollablePanel();
 
-					virtual void keyPressed(unsigned int key);
-					virtual void keyReleased(unsigned int key);
-					virtual void mouseMoved(int x, int y, int oldx, int oldy);
+					virtual bool keyPressed(unsigned int key);
+					virtual bool keyReleased(unsigned int key);
+					virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 			};
 
 
@@ -98,9 +98,9 @@ namespace ARK {
 					void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
 					void render(GameContainer* container, StateBasedGame* game, Renderer* g);
 
-					virtual void keyPressed(unsigned int key);
-					virtual void keyReleased(unsigned int key);
-					virtual void mouseMoved(int x, int y, int oldx, int oldy);
+					virtual bool keyPressed(unsigned int key);
+					virtual bool keyReleased(unsigned int key);
+					virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
 					static void onLogin(GJLoginState* ls);
 					void onLoginFailed(string message);
@@ -130,9 +130,9 @@ namespace ARK {
 					void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
 					void render(GameContainer* container, StateBasedGame* game, Renderer* g);
 
-					virtual void keyPressed(unsigned int key);
-					virtual void keyReleased(unsigned int key);
-					virtual void mouseMoved(int x, int y, int oldx, int oldy);
+					virtual bool keyPressed(unsigned int key);
+					virtual bool keyReleased(unsigned int key);
+					virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
 					static void onAchievements(GJOverviewState* ls);
 					static void onLeaderboards(GJOverviewState* ls);
@@ -175,9 +175,9 @@ namespace ARK {
 					void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
 					void render(GameContainer* container, StateBasedGame* game, Renderer* g);
 
-					virtual void keyPressed(unsigned int key);
-					virtual void keyReleased(unsigned int key);
-					virtual void mouseMoved(int x, int y, int oldx, int oldy);
+					virtual bool keyPressed(unsigned int key);
+					virtual bool keyReleased(unsigned int key);
+					virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
 					static void onBackPressed(GJAchievementsState* ls);
 
@@ -206,9 +206,9 @@ namespace ARK {
 
 					ARK::GJ::Next::gjHighscoreTable* findTableById(unsigned int tableId);
 
-					virtual void keyPressed(unsigned int key);
-					virtual void keyReleased(unsigned int key);
-					virtual void mouseMoved(int x, int y, int oldx, int oldy);
+					virtual bool keyPressed(unsigned int key);
+					virtual bool keyReleased(unsigned int key);
+					virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
 					static void onBackPressed(GJLeaderboardsState* ls);
 					static void onLeaderboardPressed(GJLeaderboardsState* ls);
@@ -237,9 +237,9 @@ namespace ARK {
 					void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
 					void render(GameContainer* container, StateBasedGame* game, Renderer* g);
 
-					virtual void keyPressed(unsigned int key);
-					virtual void keyReleased(unsigned int key);
-					virtual void mouseMoved(int x, int y, int oldx, int oldy);
+					virtual bool keyPressed(unsigned int key);
+					virtual bool keyReleased(unsigned int key);
+					virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
 					static void onBackPressed(GJLeaderboardState* ls);
 
@@ -260,9 +260,9 @@ namespace ARK {
 					void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
 					void render(GameContainer* container, StateBasedGame* game, Renderer* g);
 
-					virtual void keyPressed(unsigned int key);
-					virtual void keyReleased(unsigned int key);
-					virtual void mouseMoved(int x, int y, int oldx, int oldy);
+					virtual bool keyPressed(unsigned int key);
+					virtual bool keyReleased(unsigned int key);
+					virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
 					static void onBackPressed(GJStatsState* ls);
 
@@ -323,9 +323,9 @@ namespace ARK {
 
 					bool isLoggedIn();
 
-					virtual void keyPressed(unsigned int key);
-					virtual void keyReleased(unsigned int key);
-					virtual void mouseMoved(int x, int y, int oldx, int oldy);
+					virtual bool keyPressed(unsigned int key);
+					virtual bool keyReleased(unsigned int key);
+					virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 					virtual void resize(GameContainer* container, int width, int height);
 
 					static GameJolt* getInstance();

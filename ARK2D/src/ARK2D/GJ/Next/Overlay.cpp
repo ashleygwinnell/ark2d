@@ -434,8 +434,8 @@ namespace ARK {
 
 				//r->drawString(Cast::toString<float>(m_scrollYSpeed), 30, 30);
 			}*/
-			void GJScrollablePanel::keyPressed(unsigned int key) {
-				if (!Shape<int>::collision_rectangleRectangle(m_x, m_y, m_width, m_height, ARK2D::getInput()->getMouseX(), ARK2D::getInput()->getMouseY(), 1, 1)) { return; }
+			bool GJScrollablePanel::keyPressed(unsigned int key) {
+				if (!Shape<int>::collision_rectangleRectangle(m_x, m_y, m_width, m_height, ARK2D::getInput()->getMouseX(), ARK2D::getInput()->getMouseY(), 1, 1)) { return false; }
 				
 				Input* in = ARK2D::getInput();
 				if (key == (signed int) Input::MOUSE_BUTTON_LEFT) {
@@ -444,6 +444,8 @@ namespace ARK {
 						m_draggingStartY = in->getMouseY();
 						m_draggingStart.set(in->getMouseX(), in->getMouseY() + m_scrollY );
 						m_scrollYReleased = m_scrollY;
+
+						return true;
 					}
 				}
 
@@ -458,8 +460,9 @@ namespace ARK {
 					//m_scrollY = 0;
 					//m_scrollYReleased = 0;
 				}
+				return false;
 			}
-			void GJScrollablePanel::keyReleased(unsigned int key) {
+			bool GJScrollablePanel::keyReleased(unsigned int key) {
 				//if (!Shape<int>::collision_rectangleRectangle(m_x, m_y, m_width, m_height, ARK2D::getInput()->getMouseX(), ARK2D::getInput()->getMouseY(), 1, 1)) { return; }
 				
 
@@ -492,7 +495,7 @@ namespace ARK {
 						//} else {
 			//
 			//			}
-			 		 
+			 		 	return true;
 			 
 					}
 				}	
@@ -534,8 +537,9 @@ namespace ARK {
 				// for(unsigned int i = 0; i < m_customisationButtons.size(); i++) { 
 				// 	m_customisationButtons.get(i)->keyReleased(key);
 				// } 
+				return false;
 			}
-			void GJScrollablePanel::mouseMoved(int x, int y, int oldx, int oldy) {
+			bool GJScrollablePanel::mouseMoved(int x, int y, int oldx, int oldy) {
 			//	for(unsigned int i = 0; i < m_buttons.size(); i++) {
 			//		m_buttons.get(i)->mouseMoved(x, y, oldx, oldy);
 			//	} 
@@ -564,6 +568,7 @@ namespace ARK {
 
 					m_releaseTimer.reset();
 					m_releaseTimer.update();
+					return true;
 				}
 			 
 
@@ -572,6 +577,7 @@ namespace ARK {
 					m_scrollYReleased = -100;
 				}
 				
+				return false;
 			}
 			GJScrollablePanel::~GJScrollablePanel() {
 				
@@ -758,29 +764,32 @@ namespace ARK {
 				help->render();
 				close->render();
 			}
-			void GJLoginState::keyPressed(unsigned int key) {
-				username->keyPressed(key);
-				usertoken->keyPressed(key);
-				login->keyPressed(key);
-				signup->keyPressed(key);
-				help->keyPressed(key);
-				close->keyPressed(key);
+			bool GJLoginState::keyPressed(unsigned int key) {
+				if (username->keyPressed(key)) return true;
+				if (usertoken->keyPressed(key)) return true;
+				if (login->keyPressed(key)) return true;
+				if (signup->keyPressed(key)) return true;
+				if (help->keyPressed(key)) return true;
+				if (close->keyPressed(key)) return true;
+				return false;
 			}
-			void GJLoginState::keyReleased(unsigned int key) {
-				username->keyReleased(key);
-				usertoken->keyReleased(key);
-				login->keyReleased(key);
-				signup->keyReleased(key);
-				help->keyReleased(key);
-				close->keyReleased(key);
+			bool GJLoginState::keyReleased(unsigned int key) {
+				if (username->keyReleased(key)) return true;
+				if (usertoken->keyReleased(key)) return true;
+				if (login->keyReleased(key)) return true;
+				if (signup->keyReleased(key)) return true;
+				if (help->keyReleased(key)) return true;
+				if (close->keyReleased(key)) return true;
+				return false;
 			}
-			void GJLoginState::mouseMoved(int x, int y, int oldx, int oldy) {
-				username->mouseMoved(x, y, oldx, oldy);
-				usertoken->mouseMoved(x, y, oldx, oldy);
-				login->mouseMoved(x, y, oldx, oldy);
-				signup->mouseMoved(x, y, oldx, oldy);
-				help->mouseMoved(x, y, oldx, oldy);
-				close->mouseMoved(x, y, oldx, oldy);
+			bool GJLoginState::mouseMoved(int x, int y, int oldx, int oldy) {
+				if (username->mouseMoved(x, y, oldx, oldy)) return true;
+				if (usertoken->mouseMoved(x, y, oldx, oldy)) return true;
+				if (login->mouseMoved(x, y, oldx, oldy)) return true;
+				if (signup->mouseMoved(x, y, oldx, oldy)) return true;
+				if (help->mouseMoved(x, y, oldx, oldy)) return true;
+				if (close->mouseMoved(x, y, oldx, oldy)) return true;
+				return false;
 			}
 			GJLoginState::~GJLoginState() {
 
@@ -893,26 +902,29 @@ namespace ARK {
 				logout->render();
 				close->render();
 			}
-			void GJOverviewState::keyPressed(unsigned int key) {
-				achievements->keyPressed(key);
-				leaderboards->keyPressed(key);
-				stats->keyPressed(key);
-				logout->keyPressed(key);
-				close->keyPressed(key);
+			bool GJOverviewState::keyPressed(unsigned int key) {
+				if (achievements->keyPressed(key)) return true;
+				if (leaderboards->keyPressed(key)) return true;
+				if (stats->keyPressed(key)) return true;
+				if (logout->keyPressed(key)) return true;
+				if (close->keyPressed(key)) return true;
+				return false;
 			}
-			void GJOverviewState::keyReleased(unsigned int key) {
-				achievements->keyReleased(key);
-				leaderboards->keyReleased(key);
-				stats->keyReleased(key);
-				logout->keyReleased(key);
-				close->keyReleased(key);
+			bool GJOverviewState::keyReleased(unsigned int key) {
+				if (achievements->keyReleased(key)) return true;
+				if (leaderboards->keyReleased(key)) return true;
+				if (stats->keyReleased(key)) return true;
+				if (logout->keyReleased(key)) return true;
+				if (close->keyReleased(key)) return true;
+				return false;
 			}
-			void GJOverviewState::mouseMoved(int x, int y, int oldx, int oldy) {
-				achievements->mouseMoved(x, y, oldx, oldy);
-				leaderboards->mouseMoved(x, y, oldx, oldy);
-				stats->mouseMoved(x, y, oldx, oldy);
-				logout->mouseMoved(x, y, oldx, oldy);
-				close->mouseMoved(x, y, oldx, oldy);
+			bool GJOverviewState::mouseMoved(int x, int y, int oldx, int oldy) {
+				if (achievements->mouseMoved(x, y, oldx, oldy)) return true;
+				if (leaderboards->mouseMoved(x, y, oldx, oldy)) return true;
+				if (stats->mouseMoved(x, y, oldx, oldy)) return true;
+				if (logout->mouseMoved(x, y, oldx, oldy)) return true;
+				if (close->mouseMoved(x, y, oldx, oldy)) return true;
+				return false;
 			}
 			GJOverviewState::~GJOverviewState() {
 
@@ -1124,17 +1136,20 @@ namespace ARK {
 				back->render();
 
 			}
-			void GJAchievementsState::keyPressed(unsigned int key) {
-				back->keyPressed(key);
-				scrollablePanel->keyPressed(key);
+			bool GJAchievementsState::keyPressed(unsigned int key) {
+				if (back->keyPressed(key)) return true;
+				if (scrollablePanel->keyPressed(key)) return true;
+				return false;
 			}
-			void GJAchievementsState::keyReleased(unsigned int key) {
-				back->keyReleased(key);
-				scrollablePanel->keyReleased(key);
+			bool GJAchievementsState::keyReleased(unsigned int key) {
+				if (back->keyReleased(key)) return true;
+				if (scrollablePanel->keyReleased(key)) return true;
+				return false;
 			}
-			void GJAchievementsState::mouseMoved(int x, int y, int oldx, int oldy) {
-				back->mouseMoved(x, y, oldx, oldy);
-				scrollablePanel->mouseMoved(x, y, oldx, oldy);
+			bool GJAchievementsState::mouseMoved(int x, int y, int oldx, int oldy) {
+				if (back->mouseMoved(x, y, oldx, oldy)) return true;
+				if (scrollablePanel->mouseMoved(x, y, oldx, oldy)) return true;
+				return false;
 			}
 			GJAchievementsState::~GJAchievementsState() {
 
@@ -1310,20 +1325,29 @@ namespace ARK {
 				ARK2D::getLog()->e(StringUtil::append("could not findTableById: ", tableId));
 				return NULL;
 			}
-			void GJLeaderboardsState::keyPressed(unsigned int key) {
-				back->keyPressed(key);
-				scrollablePanel->keyPressed(key);
-				for(unsigned int i = 0; i < buttons.size(); i++) { buttons[i]->keyPressed(key); }
+			bool GJLeaderboardsState::keyPressed(unsigned int key) {
+				if (back->keyPressed(key)) return true;
+				if (scrollablePanel->keyPressed(key)) return true;
+				for(unsigned int i = 0; i < buttons.size(); i++) { 
+					if (buttons[i]->keyPressed(key)) return true;
+				}
+				return false;
 			}
-			void GJLeaderboardsState::keyReleased(unsigned int key) {
-				back->keyReleased(key);
-				scrollablePanel->keyReleased(key);
-				for(unsigned int i = 0; i < buttons.size(); i++) { buttons[i]->keyReleased(key); }
+			bool GJLeaderboardsState::keyReleased(unsigned int key) {
+				if (back->keyReleased(key)) return true;
+				if (scrollablePanel->keyReleased(key)) return true;
+				for(unsigned int i = 0; i < buttons.size(); i++) { 
+					if (buttons[i]->keyReleased(key)) return true;
+				}
+				return false;
 			}
-			void GJLeaderboardsState::mouseMoved(int x, int y, int oldx, int oldy) {
-				back->mouseMoved(x, y, oldx, oldy);
-				scrollablePanel->mouseMoved(x, y, oldx, oldy);
-				for(unsigned int i = 0; i < buttons.size(); i++) { buttons[i]->mouseMoved(x, y, oldx, oldy); }
+			bool GJLeaderboardsState::mouseMoved(int x, int y, int oldx, int oldy) {
+				if (back->mouseMoved(x, y, oldx, oldy)) return true;
+				if (scrollablePanel->mouseMoved(x, y, oldx, oldy)) return true;
+				for(unsigned int i = 0; i < buttons.size(); i++) { 
+					if (buttons[i]->mouseMoved(x, y, oldx, oldy)) return true;
+				}
+				return false;
 			}
 			GJLeaderboardsState::~GJLeaderboardsState() {
 
@@ -1446,17 +1470,20 @@ namespace ARK {
 
 				
 			}
-			void GJLeaderboardState::keyPressed(unsigned int key) {
-				back->keyPressed(key);
-				scrollablePanel->keyPressed(key);
+			bool GJLeaderboardState::keyPressed(unsigned int key) {
+				if (back->keyPressed(key)) return true;
+				if (scrollablePanel->keyPressed(key)) return true;
+				return false;
 			}
-			void GJLeaderboardState::keyReleased(unsigned int key) {
-				back->keyReleased(key);
-				scrollablePanel->keyReleased(key);
+			bool GJLeaderboardState::keyReleased(unsigned int key) {
+				if (back->keyReleased(key)) return true;
+				if (scrollablePanel->keyReleased(key)) return true;
+				return false;
 			}
-			void GJLeaderboardState::mouseMoved(int x, int y, int oldx, int oldy) {
-				back->mouseMoved(x, y, oldx, oldy);
-				scrollablePanel->mouseMoved(x, y, oldx, oldy);
+			bool GJLeaderboardState::mouseMoved(int x, int y, int oldx, int oldy) {
+				if (back->mouseMoved(x, y, oldx, oldy)) return true;
+				if (scrollablePanel->mouseMoved(x, y, oldx, oldy)) return true;
+				return false;
 			}
 			GJLeaderboardState::~GJLeaderboardState() {
 
@@ -1523,14 +1550,14 @@ namespace ARK {
 				}*/
 				
 			}
-			void GJStatsState::keyPressed(unsigned int key) {
-				back->keyPressed(key);
+			bool GJStatsState::keyPressed(unsigned int key) {
+				return back->keyPressed(key);
 			}
-			void GJStatsState::keyReleased(unsigned int key) {
-				back->keyReleased(key);
+			bool GJStatsState::keyReleased(unsigned int key) {
+				return back->keyReleased(key);
 			}
-			void GJStatsState::mouseMoved(int x, int y, int oldx, int oldy) {
-				back->mouseMoved(x, y, oldx, oldy);
+			bool GJStatsState::mouseMoved(int x, int y, int oldx, int oldy) {
+				return back->mouseMoved(x, y, oldx, oldy);
 			}
 			GJStatsState::~GJStatsState() {
 
@@ -1764,20 +1791,23 @@ namespace ARK {
 				return m_loggedin;
 			}
 
-			void GameJolt::keyPressed(unsigned int key) {
+			bool GameJolt::keyPressed(unsigned int key) {
 				if (m_openState == STATE_OPEN) {
-					StateBasedGame::keyPressed(key);
+					return StateBasedGame::keyPressed(key);
 				}
+				return false;
 			}
-			void GameJolt::keyReleased(unsigned int key) {
+			bool GameJolt::keyReleased(unsigned int key) {
 				if (m_openState == STATE_OPEN) {
-					StateBasedGame::keyReleased(key);
+					return StateBasedGame::keyReleased(key);
 				}
+				return false;
 			}
-			void GameJolt::mouseMoved(int x, int y, int oldx, int oldy) {
+			bool GameJolt::mouseMoved(int x, int y, int oldx, int oldy) {
 				if (m_openState == STATE_OPEN) {
-					StateBasedGame::mouseMoved(x, y, oldx, oldy);	
+					return StateBasedGame::mouseMoved(x, y, oldx, oldy);	
 				}
+				return false;
 			}
 
 			GameJolt::~GameJolt() {

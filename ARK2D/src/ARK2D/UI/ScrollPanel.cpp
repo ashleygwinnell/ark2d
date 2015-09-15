@@ -204,23 +204,26 @@ namespace ARK {
 		}
 
 
-		void ScrollPanel::keyPressed(unsigned int key) {
-			Panel::keyPressed(key);
-			m_upButton.keyPressed(key);
-			m_downButton.keyPressed(key);
-			//m_scrollYButton.keyPressed(key);
+		bool ScrollPanel::keyPressed(unsigned int key) {
+            if (Panel::keyPressed(key)) return true;
+			if (m_upButton.keyPressed(key)) return true;
+			if (m_downButton.keyPressed(key)) return true;
+			//if (m_scrollYButton.keyPressed(key)) return true;
+            return false;
 		}
-		void ScrollPanel::keyReleased(unsigned int key) {
-			Panel::keyReleased(key);
-			m_upButton.keyReleased(key);
-			m_downButton.keyReleased(key);
-			//m_scrollYButton.keyReleased(key);
+		bool ScrollPanel::keyReleased(unsigned int key) {
+			if (Panel::keyReleased(key)) return true;
+			if (m_upButton.keyReleased(key)) return true;
+			if (m_downButton.keyReleased(key)) return true;
+			//if (m_scrollYButton.keyReleased(key);
+            return false;
 		}
-		void ScrollPanel::mouseMoved(int x, int y, int oldx, int oldy) {
-			Panel::mouseMoved(x, y, oldx, oldy);
-			m_upButton.mouseMoved(x, y, oldx, oldy);
-			m_downButton.mouseMoved(x, y, oldx, oldy);
-			//m_scrollYButton.mouseMoved(x, y, oldx, oldy);
+		bool ScrollPanel::mouseMoved(int x, int y, int oldx, int oldy) {
+			if (Panel::mouseMoved(x, y, oldx, oldy)) return true;
+			if (m_upButton.mouseMoved(x, y, oldx, oldy)) return true;
+			if (m_downButton.mouseMoved(x, y, oldx, oldy)) return true;
+			//if (m_scrollYButton.mouseMoved(x, y, oldx, oldy)) return true;
+            return false;
 		}
 	}
 }

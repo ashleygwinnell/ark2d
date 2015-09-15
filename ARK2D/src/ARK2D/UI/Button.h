@@ -25,7 +25,7 @@ namespace ARK {
 		 * @todo Improve rendering on mobile devices not using primitive geometry.
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class ARK2D_API Button : public AbstractUIComponent {
+		class ARK2D_API Button : public AbstractUIComponent, public SceneNode {
 			protected:
 				String m_text;
 				Image* m_image;
@@ -72,8 +72,8 @@ namespace ARK {
 				void setImage(Image* i) {
 					m_image = i;
 				}
-				virtual void keyPressed(unsigned int key) {
-					if (!m_enabled) { return; } 
+				virtual bool keyPressed(unsigned int key) {
+					if (!m_enabled) { return false; }
 
 					Input* i = ARK2D::getInput();
 					if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT
@@ -83,10 +83,11 @@ namespace ARK {
 
 							//ARK2D::getLog()->e("set state to down");
 					}
+                    return false;
 				}
 
-				virtual void keyReleased(unsigned int key) {
-					if (!m_enabled) { return; } 
+				virtual bool keyReleased(unsigned int key) {
+					if (!m_enabled) { return false; }
 
 					Input* i = ARK2D::getInput();
 					if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT) {
@@ -104,6 +105,7 @@ namespace ARK {
 							//ARK2D::getLog()->e("pointer wasn't over..?");
 						}
 					}
+                    return false;
 				}
 				virtual bool isPointerOver() {
 					Input* i = ARK2D::getInput();
@@ -126,7 +128,7 @@ namespace ARK {
 				}
 
 
-				virtual void mouseMoved(int x, int y, int oldx, int oldy) {
+				virtual bool mouseMoved(int x, int y, int oldx, int oldy) {
 					if (!m_enabled) { return; } 
 					
 					if (m_state == STATE_DOWN) { return; }

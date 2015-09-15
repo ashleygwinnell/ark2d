@@ -114,9 +114,9 @@ namespace ARK {
 			}
 		 }
 
-		void Slider::keyPressed(unsigned int key) 
+		bool Slider::keyPressed(unsigned int key)
 		{
-			if (key != (unsigned int) Input::MOUSE_BUTTON_LEFT) { return; }
+			if (key != (unsigned int) Input::MOUSE_BUTTON_LEFT) { return false; }
 
 			Input* i = ARK2D::getInput();
 			if (!m_dragging) 
@@ -125,19 +125,22 @@ namespace ARK {
 				if (collides) {
 					m_dragging = true;
 					updateValue();
+                    return true;
 				}
 			}
+            return false;
 		}
 
-		void Slider::keyReleased(unsigned int key) 
+		bool Slider::keyReleased(unsigned int key)
 		{
-			if (key != (unsigned int) Input::MOUSE_BUTTON_LEFT) { return; }
+			if (key != (unsigned int) Input::MOUSE_BUTTON_LEFT) { return false; }
 
 			m_dragging = false;
 			updateValue();
+            return false;
 		}
 
-		void Slider::mouseMoved(int x, int y, int oldx, int oldy)
+		bool Slider::mouseMoved(int x, int y, int oldx, int oldy)
 		{
 			if (m_dragging) 
 			{
@@ -155,7 +158,9 @@ namespace ARK {
 				m_buttonLocation.setX(newx);
 
 				updateValue();
+                return true;
 			}
+            return false;
 		}
 
 		Slider::~Slider() 

@@ -101,20 +101,29 @@ namespace ARK {
 
 		}
 
-		void SceneNode::keyPressed(unsigned int key) { 
+		bool SceneNode::keyPressed(unsigned int key) { 
 			for(unsigned int i = 0; i < children.size(); ++i) {
-				children[i]->keyPressed(key);
+				if (children[i]->keyPressed(key)) { 
+					return true; 
+				}
 			}
+			return false;
 		}
-		void SceneNode::keyReleased(unsigned int key) { 
+		bool SceneNode::keyReleased(unsigned int key) { 
 			for(unsigned int i = 0; i < children.size(); ++i) {
-				children[i]->keyReleased(key);
+				if (children[i]->keyReleased(key)) {
+					return true;
+				}
 			}
+			return false;
 		}
-		void SceneNode::mouseMoved(int x, int y, int oldx, int oldy) { 
+		bool SceneNode::mouseMoved(int x, int y, int oldx, int oldy) { 
 			for(unsigned int i = 0; i < children.size(); ++i) {
-				children[i]->mouseMoved(x, y, oldx, oldy);
+				if (children[i]->mouseMoved(x, y, oldx, oldy)) {
+					return true;
+				}
 			}
+			return false;
 		} 
 
 
@@ -160,14 +169,14 @@ namespace ARK {
 				r->getBatch()->setEnabled(false, true);
 			}
 		}
-		void Scene::keyPressed(unsigned int key) { 
-			root->keyPressed(key);
+		bool Scene::keyPressed(unsigned int key) { 
+			return root->keyPressed(key);
 		}
-		void Scene::keyReleased(unsigned int key) { 
-			root->keyReleased(key);
+		bool Scene::keyReleased(unsigned int key) {
+            return root->keyReleased(key);
 		}
-		void Scene::mouseMoved(int x, int y, int oldx, int oldy) { 
-			root->mouseMoved(x, y, oldx, oldy);
+		bool Scene::mouseMoved(int x, int y, int oldx, int oldy) {
+			return root->mouseMoved(x, y, oldx, oldy);
 		}
 
 	}

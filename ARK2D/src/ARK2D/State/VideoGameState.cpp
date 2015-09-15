@@ -103,14 +103,14 @@ namespace ARK {
 			#endif
 		}
 
-		void VideoGameState::keyPressed(unsigned int key) {
-			GameState::keyPressed(key);
+		bool VideoGameState::keyPressed(unsigned int key) {
+			return GameState::keyPressed(key);
 		}
-		void VideoGameState::keyReleased(unsigned int key) {
-			GameState::keyReleased(key);
+		bool VideoGameState::keyReleased(unsigned int key) {
+			return GameState::keyReleased(key);
 		}
-		void VideoGameState::mouseMoved(int x, int y, int oldx, int oldy) {
-			GameState::mouseMoved(x, y, oldx, oldy);
+		bool VideoGameState::mouseMoved(int x, int y, int oldx, int oldy) {
+			return GameState::mouseMoved(x, y, oldx, oldy);
 		}
 
 		void VideoGameState::setSource(string s) {

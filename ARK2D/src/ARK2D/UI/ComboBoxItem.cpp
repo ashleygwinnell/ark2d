@@ -43,26 +43,44 @@ namespace ARK {
 			return m_value;
 		}
 
-		void ComboBoxItem::keyPressed(unsigned int key) {
+		bool ComboBoxItem::keyPressed(unsigned int key) {
+			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT) {
+				if (m_state == Button::STATE_OVER) {
+					m_state = Button::STATE_DOWN;
+					return true;
+				}
+			}
+			return false;
+		}
+		bool ComboBoxItem::keyReleased(unsigned int key) {
 			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT) {
 				//Input* i = ARK2D::getInput();
-				if (isMouseInBounds()) {
+				if (isMouseInBounds() && m_state == Button::STATE_DOWN) {
 					ARK2D::getLog()->i("clicky");
 				//if (GigaRectangle<int>::s_contains(m_x, m_y, (signed int) (m_width), (signed int)(m_height), (signed int) (i->getMouseX()), (signed int) (i->getMouseY()))) {
 					parent->m_selected = this;
 					if (parent->m_itemChangedEvent != NULL) {
 						void (*pt)(ComboBox*) = (void(*)(ComboBox*)) parent->m_itemChangedEvent;
 						pt(parent);
+                        
 					}
+					m_state = Button::STATE_OFF;
+					return true;
 				}
+                m_state = Button::STATE_OFF;
 			}
+            return false;
 		}
-		void ComboBoxItem::mouseMoved(int x, int y, int oldx, int oldy) {
-			if (isMouseInBounds()) {
-				m_state = Button::STATE_OVER;
-			} else {
-				m_state = Button::STATE_OFF;
-			}
+		bool ComboBoxItem::mouseMoved(int x, int y, int oldx, int oldy) {
+            if (m_state != Button::STATE_DOWN) { 
+            	if (isMouseInBounds()) {
+            		m_state = Button::STATE_OVER;
+	            } else {
+					m_state = Button::STATE_OFF;
+				}
+			} 
+            return m_state == Button::STATE_OVER || m_state == Button::STATE_DOWN;
+            
 		}
 
 		void ComboBoxItem::render() {
@@ -70,7 +88,13 @@ namespace ARK {
 			renderOverlay();
 
 			Renderer* g = ARK2D::getRenderer();
-			g->drawString(m_text, m_x, m_y);
+			float tx = m_x;
+			float ty = m_y;
+			if (m_state == Button::STATE_DOWN) {
+				tx += 2;
+				ty += 2;
+			} 
+			g->drawString(m_text, tx, ty);
 		}
 		void ComboBoxItem::renderBackground() {
 			Renderer* g = ARK2D::getRenderer();
@@ -80,7 +104,7 @@ namespace ARK {
 		void ComboBoxItem::renderOverlay() {
 			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white);
-			if (m_state == Button::STATE_OVER) {
+			if (m_state == Button::STATE_OVER || m_state == Button::STATE_DOWN) {
 				g->setDrawColor(Color::white_50a);
 			}
 			g->drawRect(m_x, m_y, m_width, m_height);

@@ -91,8 +91,8 @@ namespace ARK {
 				virtual void renderOverlay();
 
 				bool hasSelection();
-				void keyPressed(unsigned int key);
-				void keyReleased(unsigned int key);
+				bool keyPressed(unsigned int key);
+				bool keyReleased(unsigned int key);
 
 				void clearSelection();
 				void cursorLeft();

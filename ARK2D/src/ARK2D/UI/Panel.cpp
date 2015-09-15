@@ -10,7 +10,8 @@
 namespace ARK {
 	namespace UI {
 		Panel::Panel():
-			AbstractUIComponent(), m_children(), m_translate(true), m_showBorder(true) {
+			AbstractUIComponent(), 
+			SceneNode(), m_children(), m_translate(true), m_showBorder(true) {
 
 		}
 
@@ -63,8 +64,8 @@ namespace ARK {
 				g->drawRect(m_x, m_y, m_width, m_height);
 			}
 		}
-		void Panel::keyPressed(unsigned int key) {
-			if (!m_visible) { return; }
+		bool Panel::keyPressed(unsigned int key) {
+			if (!m_visible) { return false; }
 
 			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT
 					|| key == (unsigned int) Input::MOUSE_BUTTON_RIGHT) {
@@ -72,17 +73,18 @@ namespace ARK {
 				bool s = GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), m_width, m_height, i->getMouseX(), i->getMouseY());
 				if (s) {
 					for(unsigned int i = 0; i < m_children.size(); i++) {
-						m_children.at(i)->keyPressed(key);
+                        if (m_children.at(i)->keyPressed(key)) return true;
 					}
 				}
 			} else {
 				for(unsigned int i = 0; i < m_children.size(); i++) {
-					m_children.at(i)->keyPressed(key);
+                    if (m_children.at(i)->keyPressed(key)) return true;
 				}
 			}
+            return false;
 		}
-		void Panel::keyReleased(unsigned int key) {
-			if (!m_visible) { return; }
+		bool Panel::keyReleased(unsigned int key) {
+			if (!m_visible) { return false; }
 
 			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT
 					|| key == (unsigned int) Input::MOUSE_BUTTON_RIGHT) {
@@ -90,24 +92,26 @@ namespace ARK {
 				bool s = GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), m_width, m_height, i->getMouseX(), i->getMouseY());
 				if (s) {
 					for(unsigned int i = 0; i < m_children.size(); i++) {
-						m_children.at(i)->keyReleased(key);
+                        if (m_children.at(i)->keyReleased(key) ) return true;
 					}
 				}
 			} else {
 				for(unsigned int i = 0; i < m_children.size(); i++) {
-					m_children.at(i)->keyReleased(key);
+                    if (m_children.at(i)->keyReleased(key)) return true;
 				}
 			}
+            return false;
 		}
-		void Panel::mouseMoved(int x, int y, int oldx, int oldy) {
-			if (!m_visible) { return; }
+		bool Panel::mouseMoved(int x, int y, int oldx, int oldy) {
+			if (!m_visible) { return false; }
 
 			bool s = GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), m_width, m_height, x, y);
 			if (s) {
 				for(unsigned int i = 0; i < m_children.size(); i++) {
-					m_children.at(i)->mouseMoved(x, y, oldx, oldy);
+                    if (m_children.at(i)->mouseMoved(x, y, oldx, oldy)) return true;
 				}
 			}
+            return false;
 		}
 
 		Panel::~Panel() {

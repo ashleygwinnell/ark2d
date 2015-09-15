@@ -30,14 +30,14 @@ namespace ARK {
 		}
 
 
-		void GameState::keyPressed(unsigned int key) {
-			if (m_rootUIComponent != NULL) { m_rootUIComponent->keyPressed(key); }
+		bool GameState::keyPressed(unsigned int key) {
+			return (m_rootUIComponent != NULL && m_rootUIComponent->keyPressed(key));
 		}
-		void GameState::keyReleased(unsigned int key) {
-			if (m_rootUIComponent != NULL) { m_rootUIComponent->keyReleased(key); }
+		bool GameState::keyReleased(unsigned int key) {
+			return (m_rootUIComponent != NULL && m_rootUIComponent->keyReleased(key));
 		}
-		void GameState::mouseMoved(int x, int y, int oldx, int oldy) {
-			if (m_rootUIComponent != NULL) { m_rootUIComponent->mouseMoved(x,y,oldx,oldy); }
+		bool GameState::mouseMoved(int x, int y, int oldx, int oldy) {
+			return (m_rootUIComponent != NULL && m_rootUIComponent->mouseMoved(x,y,oldx,oldy));
 		}
 		void GameState::orientationChanged(int orientation) {
 
