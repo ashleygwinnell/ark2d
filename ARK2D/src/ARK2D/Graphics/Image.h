@@ -15,12 +15,17 @@
 #include <string>
 using namespace std;
 
+
+
 #include "../Core/Resource.h"
 #include "Color.h"
 #include "ImageIO/TargaImage.h"
 #include "ImageIO/BMPImage.h"
 #include "ImageIO/PNGImage.h"
 #include "../SceneGraph/Scene.h"
+
+#include "../Geometry/Cube.h"
+
 
 namespace ARK {
 	namespace Graphics {
@@ -37,6 +42,7 @@ namespace ARK {
 				std::string filename;
 				float m_Width;
 				float m_Height;
+				ARK::Geometry::Cube m_bounds;
 
 				// The dimensions of the sprite (usually in a spritesheet). 
 				// We need this so we can change the dimensions by a scale value.
@@ -169,6 +175,9 @@ namespace ARK {
 				void setSize(int x, int y);
 				void setWidth(int w);
 				void setHeight(int h);
+
+                virtual	ARK::Geometry::Cube* getBounds();
+            
 				//void bind() const;
 				//void unbind() const;
 				void draw();

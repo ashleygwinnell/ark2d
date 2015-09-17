@@ -304,6 +304,8 @@ namespace ARK {
 					m_visible = !m_visible;
 				}
 			#endif
+
+			m_scene->update();
 		}	
 		void Log::render(GameContainer* container, Renderer* r) {
 

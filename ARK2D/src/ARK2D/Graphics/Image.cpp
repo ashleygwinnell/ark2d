@@ -893,6 +893,7 @@ namespace ARK {
 			m_dataLength(0),
 			m_resourceType(0),
 			filename(""),
+			m_bounds(0,0,0),
 			m_texture(NULL),
 			texture_temp(0),
 			m_dxTexture(NULL),
@@ -928,6 +929,7 @@ namespace ARK {
 			m_dataLength(0),
 			m_resourceType(resourceType),
 			filename(""),
+			m_bounds(0,0,0),
 			m_texture(NULL),
 			texture_temp(0),
 			m_dxTexture(NULL),
@@ -969,6 +971,7 @@ namespace ARK {
 			m_dataLength(0),
 			m_resourceType(resourceType),
 			filename(file),
+			m_bounds(0,0,0),
 			m_texture(NULL),
 			texture_temp(0),
 			m_dxTexture(NULL),
@@ -1009,6 +1012,7 @@ namespace ARK {
 			m_dataLength(dataLength),
 			m_resourceType(resourceType),
 			filename(file),
+			m_bounds(0,0,0),
 			m_texture(NULL),
 			texture_temp(0),
 			m_dxTexture(NULL),
@@ -1048,6 +1052,7 @@ namespace ARK {
 			m_data(NULL),
 			m_resourceType(0),
 			filename(fname),
+			m_bounds(0,0,0),
 			m_texture(NULL),
 			texture_temp(0),
 			m_dxTexture(NULL),
@@ -1088,6 +1093,7 @@ namespace ARK {
 			m_data(NULL), 
 			m_resourceType(0), 
 			filename(fname),
+			m_bounds(0,0,0),
 			m_texture(NULL),
 			texture_temp(0),
 			m_dxTexture(NULL),
@@ -1617,6 +1623,8 @@ namespace ARK {
 				m_colors[14] = b;
 				m_colors[15] = a;
 
+				m_bounds.set(0, 0, 0, m_Width, m_Height, 0);
+
 			//#endif
 
 			m_dirty = false;
@@ -2063,6 +2071,12 @@ namespace ARK {
 			g->scale(scale);
 			draw(0, 0);
 			g->popMatrix();*/
+		}
+
+		ARK::Geometry::Cube* Image::getBounds() 
+		{
+			if (m_dirty) { clean(); }
+			return &m_bounds;
 		}
 		
 		void Image::drawPivoted(float x, float y, signed int pivotX, signed int pivotY, float scale)
@@ -2544,12 +2558,7 @@ namespace ARK {
 		}
 
 		void Image::render() {
-			Renderer* r = ARK2D::getRenderer();
-			r->pushMatrix();
-			r->translate(position.getX(), position.getY(), position.getZ());
-            r->rotate(float(SceneNode::rotation));
-            
-            double tempRotation = SceneNode::rotation;
+			/*double tempRotation = SceneNode::rotation;
             SceneNode::rotation = 0.0f;
             draw(
 				pivot.getX() * -1.0f * m_Width,// * SceneNode::scale.getX(),
@@ -2557,11 +2566,51 @@ namespace ARK {
 				m_Width,// * SceneNode::scale.getX(),
 				m_Height// * SceneNode::scale.getY()
 			);
-			SceneNode::rotation = tempRotation;
+			SceneNode::rotation = tempRotation;*/
+			//draw(0, 0);
+            
+            Renderer* r = ARK2D::getRenderer();
+
+
+			float batch_rawVertices[] = {
+				0,				0,				// tl
+				0 + m_Width,	0,				// tr
+				0,				0 + m_Height,	// bl
+				0,				0 + m_Height,	// bl
+				0 + m_Width,	0,				// tr 
+				0 + m_Width,	0 + m_Height	// br
+			};
+
+			unsigned char red = r->getDrawColor().getRedc();
+			unsigned char g = r->getDrawColor().getGreenc();
+			unsigned char b = r->getDrawColor().getBluec();
+			unsigned char a = (unsigned char) (m_alpha * 255.0f);
+			if (m_color != NULL) {
+				red = (unsigned char) (m_color->getRedc() * r->getDrawColor().getRedf());
+				g   = (unsigned char) (m_color->getGreenc() * r->getDrawColor().getGreenf());
+				b   = (unsigned char) (m_color->getBluec() * r->getDrawColor().getBluef());
+				a   = (unsigned char) (m_color->getAlphac() * (m_alpha * r->getDrawColor().getAlphaf()) );
+			}
+
+			Renderer::getBatch()->addTexturedQuad(
+				m_texture->getId(), 
+				batch_rawVertices[0], batch_rawVertices[1], 
+				batch_rawVertices[2], batch_rawVertices[3], 
+				batch_rawVertices[4], batch_rawVertices[5], 
+				batch_rawVertices[10], batch_rawVertices[11], 
+				texture_offset_x_tl, texture_offset_y_tl,
+				texture_offset_x_tr, texture_offset_y_tr,
+				texture_offset_x_bl, texture_offset_y_bl,
+				texture_offset_x_br, texture_offset_y_br,
+				red, g, b, a,
+				red, g, b, a,
+				red, g, b, a,
+				red, g, b, a
+			);
 			
-			r->popMatrix();
-			
-			SceneNode::render();
+
+
+			SceneNode::renderChildren();
 		}
 
 		// http://stackoverflow.com/questions/2008842/creating-and-loading-pngs-in-rgba4444-rgba5551-for-opengl

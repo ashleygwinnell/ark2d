@@ -14,10 +14,19 @@
 #include "../Geometry/Vector3.h"
 #include "../Controls/KeyListener.h"
 
+namespace ARK { 
+	namespace Graphics {
+		class Image;
+	}
+}
+
 namespace ARK {
 	namespace SceneGraph {
 
 		class ARK2D_API SceneNode : public KeyListener {
+			public:
+				static ARK::Geometry::Cube* s_dummyCube;
+
 			public:
 				static const unsigned int TYPE_NODE = 0;
 				static const unsigned int TYPE_GROUP = 1;
@@ -49,13 +58,23 @@ namespace ARK {
 				double getRotation();
 		
 				virtual void update();
+
 				virtual void render();
+				virtual void preRender();
+				virtual void postRender();
+				virtual void renderChildren();
+
+				virtual ARK::Geometry::Cube* getBounds();
 
 				virtual bool keyPressed(unsigned int key);
 				virtual bool keyReleased(unsigned int key);
 				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
 				virtual void onAdded(SceneNode* newparent);
+
+				Image* asImage();
+
+
 		};
 
 		class ARK2D_API SceneGroup : public SceneNode {

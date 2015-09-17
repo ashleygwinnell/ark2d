@@ -37,7 +37,7 @@ namespace ARK {
 				Polygon(): Shape<T>(), m_points() {
 					m_points.reserve(3);
 				}
-				Polygon(ARK::Geometry::Rectangle<float>* rect): 
+				Polygon(ARK::Geometry::Rectangle<T>* rect):
 					Shape<T>(), 
 					m_points() 
 					{

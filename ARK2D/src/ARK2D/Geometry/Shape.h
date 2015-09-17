@@ -9,7 +9,8 @@
 #define SHAPE_H_
 
 #include "../ARK2D.h"
-#include "../Core/GameContainer.h"
+//#include "../Core/GameContainer.h"
+#include "../Graphics/Renderer.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include "../Util/SAT.h"
@@ -30,9 +31,11 @@ namespace ARK {
 		class Line;
 
 		template <class T>
-		class Cube;
-
-		/*!
+		class CubeTemplate;
+        
+        class Cube;
+        
+        /*!
 		 * \brief Abstract class for all Geometry.
 		 *
 		 * @todo Some collision-pairs are missing.
@@ -71,13 +74,13 @@ namespace ARK {
 				virtual void render() = 0;
 
 				virtual bool isOffscreen() {
-					GameContainer* container = ARK2D::getContainer();
+					/*GameContainer* container = ARK2D::getContainer();
 					if (	(signed int)(getMaxY()) <= 0
 						|| 	(signed int)(getMaxX()) <= 0
 						|| 	(signed int)(getMinX()) >= (signed int) container->getWidth()
 						|| 	(signed int)(getMinY()) >= (signed int) container->getHeight()) {
 						return true;
-					}
+					}*/
 					return false;
 				}
 				virtual bool isOffscreen(signed int minX, signed int minY, signed int maxX, signed int maxY) {
@@ -90,13 +93,13 @@ namespace ARK {
 					return false;
 				}
 				virtual bool isPartlyOffscreen() {
-					GameContainer* container = ARK2D::getContainer();
+					/*GameContainer* container = ARK2D::getContainer();
 					if (	(signed int)(getMinX()) <= 0
 						|| 	(signed int)(getMinY()) <= 0
 						|| 	(signed int)(getMaxX()) >= (signed int) container->getWidth()
 						|| 	(signed int)(getMaxY()) >= (signed int) container->getHeight()) {
 						return true;
-					}
+					}*/
 					return false;
 				}
 
@@ -143,9 +146,9 @@ namespace ARK {
 					}
 					return false;
 				}*/
-				static bool collision_cubeRectangle(ARK::Geometry::Cube<T>* c, ARK::Geometry::Rectangle<T>* r) 
+				static bool collision_cubeRectangle(ARK::Geometry::CubeTemplate<T>* c, ARK::Geometry::Rectangle<T>* r) 
 				{
-					return Shape<T>::collision_cubeCube(
+					return Shape::collision_cubeCube(
 						c->getMinX(), c->getMinY(), c->getMinZ(), c->getWidth(), c->getHeight(), c->getDepth(), 
 						r->getMinX(), r->getMinY(), 0, 			  r->getWidth(), r->getHeight(), 0
 					);

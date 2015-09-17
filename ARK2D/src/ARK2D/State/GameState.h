@@ -44,8 +44,8 @@ namespace ARK {
 
 				virtual ~GameState();
 
-			protected:
-				SceneNode* m_rootUIComponent;
+			public:
+				Scene* scene;
 		};
 	}
 }

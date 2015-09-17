@@ -11,6 +11,8 @@
 #include "Shape.h"
 #include "Line.h"
 #include "Vector2.h"
+#include "Polygon.h"
+#include "../Graphics/Renderer.h"
   
 namespace ARK { 
 	namespace Geometry {

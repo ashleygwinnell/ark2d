@@ -77,6 +77,8 @@ namespace ARK {
 
 				vector<Matrix44<float> > m_stack;
 				unsigned int m_stackIndex;
+				unsigned int m_root; // the lowest stack index after ark2d does its bits. e.g. letterboxing. 
+									 // we reset to this instead of the identity matrix when starting new renderbatches.
 
 				bool m_dirty;
 
@@ -99,12 +101,15 @@ namespace ARK {
 					DirectX::XMMATRIX d3dpointer();  
 				#endif
 				Matrix44<float>* current();
-				void pushMatrix();
+				Matrix44<float>* at(unsigned int index);
+				void pushMatrix(bool setroot = false);
 				void popMatrix();
 				void toStringDialog();
 				bool isDirty();
 				void setDirty(bool b);
 				unsigned int height();
+				unsigned int root();
+
 				virtual ~MatrixStack();
 
 				
@@ -490,7 +495,7 @@ namespace ARK {
 				void enableMultisampling() const;
 				void disableMultisampling() const; 
 
-				void pushMatrix() const;
+				void pushMatrix(bool setasroot = false) const;
 				void popMatrix() const;
 				void loadIdentity() const;
 

@@ -46,6 +46,11 @@ namespace ARK {
 	}
 	//! Contains classes for Geometry including collision detection and resolution.
 	namespace Geometry {
+        
+        template <class T=int>
+        class CubeTemplate;
+        
+        class Cube;
 
 		template <class T=int>
 		class Shape;
@@ -59,8 +64,7 @@ namespace ARK {
 		template <class T=int>
 		class Line;
 
-		template <class T=int>
-		class Cube;
+		
 		
 
 	}

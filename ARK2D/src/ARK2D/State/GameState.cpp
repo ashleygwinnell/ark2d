@@ -11,7 +11,7 @@
 namespace ARK {
 	namespace State {
 
-		GameState::GameState(): m_rootUIComponent(NULL) {
+		GameState::GameState(): scene(NULL) {
 
 		}
 
@@ -31,13 +31,13 @@ namespace ARK {
 
 
 		bool GameState::keyPressed(unsigned int key) {
-			return (m_rootUIComponent != NULL && m_rootUIComponent->keyPressed(key));
+			return (scene != NULL && scene->keyPressed(key));
 		}
 		bool GameState::keyReleased(unsigned int key) {
-			return (m_rootUIComponent != NULL && m_rootUIComponent->keyReleased(key));
+			return (scene != NULL && scene->keyReleased(key));
 		}
 		bool GameState::mouseMoved(int x, int y, int oldx, int oldy) {
-			return (m_rootUIComponent != NULL && m_rootUIComponent->mouseMoved(x,y,oldx,oldy));
+			return (scene != NULL && scene->mouseMoved(x,y,oldx,oldy));
 		}
 		void GameState::orientationChanged(int orientation) {
 

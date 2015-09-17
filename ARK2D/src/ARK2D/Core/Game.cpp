@@ -80,17 +80,19 @@ namespace ARK {
 					//r->pushMatrix();
 					//r->translate(0.0f, container->getTranslateY());
 
-					r->pushMatrix();
+					//r->pushMatrix();
 				} else { 
 					r->pushMatrix();
-                	r->translate(container->getTranslateX(), container->getTranslateY());
-                	r->pushMatrix();
-                	r->scale(container->getScale(), container->getScale());
-                }
-
-            #else
-                r->pushMatrix(); 
+					r->translate(container->getTranslateX(), container->getTranslateY());
+					r->pushMatrix();
+					r->scale(container->getScale(), container->getScale());
+				}
+			
+			#else
+				r->pushMatrix(); 
 			#endif
+
+			r->pushMatrix(true);
 		}
 		
 		void Game::postRender(GameContainer* container, Renderer* r) { 
@@ -100,7 +102,7 @@ namespace ARK {
 				if (container->getOrientation() == GameContainer::ORIENTATION_LANDSCAPE) {
 				//	g->popMatrix(); // pop rotate
 				}
-				r->drawScissorBoxes(); 
+
 
 			#elif (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS) || defined(ARK2D_FLASCC) || defined(ARK2D_UBUNTU_LINUX))
 				
@@ -109,21 +111,24 @@ namespace ARK {
 					r->popMatrix();
 					r->popMatrix();
 					r->popMatrix();
-					r->popMatrix();
+					//r->popMatrix();
 				} else {
 					r->popMatrix(); // pop scale
 					r->popMatrix(); // pop translate
 				}
-				r->drawScissorBoxes();
+				
 				
 			#elif defined( ARK2D_ANDROID ) || defined(ARK2D_WINDOWS_PHONE_8)
 				r->popMatrix(); // pop scale
 				r->popMatrix(); // pop translate
 
-				r->drawScissorBoxes(); 
+				
 			#else
-				r->popMatrix();
+				r->popMatrix(); 
 			#endif
+			r->popMatrix();
+
+			r->drawScissorBoxes(); 
 		}
 		
 		void Game::resize(GameContainer* container, int width, int height) {

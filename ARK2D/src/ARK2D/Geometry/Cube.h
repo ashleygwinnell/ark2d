@@ -9,8 +9,6 @@
 #define ARK_GEOMETRY_CUBE_H_
 
 #include "Shape.h"
-#include "Line.h"
-#include "Vector2.h"
   
 namespace ARK { 
 	namespace Geometry {
@@ -22,8 +20,8 @@ namespace ARK {
 		 */
         
 		template <class T>
-		class Cube : public Shape<T> {
-			private:
+		class CubeTemplate : public Shape<T> {
+			protected:
 				T m_x;
 				T m_y;
 				T m_z;
@@ -32,7 +30,7 @@ namespace ARK {
 				int m_depth;
 
 			public:
-				Cube():
+				CubeTemplate():
 					Shape<T>(), 
 					m_x(0), 
 					m_y(0), 
@@ -41,8 +39,18 @@ namespace ARK {
 					m_height(1),
 					m_depth(1) {
 
-				}
-				Cube(T x, T y, T z, int width, int height, int depth):
+                }
+                CubeTemplate(T w, T h, T d):
+                    Shape<T>(),
+                    m_x(0),
+                    m_y(0),
+                    m_z(0),
+                    m_width(w),
+                    m_height(h),
+                    m_depth(d) {
+                    
+                }
+				CubeTemplate(T x, T y, T z, int width, int height, int depth):
 					Shape<T>(), 
 					m_x(x), 
 					m_y(y), 
@@ -216,44 +224,7 @@ namespace ARK {
 				}
 				
 				virtual bool collides(Shape<T>* s) {
-					if (s == NULL) { ErrorDialog::createAndShow("A Shape was NULL"); }
-
-					// cube
-					Cube<T>* cube = NULL;
-					cube = dynamic_cast<Cube<T>*>(s);
-					if (cube != NULL) {
-						return Shape<T>::collision_cubeCube(m_x, m_y, m_z, m_width, m_height, m_depth, cube->getMinX(), cube->getMinY(), cube->getMinZ(), cube->getWidth(), cube->getHeight(), cube->getDepth());
-					}
-
-					// rectangle
-					Rectangle<T>* rect = NULL;
-					rect = dynamic_cast<Rectangle<T>*>(s);
-					if (rect != NULL) {
-						return Shape<T>::collision_rectangleRectangle(m_x, m_y, m_width, m_height, rect->getMinX(), rect->getMinY(), rect->getWidth(), rect->getHeight());
-					}
- 
-                    // circle 
-					Circle<T>* circle = NULL;
-					circle = dynamic_cast<Circle<T>* >(s);
-					if (circle != NULL) {
-						return Shape<T>::collision_circleRectangle(circle->getCenterX(), circle->getCenterY(), circle->getRadius(), m_x, m_y, m_width, m_height);
-					}
-
-					// line
-					Line<T>* line = NULL;
-					line = dynamic_cast<Line<T>* >(s);
-					if (line != NULL) {
-						return Shape<T>::collision_rectangleLine(m_x, m_y, m_width, m_height, line->getStart()->getX(), line->getStart()->getY(), line->getEnd()->getX(), line->getEnd()->getY());
-					}
-
-					// Polygon
-					//Polygon<T>* poly = NULL;
-					//poly = dynamic_cast<Polygon<T>* >(s);
-					//if (poly != NULL) {
-					//	return Shape<T>::collision_polygonRectangle(poly, this);
-					//}
-
-					return false;
+					
 				}
 				virtual void resolve(Shape<T>* s) {
 
@@ -281,6 +252,28 @@ namespace ARK {
 					return s.get();
 				}
 
+				virtual ~CubeTemplate() {
+
+				}
+		};
+
+
+
+		class Cube : public CubeTemplate<float> {
+			public: 
+				Cube():
+					CubeTemplate() {
+
+				}
+				Cube(float w, float h, float d):
+					CubeTemplate(w, h, d) {
+
+				}
+				Cube(float x, float y, float z, float w, float h, float d):
+					CubeTemplate(x, y, z, w, h, d) {
+
+				}
+                virtual bool collides(Shape<float>* s);
 				virtual ~Cube() {
 
 				}

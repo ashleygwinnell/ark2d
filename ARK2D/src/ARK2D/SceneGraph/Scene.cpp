@@ -1,9 +1,13 @@
 
 #include "Scene.h"
 #include "../Graphics/Renderer.h"
+#include "../Geometry/Cube.h"
+#include "../Graphics/Image.h"
 
 namespace ARK {
 	namespace SceneGraph {
+
+		ARK::Geometry::Cube* SceneNode::s_dummyCube = new ARK::Geometry::Cube(0,0,0);
 
 		SceneNode::SceneNode():
 			parent(NULL),
@@ -88,12 +92,28 @@ namespace ARK {
 				children[i]->update();
 			}
 		}
-		void SceneNode::render() {
+		
+		void SceneNode::preRender() {
+			ARK::Geometry::Cube* bounds = getBounds();
 			Renderer* r = ARK2D::getRenderer();
 			r->pushMatrix();
-			for(unsigned int i = 0; i < children.size(); ++i) {
+			r->translate(position.getX(), position.getY(), position.getZ());
+            r->rotate(float(rotation));
+            r->translate(pivot.getX() * bounds->getWidth() * -1.0f, pivot.getY() * bounds->getHeight() * -1.0f, pivot.getZ() * bounds->getDepth() * -1.0f);
+            r->scale(scale.getX(), scale.getY(), scale.getZ());
+		}
+		void SceneNode::render() {
+			renderChildren();
+		}
+		void SceneNode::renderChildren() {
+            for(unsigned int i = 0; i < children.size(); ++i) {
+				children[i]->preRender();
 				children[i]->render();
+				children[i]->postRender();
 			}
+		}
+		void SceneNode::postRender() {
+			Renderer* r = ARK2D::getRenderer();
 			r->popMatrix();
 		}
 
@@ -125,7 +145,12 @@ namespace ARK {
 			}
 			return false;
 		} 
-
+		Image* SceneNode::asImage() {
+			return dynamic_cast<Image*>(this);
+		}
+		ARK::Geometry::Cube* SceneNode::getBounds() {
+			return s_dummyCube;
+		}
 
 
 		
@@ -164,9 +189,11 @@ namespace ARK {
 			if (root != NULL) { 
 				Renderer* r = ARK2D::getRenderer();
 				r->getBatch()->setEnabled(true, true);
+				root->preRender();
 				root->render();
-				r->getBatch()->render();
+				root->postRender();
 				r->getBatch()->setEnabled(false, true);
+				r->getBatch()->render();
 			}
 		}
 		bool Scene::keyPressed(unsigned int key) { 
@@ -178,6 +205,10 @@ namespace ARK {
 		bool Scene::mouseMoved(int x, int y, int oldx, int oldy) {
 			return root->mouseMoved(x, y, oldx, oldy);
 		}
+
+        
+		
+
 
 	}
 }

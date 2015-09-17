@@ -360,6 +360,7 @@ namespace ARK {
 			m_type(type),
 			m_stack(),  
 			m_stackIndex(0),
+			m_root(0),
 			m_dirty(true)
 		{
 			Matrix44<float> defaultMatrix;
@@ -433,10 +434,19 @@ namespace ARK {
 		unsigned int MatrixStack::height() {
 			return m_stackIndex; // m_stack.size();
 		}
+		unsigned int MatrixStack::root() {
+			return m_root;
+		}
 
 		Matrix44<float>* MatrixStack::current() {
 			return &m_stack[m_stackIndex];
 		}
+		Matrix44<float>* MatrixStack::at(unsigned int index) {
+			return &m_stack[index];
+		}
+
+		
+
 		
 		#ifdef ARK2D_RENDERER_DIRECTX
 			DirectX::XMMATRIX MatrixStack::d3dpointer() {
@@ -537,10 +547,11 @@ namespace ARK {
 			}
 			ErrorDialog::createAndShow(compareStr);
 		}
-		void MatrixStack::pushMatrix() {
+		void MatrixStack::pushMatrix(bool setRoot) {
 			//Matrix44<float> copy = m_stack.at(m_stackIndex).copy();
 			//m_stack.push_back(copy);
 			m_stackIndex++; 
+			if (setRoot) { m_root = m_stackIndex; }
 
 			if (m_stackIndex >= m_stack.size()) {
 				Matrix44<float> copy = m_stack.at(m_stackIndex-1).copy();
@@ -812,6 +823,8 @@ namespace ARK {
 			if (!wasEnabled && b) {
 				ms->pushMatrix();
 				if (fromSceneGraph) { 
+					//Matrix44<float>* settoroot = ms->at(ms->root());
+					//ms->current()->set( *settoroot );
 					ms->identity();
 				}
 				startedAtMatrixIndex = ms->height();
@@ -1237,10 +1250,10 @@ namespace ARK {
 			}
 			showAnyGlErrorAndExitMacro();
 		}
-		void Renderer::pushMatrix() const {
+		void Renderer::pushMatrix(bool setasroot) const {
 			//ARK2D::getLog()->v("pushMatrix");
 
-			s_matrix->pushMatrix();  
+			s_matrix->pushMatrix(setasroot);  
 			#ifndef NO_FIXED_FUNCTION_PIPELINE
 				glPushMatrix();
 				RendererStats::s_glCalls++;

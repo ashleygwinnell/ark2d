@@ -16,13 +16,13 @@
 #include "Font.h"
 #include "../Includes.h"
 
-#include "../Graphics/Image.h"
-#include "../Graphics/Color.h"
+
 #include "../Util/Log.h"
 #include "../Util/StringUtil.h"
 
 
 #include "../ARK2D.h"
+#include "../Namespaces.h"
 
 using namespace std;
 

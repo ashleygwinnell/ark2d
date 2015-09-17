@@ -42,7 +42,7 @@ namespace ARK {
 //			root->setSize(container->getWidth(), container->getHeight());
 //			root->setShowBorder(false);
 
-            SceneNode* root = m_rootUIComponent;
+            SceneNode* root = new SceneNode();
             
 			rightPanel = new ScrollPanel();
 			rightPanel->setLocation(50, 50);
@@ -105,7 +105,7 @@ namespace ARK {
 
 			root->addChild(rightPanel);
 
-			m_rootUIComponent = root;
+            scene->addChild(root);
 		}
 
 		void UITestGameState::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {
@@ -116,7 +116,7 @@ namespace ARK {
 		}
 		void UITestGameState::render(GameContainer* container, StateBasedGame* game, Renderer* g) {
 			//GameState::update(container, game. timer);
-			m_rootUIComponent->render();
+			scene->render();
 
 
 

@@ -8,8 +8,9 @@
 #ifndef CIRCLE_H_
 #define CIRCLE_H_
 
-#include "../Util/MathUtil.h"
 #include "Shape.h"
+#include "../Util/MathUtil.h"
+#include "../Graphics/Renderer.h"
 
 namespace ARK {
 	namespace Geometry {
