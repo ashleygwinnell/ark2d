@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Durango">
+      <Configuration>Debug</Configuration>
+      <Platform>Durango</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Durango">
+      <Configuration>Release</Configuration>
+      <Platform>Durango</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  
+  <PropertyGroup Label="Globals">
+    <ApplicationEnvironment>title</ApplicationEnvironment>
+    <RootNamespace>%GAME_SHORT_NAME%</RootNamespace>
+    <VCTargetsPath Condition="'$(VCTargetsPath11)' != '' and '$(VSVersion)' == '' and '$(VisualStudioVersion)' == ''">$(VCTargetsPath11)</VCTargetsPath>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <ProjectGuid>{52D77161-6E57-DCCF-42C9-E152E938C2D5}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <AppUserModelId>%GAME_SHORT_NAME%110_1.0.0.0___f8q8t5mzxvsas!%GAME_SHORT_NAME%.App</AppUserModelId>
+  </PropertyGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Durango'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Durango'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v110</PlatformToolset>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+
+  <ImportGroup Label="ExtensionSettings" />
+  <PropertyGroup Label="UserMacros" />
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Durango'">
+    <LinkIncremental>false</LinkIncremental>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Durango'">
+    <LinkIncremental>false</LinkIncremental>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  
+
+  <!-- <PropertyGroup>
+    <ExecutablePath>$(ExecutablePath);$(MSBuildProjectDirectory)\.\bin\;$(MSBuildProjectDirectory)\.\bin\</ExecutablePath>
+    <IntDir>$(Configuration)\obj\$(ProjectName)\</IntDir>
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <TargetName>$(ProjectName)</TargetName>
+    <TargetPath>$(OutDir)\$(ProjectName)$(TargetExt)</TargetPath>
+  </PropertyGroup>  -->
+
+  <!-- Configurations -->
+
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Durango'">
+     <ClCompile>
+      <AdditionalIncludeDirectories>%ARK2D_DIR%\src;%ARK2D_DIR%\src\ARK2D;%ARK2D_DIR%\src\ARK2D\vendor\xbone;%ARK2D_DIR%\src\ARK2D\vendor\spine\includes;%ARK2D_DIR%\lib\xbone\includes;%ADDITIONAL_INCLUDE_DIRECTORIES%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>$(SlashAI)</AdditionalUsingDirectories>
+       <PreprocessorDefinitions>%ADDITIONAL_PREPROCESSOR_DEFINITIONS%ARK2D_XBOXONE;UNICODE;_UNICODE;NDEBUG;_DURANGO;__WRL_NO_DEFAULT_LIB__;WINAPI_FAMILY=WINAPI_FAMILY_TV_TITLE;WIN32_LEAN_AND_MEAN;_XM_F16C_INTRINSICS_;MIN_EXPECTED_XDK_VER=12999;MAX_EXPECTED_XDK_VER=12999;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <MinimalRebuild>false</MinimalRebuild>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <CompileAsWinRT>true</CompileAsWinRT>
+      <Optimization>MaxSpeed</Optimization>
+      <WarningLevel>Level4</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <EnablePREfast>false</EnablePREfast>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>%ARK2D_DIR%\build\xbone\Release\libARK2D.lib;%ADDITIONAL_DOTLIB_FILES%;d3d11_x.lib;xg_x.lib;combase.lib;kernelx.lib;toolhelpx.lib;D3DCompiler.lib;dxguid.lib;etwplus.lib</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>kernel32.lib;oldnames.lib;runtimeobject.lib;ole32.lib</IgnoreSpecificDefaultLibraries>
+      <EntryPointSymbol></EntryPointSymbol>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
+    </Link>
+     <ResourceCompile>
+      <AdditionalIncludeDirectories>%ARK2D_DIR%\src;%ARK2D_DIR%\src\ARK2D;%ARK2D_DIR%\src\ARK2D\vendor\xbone;%ARK2D_DIR%\src\ARK2D\vendor\spine\includes;%ARK2D_DIR%\lib\xbone\includes;%ADDITIONAL_INCLUDE_DIRECTORIES%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%ADDITIONAL_PREPROCESSOR_DEFINITIONS%;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions> 
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <Optimization>Full</Optimization>
+    </ResourceCompile>
+    <Lib>
+      <AdditionalOptions>/ignore:4264 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>   
+
+
+   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Durango'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>%ARK2D_DIR%\src;%ARK2D_DIR%\src\ARK2D;%ARK2D_DIR%\src\ARK2D\vendor\xbone;%ARK2D_DIR%\src\ARK2D\vendor\spine\includes;%ARK2D_DIR%\lib\xbone\includes;%ADDITIONAL_INCLUDE_DIRECTORIES%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>$(SlashAI)</AdditionalUsingDirectories>
+      <PreprocessorDefinitions>%ADDITIONAL_PREPROCESSOR_DEFINITIONS%ARK2D_XBOXONE;ARK2D_DEBUG;_DEBUG;UNICODE;_UNICODE;_DEBUG;DEBUG;_DURANGO;__WRL_NO_DEFAULT_LIB__;WINAPI_FAMILY=WINAPI_FAMILY_TV_TITLE;WIN32_LEAN_AND_MEAN;_XM_F16C_INTRINSICS_;MIN_EXPECTED_XDK_VER=12999;MAX_EXPECTED_XDK_VER=12999;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <CompileAsWinRT>true</CompileAsWinRT>
+      <Optimization>Disabled</Optimization>
+      <MinimalRebuild>true</MinimalRebuild>
+      <WarningLevel>Level4</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <EnablePREfast>false</EnablePREfast>
+      <!-- <DebugInformationFormat>EditAndContinue</DebugInformationFormat> -->
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Fast</FloatingPointModel>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>%ARK2D_DIR%\build\xbone\Debug\libARK2D.lib;%ADDITIONAL_DOTLIB_FILES%;d3d11_x.lib;xg_x.lib;combase.lib;kernelx.lib;toolhelpx.lib;D3DCompiler.lib;dxguid.lib;etwplus.lib</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>kernel32.lib;oldnames.lib;runtimeobject.lib;ole32.lib</IgnoreSpecificDefaultLibraries>
+      <EntryPointSymbol></EntryPointSymbol>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
+    </Link>
+    <Lib>
+      <AdditionalOptions>/ignore:4264 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>%ARK2D_DIR%\src;%ARK2D_DIR%\src\ARK2D;%ARK2D_DIR%\src\ARK2D\vendor\xbone;%ARK2D_DIR%\src\ARK2D\vendor\spine\includes;%ARK2D_DIR%\lib\xbone\includes;%ADDITIONAL_INCLUDE_DIRECTORIES%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%ADDITIONAL_PREPROCESSOR_DEFINITIONS%ARK2D_XBOXONE;ARK2D_DEBUG;_DEBUG;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+
+ 
+
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ARK.h" />
+    %COMPILE_HEADER_FILES%
+    <!--<ClInclude Include="..\..\src\DefaultGame.h" />-->
+  </ItemGroup>
+  <ItemGroup>
+    %COMPILE_SOURCE_FILES%
+    <!--<ClCompile Include="..\..\src\main.cpp" />
+    <ClCompile Include="..\..\src\DefaultGame.cpp" />-->
+  </ItemGroup>
+  <ItemGroup>
+    <!-- <ResourceCompile Include="..\..\src\Resources.rc" />-->
+    %GAME_RESOURCES%
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>

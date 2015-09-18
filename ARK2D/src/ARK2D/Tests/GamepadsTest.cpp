@@ -594,13 +594,17 @@ namespace ARK {
 				r->drawString(StringUtil::append("gamepads connected: ", i->getGamepads()->size()), 30, 20);
 				r->drawString(StringUtil::append("gamepad: ", m_gamepadIndex), 30, 40);
 				
-				r->drawString(StringUtil::append("name: ", p1->getName()), 30, 70);
+				string name = p1->getName();
+				if (p1->isPS4Controller()) { name += " -- PS4 Controller!"; }
+				r->drawString(StringUtil::append("name: ", name), 30, 70);
 				r->drawString(StringUtil::append("vendor id: ", p1->vendorId), 30, 90);
 				r->drawString(StringUtil::append("product id: ", p1->productId), 30, 110);
 
 				r->drawString(StringUtil::append("num buttons: ", p1->numButtons), 30, 140);
 				r->drawString(StringUtil::append("num axes: ", p1->numAxes), 30, 160);
 				r->drawString(StringUtil::append("num axes 2: ", p1->axes.size()), 30, 180);
+				r->drawString(StringUtil::append("has configuration: ", (p1->isConfigured()?"true":"false")), 30, 210, -1, -1, 0.0, 0.5f);
+				r->drawString(StringUtil::append("shared trigger axis: ", (p1->m_sharedTriggerAxis?"true":"false")), 30, 220, -1, -1, 0.0, 0.5f);
 				//r->drawString(StringUtil::append("axis 1: ", p1->axes.at(0)->value), 30, 180);
 				//r->drawString(StringUtil::append("axis 2: ", p1->axes.at(1)->value), 30, 210);
 				renderGamepad(p1, container->getWidth()*0.5f, container->getHeight()*0.7f);

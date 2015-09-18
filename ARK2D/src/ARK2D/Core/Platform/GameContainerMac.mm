@@ -463,8 +463,8 @@
 						}
 						integerValue = IOHIDValueGetIntegerValue(value);
 						 
-						if (axis->isHatSwitch) {
-							int x, y;
+						if (axis->isHatSwitch) { // DPADS! 
+							/*int x, y;
 							
 							// Fix for Saitek X52 -- ???
 							axis->hasNullState = false;
@@ -486,8 +486,55 @@
 							if (y != axis->nextHatSwitch->value) {
 								//queueAxisEvent(deviceRecord, IOHIDValueGetTimeStamp(value) * timebaseInfo.numer / timebaseInfo.denom * 0.000000001, axisIndex + 1, y);
 								axis->nextHatSwitch->value = y;
+							}*/
+
+							int x, y;
+							hatValueToXY(integerValue, axis->logicalMax - axis->logicalMin + 1, &x, &y);
+							ARK2D::getLog()->e(StringUtil::append("x: ", x));
+							ARK2D::getLog()->e(StringUtil::append("y: ", y));
+
+							unsigned int dpadThisUpdate = Gamepad::DPAD_NONE;
+							if (x == -1 && y == 0) { // left
+								gamepad->dpadPosition = Gamepad::DPAD_LEFT;
+								dpadThisUpdate = gamepad->dpadPosition;
+								if (!gamepad->isButtonDown(Gamepad::DPAD_LEFT)) {
+									gamepad->pressButton(Gamepad::DPAD_LEFT);
+								}
+							} else if (x == 1 && y == 0) { // right
+								gamepad->dpadPosition = Gamepad::DPAD_RIGHT;
+								dpadThisUpdate = gamepad->dpadPosition;
+								if (!gamepad->isButtonDown(Gamepad::DPAD_RIGHT)) {
+									gamepad->pressButton(Gamepad::DPAD_RIGHT);
+								}
+							} else if (x == 0 && y == -1) { // up
+								gamepad->dpadPosition = Gamepad::DPAD_UP;
+								dpadThisUpdate = gamepad->dpadPosition;
+								if (!gamepad->isButtonDown(Gamepad::DPAD_UP)) {
+									gamepad->pressButton(Gamepad::DPAD_UP);
+								}
+							} else if (x == 0 && y == 1) { // down
+								gamepad->dpadPosition = Gamepad::DPAD_DOWN;
+								dpadThisUpdate = gamepad->dpadPosition;
+								if (!gamepad->isButtonDown(Gamepad::DPAD_DOWN)) {
+									gamepad->pressButton(Gamepad::DPAD_DOWN);
+								}
+							} else {
+								gamepad->dpadPosition = Gamepad::DPAD_NONE;
+								dpadThisUpdate = Gamepad::DPAD_NONE;
 							}
-							
+
+							if (gamepad->isButtonDown(Gamepad::DPAD_LEFT) && dpadThisUpdate != Gamepad::DPAD_LEFT) {
+								gamepad->releaseButton(Gamepad::DPAD_LEFT);
+							}
+							if (gamepad->isButtonDown(Gamepad::DPAD_RIGHT) && dpadThisUpdate != Gamepad::DPAD_RIGHT) {
+								gamepad->releaseButton(Gamepad::DPAD_RIGHT);
+							}
+							if (gamepad->isButtonDown(Gamepad::DPAD_UP) && dpadThisUpdate != Gamepad::DPAD_UP) {
+								gamepad->releaseButton(Gamepad::DPAD_UP);
+							}
+							if (gamepad->isButtonDown(Gamepad::DPAD_DOWN) && dpadThisUpdate != Gamepad::DPAD_DOWN) {
+								gamepad->releaseButton(Gamepad::DPAD_DOWN);
+							}
 						} else {
 							
 							
@@ -500,7 +547,42 @@
 
 							float floatValue = (integerValue - axis->logicalMin) / (float) (axis->logicalMax - axis->logicalMin) * 2.0f - 1.0f;
 							//queueAxisEvent(deviceRecord, IOHIDValueGetTimeStamp(value) * timebaseInfo.numer / timebaseInfo.denom * 0.000000001, axisIndex, floatValue);
-							axis->value = floatValue;
+
+							//ARK2D::getLog()->e(StringUtil::append("min :", axis->logicalMin));
+							unsigned int newAxisId = Gamepad::convertSystemAxisToARKAxis(gamepad, axis->id);
+							if (axis->logicalMin == 0 && (newAxisId == Gamepad::TRIGGER_1 || newAxisId == Gamepad::TRIGGER_2)) {
+								floatValue = (floatValue + 1.0f)*0.5f;
+							}
+
+							if (gamepad->isPS4Controller() && (axis->id > 10 || axis->id == 6)) {
+								continue;
+							}
+
+							if (newAxisId == 4 || newAxisId == 5) {
+								ARK2D::getLog()->e(StringUtil::append("axis moved id: ", axis->id));
+								ARK2D::getLog()->e(StringUtil::append("axis moved id2: ", newAxisId));
+								ARK2D::getLog()->e(StringUtil::appendf("axis moved vl: ", floatValue));
+							}
+
+							//axis->value = floatValue;
+							GamepadAxis* newaxis = NULL;
+							for(unsigned int jj = 0; jj < gamepad->axes.size(); jj++) {
+								if (gamepad->axes.at(jj)->id == newAxisId) {
+									newaxis = gamepad->axes.at(jj);
+								}
+							}
+							if (newaxis != NULL) {
+								newaxis->value = floatValue;
+                                
+                                Game* g = ARK2D::getGame();
+                                GamepadListener* gl = NULL;
+                                gl = dynamic_cast<GamepadListener*>(g);
+                                if (gl != NULL) {
+                                    gl->axisMoved(gamepad, newAxisId, newaxis->value);
+                                }
+							}
+
+							
 						}
 						
 						return;
@@ -516,16 +598,29 @@
 							buttonIndex,
 							down);*/ 
 						//deviceRecord->buttonStates[buttonIndex] = down;
-						unsigned int newbutton = gamepad->convertCookieToButton( (int) button->cookie );
+						//int cookie = (int) button->cookie;
+
+
+
+						unsigned int newId = Gamepad::convertSystemButtonToARKButton(gamepad, (int) button->id);
+
+						if (gamepad->isPS4Controller() && newId == button->id && (newId == 6 || newId == 7)) {
+							continue;
+						}
+
+						//unsigned int newbutton = gamepad->convertCookieToButton( (int) button->cookie );
 						//ARK2D::getLog()->v(StringUtil::append("button press id: ", (int) button->id));
 						//ARK2D::getLog()->v(StringUtil::append("button press cookie: ", (int) button->cookie));
 						//ARK2D::getLog()->v(StringUtil::append("button press arkid: ", (int) newbutton));
 
 						
 						if (down) {
-							gamepad->pressButton(newbutton); 
+							ARK2D::getLog()->e(StringUtil::append("old id: ", (int) button->id));
+							ARK2D::getLog()->e(StringUtil::append("new id: ", (int) newId));
+
+							gamepad->pressButton(newId); 
 						} else {
-							gamepad->releaseButton(newbutton);
+							gamepad->releaseButton(newId);
 						}
 						
 						return;
@@ -666,9 +761,9 @@
 							gamepad->axes.push_back(axis);
 							gamepad->numAxes++; 
 
-							if (axis->id == 4 || axis->id == 5) { 
-								axis->value = -1.0f;
-							}
+							//if (axis->id == 4 || axis->id == 5) { 
+							//	axis->value = -1.0f;
+							//}
 
 							if (axis->isHatSwitch) { 
 								GamepadAxis* nextaxis = new GamepadAxis();
@@ -691,6 +786,7 @@
 							button->id = gamepad->numButtons;
 							button->cookie = IOHIDElementGetCookie(element);
 							button->down = false;
+
 							gamepad->buttons.push_back(button);
 
 							gamepad->numButtons++;
@@ -700,6 +796,30 @@
 				
 
 				}
+
+				GamepadButton* dpad_button = new GamepadButton();
+				dpad_button->id = Gamepad::DPAD_UP;
+				dpad_button->down = false;  
+				gamepad->buttons.push_back(dpad_button);
+
+				dpad_button = new GamepadButton();
+				dpad_button->id = Gamepad::DPAD_DOWN;
+				dpad_button->down = false;  
+				gamepad->buttons.push_back(dpad_button);
+
+				dpad_button = new GamepadButton();
+				dpad_button->id = Gamepad::DPAD_LEFT;
+				dpad_button->down = false;  
+				gamepad->buttons.push_back(dpad_button);
+
+				dpad_button = new GamepadButton();
+				dpad_button->id = Gamepad::DPAD_RIGHT;
+				dpad_button->down = false;  
+				gamepad->buttons.push_back(dpad_button);
+
+				gamepad->numButtons += 4;
+
+
 				
 				//deviceRecord->axisStates = calloc(sizeof(float), deviceRecord->numAxes);
 				//deviceRecord->buttonStates = calloc(sizeof(bool), deviceRecord->numButtons);

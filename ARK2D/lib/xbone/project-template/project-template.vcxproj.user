@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <RemoteAddress>XboxOne</RemoteAddress>
+    <LastConfigDeployed>Debug</LastConfigDeployed>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Durango'">
+    <LogModuleLoads>true</LogModuleLoads>
+    <DebuggerFlavor>DurangoVCppDebugger</DebuggerFlavor>
+    <LocalDebuggerAttach>true</LocalDebuggerAttach>
+    <DeployMode>Push</DeployMode>
+  </PropertyGroup>
+</Project>

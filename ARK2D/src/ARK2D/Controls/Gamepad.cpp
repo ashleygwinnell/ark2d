@@ -60,6 +60,13 @@ namespace ARK {
 						mapping.axes[(unsigned int) Gamepad::ANALOG_STICK_2_Y] = pad->GetNode("axes")->GetNode("RY")->NodeAsInt();
 						mapping.axes[(unsigned int) Gamepad::TRIGGER_1] = pad->GetNode("axes")->GetNode("LT")->NodeAsInt();
 						mapping.axes[(unsigned int) Gamepad::TRIGGER_2] = pad->GetNode("axes")->GetNode("RT")->NodeAsInt();
+						
+						mapping.shared_triggers_axis = true;
+						JSONNode* sharedTriggersNode = pad->GetNode("shared_triggers_axis");
+						if (sharedTriggersNode) {
+							mapping.shared_triggers_axis = sharedTriggersNode->NodeAsBool();
+						}
+						
 
 						mapping.toInverse();
 
@@ -145,6 +152,7 @@ namespace ARK {
 			m_triggersSendBumperEvents(true),
 			m_previousLTriggerValue(0.0f),
 			m_previousRTriggerValue(0.0f), 
+			m_sharedTriggerAxis(true),
 
 			pressedEvents(),
 			releasedEvents(),
@@ -378,51 +386,31 @@ namespace ARK {
 		}
 		float Gamepad::getAxisValue(unsigned int axisId) {
 
-			// Windows multimedia api maps xbox 360 triggers on to A SINGLE AXIS LIKE A FUCKING IDIOT.
-			// It's fixed in Xinput apis but that rquires a Visual Studio compiler set up. :( 
-			#if defined(ARK2D_WINDOWS)  
-				float trigger1RawValue = 0.0f; 
-				if (axisId == TRIGGER_2) {
-					unsigned int newAxisId = convertAxisToId(this, TRIGGER_1);
-					for(unsigned int i = 0; i < axes.size(); ++i) {
-						if (axes.at(i)->id == newAxisId) { 
-							trigger1RawValue = axes.at(i)->value;
-						}
-					}
-				}
-			#endif
-
-			unsigned int newAxisId = convertAxisToId(this, axisId);
+			unsigned int newAxisId = axisId; //convertAxisToId(this, axisId);
 			for(unsigned int i = 0; i < axes.size(); ++i) {
 				if (axes.at(i)->id == newAxisId) { 
- 
-					#if defined(ARK2D_WINDOWS)  
-						if (axisId == TRIGGER_1) {
-							float val = axes.at(i)->value;
-							if (val < 0.0f) { val = 0.0f; }
-							return val; 
-						}  else if (axisId == TRIGGER_2) {
-							float val = trigger1RawValue;
-							if (val > 0.0f) { val = 0.0f; }
-							return val * -1.0f;
-						}
-					#endif
-
-					if (axisId == TRIGGER_1 || axisId == TRIGGER_2) {
-						return (axes.at(i)->value + 1.0f)/2.0f;
-					}
-
-					return axes.at(i)->value; 
+ 					return axes.at(i)->value; 
 				}
 			}
 			return 0.0f;
 		}
 
-
+		GamepadMapping* Gamepad::getMapping() {
+			unsigned int len = s_gamepadMapping->size();
+			for(unsigned int i = 0; i < len; ++i) 
+			{
+				GamepadMapping* mapping = &s_gamepadMapping->at(i);
+				if (mapping->vendorId == this->vendorId && mapping->productId == this->productId) {
+					return mapping;
+				}
+			}
+			ARK2D::getLog()->e("Could not get mapping for gamepad. returning null.");
+			return NULL;
+		}
 		unsigned int Gamepad::convertSystemButtonToARKButton(Gamepad* gamepad, unsigned int button) {
 			if (s_gamepadMapping == NULL) { ARK2D::getLog()->e("GamepadMapping not initialised."); return button; }
 
-			#if defined(ARK2D_WINDOWS)
+			#if defined(ARK2D_WINDOWS) || defined(ARK2D_MACINTOSH)
 				bool foundControllerMapping = false;
 				unsigned int len = s_gamepadMapping->size();
 				for(unsigned int i = 0; i < len; ++i) {
@@ -550,7 +538,7 @@ namespace ARK {
 				return button;
 		}
 		unsigned int Gamepad::convertSystemAxisToARKAxis(Gamepad* gamepad, unsigned int axis) {
-			#if defined(ARK2D_WINDOWS)
+			#if defined(ARK2D_WINDOWS) || defined(ARK2D_MACINTOSH)
 				if (s_gamepadMapping == NULL) { ARK2D::getLog()->e("GamepadMapping not initialised."); return axis; }
 				unsigned int len = s_gamepadMapping->size();
 				for(unsigned int i = 0; i < len; ++i) {
@@ -697,7 +685,7 @@ namespace ARK {
 
 		unsigned int Gamepad::convertButtonToId(Gamepad* gamepad, unsigned int button, bool printInfo) {
 			#if defined(ARK2D_MACINTOSH) 
-				bool isPS3 = StringUtil::str_contains(gamepad->name, "PLAYSTATION(R)3");
+				/*bool isPS3 = StringUtil::str_contains(gamepad->name, "PLAYSTATION(R)3");
 				if (isPS3) {
 					//ARK2D::getLog()->v("ps3 convertButtonToId");
 					switch(button) {
@@ -767,7 +755,7 @@ namespace ARK {
 						return 18;
 					case BUTTON_Y:
 						return 19;
-				}
+				}*/
 			#elif defined(ARK2D_ANDROID)
 				if (ARK2D::getContainer()->getPlatformSpecific()->getPluggable()->ouya_isOuya()) {
 					switch (button) {
@@ -1028,6 +1016,25 @@ namespace ARK {
 			bool isXbox360Controller = StringUtil::str_contains(this->name, "XBOX 360");
 			bool isXbox360Controller2 = StringUtil::str_contains(this->name, "Xbox 360");
 			return (isXbox360Controller || isXbox360Controller2);
+		}
+		bool Gamepad::isPS4Controller() {
+			#if defined(ARK2D_WINDOWS) || defined(ARK2D_MACINTOSH)
+				return (this->vendorId == 1356 && this->productId == 1476);
+			#endif
+			return false;
+		}
+		bool Gamepad::isConfigured() {
+			unsigned int len = s_gamepadMapping->size();
+			for(unsigned int i = 0; i < len; ++i) 
+			{
+				const GamepadMapping& mapping = s_gamepadMapping->at(i);
+				if (mapping.vendorId == this->vendorId && 
+					mapping.productId == this->productId) 
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 
 		unsigned int Gamepad::s_nextGamepadId = 0;

@@ -61,6 +61,10 @@ namespace ARK {
 				return BOUNCE_OUT;
 			} else if (str == "BOUNCE_IN_OUT") {
 				return BOUNCE_IN_OUT;
+			} else if (str == "BACK_IN") {
+				return BACK_IN;
+			} else if (str == "BACK_OUT") {
+				return BACK_OUT;
 			}
 			return LINEAR;
 		}
@@ -116,6 +120,10 @@ namespace ARK {
 				return "BOUNCE_OUT";
 			} else if (i == BOUNCE_IN_OUT) {
 				return "BOUNCE_IN_OUT";
+			} else if (i == BOUNCE_IN) {
+				return "BOUNCE_IN";
+			} else if (i == BOUNCE_OUT) {
+				return "BOUNCE_OUT";
 			}
 			return "LINEAR";
 		}
@@ -268,6 +276,17 @@ namespace ARK {
 					if (t < duration/2) { return Easing::ease(Easing::BOUNCE_IN, t*2, 0, change, duration) * 0.5 + start; }
 					return Easing::ease(Easing::BOUNCE_OUT, t*2-duration, 0, change, duration) * .5 + change * 0.5 + start;
 
+                case Easing::BACK_IN:{
+					float ts = (t /= duration) * t;
+					float tc = ts * t;
+					return start + change * (-1*tc*ts + 3*ts*ts + tc + -2*ts);
+                }
+                case Easing::BACK_OUT:  {
+					float ts = (t /= duration) * t;
+					float tc = ts * t;
+					return start + change * (5*tc*ts + -15*ts*ts + 19*tc + -14*ts + 6*t);
+                }
+				
 				case Easing::NONE:
 					return start;
 				default:

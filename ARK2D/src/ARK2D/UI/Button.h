@@ -129,14 +129,17 @@ namespace ARK {
 
 
 				virtual bool mouseMoved(int x, int y, int oldx, int oldy) {
-					if (!m_enabled) { return; } 
+					if (!m_enabled) { return false; } 
 					
-					if (m_state == STATE_DOWN) { return; }
-					if (GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), m_width, m_height, x, y)) {
-						m_state = STATE_OVER;
-					} else {
-						m_state = STATE_OFF;
+					if (m_state != STATE_DOWN) {
+						if (GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), m_width, m_height, x, y)) {
+							m_state = STATE_OVER;
+						}
+						else {
+							m_state = STATE_OFF;
+						}
 					}
+					return (m_state == STATE_OVER || m_state == STATE_DOWN);
 				}
 				void setText(string s) {
 					m_text.clear();

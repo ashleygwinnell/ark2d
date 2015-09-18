@@ -327,14 +327,14 @@ namespace ARK {
 
 		// key listener
 		bool Game::keyPressed(unsigned int key) {
-
+			return false;
 		}
 		bool Game::keyReleased(unsigned int key) {
-
+			return false;
 		}
 		// mouse listener
 		bool Game::mouseMoved(int x, int y, int oldx, int oldy) {
-
+			return false;
 		}
 
 		// gamepad listener 

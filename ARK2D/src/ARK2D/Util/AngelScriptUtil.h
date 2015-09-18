@@ -44,6 +44,6 @@ namespace ARK {
 #define AngelScriptUtil_assert(r) AngelScriptUtil::assertInternal(__FILE__, __LINE__, r);
 #define AngelScriptUtil_functionCheck(func, s) AngelScriptUtil::functionCheckInternal(__FILE__, __LINE__, func, s);
 #define AngelScriptUtil_execeptionCheck(ctx, func, r) AngelScriptUtil::exceptionCheckInternal(__FILE__, __LINE__, ctx, func, r);
-int AngelScriptUtil_IncludeCallback(const char* include, const char* from, CScriptBuilder* builder, void* userParam);
+ARK2D_API int AngelScriptUtil_IncludeCallback(const char* include, const char* from, CScriptBuilder* builder, void* userParam);
 
 #endif

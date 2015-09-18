@@ -24,6 +24,11 @@
 #include "Input.h"
 
 
+#ifdef ARK2D_XBOXONE
+	//using namespace Windows::Xbox::Input; 
+    using namespace Windows::Foundation;
+#endif
+
 // Linux help/examples: 
 // http://scaryreasoner.wordpress.com/2008/02/22/programming-joysticks-with-linux/ 
 // http://ludobloom.com/svn/StemLibProjects/gamepad/tags/1.3.0/source/gamepad/ 
@@ -93,6 +98,7 @@ namespace ARK {
 				std::map<unsigned int, signed int> axes;
 				std::map<signed int, unsigned int> buttonsInverse; // SomeController::BUTTON_A -> Gamepad::BUTTON_A.
 				std::map<signed int, unsigned int> axesInverse;
+				bool shared_triggers_axis;
 				void toInverse();
 				void toRegular(); 
 				string toString();
@@ -147,7 +153,8 @@ namespace ARK {
 				bool m_triggersSendBumperEvents;
 				float m_previousLTriggerValue;
 				float m_previousRTriggerValue;
-
+				bool m_sharedTriggerAxis; // true if Left and Right triggers share the same input axis.
+				 
 				Gamepad();
 				void update();
 
@@ -165,6 +172,7 @@ namespace ARK {
 				void clearButtonPressedRecord();
 
 				string toString();
+				GamepadMapping* getMapping();
 				virtual ~Gamepad();
 
  
@@ -203,6 +211,11 @@ namespace ARK {
 					int axisMap[ABS_CNT];
 					struct input_absinfo axisInfo[ABS_CNT];
 					char* description;
+
+				#elif defined(ARK2D_XBOXONE) 
+
+					Windows::Xbox::Input::IGamepad^ m_currentGamepad;
+        			Windows::Xbox::Input::IGamepadReading^ m_currentGamepadReading;
 
 				#endif
 
@@ -252,6 +265,8 @@ namespace ARK {
 				static vector<GamepadMapping>* s_gamepadMapping;
 				static void initMapping();
 				bool isXbox360Controller();
+				bool isPS4Controller();
+				bool isConfigured();
 
 
 			};

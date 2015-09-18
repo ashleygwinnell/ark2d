@@ -27,6 +27,10 @@ namespace ARK {
 		 * @see http://www.robertpenner.com/easing/easing_demo.html
 		 * @see http://www.dzone.com/snippets/robert-penner-easing-equations
 		 * @see file://C:\xampp\htdocs\C++\ARK2D\Docs\Easing.png
+		 *
+		 * (Generate your own)
+		 * @see http://www.timotheegroleau.com/Flash/experiments/easing_function_generator.htm 
+		 * 
 		 */
 		class ARK2D_API Easing {
 			public:
@@ -55,7 +59,9 @@ namespace ARK {
 				static const unsigned int BOUNCE_IN = 22;
 				static const unsigned int BOUNCE_OUT = 23;
 				static const unsigned int BOUNCE_IN_OUT = 24;
-				static const unsigned int NONE = 25;
+				static const unsigned int BACK_IN = 25;
+				static const unsigned int BACK_OUT = 26;
+				static const unsigned int NONE = 27;
 
 				static unsigned int getByString(string str);
 				static string getByInt(unsigned int str);

@@ -224,7 +224,7 @@ namespace ARK {
 				}
 				
 				virtual bool collides(Shape<T>* s) {
-					
+					return false;
 				}
 				virtual void resolve(Shape<T>* s) {
 

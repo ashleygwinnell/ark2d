@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:mx="http://schemas.microsoft.com/appx/2013/xbox/manifest" IgnorableNamespaces="mx">
+
+    <!--- 'Name' and 'Version' appear in the package path created by deploy  -->
+    <Identity Name="%GAME_SHORT_NAME%"
+            Publisher="CN=%COMPANY_NAME%, O=%COMPANY_NAME%, L=City, S=State, C=UK"
+            Version="1.0.0.0" />
+
+  <Properties>
+    <DisplayName>%GAME_SHORT_NAME%</DisplayName>
+    <PublisherDisplayName>%COMPANY_NAME%</PublisherDisplayName>
+    <Logo>Media/Textures/ATGStoreLogo.png</Logo>
+    <Description>%GAME_SHORT_NAME%</Description>
+  </Properties>
+  
+  <Prerequisites>
+    <OSMinVersion>6.2</OSMinVersion>
+    <OSMaxVersionTested>6.2</OSMaxVersionTested>
+  </Prerequisites>
+  
+  <Resources>
+    <Resource Language="en-us"/>
+  </Resources>
+  
+  <Applications>
+
+      <!--- Debug config -->
+      <!--- 'Id' is in the aumid returned from deploy  -->
+      <!--- 'Executable' must match the .exe produced by the build  -->
+      <Application Id="%GAME_SHORT_NAME%Debug"
+          Executable="%GAME_SHORT_NAME%Debug.exe"
+          EntryPoint="%GAME_SHORT_NAME%.App">
+          <!--- all fields except DisplayName not yet implemented -->
+          <VisualElements
+              DisplayName="%GAME_NAME% (Debug)"
+              Logo="Media/Textures/ATGGraphicsLogo.png"
+              SmallLogo="Media/Textures/ATGSmallLogo.png"
+              Description="%GAME_DESCRIPTION%"
+              ForegroundText="dark"
+              BackgroundColor="#000040">
+              <SplashScreen Image="Media/Textures/ATGSplashScreen.png" />
+          </VisualElements>
+      </Application>
+
+    
+      <!--- Release config -->
+      <!--- 'Id' is in the aumid returned from deploy  -->
+      <!--- 'Executable' must match the .exe produced by the build  -->
+      <Application Id="%GAME_SHORT_NAME%Release"
+          Executable="%GAME_SHORT_NAME%Release.exe"
+          EntryPoint="%GAME_SHORT_NAME%.App">
+          <!--- all fields except DisplayName not yet implemented -->
+          <VisualElements
+              DisplayName="%GAME_NAME%"
+              Logo="Media/Textures/ATGGraphicsLogo.png"
+              SmallLogo="Media/Textures/ATGSmallLogo.png"
+              Description="%GAME_DESCRIPTION%"
+              ForegroundText="dark"
+              BackgroundColor="#000040">
+              <SplashScreen Image="Media/Textures/ATGSplashScreen.png" />
+          </VisualElements>
+      </Application>
+
+
+  </Applications>
+  <Capabilities>
+    <Capability Name="internetClientServer" />
+  </Capabilities>
+</Package>

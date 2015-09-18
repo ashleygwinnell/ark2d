@@ -84,6 +84,55 @@ namespace ARK {
 				}
 		};
 
+		class ARK2D_API TweenValue {
+			public: 
+				float timer;
+				float duration;
+				unsigned int easing;
+				
+				TweenValue();
+				bool isRunning();
+				virtual void update();
+				virtual string toString();
+				virtual ~TweenValue();
+		};
+		class ARK2D_API TweenDoubleValue : public TweenValue {
+			public:
+				double* obj;
+				double fromValue;
+				double toValue;
+				TweenDoubleValue();
+				virtual void update();
+				virtual string toString();
+				virtual ~TweenDoubleValue();
+		};
+		class ARK2D_API TweenVector3Object  : public TweenValue {
+			public:
+				Vector3<float>* obj;
+				float fromX;
+				float fromY;
+				float fromZ;
+				float toX;
+				float toY;
+				float toZ;
+				TweenVector3Object();
+				virtual void update();
+				virtual string toString();
+				virtual ~TweenVector3Object();
+		};
+		class ARK2D_API TweenVector2Object  : public TweenValue {
+			public:
+				Vector2<float>* obj;
+				float fromX;
+				float fromY;
+				float toX;
+				float toY;
+				TweenVector2Object();
+				virtual void update();
+				virtual string toString();
+				virtual ~TweenVector2Object();
+		};
+
 
 		using namespace std;
 
@@ -104,6 +153,9 @@ namespace ARK {
 				map<string, TweenedEvent*> keyedTweenedEvents;
 
 			public:
+				vector<TweenValue*> tweenValues;
+
+			public:
 				Timeline();
 				vector<StaticEvent*> getStaticEvents();
 				vector<TweenedEvent*> getTweenedEvents();
@@ -116,6 +168,7 @@ namespace ARK {
 				void addKeyedIndependentEvent(string key, AnimationEvent* e);
 				void addKeyedIndependentEvent(string key, AnimationEvent* e, unsigned int delay_millis);
 				void removeKeyedIndependentEvent(string key);
+				void update();
 				void update(float delta);
 				void update(GameTimer* timer);
 				void pause();
@@ -126,12 +179,18 @@ namespace ARK {
 				unsigned int count();
 				unsigned int countRunning();
 
+				void tweenVector2(Vector2<float>* obj, float x, float y, float duration = 1.0f, unsigned int easing = Easing::LINEAR, float delay = 0.0f);
+				void tweenVector3(Vector3<float>* obj, float x, float y, float z, float duration = 1.0f, unsigned int easing = Easing::LINEAR, float delay = 0.0f);
+				void tweenDouble(double* obj, double d, float duration = 1.0f, unsigned int easing = Easing::LINEAR, float delay = 0.0f);
+
 				AnimationEvent* getKeyedIndependentEvent(string key);
 
 				virtual ~Timeline();
 			private:
 
 		};
+
+		
 	}
 }
 

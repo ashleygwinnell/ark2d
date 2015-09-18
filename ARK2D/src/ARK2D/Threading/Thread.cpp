@@ -20,7 +20,7 @@ namespace ARK {
 
 		
 
-			#if (defined(ARK2D_WINDOWS_PHONE_8))
+		#if (defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE))
 
 			using namespace Windows::Foundation;
 			using namespace concurrency;
@@ -58,29 +58,33 @@ namespace ARK {
 					}
 				};
 
-				auto completionDelegate = [this](IAsyncAction^ action, AsyncStatus status)
+				auto completionDelegate = [this](IAsyncAction^ action, Windows::Foundation::AsyncStatus status)
     			{
     				switch (action->Status)
 					{
-						case AsyncStatus::Started:
+						case Windows::Foundation::AsyncStatus::Started:
 							ARK2D::getLog()->t("Thread Started"); 
 							break;
-						case AsyncStatus::Completed:
+						case Windows::Foundation::AsyncStatus::Completed:
 							ARK2D::getLog()->t("Thread Completed"); 
 							break;
-						case AsyncStatus::Canceled:
+						case Windows::Foundation::AsyncStatus::Canceled:
 							ARK2D::getLog()->t("Thread Cancelled"); 
 							break;
-						case AsyncStatus::Error: 
+						case Windows::Foundation::AsyncStatus::Error: 
 							ARK2D::getLog()->t("Thread Error. ;O; "); 
 							break;
 					}
     			};
 
-				auto workItemHandler = ref new Windows::System::Threading::WorkItemHandler(workItemDelegate);
-				auto completionHandler = ref new Windows::Foundation::AsyncActionCompletedHandler(completionDelegate, Platform::CallbackContext::Same);
+				#ifndef ARK2D_XBOXONE
+				
+					auto workItemHandler = ref new Windows::System::Threading::WorkItemHandler(workItemDelegate);
+					auto completionHandler = ref new Windows::Foundation::AsyncActionCompletedHandler(completionDelegate, Platform::CallbackContext::Same);
 
-				m_handle = Windows::System::Threading::ThreadPool::RunAsync(workItemHandler, Windows::System::Threading::WorkItemPriority::Normal);
+				
+					m_handle = Windows::System::Threading::ThreadPool::RunAsync(workItemHandler, Windows::System::Threading::WorkItemPriority::Normal);
+				#endif
 			}
 			void Thread::pause() {
 				//SuspendThread(m_handle);

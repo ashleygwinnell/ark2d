@@ -869,22 +869,91 @@
 					ARK2D::getLog()->i(StringUtil::append("Bit weird... ", axisIndex));
 					return;
 				}
-				 
-				for(signed int i = 0; i < gamepad->numAxes /* && i < gamepad->axes.size()*/; ++i) {
-					GamepadAxis* axis = gamepad->axes.at(i);
-					if (axis->id == (unsigned int) axisIndex) {
-						axis->value = (value - axis->rangeMin) / (float) (axis->rangeMax - axis->rangeMin) * 2.0f - 1.0f;
 
-						Game* g = ARK2D::getGame();
-						GamepadListener* gl = NULL;
-						gl = dynamic_cast<GamepadListener*>(g);
-						if (gl != NULL) {
-							gl->axisMoved(gamepad, axisIndex, axis->value);
+
+				
+				int newAxisIndex = Gamepad::convertSystemAxisToARKAxis(gamepad, axisIndex);
+				ARK2D::getLog()->e(StringUtil::append("axis change: ", axisIndex));
+				ARK2D::getLog()->e(StringUtil::append("axis change 2: ", newAxisIndex));
+
+				// Windows multimedia api maps xbox 360 triggers on to A SINGLE AXIS LIKE A FUCKING IDIOT.
+				// It's fixed in Xinput apis but that rquires a Visual Studio compiler set up. :( 
+				float trigger1RawValue = 0.0f; 
+				if (gamepad->m_sharedTriggerAxis) { 
+					if (axisIndex == Gamepad::TRIGGER_2) {
+						for(unsigned int i = 0; i < gamepad->axes.size(); ++i) {
+							if (gamepad->axes.at(i)->id == newAxisIndex) { 
+								trigger1RawValue = gamepad->axes.at(i)->value;
+							} 
 						}
-
-
-						return;
 					}
+				}
+			
+				GamepadAxis* axis = NULL;
+				for (signed int i = 0; i < gamepad->numAxes /* && i < gamepad->axes.size()*/; ++i) {
+					axis = gamepad->axes.at(i);
+					if (axis->id == (unsigned int)newAxisIndex) { break; }
+				}
+
+				if (axis != NULL) { 
+
+					float triggerValue = (value - axis->rangeMin) / (float) (axis->rangeMax - axis->rangeMin) * 2.0f - 1.0f;
+
+					// not a shared axis. axis values go from -1.0f to +1.0f sp sort this out.
+					if (!gamepad->m_sharedTriggerAxis) { 
+						if (axisIndex == Gamepad::TRIGGER_1 || axisIndex == Gamepad::TRIGGER_2) { 
+							triggerValue = (triggerValue + 1.0f) / 2.0f;
+						}
+					} else { 
+						if (newAxisIndex == Gamepad::TRIGGER_1 || newAxisIndex == Gamepad::TRIGGER_2) {
+
+							
+							GamepadAxis* leftAxis = NULL;
+							for (signed int i = 0; i < gamepad->numAxes ; ++i) {
+								GamepadAxis* thisaxis = gamepad->axes.at(i);
+								if (thisaxis->id == Gamepad::TRIGGER_1) { 
+									leftAxis = thisaxis;
+									break;
+								}
+							}
+
+
+							ARK2D::getLog()->e(StringUtil::appendf("axis val o: ", triggerValue));
+							float epsilon = 0.0001f;
+							if (triggerValue >= epsilon) {
+								axis = leftAxis;
+								newAxisIndex = Gamepad::TRIGGER_1;
+								ARK2D::getLog()->e(StringUtil::append("axis change 3 (left trigger): ", newAxisIndex));
+							} else if (triggerValue < epsilon*-1.0f){
+								triggerValue *= -1.0f;
+							} else {
+								triggerValue = 0.0f;
+
+								// we have to set the left axis to zero in this circumstance too. 
+								leftAxis->value = 0.0f;
+								Game* g = ARK2D::getGame();
+								GamepadListener* gl = NULL;
+								gl = dynamic_cast<GamepadListener*>(g);
+								if (gl != NULL) {
+									gl->axisMoved(gamepad, Gamepad::TRIGGER_1, leftAxis->value);
+								}
+							}
+						} 
+					}
+
+					axis->value = triggerValue;
+					ARK2D::getLog()->e(StringUtil::appendf("axis val: ", axis->value));
+
+					Game* g = ARK2D::getGame();
+					GamepadListener* gl = NULL;
+					gl = dynamic_cast<GamepadListener*>(g);
+					if (gl != NULL) {
+						gl->axisMoved(gamepad, newAxisIndex, axis->value);
+					}
+
+
+					return; 
+					
 				} 
 
 				ARK2D::getLog()->i(StringUtil::append("Could not handle axis change for index: ", axisIndex));
@@ -1081,10 +1150,15 @@
 
 								GamepadButton* but = p->buttons.at(buttonIndex);
 								unsigned int newId = Gamepad::convertSystemButtonToARKButton(p, but->id); 
-								 
-								if (p->m_triggersSendBumperEvents && (newId == Gamepad::BUTTON_LBUMPER || newId == Gamepad::BUTTON_RBUMPER)) { 
 
-									unsigned int triggerIndex = (newId == Gamepad::BUTTON_LBUMPER) ? Gamepad::TRIGGER_1 : Gamepad::TRIGGER_2;
+								if (p->isPS4Controller() && newId == but->id && (but->id == 6 || but->id == 7)) { continue; }
+								 
+								if (p->m_triggersSendBumperEvents && 
+										(newId == Gamepad::BUTTON_LBUMPER || newId == Gamepad::BUTTON_RBUMPER || 
+										newId == Gamepad::TRIGGER_1 || newId == Gamepad::TRIGGER_2
+										)) { 
+
+									unsigned int triggerIndex = (newId == Gamepad::BUTTON_LBUMPER || newId == Gamepad::TRIGGER_1) ? Gamepad::TRIGGER_1 : Gamepad::TRIGGER_2;
 
 									bool b = !!(info.dwButtons & (1 << but->id));
 
@@ -1210,6 +1284,11 @@
 							gamepad->vendorId = caps.wMid;
 							gamepad->productId = caps.wPid;
 							gamepad->name = gamepadName;
+
+							GamepadMapping* mapping = gamepad->getMapping();
+							if (mapping != NULL) { 
+								gamepad->m_sharedTriggerAxis = mapping->shared_triggers_axis;
+							} 
 
 						//	ARK2D::getLog()->i(StringUtil::append("Gamepad description: ", gamepad->name));
 

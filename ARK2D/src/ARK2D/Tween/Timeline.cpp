@@ -25,7 +25,8 @@ namespace ARK {
 			staticEvents(),
 			tweenedEvents(),
 			keyedStaticEvents(),
-			keyedTweenedEvents()
+			keyedTweenedEvents(),
+			tweenValues()
 		{
 
 		}
@@ -97,6 +98,7 @@ namespace ARK {
 
 		void Timeline::update(float delta) {
 
+			// Static events.
 			for (unsigned int i = 0; i < staticEvents.size(); ++i) {
 				StaticEvent* event = staticEvents.at(i);
 				event->m_starting_delay -= delta;
@@ -119,6 +121,7 @@ namespace ARK {
 				}
 			}
 
+			// tween events
 			for (unsigned int i = 0; i < tweenedEvents.size(); ++i) {
 				TweenedEvent* event = tweenedEvents.at(i);
 				if (event->m_starting_delay >= 0) {
@@ -164,6 +167,26 @@ namespace ARK {
 					event->m_timer += (delta * 1000);
 				}
 			}
+
+
+			// Values inc. vector3 and double
+			vector<TweenValue*>::iterator it_values;
+			for (it_values = tweenValues.begin(); it_values != tweenValues.end(); ) {
+				TweenValue* obj = *it_values;
+				obj->update();
+				
+				if (obj->timer >= obj->duration) {
+					ARK2D::getLog()->e("TweenValue erased");
+					delete obj;
+					it_values = tweenValues.erase(it_values);
+				} else {
+					++it_values;
+				}
+			}
+
+		}
+		void Timeline::update() {
+			update(ARK2D::getTimer()->getDelta());
 		}
 		void Timeline::update(GameTimer* timer) {
 			update(timer->getDelta());
@@ -233,6 +256,141 @@ namespace ARK {
 		Timeline::~Timeline() {
 			
 		}
+
+		// Tween Values
+		TweenValue::TweenValue() {
+
+		}
+		bool TweenValue::isRunning() {
+			return (timer >= 0.0f && timer <= duration);
+		}	
+		void TweenValue::update() {
+			timer += ARK2D::getTimer()->getDelta();
+			if (timer >= duration) {
+				timer = duration;
+			}
+		}
+		string TweenValue::toString() { 
+			return "TweenValue todo"; 
+		} 
+		TweenValue::~TweenValue() {
+
+		}
+
+		// Tween Vectors
+		void Timeline::tweenVector3(Vector3<float>* obj, float x, float y, float z, float duration, unsigned int easing, float delay) {
+			TweenVector3Object* tween = new TweenVector3Object();
+			tween->obj = obj;
+			tween->fromX = obj->getX();
+			tween->fromY = obj->getY();
+			tween->fromZ = obj->getZ();
+			tween->toX = x;
+			tween->toY = y;
+			tween->toZ = z;
+			tween->timer = delay * -1.0f;
+			tween->duration = duration;
+			tween->easing = easing;
+
+			tweenValues.push_back(tween);
+		}
+		TweenVector3Object::TweenVector3Object():TweenValue() {
+
+		}
+		void TweenVector3Object::update() {
+			TweenValue::update();
+			if (timer >= 0.0f) { 
+				obj->setX( Easing::easebetween(easing, timer, fromX, toX, duration) );
+				obj->setY( Easing::easebetween(easing, timer, fromY, toY, duration) );
+				obj->setZ( Easing::easebetween(easing, timer, fromZ, toZ, duration) );
+			}
+		} 
+		string TweenVector3Object::toString() {
+			string s = "{";
+			s += "\"obj\":"; s += obj->toString(); s += ", ";
+			s += "\"fromX\":"; s += Cast::toString<float>(fromX); s += ", ";
+			s += "\"fromY\":"; s += Cast::toString<float>(fromY); s += ", ";
+			s += "\"fromZ\":"; s += Cast::toString<float>(fromZ); s += ", ";
+			s += "\"toX\":"; s += Cast::toString<float>(toX); s += ", ";
+			s += "\"toY\":"; s += Cast::toString<float>(toY); s += ", ";
+			s += "\"toZ\":"; s += Cast::toString<float>(toZ); s += ", ";
+			s += "\"timer\":"; s += Cast::toString<float>(timer); s += ", ";
+			s += "\"duration\":"; s += Cast::toString<float>(duration); s += ", ";
+			s += "\"easing\":"; s += Cast::toString<unsigned int>(easing);
+			s += "}";
+			return s;
+		}
+		TweenVector3Object::~TweenVector3Object() {
+
+		}
+
+		// Tween Vector2s
+		void Timeline::tweenVector2(Vector2<float>* obj, float x, float y, float duration, unsigned int easing, float delay) {
+			TweenVector2Object* tween = new TweenVector2Object();
+			tween->obj = obj;
+			tween->fromX = obj->getX();
+			tween->fromY = obj->getY();
+			tween->toX = x;
+			tween->toY = y;
+			tween->timer = delay * -1.0f;
+			tween->duration = duration;
+			tween->easing = easing;
+			tweenValues.push_back(tween);
+		}
+		TweenVector2Object::TweenVector2Object():TweenValue() {
+
+		}
+		void TweenVector2Object::update() {
+			TweenValue::update();
+			if (timer >= 0.0f) { 
+				obj->setX( Easing::easebetween(easing, timer, fromX, toX, duration) );
+				obj->setY( Easing::easebetween(easing, timer, fromY, toY, duration) );
+			}
+		} 
+		string TweenVector2Object::toString() {
+			string s = "{"; 
+			s += "\"obj\":"; s += obj->toString(); s += ", ";
+			s += "\"fromX\":"; s += Cast::toString<float>(fromX); s += ", ";
+			s += "\"fromY\":"; s += Cast::toString<float>(fromY); s += ", ";
+			s += "\"toX\":"; s += Cast::toString<float>(toX); s += ", ";
+			s += "\"toY\":"; s += Cast::toString<float>(toY); s += ", ";
+			s += "\"timer\":"; s += Cast::toString<float>(timer); s += ", ";
+			s += "\"duration\":"; s += Cast::toString<float>(duration); s += ", ";
+			s += "\"easing\":"; s += Cast::toString<unsigned int>(easing);
+			s += "}";
+			return s;
+		}
+		TweenVector2Object::~TweenVector2Object() {
+
+		}
+		
+		// Tween doubles.
+		void Timeline::tweenDouble(double* obj, double d, float duration, unsigned int easing, float delay) {
+			TweenDoubleValue* tween = new TweenDoubleValue();
+			tween->obj = obj;
+			tween->fromValue = *obj;
+			tween->toValue = d;
+			tween->timer = delay * -1.0f;
+			tween->duration = duration;
+			tween->easing = easing;
+
+			tweenValues.push_back(tween);
+		}
+		TweenDoubleValue::TweenDoubleValue():TweenValue(){
+
+		}
+		void TweenDoubleValue::update() {
+			TweenValue::update();
+			if (timer >= 0.0f) { 
+				(*obj) = Easing::easebetween(easing, timer, fromValue, toValue, duration);
+			}
+		}
+		string TweenDoubleValue::toString() {
+			return "TweenDoubleValue todo";
+		}
+		TweenDoubleValue::~TweenDoubleValue() {
+
+		}
+
 
 		/**
 		 * TWEENED EVENT

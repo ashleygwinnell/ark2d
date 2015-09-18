@@ -33,6 +33,39 @@
 			}
 		},
 		{
+			"name": "Controller (XBOX 360 For Windows)",
+			"comment": "wireless controller",
+			"vendorId": 1118,
+			"productId": 673,
+			"buttons": {
+				"DPAD_LEFT": 101,
+				"DPAD_RIGHT": 105,
+				"DPAD_UP": 103,
+				"DPAD_DOWN": 107,
+				"A": 0,
+				"B": 1,
+				"X": 2,
+				"Y": 3,
+				"LBUMPER": 4,
+				"RBUMPER": 5,
+				"LTRIGGER": -1,
+				"RTRIGGER": -1,
+				"L3": 8,
+				"R3": 9,
+				"BACK": 6,
+				"START": 7,
+				"ACTIVATE": -1
+			},
+			"axes": {
+				"LX": 0,
+				"LY": 1,
+				"RX": 4,
+				"RY": 3,
+				"LT": 2,
+				"RT": 2
+			}
+		},
+		{
 			"name": "Saitek Cyborg Rumble Pad",
 			"vendorId": 1699,
 			"productId": 62746,
@@ -127,9 +160,142 @@
 				"LT": -1,
 				"RT": -1 
 			}
+		},
+		{
+			"name": "Wireless Controller",
+			"comment": "PS4 (Dual Shock 4) Controller",
+			"vendorId": 1356,
+			"productId": 1476,
+			"buttons": {
+				"DPAD_LEFT": 101,
+				"DPAD_RIGHT": 105,
+				"DPAD_UP": 103,
+				"DPAD_DOWN": 107,
+				"A": 1,
+				"B": 2,
+				"X": 0,
+				"Y": 3,
+				"LBUMPER": 4,
+				"RBUMPER": 5,
+				"LTRIGGER": -1,
+				"RTRIGGER": -1,
+				"L3": 10,
+				"R3": 11,
+				"BACK": 9,
+				"START": 12,
+				"ACTIVATE": 13
+			},
+			"axes": {
+				"LX": 0,
+				"LY": 1,
+				"RX": 2,
+				"RY": 3,
+				"LT": 5,
+				"RT": 4 
+			},
+			"shared_triggers_axis": false
 		}
 	],
 	"osx": [ 
+		 {
+			"name": "Xbox 360 Wired Controller", 
+			"comment": "Xbox 360",
+			"vendorId": 1118, 
+			"productId": 654, 
+			"buttons": { 
+				"DPAD_LEFT": 101, 
+				"DPAD_RIGHT": 105, 
+				"DPAD_UP": 103, 
+				"DPAD_DOWN": 107, 
+				"A": 0, 
+				"B": 1, 
+				"X": 2, 
+				"Y": 3, 
+				"LBUMPER": 4, 
+				"RBUMPER": 5, 
+				"LTRIGGER": -1, 
+				"RTRIGGER": -1, 
+				"L3": 8, 
+				"R3": 9, 
+				"BACK": 6, 
+				"START": 7, 
+				"ACTIVATE": -1 
+			},
+			"axes": { 
+				"LX": 0, 
+				"LY": 1, 
+				"RX": 2, 
+				"RY": 3, 
+				"LT": 4, 
+				"RT": 5 
+			}
+		},
+		{
+            "name": "Wireless 360 Controller",
+            "comment":"Xbox 360",
+            "vendorId": 1118,
+            "productId": 654,
+            "buttons": {
+	            "DPAD_LEFT": 7,
+	            "DPAD_RIGHT": 8,
+	            "DPAD_UP": 5,
+	            "DPAD_DOWN": 6,
+	            "A": 16,
+	            "B": 17,
+	            "X": 18,
+	            "Y": 19,
+	            "LBUMPER": 13,
+	            "RBUMPER": 14,
+	            "LTRIGGER": -1,
+	            "RTRIGGER": -1,
+	            "L3": 11,
+	            "R3": 12, 
+	            "BACK": 10, 
+	            "START": 9, 
+	            "ACTIVATE": -1 
+            },
+            "axes": { 
+	            "LX": 0, 
+	            "LY": 1, 
+	            "RX": 2, 
+	            "RY": 3, 
+	            "LT": 4, 
+	            "RT": 5 
+            }
+		},
+        {
+            "name": "Wireless Controller",
+            "comment": "PS4 Controller",
+            "vendorId": 1356,
+            "productId": 1476,
+            "buttons": {
+	            "DPAD_LEFT": 101,
+	            "DPAD_RIGHT": 105,
+	            "DPAD_UP": 103,
+	            "DPAD_DOWN": 107,
+	            "A": 1,
+	            "B": 2,
+	            "X": 0,
+	            "Y": 3,
+	            "LBUMPER": 4,
+	            "RBUMPER": 5,
+	            "LTRIGGER": -1,
+	            "RTRIGGER": -1,
+	            "L3": 10,
+	            "R3": 11, 
+	            "BACK": 9, 
+	            "START": 12, 
+	            "ACTIVATE": -1 
+            },
+            "axes": { 
+	            "LX": 0, 
+	            "LY": 1, 
+	            "RX": 2, 
+	            "RY": 3, 
+	            "LT": 7, 
+	            "RT": 8 
+            }
+		}
 
 	],
 	"linux": [ 
