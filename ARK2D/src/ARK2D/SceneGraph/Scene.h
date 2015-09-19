@@ -61,6 +61,8 @@ namespace ARK {
 				Vector3<float> localPositionToGlobalPositionInternal();
 			public:
 				Vector3<float> localPositionToGlobalPosition();
+				Vector3<float> localScaleToGlobalScale();
+				float localRotationToGlobalRotation();
 				virtual bool isGlobalPositionInBounds(float x, float y);
 		
 				virtual void update();

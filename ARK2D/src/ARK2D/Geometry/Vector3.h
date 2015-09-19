@@ -296,6 +296,15 @@ namespace ARK {
 					return *this; 
 				}
 
+				Vector3<T> operator-=(const Vector3<T>& other) { 
+					subtract(other.m_x, other.m_y, other.m_z); 
+					return *this; 
+				}
+				Vector3<T> operator-=(float other) { 
+					subtract(other, other, other); 
+					return *this; 
+				}
+
 
 			
 

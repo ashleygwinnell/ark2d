@@ -230,9 +230,7 @@ namespace ARK {
 			ARK2D::getLog()->i(k); //std::cout << k << std::endl;
 
 			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT) {
-				//if (GigaRectangle<int>::s_contains(m_x, m_y, m_width, m_height, i->getMouseX(), i->getMouseY())) {
-				Vector3<float> worldpos = localPositionToGlobalPosition();
-				if (GigaRectangle<int>::s_contains(worldpos.getX(), worldpos.getY(), m_width, m_height, i->getMouseX(), i->getMouseY())) {
+				if (isGlobalPositionInBounds(i->getMouseX(), i->getMouseY())) {
 					//if (UIComponent::s_currentFocus != NULL) {
 					//	UIComponent::s_currentFocus->setFocussed(false);
 					//}

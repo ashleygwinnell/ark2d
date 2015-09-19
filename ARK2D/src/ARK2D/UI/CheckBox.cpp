@@ -92,7 +92,7 @@ namespace ARK {
 		}
 
 		bool CheckBox::mouseMoved(int x, int y, int oldx, int oldy) {
-			AbstractUIComponent::mouseMoved(x, y, oldx, oldy);
+			return AbstractUIComponent::mouseMoved(x, y, oldx, oldy);
 		}
 
 

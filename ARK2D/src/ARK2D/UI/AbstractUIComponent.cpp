@@ -138,12 +138,9 @@ namespace ARK {
         	if (!m_enabled) { return false; } 
 					
 			if (m_state != STATE_DOWN) {
-				//Vector3<float> worldpos = localPositionToGlobalPosition();
-				//if (GigaRectangle<int>::s_contains(worldpos.getX(), worldpos.getY(), m_width, m_height, x, y)) {
 				if (isGlobalPositionInBounds(x, y)) { 
 					m_state = STATE_OVER;
-				}
-				else {
+				} else {
 					m_state = STATE_OFF;
 				}
 			}

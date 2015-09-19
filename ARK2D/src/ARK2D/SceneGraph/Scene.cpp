@@ -113,17 +113,53 @@ namespace ARK {
 				pos.m_y -= parent->pivot.m_y * bounds->getHeight() * parent->scale.getY();
 				pos.m_z -= parent->pivot.m_z * bounds->getDepth() * parent->scale.getZ();
 
-				//MathUtil::rotateVectorAroundAxis(&pos.m_x, &pos.m_y, &pos.m_z, 0.0f, 0.0f, 0.0f, parent->rotation * -1);
 				MathUtil::rotatePointAroundPoint<float>(&pos.m_x, &pos.m_y, 0.0f, 0.0f, parent->rotation * 1.0f);
 
+				// TODO: 
+				// Positions are not calculated properly when rotation is set.
+				// How do I sort this out?! 
+
 				pos += parent->localPositionToGlobalPosition();
-			}
+			} 
 			return pos;
+		}
+		Vector3<float> SceneNode::localScaleToGlobalScale() {
+			Vector3<float> sc(scale.getX(), scale.getY(), scale.getZ());
+			if (parent != NULL) {
+				sc *= parent->localScaleToGlobalScale();
+			}
+			return sc;
+		}
+		float SceneNode::localRotationToGlobalRotation() {
+			float rot = rotation;
+			if (parent != NULL) {
+				rot += parent->localRotationToGlobalRotation();
+			}
+			return rot;
 		}
 		bool SceneNode::isGlobalPositionInBounds(float x, float y) {
 			ARK::Geometry::Cube* bounds = getBounds();
 			Vector3<float> globalpos = localPositionToGlobalPosition();
-			return Shape<float>::collision_rectangleRectangle(globalpos.getX(), globalpos.getY(), bounds->getWidth(), bounds->getHeight(), x, y, 1, 1);
+			Vector3<float> globalsc = localScaleToGlobalScale();
+			float globalrot = localRotationToGlobalRotation();
+
+			float minx = globalpos.getX() - pivot.getX() * bounds->getWidth()*globalsc.getX();
+			float miny = globalpos.getY() - pivot.getY() * bounds->getHeight()*globalsc.getY();
+			float tw = bounds->getWidth() * globalsc.getX();
+			float th = bounds->getHeight() * globalsc.getY();
+
+			// Make shape and globalposition relative to origin (0,0).
+			x -= globalpos.getX();
+			y -= globalpos.getY();
+
+			MathUtil::rotatePointAroundPoint<float>(&x, &y, 0.0f, 0.0f, globalrot * -1.0f);
+
+			return Shape<float>::collision_rectangleRectangle( 
+				tw * pivot.getX() * -1.0f, 
+				th * pivot.getY() * -1.0f, 
+				tw, 
+				th, 
+				x, y, 1, 1);
 		}
 
 		void SceneNode::update() {

@@ -66,6 +66,9 @@ namespace ARK {
 			if (m_showBorder == true) {
 				Renderer* g = ARK2D::getRenderer();
 				g->setDrawColor(Color::white);
+				if (m_state == STATE_OVER) {
+					g->setDrawColor(Color::white_50a);
+				}
 				g->drawRect(0, 0, m_width, m_height);
 			}
 		}
@@ -79,54 +82,33 @@ namespace ARK {
 		bool Panel::keyPressed(unsigned int key) {
 			if (!m_visible) { return false; }
 
-			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT || key == (unsigned int) Input::MOUSE_BUTTON_RIGHT) 
-			{
-				Input* i = ARK2D::getInput();
-				Vector3<float> worldpos = localPositionToGlobalPosition();
-				bool s = GigaRectangle<int>::s_contains(worldpos.getX(), worldpos.getY(), m_width, m_height, i->getMouseX(), i->getMouseY());
-				if (s) {
-					for(unsigned int i = 0; i < children.size(); i++) {
-                        if (children.at(i)->keyPressed(key)) return true;
-					}
-				}
-			} else {
-				for(unsigned int i = 0; i < children.size(); i++) {
-                    if (children.at(i)->keyPressed(key)) return true;
-				}
+			for(unsigned int i = 0; i < children.size(); i++) {
+				if (children.at(i)->keyPressed(key)) return true;
 			}
             return false;
 		}
 		bool Panel::keyReleased(unsigned int key) {
 			if (!m_visible) { return false; }
 
-			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT || key == (unsigned int) Input::MOUSE_BUTTON_RIGHT) 
-			{
-				Input* i = ARK2D::getInput();
-				Vector3<float> worldpos = localPositionToGlobalPosition();
-				bool s = GigaRectangle<int>::s_contains(worldpos.getX(), worldpos.getY(), m_width, m_height, i->getMouseX(), i->getMouseY());
-				if (s) {
-					for(unsigned int i = 0; i < children.size(); i++) {
-                        if (children.at(i)->keyReleased(key) ) return true;
-					}
-				}
-			} else {
-				for(unsigned int i = 0; i < children.size(); i++) {
-                    if (children.at(i)->keyReleased(key)) return true;
-				}
+			for(unsigned int i = 0; i < children.size(); i++) {
+                if (children.at(i)->keyReleased(key) ) return true;
 			}
-            return false;
+	        return false;
 		}
 		bool Panel::mouseMoved(int x, int y, int oldx, int oldy) {
 			if (!m_visible) { return false; }
 
-			Vector3<float> worldpos = localPositionToGlobalPosition();
-			bool s = GigaRectangle<int>::s_contains(worldpos.getX(), worldpos.getY(), m_width, m_height, x, y);
-			if (s) {
-				for(unsigned int i = 0; i < children.size(); i++) {
-                    if (children.at(i)->mouseMoved(x, y, oldx, oldy)) return true;
-				}
+			m_state = (isGlobalPositionInBounds(x, y)) ? STATE_OVER : STATE_OFF;
+
+			bool consumed = false;
+			for(unsigned int i = 0; i < children.size(); i++) {
+                if (children.at(i)->mouseMoved(x, y, oldx, oldy)) { consumed = true; }
 			}
-            return false;
+			if (consumed) { m_state = STATE_OFF; return consumed; }
+
+			
+				
+			return m_state == STATE_OVER;
 		}
 
 		Panel::~Panel() {
