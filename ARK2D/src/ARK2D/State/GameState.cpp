@@ -11,8 +11,10 @@
 namespace ARK {
 	namespace State {
 
-		GameState::GameState(): scene(NULL) {
-
+		GameState::GameState(): 
+			scene(NULL) 
+		{
+			scene = new Scene();
 		}
 
 		void GameState::enter(GameContainer* container, StateBasedGame* game, GameState* from) {

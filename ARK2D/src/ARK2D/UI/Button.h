@@ -25,23 +25,19 @@ namespace ARK {
 		 * @todo Improve rendering on mobile devices not using primitive geometry.
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class ARK2D_API Button : public AbstractUIComponent, public SceneNode {
+		class ARK2D_API Button : public AbstractUIComponent {
 			protected:
 				String m_text;
 				Image* m_image;
-				unsigned int m_state; // 0 for mouse-off, 1 for mouse-over, 2 for mouse-down.
+				//unsigned int m_state; // 0 for mouse-off, 1 for mouse-over, 2 for mouse-down.
 				void* m_event;
 				void* m_eventObj;
+			
 			public:
-				static const unsigned int STATE_OFF = 0;
-				static const unsigned int STATE_OVER = 1;
-				static const unsigned int STATE_DOWN = 2;
-
 				Button():
 					AbstractUIComponent(),
 					m_text(""),
 					m_image(NULL),
-					m_state(0),
 					m_event(NULL),
 					m_eventObj(NULL)
 				{
@@ -51,7 +47,6 @@ namespace ARK {
 					AbstractUIComponent(),
 					m_text(text),
 					m_image(NULL),
-					m_state(0),
 					m_event(NULL),
 					m_eventObj(NULL)
 				{
@@ -109,7 +104,8 @@ namespace ARK {
 				}
 				virtual bool isPointerOver() {
 					Input* i = ARK2D::getInput();
-					return GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), (signed int) (m_width), (signed int)(m_height), (signed int) (i->getMouseX()), (signed int) (i->getMouseY()));
+					//Vector3<float> worldpos = localPositionToGlobalPosition();
+					return isGlobalPositionInBounds(i->getMouseX(), i->getMouseY());// GigaRectangle<int>::s_contains(worldpos.getX(), worldpos.getY(), (signed int) (m_width), (signed int)(m_height), (signed int) (i->getMouseX()), (signed int) (i->getMouseY()));
 				}
 
 				virtual void doEvent() {
@@ -129,17 +125,7 @@ namespace ARK {
 
 
 				virtual bool mouseMoved(int x, int y, int oldx, int oldy) {
-					if (!m_enabled) { return false; } 
-					
-					if (m_state != STATE_DOWN) {
-						if (GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), m_width, m_height, x, y)) {
-							m_state = STATE_OVER;
-						}
-						else {
-							m_state = STATE_OFF;
-						}
-					}
-					return (m_state == STATE_OVER || m_state == STATE_DOWN);
+					return AbstractUIComponent::mouseMoved(x, y, oldx, oldy);
 				}
 				void setText(string s) {
 					m_text.clear();
@@ -148,12 +134,7 @@ namespace ARK {
 				const String& getText() {
 					return m_text;
 				}
-				void setState(unsigned int i) {
-					m_state = i;
-				}
-				unsigned int getState() {
-					return m_state;
-				}
+				
 				virtual void render() {
 
 					if (!m_visible) { return; }
@@ -163,8 +144,8 @@ namespace ARK {
 					Renderer* g = ARK2D::getRenderer();
 					renderBackground();
 
-					float renderTextX = m_x + (m_width/2) - (g->getFont()->getStringWidth(m_text.get())/2);
-					float renderTextY = m_y + (m_height/2) - (g->getFont()->getLineHeight()/2);
+					float renderTextX = (m_width/2) - (g->getFont()->getStringWidth(m_text.get())/2);
+					float renderTextY = (m_height/2) - (g->getFont()->getLineHeight()/2);
 					if (m_state == STATE_DOWN) {
 						renderTextX += 2;
 						renderTextY += 2;
@@ -172,8 +153,8 @@ namespace ARK {
 					renderText((int) renderTextX, (int) renderTextY);
 
 					if (m_image != NULL) {
-						int rx = int(m_x + (m_width/2)) - int(m_image->getWidth()/2);
-						int ry = int(m_y + (m_height/2)) - int(m_image->getHeight()/2);
+						int rx = int( (m_width/2)) - int(m_image->getWidth()/2);
+						int ry = int( (m_height/2)) - int(m_image->getHeight()/2);
 						renderImage(rx, ry);
 					}
 
@@ -185,7 +166,7 @@ namespace ARK {
 				virtual void renderBackground() {
 					Renderer* g = ARK2D::getRenderer();
 					g->setDrawColor(Color::black_50a);
-					g->fillRect(m_x, m_y, m_width, m_height);
+					g->fillRect(0, 0, m_width, m_height);
 				}
 				virtual void renderText(int x, int y) {
 					Renderer* g = ARK2D::getRenderer();
@@ -201,7 +182,7 @@ namespace ARK {
 					if (m_state == STATE_OVER || m_state == STATE_DOWN) {
 						g->setDrawColor(Color::white_50a);
 					}
-					g->drawRect(m_x, m_y, m_width, m_height);
+					g->drawRect(0, 0, m_width, m_height);
 				}
 		};
 	}

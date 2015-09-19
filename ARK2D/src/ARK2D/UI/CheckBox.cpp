@@ -12,8 +12,7 @@ namespace ARK {
 	namespace UI { 
 		CheckBox::CheckBox():
 			AbstractUIComponent(),
-			m_checked(false),
-			m_state(STATE_OFF),
+          	m_checked(false),
 			m_stateChangedEvent(NULL)
 			{
 			setSize(30, 30);
@@ -37,27 +36,23 @@ namespace ARK {
 		}
 
 		void CheckBox::render() {
-			AbstractUIComponent::preRender();
-
 			renderBackground();
 			if (m_checked) { renderTick(); }
 			renderOverlay();
-
-			AbstractUIComponent::postRender();
 		}
 		void CheckBox::renderTick() {
 			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white);
 			g->setLineWidth(2);
-			g->drawLine(m_x, m_y + (m_height/2), m_x + (m_width/3), m_y + m_height);
-			g->drawLine(m_x + (m_width/3), m_y + m_height, m_x + m_width, m_y);
+			g->drawLine(0, 0 + (m_height/2), 0 + (m_width/3), 0 + m_height);
+			g->drawLine(0 + (m_width/3), 0 + m_height, 0 + m_width, 0);
 			g->setLineWidth(1);
 		}
 
 		void CheckBox::renderBackground() {
 			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::black_50a);
-			g->fillRect(m_x, m_y, m_width, m_height);
+			g->fillRect(0, 0, m_width, m_height);
 		}
 
 		void CheckBox::renderOverlay() {
@@ -66,12 +61,13 @@ namespace ARK {
 			if (m_state == STATE_OVER || m_state == STATE_DOWN) {
 				g->setDrawColor(Color::white_50a);
 			}
-			g->drawRect(m_x, m_y, m_width, m_height);
+			g->drawRect(0, 0, m_width, m_height);
 			g->setDrawColor(Color::white);  
 		}
 
 		bool CheckBox::keyPressed(unsigned int key) {
-			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT && isMouseInBounds()) {
+            Input* in = ARK2D::getInput();
+			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT && isGlobalPositionInBounds(in->getMouseX(), in->getMouseY())) {
 				m_state = STATE_DOWN;
 				setFocussed(true);
                 return true;
@@ -80,7 +76,8 @@ namespace ARK {
 		}
 
 		bool CheckBox::keyReleased(unsigned int key) {
-			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT && isMouseInBounds()) {
+            Input* in = ARK2D::getInput();
+            if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT && isGlobalPositionInBounds(in->getMouseX(), in->getMouseY())) {
 				if (m_state == STATE_DOWN) {
 					m_state = STATE_OVER;
 					m_checked = !m_checked;
@@ -95,14 +92,7 @@ namespace ARK {
 		}
 
 		bool CheckBox::mouseMoved(int x, int y, int oldx, int oldy) {
-			if (m_state == STATE_DOWN) { return false; }
-			if (isMouseInBounds()) {
-				m_state = STATE_OVER;
-                return true;
-			} else {
-				m_state = STATE_OFF;
-            }
-            return false;
+			AbstractUIComponent::mouseMoved(x, y, oldx, oldy);
 		}
 
 

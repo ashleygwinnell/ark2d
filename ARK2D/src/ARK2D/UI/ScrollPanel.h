@@ -34,9 +34,7 @@ namespace ARK {
 				static const unsigned int LAYOUT_FLOW = 0;
 
 				ScrollPanel();
-				void add(AbstractUIComponent* c);
-				void calculateSize();
-
+				
 				void renderScrollbars();
 				void render();
 
@@ -50,6 +48,9 @@ namespace ARK {
 				bool keyPressed(unsigned int key);
 				bool keyReleased(unsigned int key);
 				bool mouseMoved(int x, int y, int oldx, int oldy);
+
+				virtual void onChildAdded(SceneNode* newChild);
+				void calculateSize();
 
 		};
 	}

@@ -77,22 +77,22 @@ namespace ARK {
 				int sw2 = g->getFont()->getStringWidth(m_text.substring(m_selectedFrom, m_selectedTo - m_selectedFrom).get());
 
 				renderSelectedArea(
-					m_x + sw + getPaddingLeft(),
-					m_y + getPaddingTop(),
+					0 + sw + getPaddingLeft(),
+					0 + getPaddingTop(),
 					sw2,
 					m_height - getPaddingY()
 				);
 			}
 
-			int renderTextX = m_x + getPaddingLeft();
-			int renderTextY = m_y;
+			int renderTextX = 0 + getPaddingLeft();
+			int renderTextY = 0;
 			if (m_textAlignY == -1) {
-				renderTextY = m_y + getPaddingTop();
+				renderTextY = 0 + getPaddingTop();
 			} else if (m_textAlignY == 1) {
-				renderTextY = m_y + m_height - getPaddingBottom() - g->getFont()->getStringHeight(m_text.get());
+				renderTextY = 0 + m_height - getPaddingBottom() - g->getFont()->getStringHeight(m_text.get());
 			} else if (m_textAlignY == 0) {
-				int tp = m_y + getPaddingTop();
-				int bp = m_y + m_height - getPaddingBottom();
+				int tp = 0 + getPaddingTop();
+				int bp = 0 + m_height - getPaddingBottom();
 				int diff = bp - tp;
 				renderTextY = tp + (diff/2) - (g->getFont()->getLineHeight()/2);
 			}
@@ -103,10 +103,10 @@ namespace ARK {
 				{
 					int sw = g->getFont()->getStringWidth(m_text.substring(0, m_cursorPosition).get());
 					renderCaret(
-						m_x + getPaddingLeft() + sw,
-						m_y + getPaddingTop(),
-						m_x + getPaddingLeft() + sw,
-						m_y + m_height - getPaddingBottom()
+						0 + getPaddingLeft() + sw,
+						0 + getPaddingTop(),
+						0 + getPaddingLeft() + sw,
+						0 + m_height - getPaddingBottom()
 					);
 				}
 				else
@@ -132,10 +132,10 @@ namespace ARK {
 					int lh = g->getFont()->getLineHeight();
 					int sw = g->getFont()->getStringWidth(line.substring(0, curPos).get());
 					renderCaret(
-						m_x + getPaddingLeft() + sw,
-						m_y + getPaddingTop() + (curLine * lh),
-						m_x + getPaddingLeft() + sw,
-						m_y + getPaddingTop() + ((curLine+1) * lh)
+						0 + getPaddingLeft() + sw,
+						0 + getPaddingTop() + (curLine * lh),
+						0 + getPaddingLeft() + sw,
+						0 + getPaddingTop() + ((curLine+1) * lh)
 					);
 				}
 			}
@@ -150,7 +150,7 @@ namespace ARK {
 		void TextField::renderBackground() {
 			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::black_50a);
-			g->fillRect(m_x, m_y, m_width, m_height);
+			g->fillRect(0, 0, m_width, m_height);
 		}
 		void TextField::renderSelectedArea(int x, int y, int w, int h) {
 			Renderer* g = ARK2D::getRenderer();
@@ -197,10 +197,10 @@ namespace ARK {
 		void TextField::renderCaret() {
 			int sw = ARK2D::getRenderer()->getFont()->getStringWidth(m_text.substring(0, m_cursorPosition).get());
 			renderCaret(  
-				m_x + getPaddingLeft() + sw,
-				m_y + getPaddingTop(),
-				m_x + getPaddingLeft() + sw, 
-				m_y + m_height - getPaddingBottom()
+				0 + getPaddingLeft() + sw,
+				0 + getPaddingTop(),
+				0 + getPaddingLeft() + sw,
+				0 + m_height - getPaddingBottom()
 			);
 		}
 		void TextField::renderCaret(int x1, int y1, int x2, int y2) {
@@ -211,7 +211,7 @@ namespace ARK {
 		void TextField::renderOverlay() {
 			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white);
-			g->drawRect(m_x, m_y, m_width, m_height);
+			g->drawRect(0, 0, m_width, m_height);
 		}
 
 		bool TextField::hasSelection() {
@@ -231,7 +231,8 @@ namespace ARK {
 
 			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT) {
 				//if (GigaRectangle<int>::s_contains(m_x, m_y, m_width, m_height, i->getMouseX(), i->getMouseY())) {
-				if (GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), m_width, m_height, i->getMouseX(), i->getMouseY())) {
+				Vector3<float> worldpos = localPositionToGlobalPosition();
+				if (GigaRectangle<int>::s_contains(worldpos.getX(), worldpos.getY(), m_width, m_height, i->getMouseX(), i->getMouseY())) {
 					//if (UIComponent::s_currentFocus != NULL) {
 					//	UIComponent::s_currentFocus->setFocussed(false);
 					//}

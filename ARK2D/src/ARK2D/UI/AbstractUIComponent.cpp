@@ -11,40 +11,37 @@ namespace ARK {
 	namespace UI {
 		AbstractUIComponent::AbstractUIComponent():
 			UIComponent(),
+			SceneNode(), 
 			m_parent(NULL),
-			m_x(0), m_y(0),
-			m_width(1), m_height(1),
+			m_bounds(),
+			m_width(1), 
+			m_height(1),
 			m_padding(0,0,0,0),
 			m_margin(0,0,0,0), 
 			m_clipping(true),
 			m_visible(true),
-			m_enabled(true)
+			m_enabled(true),
+			m_state(0)
 			{
- 
+ 			m_bounds = new ARK::Geometry::Cube();
 		}
 		float AbstractUIComponent::getX() {
-			return m_x;
+			return position.m_x;
 		}
 		float AbstractUIComponent::getY() {
-			return m_y;
-		}
-		float AbstractUIComponent::getCenterX() {
-			return m_x + (m_width/2);
-		}
-		float AbstractUIComponent::getCenterY() {
-			return m_y + (m_height/2);
+			return position.m_y;
 		}
 		float AbstractUIComponent::getMaxX() {
-			return m_x + m_width;
+			return position.m_x + ((1.0f - pivot.m_x) * m_width);
 		}
 		float AbstractUIComponent::getMaxY() {
-			return m_y + m_height;
+			return position.m_y + ((1.0f - pivot.m_y) * m_height);
 		}
 		float AbstractUIComponent::getMinX() {
-			return m_x; 
+			return position.m_x - (pivot.m_x * m_width);
 		}
 		float AbstractUIComponent::getMinY() {
-			return m_y;
+			return position.m_y - (pivot.m_y * m_width);
 		}
 		unsigned int AbstractUIComponent::getWidth() {
 			return m_width;
@@ -53,32 +50,22 @@ namespace ARK {
 			return m_height;
 		}
 		void AbstractUIComponent::setX(float x) {
-			m_x = x; 
-		}
-		void AbstractUIComponent::setXByCenter(float x) {
-			m_x = x - (m_width/2); 
+			position.setX(x);
 		}
 		void AbstractUIComponent::setY(float y) {
-			m_y = y;
-		}
-		void AbstractUIComponent::setYByCenter(float y) {
-			m_y = y - (m_height/2); 
+			position.setY(y);
 		}
 		void AbstractUIComponent::setLocation(float x, float y) {
-			m_x = x;
-			m_y = y;
+			position.set(x, y, 0);
 		} 
 		void AbstractUIComponent::setLocationByCenter(float x, float y) {
-			m_x = x - (m_width/2);
-			m_y = y - (m_height/2);
+			position.set(x, y, 0);
+			pivot.set(0.5, 0.5);
 		}
 		void AbstractUIComponent::setSize(unsigned int w, unsigned int h) {
 			m_width = w;
 			m_height = h;
 		} 
-		//void AbstractUIComponent::setSize(float w, float h) {
-		//	setSize((unsigned int) w, (unsigned int) h);
-		//}
 
 		void AbstractUIComponent::setWidth(unsigned int w) {
 			m_width = w;
@@ -110,18 +97,7 @@ namespace ARK {
 		AbstractUIComponent* AbstractUIComponent::getParent() { return m_parent; }
 		void AbstractUIComponent::setParent(AbstractUIComponent* p) { m_parent = p; }
 		bool AbstractUIComponent::hasParent() { return (m_parent!=NULL); }
-		int AbstractUIComponent::getOnScreenX() {
-			if (!hasParent()) { return getMinX(); }
-
-			int thisx = m_x;
-			AbstractUIComponent* thisParent = m_parent;
-			while(thisParent != NULL) {
-				thisx += thisParent->getMinX();
-				thisParent = thisParent->getParent();
-			}
-			return thisx;
-		}
-
+		
 		void AbstractUIComponent::setVisible(bool b) {
 			m_visible = b;
 		}
@@ -136,26 +112,17 @@ namespace ARK {
 			return m_enabled;
 		}
 
-		int AbstractUIComponent::getOnScreenY() {
-			if (!hasParent()) { return getY(); }
-
-			int thisy = m_y;
-			AbstractUIComponent* thisParent = m_parent;
-			while(thisParent != NULL) {
-				thisy += thisParent->getY();
-				thisParent = thisParent->getParent();
-			}
-			return thisy;
-		}
-
 		void AbstractUIComponent::preRender() {
 			if (m_clipping) {
-				Renderer* g = ARK2D::getRenderer();
-				g->setScissorTestEnabled(true);
-				g->scissor(getOnScreenX(), getOnScreenY(), m_width, m_height);
+				Renderer* r = ARK2D::getRenderer();
+				Vector3<float> worldpos = localPositionToGlobalPosition();
+				r->setScissorTestEnabled(true);
+				r->scissor(worldpos.m_x, worldpos.m_y, m_width, m_height);
 			}
+			SceneNode::preRender();
 		}
 		void AbstractUIComponent::postRender() {
+			SceneNode::postRender();
 			if (m_clipping) {
 				GameContainer* c = ARK2D::getContainer();
 				Renderer* g = ARK2D::getRenderer();
@@ -166,12 +133,41 @@ namespace ARK {
 
         bool AbstractUIComponent::keyPressed(unsigned int key) { return false; }
         bool AbstractUIComponent::keyReleased(unsigned int key) { return false; }
-        bool AbstractUIComponent::mouseMoved(int x, int y, int oldx, int oldy) { return false; }
+        bool AbstractUIComponent::mouseMoved(int x, int y, int oldx, int oldy) { 
 
-		bool AbstractUIComponent::isMouseInBounds() {
+        	if (!m_enabled) { return false; } 
+					
+			if (m_state != STATE_DOWN) {
+				//Vector3<float> worldpos = localPositionToGlobalPosition();
+				//if (GigaRectangle<int>::s_contains(worldpos.getX(), worldpos.getY(), m_width, m_height, x, y)) {
+				if (isGlobalPositionInBounds(x, y)) { 
+					m_state = STATE_OVER;
+				}
+				else {
+					m_state = STATE_OFF;
+				}
+			}
+			return (m_state == STATE_OVER || m_state == STATE_DOWN);
+
+        }
+
+        void AbstractUIComponent::setState(unsigned int i) {
+			m_state = i;
+		}
+		unsigned int AbstractUIComponent::getState() {
+			return m_state;
+		}
+
+		ARK::Geometry::Cube* AbstractUIComponent::getBounds() {
+			m_bounds->setWidth(m_width);
+			m_bounds->setHeight(m_height);
+			return m_bounds;
+		}
+
+		/*bool AbstractUIComponent::isMouseInBounds() {
 			Input* i = ARK2D::getInput();
 			return GigaRectangle<int>::s_contains(getOnScreenX(), getOnScreenY(), m_width, m_height, i->getMouseX(), i->getMouseY());
-		}
+		}*/
 
 		AbstractUIComponent::~AbstractUIComponent() {
 

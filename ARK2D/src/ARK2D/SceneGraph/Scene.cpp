@@ -42,9 +42,10 @@ namespace ARK {
 			return name;
 		}
 		void SceneNode::addChild(SceneNode* node) { 
+			children.push_back(node);
 			node->parent = this;
 			node->onAdded(this);
-			children.push_back(node);
+			onChildAdded(node);
 		}
 		void SceneNode::removeChild(SceneNode* node) {
 			for(unsigned int i = 0; i < children.size(); ++i) {
@@ -87,6 +88,44 @@ namespace ARK {
 			return rotation;
 		}
 
+		Vector3<float> SceneNode::localPositionToGlobalPositionInternal() {
+			Renderer* r = ARK2D::getRenderer();
+			float x = position.getX();
+			float y = position.getY();
+			float z = position.getZ();
+			float w = 1.0f;
+			if (r->getMatrix()->height() >= 1) {
+				Vector4<float>::multMatrix44(x, y, z, w, *r->getMatrix()->at(r->getMatrix()->height()-1));
+			}
+			return Vector3<float>(x, y, z);
+		}
+
+		Vector3<float> SceneNode::localPositionToGlobalPosition() {
+			// This method has to climb the scene graph to calculate the position. 
+			// Likely slower than getWorldPosition() but can be used regardless of the current transformation matrix.
+			Vector3<float> pos(position.getX(), position.getY(), position.getZ());
+			if (parent != NULL) {
+
+				pos *= parent->scale;
+
+				ARK::Geometry::Cube* bounds = parent->getBounds();
+				pos.m_x -= parent->pivot.m_x * bounds->getWidth() * parent->scale.getX();
+				pos.m_y -= parent->pivot.m_y * bounds->getHeight() * parent->scale.getY();
+				pos.m_z -= parent->pivot.m_z * bounds->getDepth() * parent->scale.getZ();
+
+				//MathUtil::rotateVectorAroundAxis(&pos.m_x, &pos.m_y, &pos.m_z, 0.0f, 0.0f, 0.0f, parent->rotation * -1);
+				MathUtil::rotatePointAroundPoint<float>(&pos.m_x, &pos.m_y, 0.0f, 0.0f, parent->rotation * 1.0f);
+
+				pos += parent->localPositionToGlobalPosition();
+			}
+			return pos;
+		}
+		bool SceneNode::isGlobalPositionInBounds(float x, float y) {
+			ARK::Geometry::Cube* bounds = getBounds();
+			Vector3<float> globalpos = localPositionToGlobalPosition();
+			return Shape<float>::collision_rectangleRectangle(globalpos.getX(), globalpos.getY(), bounds->getWidth(), bounds->getHeight(), x, y, 1, 1);
+		}
+
 		void SceneNode::update() {
 			for(unsigned int i = 0; i < children.size(); ++i) {
 				children[i]->update();
@@ -99,7 +138,7 @@ namespace ARK {
 			r->pushMatrix();
 			r->translate(position.getX(), position.getY(), position.getZ());
             r->rotate(float(rotation));
-            r->translate(pivot.getX() * bounds->getWidth() * -1.0f, pivot.getY() * bounds->getHeight() * -1.0f, pivot.getZ() * bounds->getDepth() * -1.0f);
+            r->translate(pivot.getX() * bounds->getWidth() * -1.0f * scale.getX(), pivot.getY() * bounds->getHeight() * -1.0f * scale.getY(), pivot.getZ() * bounds->getDepth() * -1.0f * scale.getZ());
             r->scale(scale.getX(), scale.getY(), scale.getZ());
 		}
 		void SceneNode::render() {
@@ -119,6 +158,9 @@ namespace ARK {
 
 		void SceneNode::onAdded(SceneNode* newparent) {
 
+		}
+		void SceneNode::onChildAdded(SceneNode* newChild) {
+			
 		}
 
 		bool SceneNode::keyPressed(unsigned int key) { 
@@ -151,6 +193,7 @@ namespace ARK {
 		ARK::Geometry::Cube* SceneNode::getBounds() {
 			return s_dummyCube;
 		}
+		
 
 
 		

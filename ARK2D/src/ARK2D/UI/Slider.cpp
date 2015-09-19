@@ -14,8 +14,7 @@ namespace ARK {
 
 		Slider::Slider(): 
 			AbstractUIComponent(),
-			SceneNode(),
-			m_buttonLocation(40, 4),
+			m_buttonLocation(0, 0),
 			
 			bar(NULL),
 			button(NULL),
@@ -41,7 +40,7 @@ namespace ARK {
 
 		void Slider::updateValue()
 		{
-			float intermediary = Easing::ease(Easing::LINEAR, m_buttonLocation.getX() - getMinX(), 0.0f, 1.0f, getMaxX() - getMinX());
+			float intermediary = Easing::ease(Easing::LINEAR, m_buttonLocation.getX(), 0.0f, 1.0f, m_width);
 			m_value = intermediary;
 
 			if (m_snapping) {
@@ -59,9 +58,9 @@ namespace ARK {
 			refreshButtonPosition();
 		}
 		void Slider::refreshButtonPosition() {
-			float val = getMinX() + (m_value * getWidth());
+            float val = m_value * getWidth();
 			m_buttonLocation.setX(val);
-			m_buttonLocation.setY(getCenterY());
+			//m_buttonLocation.setY(getHeight()*0.5f);
 		}
 		void Slider::setBarImage(Image* img)
 		{
@@ -96,11 +95,13 @@ namespace ARK {
 			if (bar != NULL) {
 				bar->setAlpha(m_alpha);
 				//bar->draw(m_bounds.getMinX(), m_bounds.getMinY(), m_bounds.getWidth(), m_bounds.getHeight());
-				bar->drawCentered(getCenterX(), getCenterY());
+				bar->drawCentered(m_width*0.5f, m_height*0.5f);
 			} else {
 				r->setDrawColor(Color::white);
-				r->fillRect(getMinX(), getMinY(), (int) getWidth(), (int) getHeight());
+				r->fillRect(0, 0, m_width, m_height);
 			}
+
+			r->drawString(m_buttonLocation.toString(), 0, 0);
 
 			if (button != NULL) {
 				button->setAlpha(m_alpha);
@@ -121,7 +122,8 @@ namespace ARK {
 			Input* i = ARK2D::getInput();
 			if (!m_dragging) 
 			{
-				bool collides = Shape<float>::collision_circleCircle(i->getMouseX(), i->getMouseY(), 15.0f, m_buttonLocation.getX(), m_buttonLocation.getY(), 15.0f);
+				Vector3<float> worldpos = localPositionToGlobalPosition();
+				bool collides = Shape<float>::collision_circleCircle(i->getMouseX(), i->getMouseY(), 15.0f, worldpos.m_x + m_buttonLocation.getX(), worldpos.m_y + m_buttonLocation.getY(), 15.0f);
 				if (collides) {
 					m_dragging = true;
 					updateValue();
@@ -147,13 +149,13 @@ namespace ARK {
 				
 				int newx = x;
 				if (m_snapping) {
-					int snapx = (getMaxX() - getMinX()) * m_snapTo;
+					int snapx = (m_width) * m_snapTo;
 					signed int divisions = round(newx / snapx);
 					newx = divisions * snapx; 
 				}
 
-				if (newx < getMinX()) { newx = (int) getMinX(); }
-				else if (newx > getMaxX()) { newx = (int) getMaxX(); }
+				if (newx < 0.0) { newx = (int) 0; }
+				else if (newx > m_width) { newx = (int) m_width; }
 
 				m_buttonLocation.setX(newx);
 

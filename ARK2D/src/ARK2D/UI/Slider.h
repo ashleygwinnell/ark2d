@@ -22,7 +22,7 @@
 namespace ARK {
 	namespace UI {
 		
-		class ARK2D_API Slider : public AbstractUIComponent, public SceneNode { 
+		class ARK2D_API Slider : public AbstractUIComponent { 
 			public:
 
 				Vector2<float> m_buttonLocation;

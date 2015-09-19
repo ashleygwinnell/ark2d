@@ -9,6 +9,7 @@
 #define ARK_GEOMETRY_CUBE_H_
 
 #include "Shape.h"
+#include "../Includes.h"
   
 namespace ARK { 
 	namespace Geometry {
@@ -273,7 +274,7 @@ namespace ARK {
 					CubeTemplate(x, y, z, w, h, d) {
 
 				}
-                virtual bool collides(Shape<float>* s);
+				virtual ARK2D_API bool collides(Shape<float>* s);
 				virtual ~Cube() {
 
 				}

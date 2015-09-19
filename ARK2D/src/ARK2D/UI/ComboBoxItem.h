@@ -30,7 +30,7 @@ namespace ARK {
 				ComboBox* parent;
 				string m_text;
 				string m_value;
-				unsigned int m_state;
+				//unsigned int m_state;
 			public:
 
 				ComboBoxItem();

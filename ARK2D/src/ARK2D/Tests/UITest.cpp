@@ -52,17 +52,17 @@ namespace ARK {
 
 			Label* label2 = new Label("A Text Label #2");
 			label2->setMargin(10);
-			rightPanel->add(label2);
+			rightPanel->addChild(label2); 
 
 			TextField* textField2 = new TextField();
 			textField2->setMargin(10);
 			textField2->setSize(200, 30);
 			textField2->setText("A Text Field #2");
-			rightPanel->add(textField2);
+			rightPanel->addChild(textField2);
 
 			Label* label3 = new Label("A Text Label #2");
 			label3->setMargin(10);
-			rightPanel->add(label3);
+			rightPanel->addChild(label3);
 
 			ComboBox* comboBox = new ComboBox();
 			comboBox->setMargin(10);
@@ -74,33 +74,33 @@ namespace ARK {
 				ComboBoxItem* comboItemTwo = new ComboBoxItem();
 				comboItemTwo->setText("Item Two");
 				comboBox->addItem(comboItemTwo);
-			rightPanel->add(comboBox);
+			rightPanel->addChild(comboBox);
 
 			Label* label4 = new Label("A Text Label #3");
 			label4->setMargin(10);
-			rightPanel->add(label4);
+			rightPanel->addChild(label4);
 
 			CheckBox* checkBox = new CheckBox();
 			checkBox->setMargin(10);
 			checkBox->setChecked(false);
 			checkBox->setStateChangedEvent((void*) &stateChangedEvent);
-			rightPanel->add(checkBox);
+			rightPanel->addChild(checkBox);
 
 			CheckBox* checkBox2 = new CheckBox();
 			checkBox2->setMargin(10);
 			checkBox2->setChecked(true);
-			rightPanel->add(checkBox2);
+			rightPanel->addChild(checkBox2);
 
 			Label* label5 = new Label("A Text Label four is big");
 			label5->setMargin(10);
-			rightPanel->add(label5);
+			rightPanel->addChild(label5);
 
 			ARK::UI::Button* button = new ARK::UI::Button();
 			button->setText("Click me!");
 			button->setSize(50, 50);
 			button->setEvent((void*) &buttonClickEvent);
 			button->setMargin(10);
-			rightPanel->add(button);
+			rightPanel->addChild(button); 
 
 
 			root->addChild(rightPanel);

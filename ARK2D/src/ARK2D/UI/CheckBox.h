@@ -22,10 +22,10 @@ namespace ARK {
 		class ARK2D_API CheckBox : public AbstractUIComponent {
 			protected:
 				bool m_checked;
-				unsigned int m_state;
-				static const unsigned int STATE_OFF = Button::STATE_OFF;
-				static const unsigned int STATE_OVER = Button::STATE_OVER;
-				static const unsigned int STATE_DOWN = Button::STATE_DOWN;
+				//unsigned int m_state;
+				//static const unsigned int STATE_OFF = Button::STATE_OFF;
+				//static const unsigned int STATE_OVER = Button::STATE_OVER;
+				//static const unsigned int STATE_DOWN = Button::STATE_DOWN;
 				void* m_stateChangedEvent;
 
 			public:

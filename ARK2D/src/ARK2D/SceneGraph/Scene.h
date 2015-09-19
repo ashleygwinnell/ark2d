@@ -56,6 +56,12 @@ namespace ARK {
 				virtual SceneNode* setScale(float x, float y);
 				virtual SceneNode* setRotation(double degrees);
 				double getRotation();
+
+			protected:
+				Vector3<float> localPositionToGlobalPositionInternal();
+			public:
+				Vector3<float> localPositionToGlobalPosition();
+				virtual bool isGlobalPositionInBounds(float x, float y);
 		
 				virtual void update();
 
@@ -69,8 +75,9 @@ namespace ARK {
 				virtual bool keyPressed(unsigned int key);
 				virtual bool keyReleased(unsigned int key);
 				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
-
-				virtual void onAdded(SceneNode* newparent);
+				
+				virtual void onAdded(SceneNode* newParent); // called on the child when it is added.
+				virtual void onChildAdded(SceneNode* newChild); // called on the parent when it is added.
 
 				Image* asImage();
 

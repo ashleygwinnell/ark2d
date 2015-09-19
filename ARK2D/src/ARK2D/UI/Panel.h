@@ -29,21 +29,21 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class ARK2D_API Panel : public AbstractUIComponent, public SceneNode {
+		class ARK2D_API Panel : public AbstractUIComponent{
 			public:
-				vector<AbstractUIComponent*> m_children;
+				//vector<AbstractUIComponent*> m_children;
 				bool m_translate;
 				bool m_showBorder;
+				ARK::Geometry::Cube* m_bounds;
 				Panel();
-				void add(AbstractUIComponent* c);
-				void setTranslating(bool b);
+				//void add(AbstractUIComponent* c);
+				//void setTranslating(bool b);
 				void setShowBorder(bool b);
 
-				virtual void preRender();
-				virtual void postRender();
 				virtual void render();
-				virtual void renderChildren();
 				virtual void renderBorder();
+
+				virtual ARK::Geometry::Cube* getBounds();
 
 				virtual bool keyPressed(unsigned int key);
 				virtual bool keyReleased(unsigned int key);

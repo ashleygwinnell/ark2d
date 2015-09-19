@@ -122,7 +122,7 @@ namespace ARK {
 				ARK::GJ::Next::GameJolt* gj = ARK::GJ::Next::GameJolt::getInstance();
 				Renderer* r = ARK2D::getRenderer();
 				r->setDrawColorf(1.0f, 1.0f, 1.0f, gj->getAlpha());
-				r->fillRect(m_x, m_y, m_width, m_height);
+				r->fillRect(0, 0, m_width, m_height);
 
 				m_textColor.set("#000000");
 				m_textColor.setAlpha(gj->getAlpha());
@@ -178,7 +178,7 @@ namespace ARK {
 				ARK::GJ::Next::GameJolt* gj = ARK::GJ::Next::GameJolt::getInstance();
 				Renderer* g = ARK2D::getRenderer();
 				g->setDrawColor("#2f7f6f", gj->getAlpha());
-				g->fillRect(m_x, m_y, m_width, m_height);
+				g->fillRect(0, 0, m_width, m_height);
 				g->setFont(gj->font);
 			}
 			void GJButton::renderOverlay() {

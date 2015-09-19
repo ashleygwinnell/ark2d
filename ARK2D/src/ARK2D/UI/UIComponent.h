@@ -26,7 +26,11 @@ namespace ARK {
 				bool m_focussed;
 
 			public:
-				UIComponent(): m_focussed(false) {}
+				UIComponent():
+					m_focussed(false) 
+				{
+
+				}
 				void setFocussed(bool b) { 
 					setFocussed(b, false);
 				}

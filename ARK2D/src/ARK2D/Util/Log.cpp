@@ -51,14 +51,16 @@ namespace ARK {
 
 			m_gameSpeedSlider = new ARK::UI::Slider();
 			m_gameSpeedSlider->setSize(240, 3);
-			m_gameSpeedSlider->setLocation(20, 30);
+			m_gameSpeedSlider->position.set(20, 30);
 			m_gameSpeedSlider->setSnapping(true, 0.05f);
 			m_gameSpeedSlider->setRange(0.0f, 2.0f);
 			m_gameSpeedSlider->setButtonPosition(0.5f);
+			m_scene->getRoot()->addChild(m_gameSpeedSlider);
 
 			m_expoCheckbox = new ARK::UI::CheckBox();
 			m_expoCheckbox->setSize(24, 24);
-			m_expoCheckbox->setLocation(20, 70); 
+			m_expoCheckbox->position.set(20, 70); 
+			m_scene->getRoot()->addChild(m_expoCheckbox);
 		}
 
 		#define  LOGLOGLOG(...)  __android_log_print(ANDROID_LOG_INFO,"ARK2D",__VA_ARGS__)
@@ -305,6 +307,10 @@ namespace ARK {
 				}
 			#endif
 
+			if (m_visible) {
+				ARK2D::getContainer()->setCursorVisible(true); 
+			}
+
 			m_scene->update();
 		}	
 		void Log::render(GameContainer* container, Renderer* r) {
@@ -344,12 +350,12 @@ namespace ARK {
 			// Adjust game speed
 			r->drawString(StringUtil::appendf("Game Speed: ", m_gameSpeedSlider->getActualValue()), 10, 10, Renderer::ALIGN_LEFT, Renderer::ALIGN_CENTER, 0.0f, 0.5f);
 			m_gameSpeedSlider->updateValue();
-			m_gameSpeedSlider->render();
+			//m_gameSpeedSlider->render();
 			ARK2D::getTimer()->setDeltaModifier(m_gameSpeedSlider->getActualValue());
 
 			r->setDrawColor(Color::white);
 			r->drawString("EXPO Mode:", 10, 60, Renderer::ALIGN_LEFT, Renderer::ALIGN_CENTER, 0.0f, 0.5f);
-			m_expoCheckbox->render();
+			//m_expoCheckbox->render();
 			ARK2D::setExpoMode(m_expoCheckbox->isChecked());
 
 			// draw watched variables
@@ -427,20 +433,20 @@ namespace ARK {
 
 		void Log::keyPressed(unsigned int key) {
 			if (!m_visible) { return; }
-			m_gameSpeedSlider->keyPressed(key);
-			m_expoCheckbox->keyPressed(key);
+			//m_gameSpeedSlider->keyPressed(key);
+			//m_expoCheckbox->keyPressed(key);
 			m_scene->keyPressed(key);
 		}
 		void Log::keyReleased(unsigned int key) {
 			if (!m_visible) { return; }
-			m_gameSpeedSlider->keyReleased(key);
-			m_expoCheckbox->keyReleased(key);
+			//m_gameSpeedSlider->keyReleased(key);
+			//m_expoCheckbox->keyReleased(key);
 			m_scene->keyReleased(key);
 		}
 		void Log::mouseMoved(int x, int y, int oldx, int oldy) {
 			if (!m_visible) { return; }
-			m_gameSpeedSlider->mouseMoved(x, y, oldx, oldy);
-			m_expoCheckbox->mouseMoved(x, y, oldx, oldy);
+			//m_gameSpeedSlider->mouseMoved(x, y, oldx, oldy);
+			//m_expoCheckbox->mouseMoved(x, y, oldx, oldy);
 			m_scene->mouseMoved(x, y, oldx, oldy);
 		}
 

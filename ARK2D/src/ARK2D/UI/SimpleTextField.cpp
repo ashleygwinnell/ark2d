@@ -12,8 +12,8 @@ bool SimpleTextField::keyPressed(unsigned int key) {
     return TextField::keyPressed(key);
 }
 void SimpleTextField::render() { 
-	int x = m_x + (m_width/2);
-	int y = m_y + (m_height/2);
+	int x = 0 + (m_width/2);
+	int y = 0 + (m_height/2);
 	x -= (ARK2D::getRenderer()->getFont()->getStringWidth(m_text.get())/2);
 	y -= (ARK2D::getRenderer()->getFont()->getLineHeight()/2);
 	renderText(x, y); 
@@ -22,8 +22,8 @@ void SimpleTextField::render() {
 void SimpleTextField::renderCaret() {
 	//TextField::renderCaret(m_x, m_y, m_x + 40, m_y);
 
-	int x = m_x + (m_width/2);
-	int y = m_y + (m_height/2);
+	int x = 0 + (m_width/2);
+	int y = 0 + (m_height/2);
 	x -= (ARK2D::getRenderer()->getFont()->getStringWidth(m_text.get())/2);
 	y += (ARK2D::getRenderer()->getFont()->getLineHeight()/2);
 

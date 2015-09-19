@@ -30,8 +30,7 @@ namespace ARK {
 			m_scrollYButton.setParent(this);
 		}
 
-		void ScrollPanel::add(AbstractUIComponent* c) {
-			Panel::add(c);
+		void ScrollPanel::onChildAdded(SceneNode* newChild) {
 			calculateSize();
 		}
 
@@ -44,9 +43,9 @@ namespace ARK {
 			currentY += getPaddingTop();
 
 			bool startedNewLine = true;
-			for(unsigned int i = 0; i < m_children.size(); i++)
+			for(unsigned int i = 0; i < children.size(); i++)
 			{
-				AbstractUIComponent* current = m_children.at(i);
+                AbstractUIComponent* current = (AbstractUIComponent*) children.at(i);
 				if (startedNewLine) {
 					currentY += current->getMarginTop();
 					startedNewLine = false;
@@ -113,7 +112,7 @@ namespace ARK {
 			}
 
 			if (m_layout == LAYOUT_FLOW) {
-				Panel::preRender();
+				//Panel::preRender();
 
 				int cx = getPaddingLeft() + m_offsetX;
 				int cy = getPaddingTop() + m_offsetY;
@@ -121,9 +120,9 @@ namespace ARK {
 				//int maxHeight = 0;
 				bool startedNewLine = true;
 				int startedNewLineAtIndex = 0;
-				for(unsigned int i = 0; i < m_children.size(); i++)
+				for(unsigned int i = 0; i < children.size(); i++)
 				{
-					AbstractUIComponent* c = m_children.at(i);
+					AbstractUIComponent* c = (AbstractUIComponent*) children.at(i);
 					cx += c->getMarginLeft();
 					if (startedNewLine) {
 						cy += c->getMarginTop();
@@ -138,8 +137,9 @@ namespace ARK {
 						unsigned int tallestHeight = 0;
 						AbstractUIComponent* tallestComponent = NULL;
 						for(unsigned int j = startedNewLineAtIndex; j < i; j++) {
-							if (m_children.at(j)->getHeight() + m_children.at(j)->getPaddingY() > tallestHeight) {
-								tallestComponent = m_children.at(j);
+                            AbstractUIComponent* ch = (AbstractUIComponent*) children.at(j);
+							if (ch->getHeight() + ch->getPaddingY() > tallestHeight) {
+                                tallestComponent = ch;
 							}
 						}
 						if (tallestComponent != NULL) {
@@ -155,13 +155,15 @@ namespace ARK {
 						startedNewLineAtIndex = i;
 					}
 					c->setLocation(cx, cy);
-					c->render();
+					//c->render();
 
 					cx += c->getWidth() + c->getMarginRight();
 
 					if (startedNewLine) { cy -= c->getMarginTop(); }
 
 				}
+
+				renderChildren();
 
 				if (m_calculatedWidth >= (int) m_width) {
 
@@ -173,16 +175,16 @@ namespace ARK {
 					renderScrollbars();
 				}
 
-				Panel::postRender();
+				//Panel::postRender();
 			} else {
 
 				// @TODO: this depends on panel layout used
 				m_calculatedWidth = m_width;
 				m_calculatedHeight = m_height;
 
-				Panel::preRender();
-				Panel::renderChildren();
-				Panel::postRender();
+				//Panel::preRender();
+				renderChildren();
+				//Panel::postRender();
 			}
 		}
 

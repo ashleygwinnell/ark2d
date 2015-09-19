@@ -32,11 +32,11 @@ namespace ARK {
 
 		void Label::render() {
 			Renderer* g = ARK2D::getRenderer();
-			g->drawString(m_text, m_x, m_y);
+			g->drawString(m_text, 0, 0);
 		}
 		void Label::renderBounds() {
 			Renderer* g = ARK2D::getRenderer();
-			g->drawRect(m_x, m_y, m_width, m_height);
+			g->drawRect(0, 0, m_width, m_height);
 		}
 
 		Label::~Label() {

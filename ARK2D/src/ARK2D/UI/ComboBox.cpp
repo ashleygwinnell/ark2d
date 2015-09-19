@@ -13,7 +13,6 @@ namespace ARK {
 	namespace UI {
 		ComboBox::ComboBox():
 			AbstractUIComponent(),
-			SceneNode(),
 			m_items(),
 			m_selected(NULL),
 			m_open(false),
@@ -28,6 +27,8 @@ namespace ARK {
 			}
 			cbi->parent = this;
 			m_items.push_back(cbi);
+
+			addChild(cbi);
 		}
 		void ComboBox::setOpen(bool b) {
 			m_open = b;
@@ -96,7 +97,9 @@ namespace ARK {
 		bool ComboBox::keyReleased(unsigned int key) {
             if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT) {
 
-            	if (isMouseInBounds() && m_state == Button::STATE_DOWN) {
+                Input* in = ARK2D::getInput();
+                bool mib = isGlobalPositionInBounds(in->getMouseX(), in->getMouseY());
+            	if (mib && m_state == Button::STATE_DOWN) {
 
             		bool consumed = false;
             		if (m_open) {
@@ -110,7 +113,7 @@ namespace ARK {
 	                }
 
 					setOpen(!isOpen());
-					m_state = (isMouseInBounds())?Button::STATE_OVER:Button::STATE_OFF;
+					m_state = (mib)?Button::STATE_OVER:Button::STATE_OFF;
 					if (consumed) {
 						return consumed;
 					}
@@ -121,10 +124,11 @@ namespace ARK {
 				
 			}
             return false;
-
+ 
 		}
 		bool ComboBox::mouseMoved(int x, int y, int oldx, int oldy) {
-			bool mib = isMouseInBounds();
+            Input* in = ARK2D::getInput();
+            bool mib = isGlobalPositionInBounds(x, y);
 	//		ARK2D::getLog()->e(StringUtil::append("mib: ", mib));
 	//		ARK2D::getLog()->e(StringUtil::append("m_state: ", m_state));
 
@@ -155,8 +159,8 @@ namespace ARK {
 
 			Renderer* g = ARK2D::getRenderer();
 			if (m_selected != NULL) {
-				float tx = m_x;
-				float ty = m_y;
+				float tx = 0;
+				float ty = 0;
 				if (m_state == Button::STATE_DOWN || m_open) {
 					tx += 2;
 					ty += 2;
@@ -165,26 +169,26 @@ namespace ARK {
 			}
 
 			if (m_open) {
-				int y = m_y + m_originalHeight;
+				int y = 0 + m_originalHeight;
 				for(unsigned int i = 0; i < m_items.size(); i++) {
-					m_items.at(i)->setLocation(m_x, y);
-					m_items.at(i)->render();
+					m_items.at(i)->setLocation(0, y);
 					y += m_items.at(i)->getHeight();
 				}
+				renderChildren();
 			}
 		}
 		void ComboBox::renderBackground() {
 			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::black_50a);
-			g->fillRect(m_x, m_y, m_width, m_height);
+			g->fillRect(0, 0, m_width, m_height);
 		}
 		void ComboBox::renderArrow() {
 			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white_50a);
 			if (m_open) {
-				g->fillTriangle(m_x + m_width - 20, m_y+10, 10, 10);
+				g->fillTriangle(0 + m_width - 20, 0+10, 10, 10);
 			} else {
-				g->fillTriangle(m_x + m_width - 20, m_y+20, 10, -10);
+				g->fillTriangle(0 + m_width - 20, 0+20, 10, -10);
 			}
 
 		}
@@ -197,7 +201,7 @@ namespace ARK {
 			if (m_state == Button::STATE_OVER || m_state == Button::STATE_DOWN || m_open) {
 				g->setDrawColor(Color::white_50a);
 			}
-			g->drawRect(m_x, m_y, m_width, m_height);
+			g->drawRect(0, 0, m_width, m_height);
 		}
 	}
 }
