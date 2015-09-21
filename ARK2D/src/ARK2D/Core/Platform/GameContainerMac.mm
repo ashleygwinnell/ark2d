@@ -7,7 +7,9 @@
  
 #include "../GameContainer.h"
 #include "GameContainerMac.h"  
-#include "../../Util/Log.h"   
+#include "../../Util/Log.h" 
+#include "../../Graphics/Color.h"
+#include "../../Graphics/Image.h"
 
 #ifdef ARK2D_MACINTOSH  
  
@@ -565,23 +567,8 @@
 							}
 
 							//axis->value = floatValue;
-							GamepadAxis* newaxis = NULL;
-							for(unsigned int jj = 0; jj < gamepad->axes.size(); jj++) {
-								if (gamepad->axes.at(jj)->id == newAxisId) {
-									newaxis = gamepad->axes.at(jj);
-								}
-							}
-							if (newaxis != NULL) {
-								newaxis->value = floatValue;
-                                
-                                Game* g = ARK2D::getGame();
-                                GamepadListener* gl = NULL;
-                                gl = dynamic_cast<GamepadListener*>(g);
-                                if (gl != NULL) {
-                                    gl->axisMoved(gamepad, newAxisId, newaxis->value);
-                                }
-							}
 
+							gamepad->moveAxis(newAxisId, floatValue);
 							
 						}
 						

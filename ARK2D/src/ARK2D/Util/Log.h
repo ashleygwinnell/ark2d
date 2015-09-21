@@ -16,7 +16,8 @@
 
 struct Graphics;
 #include "../Namespaces.h"
-
+#include "../UI/Panel.h"
+#include "../UI/Button.h"
 
 #include "../Core/String.h"
 namespace ARK {
@@ -97,6 +98,7 @@ namespace ARK {
 				Color* m_backgroundColor;
 				ARK::UI::Slider* m_gameSpeedSlider;
 				ARK::UI::CheckBox* m_expoCheckbox;
+				ARK::UI::Button* m_addGamepadButton;
 				ARK::SceneGraph::Scene* m_scene;
 
 			public:
@@ -152,6 +154,42 @@ namespace ARK {
 				string getTypeString(unsigned int type);
 				wstring getTypeWString(unsigned int type);
 		};
+
+		void debug_addVirtualGamepad(); 
+
+		class ARK2D_API TitledPanel : public ARK::UI::Panel {
+			public:
+				string m_title;
+			public:
+				TitledPanel();
+				void setTitle(string title);
+				virtual void render();
+		};
+		class ARK2D_API GPButton : public ARK::UI::Button {
+			public:
+                GPButton(string text); 
+				unsigned int gpid; 
+				unsigned int gpbid;
+		};
+		class ARK2D_API GPAxisButton : public GPButton {
+			public:
+				unsigned int axisIdX;
+				unsigned int axisIdY;
+				float downX;
+				float downY;
+				float axisValueX;
+				float axisValueY;
+				GPAxisButton(string text);
+				virtual void render(); 
+				virtual void renderBackground(); 
+				virtual void renderText(int x, int y);
+				virtual void renderOverlay(); 
+
+				virtual bool keyPressed(unsigned int key);
+				virtual bool keyReleased(unsigned int key);
+				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
+		};
+
 
 	}
 }

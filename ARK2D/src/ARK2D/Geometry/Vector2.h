@@ -11,10 +11,10 @@
 #include <math.h>
 #include <cmath>
 #include <stdlib.h>
-#include "../Util/Log.h"
 #include "../ARK2D.h"
 #include <string>
 #include "../Core/String.h"
+#include "../Util/Log.h"
 //#include "../Util/MathUtil.h"
 
 using namespace std;

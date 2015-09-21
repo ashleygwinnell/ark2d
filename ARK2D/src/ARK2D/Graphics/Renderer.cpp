@@ -2445,7 +2445,7 @@ namespace ARK {
 
 
 			pushMatrix();
-			if (isBatching()) { getMatrix()->identity(); }
+			//if (isBatching()) { getMatrix()->identity(); }
 			translate(x, y); 
 
 			bool doRot = false;

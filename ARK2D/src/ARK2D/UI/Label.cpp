@@ -6,6 +6,7 @@
  */
 
 #include "Label.h"
+#include "../Graphics/Renderer.h"
 
 namespace ARK {
 	namespace UI {

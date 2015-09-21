@@ -7,6 +7,8 @@
 
 #include "ArcadeHighscoreInput.h"
 
+#include "../Core/GameContainer.h"
+
 namespace ARK {
 	namespace Util {
 

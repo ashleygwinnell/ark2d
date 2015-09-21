@@ -50,8 +50,18 @@ namespace ARK {
 		void SceneNode::removeChild(SceneNode* node) {
 			for(unsigned int i = 0; i < children.size(); ++i) {
 				if (children[i] == node) {
+					
+					// sure we want to deallocate memory? 
+					this->onChildRemoved(node);
+					node->onRemoved(this);
+
+					delete node;
+					node = NULL;
+
 					children.erase(children.begin() + i);
        				break;
+				} else {
+					children[i]->removeChild(node);
 				}
 			}
 		}
@@ -71,6 +81,22 @@ namespace ARK {
 				if (children[i]->name == n) {
 					ret = children[i];
 					break;
+				}
+			}
+			return ret;
+		}
+		SceneNode* SceneNode::find(string n) {
+			SceneNode* ret = NULL;
+			for(unsigned int i = 0; i < children.size(); ++i) {
+				if (children[i]->name == n) {
+					ret = children[i];
+					break;
+				} else {
+					SceneNode* ch = children[i]->find(n);
+					if (ch != NULL) {
+						ret = ch;
+						break;
+					}
 				}
 			}
 			return ret;
@@ -100,15 +126,32 @@ namespace ARK {
 			return Vector3<float>(x, y, z);
 		}
 
+		vector<SceneNode*> SceneNode::getPathToRoot() {
+			vector<SceneNode*> path;
+			getPathToRoot(&path);
+			return path;
+		}
+		void SceneNode::getPathToRoot(vector<SceneNode* >* path) {
+			path->push_back(this);
+			if (parent != NULL) {
+				parent->getPathToRoot(path);
+			}
+		}
+
 		Vector3<float> SceneNode::localPositionToGlobalPosition() {
 			// This method has to climb the scene graph to calculate the position. 
 			// Likely slower than getWorldPosition() but can be used regardless of the current transformation matrix.
 			Vector3<float> pos(position.getX(), position.getY(), position.getZ());
 			if (parent != NULL) {
 
+				ARK::Geometry::Cube* bounds = parent->getBounds();
+
+				pos.m_x += parent->pivot.m_x * bounds->getWidth() * parent->scale.getX();
+				pos.m_y += parent->pivot.m_y * bounds->getHeight() * parent->scale.getY();
+				pos.m_z += parent->pivot.m_z * bounds->getDepth() * parent->scale.getZ();
+
 				pos *= parent->scale;
 
-				ARK::Geometry::Cube* bounds = parent->getBounds();
 				pos.m_x -= parent->pivot.m_x * bounds->getWidth() * parent->scale.getX();
 				pos.m_y -= parent->pivot.m_y * bounds->getHeight() * parent->scale.getY();
 				pos.m_z -= parent->pivot.m_z * bounds->getDepth() * parent->scale.getZ();
@@ -122,6 +165,32 @@ namespace ARK {
 				pos += parent->localPositionToGlobalPosition();
 			} 
 			return pos;
+
+			/*
+			// The vector we will return.
+			Vector3<float> pos(0, 0, 0);
+
+			// Get path from root to this node. 
+			vector<SceneNode* > path = getPathToRoot();
+			//std::reverse(path.begin(), path.end());
+			
+			// Do the same things we do in preRender.
+			for(signed int i = path.size()-1; i >= 1; i--) {
+
+				ARK::Geometry::Cube* bounds = path[i]->getBounds();
+
+				pos += path[i]->position;
+				MathUtil::rotatePointAroundPoint<float>(&pos.m_x, &pos.m_y, 0.0f, 0.0f, path[i]->rotation);
+				pos.m_x += path[i]->pivot.getX() * bounds->getWidth() * path[i]->scale.getX() * -1.0f;
+				pos.m_y += path[i]->pivot.getY() * bounds->getHeight() * path[i]->scale.getY() * -1.0f;
+				pos.m_z += path[i]->pivot.getZ() * bounds->getDepth() * path[i]->scale.getZ() * -1.0f;
+
+				pos *= path[i]->scale;
+			}
+			return pos;
+			*/
+
+				
 		}
 		Vector3<float> SceneNode::localScaleToGlobalScale() {
 			Vector3<float> sc(scale.getX(), scale.getY(), scale.getZ());
@@ -181,11 +250,15 @@ namespace ARK {
 			renderChildren();
 		}
 		void SceneNode::renderChildren() {
-            for(unsigned int i = 0; i < children.size(); ++i) {
+			Renderer* r = ARK2D::getRenderer();
+   			ARK::Geometry::Cube* bounds = getBounds();
+   			r->translate(pivot.getX() * bounds->getWidth() * scale.getX(), pivot.getY() * bounds->getHeight() * scale.getY(), pivot.getZ() * bounds->getDepth() * scale.getZ());
+			 for(unsigned int i = 0; i < children.size(); ++i) {
 				children[i]->preRender();
 				children[i]->render();
 				children[i]->postRender();
 			}
+			r->translate(pivot.getX() * bounds->getWidth() * scale.getX() * -1.0f, pivot.getY() * bounds->getHeight() * scale.getY() * -1.0f, pivot.getZ() * bounds->getDepth() * scale.getZ() * -1.0f);
 		}
 		void SceneNode::postRender() {
 			Renderer* r = ARK2D::getRenderer();
@@ -197,6 +270,12 @@ namespace ARK {
 		}
 		void SceneNode::onChildAdded(SceneNode* newChild) {
 			
+		}
+		void SceneNode::onRemoved(SceneNode* removingFrom) {
+
+		}
+		void SceneNode::onChildRemoved(SceneNode* removingChild) {
+
 		}
 
 		bool SceneNode::keyPressed(unsigned int key) { 
@@ -229,6 +308,9 @@ namespace ARK {
 		ARK::Geometry::Cube* SceneNode::getBounds() {
 			return s_dummyCube;
 		}
+		SceneNode::~SceneNode() {
+			
+		}
 		
 
 
@@ -258,6 +340,9 @@ namespace ARK {
 		}
 		SceneNode* Scene::getChildByName(string n) {
 			return root->getChildByName(n);
+		}
+		SceneNode* Scene::find(string n) {
+			return root->find(n);
 		}
 		void Scene::update() {
 			if (root != NULL) { 

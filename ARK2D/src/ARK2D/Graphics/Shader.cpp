@@ -12,6 +12,7 @@
 
 #include "../Includes.h"
 #include "../Util/Containers/Vector.h"
+#include "Image.h"
 
 namespace ARK {
 	namespace Graphics {

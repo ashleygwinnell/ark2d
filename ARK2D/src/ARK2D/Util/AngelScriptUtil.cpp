@@ -4,9 +4,10 @@
 #include "../ARK2D.h"
 #include "Log.h"
 #include "KeyPairFile.h"
-#include "../Font/BMFont.h"
-#include "../Graphics/Renderer.h"
 #include "../Core/GameContainer.h"
+#include "../Font/BMFont.h"
+#include "../Graphics/Image.h"
+#include "../Graphics/Renderer.h"
 #include "../Util/Containers/Pool.h"
 
 asIScriptEngine* AngelScriptUtil::s_engine = NULL;

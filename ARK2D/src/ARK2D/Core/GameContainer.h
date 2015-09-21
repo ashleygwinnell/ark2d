@@ -18,13 +18,15 @@
 #include "../Controls/Gamepad.h"
 #include "../Controls/Input.h"
 #include "../Core/GameTimer.h"
+
+//#include "../Font/BMFont.h"
+//#include "../Graphics/Image.h"
+#include "../Graphics/Color.h"
 #include "../Graphics/Renderer.h"
-#include "../Font/BMFont.h"
-#include "../Graphics/Image.h"
 #include "../UI/ErrorDialog.h"
 #include "../Util/Log.h"
 
-#include "../Audio/Sound.h"
+//#include "../Audio/Sound.h"
 
 #include <vector>
 #include <ctime>

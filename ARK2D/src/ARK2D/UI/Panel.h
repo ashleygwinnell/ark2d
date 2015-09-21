@@ -11,13 +11,14 @@
 #include <vector>
 using namespace std;
 
-#include "../ARK2D.h"
+//#include "../ARK2D.h"
+#include "../Namespaces.h"
 #include "AbstractUIComponent.h"
 
-#include "../Graphics/Renderer.h"
-#include "../Core/GameContainer.h"
-#include "../Geometry/GigaRectangle.h"
-#include "../Controls/Input.h"
+//#include "../Graphics/Renderer.h"
+//#include "../Core/GameContainer.h"
+//#include "../Geometry/GigaRectangle.h"
+//#include "../Controls/Input.h"
 
 namespace ARK {
 	namespace UI {

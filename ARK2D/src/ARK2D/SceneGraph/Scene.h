@@ -53,6 +53,8 @@ namespace ARK {
 				unsigned int countChildren(bool recursive);
 				SceneNode* getChildByName(string n);
 
+				SceneNode* find(string n);
+
 				virtual SceneNode* setScale(float x, float y);
 				virtual SceneNode* setRotation(double degrees);
 				double getRotation();
@@ -64,6 +66,9 @@ namespace ARK {
 				Vector3<float> localScaleToGlobalScale();
 				float localRotationToGlobalRotation();
 				virtual bool isGlobalPositionInBounds(float x, float y);
+
+				vector<SceneNode*> getPathToRoot();
+				void getPathToRoot(vector<SceneNode* >* path);
 		
 				virtual void update();
 
@@ -80,8 +85,11 @@ namespace ARK {
 				
 				virtual void onAdded(SceneNode* newParent); // called on the child when it is added.
 				virtual void onChildAdded(SceneNode* newChild); // called on the parent when it is added.
+				virtual void onRemoved(SceneNode* removingFrom); // called on the child when it is removed.
+				virtual void onChildRemoved(SceneNode* removingChild); // called on the parent when it is removed.
 
 				Image* asImage();
+				virtual ~SceneNode();
 
 
 		};
@@ -100,6 +108,7 @@ namespace ARK {
 				void addChild(SceneNode* node);
 				void removeChild(SceneNode* node);
 				SceneNode* getChildByName(string n);
+				SceneNode* find(string n);
 				void update();
 				void render();
 

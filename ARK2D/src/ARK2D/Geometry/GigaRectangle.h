@@ -277,25 +277,27 @@
 			}
 
 			static bool s_isOffscreen(GigaRectangle* obj) {
-				ARK::Core::GameContainer* container = ARK2D::getContainer();
+				/*ARK::Core::GameContainer* container = ARK2D::getContainer();
 				if (	(signed int)(obj->getY() + obj->getHeight()) <= 0
 					|| 	(signed int)(obj->getX() + obj->getWidth()) <= 0
 					|| 	(signed int)(obj->getX()) >= (signed int) container->getWidth()
 					|| 	(signed int)(obj->getY()) >= (signed int) container->getHeight()) {
 					return true;
 				}
-				return false;
+				return false;*/
+                return false;
 			}
 
 			static bool s_isPartlyOffscreen(GigaRectangle* obj) {
-				ARK::Core::GameContainer* container = ARK2D::getContainer();
+				/*ARK::Core::GameContainer* container = ARK2D::getContainer();
 				if (	(signed int)(obj->getX()) <= 0
 					|| 	(signed int)(obj->getX()) <= 0
 					|| 	(signed int)(obj->getX() + obj->getWidth()) >= (signed int) container->getWidth()
 					|| 	(signed int)(obj->getY() + obj->getHeight()) >= (signed int) container->getHeight()) {
 					return true;
 				}
-				return false;
+				return false;*/
+                return false;
 			}
 
 			~GigaRectangle() {

@@ -38,7 +38,8 @@ namespace ARK {
 			m_enabled(true),
 			m_backgroundColor(NULL),
 			m_gameSpeedSlider(NULL),
-			m_expoCheckbox(NULL)
+			m_expoCheckbox(NULL),
+			m_addGamepadButton(NULL)
 			{
 
 			for(unsigned int i = 0; i < m_maxMessages; i++) {
@@ -61,6 +62,12 @@ namespace ARK {
 			m_expoCheckbox->setSize(24, 24);
 			m_expoCheckbox->position.set(20, 70); 
 			m_scene->getRoot()->addChild(m_expoCheckbox);
+
+			m_addGamepadButton = new ARK::UI::Button("+ Virtual Gamepad");
+			m_addGamepadButton->setSize(160, 30);
+			m_addGamepadButton->position.set(20, 140); 
+			m_addGamepadButton->setEvent((void*) &debug_addVirtualGamepad);
+			m_scene->getRoot()->addChild(m_addGamepadButton);
 		}
 
 		#define  LOGLOGLOG(...)  __android_log_print(ANDROID_LOG_INFO,"ARK2D",__VA_ARGS__)
@@ -487,6 +494,472 @@ namespace ARK {
 		}
 
 		Log::~Log() {
+
+		}
+
+
+		GPAxisButton::GPAxisButton(string text): 
+			GPButton(text),
+			downX(0.0f),
+			downY(0.0f),
+			axisValueX(0.0f),
+			axisValueY(0.0f) {
+
+		}
+		GPButton::GPButton(string text): 
+			Button(text) {
+
+		}
+
+		void debugGamepadButtonPress(GPButton* butt) { 
+			Gamepad* pad = ARK2D::getInput()->getGamepad(butt->gpid);
+			pad->pressButton(butt->gpbid); 
+		}
+		void debugGamepadClose(GPButton* butt) {
+			bool closed = false;
+			unsigned int gamepadId = butt->gpid;
+			vector<Gamepad* >* pads = ARK2D::getInput()->getGamepads();
+			Gamepad* pad = NULL;
+			for(unsigned int i = 0; i < pads->size(); i++) { 
+				if (pads->at(i)->id == gamepadId) { 
+					pad = pads->at(i);
+					closed = true;
+
+					pads->erase(pads->begin() + i);
+					break;
+				}
+			}
+
+			if (!closed) {
+				ARK2D::getLog()->e("Could not remove virtual gamepad.");
+				return;
+			}
+
+			// send event to game.
+			Game* g = ARK2D::getGame();
+			GamepadListener* gl = NULL;
+			gl = dynamic_cast<GamepadListener*>(g);
+			if (gl != NULL) {
+				gl->gamepadDisconnected(pad);
+			}
+
+			// Remove the panel from the debug scene
+		    Scene* scene = ARK2D::getLog()->getScene();
+			SceneNode* panel = scene->find(pad->getName());
+		    if (panel != NULL) {
+		        scene->removeChild(panel);
+		    }
+
+			delete pad;
+			pad = NULL;
+		}
+
+		TitledPanel::TitledPanel(): 
+			Panel(), 
+			m_title("") {
+
+		}
+		void TitledPanel::setTitle(string title) {
+			m_title = title;
+		}
+		void TitledPanel::render() {
+			Renderer* r = ARK2D::getRenderer();
+			r->setDrawColor(Color::black_50a);
+			r->fillRect(0, 0, m_width, m_height);
+
+			r->setDrawColor(Color::white);
+			r->drawLine(0, 20, m_width, 20);
+			
+			r->drawString(m_title, 1, 1, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+
+			renderChildren();
+
+			Panel::renderBorder();
+		}
+		void GPAxisButton::render() {
+			//GPButton::render();
+
+			renderBackground();
+			renderText(0,0); 
+			renderOverlay();
+
+			Renderer* r = ARK2D::getRenderer();
+			r->setDrawColor(Color::white);
+		    r->fillCircle((m_width*0.5) + (axisValueX * m_width*0.5), (m_height*0.5) + (axisValueY * m_height*0.5), 5, 10);
+
+			renderChildren();
+		} 
+		void GPAxisButton::renderText(int x, int y) {
+			//Renderer* r = ARK2D::getRenderer();
+			//r->setDrawColor(Color::white);
+			//r->drawString(m_text.get(), x + (m_width * 0.5f), y + (m_height * 0.5f) );
+
+		}
+		void GPAxisButton::renderBackground() {
+			Renderer* r = ARK2D::getRenderer();
+			r->setDrawColor(Color::black_50a);
+			r->fillCircle(m_width * 0.5f, m_height * 0.5f, (m_width + m_height)*0.25, 20);
+		}
+		void GPAxisButton::renderOverlay() {
+			Renderer* r = ARK2D::getRenderer();
+			r->setDrawColor(Color::white);
+			if (m_state == STATE_OVER || m_state == STATE_DOWN) {
+				r->setDrawColor(Color::white_50a);
+			}
+			r->drawCircle(m_width * 0.5f, m_height * 0.5f, (m_width + m_height)*0.25, 20);
+		}
+		bool GPAxisButton::keyPressed(unsigned int key) {
+			bool didEvent = GPButton::keyPressed(key);
+			if (didEvent) {
+				downX = ARK2D::getInput()->getMouseX();
+				downY = ARK2D::getInput()->getMouseY();
+				return true;
+			}
+			return false;
+		}
+		bool GPAxisButton::keyReleased(unsigned int key) {
+
+
+			downX = -1.0f;
+			downY = -1.0f;
+			axisValueX = 0.0f;
+			axisValueY = 0.0f; 
+
+			Gamepad* pad = ARK2D::getInput()->getGamepad(this->gpid);
+		    pad->moveAxis(axisIdX, axisValueX);
+			pad->moveAxis(axisIdY, axisValueY);
+				
+			bool didEvent = GPButton::keyReleased(key);
+			if (didEvent) {
+				return true;
+			}
+			return false;
+		}
+		bool GPAxisButton::mouseMoved(int x, int y, int oldx, int oldy) {
+			bool didEvent = GPButton::mouseMoved(x, y, oldx, oldy);
+			if (didEvent && m_state == STATE_DOWN) { 
+				
+		        float angle = MathUtil::angle(downX, downY, x, y);
+		        float dist = MathUtil::distance(downX, downY, x, y);
+		        if (dist > m_width * 0.5) { dist = m_width * 0.5; }
+
+		        axisValueX = 0.0f;
+				axisValueY = 0.0f;
+		        MathUtil::moveAngle<float>(axisValueX, axisValueY, angle, dist / float(m_width*0.5f)); 
+		         
+		        Gamepad* pad = ARK2D::getInput()->getGamepad(this->gpid);
+		        pad->moveAxis(axisIdX, axisValueX);
+		        pad->moveAxis(axisIdY, axisValueY);
+		        return true;
+			} else {
+				axisValueX = 0.0f;
+				axisValueY = 0.0f;
+			}
+			return false;
+		}
+
+		void debug_addVirtualGamepad() {
+			GameContainer* container = ARK2D::getContainer(); 
+			Gamepad* gamepad = new Gamepad();
+			gamepad->id = ARK2D::getInput()->countGamepads();
+			gamepad->name = StringUtil::append("Virtual Gamepad ", gamepad->id+1);
+
+			// DPAD
+			GamepadButton* dpad_button = new GamepadButton();
+			dpad_button->id = Gamepad::DPAD_UP;
+			dpad_button->down = false;  
+			gamepad->buttons.push_back(dpad_button);
+
+			dpad_button = new GamepadButton();
+			dpad_button->id = Gamepad::DPAD_DOWN;
+			dpad_button->down = false;  
+			gamepad->buttons.push_back(dpad_button);
+
+			dpad_button = new GamepadButton();
+			dpad_button->id = Gamepad::DPAD_LEFT;
+			dpad_button->down = false;  
+			gamepad->buttons.push_back(dpad_button);
+
+			dpad_button = new GamepadButton();
+			dpad_button->id = Gamepad::DPAD_RIGHT;
+			dpad_button->down = false;  
+			gamepad->buttons.push_back(dpad_button);
+
+			// Face Buttons
+			GamepadButton* a_button = new GamepadButton();
+			a_button->id = Gamepad::BUTTON_A;
+			a_button->down = false;  
+			gamepad->buttons.push_back(a_button);
+
+			GamepadButton* b_button = new GamepadButton();
+			b_button->id = Gamepad::BUTTON_B;
+			b_button->down = false;  
+			gamepad->buttons.push_back(b_button);
+
+			GamepadButton* x_button = new GamepadButton();
+			x_button->id = Gamepad::BUTTON_X;
+			x_button->down = false;  
+			gamepad->buttons.push_back(x_button);
+
+			GamepadButton* y_button = new GamepadButton();
+			y_button->id = Gamepad::BUTTON_Y;
+			y_button->down = false;  
+			gamepad->buttons.push_back(y_button);
+
+			GamepadButton* lb_button = new GamepadButton();
+			lb_button->id = Gamepad::BUTTON_LBUMPER;
+			lb_button->down = false;  
+			gamepad->buttons.push_back(lb_button);
+
+			GamepadButton* rb_button = new GamepadButton();
+			rb_button->id = Gamepad::BUTTON_RBUMPER;
+			rb_button->down = false;  
+			gamepad->buttons.push_back(rb_button);
+
+			GamepadButton* back_button = new GamepadButton();
+			back_button->id = Gamepad::BUTTON_BACK;
+			back_button->down = false;  
+			gamepad->buttons.push_back(back_button);
+
+			GamepadButton* start_button = new GamepadButton();
+			start_button->id = Gamepad::BUTTON_START;
+			start_button->down = false;  
+			gamepad->buttons.push_back(start_button);
+
+			GamepadButton* l3_button = new GamepadButton();
+			l3_button->id = Gamepad::BUTTON_L3;
+			l3_button->down = false;  
+			gamepad->buttons.push_back(l3_button);
+
+			GamepadButton* r3_button = new GamepadButton();
+			r3_button->id = Gamepad::BUTTON_R3;
+			r3_button->down = false;  
+			gamepad->buttons.push_back(r3_button);
+
+			GamepadButton* activate_button = new GamepadButton();
+			activate_button->id = Gamepad::BUTTON_R3;
+			activate_button->down = false;  
+			gamepad->buttons.push_back(activate_button);
+
+			GamepadButton* lt_button = new GamepadButton();
+			lt_button->id = Gamepad::BUTTON_LTRIGGER;
+			lt_button->down = false;  
+			gamepad->buttons.push_back(lt_button);
+
+			GamepadButton* rt_button = new GamepadButton();
+			rt_button->id = Gamepad::BUTTON_RTRIGGER;
+			rt_button->down = false;  
+			gamepad->buttons.push_back(rt_button);
+
+			// Axes
+			GamepadAxis* xAxis = new GamepadAxis();
+			xAxis->id = Gamepad::ANALOG_STICK_1_X;
+			gamepad->axes.push_back(xAxis);
+
+			GamepadAxis* yAxis = new GamepadAxis(); 
+			yAxis->id = Gamepad::ANALOG_STICK_1_Y;
+			gamepad->axes.push_back(yAxis);
+			 
+			GamepadAxis* rAxis = new GamepadAxis();
+			rAxis->id = Gamepad::ANALOG_STICK_2_X;
+			gamepad->axes.push_back(rAxis);
+			
+			GamepadAxis* uAxis = new GamepadAxis();
+			uAxis->id = Gamepad::ANALOG_STICK_2_Y;
+			gamepad->axes.push_back(uAxis);
+
+			// Triggers
+			GamepadAxis* zAxis = new GamepadAxis();
+			zAxis->id = Gamepad::TRIGGER_1;
+			gamepad->axes.push_back(zAxis);
+
+			GamepadAxis* vAxis = new GamepadAxis(); // rtrigger
+			vAxis->id = Gamepad::TRIGGER_2;
+			gamepad->axes.push_back(vAxis);
+
+			gamepad->numAxes = gamepad->axes.size(); 
+
+			ARK2D::getLog()->i(gamepad->toString());
+			container->getGamepads()->push_back(gamepad);
+
+			// Give event to game
+			Game* g = ARK2D::getGame();
+			GamepadListener* gl = NULL;
+			gl = dynamic_cast<GamepadListener*>(g);
+			if (gl != NULL) {
+				gl->gamepadConnected(gamepad);
+			}
+
+			float panelX = 500 + ((gamepad->id%3)*300);
+			float panelY = 120 + (floor(gamepad->id/3)*240);
+
+			SceneNode* root = ARK2D::getLog()->getScene()->getRoot();
+				TitledPanel* p = new TitledPanel();
+				p->setName(gamepad->name);
+				p->setTitle(gamepad->name);
+				p->setSize(300,240);
+				p->position.set(panelX, panelY);
+				p->scale.set(1.0f, 1.0f);
+				p->pivot.set(0.5f, 0.5f);
+
+					// BACK, START
+					GPButton* backButton = new GPButton("back");
+					backButton->gpid = gamepad->id;
+					backButton->gpbid = Gamepad::BUTTON_BACK;
+					backButton->setEvent((void*) &debugGamepadButtonPress);
+					backButton->setEventObj((void*) backButton);
+					backButton->setSize(30, 30);
+					backButton->position.set(-5.0f, 10.0f);
+					backButton->pivot.set(1.0, 0.5);
+					p->addChild(backButton);
+
+					GPButton* startButton = new GPButton("start");
+					startButton->gpid = gamepad->id;
+					startButton->gpbid = Gamepad::BUTTON_START;
+					startButton->setEvent((void*) &debugGamepadButtonPress);
+					startButton->setEventObj((void*) startButton);
+					startButton->setSize(30, 30);
+					startButton->position.set(5, 10);
+					startButton->pivot.set(0.0, 0.5);
+					p->addChild(startButton);
+
+					// DPAD
+					GPButton* dpadButtonLeft = new GPButton("left");
+					dpadButtonLeft->gpid = gamepad->id;
+					dpadButtonLeft->gpbid = Gamepad::DPAD_LEFT;
+					dpadButtonLeft->setEvent((void*) &debugGamepadButtonPress);
+					dpadButtonLeft->setEventObj((void*) dpadButtonLeft);
+					dpadButtonLeft->setSize(30, 30);
+					dpadButtonLeft->position.set(-100, 60);
+					dpadButtonLeft->pivot.set(0.5, 0.5);
+					p->addChild(dpadButtonLeft);
+
+					GPButton* dpadButtonRight = new GPButton("right");
+					dpadButtonRight->gpid = gamepad->id;
+					dpadButtonRight->gpbid = Gamepad::DPAD_RIGHT;
+					dpadButtonRight->setEvent((void*) &debugGamepadButtonPress);
+					dpadButtonRight->setEventObj((void*) dpadButtonRight);
+					dpadButtonRight->setSize(30, 30);
+					dpadButtonRight->position.set(-50, 60);
+					dpadButtonRight->pivot.set(0.5, 0.5);
+					p->addChild(dpadButtonRight);
+
+					GPButton* dpadButtonUp = new GPButton("up");
+					dpadButtonUp->gpid = gamepad->id;
+					dpadButtonUp->gpbid = Gamepad::DPAD_UP;
+					dpadButtonUp->setEvent((void*) &debugGamepadButtonPress);
+					dpadButtonUp->setEventObj((void*) dpadButtonUp);
+					dpadButtonUp->setSize(30, 30);
+					dpadButtonUp->position.set(-75, 35);
+					dpadButtonUp->pivot.set(0.5, 0.5);
+					p->addChild(dpadButtonUp);
+
+					GPButton* dpadButtonDown = new GPButton("down");
+					dpadButtonDown->gpid = gamepad->id;
+					dpadButtonDown->gpbid = Gamepad::DPAD_DOWN;
+					dpadButtonDown->setEvent((void*) &debugGamepadButtonPress);
+					dpadButtonDown->setEventObj((void*) dpadButtonDown);
+					dpadButtonDown->setSize(30, 30);
+					dpadButtonDown->position.set(-75, 85);
+					dpadButtonDown->pivot.set(0.5, 0.5);
+					p->addChild(dpadButtonDown);
+
+					// ABXY
+					GPButton* buttonB = new GPButton("B");
+					buttonB->gpid = gamepad->id;
+					buttonB->gpbid = Gamepad::BUTTON_B;
+					buttonB->setEvent((void*) &debugGamepadButtonPress);
+					buttonB->setEventObj((void*) buttonB);
+					buttonB->setSize(30, 30);
+					buttonB->position.set(100, 60);
+					buttonB->pivot.set(0.5, 0.5);
+					p->addChild(buttonB);
+
+					GPButton* buttonX = new GPButton("X");
+					buttonX->gpid = gamepad->id;
+					buttonX->gpbid = Gamepad::BUTTON_X;
+					buttonX->setEvent((void*) &debugGamepadButtonPress);
+					buttonX->setEventObj((void*) buttonX);
+					buttonX->setSize(30, 30);
+					buttonX->position.set(50, 60);
+					buttonX->pivot.set(0.5, 0.5);
+					p->addChild(buttonX);
+
+					GPButton* buttonY = new GPButton("Y");
+					buttonY->gpid = gamepad->id;
+					buttonY->gpbid = Gamepad::BUTTON_Y;
+					buttonY->setEvent((void*) &debugGamepadButtonPress);
+					buttonY->setEventObj((void*) buttonY);
+					buttonY->setSize(30, 30);
+					buttonY->position.set(75, 35);
+					buttonY->pivot.set(0.5, 0.5);
+					p->addChild(buttonY);
+
+					GPButton* buttonA = new GPButton("A");
+					buttonA->gpid = gamepad->id;
+					buttonA->gpbid = Gamepad::BUTTON_A;
+					buttonA->setEvent((void*) &debugGamepadButtonPress);
+					buttonA->setEventObj((void*) buttonA);
+					buttonA->setSize(30, 30);
+					buttonA->position.set(75, 85);
+					buttonA->pivot.set(0.5, 0.5);
+					p->addChild(buttonA);
+
+					// Shoulder buttons
+					GPButton* leftBumperButton = new GPButton("LB");
+					leftBumperButton->gpid = gamepad->id;
+					leftBumperButton->gpbid = Gamepad::BUTTON_LBUMPER;
+					leftBumperButton->setEvent((void*) &debugGamepadButtonPress);
+					leftBumperButton->setEventObj((void*) leftBumperButton);
+					leftBumperButton->setSize(60, 25);
+					leftBumperButton->position.set(-110.0f, -70.0f);
+					leftBumperButton->pivot.set(0.5, 0.5);
+					p->addChild(leftBumperButton);
+
+					GPButton* rightBumperButton = new GPButton("RB");
+					rightBumperButton->gpid = gamepad->id;
+					rightBumperButton->gpbid = Gamepad::BUTTON_RBUMPER;
+					rightBumperButton->setEvent((void*) &debugGamepadButtonPress);
+					rightBumperButton->setEventObj((void*) rightBumperButton);
+					rightBumperButton->setSize(60, 25);
+					rightBumperButton->position.set(110, -70);
+					rightBumperButton->pivot.set(0.5, 0.5);
+					p->addChild(rightBumperButton);
+
+					// L & R Axes
+					GPAxisButton* axisLeft = new GPAxisButton("L");
+					axisLeft->gpid = gamepad->id;
+					axisLeft->axisIdX = Gamepad::ANALOG_STICK_1_X;
+					axisLeft->axisIdY = Gamepad::ANALOG_STICK_1_Y;
+					axisLeft->setSize(55, 55);
+					axisLeft->position.set(-100, -20);
+					axisLeft->pivot.set(0.5, 0.5);
+					p->addChild(axisLeft);
+
+					GPAxisButton* axisRight = new GPAxisButton("R");
+					axisRight->gpid = gamepad->id;
+					axisRight->axisIdX = Gamepad::ANALOG_STICK_2_X;
+					axisRight->axisIdY = Gamepad::ANALOG_STICK_2_Y;
+					axisRight->setSize(55, 55);
+					axisRight->position.set(100, -20);
+					axisRight->pivot.set(0.5, 0.5);
+					p->addChild(axisRight);
+
+					// Remove gamepad button
+					GPButton* closeButton = new GPButton("X");
+					closeButton->gpid = gamepad->id;
+					closeButton->setEvent((void*) &debugGamepadClose);
+					closeButton->setEventObj((void*) closeButton);
+					closeButton->setSize(40, 40);
+					closeButton->position.set(p->getWidth()*0.5f, p->getHeight()*-0.5f);
+					closeButton->scale.set(0.5f, 0.5f);
+					closeButton->pivot.set(1.0, 0.0);
+					p->addChild(closeButton);
+		 
+
+
+			root->addChild(p);
+
 
 		}
 

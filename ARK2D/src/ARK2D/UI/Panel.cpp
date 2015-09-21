@@ -6,6 +6,8 @@
  */
 
 #include "Panel.h"
+#include "../Geometry/Cube.h"
+#include "../Graphics/Renderer.h"
 
 namespace ARK {
 	namespace UI {
@@ -32,12 +34,6 @@ namespace ARK {
 
 		void Panel::render() {
 			if (m_visible) {
-				//preRender();
-				renderChildren();
-				renderBorder();
-				//postRender();
-
-
 
 				string pos = "(0,0)";
 				Renderer* r = ARK2D::getRenderer();
@@ -59,6 +55,15 @@ namespace ARK {
 					worldpost2 += Cast::toString<float>(worldpos2.getY());
 				worldpost2 += ")";
 				r->drawString(worldpost2, 0, 40);
+				
+				//preRender();
+				renderChildren();
+				renderBorder();
+				//postRender();
+
+
+
+				
 			}
 		}
 		

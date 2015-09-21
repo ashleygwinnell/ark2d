@@ -13,9 +13,9 @@
 #include "AbstractUIComponent.h"
 
 #include "../Core/String.h"
-#include "../Controls/Input.h"
-#include "../Graphics/Renderer.h"
-#include "../Geometry/GigaRectangle.h"
+//#include "../Controls/Input.h"
+//#include "../Graphics/Renderer.h"
+//#include "../Geometry/GigaRectangle.h"
 
 namespace ARK {
 	namespace UI {
@@ -29,161 +29,35 @@ namespace ARK {
 			protected:
 				String m_text;
 				Image* m_image;
-				//unsigned int m_state; // 0 for mouse-off, 1 for mouse-over, 2 for mouse-down.
 				void* m_event;
 				void* m_eventObj;
 			
 			public:
-				Button():
-					AbstractUIComponent(),
-					m_text(""),
-					m_image(NULL),
-					m_event(NULL),
-					m_eventObj(NULL)
-				{
-
-				}
-				Button(string text):
-					AbstractUIComponent(),
-					m_text(text),
-					m_image(NULL),
-					m_event(NULL),
-					m_eventObj(NULL)
-				{
-
-				}
-				void setEvent(void* e) {
-					m_event = e;
-				}
-				void setEventObj(void* o) {
-					m_eventObj = o;
-				}
-				void* getEvent() {
-					return m_event;
-				}
-				void* getEventObj() {
-					return m_eventObj;
-				}
-				void setImage(Image* i) {
-					m_image = i;
-				}
-				virtual bool keyPressed(unsigned int key) {
-					if (!m_enabled) { return false; }
-
-					Input* i = ARK2D::getInput();
-					if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT
-						&& isPointerOver()) {
-							m_state = STATE_DOWN;
-							setFocussed(true);
-
-							//ARK2D::getLog()->e("set state to down");
-					}
-                    return false;
-				}
-
-				virtual bool keyReleased(unsigned int key) {
-					if (!m_enabled) { return false; }
-
-					Input* i = ARK2D::getInput();
-					if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT) {
-						//ARK2D::getLog()->e("released");
-						if (isPointerOver()) {
-							if (m_state == STATE_DOWN) {
-								m_state = STATE_OVER;
-								doEvent();
-								//ARK2D::getLog()->e("doEvent");
-							}
-							//ARK2D::getLog()->e(StringUtil::append("state: ", m_state));
-						} else {
-							m_state = STATE_OFF;
-							setFocussed(false);
-							//ARK2D::getLog()->e("pointer wasn't over..?");
-						}
-					}
-                    return false;
-				}
-				virtual bool isPointerOver() {
-					Input* i = ARK2D::getInput();
-					//Vector3<float> worldpos = localPositionToGlobalPosition();
-					return isGlobalPositionInBounds(i->getMouseX(), i->getMouseY());// GigaRectangle<int>::s_contains(worldpos.getX(), worldpos.getY(), (signed int) (m_width), (signed int)(m_height), (signed int) (i->getMouseX()), (signed int) (i->getMouseY()));
-				}
-
-				virtual void doEvent() {
-					if (m_event != NULL) {
-						if (m_eventObj == NULL) {
-							
-							void (*pt)() = (void(*)()) m_event;
-							//typedef void fnct();
-							//fnct* pt = (fnct*) m_event;
-							pt();
-						} else {
-							void (*pt)(void*) = (void(*)(void*)) m_event;
-							pt(m_eventObj);
-						}
-					}
-				}
-
-
-				virtual bool mouseMoved(int x, int y, int oldx, int oldy) {
-					return AbstractUIComponent::mouseMoved(x, y, oldx, oldy);
-				}
-				void setText(string s) {
-					m_text.clear();
-					m_text += s;
-				}
-				const String& getText() {
-					return m_text;
-				}
+				Button();
+				Button(string text);
 				
-				virtual void render() {
+				void setEvent(void* e);
+				void setEventObj(void* o);
+				void* getEvent();
+				void* getEventObj();
+				void setImage(Image* i);
 
-					if (!m_visible) { return; }
+				virtual bool isPointerOver();
 
-					//AbstractUIComponent::preRender();
+				virtual void doEvent();
 
-					Renderer* g = ARK2D::getRenderer();
-					renderBackground();
+				void setText(string s);
+				const String& getText();
+				
+				virtual void render();
+				virtual void renderBackground();
+				virtual void renderText(int x, int y);
+				virtual void renderImage(int x, int y);
+				virtual void renderOverlay();
 
-					float renderTextX = (m_width/2) - (g->getFont()->getStringWidth(m_text.get())/2);
-					float renderTextY = (m_height/2) - (g->getFont()->getLineHeight()/2);
-					if (m_state == STATE_DOWN) {
-						renderTextX += 2;
-						renderTextY += 2;
-					}
-					renderText((int) renderTextX, (int) renderTextY);
-
-					if (m_image != NULL) {
-						int rx = int( (m_width/2)) - int(m_image->getWidth()/2);
-						int ry = int( (m_height/2)) - int(m_image->getHeight()/2);
-						renderImage(rx, ry);
-					}
-
-					renderOverlay();
-
-					//AbstractUIComponent::postRender();
-					g->setDrawColor(Color::white);
-				}
-				virtual void renderBackground() {
-					Renderer* g = ARK2D::getRenderer();
-					g->setDrawColor(Color::black_50a);
-					g->fillRect(0, 0, m_width, m_height);
-				}
-				virtual void renderText(int x, int y) {
-					Renderer* g = ARK2D::getRenderer();
-					g->setDrawColor(Color::white);
-					g->drawString(m_text.get(), x, y);
-				}
-				virtual void renderImage(int x, int y) {
-					m_image->draw(x, y);
-				}
-				virtual void renderOverlay() {
-					Renderer* g = ARK2D::getRenderer();
-					g->setDrawColor(Color::white);
-					if (m_state == STATE_OVER || m_state == STATE_DOWN) {
-						g->setDrawColor(Color::white_50a);
-					}
-					g->drawRect(0, 0, m_width, m_height);
-				}
+				virtual bool keyPressed(unsigned int key);
+				virtual bool keyReleased(unsigned int key);
+				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 		};
 	}
 }

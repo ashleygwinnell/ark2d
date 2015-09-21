@@ -9,7 +9,7 @@
 #define ARK_GEOMETRY_VECTOR3_H_
 
 #include "../ARK2D.h" 
-#include "../Util/Log.h"
+//#include "../Util/Log.h"
 #include "../Core/String.h"
 
 namespace ARK {

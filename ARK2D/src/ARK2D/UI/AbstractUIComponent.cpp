@@ -6,6 +6,8 @@
  */
 
 #include "AbstractUIComponent.h"
+#include "../Geometry/Cube.h"
+#include "../Core/GameContainer.h"
 
 namespace ARK {
 	namespace UI {

@@ -11,7 +11,8 @@
 #include "../ARK2D.h"
 #include "Gamepad.h" 
 #include "../Util/Log.h" 
-#include "../Core/GameContainer.h" 
+#include "../Core/GameContainer.h"
+#include "../Core/Game.h"
  
 #ifdef ARK2D_ANDROID
 	#include "../Core/Platform/GameContainerAndroid.h" 
@@ -231,6 +232,28 @@ namespace ARK {
 				} 
 				return found;
 			#endif
+		}
+		void Gamepad::moveAxis(unsigned int axis, float val) {
+			bool found = false;
+			for(unsigned int i = 0; i < axes.size(); ++i) {
+				if (axes.at(i)->id == axis) {
+					axes.at(i)->value = val;
+					found = true;
+					break;
+				}
+			} 
+
+			if (!found) {
+				ARK2D::getLog()->e(StringUtil::append("Could not find Gamepad axis (on move) with id: ", axis));
+				return;
+			}
+
+			Game* g = ARK2D::getGame();
+			GamepadListener* gl = NULL;
+			gl = dynamic_cast<GamepadListener*>(g);
+			if (gl != NULL) {
+				gl->axisMoved(this, axis, val);
+			}
 		}
 		void Gamepad::pressButton(unsigned int b) {
 
@@ -684,79 +707,8 @@ namespace ARK {
 		
 
 		unsigned int Gamepad::convertButtonToId(Gamepad* gamepad, unsigned int button, bool printInfo) {
-			#if defined(ARK2D_MACINTOSH) 
-				/*bool isPS3 = StringUtil::str_contains(gamepad->name, "PLAYSTATION(R)3");
-				if (isPS3) {
-					//ARK2D::getLog()->v("ps3 convertButtonToId");
-					switch(button) {
-						case BUTTON_LBUMPER:
-							return 10;
-						case BUTTON_RBUMPER:
-							return 11; 
-						case BUTTON_BACK:
-							return 0;
-						case BUTTON_L3:
-							return 1;
-						case BUTTON_R3:
-							return 2;
-
-						case BUTTON_START:
-							return 3;
-						case DPAD_UP:
-							return 4;
-						case DPAD_RIGHT: 
-							return 5;
-						case DPAD_DOWN:
-							return 6;
-						case DPAD_LEFT:
-							return 7;
-						
-						case BUTTON_A:
-							return 14;
-						case BUTTON_B:
-							return 13;
-						
-						case BUTTON_X:
-							return 15;
-						case BUTTON_ACTIVATE: 
-							return 16;
-						case BUTTON_Y:
-							return 12;
-					}
-				} 
-				switch (button) {
-					case DPAD_UP:
-						return 5;
-					case DPAD_DOWN:
-						return 6;
-					case DPAD_LEFT:
-						return 7; 
-					case DPAD_RIGHT:
-						return 8;
-					case BUTTON_START:
-						return 9; 
-					case BUTTON_BACK:
-						return 10;
-					case BUTTON_L3:
-						return 11;
-					case BUTTON_R3:
-						return 12;
-					case BUTTON_LBUMPER:
-						return 13;
-					case BUTTON_RBUMPER:
-						return 14; 
-					case BUTTON_ACTIVATE: 
-						return 15;
-					case BUTTON_A:
-						return 16;
-					case BUTTON_B:
-						return 17;
-					case BUTTON_X:
-						return 18;
-					case BUTTON_Y:
-						return 19;
-				}*/
-			#elif defined(ARK2D_ANDROID)
+			
+			#if defined(ARK2D_ANDROID)
 				if (ARK2D::getContainer()->getPlatformSpecific()->getPluggable()->ouya_isOuya()) {
 					switch (button) {
 						case DPAD_UP:

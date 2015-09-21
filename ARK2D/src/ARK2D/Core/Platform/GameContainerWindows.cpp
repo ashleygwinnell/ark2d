@@ -930,27 +930,12 @@
 								triggerValue = 0.0f;
 
 								// we have to set the left axis to zero in this circumstance too. 
-								leftAxis->value = 0.0f;
-								Game* g = ARK2D::getGame();
-								GamepadListener* gl = NULL;
-								gl = dynamic_cast<GamepadListener*>(g);
-								if (gl != NULL) {
-									gl->axisMoved(gamepad, Gamepad::TRIGGER_1, leftAxis->value);
-								}
+								gamepad->moveAxis(Gamepad::TRIGGER_1, 0.0f);
 							}
 						} 
 					}
 
-					axis->value = triggerValue;
-					ARK2D::getLog()->e(StringUtil::appendf("axis val: ", axis->value));
-
-					Game* g = ARK2D::getGame();
-					GamepadListener* gl = NULL;
-					gl = dynamic_cast<GamepadListener*>(g);
-					if (gl != NULL) {
-						gl->axisMoved(gamepad, newAxisIndex, axis->value);
-					}
-
+					gamepad->moveAxis(axis->id, triggerValue);
 
 					return; 
 					

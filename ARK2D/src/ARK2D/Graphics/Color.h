@@ -10,7 +10,7 @@
 #define COLOR_H_
 
 #include "../ARK2D.h"
-#include "../Util/MathUtil.h"
+
 
 namespace ARK {
 	namespace Graphics {

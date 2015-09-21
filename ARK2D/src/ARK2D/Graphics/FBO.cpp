@@ -5,7 +5,9 @@
 #include "../ARK2D.h"
 #include "../Core/GameContainer.h"
 #include "Renderer.h" 
+#include "Image.h"
 #include "TextureStore.h"
+
  
 namespace ARK { 
 	namespace Graphics {

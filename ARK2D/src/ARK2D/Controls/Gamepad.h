@@ -169,6 +169,9 @@ namespace ARK {
 				void releaseButton(unsigned int key);
 				bool hasButton(unsigned int key);
 
+				void moveAxis(unsigned int axis, float val);
+				
+
 				void clearButtonPressedRecord();
 
 				string toString();
