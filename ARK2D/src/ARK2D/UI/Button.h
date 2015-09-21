@@ -12,11 +12,6 @@
 #include "../Namespaces.h"
 #include "AbstractUIComponent.h"
 
-#include "../Core/String.h"
-//#include "../Controls/Input.h"
-//#include "../Graphics/Renderer.h"
-//#include "../Geometry/GigaRectangle.h"
-
 namespace ARK {
 	namespace UI {
 		/*!

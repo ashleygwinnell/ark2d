@@ -238,6 +238,7 @@ namespace ARK {
 		}
 		
 		void SceneNode::preRender() {
+			if (!visible) { return; }
 			ARK::Geometry::Cube* bounds = getBounds();
 			Renderer* r = ARK2D::getRenderer();
 			r->pushMatrix();
@@ -247,9 +248,11 @@ namespace ARK {
             r->scale(scale.getX(), scale.getY(), scale.getZ());
 		}
 		void SceneNode::render() {
+			if (!visible) { return; }
 			renderChildren();
 		}
 		void SceneNode::renderChildren() {
+			if (!visible) { return; }
 			Renderer* r = ARK2D::getRenderer();
    			ARK::Geometry::Cube* bounds = getBounds();
    			r->translate(pivot.getX() * bounds->getWidth() * scale.getX(), pivot.getY() * bounds->getHeight() * scale.getY(), pivot.getZ() * bounds->getDepth() * scale.getZ());
@@ -261,6 +264,7 @@ namespace ARK {
 			r->translate(pivot.getX() * bounds->getWidth() * scale.getX() * -1.0f, pivot.getY() * bounds->getHeight() * scale.getY() * -1.0f, pivot.getZ() * bounds->getDepth() * scale.getZ() * -1.0f);
 		}
 		void SceneNode::postRender() {
+			if (!visible) { return; }
 			Renderer* r = ARK2D::getRenderer();
 			r->popMatrix();
 		}
@@ -310,6 +314,12 @@ namespace ARK {
 		}
 		SceneNode::~SceneNode() {
 			
+		}
+		void SceneNode::setVisible(bool b) {
+			visible = b;
+		}
+		void SceneNode::setVisibleStatic(SceneNode* obj, bool b) {
+			obj->setVisible(b);
 		}
 		
 

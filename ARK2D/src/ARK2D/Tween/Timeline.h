@@ -101,10 +101,22 @@ namespace ARK {
 				double* obj;
 				double fromValue;
 				double toValue;
+				bool started;
 				TweenDoubleValue();
 				virtual void update();
 				virtual string toString();
 				virtual ~TweenDoubleValue();
+		};
+		class ARK2D_API TweenFloatValue : public TweenValue {
+			public:
+				float* obj;
+				float fromValue;
+				float toValue;
+				bool started;
+				TweenFloatValue();
+				virtual void update();
+				virtual string toString();
+				virtual ~TweenFloatValue();
 		};
 		class ARK2D_API TweenVector3Object  : public TweenValue {
 			public:
@@ -115,6 +127,7 @@ namespace ARK {
 				float toX;
 				float toY;
 				float toZ;
+				bool started;
 				TweenVector3Object();
 				virtual void update();
 				virtual string toString();
@@ -127,10 +140,20 @@ namespace ARK {
 				float fromY;
 				float toX;
 				float toY;
+				bool started;
 				TweenVector2Object();
 				virtual void update();
 				virtual string toString();
 				virtual ~TweenVector2Object();
+		};
+		class ARK2D_API TweenObjectFunction  : public TweenValue {
+			public:
+				void* obj;
+				void* func;
+				TweenObjectFunction();
+				virtual void update();
+				virtual string toString();
+				virtual ~TweenObjectFunction();
 		};
 
 
@@ -179,9 +202,11 @@ namespace ARK {
 				unsigned int count();
 				unsigned int countRunning();
 
+				void staticEvent(void* obj, void* func, float delay = 1.0f);
 				void tweenVector2(Vector2<float>* obj, float x, float y, float duration = 1.0f, unsigned int easing = Easing::LINEAR, float delay = 0.0f);
 				void tweenVector3(Vector3<float>* obj, float x, float y, float z, float duration = 1.0f, unsigned int easing = Easing::LINEAR, float delay = 0.0f);
 				void tweenDouble(double* obj, double d, float duration = 1.0f, unsigned int easing = Easing::LINEAR, float delay = 0.0f);
+				void tweenFloat(float* obj, float d, float duration = 1.0f, unsigned int easing = Easing::LINEAR, float delay = 0.0f);
 
 				AnimationEvent* getKeyedIndependentEvent(string key);
 

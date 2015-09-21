@@ -22,7 +22,7 @@ namespace ARK {
 			m_event(NULL),
 			m_eventObj(NULL)
 		{
-
+			
 		}
 		Button::Button(string text):
 			AbstractUIComponent(),
@@ -119,12 +119,10 @@ namespace ARK {
 		}
 		
 		void Button::render() {
-
 			if (!m_visible) { return; }
 
-			//AbstractUIComponent::preRender();
+			if (parent == NULL) { preRender(); }
 
-			Renderer* g = ARK2D::getRenderer();
 			renderBackground();
 
 			float renderTextX = (m_width/2);// - (g->getFont()->getStringWidth(m_text.get())/2);
@@ -143,7 +141,9 @@ namespace ARK {
 
 			renderOverlay();
 
-			//AbstractUIComponent::postRender();
+			if (parent == NULL) { postRender(); }
+
+			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white);
 		}
 		void Button::renderBackground() {

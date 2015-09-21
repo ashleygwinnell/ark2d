@@ -9,6 +9,7 @@
 #include "../Graphics/Image.h"
 #include "../Graphics/Renderer.h"
 #include "../Util/Containers/Pool.h"
+#include "../Audio/Sound.h"
 
 asIScriptEngine* AngelScriptUtil::s_engine = NULL;
 

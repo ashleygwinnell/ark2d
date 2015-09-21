@@ -77,6 +77,9 @@ namespace ARK {
 				virtual void postRender();
 				virtual void renderChildren();
 
+				void setVisible(bool b);
+				static void setVisibleStatic(SceneNode* obj, bool b);
+
 				virtual ARK::Geometry::Cube* getBounds();
 
 				virtual bool keyPressed(unsigned int key);

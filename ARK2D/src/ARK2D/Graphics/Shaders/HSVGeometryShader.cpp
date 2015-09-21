@@ -7,7 +7,7 @@
 
 #include "../Shader.h"
 #include "HSVGeometryShader.h"
-#include "Image.h"
+#include "../Image.h"
 
 namespace ARK { 
 	namespace Graphics { 

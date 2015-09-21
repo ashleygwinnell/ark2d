@@ -2558,6 +2558,7 @@ namespace ARK {
 		}
 
 		void Image::render() {
+			if (!visible) { return; }
 			/*double tempRotation = SceneNode::rotation;
             SceneNode::rotation = 0.0f;
             draw(

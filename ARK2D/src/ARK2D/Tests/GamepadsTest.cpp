@@ -409,8 +409,12 @@ namespace ARK {
 			m_autoConfig->setText("Configure");
 			m_autoConfig->setSize(100, 30);
 			m_autoConfig->setEvent((void*) &configureButtonEvent);
-			m_autoConfig->setMargin(10);
+			m_autoConfig->setMargin(10); 
 			m_autoConfig->setLocationByCenter(container->getWidth() - 85, 150);
+ 
+			// scene->addChild(m_alertButtons);
+			// scene->addChild(m_alertAxes);
+			// scene->addChild(m_autoConfig);
 		}
 		void GamepadsTestGameState::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {
 

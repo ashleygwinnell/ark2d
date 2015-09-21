@@ -36,9 +36,11 @@ namespace ARK {
 		}
 
 		void CheckBox::render() {
+			if (parent == NULL) { preRender(); }
 			renderBackground();
 			if (m_checked) { renderTick(); }
 			renderOverlay();
+			if (parent == NULL) { postRender(); }
 		}
 		void CheckBox::renderTick() {
 			Renderer* g = ARK2D::getRenderer();

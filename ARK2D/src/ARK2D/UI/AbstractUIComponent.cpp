@@ -20,7 +20,7 @@ namespace ARK {
 			m_height(1),
 			m_padding(0,0,0,0),
 			m_margin(0,0,0,0), 
-			m_clipping(true),
+			m_clipping(false),
 			m_visible(true),
 			m_enabled(true),
 			m_state(0)
@@ -112,14 +112,15 @@ namespace ARK {
 		}
 		bool AbstractUIComponent::isEnabled() {
 			return m_enabled;
-		}
+		} 
 
 		void AbstractUIComponent::preRender() {
+			// TODO: clipping does not work beacuse of screen space coordinates and what not.
 			if (m_clipping) {
 				Renderer* r = ARK2D::getRenderer();
 				Vector3<float> worldpos = localPositionToGlobalPosition();
 				r->setScissorTestEnabled(true);
-				r->scissor(worldpos.m_x, worldpos.m_y, m_width, m_height);
+				r->scissor(worldpos.m_x - m_width*pivot.getX()*scale.getX(), worldpos.m_y - m_height * pivot.getY()*scale.getY(), m_width, m_height);
 			}
 			SceneNode::preRender();
 		}

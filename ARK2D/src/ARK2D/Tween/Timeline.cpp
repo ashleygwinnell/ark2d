@@ -258,7 +258,10 @@ namespace ARK {
 		}
 
 		// Tween Values
-		TweenValue::TweenValue() {
+		TweenValue::TweenValue():
+			timer(0.0f),
+			duration(1.0f),
+			easing(Easing::LINEAR) {
 
 		}
 		bool TweenValue::isRunning() {
@@ -293,12 +296,18 @@ namespace ARK {
 
 			tweenValues.push_back(tween);
 		}
-		TweenVector3Object::TweenVector3Object():TweenValue() {
+		TweenVector3Object::TweenVector3Object():TweenValue(),started(false) {
 
 		}
 		void TweenVector3Object::update() {
 			TweenValue::update();
 			if (timer >= 0.0f) { 
+				if (!started) { 
+					fromX = obj->getX();
+					fromY = obj->getY();
+					fromZ = obj->getZ();
+					started = true;
+				}
 				obj->setX( Easing::easebetween(easing, timer, fromX, toX, duration) );
 				obj->setY( Easing::easebetween(easing, timer, fromY, toY, duration) );
 				obj->setZ( Easing::easebetween(easing, timer, fromZ, toZ, duration) );
@@ -336,12 +345,18 @@ namespace ARK {
 			tween->easing = easing;
 			tweenValues.push_back(tween);
 		}
-		TweenVector2Object::TweenVector2Object():TweenValue() {
+		TweenVector2Object::TweenVector2Object():TweenValue(),started(false) {
 
 		}
 		void TweenVector2Object::update() {
 			TweenValue::update();
 			if (timer >= 0.0f) { 
+				if (!started) { 
+					fromX = obj->getX();
+					fromY = obj->getY();
+					started = true;
+				}
+
 				obj->setX( Easing::easebetween(easing, timer, fromX, toX, duration) );
 				obj->setY( Easing::easebetween(easing, timer, fromY, toY, duration) );
 			}
@@ -375,12 +390,17 @@ namespace ARK {
 
 			tweenValues.push_back(tween);
 		}
-		TweenDoubleValue::TweenDoubleValue():TweenValue(){
+		TweenDoubleValue::TweenDoubleValue():TweenValue(),started(false){
 
 		}
 		void TweenDoubleValue::update() {
 			TweenValue::update();
 			if (timer >= 0.0f) { 
+				if (!started) { 
+					fromValue = (*obj);
+					started = true;
+				}
+
 				(*obj) = Easing::easebetween(easing, timer, fromValue, toValue, duration);
 			}
 		}
@@ -388,6 +408,75 @@ namespace ARK {
 			return "TweenDoubleValue todo";
 		}
 		TweenDoubleValue::~TweenDoubleValue() {
+
+		}
+
+		// Tween floats.
+		void Timeline::tweenFloat(float* obj, float d, float duration, unsigned int easing, float delay) {
+			TweenFloatValue* tween = new TweenFloatValue();
+			tween->obj = obj;
+			tween->fromValue = *obj;
+			tween->toValue = d;
+			tween->timer = delay * -1.0f;
+			tween->duration = duration;
+			tween->easing = easing;
+
+			tweenValues.push_back(tween);
+		}
+		TweenFloatValue::TweenFloatValue():TweenValue(),started(false){
+
+		}
+		void TweenFloatValue::update() {
+			TweenValue::update();
+			if (timer >= 0.0f) { 
+				if (!started) { 
+					fromValue = (*obj);
+					started = true;
+				}
+
+				(*obj) = Easing::easebetween(easing, timer, fromValue, toValue, duration);
+			}
+		}
+		string TweenFloatValue::toString() {
+			return "TweenFloatValue todo";
+		}
+		TweenFloatValue::~TweenFloatValue() {
+
+		}
+
+		// Execute function on an object. 
+		void Timeline::staticEvent(void* obj, void* func, float delay) {
+			TweenObjectFunction* tween = new TweenObjectFunction();
+			tween->obj = obj;
+			tween->func = func;
+			tween->timer = delay * -1.0f;
+			tween->duration = 0.0f;
+			tweenValues.push_back(tween);
+		}
+		TweenObjectFunction::TweenObjectFunction():
+			TweenValue()
+			{
+
+		}
+		void TweenObjectFunction::update() {
+			TweenValue::update();
+			if (timer >= 0.0f) { 
+				if (func != NULL) {
+					if (obj == NULL) {
+						void (*pt)() = (void(*)()) func;
+						pt();
+					} else {
+						void (*pt)(void*) = (void(*)(void*)) func;
+						pt(obj);
+					}
+				}
+				timer = duration;
+			}
+		}
+		string TweenObjectFunction::toString() {
+			return "TweenObjectFunction todo";
+		}
+		TweenObjectFunction::~TweenObjectFunction() {
 
 		}
 
