@@ -10,6 +10,7 @@
 #include "../../Util/Log.h" 
 #include "../../Graphics/Color.h"
 #include "../../Graphics/Image.h"
+#include "../../Audio/Sound.h"
 
 #ifdef ARK2D_MACINTOSH  
  
@@ -152,6 +153,42 @@
 					//} 
 					
 					m_platformSpecific.m_window = window;
+
+
+					// Create menu bar(ish)
+					/*NSMenu* mainMenu = [[NSApplication sharedApplication] mainMenu];
+					NSMenu* appMenu = [[mainMenu itemAtIndex:0] submenu];
+                    for (NSMenuItem *item in [appMenu itemArray]) {
+                        NSLog(@"%@", [item title]);
+                    }
+                    
+                    [appMenu addItemWithTitle:@"About" action:@selector(aboutMenu:) keyEquivalent:@""];
+                    for (NSMenuItem *item in [appMenu itemArray]) {
+                        NSLog(@"%@", [item title]);
+                    }*/
+					NSApplication* app = [NSApplication sharedApplication];
+                    NSMenu* appMenu = [[NSMenu alloc] initWithTitle:@""];
+
+                    // about
+                    NSString* firstString = @"About ";
+                    NSString* nameStr = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
+                    NSString* aboutMenuString = [firstString stringByAppendingString:nameStr];
+                    NSMenu* menu = [[NSMenu alloc] initWithTitle: @""];
+                    NSMenuItem* mi = [menu addItemWithTitle:@"" action:nil keyEquivalent:@""];
+                    [appMenu addItemWithTitle:aboutMenuString action:@selector(aboutMenu:) keyEquivalent:@""];
+                    
+                    // separator
+                    [appMenu addItem:[NSMenuItem separatorItem]];
+                    
+                    // close
+                    NSString* firstStringQ = @"Quit ";
+                    NSString* quitMenuString = [firstStringQ stringByAppendingString:nameStr];
+                    [appMenu addItemWithTitle:quitMenuString action:@selector(quitMenu:) keyEquivalent:@"q"];
+                    
+                    [mi setSubmenu:appMenu];
+                    
+                    [app setMainMenu:menu];
+
 					
 					NSOpenGLContext* context = m_platformSpecific.createGLContext();
 					m_platformSpecific.makeContextCurrent(window, context);

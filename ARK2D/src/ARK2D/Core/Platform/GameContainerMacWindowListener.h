@@ -40,5 +40,8 @@ using namespace ARK::Core;
 - (BOOL) becomeFirstResponder;
 - (BOOL) resignFirstResponder;
 
+-(void)aboutMenu:(NSEvent*)theEvent;
+-(void)quitMenu:(NSEvent*)theEvent;
+
 
 @end

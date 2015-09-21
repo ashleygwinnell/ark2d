@@ -177,6 +177,16 @@ static int darwin_scancode_table[] = {
 	[pool release];
 }
 
+-(void)aboutMenu:(NSEvent*)theEvent {
+	NSString* str = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleGetInfoString"];
+	std::string bar([str UTF8String]);
+	ErrorDialog::createAndShow(bar);
+}
+-(void)quitMenu:(NSEvent*)theEvent {
+	GameContainer* container = ARK2D::getContainer();
+	container->close();
+}
+
 - (BOOL)windowShouldClose:(id)sender
 {
     //Monocle::Game::Quit();
