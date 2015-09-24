@@ -18,6 +18,7 @@ namespace ARK {
 	namespace Spine {
 
 		class SkeletalAnimationMixer;
+		class Skeleton;
 
 		class SpineCallback {
 			public:
@@ -26,6 +27,11 @@ namespace ARK {
 				void* eventFunction;
 				const char* animationName;
 				unsigned int trackIndex;
+		};
+
+		class ARK2D_API SpineUtil {
+			public:
+				static void transformSceneNodeFromBoneName(SceneNode* node, Skeleton* skeleton, string boneName);
 		};
 
 		class ARK2D_API Skeleton : public ARK::Core::Resource 

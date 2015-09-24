@@ -171,6 +171,7 @@ namespace ARK {
 		* 
 		* @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		*/
+		//class ARK2D_API RendererBatchItem_StencilStart {
 		class ARK2D_API RendererBatchItem_GeomTri {
 			public:
 				float vertexData[6];
@@ -184,10 +185,15 @@ namespace ARK {
 				unsigned char colorData[12];
 				RendererBatchItem_TexTri();
 		};
+
 		class ARK2D_API RendererBatchItem {
 			public:
 				static const unsigned int TYPE_GEOMETRY_TRIS = 0;
 				static const unsigned int TYPE_TEXTURE_TRIS = 1;
+				static const unsigned int TYPE_STENCIL_ENABLE = 2;
+				static const unsigned int TYPE_STENCIL_START = 3;
+				static const unsigned int TYPE_STENCIL_STOP = 4; 
+				static const unsigned int TYPE_STENCIL_DISABLE = 5;
 
 			public:
 				vector<RendererBatchItem_GeomTri> geomtris;
@@ -200,6 +206,7 @@ namespace ARK {
 				RendererBatchItem();
 				void clear();
 				void render();
+				string toString();
 				~RendererBatchItem();
 
 			private:
@@ -257,6 +264,7 @@ namespace ARK {
 					unsigned char c3r, unsigned char c3g, unsigned char c3b, unsigned char c3a,
 					unsigned char c4r, unsigned char c4g, unsigned char c4b, unsigned char c4a);
 
+				string toString();
 				void render(); 
 				~RendererBatch();
 		};

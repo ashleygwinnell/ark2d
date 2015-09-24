@@ -16,6 +16,23 @@ namespace ARK {
 
 		void* Skeleton::s_soundEventCallback = NULL;
 
+		void SpineUtil::transformSceneNodeFromBoneName(SceneNode* node, Skeleton* skeleton, string boneName) {
+			spBone* bone = skeleton->getBone(boneName);
+
+			float thisX = bone->x;
+			float thisY = bone->y*-1.0f;
+			float thisRotation = bone->rotation;
+			if (bone->parent && bone->data->inheritRotation && bone->parent == skeleton->getRoot()) {
+				thisX += skeleton->getX();
+				thisY += skeleton->getY();
+				thisRotation -= 90;
+			}
+
+			node->position.set(thisX, thisY);
+			node->scale.set(bone->scaleY, bone->scaleX);
+			node->rotation = thisRotation;
+		}
+
 		void spineCallback(spAnimationState* state, int trackIndex, spEventType type, spEvent* event, int loopCount) 
 		{
 			spTrackEntry* entry = spAnimationState_getCurrent(state, trackIndex);

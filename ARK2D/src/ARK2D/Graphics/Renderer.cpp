@@ -707,6 +707,7 @@ namespace ARK {
 			#if defined(ARK2D_RENDERER_DIRECTX)
 				renderDX();
 			#else 
+				Renderer* r = ARK2D::getRenderer();
 				if (m_type == TYPE_GEOMETRY_TRIS) 
 				{
 					unsigned int tsz = geomtris.size();
@@ -730,7 +731,7 @@ namespace ARK {
 						memcpy(&all_colorData[i*12], &geomtris[i].colorData, sizeof(unsigned char) * 12);
 					}
 
-					ARK2D::getRenderer()->fillTriangles(&all_vertexData[0], &all_colorData[0], tsz, true);
+					r->fillTriangles(&all_vertexData[0], &all_colorData[0], tsz, true);
 
 					//#ifdef ARK2D_WINDOWS_VS
 					//	free(all_vertexData);
@@ -763,16 +764,30 @@ namespace ARK {
 						memcpy(&all_colorData[i*12], &textris[i].colorData, sizeof(unsigned char) * 12);
 					}
 
-					ARK2D::getRenderer()->texturedTriangles(m_textureId, &all_vertexData[0], &all_textureData[0], &all_colorData[0], tsz, true);
+					r->texturedTriangles(m_textureId, &all_vertexData[0], &all_textureData[0], &all_colorData[0], tsz, true);
 
 					//#ifdef ARK2D_WINDOWS_VS
 					//	free(all_vertexData);
 					//	free(all_textureData);
 					//	free(all_colorData);
 					//#endif
+				} else if (m_type == TYPE_STENCIL_ENABLE) {
+					r->enableStencil();
+				} else if (m_type == TYPE_STENCIL_START) {
+					r->startStencil();
+				} else if (m_type == TYPE_STENCIL_STOP) {
+					r->stopStencil();
+				} else if (m_type == TYPE_STENCIL_DISABLE) {
+					r->disableStencil();
 				}
 				clear();
 			#endif
+		}
+		string RendererBatchItem::toString() {
+			string s = string("{");
+				s += string("m_type: \""); s += Cast::toString<unsigned int>(m_type); s += string("\"");
+			s += string("}");
+			return s;
 		}
 		RendererBatchItem::~RendererBatchItem() { 
 			clear();
@@ -813,6 +828,17 @@ namespace ARK {
 			startedAtMatrixIndex(0)
 		{
 
+		}
+		string RendererBatch::toString() {
+			string s = string("{\n");
+			s += string("items:\" [");
+			for(unsigned int i = 0; i < items.size(); ++i) {
+				s += items[i].toString();
+				s += string("\n");
+			}
+			s += string("]\n"); 
+ 			s += string("}");
+			return s;
 		}
 		void RendererBatch::setEnabled(bool b, bool fromSceneGraph) { 
 			bool wasEnabled = enabled;
@@ -864,7 +890,10 @@ namespace ARK {
 			unsigned char c2r, unsigned char c2g, unsigned char c2b, unsigned char c2a,
 			unsigned char c3r, unsigned char c3g, unsigned char c3b, unsigned char c3a) 
 		{
-			if (items.size() == 0 || items.at(items.size()-1).m_type == RendererBatchItem::TYPE_TEXTURE_TRIS) {
+			if (items.size() == 0 || 
+				//items.at(items.size()-1).m_type == RendererBatchItem::TYPE_TEXTURE_TRIS
+				items.at(items.size()-1).m_type != RendererBatchItem::TYPE_GEOMETRY_TRIS
+				) {
 				items.push_back(RendererBatchItem());
 			}
 
@@ -915,7 +944,8 @@ namespace ARK {
 			unsigned char c4r, unsigned char c4g, unsigned char c4b, unsigned char c4a) 
 		{
 			if (items.size() == 0 || 
-				items.at(items.size()-1).m_type == RendererBatchItem::TYPE_TEXTURE_TRIS
+				//items.at(items.size()-1).m_type == RendererBatchItem::TYPE_TEXTURE_TRIS
+				items.at(items.size()-1).m_type != RendererBatchItem::TYPE_GEOMETRY_TRIS
 				) {
 				items.push_back(RendererBatchItem());
 			}
@@ -1001,10 +1031,13 @@ namespace ARK {
 			unsigned char c3r, unsigned char c3g, unsigned char c3b, unsigned char c3a) 
 		{
 			if (items.size() == 0 || 
-				items.at(items.size()-1).m_type == RendererBatchItem::TYPE_GEOMETRY_TRIS || 
-				items.at(items.size()-1).m_textureId != texId ||
-                items.at(items.size()-1).m_shaderId != RendererState::s_shaderId
-				) {
+				//items.at(items.size()-1).m_type == RendererBatchItem::TYPE_GEOMETRY_TRIS || 
+				items.at(items.size()-1).m_type != RendererBatchItem::TYPE_TEXTURE_TRIS || 
+				((
+					items.at(items.size()-1).m_type == RendererBatchItem::TYPE_TEXTURE_TRIS) && 
+					(items.at(items.size()-1).m_textureId != texId ||
+                	 items.at(items.size()-1).m_shaderId != RendererState::s_shaderId)
+				)) {
 				items.push_back(RendererBatchItem());
 			}
 
@@ -1080,11 +1113,20 @@ namespace ARK {
 			unsigned char c3r, unsigned char c3g, unsigned char c3b, unsigned char c3a,
 			unsigned char c4r, unsigned char c4g, unsigned char c4b, unsigned char c4a) {
 
-			if (items.size() == 0 || 
+			/*if (items.size() == 0 || 
 				items.at(items.size()-1).m_type == RendererBatchItem::TYPE_GEOMETRY_TRIS ||
 				items.at(items.size()-1).m_textureId != texId ||
 				items.at(items.size()-1).m_shaderId != RendererState::s_shaderId
 				) {
+				items.push_back(RendererBatchItem());
+			}*/
+			if (items.size() == 0 || 
+				items.at(items.size()-1).m_type != RendererBatchItem::TYPE_TEXTURE_TRIS || 
+				((
+					items.at(items.size()-1).m_type == RendererBatchItem::TYPE_TEXTURE_TRIS) && 
+					(items.at(items.size()-1).m_textureId != texId ||
+                	 items.at(items.size()-1).m_shaderId != RendererState::s_shaderId)
+				)) {
 				items.push_back(RendererBatchItem());
 			}
 			RendererBatchItem* item = &items.at(items.size()-1);
@@ -2183,6 +2225,14 @@ namespace ARK {
 		// STENCIL THINGS
 		void Renderer::enableStencil() const {
 			#ifdef ARK2D_RENDERER_OPENGL
+
+				if (Renderer::isBatching()) { 
+					RendererBatchItem stateChange;
+					stateChange.m_type = RendererBatchItem::TYPE_STENCIL_ENABLE;
+					s_batch->items.push_back(stateChange);
+					return;
+				}
+
 				// Clear stencil buffer (but not color)
 				glClear( GL_STENCIL_BUFFER_BIT );
 				RendererStats::s_glCalls++;
@@ -2190,6 +2240,13 @@ namespace ARK {
 		}
 		void Renderer::startStencil() const {
 			#ifdef ARK2D_RENDERER_OPENGL
+				if (Renderer::isBatching()) { 
+					RendererBatchItem stateChange;
+					stateChange.m_type = RendererBatchItem::TYPE_STENCIL_START;
+					s_batch->items.push_back(stateChange);
+					return;
+				}
+
 				// Disable rendering to the color buffer
 			    glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
 
@@ -2218,6 +2275,13 @@ namespace ARK {
 		}*/
 		void Renderer::stopStencil() const {
 			#ifdef ARK2D_RENDERER_OPENGL
+				if (Renderer::isBatching()) { 
+					RendererBatchItem stateChange;
+					stateChange.m_type = RendererBatchItem::TYPE_STENCIL_STOP;
+					s_batch->items.push_back(stateChange);
+					return;
+				}
+
 				// Reenable color
 			    glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
 
@@ -2232,6 +2296,13 @@ namespace ARK {
 		}
 		void Renderer::disableStencil() const {
 			#ifdef ARK2D_RENDERER_OPENGL
+				if (Renderer::isBatching()) { 
+					RendererBatchItem stateChange;
+					stateChange.m_type = RendererBatchItem::TYPE_STENCIL_DISABLE;
+					s_batch->items.push_back(stateChange);
+					return;
+				}
+
 				// Finished using stencil
 				glDisable( GL_STENCIL_TEST );
 				RendererStats::s_glCalls++;
@@ -2639,6 +2710,54 @@ namespace ARK {
 		}
 		void Renderer::fillArc(float cx, float cy, int width, int height, float startAngle, float endAngle, int segs) const {
 			if (segs == 0) { return; }
+
+			if (isBatching()) {
+
+				float halfwidth = width / 2.0f; 
+				float halfheight = height / 2.0f;
+
+				float diffAngle = endAngle - startAngle;
+				float eachAngle = diffAngle / float(segs);
+				for(signed int i = 0; i < segs; i++) 
+				{
+					float rawVertices[6];
+					unsigned char rawColors[12];
+
+					float localStartAngle = startAngle + (i*eachAngle);
+					float nextAngle = localStartAngle + eachAngle;
+					if (nextAngle > endAngle) {
+						nextAngle = endAngle;
+					}
+
+					double angle = 2 * MY_PI * localStartAngle / 360; 
+					double nangle = 2 * MY_PI * (nextAngle) / 360; 
+
+					rawVertices[0] = cx;
+					rawVertices[1] = cy; 
+					rawVertices[2] = cx + float(cos(angle) * halfwidth);
+					rawVertices[3] = cy + float(sin(angle) * halfheight);
+					rawVertices[4] = cx + float(cos(nangle) * halfwidth);
+					rawVertices[5] = cy + float(sin(nangle) * halfheight);
+
+					rawColors[0] = m_DrawColor.getRedc();
+					rawColors[1] = m_DrawColor.getGreenc();
+					rawColors[2] = m_DrawColor.getBluec(); 
+					rawColors[3] = m_DrawColor.getAlphac();
+					rawColors[4] = m_DrawColor.getRedc();
+					rawColors[5] = m_DrawColor.getGreenc();
+					rawColors[6] = m_DrawColor.getBluec(); 
+					rawColors[7] = m_DrawColor.getAlphac();
+					rawColors[8] = m_DrawColor.getRedc();
+					rawColors[9] = m_DrawColor.getGreenc();
+					rawColors[10] = m_DrawColor.getBluec(); 
+					rawColors[11] = m_DrawColor.getAlphac();
+
+					s_batch->addGeometryTri(&rawVertices[0], &rawColors[0]);
+				}
+
+				return;
+				
+			}
 
 			#if defined(ARK2D_RENDERER_OPENGL) && defined(ARK2D_OPENGL_3_2)
 
