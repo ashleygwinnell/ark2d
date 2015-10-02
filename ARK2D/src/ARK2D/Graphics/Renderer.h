@@ -36,7 +36,14 @@ namespace ARK {
 				static unsigned int s_textureSwaps;	
 				static unsigned int s_shaderSwaps;	
 				static unsigned int s_textureAllocatedBytes;
+
+				static unsigned int s_previousframe_glCalls;
+				static unsigned int s_previousframe_lines;
+				static unsigned int s_previousframe_tris;
+				static unsigned int s_previousframe_textureSwaps;
+				static unsigned int s_previousframe_shaderSwaps;
 				static void reset();
+				static void endframe();
 
 				RendererStats();
 				virtual ~RendererStats();

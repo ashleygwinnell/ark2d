@@ -119,24 +119,36 @@ namespace ARK {
 
 		// renderer statistics
 		unsigned int RendererStats::s_glCalls = 0;
-		//unsigned int RendererStats::s_glDrawCalls = 0;
 		unsigned int RendererStats::s_lines = 0;
 		unsigned int RendererStats::s_tris = 0;
 		unsigned int RendererStats::s_textureSwaps = 0;	
 		unsigned int RendererStats::s_shaderSwaps = 0;	
 		unsigned int RendererStats::s_textureAllocatedBytes = 0;	
 
+		unsigned int RendererStats::s_previousframe_glCalls = 0;
+		unsigned int RendererStats::s_previousframe_lines = 0;
+		unsigned int RendererStats::s_previousframe_tris = 0;
+		unsigned int RendererStats::s_previousframe_textureSwaps = 0;	
+		unsigned int RendererStats::s_previousframe_shaderSwaps = 0;	
+
 		RendererStats::RendererStats() {
 
 		}
 		void RendererStats::reset() {
 			s_glCalls = 0;
-			//s_glDrawCalls = 0;
 			s_lines = 0;
 			s_tris = 0;
 			s_textureSwaps = 0;
 			s_shaderSwaps = 0;
+
 			// s_textureAllocatedBytes .. don't reset this.
+		}
+		void RendererStats::endframe() {
+			s_previousframe_glCalls = s_glCalls;
+			s_previousframe_lines = s_lines;
+			s_previousframe_tris = s_tris;
+			s_previousframe_textureSwaps = s_textureSwaps;
+			s_previousframe_shaderSwaps = s_shaderSwaps;
 		}
 		RendererStats::~RendererStats() {
  
@@ -5937,6 +5949,42 @@ namespace ARK {
 		void Renderer::fillEllipse(float x, float y, float rx, float ry) const 
 		{
 			const int points = 30; 
+
+			if (isBatching()) {
+
+				float each = 360.0f / float(points);
+				for(signed int i = 0; i < points; i++) {
+					float j = float(i) * each;
+					double angle = 2 * MY_PI * j / 360; 
+					double nangle = 2 * MY_PI * (j+each) / 360; 
+
+					float rawVertices[6];
+					unsigned char rawColors[12];
+
+					rawVertices[0] = x;
+					rawVertices[1] = y; 
+					rawVertices[2] = x + float(cos(angle) * rx);
+					rawVertices[3] = y + float(sin(angle) * ry);
+					rawVertices[4] = x + float(cos(nangle) * rx);
+					rawVertices[5] = y + float(sin(nangle) * ry);
+
+					rawColors[0] = m_DrawColor.getRedc();
+					rawColors[1] = m_DrawColor.getGreenc();
+					rawColors[2] = m_DrawColor.getBluec(); 
+					rawColors[3] = m_DrawColor.getAlphac();
+					rawColors[4] = m_DrawColor.getRedc();
+					rawColors[5] = m_DrawColor.getGreenc();
+					rawColors[6] = m_DrawColor.getBluec(); 
+					rawColors[7] = m_DrawColor.getAlphac();
+					rawColors[8] = m_DrawColor.getRedc();
+					rawColors[9] = m_DrawColor.getGreenc();
+					rawColors[10] = m_DrawColor.getBluec(); 
+					rawColors[11] = m_DrawColor.getAlphac();
+
+					s_batch->addGeometryTri(&rawVertices[0], &rawColors[0]);
+				}
+				return;
+			}
 
 			#if (defined(ARK2D_OPENGL_3_2) || defined(ARK2D_OPENGL_ES_2_0))
 
