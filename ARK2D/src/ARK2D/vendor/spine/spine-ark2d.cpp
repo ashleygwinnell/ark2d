@@ -12,8 +12,16 @@
 #include "../../Graphics/Image.h"
 #include "../../Graphics/Texture.h"
 #include "../../Graphics/TextureStore.h"
+#include "../../vendor/spine/SpineSkeleton.h"
 
 void _spAtlasPage_createTexture (spAtlasPage* self, const char* path) {
+
+	if (SpineUtil::s_usingDummyTexture) {
+		self->rendererObject = Image::getDummy();
+		self->width = 0;
+		self->height = 0;
+		return; 
+	}
 
 	string oldfname = StringUtil::append("", path);
 	string fname = StringUtil::append("", path);

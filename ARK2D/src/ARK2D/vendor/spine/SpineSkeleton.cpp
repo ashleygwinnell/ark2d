@@ -16,16 +16,21 @@ namespace ARK {
 
 		void* Skeleton::s_soundEventCallback = NULL;
 
+		bool SpineUtil::s_usingDummyTexture = false;
+		void SpineUtil::setUsingDummyTexture(bool b) {
+			s_usingDummyTexture = b;
+		}
+
 		void SpineUtil::transformSceneNodeFromBoneName(SceneNode* node, Skeleton* skeleton, string boneName) {
 			spBone* bone = skeleton->getBone(boneName);
 
 			float thisX = bone->x;
 			float thisY = bone->y*-1.0f;
-			float thisRotation = bone->rotation;
+			float thisRotation = bone->rotation*-1;
 			if (bone->parent && bone->data->inheritRotation && bone->parent == skeleton->getRoot()) {
 				thisX += skeleton->getX();
 				thisY += skeleton->getY();
-				thisRotation -= 90;
+				thisRotation += 90;
 			}
 
 			node->position.set(thisX, thisY);
@@ -107,7 +112,7 @@ namespace ARK {
 
 					} else { 
 						Skeleton* sk4 = (Skeleton*) state->ark2dskeleton;
-						sk4->doCallback(type, 0, NULL);
+						sk4->doCallback(type, 0, event->data->name);
 						printf("%d event: %s, %s: %d, %f, %s\n", trackIndex, animationName, event->data->name, event->intValue, event->floatValue, event->stringValue);
 					}
 					break;
@@ -252,10 +257,13 @@ namespace ARK {
 
 				ARK2D::getLog()->v("Creating Skeleton from file...");
 				m_atlas = spAtlas_createFromFile(atlasFile.c_str(), 0);
-				if (m_atlas == NULL) { printf("spAtlas was null"); exit(0); }
-				
-				m_json = spSkeletonJson_create(m_atlas);
-				m_json->scale = s_defaultScale;
+				if (m_atlas == NULL) { 
+					ARK2D::getLog()->w("spAtlas was null. maybe it's not meant to be?");
+					m_json = spSkeletonJson_create(m_atlas);
+				} else { 
+					m_json = spSkeletonJson_create(m_atlas);
+					m_json->scale = s_defaultScale;
+				}
 
 				m_data = spSkeletonJson_readSkeletonDataFile(m_json, skeletonFile.c_str());
 				if (!m_data) { printf("Error: %s\n", m_json->error); exit(0); }

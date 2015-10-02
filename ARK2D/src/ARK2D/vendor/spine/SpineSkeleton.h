@@ -31,7 +31,10 @@ namespace ARK {
 
 		class ARK2D_API SpineUtil {
 			public:
+				static bool s_usingDummyTexture;
+			public:
 				static void transformSceneNodeFromBoneName(SceneNode* node, Skeleton* skeleton, string boneName);
+				static void setUsingDummyTexture(bool b);
 		};
 
 		class ARK2D_API Skeleton : public ARK::Core::Resource 
