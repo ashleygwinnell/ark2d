@@ -9,7 +9,7 @@
 #import "GameContainerMacAppDelegate.h"
 
 #import "../../ARK2D.h"
-#import "../../Util/Log.h"
+//#import "../../Util/Log.h"
 
 using namespace ARK::Core;
 

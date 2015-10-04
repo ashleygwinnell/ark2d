@@ -160,6 +160,7 @@
 #include "ARK2D/UI/ErrorDialog.h"
 #include "ARK2D/UI/SimpleTextField.h"
 #include "ARK2D/UI/Slider.h"
+#include "ARK2D/UI/SplitPane.h"
 
 // Particle Engine
 #include "ARK2D/Particles/Particle.h"

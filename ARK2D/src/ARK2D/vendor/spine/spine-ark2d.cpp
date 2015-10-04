@@ -12,6 +12,7 @@
 #include "../../Graphics/Image.h"
 #include "../../Graphics/Texture.h"
 #include "../../Graphics/TextureStore.h"
+#include "../../Util/Log.h"
 #include "../../vendor/spine/SpineSkeleton.h"
 
 void _spAtlasPage_createTexture (spAtlasPage* self, const char* path) {

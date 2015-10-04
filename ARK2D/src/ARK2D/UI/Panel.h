@@ -8,12 +8,13 @@
 #ifndef PANEL_H_
 #define PANEL_H_
 
-#include <vector>
-using namespace std;
+//#include <vector>
+//using namespace std;
 
 //#include "../ARK2D.h"
 #include "../Namespaces.h"
 #include "AbstractUIComponent.h"
+#include "../Geometry/Cube.h"
 
 //#include "../Graphics/Renderer.h"
 //#include "../Core/GameContainer.h"
@@ -30,12 +31,12 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class ARK2D_API Panel : public AbstractUIComponent{
+		class ARK2D_API Panel : public AbstractUIComponent {
 			public:
 				//vector<AbstractUIComponent*> m_children;
 				bool m_translate;
 				bool m_showBorder;
-				ARK::Geometry::Cube* m_bounds;
+				ARK::Geometry::Cube m_bounds;
 				Panel();
 				//void add(AbstractUIComponent* c);
 				//void setTranslating(bool b);
@@ -44,6 +45,7 @@ namespace ARK {
 				virtual void render();
 				virtual void renderBorder();
 
+				virtual void setBounds(float w, float h ,float d);
 				virtual ARK::Geometry::Cube* getBounds();
 
 				virtual bool keyPressed(unsigned int key);
@@ -51,6 +53,8 @@ namespace ARK {
 				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
 				virtual ~Panel();
+
+				static bool s_debugCoordinates;
 		};
 	}
 }

@@ -105,18 +105,18 @@ namespace ARK {
 
 			root->addChild(rightPanel);
 
-            scene->addChild(root);
+            addChild(root);
 		}
 
 		void UITestGameState::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {
 			//GameState::update(container, game, timer);
 			//Input* i = ARK2D::getInput();
-
+            SceneNode::update();
 
 		}
 		void UITestGameState::render(GameContainer* container, StateBasedGame* game, Renderer* g) {
 			//GameState::update(container, game. timer);
-			scene->render();
+            SceneNode::render();
 
 
 

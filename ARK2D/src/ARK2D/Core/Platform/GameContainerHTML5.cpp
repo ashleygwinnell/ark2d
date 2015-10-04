@@ -153,7 +153,8 @@
 				m_game(g), 
 				m_input(),
 				m_graphics(),
-				m_gamepads(), 
+				m_gamepads(),
+				scene(NULL), 
 				m_originalWidth(width),    
 				m_originalHeight(height),
 				m_width(width),
@@ -190,6 +191,7 @@
 				ARK2D::s_graphics = &m_graphics;
 				ARK2D::s_input = &m_input;
 				ARK2D::s_log = new ARK::Util::Log();
+				scene = new Scene();
 
 				
 				m_platformSpecific.esContext = new ESContext(); //(ESContext*) malloc(sizeof(ESContext));

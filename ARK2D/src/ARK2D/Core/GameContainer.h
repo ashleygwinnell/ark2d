@@ -172,12 +172,15 @@ namespace ARK {
 		#else
 			private:
 				void renderFPS();
+				virtual void preRender();
+				virtual void postRender();
 			public:
 		#endif
 
 	//	#if (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS) || defined(ARK2D_FLASCC) || defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 				void resizeBehaviourNoCallback(int width, int height);
 				void resizeBehaviour(int width, int height, bool docallback=true);
+				void resizeGame();
 	//	#endif
 
 				void close() const;
@@ -205,6 +208,8 @@ namespace ARK {
 
 				float time();
 
+				void initLocalisation();
+
 				void initGamepads();
 				void processGamepadInput();
 				void deinitGamepads();
@@ -223,6 +228,10 @@ namespace ARK {
 				Input m_input;
 				Renderer m_graphics;
 				vector<ARK::Controls::Gamepad*> m_gamepads;
+
+			public:
+				Scene* scene;
+			private:
 
 				string m_strTitle;
 

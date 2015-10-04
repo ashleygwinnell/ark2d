@@ -122,6 +122,7 @@ namespace ARK {
 			if (!m_visible) { return; }
 
 			if (parent == NULL) { preRender(); }
+			preRenderFromPivot();
 
 			renderBackground();
 
@@ -140,6 +141,7 @@ namespace ARK {
 			}
 
 			renderOverlay();
+			postRenderFromPivot();
 
 			if (parent == NULL) { postRender(); }
 

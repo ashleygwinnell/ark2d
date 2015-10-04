@@ -12,15 +12,40 @@ namespace ARK {
 	namespace UI {
 		Label::Label():
 			AbstractUIComponent(),
-			m_text("") {
+			m_text(""),
+			m_alignX(-1),
+			m_alignY(-1) 
+		{
 
 		}
 
 		Label::Label(string text):
 			AbstractUIComponent(),
-			m_text(text) {
+			m_text(text),
+			m_alignX(-1),
+			m_alignY(-1) 
+		{
 			setSize(ARK2D::getRenderer()->getFont()->getStringWidth(text), ARK2D::getRenderer()->getFont()->getLineHeight());
 		}
+
+		Label::Label(string text, signed int alignX, signed int alignY):
+			AbstractUIComponent(),
+			m_text(text),
+			m_alignX(alignX),
+			m_alignY(alignY)
+		{
+			setSize(ARK2D::getRenderer()->getFont()->getStringWidth(text), ARK2D::getRenderer()->getFont()->getLineHeight());
+		}
+		Label::Label(string text, signed int alignX, signed int alignY, float sc):
+			AbstractUIComponent(),
+			m_text(text),
+			m_alignX(alignX),
+			m_alignY(alignY)
+		{
+			setSize(ARK2D::getRenderer()->getFont()->getStringWidth(text), ARK2D::getRenderer()->getFont()->getLineHeight());
+			scale.set(sc, sc, sc);
+		}
+
 		void Label::setText(string text) {
 			setText(text, false);
 		}
@@ -33,7 +58,7 @@ namespace ARK {
 
 		void Label::render() {
 			Renderer* g = ARK2D::getRenderer();
-			g->drawString(m_text, 0, 0);
+			g->drawString(m_text, 0, 0, m_alignX, m_alignY); // scale is applied before this in prerender
 		}
 		void Label::renderBounds() {
 			Renderer* g = ARK2D::getRenderer();

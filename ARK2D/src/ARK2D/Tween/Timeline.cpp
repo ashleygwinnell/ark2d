@@ -11,6 +11,7 @@
 #include <map>
 #include "../Core/GameTimer.h"
 #include "../UI/ErrorDialog.h"
+#include "../Util/Log.h"
 
 #include "Timeline.h"
 

@@ -176,6 +176,7 @@ namespace ARK {
 				void setWidth(int w);
 				void setHeight(int h);
 
+                virtual	void setBounds(float w, float h, float z);
                 virtual	ARK::Geometry::Cube* getBounds();
             
 				//void bind() const;

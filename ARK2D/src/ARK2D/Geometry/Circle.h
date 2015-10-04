@@ -11,6 +11,7 @@
 #include "Shape.h"
 #include "../Util/MathUtil.h"
 #include "../Graphics/Renderer.h"
+#include "../Util/Log.h"
 
 namespace ARK {
 	namespace Geometry {

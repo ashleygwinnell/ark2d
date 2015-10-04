@@ -217,11 +217,13 @@
 			"src/ARK2D/UI/FileDialog.cpp",
 			"src/ARK2D/UI/ComboBox.cpp",
 			"src/ARK2D/UI/ComboBoxItem.cpp",
+			"src/ARK2D/UI/SplitPane.cpp",
 			"src/ARK2D/UI/ErrorDialog.cpp", 
 			"src/ARK2D/UI/Notification.cpp",
 			"src/ARK2D/UI/NotificationSystem.cpp",
 			"src/ARK2D/UI/SimpleTextField.cpp", 
 			"src/ARK2D/UI/Slider.cpp", 
+			"src/ARK2D/UI/TitledPanel.cpp", 
 
 			"src/ARK2D/Util/AnalyticsUtil.cpp",
 			"src/ARK2D/Util/AngelScriptUtil.cpp",

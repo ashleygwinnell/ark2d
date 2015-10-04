@@ -11,13 +11,15 @@
 
 namespace ARK {
 	namespace UI {
+		bool Panel::s_debugCoordinates = false;
+
 		Panel::Panel():
 			AbstractUIComponent(), 
 			//m_children(), 
 			//m_translate(true), 
 			m_showBorder(true),
-			m_bounds(NULL) {
-				m_bounds = new Cube();
+			m_bounds(0,0,0) {
+				
 		}
 
 		//void Panel::add(AbstractUIComponent* c) {
@@ -35,33 +37,71 @@ namespace ARK {
 		void Panel::render() {
 			if (m_visible) {
 
-				string pos = "(0,0)";
-				Renderer* r = ARK2D::getRenderer();
-				r->drawString(pos, 0, 0);
+				preRenderFromPivot();
 
-				Vector3<float> worldpos = localPositionToGlobalPositionInternal();
-				string worldpost = "(";
-					worldpost += Cast::toString<float>(worldpos.getX());
-					worldpost += ",";
-					worldpost += Cast::toString<float>(worldpos.getY());
-				worldpost += ")";
-				r->drawString(worldpost, 0, 20);
+				if (s_debugCoordinates) { 
+					string pos = "(0,0)";
+					Renderer* r = ARK2D::getRenderer();
+					r->setFont(r->getDefaultFont());
+					r->drawString(pos, 0, 0, -1, -1, 0.0f, 0.5f);
+
+					Vector3<float> worldpos = localPositionToGlobalPositionInternal();
+					string worldpost = "(";
+						worldpost += Cast::toString<float>(worldpos.getX());
+						worldpost += ",";
+						worldpost += Cast::toString<float>(worldpos.getY());
+					worldpost += ")";
+					r->drawString(worldpost, 0, 10, -1, -1, 0.0, 0.5f);
 
 
-				Vector3<float> worldpos2 = localPositionToGlobalPosition();
-				string worldpost2 = "(";
-					worldpost2 += Cast::toString<float>(worldpos2.getX());
-					worldpost2 += ",";
-					worldpost2 += Cast::toString<float>(worldpos2.getY());
-				worldpost2 += ")";
-				r->drawString(worldpost2, 0, 40);
+					Vector3<float> worldpos2 = localPositionToGlobalPosition();
+					string worldpost2 = "(";
+						worldpost2 += Cast::toString<float>(worldpos2.getX());
+						worldpost2 += ",";
+						worldpost2 += Cast::toString<float>(worldpos2.getY());
+					worldpost2 += ")";
+					r->drawString(worldpost2, 0, 20, -1, -1, 0.0, 0.5f);
+
+					// global to local pos.
+					float mx = ARK2D::getInput()->getMouseX();
+					float my = ARK2D::getInput()->getMouseY();
+					string worldpost3 = "(";
+						worldpost3 += Cast::toString<float>(mx);
+						worldpost3 += ",";
+						worldpost3 += Cast::toString<float>(my);
+					worldpost2 += ")";
+					r->drawString(worldpost3, 0, 35, -1, -1, 0.0, 0.5f);
+
+					Vector3<float> worldpos4 = globalPositionToLocalPosition(mx, my, 0, false);
+					string worldpost4 = "(";
+						worldpost4 += Cast::toString<float>(worldpos4.getX());
+						worldpost4 += ",";
+						worldpost4 += Cast::toString<float>(worldpos4.getY());
+					worldpost4 += ")";
+					r->drawString(worldpost4, 0, 45, -1, -1, 0.0, 0.5f);
+
+					Vector3<float> worldpos5 = globalPositionToLocalPosition(mx, my, 0, true);
+					string worldpost5 = "(";
+						worldpost5 += Cast::toString<float>(worldpos5.getX());
+						worldpost5 += ",";
+						worldpost5 += Cast::toString<float>(worldpos5.getY());
+					worldpost5 += ")";
+					r->drawString(worldpost5, 0, 55, -1, -1, 0.0, 0.5f);
+
+					ARK::Geometry::Cube* bounds = getBounds();
+					r->setDrawColor(Color::white);
+					r->fillCircle(bounds->getWidth() * pivot.getX(), bounds->getHeight() * pivot.getY(),2,10);
+				}
+				
+				renderBorder();
+				postRenderFromPivot();
 				
 				//preRender();
-				renderChildren();
-				renderBorder();
+				
+				
 				//postRender();
 
-
+				renderChildren();
 
 				
 			}
@@ -78,10 +118,14 @@ namespace ARK {
 			}
 		}
 
+		void Panel::setBounds(float w, float h, float d) {
+			AbstractUIComponent::setBounds(w,h,d);
+			m_bounds.set(0,0,0,w,h,d);
+		}
 
 		ARK::Geometry::Cube* Panel::getBounds() {
-			m_bounds->set(0,0,0,m_width, m_height, 0);
-			return m_bounds;
+			m_bounds.set(0, 0, 0, m_width, m_height, 0);
+			return &m_bounds;
 		}
 
 		bool Panel::keyPressed(unsigned int key) {

@@ -13,6 +13,8 @@
 
 #include "../Controls/KeyListener.h"
 #include "../Controls/Gamepad.h"
+#include "../SceneGraph/Scene.h"
+#include "../Geometry/Cube.h"
 
 namespace ARK {
 	namespace Core {
@@ -22,13 +24,13 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class ARK2D_API Game : public GamepadListener, public KeyListener/*, public MouseListener*/ {
+		class ARK2D_API Game : public SceneNode, public GamepadListener, public KeyListener/*, public MouseListener*/ {
 			public:
 
 				Game(string title);
 				string getTitle();
 				Timeline* getTimeline();
-				virtual void init(GameContainer* container) = 0;
+				virtual void init(GameContainer* container);
 
 				virtual void preUpdate(GameContainer* container, GameTimer* timer);
 				virtual void update(GameContainer* container, GameTimer* timer) = 0;
@@ -38,7 +40,13 @@ namespace ARK {
 				virtual void render(GameContainer* container, Renderer* g) = 0;
 				virtual void postRender(GameContainer* container, Renderer* g);
 
+				// SceneNode overrides
+				virtual void render();
+				virtual void preRender();
+				virtual void postRender();
+
 				virtual void resize(GameContainer* container, int width, int height);
+				virtual ARK::Geometry::Cube* getBounds();
 
 				virtual void pause(); // android events
 				virtual void resume();
@@ -60,12 +68,17 @@ namespace ARK {
 				// Orientation Listener
 				virtual void orientationChanged(int orientation);
 
+
+
 				virtual ~Game();
 
 			protected:
 				GameContainer* m_container;
 				string m_title;
 				Timeline* m_timeline;
+				Scene* scene;
+				ARK::Geometry::Cube bounds;
+
 		};
 	}
 }

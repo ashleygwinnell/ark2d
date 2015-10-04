@@ -9,7 +9,7 @@
 #define FADETOCOLOURTRANSITION_H_
 
 #include "Transition.h"
-#include "../../Tween/Timeline.h"
+//#include "../../Tween/Timeline.h"
 
 namespace ARK {
 	namespace State {

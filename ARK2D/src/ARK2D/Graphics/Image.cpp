@@ -888,7 +888,7 @@ namespace ARK {
 
 		Image::Image():
 			ARK::Core::Resource(),
-			ARK::SceneGraph::SceneNode(SceneNode::TYPE_IMAGE, "image"),
+			ARK::SceneGraph::SceneNode("image",SceneNode::TYPE_IMAGE),
 			m_data(NULL),
 			m_dataLength(0),
 			m_resourceType(0),
@@ -924,7 +924,7 @@ namespace ARK {
 
 		Image::Image(unsigned int resource, unsigned int resourceType):
 			ARK::Core::Resource(),
-			ARK::SceneGraph::SceneNode(SceneNode::TYPE_IMAGE, "image"),
+			ARK::SceneGraph::SceneNode("image",SceneNode::TYPE_IMAGE),
 			m_data(NULL),
 			m_dataLength(0),
 			m_resourceType(resourceType),
@@ -966,7 +966,7 @@ namespace ARK {
 
 		Image::Image(void* data, unsigned int resourceType, string file):
 			ARK::Core::Resource(),
-			ARK::SceneGraph::SceneNode(SceneNode::TYPE_IMAGE, file),
+			ARK::SceneGraph::SceneNode(file,SceneNode::TYPE_IMAGE),
 			m_data(data),
 			m_dataLength(0),
 			m_resourceType(resourceType),
@@ -1007,7 +1007,7 @@ namespace ARK {
 
 		Image::Image(void* data, unsigned int dataLength, unsigned int resourceType, string file):
 			ARK::Core::Resource(),
-			ARK::SceneGraph::SceneNode(SceneNode::TYPE_IMAGE, file),
+			ARK::SceneGraph::SceneNode("file",SceneNode::TYPE_IMAGE),
 			m_data(data),
 			m_dataLength(dataLength),
 			m_resourceType(resourceType),
@@ -1048,7 +1048,7 @@ namespace ARK {
 
 		Image::Image(const std::string& fname):
 			ARK::Core::Resource(),
-			ARK::SceneGraph::SceneNode(SceneNode::TYPE_IMAGE, fname),
+			ARK::SceneGraph::SceneNode(fname,SceneNode::TYPE_IMAGE),
 			m_data(NULL),
 			m_resourceType(0),
 			filename(fname),
@@ -1089,7 +1089,7 @@ namespace ARK {
 
 		Image::Image(const std::string& fname, const Color& mask) :
 			ARK::Core::Resource(),
-			ARK::SceneGraph::SceneNode(SceneNode::TYPE_IMAGE, fname),
+   			ARK::SceneGraph::SceneNode(fname,SceneNode::TYPE_IMAGE),
 			m_data(NULL), 
 			m_resourceType(0), 
 			filename(fname),
@@ -2073,6 +2073,13 @@ namespace ARK {
 			g->popMatrix();*/
 		}
 
+		void Image::setBounds(float w, float h, float d) 
+		{
+			m_Width = w;
+			m_Height = h;
+			m_dirty = true;
+			clean();
+		}
 		ARK::Geometry::Cube* Image::getBounds() 
 		{
 			if (m_dirty) { clean(); }
@@ -2569,6 +2576,8 @@ namespace ARK {
 			);
 			SceneNode::rotation = tempRotation;*/
 			//draw(0, 0);
+
+			preRenderFromPivot();
             
             Renderer* r = ARK2D::getRenderer();
 
@@ -2610,8 +2619,11 @@ namespace ARK {
 			);
 			
 
+			postRenderFromPivot();
 
 			SceneNode::renderChildren();
+
+
 		}
 
 		// http://stackoverflow.com/questions/2008842/creating-and-loading-pngs-in-rgba4444-rgba5551-for-opengl

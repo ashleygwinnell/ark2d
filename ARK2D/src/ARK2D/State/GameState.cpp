@@ -8,13 +8,20 @@
 #include "GameState.h"
 #include "StateBasedGame.h"
 
+#include "../Namespaces.h"
+
 namespace ARK {
 	namespace State {
 
 		GameState::GameState(): 
-			scene(NULL) 
+			SceneNode("GameState",TYPE_NODE)
 		{
-			scene = new Scene();
+
+		}
+		GameState::GameState(string nm):
+			SceneNode(nm,TYPE_NODE)
+		{
+
 		}
 
 		void GameState::enter(GameContainer* container, StateBasedGame* game, GameState* from) {
@@ -31,15 +38,21 @@ namespace ARK {
 			ARK2D::getLog()->v("GameState::resume");
 		}
 
+		void GameState::render() {
+			if (!visible) { return; }
+            StateBasedGame* sbg = dynamic_cast<StateBasedGame*>(ARK2D::getGame());
+			render(ARK2D::getContainer(), sbg, ARK2D::getRenderer());
+		}
+
 
 		bool GameState::keyPressed(unsigned int key) {
-			return (scene != NULL && scene->keyPressed(key));
+			return SceneNode::keyPressed(key);
 		}
 		bool GameState::keyReleased(unsigned int key) {
-			return (scene != NULL && scene->keyReleased(key));
+			return SceneNode::keyReleased(key);
 		}
 		bool GameState::mouseMoved(int x, int y, int oldx, int oldy) {
-			return (scene != NULL && scene->mouseMoved(x,y,oldx,oldy));
+			return SceneNode::mouseMoved(x,y,oldx,oldy);
 		}
 		void GameState::orientationChanged(int orientation) {
 

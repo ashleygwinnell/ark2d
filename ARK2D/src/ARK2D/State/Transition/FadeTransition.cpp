@@ -6,7 +6,10 @@
  */
 
 #include "FadeTransition.h"
-#include "../../Includes.h"
+
+#include "../GameState.h"
+#include "../StateBasedGame.h"
+#include "../../Graphics/Renderer.h"
 
 namespace ARK {
 	namespace State {

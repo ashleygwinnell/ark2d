@@ -10,9 +10,9 @@
 
 
 #include "Transition.h"
-#include "../../Graphics/Color.h"
-#include "../../Tween/Timeline.h"
-#include "../../Core/Constants.h"
+//#include "../../Graphics/Color.h"
+//#include "../../Tween/Timeline.h"
+//#include "../../Core/Constants.h"
 
 #include <vector>
 using std::vector;

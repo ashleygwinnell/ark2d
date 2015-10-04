@@ -16,8 +16,8 @@
 
 struct Graphics;
 #include "../Namespaces.h"
-#include "../UI/Panel.h"
 #include "../UI/Button.h"
+#include "../UI/TitledPanel.h"
 
 #include "../Core/String.h"
 namespace ARK {
@@ -55,6 +55,10 @@ namespace ARK {
 				static const unsigned int TYPE_STR = 3;
 				static const unsigned int TYPE_BOOL = 4;
 		};
+        
+        class LogConsolePanel;
+        class LogWatchedVariablesPanel;
+        class LogRendererStatsPanel;
 
 		/*!
 		 * \brief Standard framework logging - contains UI element for log viewing and debugging.
@@ -65,9 +69,12 @@ namespace ARK {
 		 * @see ARK2D
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class ARK2D_API Log {
+		class ARK2D_API Log : public SceneNode {
 			friend class ARK::Core::GameContainer;
 			friend class ARK2D;
+			friend class LogConsolePanel;
+			friend class LogWatchedVariablesPanel;
+			friend class LogRendererStatsPanel;
 
 			public:
 				static Log* s_instance;
@@ -92,17 +99,17 @@ namespace ARK {
 				vector<WatchedVariable*> m_watchedVariables;
 
 				unsigned int m_filter;
-				bool m_visible;
 				bool m_enabled;
 
 				Color* m_backgroundColor;
 				ARK::UI::Slider* m_gameSpeedSlider;
 				ARK::UI::CheckBox* m_expoCheckbox;
 				ARK::UI::Button* m_addGamepadButton;
-				ARK::SceneGraph::Scene* m_scene;
-
+				LogConsolePanel* m_consolePanel;
+				
 			public:
 				Log();
+				void init(); // call this just before game.init
 				void message(string s, unsigned int type);
 				
 				void e(const char* s);
@@ -136,17 +143,15 @@ namespace ARK {
 				void setFilter(unsigned int level); 
 				unsigned int getFilter();
 
-				Scene* getScene() { return m_scene; }
-				
-				void update();
-				void render(GameContainer* container, Renderer* r);
+				virtual void update();
+				virtual void render();
 
-				virtual void keyPressed(unsigned int key);
-				virtual void keyReleased(unsigned int key);
-				virtual void mouseMoved(int x, int y, int oldx, int oldy);
+				virtual bool keyPressed(unsigned int key);
+				virtual bool keyReleased(unsigned int key);
+				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
-				inline bool isVisible() { return m_visible; }
-				inline bool isEnabled() { return m_visible; }
+				inline bool isVisible() { return visible; }
+				inline bool isEnabled() { return visible; }
 
 				virtual ~Log();
 
@@ -157,12 +162,21 @@ namespace ARK {
 
 		void debug_addVirtualGamepad(); 
 
-		class ARK2D_API TitledPanel : public ARK::UI::Panel {
+		
+
+		class ARK2D_API LogConsolePanel : public Panel {
 			public:
-				string m_title;
+				LogConsolePanel();
+				virtual void render();
+		};
+		class ARK2D_API LogWatchedVariablesPanel : public Panel {
 			public:
-				TitledPanel();
-				void setTitle(string title);
+				LogWatchedVariablesPanel();
+				virtual void render();
+		};
+		class ARK2D_API LogRendererStatsPanel : public Panel {
+			public:
+				LogRendererStatsPanel();
 				virtual void render();
 		};
 		class ARK2D_API GPButton : public ARK::UI::Button {

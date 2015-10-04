@@ -12,7 +12,8 @@
 #define LINE_H_
 
 #include "Shape.h"
-//#include "../Graphics/Renderer.h"
+#include "../Graphics/Renderer.h"
+#include "../Util/Log.h"
 
 namespace ARK {
 	namespace Geometry {

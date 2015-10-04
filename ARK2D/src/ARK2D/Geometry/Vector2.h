@@ -14,7 +14,7 @@
 #include "../ARK2D.h"
 #include <string>
 #include "../Core/String.h"
-#include "../Util/Log.h"
+//#include "../Util/Log.h"
 //#include "../Util/MathUtil.h"
 
 using namespace std;
@@ -156,13 +156,13 @@ namespace ARK {
 
 				// Distance
 				Vector2* distance(Vector2<T>* v) {
-					ARK2D::getLog()->w("Vector2* Vector2::distance(Vector2* v) is inefficient, use other method.");
+//					ARK2D::getLog()->w("Vector2* Vector2::distance(Vector2* v) is inefficient, use other method.");
 					Vector2<T>* result = new Vector2<T>();
 					distance(v, result);
 					return result;
 				}
 				Vector2* distance(T x, T y) {
-					ARK2D::getLog()->w("Vector2* Vector2::distance(T x, T y) is inefficient, use other method.");
+//					ARK2D::getLog()->w("Vector2* Vector2::distance(T x, T y) is inefficient, use other method.");
 					Vector2<T>* result = new Vector2<T>();
 					distance(x, y, result);
 					return result;

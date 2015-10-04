@@ -51,7 +51,8 @@
 				m_game(g),
 				m_input(),
 				m_graphics(),
-				m_gamepads(),  
+				m_gamepads(),
+				scene(NULL),
 				m_originalWidth(width),    
 				m_originalHeight(height),
 				m_width(width),
@@ -91,6 +92,9 @@
 					ARK2D::s_graphics = &m_graphics;
 					ARK2D::s_input = &m_input;
 					ARK2D::s_log = ARK::Util::Log::getInstance();
+					scene = new Scene();
+					scene->addChild(ARK2D::s_game);
+					scene->addChild(ARK2D::s_log);
 
 					ARK2D::getRenderer()->preinit();
 				
@@ -1003,6 +1007,7 @@
 				
 				// load default font.
 				if (m_willLoadDefaultFont) { 
+					Renderer::setInterpolation(Renderer::INTERPOLATION_NEAREST);
 					ARK::Font::BMFont* fnt = ARK::Core::Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont(); // BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
 					m_graphics.m_DefaultFont = fnt;
 					m_graphics.m_Font = fnt;
@@ -1014,7 +1019,12 @@
 				// initialise 
 				enableOpenAL();
 				
-				// initialise game.
+				ARK2D::getLog()->i("Initialising Log");
+				ARK2D::s_log->init();
+
+				ARK2D::getLog()->i("Initialising Localisations");
+				initLocalisation();
+
 				ARK2D::getLog()->i("Initialising ");
 				ARK2D::getLog()->i(m_game.getTitle());
 				ARK2D::getLog()->i("...");
@@ -1047,10 +1057,15 @@
 					
 					RendererStats::reset();
 					glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-					m_game.preRender(this, &m_graphics);
-					m_game.render(this, &m_graphics);
-					ARK2D::getLog()->render(this, &m_graphics);
-					m_game.postRender(this, &m_graphics);
+					preRender();
+					scene->render();
+					postRender();
+					
+
+					//m_game.preRender(this, &m_graphics);
+					//m_game.render(this, &m_graphics);
+					//ARK2D::getLog()->render(this, &m_graphics);
+					//m_game.postRender(this, &m_graphics);
 					//if (m_showingFPS) { renderFPS(); }
 					
 					

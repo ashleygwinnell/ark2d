@@ -158,6 +158,11 @@ namespace ARK {
 			return m_state;
 		}
 
+		void AbstractUIComponent::setBounds(float w, float h, float d) {
+			m_width = w;
+			m_height = h;
+		}
+
 		ARK::Geometry::Cube* AbstractUIComponent::getBounds() {
 			m_bounds->setWidth(m_width);
 			m_bounds->setHeight(m_height);

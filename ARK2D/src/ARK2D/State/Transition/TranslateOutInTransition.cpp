@@ -8,6 +8,11 @@
 #include "TranslateOutInTransition.h"
 #include "../../Tween/Timeline.h"
 
+ #include "../../Graphics/Color.h"
+#include "../GameState.h"
+#include "../StateBasedGame.h"
+#include "../../Tween/Easing.h"
+
 namespace ARK {
 	namespace State {
 		namespace Transition {

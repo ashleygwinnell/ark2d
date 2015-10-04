@@ -10,10 +10,11 @@
 
 #include "../ARK2D.h"
 //#include "../Core/GameContainer.h"
-#include "../Graphics/Renderer.h"
+//#include "../Graphics/Renderer.h"
 #include "Vector2.h"
 #include "Vector3.h"
 #include "../Util/SAT.h"
+#include "../Util/MathUtil.h"
 #include <limits>
 namespace ARK {
 	namespace Geometry {

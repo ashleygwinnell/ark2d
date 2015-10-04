@@ -198,6 +198,8 @@ namespace ARK {
 		class TextField;
 		class UIComponent;
 		class Slider;
+		class SplitPane;
+        class TitledPanel;
 	}
 	//! Contains miscellaneous classes for mathematical functions, logging, etc.
 	namespace Util {

@@ -590,6 +590,7 @@
 				m_input(),
 				m_graphics(),
 				m_gamepads(),
+				scene(NULL),
 				m_originalWidth(width),
 				m_originalHeight(height),
 				m_width(width),
@@ -628,6 +629,7 @@
 				ARK2D::s_graphics = &m_graphics;
 				ARK2D::s_input = &m_input;
 				ARK2D::s_log = ARK::Util::Log::getInstance();
+				scene = new Scene();
 
 				m_platformSpecific.m_windowRect.left = (long) 0; 			// Set Left Value To 0
 				m_platformSpecific.m_windowRect.right = (long) width; 		// Set Right Value To Requested Width

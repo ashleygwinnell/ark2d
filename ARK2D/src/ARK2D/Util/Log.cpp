@@ -13,6 +13,12 @@
 #include "../Graphics/Renderer.h"
 #include "../UI/Slider.h"
 #include "../UI/CheckBox.h"
+#include "../UI/Label.h"
+#include "../UI/ComboBox.h"
+#include "../UI/ComboBoxItem.h"
+#include "../Util/Strings.h"
+#include "../UI/SplitPane.h"
+#include "../UI/TitledPanel.h"
 
 namespace ARK { 
 	namespace Util {
@@ -27,6 +33,7 @@ namespace ARK {
 		}
 
 		Log::Log():
+			SceneNode("log"),
 			m_messages(),
 			m_messagesPool(), 
 			m_maxMessages(128),
@@ -34,40 +41,119 @@ namespace ARK {
 			m_watchedVariables(),
 
 			m_filter(TYPE_ALL),
-			m_visible(false),
 			m_enabled(true),
 			m_backgroundColor(NULL),
 			m_gameSpeedSlider(NULL),
 			m_expoCheckbox(NULL),
 			m_addGamepadButton(NULL)
 			{
+				this->visible = false;
 
+			
+		}
+
+		void debugLanguageChanged(ComboBox* box) {
+		    //wstring val = StringUtil::stringToWstring( box->getSelected()->getValue() );
+		    string val = box->getSelected()->getValue();
+			ARK2D::getStrings()->setLanguage( Strings::textLanguageToConstLanguage(val) );
+			//ARK2D::getStrings()->print();
+		}
+
+		void Log::init() {
 			for(unsigned int i = 0; i < m_maxMessages; i++) {
 				LogMessage* item = new LogMessage();
 				m_messagesPool.push_back(item);
 			}
  			m_backgroundColor = new Color(Color::black_50a);
 
- 			m_scene = new Scene();
+ 			//m_scene = new Scene();
 
-			m_gameSpeedSlider = new ARK::UI::Slider();
-			m_gameSpeedSlider->setSize(240, 3);
-			m_gameSpeedSlider->position.set(20, 30);
-			m_gameSpeedSlider->setSnapping(true, 0.05f);
-			m_gameSpeedSlider->setRange(0.0f, 2.0f);
-			m_gameSpeedSlider->setButtonPosition(0.5f);
-			m_scene->getRoot()->addChild(m_gameSpeedSlider);
+ 			SplitPane* splitHorizontal = new SplitPane(SplitPane::SPLIT_HORIZONTAL);
+ 			splitHorizontal->setName("split_horizontal");
+ 			splitHorizontal->setBounds(1280, 720, 0);
+ 			splitHorizontal->setSplitLocation(0.2f);
+ 			
+ 			TitledPanel* leftPanel = new TitledPanel();
+ 			leftPanel->setTitle("Debug");
+ 			leftPanel->setName("left_panel");
+                
+                ARK::UI::Label* gameSpeedLabel = new ARK::UI::Label("Game Speed:", -1, 0, 0.5f);
+                gameSpeedLabel->position.set(10, 20);
+   				leftPanel->addChild(gameSpeedLabel);
 
-			m_expoCheckbox = new ARK::UI::CheckBox();
-			m_expoCheckbox->setSize(24, 24);
-			m_expoCheckbox->position.set(20, 70); 
-			m_scene->getRoot()->addChild(m_expoCheckbox);
+				m_gameSpeedSlider = new ARK::UI::Slider();
+				m_gameSpeedSlider->setName("game_speed_slider");
+				m_gameSpeedSlider->setSize(160, 3);
+				m_gameSpeedSlider->position.set(70, 20);
+				m_gameSpeedSlider->setSnapping(true, 0.05f);
+				m_gameSpeedSlider->setRange(0.0f, 2.0f);
+				m_gameSpeedSlider->setButtonPosition(0.5f);
+				leftPanel->addChild(m_gameSpeedSlider);
 
-			m_addGamepadButton = new ARK::UI::Button("+ Virtual Gamepad");
-			m_addGamepadButton->setSize(160, 30);
-			m_addGamepadButton->position.set(20, 140); 
-			m_addGamepadButton->setEvent((void*) &debug_addVirtualGamepad);
-			m_scene->getRoot()->addChild(m_addGamepadButton);
+				ARK::UI::Label* expoModeLabel = new ARK::UI::Label("Expo Mode:", -1, 0, 0.5f);
+                expoModeLabel->position.set(10, 60);
+                leftPanel->addChild(expoModeLabel);
+
+				m_expoCheckbox = new ARK::UI::CheckBox();
+				m_expoCheckbox->setName("expo_mode_checkbox");
+				m_expoCheckbox->setSize(24, 24);
+				m_expoCheckbox->position.set(70, 60);
+				leftPanel->addChild(m_expoCheckbox);
+
+				ARK::UI::Label* virtualPadLabel = new ARK::UI::Label("Virtual Pad:", -1, 0, 0.5f);
+                virtualPadLabel->position.set(10, 120);
+                leftPanel->addChild(virtualPadLabel);
+
+				m_addGamepadButton = new ARK::UI::Button("+");
+				m_expoCheckbox->setName("add_virtual_gamepad_button");
+				m_addGamepadButton->setSize(30, 30);
+				m_addGamepadButton->position.set(70, 120); 
+				m_addGamepadButton->setEvent((void*) &debug_addVirtualGamepad);
+				leftPanel->addChild(m_addGamepadButton);
+
+				ARK::UI::Label* languageLabel = new ARK::UI::Label("Language:", -1, 0, 0.5f);
+                languageLabel->position.set(10, 180);
+                leftPanel->addChild(languageLabel);
+
+				ARK::UI::ComboBox* languageCombobox = new ARK::UI::ComboBox();
+				languageCombobox->setName("language arena");
+				languageCombobox->position.set(70, 180);
+				languageCombobox->setSize(160, 30);
+				languageCombobox->setItemChangedEvent((void*) debugLanguageChanged);
+				languageCombobox->addItem(new ComboBoxItem("English (UK)", "english_uk"));
+				languageCombobox->addItem(new ComboBoxItem("English (US)", "english_us"));
+				languageCombobox->addItem(new ComboBoxItem("French", "french_fr"));
+				languageCombobox->addItem(new ComboBoxItem("Italian", "italian"));
+				languageCombobox->addItem(new ComboBoxItem("German", "german"));
+				languageCombobox->addItem(new ComboBoxItem("Spanish", "spanish"));
+				languageCombobox->addItem(new ComboBoxItem("Swedish", "swedish"));
+				languageCombobox->addItem(new ComboBoxItem("Hebrew", "hebrew"));
+				//combobox->addItem(new ComboBoxItem("Arabic", "arabic"));
+				leftPanel->addChild(languageCombobox);
+
+
+			SplitPane* rightPanel = new SplitPane(SplitPane::SPLIT_VERTICAL);
+			rightPanel->setName("right_panel_split_vertical");
+			rightPanel->setSplitLocation(0.8f);
+
+				TitledPanel* watchedVariables = new TitledPanel(new LogWatchedVariablesPanel(), "Watched Variables");
+				TitledPanel* rendererStats = new TitledPanel(new LogRendererStatsPanel(), "Renderer Stats");
+				SplitPane* bottomSplitRight = new SplitPane(SplitPane::SPLIT_HORIZONTAL, watchedVariables, rendererStats, 0.5f);
+
+				SplitPane* bottomSplitLeft = new SplitPane(
+												SplitPane::SPLIT_HORIZONTAL, 
+												new TitledPanel(new LogConsolePanel(), "Console"), 
+												bottomSplitRight,
+												0.70f
+											);
+
+				
+
+				rightPanel->setRightComponent(bottomSplitLeft);
+
+			splitHorizontal->setLeftComponent(leftPanel);
+ 			splitHorizontal->setRightComponent(rightPanel);
+			addChild(splitHorizontal);
 		}
 
 		#define  LOGLOGLOG(...)  __android_log_print(ANDROID_LOG_INFO,"ARK2D",__VA_ARGS__)
@@ -273,6 +359,14 @@ namespace ARK {
 
 
 		void Log::watchVariable(string name, unsigned int type, void* data) {
+			// check the memory location/variable is not being watched already! 
+			for(unsigned int i = 0; i < m_watchedVariables.size(); i++) {
+				if (m_watchedVariables[i]->data == data) {
+					ARK2D::getLog()->w(StringUtil::append("Variable is already being watched: ", name));
+					return;
+				}
+			}
+
 			WatchedVariable* wv = new WatchedVariable();
 			wv->name = name;
 			wv->type = type;
@@ -292,6 +386,7 @@ namespace ARK {
 		}
 		
 		void Log::update() {
+			SceneNode::update();
 
 			//#if defined(ARK2D_DEBUG) 
 			//	return;
@@ -300,27 +395,31 @@ namespace ARK {
 			#if defined(ARK2D_FLASCC)
 				Input* i = ARK2D::getInput();
 				if (i->isKeyPressed(Input::KEY_D) && i->isKeyDown(Input::KEY_SPACE) && i->isKeyDown(Input::KEY_9)) {
-					m_visible = !m_visible;
+					this->visible = !this->visible;
 				} 
 			#elif defined(ARK2D_WINDOWS)
 				Input* i = ARK2D::getInput();
 				if (i->isKeyPressed(Input::KEY_D) && i->isKeyDown(Input::KEY_LSHIFT) && i->isKeyDown(Input::KEY_LCONTROL)) {
-					m_visible = !m_visible;
+					this->visible = !this->visible;
 				}
 			#else 
 				Input* i = ARK2D::getInput();
 				if (i->isKeyPressed(Input::KEY_D) && i->isKeyDown(Input::KEY_LSHIFT)) {
-					m_visible = !m_visible;
+					this->visible = !this->visible;
 				}
 			#endif
 
-			if (m_visible) {
+			if (this->visible) {
 				ARK2D::getContainer()->setCursorVisible(true); 
 			}
 
-			m_scene->update();
+			//m_scene->update();
 		}	
-		void Log::render(GameContainer* container, Renderer* r) {
+		void Log::render() {
+			GameContainer* container = ARK2D::getContainer();
+			Renderer* r = ARK2D::getRenderer();
+
+
 
 			// remove old items
 			if (m_messages.size() > m_maxMessages) {
@@ -332,83 +431,62 @@ namespace ARK {
 				}
 			}
 
-			if (!m_visible) {
+			if (this->visible) {
+				Vector3<float> pos = find("right_panel_split_vertical")->localPositionToGlobalPosition();
+				Game* g = ARK2D::getGame();
+				ARK::Geometry::Cube* bounds = g->getBounds();
+
+				
+				g->position.set(pos.getX(), 0, 0);
+
+				float scaleX = std::min(1.0f, (container->getWidth() - pos.getX()) / float(container->getWidth()));
+				float uniformScale = scaleX;
+				g->scale.set(uniformScale, uniformScale, uniformScale);
+			} else {
+				Game* g = ARK2D::getGame();
+				g->position.set(0, 0, 0);
+				g->scale.set(1.0f, 1.0f, 1.0f);
+			}
+
+			if (!this->visible) {
 				return;
 			}
 
+			r->disableMultisampling();
+
 			//GameContainer* container = ARK2D::getContainer();
 			//Renderer* g = ARK2D::getRenderer();
-			ARK::Font::Font* oldFont = r->getFont();
-			const Color& oldColor = r->getDrawColor();
+			//ARK::Font::Font* oldFont = r->getFont();
+			//const Color& oldColor = r->getDrawColor();
 
 			r->setDrawColor(*m_backgroundColor);
-			r->fillRect(container->getWidth()-150, 0, 150, 150);
-			r->fillRect(0, 0, 350, 200);
+			//r->fillRect(container->getWidth()-150, 0, 150, 150);
+			//r->fillRect(0, 0, 350, 200);
 			//r->fillRect(0, 0, container->getWidth(), container->getHeight());
 
 			ARK::Font::Font* defaultFont = r->getDefaultFont();
 			if (defaultFont == NULL) {
-				defaultFont = oldFont;
+				e("cannot display log. no default font loaded.");
+				return;
+				//defaultFont = oldFont;
 			} 
 
 			r->setDrawColor(Color::white);
 			r->setFont(defaultFont);
 
 			// Adjust game speed
-			r->drawString(StringUtil::appendf("Game Speed: ", m_gameSpeedSlider->getActualValue()), 10, 10, Renderer::ALIGN_LEFT, Renderer::ALIGN_CENTER, 0.0f, 0.5f);
+//			defaultFont->asBMFont()->drawString(StringUtil::appendf("Game Speed: ", m_gameSpeedSlider->getActualValue()), 10, 10, Renderer::ALIGN_LEFT, Renderer::ALIGN_CENTER, 0.0f, 0.5f);
 			m_gameSpeedSlider->updateValue();
 			//m_gameSpeedSlider->render();
 			ARK2D::getTimer()->setDeltaModifier(m_gameSpeedSlider->getActualValue());
 
 			r->setDrawColor(Color::white);
-			r->drawString("EXPO Mode:", 10, 60, Renderer::ALIGN_LEFT, Renderer::ALIGN_CENTER, 0.0f, 0.5f);
+			
 			//m_expoCheckbox->render();
 			ARK2D::setExpoMode(m_expoCheckbox->isChecked());
 
-			// draw watched variables
-			r->drawString("Watched Variables:", 10, 100, Renderer::ALIGN_LEFT, Renderer::ALIGN_CENTER, 0.0f, 0.5f);
-			for(unsigned int i = 0; i < m_watchedVariables.size(); ++i) {
-				WatchedVariable* wv = m_watchedVariables[i];
-				string displayName = wv->name;
-				displayName += ": ";
-				if (wv->type == WatchedVariable::TYPE_FLOAT) {
-					float* d = (float*) wv->data;
-					r->drawString(StringUtil::appendf(displayName, *d), 10, 110 + (10*i), Renderer::ALIGN_LEFT, Renderer::ALIGN_CENTER, 0.0f, 0.5f);
-				} else if (wv->type == WatchedVariable::TYPE_UINT) {
-					unsigned int* d = (unsigned int*) wv->data;
-					r->drawString(StringUtil::append(displayName, *d), 10, 110 + (10*i), Renderer::ALIGN_LEFT, Renderer::ALIGN_CENTER, 0.0f, 0.5f);
-				} else if (wv->type == WatchedVariable::TYPE_SINT) {
-					signed int* d = (signed int*) wv->data;
-					r->drawString(StringUtil::append(displayName, *d), 10, 110 + (10*i), Renderer::ALIGN_LEFT, Renderer::ALIGN_CENTER, 0.0f, 0.5f);
-				} else if (wv->type == WatchedVariable::TYPE_BOOL) {
-					bool* d = (bool*) wv->data;
-					r->drawString(StringUtil::append(displayName, Cast::boolToString(*d)), 10, 110 + (10*i), Renderer::ALIGN_LEFT, Renderer::ALIGN_CENTER, 0.0f, 0.5f);
-				} else if (wv->type == WatchedVariable::TYPE_STR) {
-					string* d = (string*) wv->data;
-					displayName += *d;
-					r->drawString(displayName, 10, 110 + (10*i), Renderer::ALIGN_LEFT, Renderer::ALIGN_CENTER, 0.0f, 0.5f);
-				}
-			}
-			
 			// draw renderer stats
-			r->setDrawColor(Color::white);
-			unsigned int rendererGLCalls = RendererStats::s_glCalls;
-			unsigned int rendererLines = RendererStats::s_lines;
-			unsigned int rendererTris = RendererStats::s_tris;
-			unsigned int rendererTextureSwaps = RendererStats::s_textureSwaps;
-			unsigned int rendererShaderSwaps = RendererStats::s_shaderSwaps;
-			float rendererTextureMemory = (float(RendererStats::s_textureAllocatedBytes) / 1024.0f) / 1024.0f;
-			r->drawString(StringUtil::append("FPS: ", ARK2D::getTimer()->getFPS()), container->getWidth() - 10, 10, Renderer::ALIGN_RIGHT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
 			
-			r->drawString(StringUtil::append("Log Size: ", m_messagesPool.size()), container->getWidth() - 10, 30, Renderer::ALIGN_RIGHT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
-
-			r->drawString(StringUtil::append("OpenGL Calls: ", rendererGLCalls), container->getWidth() - 10, 50, Renderer::ALIGN_RIGHT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
-			r->drawString(StringUtil::append("Lines: ", rendererLines), container->getWidth() - 10, 60, Renderer::ALIGN_RIGHT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
-			r->drawString(StringUtil::append("Tris: ", rendererTris), container->getWidth() - 10, 70, Renderer::ALIGN_RIGHT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
-			r->drawString(StringUtil::append("Texture Swaps: ", rendererTextureSwaps), container->getWidth() - 10, 80, Renderer::ALIGN_RIGHT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
-			r->drawString(StringUtil::append("Shader Swaps: ", rendererShaderSwaps), container->getWidth() - 10, 90, Renderer::ALIGN_RIGHT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
-			r->drawString(StringUtil::appendf("Texture Memory (MB): ", rendererTextureMemory), container->getWidth() - 10, 100, Renderer::ALIGN_RIGHT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
-			 
  			// container widths and heights...
  			int cy = 120;
  			//r->drawString(StringUtil::append("FPS: ", ARK2D::getTimer()->getFPS()), container->getWidth() - 10, 10, Renderer::ALIGN_RIGHT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
@@ -429,32 +507,29 @@ namespace ARK {
 				y += defaultFont->getLineHeight() * 0.5f;
 			}*/
 
+			renderChildren();
+
 			r->setDrawColor(Color::white);
-			r->setFont(defaultFont);
-			m_scene->render();
+			//r->setFont(defaultFont);
+			//m_scene->render();
+			
+			r->enableMultisampling();
 
-
-			r->setDrawColor(oldColor);
-			r->setFont(oldFont);
+			//r->setDrawColor(oldColor);
+			//r->setFont(oldFont);
 		}
 
-		void Log::keyPressed(unsigned int key) {
-			if (!m_visible) { return; }
-			//m_gameSpeedSlider->keyPressed(key);
-			//m_expoCheckbox->keyPressed(key);
-			m_scene->keyPressed(key);
+		bool Log::keyPressed(unsigned int key) {
+			if (!this->visible) { return false; }
+			return SceneNode::keyPressed(key);
 		}
-		void Log::keyReleased(unsigned int key) {
-			if (!m_visible) { return; }
-			//m_gameSpeedSlider->keyReleased(key);
-			//m_expoCheckbox->keyReleased(key);
-			m_scene->keyReleased(key);
+		bool Log::keyReleased(unsigned int key) {
+			if (!this->visible) { return false; }
+			return SceneNode::keyReleased(key);
 		}
-		void Log::mouseMoved(int x, int y, int oldx, int oldy) {
-			if (!m_visible) { return; }
-			//m_gameSpeedSlider->mouseMoved(x, y, oldx, oldy);
-			//m_expoCheckbox->mouseMoved(x, y, oldx, oldy);
-			m_scene->mouseMoved(x, y, oldx, oldy);
+		bool Log::mouseMoved(int x, int y, int oldx, int oldy) {
+			if (!this->visible) { return false; }
+			return SceneNode::mouseMoved(x, y, oldx, oldy);
 		}
 
    		wstring Log::getTypeWString(unsigned int type) {
@@ -544,40 +619,137 @@ namespace ARK {
 			}
 
 			// Remove the panel from the debug scene
-		    Scene* scene = ARK2D::getLog()->getScene();
-			SceneNode* panel = scene->find(pad->getName());
+			SceneNode* panel = ARK2D::getLog()->find(pad->getName());
 		    if (panel != NULL) {
-		        scene->removeChild(panel);
+		        ARK2D::getLog()->removeChild(panel);
 		    }
 
 			delete pad;
 			pad = NULL;
 		}
 
-		TitledPanel::TitledPanel(): 
-			Panel(), 
-			m_title("") {
+		
 
+		LogConsolePanel::LogConsolePanel():
+            Panel() {
+            setName("console");
+			//setTitle("Console");
 		}
-		void TitledPanel::setTitle(string title) {
-			m_title = title;
-		}
-		void TitledPanel::render() {
+		void LogConsolePanel::render() {
+			// Panel::render();
+
+			preRenderFromPivot();
+
+			Log* l = ARK2D::getLog();
 			Renderer* r = ARK2D::getRenderer();
-			r->setDrawColor(Color::black_50a);
-			r->fillRect(0, 0, m_width, m_height);
+			ARK::Geometry::Cube* bounds = getBounds();
 
-			r->setDrawColor(Color::white);
-			r->drawLine(0, 20, m_width, 20);
-			
-			r->drawString(m_title, 1, 1, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+			r->enableStencil();
+			r->startStencil();
+			r->fillRect(0,0,bounds->getWidth(), bounds->getHeight());
+			r->stopStencil();
+            
+            unsigned int i = 0;
+            float totalH = 0;
+            list<LogMessage*>::reverse_iterator it = l->m_messages.rbegin();
+            while (it != l->m_messages.rend()) {
+				r->drawString((*it)->message, 10.0f, bounds->getHeight() - (i*12.0f), Renderer::ALIGN_LEFT, Renderer::ALIGN_BOTTOM, 0.0f, 0.5f);
+                it++;
+                i++;
+                totalH += 12.0f;
+                if (i >= 10 || totalH > bounds->getHeight()) { break; }
+			}
 
-			renderChildren();
+			r->disableStencil();
 
 			Panel::renderBorder();
+
+			postRenderFromPivot();
 		}
+
+		LogWatchedVariablesPanel::LogWatchedVariablesPanel():
+            Panel() {
+            setName("watchedVariables");
+			//setTitle("Watched Variables");
+		}
+		void LogWatchedVariablesPanel::render() {
+			//TitledPanel::render();
+
+			Log* l = ARK2D::getLog();
+			Renderer* r = ARK2D::getRenderer();
+
+			preRenderFromPivot();
+			
+            for(unsigned int i = 0; i < l->m_watchedVariables.size(); ++i) {
+				WatchedVariable* wv = l->m_watchedVariables[i];
+				string displayName = wv->name;
+				displayName += ": ";
+				if (wv->type == WatchedVariable::TYPE_FLOAT) {
+					float* d = (float*) wv->data;
+					r->drawString(StringUtil::appendf(displayName, *d), 10, 0 + (12*i), Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+				} else if (wv->type == WatchedVariable::TYPE_UINT) {
+					unsigned int* d = (unsigned int*) wv->data;
+					r->drawString(StringUtil::append(displayName, *d), 10, 0 + (12*i), Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+				} else if (wv->type == WatchedVariable::TYPE_SINT) {
+					signed int* d = (signed int*) wv->data;
+					r->drawString(StringUtil::append(displayName, *d), 10, 0 + (12*i), Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+				} else if (wv->type == WatchedVariable::TYPE_BOOL) {
+					bool* d = (bool*) wv->data;
+					r->drawString(StringUtil::append(displayName, Cast::boolToString(*d)), 10, 0 + (12*i), Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+				} else if (wv->type == WatchedVariable::TYPE_STR) {
+					string* d = (string*) wv->data;
+					displayName += *d;
+					r->drawString(displayName, 10, 0 + (12*i), Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+				}
+			}
+
+			Panel::renderBorder();
+
+			postRenderFromPivot();
+		}
+
+		LogRendererStatsPanel::LogRendererStatsPanel():
+            Panel() {
+            setName("rendererStats");
+			//setTitle("Renderer Stats");
+		}
+		void LogRendererStatsPanel::render() {
+			//TitledPanel::render();
+
+			Log* l = ARK2D::getLog();
+			Renderer* r = ARK2D::getRenderer();
+
+			preRenderFromPivot();
+			
+            float textX = 10;
+            r->setDrawColor(Color::white);
+			unsigned int rendererGLCalls = RendererStats::s_previousframe_glCalls;
+			unsigned int rendererLines = RendererStats::s_previousframe_lines;
+			unsigned int rendererTris = RendererStats::s_previousframe_tris;
+			unsigned int rendererTextureSwaps = RendererStats::s_previousframe_textureSwaps;
+			unsigned int rendererShaderSwaps = RendererStats::s_previousframe_shaderSwaps;
+			float rendererTextureMemory = (float(RendererStats::s_textureAllocatedBytes) / 1024.0f) / 1024.0f;
+			r->drawString(StringUtil::append("FPS: ", ARK2D::getTimer()->getFPS()), textX, 0, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+			
+			r->drawString(StringUtil::append("Log Size: ", l->m_messagesPool.size()), textX, 10, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+
+			r->drawString(StringUtil::append("OpenGL Calls: ", rendererGLCalls), textX, 30, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+			r->drawString(StringUtil::append("Lines: ", rendererLines), textX, 40, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+			r->drawString(StringUtil::append("Tris: ", rendererTris), textX, 50, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+			r->drawString(StringUtil::append("Texture Swaps: ", rendererTextureSwaps), textX, 60, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+			r->drawString(StringUtil::append("Shader Swaps: ", rendererShaderSwaps), textX, 70, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+			r->drawString(StringUtil::appendf("Texture Memory (MB): ", rendererTextureMemory), textX, 80, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+			 
+			Panel::renderBorder();
+
+			postRenderFromPivot();
+
+		}
+
 		void GPAxisButton::render() {
 			//GPButton::render();
+
+			preRenderFromPivot();
 
 			renderBackground();
 			renderText(0,0); 
@@ -586,6 +758,8 @@ namespace ARK {
 			Renderer* r = ARK2D::getRenderer();
 			r->setDrawColor(Color::white);
 		    r->fillCircle((m_width*0.5) + (axisValueX * m_width*0.5), (m_height*0.5) + (axisValueY * m_height*0.5), 5, 10);
+
+		    postRenderFromPivot();
 
 			renderChildren();
 		} 
@@ -793,15 +967,10 @@ namespace ARK {
 			float panelX = 500 + ((gamepad->id%3)*300);
 			float panelY = 120 + (floor(gamepad->id/3)*240);
 
-			SceneNode* root = ARK2D::getLog()->getScene()->getRoot();
-				TitledPanel* p = new TitledPanel();
-				p->setName(gamepad->name);
-				p->setTitle(gamepad->name);
-				p->setSize(300,240);
-				p->position.set(panelX, panelY);
-				p->scale.set(1.0f, 1.0f);
-				p->pivot.set(0.5f, 0.5f);
-
+            SceneNode* root = ARK2D::getLog();//->getScene()->getRoot();
+            	
+				Panel* p = new Panel();
+				
 					// BACK, START
 					GPButton* backButton = new GPButton("back");
 					backButton->gpid = gamepad->id;
@@ -951,14 +1120,20 @@ namespace ARK {
 					closeButton->setEvent((void*) &debugGamepadClose);
 					closeButton->setEventObj((void*) closeButton);
 					closeButton->setSize(40, 40);
-					closeButton->position.set(p->getWidth()*0.5f, p->getHeight()*-0.5f);
+					
 					closeButton->scale.set(0.5f, 0.5f);
 					closeButton->pivot.set(1.0, 0.0);
 					p->addChild(closeButton);
-		 
+			 
+				TitledPanel* pw = new TitledPanel(p, gamepad->name);
+				pw->pivot.set(0.5, 0.5, 0.0);
+                pw->setName(gamepad->name);
+                pw->setBounds(300,240,0);
+				pw->position.set(panelX, panelY); 
 
+				closeButton->position.set(pw->getWidth()*0.5f, -120.0f);
 
-			root->addChild(p);
+			root->addChild(pw);
 
 
 		}

@@ -10,6 +10,7 @@
 
 #include "Shape.h"
 #include "../Includes.h"
+#include "../Graphics/Renderer.h"
   
 namespace ARK { 
 	namespace Geometry {

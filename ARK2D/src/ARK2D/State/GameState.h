@@ -21,9 +21,10 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-        class ARK2D_API GameState : public KeyListener {
+        class ARK2D_API GameState : public SceneNode, public KeyListener {
 			public:
 				GameState();
+				GameState(string name);
 
 				virtual void enter(GameContainer* container, StateBasedGame* game, GameState* from);
 				virtual void leave(GameContainer* container, StateBasedGame* game, GameState* to);
@@ -32,6 +33,8 @@ namespace ARK {
 				virtual void init(GameContainer* container, StateBasedGame* game) = 0;
 				virtual void update(GameContainer* container, StateBasedGame* game, GameTimer* timer) = 0;
 				virtual void render(GameContainer* container, StateBasedGame* game, Renderer* g) = 0;
+				
+				virtual void render();
 
 				virtual void pause(); // android events
 				virtual void resume();
@@ -44,8 +47,6 @@ namespace ARK {
 
 				virtual ~GameState();
 
-			public:
-				Scene* scene;
 		};
 	}
 }

@@ -101,6 +101,7 @@ namespace ARK {
 				unsigned int getState();
 
 				virtual ARK::Geometry::Cube* getBounds();
+				virtual	void setBounds(float w, float h, float z);
 
 				virtual void render() = 0;
 				virtual void preRender();

@@ -43,7 +43,8 @@ namespace ARK {
 				unsigned int type;
 
                 SceneNode();
-                SceneNode(unsigned int type, string name);
+                SceneNode(string name);
+                SceneNode(string name,unsigned int type);
 
 				void setName(string n);
 				string getName();
@@ -67,6 +68,8 @@ namespace ARK {
 				float localRotationToGlobalRotation();
 				virtual bool isGlobalPositionInBounds(float x, float y);
 
+				Vector3<float> globalPositionToLocalPosition(float gx, float gy, float gz, bool fromTopLeft = false);
+
 				vector<SceneNode*> getPathToRoot();
 				void getPathToRoot(vector<SceneNode* >* path);
 		
@@ -76,10 +79,12 @@ namespace ARK {
 				virtual void preRender();
 				virtual void postRender();
 				virtual void renderChildren();
+				virtual void renderBounds();
 
 				void setVisible(bool b);
 				static void setVisibleStatic(SceneNode* obj, bool b);
 
+				virtual void setBounds(float w, float h, float d);
 				virtual ARK::Geometry::Cube* getBounds();
 
 				virtual bool keyPressed(unsigned int key);
@@ -94,8 +99,14 @@ namespace ARK {
 				Image* asImage();
 				virtual ~SceneNode();
 
+				string toListString();
+				string toListString(signed int indent);
 
+				void preRenderFromPivot();
+				void postRenderFromPivot();
 		};
+
+
 
 		class ARK2D_API SceneGroup : public SceneNode {
 				

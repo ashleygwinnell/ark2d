@@ -35,6 +35,9 @@ namespace ARK {
 			return Game::getTitle();
 		}
 		void StateBasedGame::addState(GameState* state) {
+
+			addChild(state);
+
 			m_states.push_back(state);
 			m_from_state = state;
 			//if (m_current_state != NULL && m_current_state == m_loading_state) {
@@ -134,6 +137,7 @@ namespace ARK {
 		}
 
 		void StateBasedGame::init(GameContainer* container) {
+			Game::init(container);
 			m_container = container;
 
 			initStates(container);
@@ -207,27 +211,54 @@ namespace ARK {
 			//postUpdate(container, timer);
 		}
 
-		void StateBasedGame::preRender(GameContainer* container, Renderer* r) {
-			Game::preRender(container, r);
+
+		void StateBasedGame::preRender() {
+			if (!visible) { return; }
+			Game::preRender();
 		}
-		void StateBasedGame::postRender(GameContainer* container, Renderer* r) {
-			Game::postRender(container, r);
+		void StateBasedGame::postRender() {
+			if (!visible) { return; }
+			Game::postRender();
 		}
-		void StateBasedGame::render(GameContainer* container, Renderer* g) {
+		void StateBasedGame::render() {
+			if (!visible) { return; }
 			//preRender(container, g);
 			//ARK2D::getLog()->v("sbg::render");
-
 			preRenderTransitions();
+
+			//container->scene->render();
 			
 			// Render Current State.
 			if (m_current_state != NULL) {
 				//ARK2D::getLog()->v("StateBasedGame::render - render current state");
-				m_current_state->render(container, this, g);
+                m_current_state->render(ARK2D::getContainer(), this, ARK2D::getRenderer());
+			}
+
+			// set visiblity of states.
+			// for state in states
+			// 	visible = (currentstate)?true:false;
+			// end for 
+
+			// render all states
+			renderChildren();
+			if (ARK2D::getLog()->isVisible()) {
+				renderBounds();
 			}
 
 			postRenderTransitions();
  
 			//postRender(container, g);
+		}
+
+
+		void StateBasedGame::preRender(GameContainer* container, Renderer* r) {
+			preRender(); 
+		}
+		void StateBasedGame::postRender(GameContainer* container, Renderer* r) {
+			postRender();
+		}
+		void StateBasedGame::render(GameContainer* container, Renderer* g) {
+			
 		}
 		void StateBasedGame::preRenderTransitions() {
 			// Render post-enter transition 

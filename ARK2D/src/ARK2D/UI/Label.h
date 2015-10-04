@@ -27,9 +27,14 @@ namespace ARK {
 		class ARK2D_API Label : public AbstractUIComponent {
 			private:
 				string m_text;
+				signed int m_alignX;
+				signed int m_alignY;
+
 			public:
 				Label();
 				Label(string text);
+				Label(string text, signed int alignX, signed int alignY);
+				Label(string text, signed int alignX, signed int alignY, float scale);
 				void setText(string text);
 				void setText(string text, bool updateSize);
 				void render();
