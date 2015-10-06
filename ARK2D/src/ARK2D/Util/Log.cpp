@@ -980,7 +980,7 @@ namespace ARK {
 					backButton->setEvent((void*) &debugGamepadButtonPress);
 					backButton->setEventObj((void*) backButton);
 					backButton->setSize(30, 30);
-					backButton->position.set(-5.0f, 10.0f);
+					backButton->position.set(-5.0f, 0.0f);
 					backButton->pivot.set(1.0, 0.5);
 					p->addChild(backButton);
 
@@ -990,7 +990,7 @@ namespace ARK {
 					startButton->setEvent((void*) &debugGamepadButtonPress);
 					startButton->setEventObj((void*) startButton);
 					startButton->setSize(30, 30);
-					startButton->position.set(5, 10);
+					startButton->position.set(5, 0);
 					startButton->pivot.set(0.0, 0.5);
 					p->addChild(startButton);
 
@@ -1001,7 +1001,7 @@ namespace ARK {
 					dpadButtonLeft->setEvent((void*) &debugGamepadButtonPress);
 					dpadButtonLeft->setEventObj((void*) dpadButtonLeft);
 					dpadButtonLeft->setSize(30, 30);
-					dpadButtonLeft->position.set(-100, 60);
+					dpadButtonLeft->position.set(-100, 50);
 					dpadButtonLeft->pivot.set(0.5, 0.5);
 					p->addChild(dpadButtonLeft);
 
@@ -1011,7 +1011,7 @@ namespace ARK {
 					dpadButtonRight->setEvent((void*) &debugGamepadButtonPress);
 					dpadButtonRight->setEventObj((void*) dpadButtonRight);
 					dpadButtonRight->setSize(30, 30);
-					dpadButtonRight->position.set(-50, 60);
+					dpadButtonRight->position.set(-50, 50);
 					dpadButtonRight->pivot.set(0.5, 0.5);
 					p->addChild(dpadButtonRight);
 
@@ -1021,7 +1021,7 @@ namespace ARK {
 					dpadButtonUp->setEvent((void*) &debugGamepadButtonPress);
 					dpadButtonUp->setEventObj((void*) dpadButtonUp);
 					dpadButtonUp->setSize(30, 30);
-					dpadButtonUp->position.set(-75, 35);
+					dpadButtonUp->position.set(-75, 25);
 					dpadButtonUp->pivot.set(0.5, 0.5);
 					p->addChild(dpadButtonUp);
 
@@ -1031,7 +1031,7 @@ namespace ARK {
 					dpadButtonDown->setEvent((void*) &debugGamepadButtonPress);
 					dpadButtonDown->setEventObj((void*) dpadButtonDown);
 					dpadButtonDown->setSize(30, 30);
-					dpadButtonDown->position.set(-75, 85);
+					dpadButtonDown->position.set(-75, 75);
 					dpadButtonDown->pivot.set(0.5, 0.5);
 					p->addChild(dpadButtonDown);
 
@@ -1042,7 +1042,7 @@ namespace ARK {
 					buttonB->setEvent((void*) &debugGamepadButtonPress);
 					buttonB->setEventObj((void*) buttonB);
 					buttonB->setSize(30, 30);
-					buttonB->position.set(100, 60);
+					buttonB->position.set(100, 50);
 					buttonB->pivot.set(0.5, 0.5);
 					p->addChild(buttonB);
 
@@ -1052,7 +1052,7 @@ namespace ARK {
 					buttonX->setEvent((void*) &debugGamepadButtonPress);
 					buttonX->setEventObj((void*) buttonX);
 					buttonX->setSize(30, 30);
-					buttonX->position.set(50, 60);
+					buttonX->position.set(50, 50);
 					buttonX->pivot.set(0.5, 0.5);
 					p->addChild(buttonX);
 
@@ -1062,7 +1062,7 @@ namespace ARK {
 					buttonY->setEvent((void*) &debugGamepadButtonPress);
 					buttonY->setEventObj((void*) buttonY);
 					buttonY->setSize(30, 30);
-					buttonY->position.set(75, 35);
+					buttonY->position.set(75, 25);
 					buttonY->pivot.set(0.5, 0.5);
 					p->addChild(buttonY);
 
@@ -1072,7 +1072,7 @@ namespace ARK {
 					buttonA->setEvent((void*) &debugGamepadButtonPress);
 					buttonA->setEventObj((void*) buttonA);
 					buttonA->setSize(30, 30);
-					buttonA->position.set(75, 85);
+					buttonA->position.set(75, 75);
 					buttonA->pivot.set(0.5, 0.5);
 					p->addChild(buttonA);
 
@@ -1083,7 +1083,7 @@ namespace ARK {
 					leftBumperButton->setEvent((void*) &debugGamepadButtonPress);
 					leftBumperButton->setEventObj((void*) leftBumperButton);
 					leftBumperButton->setSize(60, 25);
-					leftBumperButton->position.set(-110.0f, -70.0f);
+					leftBumperButton->position.set(-110.0f, -80.0f);
 					leftBumperButton->pivot.set(0.5, 0.5);
 					p->addChild(leftBumperButton);
 
@@ -1093,7 +1093,7 @@ namespace ARK {
 					rightBumperButton->setEvent((void*) &debugGamepadButtonPress);
 					rightBumperButton->setEventObj((void*) rightBumperButton);
 					rightBumperButton->setSize(60, 25);
-					rightBumperButton->position.set(110, -70);
+					rightBumperButton->position.set(110, -80);
 					rightBumperButton->pivot.set(0.5, 0.5);
 					p->addChild(rightBumperButton);
 
@@ -1103,7 +1103,7 @@ namespace ARK {
 					axisLeft->axisIdX = Gamepad::ANALOG_STICK_1_X;
 					axisLeft->axisIdY = Gamepad::ANALOG_STICK_1_Y;
 					axisLeft->setSize(55, 55);
-					axisLeft->position.set(-100, -20);
+					axisLeft->position.set(-100, -30);
 					axisLeft->pivot.set(0.5, 0.5);
 					p->addChild(axisLeft);
 
@@ -1112,7 +1112,7 @@ namespace ARK {
 					axisRight->axisIdX = Gamepad::ANALOG_STICK_2_X;
 					axisRight->axisIdY = Gamepad::ANALOG_STICK_2_Y;
 					axisRight->setSize(55, 55);
-					axisRight->position.set(100, -20);
+					axisRight->position.set(100, -30);
 					axisRight->pivot.set(0.5, 0.5);
 					p->addChild(axisRight);
 
@@ -1121,8 +1121,8 @@ namespace ARK {
 					closeButton->gpid = gamepad->id;
 					closeButton->setEvent((void*) &debugGamepadClose);
 					closeButton->setEventObj((void*) closeButton);
-					closeButton->setSize(40, 40);
-					
+					closeButton->setSize(40, 40); 
+					//closeButton->position.set(0.0f, -20.0f);
 					closeButton->scale.set(0.5f, 0.5f);
 					closeButton->pivot.set(1.0, 0.0);
 					p->addChild(closeButton);
@@ -1133,7 +1133,7 @@ namespace ARK {
                 pw->setBounds(300,240,0);
 				pw->position.set(panelX, panelY); 
 
-				closeButton->position.set(pw->getWidth()*0.5f, -120.0f);
+				closeButton->position.set(pw->getWidth()*0.5f, -130.0f);
 
 			root->addChild(pw);
 
