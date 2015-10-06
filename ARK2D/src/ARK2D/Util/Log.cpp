@@ -73,64 +73,80 @@ namespace ARK {
  			splitHorizontal->setBounds(1280, 720, 0);
  			splitHorizontal->setSplitLocation(0.2f);
  			
- 			TitledPanel* leftPanel = new TitledPanel();
- 			leftPanel->setTitle("Debug");
- 			leftPanel->setName("left_panel");
-                
-                ARK::UI::Label* gameSpeedLabel = new ARK::UI::Label("Game Speed:", -1, 0, 0.5f);
-                gameSpeedLabel->position.set(10, 20);
-   				leftPanel->addChild(gameSpeedLabel);
+ 			
 
-				m_gameSpeedSlider = new ARK::UI::Slider();
-				m_gameSpeedSlider->setName("game_speed_slider");
-				m_gameSpeedSlider->setSize(160, 3);
-				m_gameSpeedSlider->position.set(70, 20);
-				m_gameSpeedSlider->setSnapping(true, 0.05f);
-				m_gameSpeedSlider->setRange(0.0f, 2.0f);
-				m_gameSpeedSlider->setButtonPosition(0.5f);
-				leftPanel->addChild(m_gameSpeedSlider);
+ 				SplitPane* splitLeft = new SplitPane(SplitPane::SPLIT_VERTICAL);
+ 				splitLeft->setName("leftpanel_split_vertical");
+ 				splitLeft->setSplitLocation(0.5f);
 
-				ARK::UI::Label* expoModeLabel = new ARK::UI::Label("Expo Mode:", -1, 0, 0.5f);
-                expoModeLabel->position.set(10, 60);
-                leftPanel->addChild(expoModeLabel);
+ 					TitledPanel* splitLeftTop = new TitledPanel();
+ 					splitLeftTop->setTitle("Debug");
+ 					splitLeftTop->setName("left_panel");
+	                
+		                ARK::UI::Label* gameSpeedLabel = new ARK::UI::Label("Game Speed:", -1, 0, 0.5f);
+		                gameSpeedLabel->position.set(10, 20);
+		   				splitLeftTop->addChild(gameSpeedLabel);
 
-				m_expoCheckbox = new ARK::UI::CheckBox();
-				m_expoCheckbox->setName("expo_mode_checkbox");
-				m_expoCheckbox->setSize(24, 24);
-				m_expoCheckbox->position.set(70, 60);
-				leftPanel->addChild(m_expoCheckbox);
+						m_gameSpeedSlider = new ARK::UI::Slider();
+						m_gameSpeedSlider->setName("game_speed_slider");
+						m_gameSpeedSlider->setSize(160, 3);
+						m_gameSpeedSlider->position.set(70, 20);
+						m_gameSpeedSlider->setSnapping(true, 0.05f);
+						m_gameSpeedSlider->setRange(0.0f, 2.0f);
+						m_gameSpeedSlider->setButtonPosition(0.5f);
+						splitLeftTop->addChild(m_gameSpeedSlider);
 
-				ARK::UI::Label* virtualPadLabel = new ARK::UI::Label("Virtual Pad:", -1, 0, 0.5f);
-                virtualPadLabel->position.set(10, 120);
-                leftPanel->addChild(virtualPadLabel);
+						ARK::UI::Label* expoModeLabel = new ARK::UI::Label("Expo Mode:", -1, 0, 0.5f);
+		                expoModeLabel->position.set(10, 60);
+		                splitLeftTop->addChild(expoModeLabel);
 
-				m_addGamepadButton = new ARK::UI::Button("+");
-				m_expoCheckbox->setName("add_virtual_gamepad_button");
-				m_addGamepadButton->setSize(30, 30);
-				m_addGamepadButton->position.set(70, 120); 
-				m_addGamepadButton->setEvent((void*) &debug_addVirtualGamepad);
-				leftPanel->addChild(m_addGamepadButton);
+						m_expoCheckbox = new ARK::UI::CheckBox();
+						m_expoCheckbox->setName("expo_mode_checkbox");
+						m_expoCheckbox->setSize(24, 24);
+						m_expoCheckbox->position.set(70, 60);
+						splitLeftTop->addChild(m_expoCheckbox);
 
-				ARK::UI::Label* languageLabel = new ARK::UI::Label("Language:", -1, 0, 0.5f);
-                languageLabel->position.set(10, 180);
-                leftPanel->addChild(languageLabel);
+						ARK::UI::Label* virtualPadLabel = new ARK::UI::Label("Virtual Pad:", -1, 0, 0.5f);
+		                virtualPadLabel->position.set(10, 120);
+		                splitLeftTop->addChild(virtualPadLabel);
 
-				ARK::UI::ComboBox* languageCombobox = new ARK::UI::ComboBox();
-				languageCombobox->setName("language arena");
-				languageCombobox->position.set(70, 180);
-				languageCombobox->setSize(160, 30);
-				languageCombobox->setItemChangedEvent((void*) debugLanguageChanged);
-				languageCombobox->addItem(new ComboBoxItem("English (UK)", "english_uk"));
-				languageCombobox->addItem(new ComboBoxItem("English (US)", "english_us"));
-				languageCombobox->addItem(new ComboBoxItem("French", "french_fr"));
-				languageCombobox->addItem(new ComboBoxItem("Italian", "italian"));
-				languageCombobox->addItem(new ComboBoxItem("German", "german"));
-				languageCombobox->addItem(new ComboBoxItem("Spanish", "spanish"));
-				languageCombobox->addItem(new ComboBoxItem("Swedish", "swedish"));
-				languageCombobox->addItem(new ComboBoxItem("Hebrew", "hebrew"));
-				//combobox->addItem(new ComboBoxItem("Arabic", "arabic"));
-				leftPanel->addChild(languageCombobox);
+						m_addGamepadButton = new ARK::UI::Button("+");
+						m_expoCheckbox->setName("add_virtual_gamepad_button");
+						m_addGamepadButton->setSize(30, 30);
+						m_addGamepadButton->position.set(70, 120); 
+						m_addGamepadButton->setEvent((void*) &debug_addVirtualGamepad);
+						splitLeftTop->addChild(m_addGamepadButton);
 
+						ARK::UI::Label* languageLabel = new ARK::UI::Label("Language:", -1, 0, 0.5f);
+		                languageLabel->position.set(10, 180);
+		                splitLeftTop->addChild(languageLabel);
+
+						ARK::UI::ComboBox* languageCombobox = new ARK::UI::ComboBox();
+						languageCombobox->setName("language arena");
+						languageCombobox->position.set(70, 180);
+						languageCombobox->setSize(160, 30);
+						languageCombobox->setItemChangedEvent((void*) debugLanguageChanged);
+						languageCombobox->addItem(new ComboBoxItem("English (UK)", "english_uk"));
+						languageCombobox->addItem(new ComboBoxItem("English (US)", "english_us"));
+						languageCombobox->addItem(new ComboBoxItem("French", "french_fr"));
+						languageCombobox->addItem(new ComboBoxItem("Italian", "italian"));
+						languageCombobox->addItem(new ComboBoxItem("German", "german"));
+						languageCombobox->addItem(new ComboBoxItem("Spanish", "spanish"));
+						languageCombobox->addItem(new ComboBoxItem("Swedish", "swedish"));
+						languageCombobox->addItem(new ComboBoxItem("Hebrew", "hebrew"));
+						//languageCombobox->addItem(new ComboBoxItem("Arabic", "arabic"));
+						splitLeftTop->addChild(languageCombobox);
+
+					TitledPanel* splitLeftBottomTitled = new TitledPanel(new LogSceneTreePanel(), "Scene Tree");
+                    
+
+
+
+
+
+				splitLeft->setLeftComponent(splitLeftTop);
+ 				splitLeft->setRightComponent(splitLeftBottomTitled);
+ 				addChild(splitLeft);
 
 			SplitPane* rightPanel = new SplitPane(SplitPane::SPLIT_VERTICAL);
 			rightPanel->setName("right_panel_split_vertical");
@@ -151,7 +167,7 @@ namespace ARK {
 
 				rightPanel->setRightComponent(bottomSplitLeft);
 
-			splitHorizontal->setLeftComponent(leftPanel);
+			splitHorizontal->setLeftComponent(splitLeft);
  			splitHorizontal->setRightComponent(rightPanel);
 			addChild(splitHorizontal);
 		}
@@ -629,6 +645,41 @@ namespace ARK {
 		}
 
 		
+
+		LogSceneTreePanel::LogSceneTreePanel():
+            ScrollPanel() {
+            setName("scene_tree");
+			//setTitle("Console");
+		}
+		void LogSceneTreePanel::render() {
+			// Panel::render();
+
+			ScrollPanel::render();
+
+			preRenderFromPivot();
+
+			Log* l = ARK2D::getLog();
+			Renderer* r = ARK2D::getRenderer();
+			ARK::Geometry::Cube* bounds = getBounds();
+
+			r->enableStencil();
+			r->startStencil();
+			r->fillRect(0,0,bounds->getWidth(), bounds->getHeight());
+			r->stopStencil();
+            
+           	Scene* scene = ARK2D::getContainer()->scene;
+           	string str = scene->getRoot()->toListString();
+           	vector<string> lines = StringUtil::split(str, "\n");
+           	for(unsigned int i = 0; i < lines.size(); i++) {
+           		r->drawString(lines[i], 10.0f, i*12.0f, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+           	} 
+
+			r->disableStencil();
+
+			Panel::renderBorder();
+
+			postRenderFromPivot();
+		}
 
 		LogConsolePanel::LogConsolePanel():
             Panel() {

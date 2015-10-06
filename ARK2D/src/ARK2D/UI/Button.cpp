@@ -119,7 +119,7 @@ namespace ARK {
 		}
 		
 		void Button::render() {
-			if (!m_visible) { return; }
+			if (!visible) { return; }
 
 			if (parent == NULL) { preRender(); }
 			preRenderFromPivot();

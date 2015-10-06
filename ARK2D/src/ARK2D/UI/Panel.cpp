@@ -35,7 +35,7 @@ namespace ARK {
 		}
 
 		void Panel::render() {
-			if (m_visible) {
+			if (visible) {
 
 				preRenderFromPivot();
 
@@ -129,7 +129,7 @@ namespace ARK {
 		}
 
 		bool Panel::keyPressed(unsigned int key) {
-			if (!m_visible) { return false; }
+			if (!visible) { return false; }
 
 			for(unsigned int i = 0; i < children.size(); i++) {
 				if (children.at(i)->keyPressed(key)) return true;
@@ -137,7 +137,7 @@ namespace ARK {
             return false;
 		}
 		bool Panel::keyReleased(unsigned int key) {
-			if (!m_visible) { return false; }
+			if (!visible) { return false; }
 
 			for(unsigned int i = 0; i < children.size(); i++) {
                 if (children.at(i)->keyReleased(key) ) return true;
@@ -145,7 +145,7 @@ namespace ARK {
 	        return false;
 		}
 		bool Panel::mouseMoved(int x, int y, int oldx, int oldy) {
-			if (!m_visible) { return false; }
+			if (!visible) { return false; }
 
 			m_state = (isGlobalPositionInBounds(x, y)) ? STATE_OVER : STATE_OFF;
 

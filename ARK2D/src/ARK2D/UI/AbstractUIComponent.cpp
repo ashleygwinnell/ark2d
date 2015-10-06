@@ -21,7 +21,7 @@ namespace ARK {
 			m_padding(0,0,0,0),
 			m_margin(0,0,0,0), 
 			m_clipping(false),
-			m_visible(true),
+			//m_visible(true),
 			m_enabled(true),
 			m_state(0)
 			{
@@ -101,10 +101,10 @@ namespace ARK {
 		bool AbstractUIComponent::hasParent() { return (m_parent!=NULL); }
 		
 		void AbstractUIComponent::setVisible(bool b) {
-			m_visible = b;
+			this->visible = b;
 		}
 		bool AbstractUIComponent::isVisible() {
-			return m_visible;
+			return this->visible;
 		}
 
 		void AbstractUIComponent::setEnabled(bool b) {

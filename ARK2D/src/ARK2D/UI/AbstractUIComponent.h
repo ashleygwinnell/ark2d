@@ -34,7 +34,7 @@ namespace ARK {
 				Vector4<int> m_padding; // left, top, right, bottom.
 				Vector4<int> m_margin; // left, top, right, bottom.
 				bool m_clipping;
-				bool m_visible;
+				//bool m_visible;
 				bool m_enabled;
 
 			public:

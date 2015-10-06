@@ -19,20 +19,23 @@ namespace ARK {
 		{
 			m_upButton.setEvent((void*) ScrollPanel::upButtonPressedStatic);
 			m_upButton.setEventObj(this);
-			m_upButton.setSize(15, 15);
-			m_upButton.setParent(this);
+			m_upButton.setBounds(15, 15 ,0);
+			//m_upButton.setParent(this);
+			Panel::addChild(&m_upButton);
 
 			m_downButton.setEvent((void*) ScrollPanel::downButtonPressedStatic);
 			m_downButton.setEventObj(this);
-			m_downButton.setSize(15, 15);
-			m_downButton.setParent(this);
+			m_downButton.setBounds(15, 15, 0);
+			//m_downButton.setParent(this);
+			Panel::addChild(&m_downButton);
 
-			m_scrollYButton.setSize(15, 15);
-			m_scrollYButton.setParent(this);
+			m_scrollYButton.setBounds(15, 15, 0);
+			//m_scrollYButton.setParent(this);
+			Panel::addChild(&m_scrollYButton);
 		}
 
 		void ScrollPanel::onChildAdded(SceneNode* newChild) {
-			calculateSize();
+			//calculateSize();
 		}
 
 		void ScrollPanel::calculateSize() {
@@ -77,26 +80,15 @@ namespace ARK {
 			m_calculatedHeight = maxHeight;
 		}
 
-		void ScrollPanel::renderScrollbars() {
-			m_upButton.setLocation(m_width-15, 0);
-			m_upButton.render();
-
-			int syh = (int) ((float(m_height-30) / float(m_calculatedHeight)) * m_height);
-			m_scrollYButton.setHeight(syh);
-			m_scrollYButton.setLocation(m_width-15, 15); // set position based on m_offsetY;
-			m_scrollYButton.render();
-
-			m_downButton.setLocation(m_width-15, m_height-15);
-			m_downButton.render();
-
-			Renderer* g = ARK2D::getRenderer();
-			g->setDrawColor(Color::white);
-			g->setLineWidth(1);
-			g->drawLine(m_width-15, 0, m_width-15, m_height);
-		}
+		//void ScrollPanel::renderScrollbars() {
+			
+				
+		//}
 
 		void ScrollPanel::render() {
-			if (!m_visible) { return; }
+			if (!visible) { return; }
+
+
 
 			// buttons are down.
 			if (m_downButton.getState() == Button::STATE_DOWN) {
@@ -112,10 +104,23 @@ namespace ARK {
 				m_offsetY = (signed int) (m_height) - m_calculatedHeight;
 			}
 
+			ARK::Geometry::Cube* bounds = getBounds();
+            Renderer* r = ARK2D::getRenderer();
+
+			int syh = (int) ((float(bounds->getHeight()-30) / float(m_calculatedHeight)) * bounds->getHeight());
+			
+			m_upButton.position.set(bounds->getWidth()-15, 0);
+			m_scrollYButton.setHeight(syh);
+			m_scrollYButton.position.set(bounds->getWidth()-15, 15); // set position based on m_offsetY;
+			m_downButton.position.set(bounds->getWidth()-15, bounds->getHeight()-15);
+
 			if (m_layout == LAYOUT_FLOW) {
+
+				preRenderFromPivot();
+
 				//Panel::preRender();
 
-				int cx = getPaddingLeft() + m_offsetX;
+				/*int cx = getPaddingLeft() + m_offsetX;
 				int cy = getPaddingTop() + m_offsetY;
 				//int maxWidth = 0;
 				//int maxHeight = 0;
@@ -162,7 +167,13 @@ namespace ARK {
 
 					if (startedNewLine) { cy -= c->getMarginTop(); }
 
-				}
+				}*/
+
+				
+                r->setDrawColor(Color::white);
+				r->drawLine(bounds->getWidth()-15.0f, 0.0f, bounds->getWidth()-15.0f, bounds->getHeight()*1.0f);
+
+				postRenderFromPivot();
 
 				renderChildren();
 
@@ -173,7 +184,7 @@ namespace ARK {
 					// vertical scroll bars.
 					//g->setDrawColor(Color::white);
 					//g->fillRect(0, 0, 10, 10);
-					renderScrollbars();
+					//renderScrollbars();
 				}
 
 				//Panel::postRender();
@@ -183,9 +194,15 @@ namespace ARK {
 				m_calculatedWidth = m_width;
 				m_calculatedHeight = m_height;
 
+				preRenderFromPivot();
+
+				postRenderFromPivot();
+
 				//Panel::preRender();
 				renderChildren();
 				//Panel::postRender();
+
+				
 			}
 		}
 

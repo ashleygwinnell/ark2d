@@ -35,8 +35,7 @@ namespace ARK {
 
 				ScrollPanel();
 				
-				void renderScrollbars();
-				void render();
+				virtual void render();
 
 				static void upButtonPressedStatic(void* p);
 				void upButtonPressed();
@@ -45,9 +44,9 @@ namespace ARK {
 				void downButtonPressed();
 
 
-				bool keyPressed(unsigned int key);
-				bool keyReleased(unsigned int key);
-				bool mouseMoved(int x, int y, int oldx, int oldy);
+				virtual bool keyPressed(unsigned int key);
+				virtual bool keyReleased(unsigned int key);
+				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
 				virtual void onChildAdded(SceneNode* newChild);
 				void calculateSize();
