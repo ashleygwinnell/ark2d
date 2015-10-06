@@ -379,7 +379,7 @@ namespace ARK {
 			return false;
 		}
 		bool SceneNode::keyReleased(unsigned int key) { 
-			for(signed int i = children.size(); i >= 0; --i) {
+			for(signed int i = children.size() - 1; i >= 0; --i) {
 				if (children[i]->keyReleased(key)) {
 					return true;
 				}

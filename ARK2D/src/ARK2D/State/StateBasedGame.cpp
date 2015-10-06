@@ -311,18 +311,21 @@ namespace ARK {
             if (Game::keyPressed(key)) return true;
             if (m_loading_state != NULL && m_loading_state->isLoading()) { return false; }
 			
+			if (m_current_state == NULL) { return false; } 
 			return m_current_state->keyPressed(key);
 		}
 		bool StateBasedGame::keyReleased(unsigned int key) {
             if (Game::keyReleased(key)) return true;
 			if (m_loading_state != NULL && m_loading_state->isLoading()) { return false; }
 
-            return m_current_state->keyReleased(key);
+			if (m_current_state == NULL) { return false; } 
+			return m_current_state->keyReleased(key);
 		}
 		bool StateBasedGame::mouseMoved(int x, int y, int oldx, int oldy) {
             if (Game::mouseMoved(x, y, oldx, oldy)) return true;
 			if (m_loading_state != NULL && m_loading_state->isLoading()) { return false; }
 
+			if (m_current_state == NULL) { return false; } 
 			return m_current_state->mouseMoved(x, y, oldx, oldy);
 		} 
 

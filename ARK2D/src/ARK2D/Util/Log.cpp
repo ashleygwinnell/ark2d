@@ -785,8 +785,9 @@ namespace ARK {
 		bool GPAxisButton::keyPressed(unsigned int key) {
 			bool didEvent = GPButton::keyPressed(key);
 			if (didEvent) {
-				downX = ARK2D::getInput()->getMouseX();
-				downY = ARK2D::getInput()->getMouseY();
+				Vector3<float> pos = globalPositionToLocalPosition(ARK2D::getInput()->getMouseX(), ARK2D::getInput()->getMouseY(), 0.0f);
+				downX = pos.getX();
+				downY = pos.getY();
 				return true;
 			}
 			return false;
@@ -811,10 +812,11 @@ namespace ARK {
 		}
 		bool GPAxisButton::mouseMoved(int x, int y, int oldx, int oldy) {
 			bool didEvent = GPButton::mouseMoved(x, y, oldx, oldy);
-			if (didEvent && m_state == STATE_DOWN) { 
+			if (didEvent && m_state == STATE_DOWN) {
 				
-		        float angle = MathUtil::angle(downX, downY, x, y);
-		        float dist = MathUtil::distance(downX, downY, x, y);
+				Vector3<float> pos = globalPositionToLocalPosition(x, y, 0.0f);
+		        float angle = MathUtil::angle(downX, downY, pos.getX(), pos.getY());
+		        float dist = MathUtil::distance(downX, downY, pos.getX(), pos.getY());
 		        if (dist > m_width * 0.5) { dist = m_width * 0.5; }
 
 		        axisValueX = 0.0f;
