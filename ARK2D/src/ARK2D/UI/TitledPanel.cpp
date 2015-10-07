@@ -48,7 +48,7 @@ namespace ARK {
 			r->setDrawColor(Color::white);
 			r->drawLine(0.0f, 20.0f, bounds->getWidth(), 20.0f);
 			
-			r->drawString(m_title, 5, 10, Renderer::ALIGN_LEFT, Renderer::ALIGN_CENTER, 0.0f, 0.5f);
+			r->drawString(m_title, 5, 10, Renderer::ALIGN_LEFT, Renderer::ALIGN_CENTER);
 
 			Panel::renderBorder();
 

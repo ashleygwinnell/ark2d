@@ -155,6 +155,7 @@
 				if (m_willLoadDefaultFont) { 
 					//ARK::Font::BMFont* fnt = new ARK::Font::BMFont(ARK2D_FONT_FNT, ARK2D_FONT_PNG, ARK2D_RESOURCE_TYPE_PNG);
 					ARK::Font::BMFont* fnt = Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont();
+					fnt->scale(0.5f);
 					m_graphics.m_DefaultFont = fnt;
 					m_graphics.m_Font = fnt; 
 				} else {

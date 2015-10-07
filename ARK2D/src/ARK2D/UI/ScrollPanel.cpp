@@ -39,7 +39,7 @@ namespace ARK {
 		}
 
 		void ScrollPanel::calculateSize() {
-			int currentX = 0;
+			/*int currentX = 0;
 			int currentY = 0;
 			int maxWidth = 0;
 			int maxHeight = 0;
@@ -77,7 +77,23 @@ namespace ARK {
 			maxHeight += getPaddingBottom();
 
 			m_calculatedWidth = maxWidth;
-			m_calculatedHeight = maxHeight;
+			m_calculatedHeight = maxHeight;*/
+
+			// need to take into account bounds of children.
+			m_calculatedWidth = 0;
+			m_calculatedHeight = 0;
+
+			for (signed int i = children.size() - 1; i >= 0; i--) {
+				ARK::Geometry::Cube* bounds = children[i]->getBounds();
+                float maxX = children[i]->position.getX() + (bounds->getWidth()*(1.0f - children[i]->pivot.getX()));
+                float maxY = children[i]->position.getY() + (bounds->getHeight()*(1.0f - children[i]->pivot.getY()));
+				if (maxX > m_calculatedWidth) {
+                    m_calculatedWidth = maxX;
+				}
+				if (maxY > m_calculatedHeight) {
+					m_calculatedHeight = maxY;
+				}
+			}
 		}
 
 		//void ScrollPanel::renderScrollbars() {
@@ -226,24 +242,15 @@ namespace ARK {
 
 		bool ScrollPanel::keyPressed(unsigned int key) {
             if (Panel::keyPressed(key)) return true;
-			if (m_upButton.keyPressed(key)) return true;
-			if (m_downButton.keyPressed(key)) return true;
-			//if (m_scrollYButton.keyPressed(key)) return true;
-            return false;
+			return false;
 		}
 		bool ScrollPanel::keyReleased(unsigned int key) {
 			if (Panel::keyReleased(key)) return true;
-			if (m_upButton.keyReleased(key)) return true;
-			if (m_downButton.keyReleased(key)) return true;
-			//if (m_scrollYButton.keyReleased(key);
-            return false;
+			return false;
 		}
 		bool ScrollPanel::mouseMoved(int x, int y, int oldx, int oldy) {
 			if (Panel::mouseMoved(x, y, oldx, oldy)) return true;
-			if (m_upButton.mouseMoved(x, y, oldx, oldy)) return true;
-			if (m_downButton.mouseMoved(x, y, oldx, oldy)) return true;
-			//if (m_scrollYButton.mouseMoved(x, y, oldx, oldy)) return true;
-            return false;
+			return false;
 		}
 	}
 }

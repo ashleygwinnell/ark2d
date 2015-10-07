@@ -442,6 +442,7 @@ namespace ARK {
 	    // Load default font.
 	    if (m_container->m_willLoadDefaultFont) { 
 	    	ARK::Font::BMFont* fnt = ARK::Core::Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont(); // BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
+	    	fnt->scale(0.5f);
 			m_container->m_graphics.m_DefaultFont = fnt;
 			m_container->m_graphics.m_Font = fnt;
 		} else {

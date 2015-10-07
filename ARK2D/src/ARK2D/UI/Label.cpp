@@ -57,8 +57,21 @@ namespace ARK {
 		}
 
 		void Label::render() {
-			Renderer* g = ARK2D::getRenderer();
-			g->drawString(m_text, 0, 0, m_alignX, m_alignY); // scale is applied before this in prerender
+			Renderer* r = ARK2D::getRenderer();
+			vector<string> lines = StringUtil::split(m_text, "\n");
+			float innerWidth = 0.0f;
+			float currentY = 0.0f;
+           	for(unsigned int i = 0; i < lines.size(); i++) {
+           		r->drawString(lines[i], 0.0f, currentY, m_alignX, m_alignX);
+           		currentY += r->getFont()->getLineHeight();
+
+           		float stringWidth = r->getFont()->getStringWidth(lines[i]);
+           		if (stringWidth > innerWidth) {
+           			innerWidth = stringWidth;
+           		}
+           	} 
+
+           	setBounds(innerWidth, currentY, 0.0f);
 		}
 		void Label::renderBounds() {
 			Renderer* g = ARK2D::getRenderer();

@@ -1009,6 +1009,7 @@
 				if (m_willLoadDefaultFont) { 
 					Renderer::setInterpolation(Renderer::INTERPOLATION_NEAREST);
 					ARK::Font::BMFont* fnt = ARK::Core::Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont(); // BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
+					fnt->scale(0.5f);
 					m_graphics.m_DefaultFont = fnt;
 					m_graphics.m_Font = fnt;
 				} else { 

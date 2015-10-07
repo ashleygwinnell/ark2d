@@ -19,6 +19,7 @@ struct Graphics;
 #include "../UI/Button.h"
 #include "../UI/TitledPanel.h"
 #include "../UI/ScrollPanel.h"
+#include "../UI/Label.h"
 
 #include "../Core/String.h"
 namespace ARK {
@@ -173,6 +174,7 @@ namespace ARK {
 		class ARK2D_API LogSceneTreePanel : public ScrollPanel {
 			public:
 				LogSceneTreePanel();
+                ARK::UI::Label tree;
 				virtual void render();
 		};
 		class ARK2D_API LogWatchedVariablesPanel : public Panel {

@@ -119,6 +119,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 
 	arklog->i("init fonts");
 	ARK::Font::BMFont* fnt = Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont(); //new BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
+	fnt->scale(0.5f);
 	r->setDefaultFont(fnt);
 	r->setFont(fnt);
 	// TODO: init default font.

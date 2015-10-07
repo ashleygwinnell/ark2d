@@ -83,7 +83,7 @@ namespace ARK {
  					splitLeftTop->setTitle("Debug");
  					splitLeftTop->setName("left_panel");
 	                
-		                ARK::UI::Label* gameSpeedLabel = new ARK::UI::Label("Game Speed:", -1, 0, 0.5f);
+		                ARK::UI::Label* gameSpeedLabel = new ARK::UI::Label("Game Speed:", -1, 0);
 		                gameSpeedLabel->position.set(10, 20);
 		   				splitLeftTop->addChild(gameSpeedLabel);
 
@@ -96,7 +96,7 @@ namespace ARK {
 						m_gameSpeedSlider->setButtonPosition(0.5f);
 						splitLeftTop->addChild(m_gameSpeedSlider);
 
-						ARK::UI::Label* expoModeLabel = new ARK::UI::Label("Expo Mode:", -1, 0, 0.5f);
+						ARK::UI::Label* expoModeLabel = new ARK::UI::Label("Expo Mode:", -1, 0);
 		                expoModeLabel->position.set(10, 60);
 		                splitLeftTop->addChild(expoModeLabel);
 
@@ -106,7 +106,7 @@ namespace ARK {
 						m_expoCheckbox->position.set(70, 60);
 						splitLeftTop->addChild(m_expoCheckbox);
 
-						ARK::UI::Label* virtualPadLabel = new ARK::UI::Label("Virtual Pad:", -1, 0, 0.5f);
+						ARK::UI::Label* virtualPadLabel = new ARK::UI::Label("Virtual Pad:", -1, 0);
 		                virtualPadLabel->position.set(10, 120);
 		                splitLeftTop->addChild(virtualPadLabel);
 
@@ -117,7 +117,7 @@ namespace ARK {
 						m_addGamepadButton->setEvent((void*) &debug_addVirtualGamepad);
 						splitLeftTop->addChild(m_addGamepadButton);
 
-						ARK::UI::Label* languageLabel = new ARK::UI::Label("Language:", -1, 0, 0.5f);
+						ARK::UI::Label* languageLabel = new ARK::UI::Label("Language:", -1, 0);
 		                languageLabel->position.set(10, 180);
 		                splitLeftTop->addChild(languageLabel);
 
@@ -468,7 +468,7 @@ namespace ARK {
 				return;
 			}
 
-			r->disableMultisampling();
+			//r->disableMultisampling();
 
 			//GameContainer* container = ARK2D::getContainer();
 			//Renderer* g = ARK2D::getRenderer();
@@ -529,7 +529,7 @@ namespace ARK {
 			//r->setFont(defaultFont);
 			//m_scene->render();
 			
-			r->enableMultisampling();
+			//r->enableMultisampling();
 
 			//r->setDrawColor(oldColor);
 			//r->setFont(oldFont);
@@ -647,12 +647,19 @@ namespace ARK {
 		
 
 		LogSceneTreePanel::LogSceneTreePanel():
-            ScrollPanel() {
+            ScrollPanel(),
+            tree() {
             setName("scene_tree");
+
+            addChild(&tree);
 			//setTitle("Console");
 		}
 		void LogSceneTreePanel::render() {
 			// Panel::render();
+
+			Scene* scene = ARK2D::getContainer()->scene;
+            tree.setText(scene->getRoot()->toListString());
+            calculateSize();
 
 			ScrollPanel::render();
 
@@ -667,18 +674,17 @@ namespace ARK {
 			r->fillRect(0,0,bounds->getWidth(), bounds->getHeight());
 			r->stopStencil();
             
-           	Scene* scene = ARK2D::getContainer()->scene;
-           	string str = scene->getRoot()->toListString();
-           	vector<string> lines = StringUtil::split(str, "\n");
-           	for(unsigned int i = 0; i < lines.size(); i++) {
-           		r->drawString(lines[i], 10.0f, i*12.0f, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
-           	} 
 
-			r->disableStencil();
+           	
+           	r->disableStencil();
 
 			Panel::renderBorder();
 
 			postRenderFromPivot();
+
+
+
+			renderChildren();
 		}
 
 		LogConsolePanel::LogConsolePanel():
@@ -704,7 +710,7 @@ namespace ARK {
             float totalH = 0;
             list<LogMessage*>::reverse_iterator it = l->m_messages.rbegin();
             while (it != l->m_messages.rend()) {
-				r->drawString((*it)->message, 10.0f, bounds->getHeight() - (i*12.0f), Renderer::ALIGN_LEFT, Renderer::ALIGN_BOTTOM, 0.0f, 0.5f);
+				r->drawString((*it)->message, 10.0f, bounds->getHeight() - (i*12.0f), Renderer::ALIGN_LEFT, Renderer::ALIGN_BOTTOM);
                 it++;
                 i++;
                 totalH += 12.0f;
@@ -737,20 +743,20 @@ namespace ARK {
 				displayName += ": ";
 				if (wv->type == WatchedVariable::TYPE_FLOAT) {
 					float* d = (float*) wv->data;
-					r->drawString(StringUtil::appendf(displayName, *d), 10, 0 + (12*i), Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+					r->drawString(StringUtil::appendf(displayName, *d), 10, 0 + (12*i), Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
 				} else if (wv->type == WatchedVariable::TYPE_UINT) {
 					unsigned int* d = (unsigned int*) wv->data;
-					r->drawString(StringUtil::append(displayName, *d), 10, 0 + (12*i), Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+					r->drawString(StringUtil::append(displayName, *d), 10, 0 + (12*i), Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
 				} else if (wv->type == WatchedVariable::TYPE_SINT) {
 					signed int* d = (signed int*) wv->data;
-					r->drawString(StringUtil::append(displayName, *d), 10, 0 + (12*i), Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+					r->drawString(StringUtil::append(displayName, *d), 10, 0 + (12*i), Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
 				} else if (wv->type == WatchedVariable::TYPE_BOOL) {
 					bool* d = (bool*) wv->data;
-					r->drawString(StringUtil::append(displayName, Cast::boolToString(*d)), 10, 0 + (12*i), Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+					r->drawString(StringUtil::append(displayName, Cast::boolToString(*d)), 10, 0 + (12*i), Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
 				} else if (wv->type == WatchedVariable::TYPE_STR) {
 					string* d = (string*) wv->data;
 					displayName += *d;
-					r->drawString(displayName, 10, 0 + (12*i), Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+					r->drawString(displayName, 10, 0 + (12*i), Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
 				}
 			}
 
@@ -780,16 +786,16 @@ namespace ARK {
 			unsigned int rendererTextureSwaps = RendererStats::s_previousframe_textureSwaps;
 			unsigned int rendererShaderSwaps = RendererStats::s_previousframe_shaderSwaps;
 			float rendererTextureMemory = (float(RendererStats::s_textureAllocatedBytes) / 1024.0f) / 1024.0f;
-			r->drawString(StringUtil::append("FPS: ", ARK2D::getTimer()->getFPS()), textX, 0, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+			r->drawString(StringUtil::append("FPS: ", ARK2D::getTimer()->getFPS()), textX, 0, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
 			
-			r->drawString(StringUtil::append("Log Size: ", l->m_messagesPool.size()), textX, 10, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+			r->drawString(StringUtil::append("Log Size: ", l->m_messagesPool.size()), textX, 10, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
 
-			r->drawString(StringUtil::append("OpenGL Calls: ", rendererGLCalls), textX, 30, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
-			r->drawString(StringUtil::append("Lines: ", rendererLines), textX, 40, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
-			r->drawString(StringUtil::append("Tris: ", rendererTris), textX, 50, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
-			r->drawString(StringUtil::append("Texture Swaps: ", rendererTextureSwaps), textX, 60, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
-			r->drawString(StringUtil::append("Shader Swaps: ", rendererShaderSwaps), textX, 70, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
-			r->drawString(StringUtil::appendf("Texture Memory (MB): ", rendererTextureMemory), textX, 80, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
+			r->drawString(StringUtil::append("OpenGL Calls: ", rendererGLCalls), textX, 30, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
+			r->drawString(StringUtil::append("Lines: ", rendererLines), textX, 40, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
+			r->drawString(StringUtil::append("Tris: ", rendererTris), textX, 50, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
+			r->drawString(StringUtil::append("Texture Swaps: ", rendererTextureSwaps), textX, 60, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
+			r->drawString(StringUtil::append("Shader Swaps: ", rendererShaderSwaps), textX, 70, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
+			r->drawString(StringUtil::appendf("Texture Memory (MB): ", rendererTextureMemory), textX, 80, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
 			 
 			Panel::renderBorder();
 
