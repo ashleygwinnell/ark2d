@@ -37,6 +37,12 @@ namespace ARK {
 				void load();
 				void start();
 				void stop();
+				void startInternal();
+				void stopInternal();
+				
+				static void startStatic(StencilShader* obj);
+				static void stopStatic(StencilShader* obj);
+
 				virtual ~StencilShader();
 		};
 	}

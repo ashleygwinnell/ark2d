@@ -131,6 +131,12 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		arklog->i("openal init failed");
 	}
 
+	arklog->i("Initialising Log");
+	arklog->init();
+
+	arklog->i("Initialising Localisations");
+	container->initLocalisation();
+
 	arklog->i("init game class");
 	game->init(container);
 	arklog->i("game class initialised!");

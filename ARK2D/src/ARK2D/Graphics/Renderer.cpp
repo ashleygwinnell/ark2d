@@ -791,6 +791,12 @@ namespace ARK {
 					r->stopStencil();
 				} else if (m_type == TYPE_STENCIL_DISABLE) {
 					r->disableStencil();
+				} else if (m_type == TYPE_CUSTOM_OBJECT_FUNCTION) {
+					void (*pt)(void*) = (void(*)(void*)) m_functionPointer;
+					pt(m_objectPointer);
+				} else if (m_type == TYPE_CUSTOM_FUNCTION) {
+					void (*pt)() = (void(*)()) m_functionPointer;
+					pt();					
 				}
 				clear();
 			#endif

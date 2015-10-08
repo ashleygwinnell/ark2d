@@ -3013,7 +3013,11 @@
 
 				m_bRunning = true;
 
-				
+				ARK2D::getLog()->i("Initialising Log");
+				ARK2D::s_log->init();
+
+				ARK2D::getLog()->i("Initialising Localisations");
+				initLocalisation();
 
 				ARK2D::getLog()->i("Initialising ");
 				ARK2D::getLog()->i(m_game.getTitle());
@@ -3181,13 +3185,16 @@
 					#endif
 					
 					//ARK2D::getLog()->v("Pre-render Game");
-					m_game.preRender(this, &m_graphics);
+						preRender();
+						scene->render();
+						postRender();
+					//m_game.preRender(this, &m_graphics);
 					//ARK2D::getLog()->v("Render Game");
-					m_game.render(this, &m_graphics);
+					//m_game.render(this, &m_graphics);
 					//ARK2D::getLog()->v("Render Log");
-					ARK2D::getLog()->render(this, &m_graphics);
+					//ARK2D::getLog()->render(this, &m_graphics);
 					//ARK2D::getLog()->v("Post-render Game");
-					m_game.postRender(this, &m_graphics); 
+					//m_game.postRender(this, &m_graphics); 
 					//if (m_showingFPS) { renderFPS(); }
 
 					

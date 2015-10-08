@@ -286,6 +286,12 @@ namespace ARK {
 	}
 
 	void ARK::Core::GameContainerPlatform::initGame() {
+		ARK2D::getLog()->i("Initialising Log");
+		ARK2D::s_log->init();
+
+		ARK2D::getLog()->i("Initialising Localisations");
+		initLocalisation();
+		
 		// initialise game.
 		ARK2D::getLog()->i("Initialising "); ARK2D::getLog()->i(m_container->m_game.getTitle()); ARK2D::getLog()->i("...");
 		m_container->m_game.init(m_container);

@@ -201,6 +201,8 @@ namespace ARK {
 				static const unsigned int TYPE_STENCIL_START = 3;
 				static const unsigned int TYPE_STENCIL_STOP = 4; 
 				static const unsigned int TYPE_STENCIL_DISABLE = 5;
+				static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 6;
+				static const unsigned int TYPE_CUSTOM_FUNCTION = 7;
 
 			public:
 				vector<RendererBatchItem_GeomTri> geomtris;
@@ -208,6 +210,8 @@ namespace ARK {
 				unsigned int m_type;
 				unsigned int m_textureId;
 				unsigned int m_shaderId;
+				void* m_objectPointer;
+				void* m_functionPointer;
 
 			public:
 				RendererBatchItem();

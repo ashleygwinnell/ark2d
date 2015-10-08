@@ -24,7 +24,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class ARK2D_API Game : public SceneNode, public GamepadListener, public KeyListener/*, public MouseListener*/ {
+		class ARK2D_API Game : public SceneNode, public GamepadListener/*, public MouseListener*/ {
 			public:
 
 				Game(string title);

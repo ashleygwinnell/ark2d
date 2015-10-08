@@ -177,7 +177,11 @@
 
 
 
+				ARK2D::getLog()->i("Initialising Log");
+				ARK2D::s_log->init();
 
+				ARK2D::getLog()->i("Initialising Localisations");
+				initLocalisation();
 
 				ARK2D::getLog()->i("Initialising ");
 				ARK2D::getLog()->i(m_game.getTitle());

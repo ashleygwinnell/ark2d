@@ -54,7 +54,37 @@ namespace ARK {
 			RendererState::start(RendererState::GEOMETRY);
 		}
 
+		void StencilShader::startStatic(StencilShader* obj) { obj->startInternal(); }
+		void StencilShader::stopStatic(StencilShader* obj) { obj->stopInternal(); }
+
 		void StencilShader::start() {
+			Renderer* r = ARK2D::getRenderer();
+			if (r->isBatching()) {
+				RendererBatchItem item;
+				item.m_type = RendererBatchItem::TYPE_CUSTOM_OBJECT_FUNCTION;
+				item.m_objectPointer = this;
+				item.m_functionPointer = (void*) &startStatic;
+				Renderer::s_batch->items.push_back(item);
+				return;
+			}
+			startInternal();
+		}
+		void StencilShader::stop() {
+			Renderer* r = ARK2D::getRenderer();
+			if (r->isBatching()) {
+				RendererBatchItem item;
+				item.m_type = RendererBatchItem::TYPE_CUSTOM_OBJECT_FUNCTION;
+				item.m_objectPointer = this;
+				item.m_functionPointer = (void*) &stopStatic;
+				Renderer::s_batch->items.push_back(item);
+				return;
+			}
+			stopInternal();
+		}
+
+		void StencilShader::startInternal() {
+		
+			//RendererState::s_shaderId = getId();
 			//Shader::bind();
 
 			// Replace existing texture shader... how novel! 
@@ -77,7 +107,7 @@ namespace ARK {
 
 		} 
 
-		void StencilShader::stop() {
+		void StencilShader::stopInternal() {
 			//Shader::unbind();
 
 			Renderer::s_shaderBasicTexture 					= m_shaderBasicTexture;

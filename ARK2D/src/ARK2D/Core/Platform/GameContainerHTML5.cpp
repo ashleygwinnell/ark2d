@@ -576,6 +576,12 @@
 				
 				// initialise 
 				enableOpenAL();
+
+				ARK2D::getLog()->i("Initialising Log");
+				ARK2D::s_log->init();
+
+				ARK2D::getLog()->i("Initialising Localisations");
+				initLocalisation();
 				
 				// initialise game.
 				ARK2D::getLog()->i("Initialising ");
