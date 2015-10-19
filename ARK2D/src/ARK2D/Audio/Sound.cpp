@@ -6,7 +6,9 @@
 
 #include "Sound.h"
 #include "../Core/Resource.h" 
+#include "../Core/String.h"
 #include "../Util/StringUtil.h"
+
 #include "../Util/Log.h" 
 #include "../vendor/FileInterface.h"
 

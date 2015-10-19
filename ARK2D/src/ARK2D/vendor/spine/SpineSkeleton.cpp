@@ -415,6 +415,18 @@ namespace ARK {
 			//spAnimationState_clearTrack(as, 0);
 			spAnimationState_clearTracks(as);
 		}
+		string Skeleton::getCurrentAnimationName(string key) {
+			spAnimationState* as = NULL;
+			map<string, spAnimationState*>::iterator it = m_animationStates.find(key);
+			if (it != m_animationStates.end()) { as = it->second; }
+			if (as == NULL) { ErrorDialog::createAndShow("Could not create Spine Skeleton (playAnimation, spAnimationState)."); exit(0); }
+
+			spTrackEntry* entry = spAnimationState_getCurrent(as, 0);
+			if (entry != NULL) { 
+				return entry->animation->name;
+			}
+			return "";
+		}
 		
 		bool Skeleton::hasAnimation(string key) {
 			return (m_animationStates.find(key) != m_animationStates.end());

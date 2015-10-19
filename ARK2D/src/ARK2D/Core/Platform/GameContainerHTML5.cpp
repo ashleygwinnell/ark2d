@@ -192,6 +192,8 @@
 				ARK2D::s_input = &m_input;
 				ARK2D::s_log = new ARK::Util::Log();
 				scene = new Scene();
+				scene->addChild(ARK2D::s_game);
+				scene->addChild(ARK2D::s_log);
 
 				
 				m_platformSpecific.esContext = new ESContext(); //(ESContext*) malloc(sizeof(ESContext));

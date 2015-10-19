@@ -8,15 +8,17 @@
 #ifndef ERRORDIALOG_H_
 #define ERRORDIALOG_H_
 
-#include "../ARK2D.h"
+#include "../Common/DLL.h"
+#include "../Namespaces.h"
 
+#include <string>
 using namespace std;
 
 namespace ARK {
 	namespace UI {
 
 		/*!
-		 * \brief An error dialog.
+		 * \brief An error dialog. 
 		 *
 		 * @todo Create a singular dialogs class which does all the dialogs of all the types.
 		 * @todo Deprecate this. See previous TODO.

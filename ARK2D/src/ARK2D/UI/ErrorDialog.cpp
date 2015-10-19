@@ -65,8 +65,12 @@ namespace ARK {
 
     			ARK2D::getLog()->e(message); 
 
+    			const char* messageCStr = message.c_str();
+    			unsigned int messageLen = message.length();
+
+
 				CFStringRef header_ref    = CFStringCreateWithCString( NULL, "",   strlen("")    );
-				CFStringRef message_ref  = CFStringCreateWithCString( NULL, message.c_str(),  strlen(message.c_str()) );
+				CFStringRef message_ref  = CFStringCreateWithCString( NULL, messageCStr,  messageLen );
 
 				CFOptionFlags result;
 				CFUserNotificationDisplayAlert(
@@ -78,8 +82,8 @@ namespace ARK {
 					&result
 				);
 
-				CFRelease( header_ref );
-				CFRelease( message_ref );
+				if (header_ref != NULL) {  CFRelease( header_ref ); } 
+				if (message_ref != NULL) {  CFRelease( message_ref ); }
 
 				// kCFUserNotificationDefaultResponse // default button pressed
 				// kCFUserNotificationAlternateResponse // alternative button 1 pressed

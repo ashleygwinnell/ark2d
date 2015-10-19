@@ -94,6 +94,7 @@ namespace ARK {
 				void playAnimation(string key, string subkey, bool loop);
 				void queueAnimation(string key, string subkey, bool loop, float delay=0.0f);
 				void clearAnimationQueue(string key);
+				string getCurrentAnimationName(string key);
 				bool hasAnimation(string key);
 
 				spAnimation* findAnimation(string key);

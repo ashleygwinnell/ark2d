@@ -13,12 +13,13 @@
 
 namespace ARK {
 	namespace Net { 
-		
+		 
 		Discovery::Discovery(unsigned int protocolId):
 			m_protocolId(protocolId),
 			m_mode(MODE_NONE),
 			m_searchTimer(1.0f),
-			m_searchDuration(1.0f)
+			m_searchDuration(1.0f),
+			m_running(false)
 		{
 			//clearData();
 		}  
@@ -26,16 +27,22 @@ namespace ARK {
 		bool Discovery::start( int port ) {
 			m_port = port;
 			ARK2D::getLog()->v(StringUtil::append("start connection on port ", port));
-			if (!m_socket.open(port)) { return false; }
+			if (!m_socket.open(port)) { 
+				ARK2D::getLog()->e(StringUtil::append("could not start discovery connection on port ", port)); 
+				return false; 
+			}
 
 			m_broadcastAddress = Address(255,255,255,255,31000); // 31000 = server, 31001 = client
 			m_broadcastAddress.setBroadcast();
+
+			m_running = true;
 
 			return true;
 		}
 		
 		void Discovery::stop() {
 			m_socket.close();
+			m_running = false;
 		}
 		
 		void Discovery::search() {
@@ -52,13 +59,16 @@ namespace ARK {
 		
 		void Discovery::update( float deltaTime )
 		{
+			if (!m_running) {
+				return;
+			}
 			if (m_mode == MODE_CLIENT) {
 				m_searchTimer += deltaTime;
 				if (m_searchTimer >= m_searchDuration) {
 					// do another search. 
 					bool b = call();
 					if (!b) {
-						ARK2D::getLog()->e("did not send all 9 bytes?");
+						ARK2D::getLog()->e("did not send all 9 bytes? maybe not connected to router/gateway/switch");
 					}
 					m_searchTimer = 0.0f;
 				}
@@ -201,6 +211,9 @@ namespace ARK {
 		}
 		vector<DiscoveryAddress>* Discovery::getServers() {
 			return &m_servers;
+		}
+		bool Discovery::isRunning() {
+			return m_running;
 		}
 		
 		Discovery::~Discovery() {

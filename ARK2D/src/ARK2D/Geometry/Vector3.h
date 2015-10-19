@@ -8,9 +8,11 @@
 #ifndef ARK_GEOMETRY_VECTOR3_H_
 #define ARK_GEOMETRY_VECTOR3_H_
 
-#include "../ARK2D.h" 
+//#include "../ARK2D.h" 
 //#include "../Util/Log.h"
-#include "../Core/String.h"
+//#include "../Core/String.h"
+#include <string>
+using std::string;
 
 namespace ARK {
 	namespace Geometry { 
@@ -309,7 +311,7 @@ namespace ARK {
 			
 
 				string toString() {
-					ARK::Core::String s;
+					/*ARK::Core::String s;
 					s += "{";
 					s += "\"x\":";
 					s += m_x;
@@ -317,8 +319,10 @@ namespace ARK {
 					s += m_y;
 					s += ", \"z\":";
 					s += m_z;
-					s += "}";
-					return s.get();
+					s += "}";*/
+					//return s.get();
+					return "{}";
+					// TODO: dop this without incl;uding ark2d.h
 				}
 				
 				T& operator[](unsigned int i) {

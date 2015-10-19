@@ -177,6 +177,33 @@ namespace ARK {
 			return Vector3<float>(gx, gy, gz);
 
 		}
+		Vector3<float> SceneNode::globalPositionToLocalPositionInternal(float gx, float gy, float gz, bool fromTopLeft) {
+			/*Renderer* r = ARK2D::getRenderer();
+			Matrix44<float>* mat = r->getMatrix()->at(r->getMatrix()->height()-1);
+			Vector3<float> thisGlobalPosition = localPositionToGlobalPositionInternal();
+			float invDet = 1.0f / (mat->col[0][0] * mat->col[1][1] - mat->col[0][1] * mat->col[1][0]);
+			
+			float dx = gx - thisGlobalPosition.getX();
+			float dy = gy - thisGlobalPosition.getY();
+
+			Vector3<float> local;
+			local.setX(dx * mat->col[0][0] * invDet - dy * mat->col[0][1] * invDet);
+			local.setY(dy * mat->col[1][1] * invDet - dx * mat->col[1][0] * invDet);
+			local.setZ(0.0f);
+			return local;*/
+			return Vector3<float>(0,0,0);
+
+			/*
+			float x = position.getX();
+			float y = position.getY();
+			float z = position.getZ();
+			float w = 1.0f;
+			if (r->getMatrix()->height() >= 1) {
+				Vector4<float>::multMatrix44(x, y, z, w, *);
+			}
+			return Vector3<float>(x, y, z);*/
+		}
+
 		Vector3<float> SceneNode::localPositionToGlobalPositionInternal() {
 			Renderer* r = ARK2D::getRenderer();
 			float x = position.getX();

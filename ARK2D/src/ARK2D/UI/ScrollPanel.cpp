@@ -6,6 +6,7 @@
  */
 
 #include "ScrollPanel.h"
+#include "../Core/String.h"
 #include "../Graphics/Renderer.h"
 
 namespace ARK {

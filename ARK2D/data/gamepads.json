@@ -230,16 +230,15 @@
 		}
 	],
 	"osx": [ 
-		 {
+		{
 			"name": "Xbox 360 Wired Controller", 
-			"comment": "Xbox 360",
 			"vendorId": 1118, 
 			"productId": 654, 
 			"buttons": { 
-				"DPAD_LEFT": 101, 
-				"DPAD_RIGHT": 105, 
-				"DPAD_UP": 103, 
-				"DPAD_DOWN": 107, 
+				"DPAD_LEFT": 7, 
+				"DPAD_RIGHT": 8, 
+				"DPAD_UP": 5, 
+				"DPAD_DOWN": 6, 
 				"A": 0, 
 				"B": 1, 
 				"X": 2, 
@@ -251,7 +250,7 @@
 				"L3": 8, 
 				"R3": 9, 
 				"BACK": 6, 
-				"START": 7, 
+				"START": 9, 
 				"ACTIVATE": -1 
 			},
 			"axes": { 

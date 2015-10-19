@@ -16,12 +16,13 @@
 
 struct Graphics;
 #include "../Namespaces.h"
+#include "../Core/String.h"
 #include "../UI/Button.h"
 #include "../UI/TitledPanel.h"
 #include "../UI/ScrollPanel.h"
 #include "../UI/Label.h"
 
-#include "../Core/String.h"
+
 namespace ARK {
 	namespace Core {
 		class String;

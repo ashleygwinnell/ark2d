@@ -24,6 +24,12 @@ namespace ARK {
 
 		}
 
+		void GameState::preEnter(GameContainer* container, StateBasedGame* game, GameState* from) {
+			ARK2D::getLog()->v("GameState::preenter");
+		}
+		void GameState::postLeave(GameContainer* container, StateBasedGame* game, GameState* to) {
+			ARK2D::getLog()->v("GameState::postleave");
+		}
 		void GameState::enter(GameContainer* container, StateBasedGame* game, GameState* from) {
 			ARK2D::getLog()->v("GameState::enter");
 		}

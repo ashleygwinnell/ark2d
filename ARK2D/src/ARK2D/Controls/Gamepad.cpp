@@ -154,6 +154,7 @@ namespace ARK {
 			m_previousLTriggerValue(0.0f),
 			m_previousRTriggerValue(0.0f), 
 			m_sharedTriggerAxis(true),
+			virtualpad(false),
 
 			pressedEvents(),
 			releasedEvents(),
@@ -976,6 +977,8 @@ namespace ARK {
 			return false;
 		}
 		bool Gamepad::isConfigured() {
+			if (virtualpad) { return true; }
+
 			unsigned int len = s_gamepadMapping->size();
 			for(unsigned int i = 0; i < len; ++i) 
 			{

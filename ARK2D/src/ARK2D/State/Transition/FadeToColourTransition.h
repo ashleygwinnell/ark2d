@@ -45,6 +45,8 @@ namespace ARK {
 					float m_alpha;
 
 					unsigned int m_textureId;
+
+					bool m_updatingState;
 			};
 		}
 	}

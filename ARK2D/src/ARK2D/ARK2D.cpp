@@ -6,10 +6,12 @@
  */
 
 #include "ARK2D.h"
+#include "Core/String.h"
 #include "Util/Log.h"
 #include "Core/GameContainer.h"
 #include "Util/FileUtil.h"
 #include "Util/Strings.h"
+
 
 #if defined( ARK2D_MISSING_C99_FUNCTIONS ) && defined( ARK2D_MISSING_C99_FUNCTIONDEFINITIONS )
  	double round( double number ) { return number < 0.0 ? ceil(number - 0.5) : floor(number + 0.5); }

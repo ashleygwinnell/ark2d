@@ -8,9 +8,10 @@
 #ifndef SCROLLPANEL_H_
 #define SCROLLPANEL_H_
 
+#include "Panel.h"
 #include "Button.h"
 #include "AbstractUIComponent.h"
-#include "Panel.h"
+
 
 namespace ARK {
 	namespace UI {

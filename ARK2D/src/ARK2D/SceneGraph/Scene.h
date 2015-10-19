@@ -9,6 +9,7 @@
 #define ARK_SCENEGRAPH_SCENE_H_
 
 #include "../Common/DLL.h"
+#include "../Namespaces.h"
 #include <string>
 #include <vector>
 #include "../Geometry/Vector3.h"
@@ -19,6 +20,8 @@ namespace ARK {
 		class Image;
 	}
 }
+using std::string;
+using std::vector;
 
 namespace ARK {
 	namespace SceneGraph {
@@ -69,6 +72,7 @@ namespace ARK {
 				virtual bool isGlobalPositionInBounds(float x, float y);
 
 				Vector3<float> globalPositionToLocalPosition(float gx, float gy, float gz, bool fromTopLeft = false);
+				Vector3<float> globalPositionToLocalPositionInternal(float gx, float gy, float gz, bool fromTopLeft = false);
 
 				vector<SceneNode*> getPathToRoot();
 				void getPathToRoot(vector<SceneNode* >* path);

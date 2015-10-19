@@ -6,6 +6,7 @@
  */
 
 #include "Panel.h"
+#include "../Controls/Input.h"
 #include "../Geometry/Cube.h"
 #include "../Graphics/Renderer.h"
 

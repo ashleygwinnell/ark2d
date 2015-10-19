@@ -15,9 +15,8 @@ namespace ARK {
 
 
 		const int ServerPort = 30000;
-		const int ClientPort = 30001;
-		const int ClientPort2 = 30002;
-		const int ClientPort3 = 30003;
+		const int ClientPortRangeStart = 30001;
+		const int ClientPortRangeEnd = 30008;
 		const int ProtocolId = 0x11223344;
 		
 		const float DeltaTime = 1.0f / 30.0f;
@@ -71,7 +70,7 @@ namespace ARK {
 				Mode m_mode;
 				Address m_address;
 				ReliableConnection m_connection;
-				Discovery m_discoveryConnection;	
+				Discovery m_discoveryConnection;
 				FlowControl m_flowControl;
 
 				bool m_connected;

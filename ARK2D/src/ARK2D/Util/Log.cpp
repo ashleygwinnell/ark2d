@@ -8,8 +8,8 @@
 #include "Log.h"
 
 #include "../ARK2D.h"
-#include "../Core/GameContainer.h"
 #include "../Core/String.h"
+#include "../Core/GameContainer.h"
 #include "../Graphics/Renderer.h"
 #include "../UI/Slider.h"
 #include "../UI/CheckBox.h"
@@ -896,6 +896,7 @@ namespace ARK {
 			Gamepad* gamepad = new Gamepad();
 			gamepad->id = ARK2D::getInput()->countGamepads();
 			gamepad->name = StringUtil::append("Virtual Gamepad ", gamepad->id+1);
+			gamepad->virtualpad = true;
 
 			// DPAD
 			GamepadButton* dpad_button = new GamepadButton();

@@ -8,10 +8,11 @@
 #ifndef ABSTRACTUICOMPONENT_H_
 #define ABSTRACTUICOMPONENT_H_
 
+#include "../Namespaces.h"
 #include "UIComponent.h"
 //#include "../Graphics/Renderer.h"
 //#include "../Core/GameContainer.h"
-#include "../Controls/Input.h"
+//#include "../Controls/Input.h"
 #include "../Util/Vector4.h"
 //#include "../Geometry/GigaRectangle.h"
 #include "../SceneGraph/Scene.h"

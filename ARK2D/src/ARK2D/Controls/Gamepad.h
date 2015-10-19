@@ -154,6 +154,7 @@ namespace ARK {
 				float m_previousLTriggerValue;
 				float m_previousRTriggerValue;
 				bool m_sharedTriggerAxis; // true if Left and Right triggers share the same input axis.
+				bool virtualpad; // true if is a fake gamepad from the debug screen.
 				 
 				Gamepad();
 				void update();

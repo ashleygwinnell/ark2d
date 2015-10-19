@@ -22,7 +22,7 @@ namespace ARK {
 		 */
 		class ARK2D_API Button : public AbstractUIComponent {
 			protected:
-				String m_text;
+				ARK::Core::String m_text;
 				Image* m_image;
 				void* m_event;
 				void* m_eventObj;

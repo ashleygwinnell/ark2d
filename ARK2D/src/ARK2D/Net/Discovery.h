@@ -49,10 +49,14 @@ namespace ARK {
 				float m_searchTimer;
 				float m_searchDuration;
 
+				bool m_running;
+
 			public:
 				
 				Discovery();
 				Discovery( unsigned int protocolId );
+
+				bool isRunning();
 				
 				unsigned int getMode() const;
 

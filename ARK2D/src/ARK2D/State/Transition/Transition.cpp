@@ -23,7 +23,9 @@ namespace ARK {
 				m_container(NULL), 
 				m_from(NULL),
 				m_to(NULL),
-				m_easing(Easing::LINEAR)  
+				m_easing(Easing::LINEAR),
+				m_updatingFromState(false),
+				m_updatingToState(false)
 				{
 
 			}
@@ -42,11 +44,25 @@ namespace ARK {
 
 			}
 
+			void Transition::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {
+				if (m_updatingFromState && m_from != NULL) {
+					m_from->update(container, game, timer);
+				}
+				if (m_updatingToState && m_to != NULL) {
+					m_to->update(container, game, timer);	
+				}
+			}
+
 			void Transition::init(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to) {
 				m_container = container;
 				m_from = from;
 				m_to = to;
 				m_easing = Easing::LINEAR;
+			}
+
+			void Transition::setUpdatingStates(bool fromState, bool toState) {
+				m_updatingFromState = fromState;
+				m_updatingToState = toState;
 			}
 
 			Transition::~Transition() {

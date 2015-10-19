@@ -120,7 +120,7 @@
 		#define NO_FIXED_FUNCTION_PIPELINE true
 
 		#include <GL/gl3w.h>
-		#include <GL/glx.h>
+		//#include <GL/glx.h>
 		#include <GL/glu.h>
 	#endif
 

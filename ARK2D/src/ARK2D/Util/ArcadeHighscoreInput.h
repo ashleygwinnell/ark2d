@@ -9,6 +9,7 @@
 #define ArcadeHighscoreInput_H_
 
 #include "../ARK2D.h"
+#include "../Core/String.h"
 #include "../UI/Button.h"
 #include "LocalHighscores.h"
 

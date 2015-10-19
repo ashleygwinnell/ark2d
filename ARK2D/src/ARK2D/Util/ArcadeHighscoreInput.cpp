@@ -10,7 +10,7 @@
 #include "../Core/GameContainer.h"
 
 namespace ARK {
-	namespace Util {
+	namespace Util { 
 
 		ArcadeHighscoreInput* ArcadeHighscoreInput::s_current = NULL;
 		void ArcadeHighscoreInput::setCurrent(ArcadeHighscoreInput* hsi) {

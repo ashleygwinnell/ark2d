@@ -4,13 +4,14 @@
  *  Created on: 14 Jul 2011
  *      Author: Ashley
  */
- 
-#include "Button.h"
 
 #include "../Core/String.h"
+#include "Button.h"
+
 #include "../Controls/Input.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Image.h"
+//#include "../Util/String.h"
 
 
 namespace ARK {

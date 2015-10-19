@@ -16,9 +16,10 @@ namespace ARK {
 		class ARK2D_API GamepadConfigureGameState : public GameState, public GamepadListener {
 			public:
 				GamepadMapping m_mapping;
+				string m_mappingString;
 				signed int m_gamepadIndex;
 				unsigned int m_stateId;
-				unsigned int m_returnToStateId;
+				GameState* m_returnToState;
 				unsigned int m_state;
 				static const unsigned int STATE_A = 0;
 				static const unsigned int STATE_B = 1;
@@ -54,6 +55,8 @@ namespace ARK {
 				void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
 				void render(GameContainer* container, StateBasedGame* game, Renderer* r);
 
+				static void alertMappingString(GamepadConfigureGameState* gs);
+				static void returnToStateStatic(GamepadConfigureGameState* gs);
 				void stateChanged();
 				virtual bool keyPressed(unsigned int key);
 				virtual bool keyReleased(unsigned int key);
@@ -75,6 +78,7 @@ namespace ARK {
 				CheckBox* m_alertButtons;
 				CheckBox* m_alertAxes;
                 ARK::UI::Button* m_autoConfig;
+                GameState* m_returnToState;
 			public:
 				GamepadsTestGameState();
 				void enter(GameContainer* container, StateBasedGame* game, GameState* from);
@@ -85,6 +89,8 @@ namespace ARK {
 				void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
 				void render(GameContainer* container, StateBasedGame* game, Renderer* r);
 				static void renderGamepad(ARK::Controls::Gamepad* g, float rootX, float rootY);
+
+				static void returnToStateStatic(GamepadsTestGameState* gs);
 
 				virtual bool keyPressed(unsigned int key);
 				virtual bool keyReleased(unsigned int key);

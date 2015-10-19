@@ -27,13 +27,15 @@ namespace ARK {
 					void setEasing(unsigned int easing);
 					unsigned int getEasing();
 					virtual void init(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to) = 0;
-					virtual void update(GameContainer* container, StateBasedGame* game, GameTimer* delta) = 0;
+					virtual void update(GameContainer* container, StateBasedGame* game, GameTimer* delta);
 					virtual void preRender(GameContainer* container, StateBasedGame* game, Renderer* g) = 0;
 					virtual void postRender(GameContainer* container, StateBasedGame* game, Renderer* g) = 0;
 					virtual bool isComplete() = 0;
 
 					virtual void postEnter(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to);
 					virtual void postLeave(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to);
+
+					virtual void setUpdatingStates(bool fromState, bool toState);
 
 					virtual ~Transition();
 
@@ -42,6 +44,9 @@ namespace ARK {
 					GameState* m_from;
 					GameState* m_to;
 					unsigned int m_easing;
+
+					bool m_updatingFromState;
+					bool m_updatingToState;
 			};
 		}
 	}

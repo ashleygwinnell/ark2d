@@ -26,6 +26,9 @@ namespace ARK {
 				GameState();
 				GameState(string name);
 
+				virtual void preEnter(GameContainer* container, StateBasedGame* game, GameState* from);
+				virtual void postLeave(GameContainer* container, StateBasedGame* game, GameState* to);
+				
 				virtual void enter(GameContainer* container, StateBasedGame* game, GameState* from);
 				virtual void leave(GameContainer* container, StateBasedGame* game, GameState* to);
 

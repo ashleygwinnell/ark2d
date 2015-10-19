@@ -7,9 +7,10 @@
 
 #include "CheckBox.h"
 #include "../Graphics/Renderer.h"
+#include "../Controls/Input.h"
 
 namespace ARK {
-	namespace UI { 
+	namespace UI {  
 		CheckBox::CheckBox():
 			AbstractUIComponent(),
           	m_checked(false),

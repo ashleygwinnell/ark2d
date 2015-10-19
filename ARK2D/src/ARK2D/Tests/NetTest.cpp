@@ -133,7 +133,10 @@ namespace ARK {
 			GameState(),
 			m_connection(ProtocolId, 5.0f),
 			m_discoveryConnection(DiscoveryProtocolId),
-			m_events() 
+			m_events(),
+			m_connected(false),
+			m_sendAccumulator(0.0f),
+			m_statsAccumulator(0.0f)
 		{
 			m_showAcks = false;
 			m_number = MathUtil::randBetween(0, 10);
@@ -161,19 +164,27 @@ namespace ARK {
 			// we already know the address dum dum! 
 			
 			
-			const int port = m_mode == Server ? ServerPort : ClientPort;
+			const int port = m_mode == Server ? ServerPort : ClientPortRangeStart;
 			if ( !m_connection.start( port ) ) {
 				ARK2D::getLog()->e(StringUtil::append("could not start connection on port: ", port));
 				if (m_mode == Client) {
-					ARK2D::getLog()->e("Trying second port.");
-					if ( !m_connection.start( ClientPort2 ) ) {
-						ARK2D::getLog()->e(StringUtil::append("could not start connection on port: ",  ClientPort2 ));
-						ARK2D::getLog()->e("Trying third and final port.");
-						if ( !m_connection.start( ClientPort3 ) ) {
-							ARK2D::getLog()->e(StringUtil::append("could not start connection on port: ", ClientPort2));
-							return;
+					ARK2D::getLog()->e("Trying other ports.");
+					bool doneConnection = false;
+					for (unsigned int i = ClientPortRangeStart + 1; i <= ClientPortRangeEnd; i++) {
+						if ( !m_connection.start( i ) ) {
+							ARK2D::getLog()->e(StringUtil::append("could not start connection on port: ",  i ));
+						} else {
+							ARK2D::getLog()->e(StringUtil::append("done on port: ",  i ));
+							doneConnection = true;
+							break;
 						}
+					} 
+					
+					if (!doneConnection) {
+						ARK2D::getLog()->e("could not start connection on any ports.");
+						return;
 					}
+					
 				} else {
 					return;
 				}

@@ -41,6 +41,8 @@ namespace ARK {
 			void FadeFromColourTransition::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {
 				m_alpha = (float) Easing::ease(m_easing, double(m_time_current), double(m_colorOriginalAlpha), double(m_colorOriginalAlpha)*-1, double(m_time));
 				m_time_current += timer->getDelta();
+
+				Transition::update(container, game, timer);
 			}
 			void FadeFromColourTransition::preRender(GameContainer* container, StateBasedGame* game, Renderer* g) {
 

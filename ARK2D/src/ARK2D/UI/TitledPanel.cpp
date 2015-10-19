@@ -1,27 +1,27 @@
 #include "TitledPanel.h"
 
 #include "../Graphics/Renderer.h"
-#include "../Geometry/Cube.h"
+#include "../Geometry/Cube.h"  
+ 
+namespace ARK { 
+	namespace UI { 
 
-namespace ARK {
-	namespace UI {
-
-		TitledPanel::TitledPanel(): 
+		TitledPanel::TitledPanel():   
 			Panel(), 
-			m_title(""),
+			m_title(""), 
 			m_content(NULL) {
 			m_content = new Panel();
-			m_content->position.setY(20);
+			m_content->position.setY(20); 
 			m_content->setName("content");
 			Panel::addChild(m_content);
 		}
-		TitledPanel::TitledPanel(Panel* content, string title): 
+		TitledPanel::TitledPanel(Panel* content, string title):  
 			Panel(), 
 			m_title(title),
 			m_content(content) {
 			m_content->position.setY(20);
 			m_content->setName("content");
-			Panel::addChild(m_content);
+			Panel::addChild(m_content); 
 		}
 		void TitledPanel::setTitle(string title) {
 			m_title = title;

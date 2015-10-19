@@ -67,6 +67,8 @@ namespace ARK {
 			ARK2D::s_input = &m_input;
 			ARK2D::s_log = ARK2D::getLog();
 			scene = new Scene();
+			scene->addChild(ARK2D::s_game);
+			scene->addChild(ARK2D::s_log);
 		
 			 
 			// Get location of current app bundle and make sure there's a resources path.

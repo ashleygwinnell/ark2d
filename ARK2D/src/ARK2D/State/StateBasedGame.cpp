@@ -55,8 +55,9 @@ namespace ARK {
 		}
 		void StateBasedGame::enterState(unsigned int id) {
 			for (unsigned int i = 0; i < m_states.size(); i++) {
-				if (m_states.at(i)->id() == id) {
-					enterState(m_states.at(i));
+				GameState* s = m_states.at(i);
+				if (s != NULL && s->id() == id) {
+					enterState(s);
 					break;
 				}
 			}
@@ -82,6 +83,7 @@ namespace ARK {
 		}
 		void StateBasedGame::enterState(GameState* state, ARK::State::Transition::Transition* leave, ARK::State::Transition::Transition* enter) {
 
+			
 			m_from_state = m_current_state;
 			//m_current_state = state;
 			m_next_state = state;
@@ -97,6 +99,9 @@ namespace ARK {
 
 			m_leaveTransition = leave;
 			m_enterTransition = enter;
+
+			m_from_state->leave(m_container, this, state);
+			//state->preEnter(m_container, this, m_from_state);
 
 			m_leaveTransition->init(m_container, this, m_from_state, state);
 		}
@@ -167,16 +172,14 @@ namespace ARK {
 				//std::cout << "leave wasn't null once! :(" << std::endl;
 				m_leaveTransition->update(container, this, timer);
 				if (m_leaveTransition->isComplete()) {
-					m_from_state->leave(container, this, m_next_state);
+					m_from_state->postLeave(container, this, m_next_state);
 					m_leaveTransition->postLeave(container, this, m_from_state, m_next_state);
 
 					if (m_autoDeleteTransitions) { delete m_leaveTransition; }
 					m_leaveTransition = NULL;
 
-					if (m_enterTransition == NULL) {
-						m_current_state = m_next_state;
-						m_current_state->enter(container, this, m_from_state);
-					} else {
+					m_next_state->preEnter(container, this, m_from_state);
+					if (m_enterTransition != NULL) {
 						m_current_state = m_next_state;
 						m_enterTransition->init(container, this, m_from_state, m_next_state);
 					}
@@ -189,7 +192,7 @@ namespace ARK {
 				//std::cout << "enter wasn't null once! :(" << std::endl;
 				m_enterTransition->update(container, this, timer);
 				if (m_enterTransition->isComplete()) {
-					m_current_state->enter(container, this, m_from_state);
+					m_next_state->enter(container, this, m_from_state);
 					m_enterTransition->postEnter(container, this, m_from_state, m_current_state);
 
 					if (m_autoDeleteTransitions) { delete m_enterTransition; }

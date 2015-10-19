@@ -9,6 +9,7 @@
 #include "Sound.h" 
 #include "SoundStore.h"
 #include "../Util/StringUtil.h"
+#include "../Core/String.h"
 #include "../Util/Log.h"
 
 namespace ARK {

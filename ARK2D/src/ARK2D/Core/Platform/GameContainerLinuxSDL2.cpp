@@ -11,6 +11,10 @@
 #include "../../Geometry/Line.h"
 #include "../../Geometry/Rectangle.h"
 
+#include "../../Audio/Sound.h"
+#include "../../Graphics/ImageIO/PNGImage.h"
+#include "../../Graphics/Image.h"
+
 	#include <dirent.h>
 	#include <errno.h>
 	#include <fcntl.h>
@@ -184,6 +188,8 @@
 				ARK2D::s_input = &m_input;
 				ARK2D::s_log = ARK::Util::Log::getInstance(); 
 				scene = new Scene();
+				scene->addChild(ARK2D::s_game);
+				scene->addChild(ARK2D::s_log);
 
 				m_graphics.preinit();
 
@@ -923,13 +929,18 @@
 					glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 					//ARK2D::getLog()->v("Pre-render Game");
-					m_game.preRender(this, &m_graphics);
+					//m_game.preRender(this, &m_graphics);
 					//ARK2D::getLog()->v("Render Game");
-					m_game.render(this, &m_graphics);
+					//m_game.render(this, &m_graphics);
 					//ARK2D::getLog()->v("Render Log");
-					ARK2D::getLog()->render(this, &m_graphics);
+					//ARK2D::getLog()->render(this, &m_graphics);
 					//ARK2D::getLog()->v("Post-render Game"); 
-					m_game.postRender(this, &m_graphics); 
+					//m_game.postRender(this, &m_graphics); 
+
+					preRender();
+					scene->render();
+					postRender();
+
 					Image::showAnyGlErrorAndExit();
 
 					SDL_GL_SwapWindow(m_platformSpecific.window);

@@ -11,17 +11,28 @@
 namespace ARK {
 	namespace Tests {
 
-		ARK::Tests::GamepadsTest* gamepadsTest;
+		ARK::Tests::GamepadsTest* gamepadsTest = NULL;
 
 		GamepadConfigureGameState::GamepadConfigureGameState(unsigned int stateId): 
 			GameState(),
 			m_stateId(stateId),
-			m_returnToStateId(0) {
+			m_mappingString(""),
+			m_returnToState(NULL) {
 
 		}
 		void GamepadConfigureGameState::enter(GameContainer* container, StateBasedGame* game, GameState* from) { 
 
 			ARK::Controls::Gamepad* gamepad = ARK2D::getInput()->getGamepads()->at(m_gamepadIndex);
+
+			for(signed int i = 0; i < ARK::Controls::Gamepad::s_gamepadMapping->size(); ++i) {
+				GamepadMapping* map = &ARK::Controls::Gamepad::s_gamepadMapping->at(i);
+				if (map->vendorId == gamepad->vendorId && map->productId == gamepad->productId) {
+					ARK2D::getLog()->e("Erasing configuration of controller before reconfiguring.");
+					ARK::Controls::Gamepad::s_gamepadMapping->erase(ARK::Controls::Gamepad::s_gamepadMapping->begin() + i);
+					break;
+				}
+			}
+
 			m_mapping = GamepadMapping();
 			m_mapping.name = gamepad->getName();
 			m_mapping.vendorId = gamepad->vendorId;
@@ -35,6 +46,7 @@ namespace ARK {
 
 		unsigned int GamepadConfigureGameState::id() { return m_stateId; }
 		void GamepadConfigureGameState::init(GameContainer* container, StateBasedGame* game) {
+			visible = false;
 			m_gamepadIndex = -1;
 			m_state = STATE_A; 
 
@@ -90,7 +102,7 @@ namespace ARK {
 
 			float commandX = container->getWidth() * 0.5f;
 			float commandY = container->getHeight() * 0.3f;
-			float commandScale = 2.0f;
+			float commandScale = 4.0f;
 
 			if (m_axisChangedCooldown > 0.0f) {
 				r->drawString("processing...", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, 1.0f);
@@ -184,22 +196,45 @@ namespace ARK {
 				}
 			}
 		}
+		void GamepadConfigureGameState::alertMappingString(GamepadConfigureGameState* gs) {
+			ErrorDialog::createAndShow(gs->m_mappingString);
+		}
+		void GamepadConfigureGameState::returnToStateStatic(GamepadConfigureGameState* gs) {
+			// go back to controller state to test everything.
+			if (gs->m_returnToState != NULL) {
+				ARK2D::getLog()->i("entering state...");
+                StateBasedGame* game = dynamic_cast<StateBasedGame*>(ARK2D::getGame());
+                if (game != NULL) {
+                    game->enterState(gs->m_returnToState);
+                }
+			} else {
+				ARK2D::getLog()->w("entering state - NULL... ");
+			}
+		}
 		void GamepadConfigureGameState::stateChanged() {
 			ARK2D::getLog()->w(StringUtil::append("state: ", m_state));
 			if (m_state == STATE_END) {
 				// add config to ark2d.
 				m_mapping.toInverse();
-				string mappingStr = m_mapping.toString();
-				ARK2D::getLog()->i(StringUtil::append("mapping: ", mappingStr));
-				ErrorDialog::createAndShow(mappingStr);
+				string str = m_mapping.toString();
+				m_mappingString = str;
+				ARK2D::getLog()->i(StringUtil::append("mapping: ", m_mappingString));
 
+				
 				//Dialog::openInputDialog(0, "config:", m_mapping.toString());
 				ARK2D::getLog()->i("pushing...");
 				ARK::Controls::Gamepad::s_gamepadMapping->push_back(m_mapping);
+
+				// Alert this on the main thread. 
+				//ARK2D::getGame()->getTimeline()->staticEvent( (void*) this, (void*) &GamepadConfigureGameState::alertMappingString, 0.0f);
+				
+				//ARK2D::getGame()->getTimeline()->staticEvent( (void*) this, (void*) &GamepadConfigureGameState::returnToStateStatic, 0.0f);
+
+				alertMappingString(this);
+				returnToStateStatic(this);
+				// todo: remove existing mapping or something?
 			
-				// go back to controller state to test everything.
-				ARK2D::getLog()->i("entering state...");
-				gamepadsTest->enterState((unsigned int) m_returnToStateId); 
+				
 			}
 		}
 		void GamepadConfigureGameState::gamepadConnected(ARK::Controls::Gamepad* gamepad) {
@@ -364,7 +399,9 @@ namespace ARK {
 
 
 
-		GamepadsTestGameState::GamepadsTestGameState(): GameState() {
+		GamepadsTestGameState::GamepadsTestGameState(): 
+			GameState(),
+			m_returnToState(NULL) {
 
 		}
 		void GamepadsTestGameState::enter(GameContainer* container, StateBasedGame* game, GameState* from) { }
@@ -380,6 +417,19 @@ namespace ARK {
 		void alertAxesCheckboxEvent() {
 
 		}
+		void GamepadsTestGameState::returnToStateStatic(GamepadsTestGameState* gs) {
+			// go back to controller state to test everything.
+			if (gs->m_returnToState != NULL) {
+				ARK2D::getLog()->i("entering state...");
+                StateBasedGame* game = dynamic_cast<StateBasedGame*>(ARK2D::getGame());
+                if (game != NULL) {
+                    game->enterState(gs->m_returnToState);
+                }
+			} else {
+				ARK2D::getLog()->w("entering state - NULL... ");
+			}
+		}
+
 		void configureButtonEvent() {
 			GamepadsTestGameState* test = dynamic_cast<GamepadsTestGameState*>( gamepadsTest->getState(0) );
 			GamepadConfigureGameState* configure = dynamic_cast<GamepadConfigureGameState*>( gamepadsTest->getState(1) );
@@ -390,27 +440,38 @@ namespace ARK {
 
 
 		void GamepadsTestGameState::init(GameContainer* container, StateBasedGame* game) {
+			visible = false;
 			m_gamepadIndex = 0;
 			
 			m_alertButtons = new CheckBox();
 			m_alertButtons->setMargin(10);
 			m_alertButtons->setChecked(false);
 			m_alertButtons->setStateChangedEvent((void*) &alertButtonsCheckboxEvent);
+			m_alertButtons->position.set(container->getWidth() - 50, 50);
+			m_alertButtons->pivot.set(1.0f, 0.0f);
+
+			addChild(m_alertButtons);
 
 			m_alertAxes = new CheckBox();
 			m_alertAxes->setMargin(10);
 			m_alertAxes->setChecked(false);
 			m_alertAxes->setStateChangedEvent((void*) &alertAxesCheckboxEvent);
+			m_alertAxes->position.set(container->getWidth() - 50, 100);
+			m_alertAxes->pivot.set(1.0f, 0.0f);
+			addChild(m_alertAxes);
 
-			m_alertButtons->setLocationByCenter(container->getWidth() - 50, 50);
-			m_alertAxes->setLocationByCenter(container->getWidth() - 50, 100);
+			
+
+			
 
             m_autoConfig = new ARK::UI::Button();
 			m_autoConfig->setText("Configure");
 			m_autoConfig->setSize(100, 30);
 			m_autoConfig->setEvent((void*) &configureButtonEvent);
 			m_autoConfig->setMargin(10); 
-			m_autoConfig->setLocationByCenter(container->getWidth() - 85, 150);
+			m_autoConfig->position.set(container->getWidth() - 85, 150);
+			m_autoConfig->pivot.set(0.5, 0.5f);
+			addChild(m_autoConfig);
  
 			// scene->addChild(m_alertButtons);
 			// scene->addChild(m_alertAxes);
@@ -419,6 +480,10 @@ namespace ARK {
 		void GamepadsTestGameState::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {
 
 			Input* i = ARK2D::getInput();
+
+			if (i->isKeyPressed(Input::KEY_BACKSPACE)) {
+				returnToStateStatic(this);
+			}
  
 			if (i->getGamepads()->size() > 0) {
 				ARK::Controls::Gamepad* p1 = i->getGamepads()->at(0);
@@ -429,6 +494,7 @@ namespace ARK {
 				if (p1->isButtonPressed(ARK::Controls::Gamepad::BUTTON_START)) {
 					ARK2D::getLog()->i("START PRESSED");
 				}
+
 				if (p1->isButtonPressed(ARK::Controls::Gamepad::BUTTON_A)) {
 
 					ARK2D::getLog()->v("Printing Axes");
@@ -467,6 +533,8 @@ namespace ARK {
 
 		void GamepadsTestGameState::renderGamepad(ARK::Controls::Gamepad* p1, float rootX, float rootY) 
 		{
+			if (p1 == NULL) { 
+			 return; }
 			// rootX/Y is the center C/Y.
 			// make rootX the leftest X;
 			rootX -= 400;
@@ -607,15 +675,15 @@ namespace ARK {
 				r->drawString(StringUtil::append("num buttons: ", p1->numButtons), 30, 140);
 				r->drawString(StringUtil::append("num axes: ", p1->numAxes), 30, 160);
 				r->drawString(StringUtil::append("num axes 2: ", p1->axes.size()), 30, 180);
-				r->drawString(StringUtil::append("has configuration: ", (p1->isConfigured()?"true":"false")), 30, 210, -1, -1, 0.0, 0.5f);
-				r->drawString(StringUtil::append("shared trigger axis: ", (p1->m_sharedTriggerAxis?"true":"false")), 30, 220, -1, -1, 0.0, 0.5f);
+				r->drawString(StringUtil::append("has configuration: ", (p1->isConfigured()?"true":"false")), 30, 210, -1, -1);
+				r->drawString(StringUtil::append("shared trigger axis: ", (p1->m_sharedTriggerAxis?"true":"false")), 30, 220, -1, -1);
 				//r->drawString(StringUtil::append("axis 1: ", p1->axes.at(0)->value), 30, 180);
 				//r->drawString(StringUtil::append("axis 2: ", p1->axes.at(1)->value), 30, 210);
 				renderGamepad(p1, container->getWidth()*0.5f, container->getHeight()*0.7f);
 
-				m_alertButtons->render();
-				m_alertAxes->render();
-				m_autoConfig->render();
+				//m_alertButtons->render();
+				//m_alertAxes->render();
+				//m_autoConfig->render();
 
 				r->drawString("Alert Buttons: ", container->getWidth() - 80, 50,  Renderer::ALIGN_RIGHT, Renderer::ALIGN_CENTER);	
 				r->drawString("Alert Axes: ",    container->getWidth() - 80, 100, Renderer::ALIGN_RIGHT, Renderer::ALIGN_CENTER);	
@@ -626,24 +694,24 @@ namespace ARK {
 				//r->fillRect(100,100,100,100);
 
 			}
+
+			if (m_returnToState != NULL) {
+				r->drawString("BACKSPACE TO GO BACK", 30, container->getHeight() - 30, Renderer::ALIGN_LEFT, Renderer::ALIGN_BOTTOM, 0.0f, 2.0f);	
+			}
+
+            renderChildren();
 		}
 
 		bool GamepadsTestGameState::keyPressed(unsigned int key) {
-            if (m_alertButtons->keyPressed(key)) return true;
-			if (m_alertAxes->keyPressed(key)) return true;
-			if (m_autoConfig->keyPressed(key)) return true;
+            GameState::keyPressed(key);
             return false;
 		}
 		bool GamepadsTestGameState::keyReleased(unsigned int key) {
-			if (m_alertButtons->keyReleased(key)) return true;
-			if (m_alertAxes->keyReleased(key)) return true;
-			if (m_autoConfig->keyReleased(key)) return true;
+			GameState::keyReleased(key);
             return false;
 		}
 		bool GamepadsTestGameState::mouseMoved(int x, int y, int oldx, int oldy) {
-			if (m_alertButtons->mouseMoved(x, y, oldx, oldy)) return true;
-			if (m_alertAxes->mouseMoved(x, y, oldx, oldy)) return true;
-			if (m_autoConfig->mouseMoved(x, y, oldx, oldy)) return true;
+			GameState::mouseMoved(x,y,oldx,oldy);
             return false;
 		}
 

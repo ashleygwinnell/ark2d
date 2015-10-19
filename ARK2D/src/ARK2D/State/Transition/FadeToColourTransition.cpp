@@ -48,6 +48,8 @@ namespace ARK {
 				//ARK2D::getLog()->i(Cast::toString<float>(m_time_current));
 				//ARK2D::getLog()->i("alpha:");
 				//ARK2D::getLog()->i(Cast::toString<float>(m_alpha));
+
+				Transition::update(container, game, timer);
 				
 			}
 			void FadeToColourTransition::preRender(GameContainer* container, StateBasedGame* game, Renderer* g) {

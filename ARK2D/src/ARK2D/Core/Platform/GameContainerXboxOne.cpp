@@ -75,6 +75,8 @@
 				ARK2D::s_input = &m_input;
 				ARK2D::s_log = ARK::Util::Log::getInstance();
 				scene = new Scene();
+				scene->addChild(ARK2D::s_game);
+				scene->addChild(ARK2D::s_log);
 
 
 

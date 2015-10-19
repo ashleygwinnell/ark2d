@@ -630,6 +630,9 @@
 				ARK2D::s_input = &m_input;
 				ARK2D::s_log = ARK::Util::Log::getInstance();
 				scene = new Scene();
+				scene->addChild(ARK2D::s_game);
+				scene->addChild(ARK2D::s_log);
+
 
 				m_platformSpecific.m_windowRect.left = (long) 0; 			// Set Left Value To 0
 				m_platformSpecific.m_windowRect.right = (long) width; 		// Set Right Value To Requested Width
