@@ -45,7 +45,9 @@ namespace ARK {
 			m_backgroundColor(NULL),
 			m_gameSpeedSlider(NULL),
 			m_expoCheckbox(NULL),
-			m_addGamepadButton(NULL)
+			m_addGamepadButton(NULL),
+
+			m_logToFile(false)
 			{
 				this->visible = false;
 
@@ -307,6 +309,11 @@ namespace ARK {
 				m_messagesPool.pop_back();
 			}
 
+			if (isLoggingToFile()) {
+				std::ofstream log_file("log.txt", std::ios_base::out | std::ios_base::app );
+				log_file << "Log " << getTypeString(type) << ": " << s.c_str() << std::endl;
+			}
+
 			
 		}
 		void Log::e(const char* s) {
@@ -546,6 +553,13 @@ namespace ARK {
 		bool Log::mouseMoved(int x, int y, int oldx, int oldy) {
 			if (!this->visible) { return false; }
 			return SceneNode::mouseMoved(x, y, oldx, oldy);
+		}
+
+		bool Log::isLoggingToFile() {
+			return m_logToFile;
+		}
+		void Log::setLoggingToFile(bool b) {
+			m_logToFile = b; 
 		}
 
    		wstring Log::getTypeWString(unsigned int type) {

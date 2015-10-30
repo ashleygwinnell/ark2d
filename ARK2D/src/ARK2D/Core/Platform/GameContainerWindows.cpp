@@ -963,9 +963,13 @@
 				for (unsigned int i = 0; i < m_gamepads.size(); i++) {
 					Gamepad* p = m_gamepads.at(i);
 					info.dwFlags = JOY_RETURNALL | JOY_RETURNPOVCTS;
+					info.dwSize = sizeof(info);
+
+					ARK2D::getLog()->v(StringUtil::append("Processing input for gamepad: ", p->id));
 
 					result = joyGetPosEx(p->id, &info);
 					if (result == JOYERR_UNPLUGGED) {
+						ARK2D::getLog()->v("unplugged");
 						m_gamepads.erase(m_gamepads.begin() + i);
 
 						// Give event to game
@@ -978,6 +982,8 @@
 						//i = 0;
 
 					} else if (result == JOYERR_NOERROR) {
+
+						ARK2D::getLog()->v("no errors for this gamepad");
 
 						//handleAxisChange(device, devicePrivate->xAxisIndex, info.dwXpos);
 
@@ -1192,6 +1198,8 @@
 
 
 
+					} else {
+						ARK2D::getLog()->w(StringUtil::append("joyGetPosEx returned result: ", result));
 					}
 				}
 
@@ -3065,8 +3073,7 @@
 
 					m_platformSpecific.m_hotplugGamepadsTimer += m_timer.getDelta();
 					if (m_platformSpecific.m_hotplugGamepadsTimer >= 1.0f) {
-						// initGamepads();
-						// hotplugging disabled... :( 
+						initGamepads();
 						m_platformSpecific.m_hotplugGamepadsTimer -= 1.0f;
 					}
 					processGamepadInput();

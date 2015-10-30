@@ -33,7 +33,7 @@
 			}
 		},
 		{
-			"name": "Controller (XBOX 360 For Windows)",
+			"name": "Controller (Xbox 360 Wireless Receiver for Windows)",
 			"comment": "wireless controller",
 			"vendorId": 1118,
 			"productId": 673,
@@ -327,6 +327,38 @@
 	            "LT": 7, 
 	            "RT": 8 
             }
+		},
+		{
+			"name": "Cyborg Rumble Pad", 
+			"vendorId": 1699, 
+			"productId": 62746, 
+			"buttons": { 
+				"DPAD_LEFT": 101, 
+				"DPAD_RIGHT": 105, 
+				"DPAD_UP": 103, 
+				"DPAD_DOWN": 107, 
+				"A": 1, 
+				"B": 2, 
+				"X": 0, 
+				"Y": 3, 
+				"LBUMPER": 4, 
+				"RBUMPER": 5, 
+				"LTRIGGER": -1, 
+				"RTRIGGER": -1, 
+				"L3": 10, 
+				"R3": 11, 
+				"BACK": 8, 
+				"START": 9, 
+				"ACTIVATE": -1 
+			},
+			"axes": { 
+				"LX": 0, 
+				"LY": 1, 
+				"RX": 2, 
+				"RY": 3, 
+				"LT": 4, 
+				"RT": 4 
+			}
 		}
 
 	],

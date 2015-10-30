@@ -109,6 +109,8 @@ namespace ARK {
 				ARK::UI::CheckBox* m_expoCheckbox;
 				ARK::UI::Button* m_addGamepadButton;
 				LogConsolePanel* m_consolePanel;
+
+				bool m_logToFile;
 				
 			public:
 				Log();
@@ -155,6 +157,9 @@ namespace ARK {
 
 				inline bool isVisible() { return visible; }
 				inline bool isEnabled() { return visible; }
+
+				bool isLoggingToFile();
+				void setLoggingToFile(bool b);
 
 				virtual ~Log();
 

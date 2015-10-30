@@ -79,7 +79,7 @@
 				m_willLoadDefaultFont(true),
 				m_platformSpecific()
 				{
-					locale::global(locale(""));
+					//locale::global(locale(""));
 
 					NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 					

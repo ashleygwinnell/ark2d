@@ -52,6 +52,12 @@ void ARK2D::main(int args, char** argv) {
         ARK2D::getLog()->setFilter(Log::TYPE_ALL);
 	}
 
+	if (hasCommandLineParameter("-logtofile")) {
+		ARK2D::getLog()->i("Saving all log data.");
+		ErrorDialog::createAndShow("Saving all log data.");
+		ARK2D::getLog()->setLoggingToFile(true);
+	}
+
 	//if (hasCommandLineParameter("-dumplog")) {
 	//	ARK2D::getLog()->i("Setting dumping log to file.");
 	//}

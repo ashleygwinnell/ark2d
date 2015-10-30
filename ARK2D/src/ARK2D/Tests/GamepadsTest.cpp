@@ -61,8 +61,9 @@ namespace ARK {
 			}
 
 			Input* in = ARK2D::getInput();
-			if (in->isKeyPressed(Input::KEY_ESCAPE)) {
-				gamepadsTest->enterState((unsigned int) 0); 
+			if (in->isKeyPressed(Input::KEY_ESCAPE) || in->isKeyPressed(Input::KEY_BACKSPACE)) {
+				//gamepadsTest->enterState((unsigned int) 0); 
+				returnToStateStatic(this);
 				return;
 			}
 			if (in->isKeyPressed(Input::KEY_ENTER)) {
@@ -194,6 +195,10 @@ namespace ARK {
 					r->drawString("Press START", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, commandScale);
 					break;
 				}
+			}
+
+			if (m_returnToState != NULL) {
+				r->drawString("BACKSPACE TO GO BACK", 30, container->getHeight() - 30, Renderer::ALIGN_LEFT, Renderer::ALIGN_BOTTOM, 0.0f, 2.0f);	
 			}
 		}
 		void GamepadConfigureGameState::alertMappingString(GamepadConfigureGameState* gs) {
@@ -756,9 +761,16 @@ namespace ARK {
 		}
 		void GamepadsTest::initStates(GameContainer* container) {
 			ARK2D::getLog()->setFilter(Log::TYPE_INFORMATION);
-			addState(new GamepadsTestGameState());
-			addState(new GamepadConfigureGameState(1));
-			enterState((unsigned int) 0);
+
+			GamepadsTestGameState* testState = new GamepadsTestGameState();
+			GamepadConfigureGameState* configureState = new GamepadConfigureGameState(1);
+
+			testState->m_returnToState = testState;
+			configureState->m_returnToState = testState;
+
+			addState(testState);
+			addState(configureState);
+			enterState(testState);
 		} 
 		void GamepadsTest::update(GameContainer* container, GameTimer* timer) {
 			StateBasedGame::update(container, timer);
