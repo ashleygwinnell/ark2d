@@ -71,9 +71,8 @@
 #include "ARK2D/Graphics/Image.h"
 #include "ARK2D/Graphics/Texture.h"
 #include "ARK2D/Graphics/TextureStore.h"
+#include "ARK2D/Graphics/Shaders/AlphaMaskShader.h"
 #include "ARK2D/Graphics/Shaders/HSVShader.h"
-#include "ARK2D/Graphics/Shaders/HSVGeometryShader.h"
-#include "ARK2D/Graphics/Shaders/HSVTextureShader.h"
 #include "ARK2D/Graphics/Shaders/StencilShader.h"
 
 

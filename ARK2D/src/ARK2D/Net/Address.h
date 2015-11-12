@@ -41,6 +41,7 @@ namespace ARK {
 				bool operator != ( const Address & other ) const;
 				bool operator < ( const Address & other ) const;
 
+				string toString() const;
 				~Address();
 		};
 	}

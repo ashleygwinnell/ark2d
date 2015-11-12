@@ -787,6 +787,8 @@ namespace ARK {
 					r->enableStencil();
 				} else if (m_type == TYPE_STENCIL_START) {
 					r->startStencil();
+				} else if (m_type == TYPE_STENCIL_INVERSE) {
+					r->inverseStencil();
 				} else if (m_type == TYPE_STENCIL_STOP) {
 					r->stopStencil();
 				} else if (m_type == TYPE_STENCIL_DISABLE) {
@@ -1731,8 +1733,8 @@ namespace ARK {
 					
 					#ifdef ARK2D_WINDOWS_PHONE_8
 					
-						file_get_contents_binary_result geometryVertexShaderStruct = FileUtil::file_get_contents_binary("ark2d/shaders/geometry-dx11-vertex.cso");
-						file_get_contents_binary_result geometryFragmentShaderStruct = FileUtil::file_get_contents_binary("ark2d/shaders/geometry-dx11-pixel.cso");
+						file_get_contents_binary_result geometryVertexShaderStruct = FileUtil::file_get_contents_binary("ark2d/shaders/basic-geometry/geometry-dx11-vertex.cso");
+						file_get_contents_binary_result geometryFragmentShaderStruct = FileUtil::file_get_contents_binary("ark2d/shaders/basic-geometry/geometry-dx11-pixel.cso");
 
 						//String* geometryVertexShaderStruct = Resource::get("ark2d/shaders/geometry-dx11-vertex.cso")->asString();
 						//String* geometryFragmentShaderStruct = Resource::get("ark2d/shaders/geometry-dx11-pixel.cso")->asString();
@@ -1768,8 +1770,8 @@ namespace ARK {
 							// TODO:
 							// ... use Resource::get() as these are always within the APK.
 
-							RawDataReturns* geometryVertexShaderStruct = Resource::getRawData("assets/ark2d/shaders/geometry-glsles100.vertex");
-							RawDataReturns* geometryFragmentShaderStruct = Resource::getRawData("assets/ark2d/shaders/geometry-glsles100.fragment"); //->asString();
+							RawDataReturns* geometryVertexShaderStruct = Resource::getRawData("assets/ark2d/shaders/basic-geometry/geometry-glsles100.vertex");
+							RawDataReturns* geometryFragmentShaderStruct = Resource::getRawData("assets/ark2d/shaders/basic-geometry/geometry-glsles100.fragment"); //->asString();
 
 							char* newtextbuffer = (char*) realloc(geometryVertexShaderStruct->data, geometryVertexShaderStruct->size+1);
 							newtextbuffer[geometryVertexShaderStruct->size] = '\0';
@@ -1793,8 +1795,8 @@ namespace ARK {
 
 						#else
 
-							file_get_contents_text_result geometryVertexShaderStruct = FileUtil::file_get_contents_text("ark2d/shaders/geometry-glsles100.vertex");
-							file_get_contents_text_result geometryFragmentShaderStruct = FileUtil::file_get_contents_text("ark2d/shaders/geometry-glsles100.fragment");
+							file_get_contents_text_result geometryVertexShaderStruct = FileUtil::file_get_contents_text("ark2d/shaders/basic-geometry/geometry-glsles100.vertex");
+							file_get_contents_text_result geometryFragmentShaderStruct = FileUtil::file_get_contents_text("ark2d/shaders/basic-geometry/geometry-glsles100.fragment");
 							
 							const char* geometryVertexShader = (const char*) geometryVertexShaderStruct.data;
 							const char* geometryFragmentShader = (const char*) geometryFragmentShaderStruct.data;
@@ -1809,8 +1811,8 @@ namespace ARK {
 
 					#elif defined(ARK2D_OPENGL_3_2)
 						ARK2D::getLog()->v("Trying GLSL version 150.");
-						file_get_contents_text_result geometryVertexShaderStruct = FileUtil::file_get_contents_text("ark2d/shaders/geometry-glsl150-vertex.txt");
-						file_get_contents_text_result geometryFragmentShaderStruct = FileUtil::file_get_contents_text("ark2d/shaders/geometry-glsl150-fragment.txt");
+						file_get_contents_text_result geometryVertexShaderStruct = FileUtil::file_get_contents_text("ark2d/shaders/basic-geometry/geometry-glsl150-vertex.txt");
+						file_get_contents_text_result geometryFragmentShaderStruct = FileUtil::file_get_contents_text("ark2d/shaders/basic-geometry/geometry-glsl150-fragment.txt");
 
 						const char* geometryVertexShader = (const char*) geometryVertexShaderStruct.data;
 						const char* geometryFragmentShader = (const char*) geometryFragmentShaderStruct.data;
@@ -1829,8 +1831,8 @@ namespace ARK {
 
 						if (glsl150_vertex_error || glsl150_fragment_error) {
 							ARK2D::getLog()->w("GLSL version 150 had a problem. Trying GLSL version 130.");
-							file_get_contents_text_result geometryVertexShaderStruct2 = FileUtil::file_get_contents_text("ark2d/shaders/geometry-glsl130-vertex.txt");
-							file_get_contents_text_result geometryFragmentShaderStruct2 = FileUtil::file_get_contents_text("ark2d/shaders/geometry-glsl130-fragment.txt");
+							file_get_contents_text_result geometryVertexShaderStruct2 = FileUtil::file_get_contents_text("ark2d/shaders/basic-geometry/geometry-glsl130-vertex.txt");
+							file_get_contents_text_result geometryFragmentShaderStruct2 = FileUtil::file_get_contents_text("ark2d/shaders/basic-geometry/geometry-glsl130-fragment.txt");
 
 							const char* geometryVertexShader2 = (const char*) geometryVertexShaderStruct2.data;
 							const char* geometryFragmentShader2 = (const char*) geometryFragmentShaderStruct2.data;
@@ -1907,8 +1909,8 @@ namespace ARK {
 					// TODO: replace with texture shader...
 					#ifdef ARK2D_WINDOWS_PHONE_8
 						
-						file_get_contents_binary_result textureVertexShaderStruct = FileUtil::file_get_contents_binary("ark2d/shaders/texture-dx11-vertex.cso");
-						file_get_contents_binary_result textureFragmentShaderStruct = FileUtil::file_get_contents_binary("ark2d/shaders/texture-dx11-pixel.cso");
+						file_get_contents_binary_result textureVertexShaderStruct = FileUtil::file_get_contents_binary("ark2d/shaders/basic-texture/texture-dx11-vertex.cso");
+						file_get_contents_binary_result textureFragmentShaderStruct = FileUtil::file_get_contents_binary("ark2d/shaders/basic-texture/texture-dx11-pixel.cso");
 
 						//String* textureVertexShaderStruct = Resource::get("ark2d/shaders/geometry-dx11-vertex.cso")->asString();
 						//String* textureFragmentShaderStruct = Resource::get("ark2d/shaders/geometry-dx11-pixel.cso")->asString();
@@ -1941,8 +1943,8 @@ namespace ARK {
 							// TODO:
 							// ... use Resource::get() as these are always within the APK.
 
-							RawDataReturns* textureVertexShaderStruct = Resource::getRawData("assets/ark2d/shaders/texture-glsles100.vertex"); //->asString();
-							RawDataReturns* textureFragmentShaderStruct = Resource::getRawData("assets/ark2d/shaders/texture-glsles100.fragment"); //->asString();
+							RawDataReturns* textureVertexShaderStruct = Resource::getRawData("assets/ark2d/shaders/basic-texture/texture-glsles100.vertex"); //->asString();
+							RawDataReturns* textureFragmentShaderStruct = Resource::getRawData("assets/ark2d/shaders/basic-texture/texture-glsles100.fragment"); //->asString();
 
 							char* newtextbuffer3 = (char*) realloc(textureVertexShaderStruct->data, textureVertexShaderStruct->size+1);
 							newtextbuffer3[textureVertexShaderStruct->size] = '\0';
@@ -1965,8 +1967,8 @@ namespace ARK {
 							delete textureFragmentShaderStruct;
 						#else
 
-							file_get_contents_text_result textureVertexShaderStruct = FileUtil::file_get_contents_text("ark2d/shaders/texture-glsles100.vertex");
-							file_get_contents_text_result textureFragmentShaderStruct = FileUtil::file_get_contents_text("ark2d/shaders/texture-glsles100.fragment");
+							file_get_contents_text_result textureVertexShaderStruct = FileUtil::file_get_contents_text("ark2d/shaders/basic-texture/texture-glsles100.vertex");
+							file_get_contents_text_result textureFragmentShaderStruct = FileUtil::file_get_contents_text("ark2d/shaders/basic-texture/texture-glsles100.fragment");
 
 							const char* textureVertexShader = (const char*) textureVertexShaderStruct.data;
 							const char* textureFragmentShader = (const char*) textureFragmentShaderStruct.data;
@@ -1983,8 +1985,8 @@ namespace ARK {
 
 					#elif defined(ARK2D_OPENGL_3_2)  
 						ARK2D::getLog()->v("Trying GLSL version 150.");
-						file_get_contents_text_result textureVertexShaderStruct = FileUtil::file_get_contents_text("ark2d/shaders/texture-glsl150-vertex.txt");
-						file_get_contents_text_result textureFragmentShaderStruct = FileUtil::file_get_contents_text("ark2d/shaders/texture-glsl150-fragment.txt");
+						file_get_contents_text_result textureVertexShaderStruct = FileUtil::file_get_contents_text("ark2d/shaders/basic-texture/texture-glsl150-vertex.txt");
+						file_get_contents_text_result textureFragmentShaderStruct = FileUtil::file_get_contents_text("ark2d/shaders/basic-texture/texture-glsl150-fragment.txt");
 	 
 						const char* textureVertexShader = (const char*) textureVertexShaderStruct.data;
 						const char* textureFragmentShader = (const char*) textureFragmentShaderStruct.data;
@@ -2003,8 +2005,8 @@ namespace ARK {
 
 						if (glsl150_t_vertex_error || glsl150_t_fragment_error) {
 							ARK2D::getLog()->w("GLSL version 150 had a problem. Trying GLSL version 130.");
-							file_get_contents_text_result textureVertexShaderStruct2 = FileUtil::file_get_contents_text("ark2d/shaders/texture-glsl130-vertex.txt");
-							file_get_contents_text_result textureFragmentShaderStruct2 = FileUtil::file_get_contents_text("ark2d/shaders/texture-glsl130-fragment.txt");
+							file_get_contents_text_result textureVertexShaderStruct2 = FileUtil::file_get_contents_text("ark2d/shaders/basic-texture/texture-glsl130-vertex.txt");
+							file_get_contents_text_result textureFragmentShaderStruct2 = FileUtil::file_get_contents_text("ark2d/shaders/basic-texture/texture-glsl130-fragment.txt");
 		 
 							const char* textureVertexShader2 = (const char*) textureVertexShaderStruct2.data;
 							const char* textureFragmentShader2 = (const char*) textureFragmentShaderStruct2.data;
@@ -2280,17 +2282,33 @@ namespace ARK {
 			    RendererStats::s_glCalls += 4;
 		    #endif
 		}
-		/*void Renderer::inverseStencil() const {
+		// Need to set the stencil buffer to all 1s before using inverse!
+		void Renderer::inverseStencil() const {
 			#ifdef ARK2D_RENDERER_OPENGL
+
+				if (Renderer::isBatching()) { 
+					RendererBatchItem stateChange;
+					stateChange.m_type = RendererBatchItem::TYPE_STENCIL_INVERSE;
+					s_batch->items.push_back(stateChange);
+					return;
+				}
+
+
 				// Place a 1 where rendered
 			    glStencilFunc( GL_ALWAYS, 1, 0 );
+				// Replace where rendered
+			    //glStencilOp( GL_REPLACE, GL_REPLACE, GL_REPLACE );
 
-			    // Replace where rendered
-			    glStencilOp( GL_REPLACE, GL_REPLACE, GL_REPLACE );
+				// http://www.eng.utah.edu/~cs5610/lectures/Buffers%202015.pdf
+				//glStencilFunc(GL_NOTEQUAL, 1, 1);
+				//glStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
+
+				//glStencilFunc(GL_EQUAL, 1, 1);
+				glStencilOp(GL_ZERO,GL_ZERO,GL_ZERO);
 
 			    RendererStats::s_glCalls += 4;
 		    #endif
-		}*/
+		}
 		void Renderer::stopStencil() const {
 			#ifdef ARK2D_RENDERER_OPENGL
 				if (Renderer::isBatching()) { 

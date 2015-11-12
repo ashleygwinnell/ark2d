@@ -1,12 +1,12 @@
 /*
- * HSVShader.h
+ * AlphaMaskShader.h
  *
- *  Created on: 4 May 2015
+ *  Created on: 11 Nov 2015
  *      Author: Ashley
  */
 
-#ifndef ARK_GRAPHICS_SHADERS_HSVSHADER_H_
-#define ARK_GRAPHICS_SHADERS_HSVSHADER_H_
+#ifndef ARK_GRAPHICS_SHADERS_ALPHAMASKSHADER_H_
+#define ARK_GRAPHICS_SHADERS_ALPHAMASKSHADER_H_
 
 #include "../../ARK2D.h"
 #include "../Shader.h"
@@ -14,91 +14,70 @@
 namespace ARK { 
 	namespace Graphics { 
 
-		class ARK2D_API HSVGeometryShader : public ARK::Graphics::Shader 
-		{ 
+		class AlphaMaskGeometryShader : public Shader {
 			public:
+				Shader* m_shaderBasicGeometry;
 				unsigned int _ModelViewMatrix;
 				unsigned int _ProjectionMatrix;
-				unsigned int _HSVIn;
-
 				unsigned int _VertexPositionIn;
 				unsigned int _VertexColorIn;
 				
-				Shader* m_shaderBasicGeometry;
-				QuadVBO* m_vbo; 
 				unsigned int m_shaderBasicGeometry_ModelViewMatrix;
 				unsigned int m_shaderBasicGeometry_ProjectionMatrix;
 				unsigned int m_shaderBasicGeometry_VertexPositionIn;
 				unsigned int m_shaderBasicGeometry_VertexColorIn;
 
-				float h;
-				float s;
-				float v;
-				
-			public:
-				HSVGeometryShader();  
+				AlphaMaskGeometryShader();  
 				void load();
-				virtual void bind();
-				virtual void unbind();
-
 				void start();
 				void stop();
-				virtual ~HSVGeometryShader();
+				void startInternal();
+				void stopInternal();
+				static void startStatic(AlphaMaskGeometryShader* obj);
+				static void stopStatic(AlphaMaskGeometryShader* obj);
+				virtual ~AlphaMaskGeometryShader();
 		};
-		
-		class ARK2D_API HSVTextureShader : public ARK::Graphics::Shader 
-		{ 
+		class AlphaMaskTextureShader : public Shader {
 			public:
+				Shader* m_shaderBasicTexture;
 				unsigned int _ModelViewMatrix;
 				unsigned int _ProjectionMatrix;
-				unsigned int _TextureId;
-				unsigned int _HSVIn;
 
+				unsigned int _TextureId;
 				unsigned int _VertexPositionIn;
 				unsigned int _VertexTexCoordIn;
 				unsigned int _VertexColorIn;
-
-				Shader* m_shaderBasicTexture;
-				QuadVBO* m_vbo; 
-				unsigned int m_shaderBasicTexture_TextureId;
+				
 				unsigned int m_shaderBasicTexture_ModelViewMatrix;
 				unsigned int m_shaderBasicTexture_ProjectionMatrix;
 				unsigned int m_shaderBasicTexture_VertexPositionIn;
 				unsigned int m_shaderBasicTexture_VertexTexCoordIn;
 				unsigned int m_shaderBasicTexture_VertexColorIn;
+				unsigned int m_shaderBasicTexture_TextureId;
 
-				float h;
-				float s;
-				float v;
-				
-			public:
-				HSVTextureShader();  
+				AlphaMaskTextureShader();  
 				void load();
-				virtual void bind();
-				virtual void unbind();
-
 				void start();
 				void stop();
-				virtual ~HSVTextureShader();
+				void startInternal();
+				void stopInternal();
+				static void startStatic(AlphaMaskTextureShader* obj);
+				static void stopStatic(AlphaMaskTextureShader* obj);
+				virtual ~AlphaMaskTextureShader();
 		};
-
-		class ARK2D_API HSVShader
-		{ 
-			HSVGeometryShader* geometry;
-			HSVTextureShader* texture;
+		class AlphaMaskShader {
+			public:
+				AlphaMaskGeometryShader* geometry;
+				AlphaMaskTextureShader* texture;
 				
 			public:
-				HSVShader();
+				AlphaMaskShader();
 				void load();
-				void set(float h, float s, float v);
-				float getH();
-				float getS();
-				float getV();
 				void start();
 				void stop();
-				virtual ~HSVShader();
+				virtual ~AlphaMaskShader();
 		};
 	}
 }
 
-#endif /* ARK_GRAPHICS_SHADERS_HSVSHADER_H_ */
+#endif

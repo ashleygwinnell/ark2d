@@ -199,10 +199,11 @@ namespace ARK {
 				static const unsigned int TYPE_TEXTURE_TRIS = 1;
 				static const unsigned int TYPE_STENCIL_ENABLE = 2;
 				static const unsigned int TYPE_STENCIL_START = 3;
-				static const unsigned int TYPE_STENCIL_STOP = 4; 
-				static const unsigned int TYPE_STENCIL_DISABLE = 5;
-				static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 6;
-				static const unsigned int TYPE_CUSTOM_FUNCTION = 7;
+				static const unsigned int TYPE_STENCIL_INVERSE = 4;
+				static const unsigned int TYPE_STENCIL_STOP = 5; 
+				static const unsigned int TYPE_STENCIL_DISABLE = 6;
+				static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 7;
+				static const unsigned int TYPE_CUSTOM_FUNCTION = 8;
 
 			public:
 				vector<RendererBatchItem_GeomTri> geomtris;
@@ -507,7 +508,7 @@ namespace ARK {
 
 				void enableStencil() const;
 				void startStencil() const;
-				//void inverseStencil() const;
+				void inverseStencil() const;
 				void stopStencil() const;
 				void disableStencil() const;
 

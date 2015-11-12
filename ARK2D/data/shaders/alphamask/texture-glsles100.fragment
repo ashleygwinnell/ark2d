@@ -1,0 +1,12 @@
+#version 100
+uniform sampler2D ark_TextureId; 
+
+varying highp vec2 ark_VertexTexCoordOut;
+varying lowp vec4 ark_VertexColorOut;
+						
+void main(void)
+{
+	vec4 outv = texture2D(ark_TextureId, ark_VertexTexCoordOut) * ark_VertexColorOut;
+	if (outv.a < 1.0) discard;
+	gl_FragColor = outv;
+}

@@ -266,6 +266,9 @@ namespace ARK {
 			}
 			return -1;
 		}
+		vector<ARK::Net::Address>* Connection::getAddresses() {
+			return &m_addresses;
+		}
 
 		void Connection::onConnect(unsigned int num) {
 

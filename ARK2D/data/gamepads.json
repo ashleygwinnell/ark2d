@@ -230,6 +230,7 @@
 		}
 	],
 	"osx": [ 
+		
 		{
 			"name": "Xbox 360 Wired Controller", 
 			"vendorId": 1118, 

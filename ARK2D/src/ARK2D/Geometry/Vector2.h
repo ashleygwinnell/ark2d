@@ -250,6 +250,12 @@ namespace ARK {
 					return m_y - m_x;
 				}
 
+				void normalise() {
+					T len = length();
+					m_x /= len;
+					m_y /= len;
+				}
+
 				Vector2<T> operator*(const Vector2<T>& other) { 
 					m_x *= other.m_x;
 					m_y *= other.m_y;

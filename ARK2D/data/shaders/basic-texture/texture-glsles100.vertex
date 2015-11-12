@@ -1,0 +1,17 @@
+#version 100
+uniform highp mat4 ark_ModelViewMatrix;
+uniform highp mat4 ark_ProjectionMatrix;
+attribute vec4 ark_VertexPosition; 
+
+attribute vec2 ark_VertexTexCoordIn;
+varying vec2 ark_VertexTexCoordOut;
+
+attribute lowp vec4 ark_VertexColorIn;
+varying lowp vec4 ark_VertexColorOut;
+
+void main(void)
+{
+	ark_VertexTexCoordOut = ark_VertexTexCoordIn;
+	ark_VertexColorOut = ark_VertexColorIn;
+	gl_Position = ark_ProjectionMatrix * ark_ModelViewMatrix * ark_VertexPosition;
+}

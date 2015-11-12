@@ -306,8 +306,29 @@ namespace ARK {
 				}
 
 				template <class T>
-				static void reflectVectorOverCircle(T cx, T cy, T cr, T& vx, T& vy) {
+				static void reflectVectorOverCircle(T cx, T cy, T cr, T ox, T oy, T& vx, T& vy) {
+					double dx = ox - cx;
+					double dy = oy - cy;
+					double d = sqrt((dx * dx) + (dy * dy));
 
+					float angle = MathUtil::anglef(0, 0, vx, vy);
+					Vector2<T> v(vx, vy);
+					float length = v.length();
+					double radians = MathUtil::toRadians(angle);
+					double _vx = length * cos(radians);
+					double _vy = length * sin(radians);
+
+					double nx = dx / d;
+					double ny = dy / d;
+
+					double rx = (_vx - 2 * ((nx * _vx) + (ny * _vy)) * nx);
+					double ry = (_vy - 2 * ((nx * _vx) + (ny * _vy)) * ny);
+
+					vx = rx;
+					vy = ry;
+
+					// todo for users of this function: 
+					// move the object out of the circle range or else it will collide again?
 				}
 
 				static bool isVertexConvex(vector<Vector2<float> >* vertices, int vertex)

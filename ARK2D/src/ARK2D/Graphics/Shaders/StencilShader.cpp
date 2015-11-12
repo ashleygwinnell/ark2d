@@ -19,17 +19,17 @@ namespace ARK {
 		void StencilShader::load() {
 
 			if (ARK2D::getPlatform() == ARK2D::PLATFORM_ANDROID) {
-				addVertexShader("ark2d/shaders/stencil-glsles100-vertex.txt");
-				addFragmentShader("ark2d/shaders/stencil-glsles100-fragment.txt");
+				addVertexShader("ark2d/shaders/stencil/texture-glsles100-vertex.txt");
+				addFragmentShader("ark2d/shaders/stencil/texture-glsles100-fragment.txt");
 			} else {
-				addVertexShader("ark2d/shaders/stencil-glsl150-vertex.txt");
+				addVertexShader("ark2d/shaders/stencil/texture-glsl150-vertex.txt");
 				bool err1 = hasError();
-				addFragmentShader("ark2d/shaders/stencil-glsl150-fragment.txt");
+				addFragmentShader("ark2d/shaders/stencil/texture-glsl150-fragment.txt");
 				bool err2 = hasError();
 
 				if (err1 || err2) { 
-					addVertexShader("ark2d/shaders/stencil-glsl130-vertex.txt");
-					addFragmentShader("ark2d/shaders/stencil-glsl130-fragment.txt");
+					addVertexShader("ark2d/shaders/stencil/texture-glsl130-vertex.txt");
+					addFragmentShader("ark2d/shaders/stencil/texture-glsl130-fragment.txt");
 				}
 			}
 

@@ -88,6 +88,7 @@ namespace ARK {
 				virtual void addAddress(Address addr);
 				bool hasAddress(Address& sender);
 				signed int getAddressIndex(Address& sender);
+				vector<ARK::Net::Address>* getAddresses();
 				
 				virtual void update( float deltaTime );
 				

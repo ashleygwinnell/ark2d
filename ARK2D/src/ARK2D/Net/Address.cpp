@@ -7,6 +7,7 @@
 
 #include "Address.h"
 #include "Includes.h"
+#include "../util/Cast.h"
 
 namespace ARK {
 	namespace Net { 
@@ -74,6 +75,14 @@ namespace ARK {
 				return false;
 			else
 				return m_port < other.m_port;
+		}
+		string Address::toString() const {
+			string s = "";
+			s += Cast::toString<unsigned int>( (unsigned int)(getA()) ); s += ":";
+			s += Cast::toString<unsigned int>( (unsigned int)(getB()) ); s += ":";
+			s += Cast::toString<unsigned int>( (unsigned int)(getC()) ); s += ":";
+			s += Cast::toString<unsigned int>( (unsigned int)(getD()) ); 
+			return s;
 		}
 
 		Address::~Address() {

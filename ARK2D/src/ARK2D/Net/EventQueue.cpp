@@ -46,7 +46,10 @@ namespace ARK {
 				}
 			}
 
-			m_queueData.push_back(data);
+			const char* dataCpy = (const char*) malloc(sz * sizeof(char));
+			memcpy((void*) dataCpy, data, sz);
+
+			m_queueData.push_back(dataCpy);
 			m_queueSz.push_back(sz);
 			m_queueType.push_back(type);
 			m_total++;
@@ -67,7 +70,9 @@ namespace ARK {
 				packet[curptr] = thisSz;
 				packet[curptr+1] = thisType;
 				memcpy((void*) (packet + curptr + 2), (void*) thisData, thisSz);
-				
+
+				free((void*) thisData);
+
 				m_queueData.pop_front();
 				m_queueSz.pop_front();
 				m_queueType.pop_front();
