@@ -3018,10 +3018,10 @@ namespace ARK {
 		 * ...what ever happened to vertex arrays?
 		 * ...or maybe even OpenGL 3.0: hello deprecation model!
 		 */
-		void Renderer::drawRect(ARK::Geometry::Rectangle<int>* rect) const { 
+		void Renderer::drawRect(ARK::Geometry::RectangleTemplate<int>* rect) const {
 		 	drawRect(rect->getMinX(), rect->getMinY(), rect->getWidth(), rect->getHeight());
 		}
-		void Renderer::drawRect(ARK::Geometry::Rectangle<float>* rect) const { 
+		void Renderer::drawRect(ARK::Geometry::RectangleTemplate<float>* rect) const { 
 		 	drawRect(rect->getMinX(), rect->getMinY(), (int) rect->getWidth(), (int) rect->getHeight());
 		}
 		void Renderer::drawRect(float x, float y, int width, int height) const {

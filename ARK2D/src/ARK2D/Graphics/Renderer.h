@@ -527,8 +527,8 @@ namespace ARK {
 				void texturedLineOverlay_data(float* data, Image* img, float scale, float x1, float y1, float x2, float y2, float startX, float startY, float endX, float endY);
 				void texturedLineOverlay(Image* img, float scale, float x1, float y1, float x2, float y2, float startX, float startY, float endX, float endY);
 
-				void drawRect(ARK::Geometry::Rectangle<int>* rect) const;
-				void drawRect(ARK::Geometry::Rectangle<float>* rect) const;
+				void drawRect(ARK::Geometry::RectangleTemplate<int>* rect) const;
+				void drawRect(ARK::Geometry::RectangleTemplate<float>* rect) const;
 				void drawRect(float x, float y, int width, int height) const;
 				void drawRects(float rects[], int colors[] = NULL) const;
 				

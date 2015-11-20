@@ -325,6 +325,11 @@ namespace ARK {
 						it->reset();
 						return it;
 					}
+					VectorIterator<T>* newiterator() {
+						it = new VectorIterator<T>(this);
+						it->reset();
+						return it;
+					}
 					VectorIterator<T> newiteratorref() {
 						VectorIterator<T> it(this);
 						it.reset();

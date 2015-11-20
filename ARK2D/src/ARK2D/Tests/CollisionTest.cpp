@@ -26,8 +26,8 @@ namespace ARK {
 		void CollisionTestGameState::init(GameContainer* container, StateBasedGame* game) {
 			circleOne = new Circle<float>(200,200,40);
 			circleTwo = new Circle<float>(100,100,30);
-			rectangleOne = new ARK::Geometry::Rectangle<float>(50, 300, 50, 40);
-			rectangleTwo = new ARK::Geometry::Rectangle<float>(50, 400, 100, 100);
+			rectangleOne = new ARK::Geometry::Rectangle(50, 300, 50, 40);
+			rectangleTwo = new ARK::Geometry::Rectangle(50, 400, 100, 100);
 			lineOne = new Line<float>(300, 500, 350, 550);
 			lineTwo = new Line<float>(300, 200, 350, 150);
 			lineThree = new Line<float>(500, 200, 500, 300);

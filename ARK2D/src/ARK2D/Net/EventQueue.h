@@ -23,6 +23,8 @@ namespace ARK {
 				EventQueue();
 				void add(const char* data, unsigned int sz, unsigned int type, bool exclusive);
 				void get(unsigned char* packet);
+
+				virtual void removeAtIndex(unsigned int index);
 		};
 	}
 }

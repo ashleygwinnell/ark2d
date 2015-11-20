@@ -287,9 +287,17 @@ namespace ARK {
 				template <class T> 
 				static void moveAngle(T& x, T& y, double angleDegrees, float distance) {
 					double angleRadians = toRadians(angleDegrees);
-					x = T(x + (distance * double(cos(angleRadians))));
+					x = T(x + (distance * double(cos(angleRadians)))); 
 					y = T(y + (distance * double(sin(angleRadians))));
 				}
+
+					static void moveAnglef(Vector2<float>* vector, double angleDegrees, float distance)  {
+						moveAngle<float>(vector, angleDegrees, distance);
+					}
+					static void moveAnglef(float& x, float& y, double angleDegrees, float distance) {
+						moveAngle<float>(x, y, angleDegrees, distance);
+					}
+
 				template <class T> 
 				static void moveAngleEllipse(T& x, T& y, double angleDegrees, float distanceX, float distanceY) {
 					double angleRadians = toRadians(angleDegrees);

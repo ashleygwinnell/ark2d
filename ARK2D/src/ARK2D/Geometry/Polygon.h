@@ -37,15 +37,15 @@ namespace ARK {
 				Polygon(): Shape<T>(), m_points() {
 					m_points.reserve(3);
 				}
-				Polygon(ARK::Geometry::Rectangle<T>* rect):
+				Polygon(ARK::Geometry::Rectangle* rect):
 					Shape<T>(), 
 					m_points() 
 					{
 					m_points.reserve(4);
-					addPoint((T)rect->getMinX(), (T)rect->getMinY());
-					addPoint((T)rect->getMaxX(), (T)rect->getMinY());
-					addPoint((T)rect->getMaxX(), (T)rect->getMaxY());
-					addPoint((T)rect->getMinX(), (T)rect->getMaxY());
+					addPoint(rect->getMinX(), rect->getMinY());
+					addPoint(rect->getMaxX(), rect->getMinY());
+					addPoint(rect->getMaxX(), rect->getMaxY());
+					addPoint(rect->getMinX(), rect->getMaxY());
 					
 					
 				}
@@ -192,8 +192,8 @@ namespace ARK {
 						return Shape<T>::collision_polygonPolygon(this, polygon);
 					}
 
-					Rectangle<T>* rect = NULL;
-					rect = dynamic_cast<Rectangle<T>* >(s);
+					RectangleTemplate<T>* rect = NULL;
+					rect = dynamic_cast<RectangleTemplate<T>* >(s);
 					if (rect != NULL) {
 						return Shape<T>::collision_polygonRectangle(this, rect);
 					}

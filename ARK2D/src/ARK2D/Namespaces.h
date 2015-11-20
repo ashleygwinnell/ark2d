@@ -56,6 +56,8 @@ namespace ARK {
 		class Shape;
 
 		template <class T=int>
+		class RectangleTemplate;
+
 		class Rectangle;
 		
 		template <class T=int>

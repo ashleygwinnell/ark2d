@@ -122,7 +122,7 @@ namespace ARK {
 
 				GameTimer* getTimer();
 
-				const ARK::Geometry::Rectangle<int>& getWindowRectangle() const;
+				const ARK::Geometry::RectangleTemplate<int>& getWindowRectangle() const;
 				const Game& getGame() const;
 				const Input& getInput() const;
 				Renderer* getRenderer() const;

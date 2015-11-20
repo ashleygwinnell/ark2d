@@ -36,6 +36,7 @@ namespace ARK {
 				unsigned char getD() const;
 				unsigned short getPort() const;
 				void setBroadcast();
+				void setPort(unsigned short port);
 			
 				bool operator == ( const Address & other ) const;
 				bool operator != ( const Address & other ) const;

@@ -269,6 +269,9 @@ namespace ARK {
 		vector<ARK::Net::Address>* Connection::getAddresses() {
 			return &m_addresses;
 		}
+		unsigned int Connection::countAddresses() {
+			return m_addresses.size();
+		}
 
 		void Connection::onConnect(unsigned int num) {
 

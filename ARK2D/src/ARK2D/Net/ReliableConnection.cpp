@@ -6,6 +6,8 @@
  */
 
 #include "ReliableConnection.h"
+#include "../ARK2D.h"
+#include "../Util/Log.h"
 
 namespace ARK {
 	namespace Net { 
@@ -31,6 +33,10 @@ namespace ARK {
 				
 		bool ReliableConnection::sendPacket( unsigned int addressIndex, const unsigned char data[], int size )
 		{
+			if (addressIndex >= m_addresses.size()) {
+				ARK2D::getLog()->e("Could not send packet because addressIndex was out of bounds. ");
+				return;
+			}
 			#ifdef NET_UNIT_TEST
 				if ( reliabilitySystems[addressIndex].GetLocalSequence() & packet_loss_mask )
 				{

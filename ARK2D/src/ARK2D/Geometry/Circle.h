@@ -13,6 +13,8 @@
 #include "../Graphics/Renderer.h"
 #include "../Util/Log.h"
 
+#include "Polygon.h"
+
 namespace ARK {
 	namespace Geometry {
 
@@ -121,8 +123,8 @@ namespace ARK {
 						return Shape<T>::collision_circleCircle(m_x, m_y, m_radius, circle->getCenterX(), circle->getCenterY(), circle->getRadius());
 					}
 
-					Rectangle<T>* rect = NULL;
-					rect = dynamic_cast<Rectangle<T>* >(s);
+					RectangleTemplate<T>* rect = NULL;
+					rect = dynamic_cast<RectangleTemplate<T>* >(s);
 					if (rect != NULL) {
 						return Shape<T>::collision_circleRectangle(m_x, m_y, m_radius, rect->getMinX(), rect->getMinY(), rect->getWidth(), rect->getHeight());
 					}

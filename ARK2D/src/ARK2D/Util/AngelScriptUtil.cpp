@@ -8,6 +8,8 @@
 #include "../Font/BMFont.h"
 #include "../Graphics/Image.h"
 #include "../Graphics/Renderer.h"
+#include "../Geometry/Rectangle.h"
+#include "../Pathfinding/AStar.h"
 #include "../Util/Containers/Pool.h"
 #include "../Audio/Sound.h"
 
@@ -55,6 +57,10 @@ int AngelScriptUtil_IncludeCallback(const char* include, const char* from, CScri
 
 
 void AngelScriptUtil_Print(const string& s) {
+	ARK2D::getLog()->i(s);
+}
+void AngelScriptUtil_Print_UINT(unsigned int i) {
+	string s = Cast::toString<unsigned int >(i);
 	ARK2D::getLog()->i(s);
 }
 
@@ -221,6 +227,7 @@ asIScriptEngine* AngelScriptUtil::getEngine() {
 
 		// Logging
 		r = s_engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(AngelScriptUtil_Print), asCALL_CDECL); assert( r >= 0 );
+		r = s_engine->RegisterGlobalFunction("void print(uint val)", asFUNCTION(AngelScriptUtil_Print_UINT), asCALL_CDECL); assert( r >= 0 );
 
 		// Resource loading
 		r = s_engine->RegisterObjectType("Resource", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
@@ -384,13 +391,48 @@ asIScriptEngine* AngelScriptUtil::getEngine() {
 		r = s_engine->RegisterObjectMethod("KeyPairFile", "string getString(string key, string defaultValue)", asMETHODPR(KeyPairFile, getString, (string, string), string), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("KeyPairFile", "string toString()", asMETHOD(KeyPairFile, toString), asCALL_THISCALL); assert( r >= 0 );
 
+		// Geometry
+		r = s_engine->RegisterObjectType("Shape<class T>", 0, asOBJ_REF | asOBJ_NOCOUNT | asOBJ_TEMPLATE); assert(r >= 0);
+
+		r = s_engine->RegisterObjectType("Rectangle", 0, asOBJ_REF | asOBJ_NOCOUNT); assert(r >= 0);
+		r = s_engine->RegisterObjectMethod("Rectangle", "void set(float x, float y, float width, float height)", asMETHODPR(Rectangle, set, (float, float, float, float), void), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Rectangle", "float getMinX()", asMETHODPR(Rectangle, getMinX, (void), float), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Rectangle", "float getMaxX()", asMETHODPR(Rectangle, getMaxX, (void), float), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Rectangle", "float getCenterX()", asMETHODPR(Rectangle, getCenterX, (void), float), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Rectangle", "float getMinY()", asMETHODPR(Rectangle, getMinY, (void), float), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Rectangle", "float getMaxY()", asMETHODPR(Rectangle, getMaxY, (void), float), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Rectangle", "float getCenterY()", asMETHODPR(Rectangle, getCenterY, (void), float), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Rectangle", "float getWidth()", asMETHODPR(Rectangle, getWidth, (void), float), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Rectangle", "float getHeight()", asMETHODPR(Rectangle, getHeight, (void), float), asCALL_THISCALL); assert( r >= 0 );
+
+		r = s_engine->RegisterObjectType("Vector2<class T>", 0, asOBJ_REF | asOBJ_NOCOUNT | asOBJ_TEMPLATE); assert(r >= 0);
+		r = s_engine->RegisterObjectMethod("Vector2<T>", "void set(float x, float y)", asMETHODPR(Vector2<float>, set, (float, float), void), asCALL_THISCALL); assert( r >= 0 );
+
+		// Maths
+		r = s_engine->RegisterObjectType("MathUtil", 0, asOBJ_REF | asOBJ_NOCOUNT); assert(r >= 0);
+        r = s_engine->RegisterGlobalFunction("void MathUtil_moveAngle(Vector2<float>@ vector, double angle, float dist)", asFUNCTIONPR(MathUtil::moveAnglef, (Vector2<float>*, double, float), void), asCALL_CDECL); assert(r >= 0);
+        r = s_engine->RegisterGlobalFunction("double MathUtil_distance(float ox, float oy, float x, float y)", asFUNCTIONPR(MathUtil::distance, (float, float, float, float), double), asCALL_CDECL); assert(r >= 0);
+        r = s_engine->RegisterGlobalFunction("double MathUtil_angle(float ox, float oy, float x, float y)", asFUNCTIONPR(MathUtil::anglef, (float, float, float, float), double), asCALL_CDECL); assert(r >= 0);
+
+        // Pathfinding
+        r = s_engine->RegisterObjectType("AStarNode", 0, asOBJ_REF | asOBJ_NOCOUNT); assert(r >= 0);
+        r = s_engine->RegisterObjectMethod("AStarNode", "void reset()", asMETHODPR(AStarNode, reset, (void), void), asCALL_THISCALL); assert( r >= 0 );
 
 		// Pools
 		r = s_engine->RegisterObjectType("Pool<class T>", 0, asOBJ_REF | asOBJ_NOCOUNT | asOBJ_TEMPLATE); assert(r >= 0);
 		r = s_engine->RegisterObjectType("PoolIterator<class T>", 0, asOBJ_REF | asOBJ_NOCOUNT | asOBJ_TEMPLATE); assert(r >= 0);
-        r = s_engine->RegisterObjectMethod("Pool<T>", "PoolIterator<T>@ iterator()", asMETHOD(Pool<const char*>, newiteratorref), asCALL_THISCALL); assert( r >= 0 );
-        r = s_engine->RegisterObjectMethod("PoolIterator<T>", "T@ next()", asMETHOD(PoolIterator<const char*>, next), asCALL_THISCALL); assert( r >= 0 );
+        //r = s_engine->RegisterObjectMethod("Pool<T>", "const PoolIterator<T> iterator()", asMETHODPR(Pool<>, newiteratorref, (void), PoolIterator<>), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("Pool<T>", "PoolIterator<T>@ useIterator()", asMETHOD(Pool<>, iterator), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("Pool<T>", "PoolIterator<T>@ newIterator()", asMETHOD(Pool<>, newiterator), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("PoolIterator<T>", "bool hasNext()", asMETHODPR(PoolIterator<>, hasNext, (void), bool), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("PoolIterator<T>", "T@ next()", asMETHOD(PoolIterator<>, next), asCALL_THISCALL); assert( r >= 0 );
 
+        r = s_engine->RegisterObjectType("Vector<class T>", 0, asOBJ_REF | asOBJ_NOCOUNT | asOBJ_TEMPLATE); assert(r >= 0);
+        r = s_engine->RegisterObjectType("VectorIterator<class T>", 0, asOBJ_REF | asOBJ_NOCOUNT | asOBJ_TEMPLATE); assert(r >= 0);
+        r = s_engine->RegisterObjectMethod("Vector<T>", "VectorIterator<T>@ useIterator()", asMETHOD(Vector<>, iterator), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("Vector<T>", "VectorIterator<T>@ newIterator()", asMETHOD(Vector<>, newiterator), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("VectorIterator<T>", "bool hasNext()", asMETHODPR(VectorIterator<>, hasNext, (void), bool), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("VectorIterator<T>", "T@ next()", asMETHOD(VectorIterator<>, next), asCALL_THISCALL); assert( r >= 0 );
 		//r = s_engine->RegisterObjectBehaviour("Pool<T>", asBEHAVE_FACTORY, "Pool<T>@ f(int&in)", asFUNCTIONPR(myTemplateFactory, (asIObjectType*), Pool*), asCALL_CDECL); assert( r >= 0 );
 
 		// Globals

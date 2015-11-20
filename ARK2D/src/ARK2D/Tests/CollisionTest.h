@@ -18,8 +18,8 @@ namespace ARK {
 
 				ARK::Geometry::Circle<float>* circleOne;
 				ARK::Geometry::Circle<float>* circleTwo;
-				ARK::Geometry::Rectangle<float>* rectangleOne;
-				ARK::Geometry::Rectangle<float>* rectangleTwo;
+				ARK::Geometry::Rectangle* rectangleOne;
+				ARK::Geometry::Rectangle* rectangleTwo;
 				ARK::Geometry::Line<float>* lineOne;
 				ARK::Geometry::Line<float>* lineTwo;
 				ARK::Geometry::Line<float>* lineThree;

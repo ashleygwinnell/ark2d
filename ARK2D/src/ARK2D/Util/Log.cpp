@@ -671,6 +671,8 @@ namespace ARK {
 		void LogSceneTreePanel::render() {
 			// Panel::render();
 
+			return; 
+			
 			Scene* scene = ARK2D::getContainer()->scene;
             tree.setText(scene->getRoot()->toListString());
             calculateSize();

@@ -11,13 +11,12 @@
 	},
 	"osx": { 
 		"python_executable": "/usr/local/bin/python3.1",
-		"ark2d_dir": "/Users/ashleygwinnell/Dropbox/ark2d/ARK2D",
+		"ark2d_dir": "/Users/ashleygwinnell/Projects/ark2d/ARK2D",
         "android": {
         	"sdk_dir": "/Users/ashleygwinnell/Documents/adt-bundle-mac-x86_64-20130717/sdk/",
 			"ndk_dir": "/Users/ashleygwinnell/.android/android-ndk-r9"
 		},
-		"gyp_executable_old": "/Users/ashleygwinnell/Documents/gyp-read-only/gyp",
-		"gyp_executable": "/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/lib/gyp-read-only/gyp"
+		"gyp_executable": "/Users/ashleygwinnell/Projects/ark2d/ARK2D/lib/gyp-read-only/gyp"
 	},
 	"linux": {
 		"python_executable": "/usr/bin/python3.4",
