@@ -793,6 +793,10 @@ namespace ARK {
 					r->stopStencil();
 				} else if (m_type == TYPE_STENCIL_DISABLE) {
 					r->disableStencil();
+				} else if (m_type == TYPE_MULTISAMPLING_ENABLE) {
+					r->enableMultisampling();
+				} else if (m_type == TYPE_MULTISAMPLING_DISABLE) {
+					r->disableMultisampling();
 				} else if (m_type == TYPE_CUSTOM_OBJECT_FUNCTION) {
 					void (*pt)(void*) = (void(*)(void*)) m_functionPointer;
 					pt(m_objectPointer);
@@ -2349,6 +2353,13 @@ namespace ARK {
 		void Renderer::enableMultisampling() const {
 			#ifdef ARK2D_RENDERER_OPENGL
 				#ifdef ARK2D_OPENGL_3_2
+					if (Renderer::isBatching()) { 
+						RendererBatchItem stateChange;
+						stateChange.m_type = RendererBatchItem::TYPE_MULTISAMPLING_ENABLE;
+						s_batch->items.push_back(stateChange);
+						return;
+					}
+
 					glEnable(GL_MULTISAMPLE);
 				#endif
 			#endif
@@ -2356,6 +2367,13 @@ namespace ARK {
 		void Renderer::disableMultisampling() const {
 			#ifdef ARK2D_RENDERER_OPENGL
 				#ifdef ARK2D_OPENGL_3_2
+					if (Renderer::isBatching()) { 
+						RendererBatchItem stateChange;
+						stateChange.m_type = RendererBatchItem::TYPE_MULTISAMPLING_DISABLE;
+						s_batch->items.push_back(stateChange);
+						return;
+					}
+
 					glDisable(GL_MULTISAMPLE);
 				#endif
 			#endif

@@ -634,7 +634,7 @@
 			void GameContainer::start() {
 
 				// Seed the random
-				MathUtil::seedRandom();
+				Random::init();
 
 				//Initialize SDL
 				if ( SDL_Init( SDL_INIT_VIDEO ) < 0 )

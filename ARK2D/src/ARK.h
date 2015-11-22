@@ -75,6 +75,8 @@
 #include "ARK2D/Graphics/Shaders/HSVShader.h"
 #include "ARK2D/Graphics/Shaders/StencilShader.h"
 
+// Math
+#include "ARK2D/Math/Random.h" 
 
 // Net
 #include "ARK2D/Net/Address.h" 

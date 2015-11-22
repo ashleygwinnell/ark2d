@@ -99,6 +99,39 @@
 			}
 		},
 		{
+			"name": "Controller (Xbox One For Windows)",
+			"comment": "xbox one, wireless?",
+			"vendorId": 1118,
+			"productId": 721,
+			"buttons": {
+				"DPAD_LEFT": 101,
+				"DPAD_RIGHT": 105,
+				"DPAD_UP": 103,
+				"DPAD_DOWN": 107,
+				"A": 0,
+				"B": 1,
+				"X": 2,
+				"Y": 3,
+				"LBUMPER": 4,
+				"RBUMPER": 5,
+				"LTRIGGER": -1,
+				"RTRIGGER": -1,
+				"L3": 8,
+				"R3": 9,
+				"BACK": 6,
+				"START": 7,
+				"ACTIVATE": -1
+			},
+			"axes": {
+				"LX": 0,
+				"LY": 1,
+				"RX": 4,
+				"RY": 3,
+				"LT": 2,
+				"RT": 2
+			}
+		},
+		{
 			"name": "Saitek Cyborg Rumble Pad",
 			"vendorId": 1699,
 			"productId": 62746,

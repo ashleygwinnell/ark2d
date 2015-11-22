@@ -605,7 +605,7 @@
 			void GameContainer::start() {
 
 				// Seed the random
-				MathUtil::seedRandom();
+				Random::init();
 
 				// NULL means the current computer.
 				m_platformSpecific.dpy = XOpenDisplay(NULL);

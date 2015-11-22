@@ -2938,7 +2938,7 @@
 
 
 				// Seed the random
-				MathUtil::seedRandom();
+				Random::init();
 
 				// Init 2-in-1 variables
 				// TODO: This misbehaves on non-touch platforms, so take it out.

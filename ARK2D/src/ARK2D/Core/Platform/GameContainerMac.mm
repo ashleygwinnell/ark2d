@@ -11,6 +11,7 @@
 #include "../../Graphics/Color.h"
 #include "../../Graphics/Image.h"
 #include "../../Audio/Sound.h"
+#include "../../Math/Random.h"
 
 #ifdef ARK2D_MACINTOSH  
  
@@ -992,7 +993,7 @@
 			void ARK::Core::GameContainer::start() {
 			
 				// seed the random 
-				MathUtil::seedRandom();
+				Random::init();
 				
 				// Set window title 
 				//setTitle(m_game.getTitle());

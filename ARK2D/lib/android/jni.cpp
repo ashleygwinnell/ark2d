@@ -99,7 +99,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 
 	// random init.
 	arklog->i("seed random"); 
-	MathUtil::seedRandom();
+	Random::init();
 
 	// populate the gamepads.
 	arklog->i("Initialising Gamepads... ");

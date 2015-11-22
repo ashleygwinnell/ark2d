@@ -27,6 +27,8 @@
 	#define EPSILON 0.000001f
 #endif
 
+class MersenneTwister;
+
 namespace ARK { 
 	namespace Util {
 
@@ -41,7 +43,6 @@ namespace ARK {
 
 				static void seedRandom();
 				static int randBetween(int lower, int upper);
-
 				static float randBetweenf(float lower, float upper); 
 
 				static double distance(float x1, float y1, float x2, float y2);

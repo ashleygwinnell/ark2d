@@ -188,21 +188,8 @@ namespace ARK {
 					T last() {
 						return get(size() - 1); 
 					}
-					T get(unsigned int i) {
-						#if !defined(STL_AVAILABLE)
-							if (!isIndexInBounds(i)) {
-								return NULL;
-							}
-
-							return (T) m_data + (i * m_typeSize);
-						#else
-							if (!usingList) {
-								return vec.at(i);
-							}
-							typename list<T>::iterator it = lst.begin();
-							advance(it, i);
-							return *it;
-						#endif
+					T get(unsigned int i) const {
+						return (*this)[i];
 					}
 					T& getr(unsigned int i) {
 						#if !defined(STL_AVAILABLE)
@@ -601,6 +588,27 @@ namespace ARK {
 						s += "]";
 						return s;
 					}
+					/*const T& operator[] (const int nIndex) {
+                        //const Vector<T>* th = const_cast<const Vector<T>*>(this);
+						return get(nIndex);
+					}*/
+					const T& operator[] (const int i) const {
+						//return get(nIndex);
+						#if !defined(STL_AVAILABLE)
+							if (!isIndexInBounds(i)) {
+								return NULL;
+							}
+
+							return (T) m_data + (i * m_typeSize);
+						#else
+							if (!usingList) {
+								return vec.at(i);
+							}
+							typename list<T>::const_iterator it = lst.begin();
+							advance(it, i);
+							return *it;
+						#endif
+					}
 					~Vector() {
 						
 						/*if (!usingList) {
@@ -752,6 +760,8 @@ namespace ARK {
 					~VectorIterator() {
 
 					}
+
+					
 			};
 		}
 	}

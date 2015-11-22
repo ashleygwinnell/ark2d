@@ -202,8 +202,10 @@ namespace ARK {
 				static const unsigned int TYPE_STENCIL_INVERSE = 4;
 				static const unsigned int TYPE_STENCIL_STOP = 5; 
 				static const unsigned int TYPE_STENCIL_DISABLE = 6;
-				static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 7;
-				static const unsigned int TYPE_CUSTOM_FUNCTION = 8;
+				static const unsigned int TYPE_MULTISAMPLING_ENABLE = 7;
+				static const unsigned int TYPE_MULTISAMPLING_DISABLE = 8;
+				static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 9;
+				static const unsigned int TYPE_CUSTOM_FUNCTION = 10;
 
 			public:
 				vector<RendererBatchItem_GeomTri> geomtris;

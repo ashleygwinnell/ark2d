@@ -116,14 +116,14 @@ namespace ARK {
 						ARK2D::getLog()->v( "connect timed out\n" );
 						m_states[i] = STATE_CONNECT_FAIL;
 						onDisconnect(i);
-						clearData();
+						//clearData();
 						i = 0;
 					}
 					else if ( m_states[i] == STATE_CONNECTED )
 					{
 						ARK2D::getLog()->v( "connection timed out\n" );
 						onDisconnect(i);
-						clearData();
+						//clearData();
 						i = 0;
 						if ( m_states[i] == STATE_CONNECTING ) { 
 							m_states[i] = STATE_CONNECT_FAIL;

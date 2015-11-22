@@ -220,7 +220,7 @@ namespace ARK {
 	void ARK::Core::GameContainer::start() {
 	
 		// seed the random
-		MathUtil::seedRandom();
+		Random::init();
 		
 		// Set window title
 		//setTitle(m_game.getTitle());
