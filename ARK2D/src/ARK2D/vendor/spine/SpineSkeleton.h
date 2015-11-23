@@ -34,6 +34,7 @@ namespace ARK {
 				static bool s_usingDummyTexture;
 			public:
 				static void transformSceneNodeFromBoneName(SceneNode* node, Skeleton* skeleton, string boneName);
+				static void transformFromBoneName(float* posX, float* posY, float* scaleX, float* scaleY, float* rotation, Skeleton* skeleton, string boneName);
 				static void setUsingDummyTexture(bool b);
 		};
 

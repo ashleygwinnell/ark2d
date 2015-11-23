@@ -37,6 +37,24 @@ namespace ARK {
 			node->scale.set(bone->scaleY, bone->scaleX);
 			node->rotation = thisRotation;
 		}
+		void SpineUtil::transformFromBoneName(float* posX, float* posY, float* scaleX, float* scaleY, float* rotation, Skeleton* skeleton, string boneName) {
+			spBone* bone = skeleton->getBone(boneName);
+
+			float thisX = bone->x;
+			float thisY = bone->y*-1.0f;
+			float thisRotation = bone->rotation*-1;
+			if (bone->parent && bone->data->inheritRotation && bone->parent == skeleton->getRoot()) {
+				thisX += skeleton->getX();
+				thisY += skeleton->getY();
+				thisRotation += 90;
+			}
+
+			(*posX) = thisX;
+			(*posY) = thisY;
+			(*scaleX) = bone->scaleY;
+			(*scaleY) = bone->scaleX;
+			(*rotation) = thisRotation;
+		}
 
 		void spineCallback(spAnimationState* state, int trackIndex, spEventType type, spEvent* event, int loopCount) 
 		{
