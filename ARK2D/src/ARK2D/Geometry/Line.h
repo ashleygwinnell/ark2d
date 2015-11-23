@@ -247,8 +247,8 @@ namespace ARK {
 						return Shape<T>::collision_circleLine(circle->getCenterX(), circle->getCenterY(), circle->getRadius(), first.getX(), first.getY(), second.getX(), second.getY());
 					}
 
-					Rectangle<T>* rect = NULL;
-					rect = dynamic_cast<Rectangle<T>* >(s);
+					RectangleTemplate<T>* rect = NULL;
+					rect = dynamic_cast<RectangleTemplate<T>* >(s);
 					if (rect != NULL) {
 						return Shape<T>::collision_rectangleLine(rect->getMinX(), rect->getMinY(), rect->getWidth(), rect->getHeight(), first.getX(), first.getY(), second.getX(), second.getY());
 					}

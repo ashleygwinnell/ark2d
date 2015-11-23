@@ -26,8 +26,8 @@ namespace ARK {
             }
 
             // rectangle
-            Rectangle<float>* rect = NULL;
-            rect = dynamic_cast<Rectangle<float>*>(s);
+            RectangleTemplate<float>* rect = NULL;
+            rect = dynamic_cast<RectangleTemplate<float>*>(s);
             if (rect != NULL) {
                 return Shape<float>::collision_rectangleRectangle(m_x, m_y, m_width, m_height, rect->getMinX(), rect->getMinY(), rect->getWidth(), rect->getHeight());
             }

@@ -9,6 +9,7 @@
 #include "MathUtil.h"
 #include "Log.h"
 #include "../ARK2D.h" 
+#include "../Math/Random.h" 
 
 #include "../Core/GameContainer.h"
  
@@ -17,14 +18,8 @@ namespace ARK {
 
 		double MathUtil::PIE = 3.14159265;
 
-		void MathUtil::seedRandom() {
-			ARK2D::getLog()->i("Setting random seed.");
-			//time_t t;
-			//time(&t);
-			long t = ARK2D::getContainer()->getTimer()->millis();
-			srand(t);
-			ARK2D::getLog()->i(" ...done.");
-		}
+		
+
 
 		unsigned long MathUtil::unixTimestamp() {
 			return ARK2D::getContainer()->getTimer()->unixTimestamp();
@@ -78,20 +73,17 @@ namespace ARK {
 		/**
 		 * Includes the lower, but excludes the upper.
 		 */
+		void MathUtil::seedRandom() {
+			Random::get()->seed();
+		}
 		int MathUtil::randBetween(int lower, int upper) {
-			if (lower == upper) { return upper; }
-			if (lower > upper) { int teacup = lower; lower = upper; upper = teacup; }
-			return lower + (rand() % (upper-lower));
+			return Random::get()->randBetween(lower, upper);
 		}
 
 		float MathUtil::randBetweenf(float lower, float upper) {
-			if (lower == upper) { return upper; }
-			if (lower > upper) { float teacup = lower; lower = upper; upper = teacup; }
-
-			float r = float(randBetween(0, 101)) / 100.0f;
-			float diff = upper - lower;
-			return lower + (r * diff);
+			return Random::get()->randBetweenf(lower, upper);
 		}
+
 
 
 		/**

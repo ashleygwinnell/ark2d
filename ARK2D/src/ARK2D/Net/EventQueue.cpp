@@ -33,16 +33,7 @@ namespace ARK {
 					count++;
 				}
 				if (erased) {
-					std::list<const char*>::iterator it1 = m_queueData.begin();
-					std::list<unsigned int>::iterator it2 = m_queueSz.begin();
-
-					advance(it1, count);
-					advance(it2, count);
-
-					m_queueData.erase(it1);
-					m_queueSz.erase(it2);
-
-					m_total--;
+					removeAtIndex(count);
 				}
 			}
 
@@ -84,6 +75,19 @@ namespace ARK {
 
 			packet[0] = numEvents;
 
+		}
+
+		void EventQueue::removeAtIndex(unsigned int index) {
+			std::list<const char*>::iterator it1 = m_queueData.begin();
+			std::list<unsigned int>::iterator it2 = m_queueSz.begin();
+
+			advance(it1, index);
+			advance(it2, index);
+
+			m_queueData.erase(it1);
+			m_queueSz.erase(it2);
+
+			m_total--;
 		}
 
 	}

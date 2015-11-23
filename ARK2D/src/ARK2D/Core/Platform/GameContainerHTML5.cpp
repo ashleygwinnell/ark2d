@@ -461,7 +461,7 @@
 			void ARK::Core::GameContainer::start() {
 			 
 				// seed the random
-				MathUtil::seedRandom();
+				Random::init();
 
 				m_screenWidth = EM_ASM_INT_V({ 
 					return screen.width; 

@@ -23,7 +23,9 @@ namespace ARK {
 		class Polygon;
 
 		template <class T>
-		class Rectangle;
+		class RectangleTemplate;
+        
+        class Rectangle;
 
 		template <class T>
 		class Circle;
@@ -104,8 +106,8 @@ namespace ARK {
 					return false;
 				}
 
-				Rectangle<T>* asRectangle() {
-					return dynamic_cast<Rectangle<T>* >(this);
+				Rectangle* asRectangle() {
+					return dynamic_cast<Rectangle* >(this);
 				}
 				Circle<T>* asCircle() {
 					return dynamic_cast<Circle<T>* >(this);
@@ -147,7 +149,7 @@ namespace ARK {
 					}
 					return false;
 				}*/
-				static bool collision_cubeRectangle(ARK::Geometry::CubeTemplate<T>* c, ARK::Geometry::Rectangle<T>* r) 
+				static bool collision_cubeRectangle(ARK::Geometry::CubeTemplate<T>* c, ARK::Geometry::RectangleTemplate<T>* r)
 				{
 					return Shape::collision_cubeCube(
 						c->getMinX(), c->getMinY(), c->getMinZ(), c->getWidth(), c->getHeight(), c->getDepth(), 
@@ -629,7 +631,7 @@ namespace ARK {
 					return false;
 				}
 
-				static bool collision_polygonRectangle(Polygon<T>* one, Rectangle<T>* rect) { // convex polys only.
+				static bool collision_polygonRectangle(Polygon<T>* one, RectangleTemplate<T>* rect) { // convex polys only.
 
 					return collision_polygonRectangle(one, rect->getMinX(), rect->getMinY(), rect->getWidth(), rect->getHeight());
 					
@@ -673,7 +675,7 @@ namespace ARK {
 					return false;
 				}
 
-				static bool collision_polygonRectangle_pos(T* result, Polygon<T>* one, Rectangle<T>* rect) { // convex polys only.
+				static bool collision_polygonRectangle_pos(T* result, Polygon<T>* one, RectangleTemplate<T>* rect) { // convex polys only.
 
 					// ----------
 					// just check lines for now. SAT can come later 'cause i said so! >:O

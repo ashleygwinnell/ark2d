@@ -31,6 +31,9 @@ namespace ARK {
 		void Address::setBroadcast() {
 			m_address = INADDR_BROADCAST;
 		}
+		void Address::setPort(unsigned short port) {
+			m_port = port;
+		}
 	
 		unsigned int Address::getAddress() const {
 			return m_address;
@@ -78,10 +81,11 @@ namespace ARK {
 		}
 		string Address::toString() const {
 			string s = "";
-			s += Cast::toString<unsigned int>( (unsigned int)(getA()) ); s += ":";
-			s += Cast::toString<unsigned int>( (unsigned int)(getB()) ); s += ":";
-			s += Cast::toString<unsigned int>( (unsigned int)(getC()) ); s += ":";
-			s += Cast::toString<unsigned int>( (unsigned int)(getD()) ); 
+			s += Cast::toString<unsigned int>( (unsigned int)(getA()) ); s += ".";
+			s += Cast::toString<unsigned int>( (unsigned int)(getB()) ); s += ".";
+			s += Cast::toString<unsigned int>( (unsigned int)(getC()) ); s += ".";
+			s += Cast::toString<unsigned int>( (unsigned int)(getD()) ); s += ":";
+			s += Cast::toString<unsigned int>( (unsigned int)(getPort()) ); 
 			return s;
 		}
 

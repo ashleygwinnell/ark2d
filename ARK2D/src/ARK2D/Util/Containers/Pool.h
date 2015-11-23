@@ -90,8 +90,14 @@ namespace ARK {
 						Vector<T>* getActive() {
 							return &m_active;
 						}
+						const Vector<T>& getActiver() {
+							return m_active;
+						}
 						Vector<T>* getInactive() {
 							return &m_inactive;
+						}
+						const Vector<T>& getInactiver() {
+							return m_inactive;
 						}
 						PoolIterator<T>* iterator() {
 							if (it == NULL) {
@@ -178,23 +184,39 @@ namespace ARK {
 							}*/
 						}
 						void reset() {
-							/*VectorIterator<T>* it = m_active.iterator();
-							while (it->hasNext()) {
-								T obj = it->next();
-								obj->setPendingRemoval(true);
-							}
-							pruneAll();*/ 
+                            reset(false);
+						}
+						void reset(bool keeporder) {
+							if (!keeporder) {
+								/*VectorIterator<T>* it = m_active.iterator();
+								while (it->hasNext()) {
+									T obj = it->next();
+									obj->setPendingRemoval(true);
+								}
+								pruneAll();*/ 
 
-							VectorIterator<T>* it = m_active.iterator();
-							while (it->hasNext()) {
-								T obj = it->next();
-								obj->setPendingRemoval(false);
-								obj->onPrune();
-								
-								m_inactive.add(obj);
+								VectorIterator<T>* it = m_active.iterator();
+								while (it->hasNext()) {
+									T obj = it->next();
+									obj->setPendingRemoval(false);
+									obj->onPrune();
+									
+									m_inactive.add(obj);
+								}
+								m_active.clear();
+								//pruneAll();
+							} else {
+								// not efficient for lists.
+								// consider using / creating(?) a reverse iterator.
+								for(signed int i = sizeActive() - 1; i >= 0; i--) {
+									T obj = getActive()->get(i);
+									obj->setPendingRemoval(false);
+									obj->onPrune();
+									
+									getInactive()->add(obj);
+								}
+								getActive()->clear();
 							}
-							m_active.clear();
-							//pruneAll();
 						}
 						string toString() {
 							string s = "{";

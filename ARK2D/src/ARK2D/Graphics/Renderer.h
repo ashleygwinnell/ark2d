@@ -202,8 +202,10 @@ namespace ARK {
 				static const unsigned int TYPE_STENCIL_INVERSE = 4;
 				static const unsigned int TYPE_STENCIL_STOP = 5; 
 				static const unsigned int TYPE_STENCIL_DISABLE = 6;
-				static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 7;
-				static const unsigned int TYPE_CUSTOM_FUNCTION = 8;
+				static const unsigned int TYPE_MULTISAMPLING_ENABLE = 7;
+				static const unsigned int TYPE_MULTISAMPLING_DISABLE = 8;
+				static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 9;
+				static const unsigned int TYPE_CUSTOM_FUNCTION = 10;
 
 			public:
 				vector<RendererBatchItem_GeomTri> geomtris;
@@ -527,8 +529,8 @@ namespace ARK {
 				void texturedLineOverlay_data(float* data, Image* img, float scale, float x1, float y1, float x2, float y2, float startX, float startY, float endX, float endY);
 				void texturedLineOverlay(Image* img, float scale, float x1, float y1, float x2, float y2, float startX, float startY, float endX, float endY);
 
-				void drawRect(ARK::Geometry::Rectangle<int>* rect) const;
-				void drawRect(ARK::Geometry::Rectangle<float>* rect) const;
+				void drawRect(ARK::Geometry::RectangleTemplate<int>* rect) const;
+				void drawRect(ARK::Geometry::RectangleTemplate<float>* rect) const;
 				void drawRect(float x, float y, int width, int height) const;
 				void drawRects(float rects[], int colors[] = NULL) const;
 				

@@ -27,6 +27,8 @@
 	#define EPSILON 0.000001f
 #endif
 
+class MersenneTwister;
+
 namespace ARK { 
 	namespace Util {
 
@@ -41,7 +43,6 @@ namespace ARK {
 
 				static void seedRandom();
 				static int randBetween(int lower, int upper);
-
 				static float randBetweenf(float lower, float upper); 
 
 				static double distance(float x1, float y1, float x2, float y2);
@@ -287,9 +288,17 @@ namespace ARK {
 				template <class T> 
 				static void moveAngle(T& x, T& y, double angleDegrees, float distance) {
 					double angleRadians = toRadians(angleDegrees);
-					x = T(x + (distance * double(cos(angleRadians))));
+					x = T(x + (distance * double(cos(angleRadians)))); 
 					y = T(y + (distance * double(sin(angleRadians))));
 				}
+
+					static void moveAnglef(Vector2<float>* vector, double angleDegrees, float distance)  {
+						moveAngle<float>(vector, angleDegrees, distance);
+					}
+					static void moveAnglef(float& x, float& y, double angleDegrees, float distance) {
+						moveAngle<float>(x, y, angleDegrees, distance);
+					}
+
 				template <class T> 
 				static void moveAngleEllipse(T& x, T& y, double angleDegrees, float distanceX, float distanceY) {
 					double angleRadians = toRadians(angleDegrees);

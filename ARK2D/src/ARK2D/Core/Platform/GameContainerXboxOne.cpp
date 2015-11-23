@@ -131,7 +131,7 @@
 
 				
 				// Seed the random
-				MathUtil::seedRandom();
+				Random::init();
 
 
 				// populate the gamepads.

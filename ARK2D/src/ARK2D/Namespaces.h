@@ -56,6 +56,8 @@ namespace ARK {
 		class Shape;
 
 		template <class T=int>
+		class RectangleTemplate;
+
 		class Rectangle;
 		
 		template <class T=int>
@@ -98,6 +100,11 @@ namespace ARK {
 			class PNGImage;
 			class TargaImage;
 		}
+	}
+
+	//! Contains classes for Maths / Random numbers.
+	namespace Math {
+		class Random;
 	}
 
 	//! Contains classes for Local/Online Networking with a custom UDP protocol.
@@ -254,6 +261,7 @@ using namespace ARK::Graphics::ImageIO;
 using namespace ARK::Tiled;
 using namespace ARK::Tween;
 using namespace ARK::Threading;
+using namespace ARK::Math;
 using namespace ARK::Net;
 using namespace ARK::Path;
 using namespace ARK::Pathfinding;

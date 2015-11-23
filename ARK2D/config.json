@@ -11,13 +11,12 @@
 	},
 	"osx": { 
 		"python_executable": "/usr/local/bin/python3.1",
-		"ark2d_dir": "/Users/ashleygwinnell/Dropbox/ark2d/ARK2D",
+		"ark2d_dir": "/Users/ashleygwinnell/Projects/ark2d/ARK2D",
         "android": {
         	"sdk_dir": "/Users/ashleygwinnell/Documents/adt-bundle-mac-x86_64-20130717/sdk/",
 			"ndk_dir": "/Users/ashleygwinnell/.android/android-ndk-r9"
 		},
-		"gyp_executable_old": "/Users/ashleygwinnell/Documents/gyp-read-only/gyp",
-		"gyp_executable": "/Users/ashleygwinnell/Dropbox/ark2d/ARK2D/lib/gyp-read-only/gyp"
+		"gyp_executable": "/Users/ashleygwinnell/Projects/ark2d/ARK2D/lib/gyp-read-only/gyp"
 	},
 	"linux": {
 		"python_executable": "/usr/bin/python3.4",
@@ -142,6 +141,8 @@
 			"src/ARK2D/Geometry/Line.cpp",
 			"src/ARK2D/Geometry/AdvancedPolygon.cpp",
 
+			"src/ARK2D/Math/Random.cpp",
+			
 			"src/ARK2D/Net/Address.cpp",
 			"src/ARK2D/Net/Connection.cpp",
 			"src/ARK2D/Net/Discovery.cpp",
@@ -262,6 +263,8 @@
 			"src/ARK2D/vendor/angelscript/add_on/scriptstdstring/scriptstdstring_utils.cpp",
 			"src/ARK2D/vendor/angelscript/add_on/scriptarray/scriptarray.cpp",
 			"src/ARK2D/vendor/angelscript/add_on/scriptbuilder/scriptbuilder.cpp",
+			
+			"src/ARK2D/vendor/mersennetwister/mt.cpp",
 
 			"src/ARK2D/vendor/FileInterface.cpp",
 			"src/ARK2D/vendor/libJSON/JSON_Worker.cpp",

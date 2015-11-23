@@ -106,6 +106,7 @@ namespace ARK {
 					unsigned int namelen = packet[1];
 					char name[255];
 					memcpy(name, &packet[2], namelen);
+					name[namelen] = '\0';
 
 					unsigned int addressStart = 2 + namelen;
 					unsigned short port;

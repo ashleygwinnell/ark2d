@@ -149,6 +149,10 @@ namespace ARK {
 					m_neighbours() { 
 
 				}
+				void set(float x, float y) {
+					m_x = x;
+					m_y = y;
+				}
 				unsigned int setParent(AStarNode* parent) {
 					m_depth = parent->m_depth + 1;
 					m_parent = parent;
