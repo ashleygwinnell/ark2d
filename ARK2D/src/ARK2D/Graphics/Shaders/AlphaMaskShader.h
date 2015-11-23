@@ -14,7 +14,7 @@
 namespace ARK { 
 	namespace Graphics { 
 
-		class AlphaMaskGeometryShader : public Shader {
+		class ARK2D_API AlphaMaskGeometryShader : public Shader {
 			public:
 				Shader* m_shaderBasicGeometry;
 				unsigned int _ModelViewMatrix;
@@ -37,7 +37,7 @@ namespace ARK {
 				static void stopStatic(AlphaMaskGeometryShader* obj);
 				virtual ~AlphaMaskGeometryShader();
 		};
-		class AlphaMaskTextureShader : public Shader {
+		class ARK2D_API AlphaMaskTextureShader : public Shader {
 			public:
 				Shader* m_shaderBasicTexture;
 				unsigned int _ModelViewMatrix;
@@ -65,7 +65,7 @@ namespace ARK {
 				static void stopStatic(AlphaMaskTextureShader* obj);
 				virtual ~AlphaMaskTextureShader();
 		};
-		class AlphaMaskShader {
+		class ARK2D_API AlphaMaskShader {
 			public:
 				AlphaMaskGeometryShader* geometry;
 				AlphaMaskTextureShader* texture;
