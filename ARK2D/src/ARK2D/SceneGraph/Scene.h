@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include "../Geometry/Vector3.h"
+#include "../Geometry/Transform.h"
 #include "../Controls/KeyListener.h"
 
 namespace ARK { 
@@ -34,20 +35,22 @@ namespace ARK {
 				static const unsigned int TYPE_NODE = 0;
 				static const unsigned int TYPE_GROUP = 1;
 				static const unsigned int TYPE_IMAGE = 2;
+				static const unsigned int TYPE_CAMERA = 3;
 			public:
 				SceneNode* parent;
 				string name;
 				vector<SceneNode*> children;
 				Vector3<float> pivot;
-				Vector3<float> position;
-				Vector3<float> scale;
-				double rotation;
+				//Vector3<float> position;
+				//Vector3<float> scale;
+				//double rotation;
+				Transform transform;
 				bool visible;
 				unsigned int type;
-
+				
                 SceneNode();
                 SceneNode(string name);
-                SceneNode(string name,unsigned int type);
+                SceneNode(string name, unsigned int type);
 
 				void setName(string n);
 				string getName();
@@ -94,7 +97,7 @@ namespace ARK {
 				virtual bool keyPressed(unsigned int key);
 				virtual bool keyReleased(unsigned int key);
 				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
-				
+
 				virtual void onAdded(SceneNode* newParent); // called on the child when it is added.
 				virtual void onChildAdded(SceneNode* newChild); // called on the parent when it is added.
 				virtual void onRemoved(SceneNode* removingFrom); // called on the child when it is removed.
@@ -118,8 +121,10 @@ namespace ARK {
 		
 
 		class ARK2D_API Scene : public KeyListener {
-			public: 
+			public:
 				SceneNode* root;
+				bool batching;
+			public: 
 				Scene();
 				void setRoot(SceneNode* node);
 				SceneNode* getRoot();
@@ -129,6 +134,9 @@ namespace ARK {
 				SceneNode* find(string n);
 				void update();
 				void render();
+
+				bool isBatching();
+				void setBatching(bool b);
 
 				virtual bool keyPressed(unsigned int key);
 				virtual bool keyReleased(unsigned int key);

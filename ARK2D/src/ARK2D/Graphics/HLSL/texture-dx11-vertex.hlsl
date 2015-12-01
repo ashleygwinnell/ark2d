@@ -8,7 +8,8 @@
 /////////////
 cbuffer ModelViewProjectionConstantBuffer : register(b0)
 {
-    matrix modelView;
+    matrix model;
+    matrix view;
     matrix projection;
 };
 
@@ -40,7 +41,8 @@ PixelInputType main(VertexInputType input)
 	float4 pos = float4(input.position);
 
     // Calculate the position of the vertex against the world, view, and projection matrices.
-    pos = mul(pos, modelView); 
+    pos = mul(pos, model); 
+    pos = mul(pos, view); 
 	pos = mul(pos, projection); 
 	output.position = pos;
 

@@ -1,5 +1,6 @@
 #version 150
-uniform mat4 ark_ModelViewMatrix;
+uniform mat4 ark_ModelMatrix;
+uniform mat4 ark_ViewMatrix;
 uniform mat4 ark_ProjectionMatrix;
 						
 in vec4 ark_VertexPosition;
@@ -10,5 +11,5 @@ out vec4 ark_VertexColorOut;
 void main(void)
 {
 	ark_VertexColorOut = ark_VertexColorIn;
-	gl_Position = ark_ProjectionMatrix * ark_ModelViewMatrix * ark_VertexPosition;
+	gl_Position = ark_ProjectionMatrix * ark_ViewMatrix * ark_ModelMatrix * ark_VertexPosition;
 }

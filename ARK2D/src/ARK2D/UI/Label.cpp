@@ -43,7 +43,7 @@ namespace ARK {
 			m_alignY(alignY)
 		{
 			setSize(ARK2D::getRenderer()->getFont()->getStringWidth(text), ARK2D::getRenderer()->getFont()->getLineHeight());
-			scale.set(sc, sc, sc);
+			transform.scale.set(sc, sc, sc);
 		}
 
 		void Label::setText(string text) {

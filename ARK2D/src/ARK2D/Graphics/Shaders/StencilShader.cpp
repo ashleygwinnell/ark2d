@@ -43,7 +43,8 @@ namespace ARK {
 
 			RendererState::start(RendererState::SHADER, getId());
 
-			_ModelViewMatrix = getUniformVariable("ark_ModelViewMatrix");
+			_ModelMatrix = getUniformVariable("ark_ModelMatrix");
+			_ViewMatrix = getUniformVariable("ark_ViewMatrix");
 			_ProjectionMatrix = getUniformVariable("ark_ProjectionMatrix");
 			
 			_TextureId = getUniformVariable("ark_TextureId");
@@ -89,7 +90,8 @@ namespace ARK {
 
 			// Replace existing texture shader... how novel! 
 			m_shaderBasicTexture 					= Renderer::s_shaderBasicTexture;
-			m_shaderBasicTexture_ModelViewMatrix	= Renderer::s_shaderBasicTexture_ModelViewMatrix;
+			m_shaderBasicTexture_ModelMatrix		= Renderer::s_shaderBasicTexture_ModelMatrix;
+			m_shaderBasicTexture_ViewMatrix			= Renderer::s_shaderBasicTexture_ViewMatrix;
 			m_shaderBasicTexture_ProjectionMatrix 	= Renderer::s_shaderBasicTexture_ProjectionMatrix;
 			m_shaderBasicTexture_VertexPositionIn 	= Renderer::s_shaderBasicTexture_VertexPosition;
 			m_shaderBasicTexture_VertexTexCoordIn 	= Renderer::s_shaderBasicTexture_VertexTexCoordIn;
@@ -97,7 +99,8 @@ namespace ARK {
 			m_shaderBasicTexture_TextureId 			= Renderer::s_shaderBasicTexture_TextureId;
 
 			Renderer::s_shaderBasicTexture 					= this;
-			Renderer::s_shaderBasicTexture_ModelViewMatrix 	= _ModelViewMatrix;
+			Renderer::s_shaderBasicTexture_ModelMatrix 		= _ModelMatrix;
+			Renderer::s_shaderBasicTexture_ViewMatrix 		= _ViewMatrix;
 			Renderer::s_shaderBasicTexture_ProjectionMatrix = _ProjectionMatrix;
 			Renderer::s_shaderBasicTexture_VertexPosition	= _VertexPositionIn;
 			Renderer::s_shaderBasicTexture_VertexTexCoordIn = _VertexTexCoordIn;
@@ -111,7 +114,8 @@ namespace ARK {
 			//Shader::unbind();
 
 			Renderer::s_shaderBasicTexture 					= m_shaderBasicTexture;
-			Renderer::s_shaderBasicTexture_ModelViewMatrix 	= m_shaderBasicTexture_ModelViewMatrix;
+			Renderer::s_shaderBasicTexture_ModelMatrix 		= m_shaderBasicTexture_ModelMatrix;
+			Renderer::s_shaderBasicTexture_ViewMatrix 		= m_shaderBasicTexture_ViewMatrix;
 			Renderer::s_shaderBasicTexture_ProjectionMatrix = m_shaderBasicTexture_ProjectionMatrix;
 			Renderer::s_shaderBasicTexture_VertexPosition	= m_shaderBasicTexture_VertexPositionIn;
 			Renderer::s_shaderBasicTexture_VertexTexCoordIn = m_shaderBasicTexture_VertexTexCoordIn;

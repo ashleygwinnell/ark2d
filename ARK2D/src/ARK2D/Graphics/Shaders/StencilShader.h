@@ -16,7 +16,8 @@ namespace ARK {
 		class ARK2D_API StencilShader : public ARK::Graphics::Shader 
 		{ 
 			public:
-				unsigned int _ModelViewMatrix;
+				unsigned int _ModelMatrix;
+				unsigned int _ViewMatrix;
 				unsigned int _ProjectionMatrix;
 
 				unsigned int _TextureId;
@@ -25,7 +26,8 @@ namespace ARK {
 				unsigned int _VertexColorIn;
 
 				Shader* m_shaderBasicTexture;
-				unsigned int m_shaderBasicTexture_ModelViewMatrix;
+				unsigned int m_shaderBasicTexture_ModelMatrix;
+				unsigned int m_shaderBasicTexture_ViewMatrix;
 				unsigned int m_shaderBasicTexture_ProjectionMatrix;
 				unsigned int m_shaderBasicTexture_VertexPositionIn;
 				unsigned int m_shaderBasicTexture_VertexColorIn;

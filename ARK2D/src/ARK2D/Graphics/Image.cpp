@@ -1158,12 +1158,12 @@ namespace ARK {
 		}
 		
 		SceneNode* Image::setRotation(double angle) {
-            SceneNode::setRotation(angle);
+            SceneNode::transform.rotation = Quaternion<float>::angleAxis(angle, 0,0,1);
 			m_dirty = true;
 			return this;
 		}
 		SceneNode* Image::rotate(double angle) {
-			SceneNode::rotation += angle;
+            SceneNode::transform.rotation += Quaternion<float>::angleAxis(angle, 0,0,1);
 			m_dirty = true;
 			return this;
 		}
@@ -1295,14 +1295,14 @@ namespace ARK {
 		}
 
 		SceneNode* Image::scale(float x, float y) {
-            SceneNode::scale.multiply(x, y, 1);
+            SceneNode::transform.scale.multiply(x, y, 1);
 			m_Width = (float(m_Width) * x);
 			m_Height = (float(m_Height) * y);
 			clean();
 			return this;
 		}
 		SceneNode* Image::setScale(float x, float y) {
-			SceneNode::scale.set(x, y);
+			SceneNode::transform.scale.set(x, y);
 			m_Width = m_originalWidth * x;
 			m_Height = m_originalHeight * y;
 			clean();
@@ -1558,14 +1558,18 @@ namespace ARK {
 
 			#else */
 
-				m_verts[0] = 0; 					// tl
-				m_verts[1] = 0;
-				m_verts[2] = 0 + this->m_Width;		// tr
-				m_verts[3] = 0;
-				m_verts[4] = 0;						// bl
-				m_verts[5] = 0 + this->m_Height;
-				m_verts[6] = 0 + this->m_Width;		// br
-				m_verts[7] = 0 + this->m_Height;
+				m_verts[0]  = 0; 					// tl
+				m_verts[1]  = 0;
+				m_verts[2]  = 0;
+				m_verts[3]  = 0 + this->m_Width;		// tr
+				m_verts[4]  = 0;
+				m_verts[5]  = 0;
+				m_verts[6]  = 0;						// bl
+				m_verts[7]  = 0 + this->m_Height;
+				m_verts[8]  = 0;
+				m_verts[9]  = 0 + this->m_Width;		// br
+				m_verts[10] = 0 + this->m_Height;
+				m_verts[11] = 0;
 
 				//m_texCoords[0] = this->texture_offset_x;
 				//m_texCoords[1] = this->texture_offset_y;
@@ -1707,12 +1711,12 @@ namespace ARK {
  
 			if (Renderer::isBatching()) {
 				float batch_rawVertices[] = {
-					x,				y,				// tl
-					x + m_Width,	y,				// tr
-					x,				y + m_Height,	// bl
-					x,				y + m_Height,	// bl
-					x + m_Width,	y,				// tr 
-					x + m_Width,	y + m_Height	// br
+					x,				y,				0, // tl
+					x + m_Width,	y,				0, // tr
+					x,				y + m_Height,	0, // bl
+					x,				y + m_Height,	0, // bl
+					x + m_Width,	y,				0, // tr 
+					x + m_Width,	y + m_Height,	0 // br
 				};
 
 				unsigned char red = r->getDrawColor().getRedc();
@@ -1726,16 +1730,16 @@ namespace ARK {
 					a   = (unsigned char) (m_color->getAlphac() * (m_alpha * r->getDrawColor().getAlphaf()) );
 				}
 
-				if (SceneNode::rotation != 0) { 
-					MathUtil::rotateQuadAroundPoint(batch_rawVertices, x + m_CenterX, y + m_CenterY, SceneNode::rotation);
+				if (SceneNode::transform.rotation.angle() != 0) {
+					MathUtil::rotateQuadAroundPoint(batch_rawVertices, x + m_CenterX, y + m_CenterY, SceneNode::transform.rotation.angle());
 				}
 				
 				Renderer::getBatch()->addTexturedQuad(
 					m_texture->getId(), 
-					batch_rawVertices[0], batch_rawVertices[1], 
-					batch_rawVertices[2], batch_rawVertices[3], 
-					batch_rawVertices[4], batch_rawVertices[5], 
-					batch_rawVertices[10], batch_rawVertices[11], 
+					batch_rawVertices[0], batch_rawVertices[1], batch_rawVertices[2],
+					batch_rawVertices[3], batch_rawVertices[4], batch_rawVertices[5],
+					batch_rawVertices[6], batch_rawVertices[7], batch_rawVertices[8],
+					batch_rawVertices[15], batch_rawVertices[16], batch_rawVertices[17],
 					//texture_offset_x, texture_offset_y,
 					//texture_offset_x + texture_width, texture_offset_y,
 					//texture_offset_x, texture_offset_y + texture_height,
@@ -1776,9 +1780,9 @@ namespace ARK {
 			//ARK2D::getLog()->v("temp: 2");
 
 			// rotation
-			if (SceneNode::rotation != 0) {
+			if (SceneNode::transform.rotation.angle() != 0) {
 				r->translate(x + m_CenterX, y + m_CenterY);
-				r->rotate((float) SceneNode::rotation);
+				r->rotate((float) SceneNode::transform.rotation.angle());
 				r->translate((x + m_CenterX) * -1, (y + m_CenterY) * -1);
 			}
 
@@ -1793,12 +1797,12 @@ namespace ARK {
 				RendererState::start(RendererState::TEXTURE, m_texture->m_id);
 
 				float rawVertices[] = {
-					0.0f,			0.0f,		// tl
-					m_verts[6],		0.0f,		// tr
-					0.0f,			m_verts[7],	  	// bl
-					0.0f,			m_verts[7],	  	// bl
-					m_verts[6],		0.0f,		// tr 
-					m_verts[6],		m_verts[7]		// br
+					0.0f,			0.0f,		 	0, 	// tl
+					m_verts[9],		0.0f,			0,	// tr
+					0.0f,			m_verts[10],	0,  // bl
+					0.0f,			m_verts[10],	0,  // bl
+					m_verts[9],		0.0f,			0,	// tr 
+					m_verts[9],		m_verts[10],  	0	// br
 				};
 
 				/*float texCoords[] = {
@@ -1841,7 +1845,7 @@ namespace ARK {
 					red, g, b, a
 				};
 
-				glVertexPointer(2, GL_FLOAT, 0, rawVertices);
+				glVertexPointer(3, GL_FLOAT, 0, rawVertices);
 				glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
 				glColorPointer(4, GL_UNSIGNED_BYTE, 0, rawColors); 
 				glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -1862,7 +1866,7 @@ namespace ARK {
 						glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexTexCoordIn);
 						glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexColorIn);
 
-						Renderer::s_vboQuadVerts->setWidth(2);
+						Renderer::s_vboQuadVerts->setWidth(3);
 						Renderer::s_vboQuadTexCoords->setWidth(2);
 						Renderer::s_vboQuadColors->setWidth(4);
 
@@ -1872,7 +1876,7 @@ namespace ARK {
 
 						Renderer::s_vboQuadVerts->bind();
 						Renderer::s_vboQuadVerts->setData(&m_verts[0]); 
-						glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexPosition, 2, GL_FLOAT, GL_FALSE, 0, 0); //&rawVertices);
+						glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexPosition, 3, GL_FLOAT, GL_FALSE, 0, 0); //&rawVertices);
 
 						Renderer::s_vboQuadTexCoords->bind();
 						Renderer::s_vboQuadTexCoords->setData(&m_texCoords[0]);
@@ -1882,7 +1886,8 @@ namespace ARK {
 						Renderer::s_vboQuadColors->setData(&m_colors[0]);
 						glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, 0); //&rawColors); 
 
-						glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ModelViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODELVIEW)->pointer());
+						glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ModelMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODEL)->pointer());
+						glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_VIEW)->pointer());
 						glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ProjectionMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_PROJECTION)->pointer());
 
 						showAnyGlErrorAndExitMacro();
@@ -1906,12 +1911,13 @@ namespace ARK {
 						glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Renderer_InterleavingTextureVertexData), rawColors); 
 						*/
 				
-						glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexPosition, 2, GL_FLOAT, GL_FALSE, 0, &m_verts);
+						glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexPosition, 3, GL_FLOAT, GL_FALSE, 0, &m_verts);
 						glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexTexCoordIn, 2, GL_FLOAT, GL_FALSE, 0, &m_texCoords);
 						glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, &m_colors); 
 						
 
-						glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ModelViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODELVIEW)->pointer());
+						glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ModelMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODEL)->pointer());
+						glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_VIEW)->pointer());
 						glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ProjectionMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_PROJECTION)->pointer());
 
 						glUniform1i(Renderer::s_shaderBasicTexture_TextureId, 0); 
@@ -1995,7 +2001,7 @@ namespace ARK {
 
 					RendererState::start(RendererState::TEXTURE, m_texture->m_id);
 
-					glVertexPointer(2, GL_FLOAT, 0, m_verts);
+					glVertexPointer(3, GL_FLOAT, 0, m_verts);
 					glTexCoordPointer(2, GL_FLOAT, 0, m_texCoords);
 					glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_colors);
 
@@ -2009,9 +2015,9 @@ namespace ARK {
 
 			r->popMatrix();
 
-			if (SceneNode::rotation != 0) {
+			if (SceneNode::transform.rotation.angle() != 0) {
 				r->translate(x + m_CenterX, y + m_CenterY);
-				r->rotate(float(SceneNode::rotation * -1));
+				r->rotate(float(SceneNode::transform.rotation.angle() * -1));
 				r->translate((x + m_CenterX) * -1, (y + m_CenterY) * -1);
 			}
 
@@ -2291,10 +2297,10 @@ namespace ARK {
 				
 				Renderer::getBatch()->addTexturedQuad( 
 					m_texture->getId(), 
-					x2,				y2, 
-					x2 + m_Width,	y2, 
-					x2,				y2 + m_Height,
-					x2 + m_Width,	y2 + m_Height, 
+					x2,				y2,             0,
+					x2 + m_Width,	y2,             0,
+					x2,				y2 + m_Height,  0,
+					x2 + m_Width,	y2 + m_Height,  0,
 					//texture_offset_x, texture_offset_y,
 					//texture_offset_x + texture_width, texture_offset_y,
 					//texture_offset_x, texture_offset_y + texture_height,
@@ -2335,12 +2341,12 @@ namespace ARK {
 			#if defined(ARK2D_FLASCC) 
 				
 				float rawVertices[] = {
-					0.0f,			0.0f,		// tl
-					m_verts[6],		0.0f,		// tr
-					0.0f,			m_verts[7],	  	// bl
-					0.0f,			m_verts[7],	  	// bl
-					m_verts[6],		0.0f,		// tr
-					m_verts[6],		m_verts[7]		// br
+					0.0f,			0.0f,           0, // tl
+					m_verts[9],		0.0f,           0, // tr
+					0.0f,			m_verts[10],	0, // bl
+					0.0f,			m_verts[10],	0, // bl
+					m_verts[9],		0.0f,           0, // tr
+					m_verts[9],		m_verts[10]		0  // br
 				};
 
 				/*float texCoords[] = {
@@ -2374,7 +2380,7 @@ namespace ARK {
 					red, gre, b, a
 				};
 
-				glVertexPointer(2, GL_FLOAT, 0, rawVertices);
+				glVertexPointer(3, GL_FLOAT, 0, rawVertices);
 				glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
 				glColorPointer(4, GL_UNSIGNED_BYTE, 0, rawColors); //rawColors); 
 				glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -2393,7 +2399,7 @@ namespace ARK {
 
 					Renderer::s_vboQuadVerts->bind();
 					Renderer::s_vboQuadVerts->setData(&m_verts[0]); 
-					glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexPosition, 2, GL_FLOAT, GL_FALSE, 0, 0); //&rawVertices);
+					glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexPosition, 3, GL_FLOAT, GL_FALSE, 0, 0); //&rawVertices);
 
 					Renderer::s_vboQuadTexCoords->bind();
 					Renderer::s_vboQuadTexCoords->setData(&m_texCoords[0]);
@@ -2403,7 +2409,8 @@ namespace ARK {
 					Renderer::s_vboQuadColors->setData(&m_colors[0]);
 					glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, 0); //&rawColors); 
 					
-					glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ModelViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODELVIEW)->pointer());
+					glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ModelMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODEL)->pointer());
+					glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_VIEW)->pointer());
 					glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ProjectionMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_PROJECTION)->pointer());
 
 					glUniform1i(Renderer::s_shaderBasicTexture_TextureId, 0); 
@@ -2421,11 +2428,12 @@ namespace ARK {
 					glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Renderer_InterleavingTextureVertexData), rawColors); 
 					*/
 
-					glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexPosition, 2, GL_FLOAT, GL_FALSE, 0, &m_verts); // sizeof(Renderer_InterleavingTextureVertexData)
+					glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexPosition, 3, GL_FLOAT, GL_FALSE, 0, &m_verts); // sizeof(Renderer_InterleavingTextureVertexData)
 					glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexTexCoordIn, 2, GL_FLOAT, GL_FALSE, 0, &m_texCoords);
 					glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, &m_colors); 
 					
-					glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ModelViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODELVIEW)->pointer());
+					glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ModelMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODEL)->pointer());
+					glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_VIEW)->pointer());
 					glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ProjectionMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_PROJECTION)->pointer());
 
 					glUniform1i(Renderer::s_shaderBasicTexture_TextureId, 0);  
@@ -2439,7 +2447,8 @@ namespace ARK {
 					//ID3D11RenderTargetView* renderTargetView = ARK2D::getContainer()->m_platformSpecific.m_renderTargetView;
 					//ID3D11DepthStencilView* depthStencilView = ARK2D::getContainer()->m_platformSpecific.m_depthStencilView;
 
-					MatrixStack* modelViewMatrix = Renderer::getMatrix(MatrixStack::TYPE_MODELVIEW);
+					MatrixStack* modelMatrix = Renderer::getMatrix(MatrixStack::TYPE_MODEL);
+					MatrixStack* viewMatrix = Renderer::getMatrix(MatrixStack::TYPE_VIEW);
 					MatrixStack* projectionMatrix = Renderer::getMatrix(MatrixStack::TYPE_PROJECTION);
 
 					float red = r->getDrawColor().getRedf();
@@ -2455,7 +2464,8 @@ namespace ARK {
 
 					Renderer::__internalsDXUpdateMatrices();
 
-					//XMStoreFloat4x4(&Renderer::s_d3d_matrixBufferData->modelView, XMMatrixTranspose(modelViewMatrix->d3dpointer()));
+					//XMStoreFloat4x4(&Renderer::s_d3d_matrixBufferData->model, XMMatrixTranspose(modelMatrix->d3dpointer()));
+					//XMStoreFloat4x4(&Renderer::s_d3d_matrixBufferData->view, XMMatrixTranspose(viewMatrix->d3dpointer()));
 					//XMStoreFloat4x4(&Renderer::s_d3d_matrixBufferData->projection, XMMatrixTranspose(projectionMatrix->d3dpointer()));
 
 					//ID3D11RenderTargetView *const targets[1] = { renderTargetView };
@@ -2470,17 +2480,17 @@ namespace ARK {
 								DirectX::XMFLOAT4(red, gr, b, a)
 							},
 							{
-								DirectX::XMFLOAT4(0 + m_verts[6], 0, 0.0f, 0.0f),
+								DirectX::XMFLOAT4(0 + m_verts[9], 0, 0.0f, 0.0f),
 								DirectX::XMFLOAT2(this->texture_offset_x_tr, this->texture_offset_y_tr),
 								DirectX::XMFLOAT4(red, gr, b, a)
 							},
 							{
-								DirectX::XMFLOAT4(0, m_verts[7], 0.0f, 0.0f),
+								DirectX::XMFLOAT4(0, m_verts[10], 0.0f, 0.0f),
 								DirectX::XMFLOAT2(this->texture_offset_x_bl, this->texture_offset_y_bl),
 								DirectX::XMFLOAT4(red, gr, b, a)
 							},
 							{
-								DirectX::XMFLOAT4(m_verts[6], m_verts[7], 0.0f, 0.0f),
+								DirectX::XMFLOAT4(m_verts[9], m_verts[10], 0.0f, 0.0f),
 								DirectX::XMFLOAT2(this->texture_offset_x_br, this->texture_offset_y_br),
 								DirectX::XMFLOAT4(red, gr, b, a)
 							}
@@ -2507,7 +2517,8 @@ namespace ARK {
 
 				RendererStats::s_glCalls += 7;
 				
-				/*glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ModelViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODELVIEW)->pointer());
+				/*glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ModelMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODEL)->pointer());
+				glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_VIEW)->pointer());
 				glUniformMatrix4fv(Renderer::s_shaderBasicTexture_ProjectionMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_PROJECTION)->pointer());
 				glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexPosition, 2, GL_FLOAT, GL_FALSE, 0, &m_verts);  
 				glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexTexCoordIn, 2, GL_FLOAT, GL_FALSE, 0, &m_texCoords);
@@ -2519,7 +2530,7 @@ namespace ARK {
 
 			#else 
 				
-				glVertexPointer(2, GL_FLOAT, 0, m_verts);
+				glVertexPointer(3, GL_FLOAT, 0, m_verts);
 				glTexCoordPointer(2, GL_FLOAT, 0, m_texCoords);
 				/*if (m_color != NULL) {*/ glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_colors); //}
 
@@ -2583,12 +2594,12 @@ namespace ARK {
 
 
 			float batch_rawVertices[] = {
-				0,				0,				// tl
-				0 + m_Width,	0,				// tr
-				0,				0 + m_Height,	// bl
-				0,				0 + m_Height,	// bl
-				0 + m_Width,	0,				// tr 
-				0 + m_Width,	0 + m_Height	// br
+				0,				0,				0, // tl
+				0 + m_Width,	0,				0, // tr
+				0,				0 + m_Height,	0, // bl
+				0,				0 + m_Height,	0, // bl
+				0 + m_Width,	0,				0, // tr
+				0 + m_Width,	0 + m_Height,	0 // br
 			};
 
 			unsigned char red = r->getDrawColor().getRedc();
@@ -2604,10 +2615,10 @@ namespace ARK {
 
 			Renderer::getBatch()->addTexturedQuad(
 				m_texture->getId(), 
-				batch_rawVertices[0], batch_rawVertices[1], 
-				batch_rawVertices[2], batch_rawVertices[3], 
-				batch_rawVertices[4], batch_rawVertices[5], 
-				batch_rawVertices[10], batch_rawVertices[11], 
+				batch_rawVertices[0], batch_rawVertices[1], batch_rawVertices[2],
+				batch_rawVertices[4], batch_rawVertices[4], batch_rawVertices[5],
+				batch_rawVertices[6], batch_rawVertices[7], batch_rawVertices[8],
+				batch_rawVertices[15], batch_rawVertices[16], batch_rawVertices[17],
 				texture_offset_x_tl, texture_offset_y_tl,
 				texture_offset_x_tr, texture_offset_y_tr,
 				texture_offset_x_bl, texture_offset_y_bl,

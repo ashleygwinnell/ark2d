@@ -100,6 +100,7 @@
 			"src/ARK2D/Core/Sort.cpp",
 			"src/ARK2D/Core/String.cpp",
 			"src/ARK2D/Core/Platform/GameContainerWindows.cpp",
+			"src/ARK2D/Core/Camera.cpp",
 			
 			"src/ARK2D/Font/Font.cpp",
 			"src/ARK2D/Font/FTFont.cpp",
@@ -140,6 +141,7 @@
 			"src/ARK2D/Geometry/Polygon.cpp",
 			"src/ARK2D/Geometry/Line.cpp",
 			"src/ARK2D/Geometry/AdvancedPolygon.cpp",
+			"src/ARK2D/Geometry/Transform.cpp",
 
 			"src/ARK2D/Math/Random.cpp",
 			

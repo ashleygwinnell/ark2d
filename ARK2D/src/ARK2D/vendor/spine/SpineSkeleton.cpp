@@ -33,9 +33,9 @@ namespace ARK {
 				thisRotation += 90;
 			}
 
-			node->position.set(thisX, thisY);
-			node->scale.set(bone->scaleY, bone->scaleX);
-			node->rotation = thisRotation;
+			node->transform.position.set(thisX, thisY);
+			node->transform.scale.set(bone->scaleY, bone->scaleX);
+            node->transform.rotation = Quaternion<float>::angleAxis(thisRotation, 0,0,1);
 		}
 		void SpineUtil::transformFromBoneName(float* posX, float* posY, float* scaleX, float* scaleY, float* rotation, Skeleton* skeleton, string boneName) {
 			spBone* bone = skeleton->getBone(boneName);

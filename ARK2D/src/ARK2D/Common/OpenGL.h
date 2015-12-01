@@ -165,7 +165,8 @@
 		} Renderer_DX_InterleavingTextureVertexData;
 
 		typedef struct {
-			DirectX::XMFLOAT4X4 modelView;
+			DirectX::XMFLOAT4X4 model;
+			DirectX::XMFLOAT4X4 view;
 			DirectX::XMFLOAT4X4 projection;
 		} Renderer_DX_ModelViewProjectionMatrixBuffer; 
 

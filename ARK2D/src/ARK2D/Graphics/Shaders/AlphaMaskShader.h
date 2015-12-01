@@ -17,12 +17,14 @@ namespace ARK {
 		class AlphaMaskGeometryShader : public Shader {
 			public:
 				Shader* m_shaderBasicGeometry;
-				unsigned int _ModelViewMatrix;
+				unsigned int _ModelMatrix;
+				unsigned int _ViewMatrix;
 				unsigned int _ProjectionMatrix;
 				unsigned int _VertexPositionIn;
 				unsigned int _VertexColorIn;
 				
-				unsigned int m_shaderBasicGeometry_ModelViewMatrix;
+				unsigned int m_shaderBasicGeometry_ModelMatrix;
+				unsigned int m_shaderBasicGeometry_ViewMatrix;
 				unsigned int m_shaderBasicGeometry_ProjectionMatrix;
 				unsigned int m_shaderBasicGeometry_VertexPositionIn;
 				unsigned int m_shaderBasicGeometry_VertexColorIn;
@@ -40,7 +42,8 @@ namespace ARK {
 		class AlphaMaskTextureShader : public Shader {
 			public:
 				Shader* m_shaderBasicTexture;
-				unsigned int _ModelViewMatrix;
+				unsigned int _ModelMatrix;
+				unsigned int _ViewMatrix;
 				unsigned int _ProjectionMatrix;
 
 				unsigned int _TextureId;
@@ -48,7 +51,8 @@ namespace ARK {
 				unsigned int _VertexTexCoordIn;
 				unsigned int _VertexColorIn;
 				
-				unsigned int m_shaderBasicTexture_ModelViewMatrix;
+				unsigned int m_shaderBasicTexture_ModelMatrix;
+				unsigned int m_shaderBasicTexture_ViewMatrix;
 				unsigned int m_shaderBasicTexture_ProjectionMatrix;
 				unsigned int m_shaderBasicTexture_VertexPositionIn;
 				unsigned int m_shaderBasicTexture_VertexTexCoordIn;

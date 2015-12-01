@@ -98,7 +98,7 @@ namespace ARK {
 				//	Renderer_InterleavingTextureVertexData m_vertices[4];
 				//#else
 					bool m_dirty;
-					float m_verts[8];
+					float m_verts[12];
 					float m_texCoords[8];
 					unsigned char m_colors[16];
 				//#endif

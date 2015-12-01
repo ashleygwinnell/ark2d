@@ -28,22 +28,22 @@ namespace ARK {
  			m_bounds = new ARK::Geometry::Cube();
 		}
 		float AbstractUIComponent::getX() {
-			return position.m_x;
+			return transform.position.x;
 		}
 		float AbstractUIComponent::getY() {
-			return position.m_y;
+			return transform.position.y;
 		}
 		float AbstractUIComponent::getMaxX() {
-			return position.m_x + ((1.0f - pivot.m_x) * m_width);
+			return transform.position.x + ((1.0f - pivot.x) * m_width);
 		}
 		float AbstractUIComponent::getMaxY() {
-			return position.m_y + ((1.0f - pivot.m_y) * m_height);
+			return transform.position.y + ((1.0f - pivot.y) * m_height);
 		}
 		float AbstractUIComponent::getMinX() {
-			return position.m_x - (pivot.m_x * m_width);
+			return transform.position.x - (pivot.x * m_width);
 		}
 		float AbstractUIComponent::getMinY() {
-			return position.m_y - (pivot.m_y * m_width);
+			return transform.position.y - (pivot.y * m_width);
 		}
 		unsigned int AbstractUIComponent::getWidth() {
 			return m_width;
@@ -52,16 +52,16 @@ namespace ARK {
 			return m_height;
 		}
 		void AbstractUIComponent::setX(float x) {
-			position.setX(x);
+			transform.position.setX(x);
 		}
 		void AbstractUIComponent::setY(float y) {
-			position.setY(y);
+			transform.position.setY(y);
 		}
 		void AbstractUIComponent::setLocation(float x, float y) {
-			position.set(x, y, 0);
+			transform.position.set(x, y, 0);
 		} 
 		void AbstractUIComponent::setLocationByCenter(float x, float y) {
-			position.set(x, y, 0);
+			transform.position.set(x, y, 0);
 			pivot.set(0.5, 0.5);
 		}
 		void AbstractUIComponent::setSize(unsigned int w, unsigned int h) {
@@ -120,7 +120,7 @@ namespace ARK {
 				Renderer* r = ARK2D::getRenderer();
 				Vector3<float> worldpos = localPositionToGlobalPosition();
 				r->setScissorTestEnabled(true);
-				r->scissor(worldpos.m_x - m_width*pivot.getX()*scale.getX(), worldpos.m_y - m_height * pivot.getY()*scale.getY(), m_width, m_height);
+				r->scissor(worldpos.x - m_width*pivot.getX()*transform.scale.getX(), worldpos.y - m_height * pivot.getY()*transform.scale.getY(), m_width, m_height);
 			}
 			SceneNode::preRender();
 		}

@@ -18,6 +18,7 @@
 #include "ARK2D/Core/Event.h"
 #include "ARK2D/Core/Resource.h"
 #include "ARK2D/Core/ToString.h" 
+#include "ARK2D/Core/Camera.h"
 
 // Geometry
 #include "ARK2D/Geometry/Vector2.h"
@@ -31,6 +32,7 @@
 #include "ARK2D/Geometry/Line.h" 
 #include "ARK2D/Geometry/Transform.h" 
 #include "ARK2D/Geometry/AdvancedPolygon.h" 
+#include "ARK2D/Geometry/Plane.h" 
 
 // Game Jolt
 #include "ARK2D/GJ/GameJolt.h"

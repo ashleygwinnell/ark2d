@@ -591,7 +591,8 @@ namespace ARK {
 		void Shader::initVariables() {
 
 			int ref_ProjectionMatrix = getUniformVariable("ark_ProjectionMatrix");
-			int ref_ModelViewMatrix = getUniformVariable("ark_ModelViewMatrix");
+			int ref_ViewMatrix = getUniformVariable("ark_ViewMatrix");
+			int ref_ModelMatrix = getUniformVariable("ark_ModelMatrix");
 			int ref_VertexPosition = getAttributeVariable("ark_VertexPosition");
 			int ref_VertexColorIn = getAttributeVariable("ark_VertexColorIn");
  
@@ -603,7 +604,8 @@ namespace ARK {
 			#endif
 
 			m_variables["ark_ProjectionMatrix"] = ref_ProjectionMatrix;
-			m_variables["ark_ModelViewMatrix"] = ref_ModelViewMatrix;
+			m_variables["ark_ViewMatrix"] = ref_ViewMatrix;
+			m_variables["ark_ModelMatrix"] = ref_ModelMatrix;
 			m_variables["ark_VertexPosition"] = ref_VertexPosition;
 			m_variables["ark_VertexColorIn"] = ref_VertexColorIn;
 

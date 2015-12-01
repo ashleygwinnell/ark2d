@@ -47,7 +47,8 @@ namespace ARK {
 
 			RendererState::start(RendererState::SHADER, getId());
 
-			_ModelViewMatrix = getUniformVariable("ark_ModelViewMatrix");
+			_ModelMatrix = getUniformVariable("ark_ModelMatrix");
+			_ViewMatrix = getUniformVariable("ark_ViewMatrix");
 			_ProjectionMatrix = getUniformVariable("ark_ProjectionMatrix");
 			_HSVIn = getUniformVariable("ark_HSV");
 
@@ -74,20 +75,23 @@ namespace ARK {
 
 			RendererState::start(RendererState::NONE);
 			m_shaderBasicGeometry 					= Renderer::s_shaderBasicGeometry;
-			m_shaderBasicGeometry_ModelViewMatrix	= Renderer::s_shaderBasicGeometry_ModelViewMatrix;
+			m_shaderBasicGeometry_ModelMatrix		= Renderer::s_shaderBasicGeometry_ModelMatrix;
+			m_shaderBasicGeometry_ViewMatrix		= Renderer::s_shaderBasicGeometry_ViewMatrix;
 			m_shaderBasicGeometry_ProjectionMatrix 	= Renderer::s_shaderBasicGeometry_ProjectionMatrix;
 			m_shaderBasicGeometry_VertexPositionIn 	= Renderer::s_shaderBasicGeometry_VertexPosition;
 			m_shaderBasicGeometry_VertexColorIn 	= Renderer::s_shaderBasicGeometry_VertexColorIn;
 			
 			Renderer::s_shaderBasicGeometry 					= this;
-			Renderer::s_shaderBasicGeometry_ModelViewMatrix 	= _ModelViewMatrix;
+			Renderer::s_shaderBasicGeometry_ModelMatrix 		= _ModelMatrix;
+			Renderer::s_shaderBasicGeometry_ViewMatrix 			= _ViewMatrix;
 			Renderer::s_shaderBasicGeometry_ProjectionMatrix 	= _ProjectionMatrix;
 			Renderer::s_shaderBasicGeometry_VertexPosition		= _VertexPositionIn;
 			Renderer::s_shaderBasicGeometry_VertexColorIn 		= _VertexColorIn;
 		}
 		void HSVGeometryShader::stop() {
 			Renderer::s_shaderBasicGeometry 					= m_shaderBasicGeometry;
-			Renderer::s_shaderBasicGeometry_ModelViewMatrix 	= m_shaderBasicGeometry_ModelViewMatrix;
+			Renderer::s_shaderBasicGeometry_ModelMatrix 		= m_shaderBasicGeometry_ModelMatrix;
+			Renderer::s_shaderBasicGeometry_ViewMatrix 			= m_shaderBasicGeometry_ViewMatrix;
 			Renderer::s_shaderBasicGeometry_ProjectionMatrix 	= m_shaderBasicGeometry_ProjectionMatrix;
 			Renderer::s_shaderBasicGeometry_VertexPosition		= m_shaderBasicGeometry_VertexPositionIn;
 			Renderer::s_shaderBasicGeometry_VertexColorIn 		= m_shaderBasicGeometry_VertexColorIn;
@@ -142,7 +146,8 @@ namespace ARK {
 
 			RendererState::start(RendererState::SHADER, getId());
 
-			_ModelViewMatrix = getUniformVariable("ark_ModelViewMatrix");
+			_ModelMatrix = getUniformVariable("ark_ModelMatrix");
+			_ViewMatrix = getUniformVariable("ark_ViewMatrix");
 			_ProjectionMatrix = getUniformVariable("ark_ProjectionMatrix");
 			_TextureId = getUniformVariable("ark_TextureId");
 			_HSVIn = getUniformVariable("ark_HSV");
@@ -169,7 +174,8 @@ namespace ARK {
 			RendererState::start(RendererState::NONE);
 			m_shaderBasicTexture 					= Renderer::s_shaderBasicTexture;
 			m_shaderBasicTexture_TextureId			= Renderer::s_shaderBasicTexture_TextureId;
-			m_shaderBasicTexture_ModelViewMatrix	= Renderer::s_shaderBasicTexture_ModelViewMatrix;
+			m_shaderBasicTexture_ModelMatrix		= Renderer::s_shaderBasicTexture_ModelMatrix;
+			m_shaderBasicTexture_ViewMatrix			= Renderer::s_shaderBasicTexture_ViewMatrix;
 			m_shaderBasicTexture_ProjectionMatrix 	= Renderer::s_shaderBasicTexture_ProjectionMatrix;
 			m_shaderBasicTexture_VertexPositionIn 	= Renderer::s_shaderBasicTexture_VertexPosition;
 			m_shaderBasicTexture_VertexTexCoordIn 	= Renderer::s_shaderBasicTexture_VertexTexCoordIn;
@@ -177,7 +183,8 @@ namespace ARK {
 			
 			Renderer::s_shaderBasicTexture 						= this;
 			Renderer::s_shaderBasicTexture_TextureId 			= _TextureId;
-			Renderer::s_shaderBasicTexture_ModelViewMatrix 		= _ModelViewMatrix;
+			Renderer::s_shaderBasicTexture_ModelMatrix 			= _ModelMatrix;
+			Renderer::s_shaderBasicTexture_ViewMatrix 			= _ViewMatrix;
 			Renderer::s_shaderBasicTexture_ProjectionMatrix 	= _ProjectionMatrix;
 			Renderer::s_shaderBasicTexture_VertexPosition		= _VertexPositionIn;
 			Renderer::s_shaderBasicTexture_VertexTexCoordIn		= _VertexTexCoordIn;
@@ -186,7 +193,8 @@ namespace ARK {
 		void HSVTextureShader::stop() {
 			Renderer::s_shaderBasicTexture 						= m_shaderBasicTexture;
 			Renderer::s_shaderBasicTexture_TextureId 			= m_shaderBasicTexture_TextureId;
-			Renderer::s_shaderBasicTexture_ModelViewMatrix 		= m_shaderBasicTexture_ModelViewMatrix;
+			Renderer::s_shaderBasicTexture_ModelMatrix 			= m_shaderBasicTexture_ModelMatrix;
+			Renderer::s_shaderBasicTexture_ViewMatrix 			= m_shaderBasicTexture_ViewMatrix;
 			Renderer::s_shaderBasicTexture_ProjectionMatrix 	= m_shaderBasicTexture_ProjectionMatrix;
 			Renderer::s_shaderBasicTexture_VertexPosition		= m_shaderBasicTexture_VertexPositionIn;
 			Renderer::s_shaderBasicTexture_VertexTexCoordIn		= m_shaderBasicTexture_VertexTexCoordIn;

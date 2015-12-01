@@ -138,6 +138,8 @@ namespace ARK {
 				void g(String s);
 				void t(String s);
 
+				void backtrace();
+
 				void watchVariable(string name, unsigned int type, void* data); // could templateise this?
 				void addWatchedVariable(string name, unsigned int type, void* data); // could templateise this?
 				void clearWatchedVariables();

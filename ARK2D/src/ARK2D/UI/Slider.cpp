@@ -124,7 +124,7 @@ namespace ARK {
 			if (!m_dragging) 
 			{
 				Vector3<float> worldpos = localPositionToGlobalPosition();
-				bool collides = Shape<float>::collision_circleCircle(i->getMouseX(), i->getMouseY(), 15.0f, worldpos.m_x + m_buttonLocation.getX(), worldpos.m_y + m_buttonLocation.getY(), 15.0f);
+				bool collides = Shape<float>::collision_circleCircle(i->getMouseX(), i->getMouseY(), 15.0f, worldpos.x + m_buttonLocation.getX(), worldpos.y + m_buttonLocation.getY(), 15.0f);
 				if (collides) {
 					m_dragging = true;
 					updateValue();

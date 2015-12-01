@@ -54,6 +54,7 @@ namespace ARK {
 				static double anglef(float x1, float y1, float x2, float y2, bool enforce_abs);
 				static double forcePositiveAngle(double angle);
 				static double toRadians(double angle);
+				static double toDegrees(double angle);
 				static double getPercentage(int top, int denominator);
 				static const char* getPercentage_CSTR(int top, int denominator);
 				static void snap(int& snap, int& x, int& y);

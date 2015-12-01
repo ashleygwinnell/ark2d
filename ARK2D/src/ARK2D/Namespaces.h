@@ -27,6 +27,7 @@ namespace ARK {
 	//! Core framework classes for Windowing, Default Objects, Events, Resources.
 	namespace Core {
 		class Constants;
+        class Camera;
 		class Event;
 		class Exception;
 		class Game;
@@ -228,6 +229,7 @@ namespace ARK {
 		class Callback;
 		class DisplayUtil;
 		class Wobble;
+		//class Transform;
 
 		template <class T>
 		class Matrix44;

@@ -204,8 +204,11 @@ namespace ARK {
 		}
 		
 
-		double MathUtil::toRadians(double angle) {
-			return angle * (MY_PI/180);
+		double MathUtil::toRadians(double degrees) {
+			return degrees * (MY_PI/180);
+		}
+		double MathUtil::toDegrees(double radians) {
+			return radians * (180.0/MY_PI);
 		}
 
 		double MathUtil::getPercentage(int top, int denominator) {

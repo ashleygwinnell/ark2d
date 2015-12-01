@@ -256,19 +256,19 @@ namespace ARK {
 					m_y /= len;
 				}
 
-				Vector2<T> operator*(const Vector2<T>& other) { 
-					m_x *= other.m_x;
-					m_y *= other.m_y;
-					return *this; 
+				Vector2<T> operator*(const Vector2<T>& other) const { 
+					Vector2<T> ret(m_x, m_y); 
+					ret *= other;
+					return ret;
+				}
+				Vector2<T> operator*(float other) { 
+					Vector2<T> ret(m_x, m_y);
+					ret *= other; 
+					return ret; 
 				}
 				Vector2<T> operator*=(const Vector2<T>& other) { 
 					m_x *= other.m_x;
 					m_y *= other.m_y;
-					return *this; 
-				}
-				Vector2<T> operator*(float other) { 
-					m_x *= other;
-					m_y *= other;
 					return *this; 
 				}
 				Vector2<T> operator*=(float other) { 
