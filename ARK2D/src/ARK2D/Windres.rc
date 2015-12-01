@@ -1,17 +1,17 @@
 #include "Windres.h"
 
 #if defined(ARK2D_WINDOWS)
-	ARK2D_ICON 			ICON 	"D:\\Dropbox\\ark2d\\ARK2D\\data\\icon.ico"
-	ARK2D_FONT_PNG 	ARK2D_RESOURCE_TYPE_PNG 	"D:\\Dropbox\\ark2d\\ARK2D\\data\\fonts\\default.png"
-	ARK2D_FONT_FNT 	ARK2D_RESOURCE_TYPE_FNT 	"D:\\Dropbox\\ark2d\\ARK2D\\data\\fonts\\default.fnt"
-	ARK2D_PARTICLE 	ARK2D_RESOURCE_TYPE_PNG 	"D:\\Dropbox\\ark2d\\ARK2D\\data\\particle.png"
+	ARK2D_ICON 			ICON 	"D:\\Git\\ark2d\\ARK2D\\data\\icon.ico"
+	ARK2D_FONT_PNG 	ARK2D_RESOURCE_TYPE_PNG 	"D:\\Git\\ark2d\\ARK2D\\data\\fonts\\default.png"
+	ARK2D_FONT_FNT 	ARK2D_RESOURCE_TYPE_FNT 	"D:\\Git\\ark2d\\ARK2D\\data\\fonts\\default.fnt"
+	ARK2D_PARTICLE 	ARK2D_RESOURCE_TYPE_PNG 	"D:\\Git\\ark2d\\ARK2D\\data\\particle.png"
 	#if defined(ARK2D_RENDERER_DIRECTX)
-		ARK2D_DX11_GEOM_VS 	ARK2D_RESOURCE_TYPE_SHADER 	"D:\\Dropbox\\ark2d\\ARK2D\\build\\windows-vs\\Default\\geometry-dx11-vertex.cso"
-		ARK2D_DX11_GEOM_PS 	ARK2D_RESOURCE_TYPE_SHADER 	"D:\\Dropbox\\ark2d\\ARK2D\\build\\windows-vs\\Default\\geometry-dx11-pixel.cso"
+		ARK2D_DX11_GEOM_VS 	ARK2D_RESOURCE_TYPE_SHADER 	"D:\\Git\\ark2d\\ARK2D\\build\\windows-vs\\Default\\geometry-dx11-vertex.cso"
+		ARK2D_DX11_GEOM_PS 	ARK2D_RESOURCE_TYPE_SHADER 	"D:\\Git\\ark2d\\ARK2D\\build\\windows-vs\\Default\\geometry-dx11-pixel.cso"
 	#endif
 #elif defined(ARK2D_XBOXONE)
-	ARK2D_DX11_GEOM_VS 	ARK2D_RESOURCE_TYPE_SHADER 	"D:\\Dropbox\\ark2d\\ARK2D\\build\\xbone\\Default\\geometry-dx11-vertex.cso"
-	ARK2D_DX11_GEOM_PS 	ARK2D_RESOURCE_TYPE_SHADER 	"D:\\Dropbox\\ark2d\\ARK2D\\build\\xbone\\Default\\geometry-dx11-pixel.cso"
+	ARK2D_DX11_GEOM_VS 	ARK2D_RESOURCE_TYPE_SHADER 	"D:\\Git\\ark2d\\ARK2D\\build\\xbone\\Default\\geometry-dx11-vertex.cso"
+	ARK2D_DX11_GEOM_PS 	ARK2D_RESOURCE_TYPE_SHADER 	"D:\\Git\\ark2d\\ARK2D\\build\\xbone\\Default\\geometry-dx11-pixel.cso"
 #endif
 
 #ifdef ARK2D_WINDOWS 

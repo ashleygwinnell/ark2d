@@ -2,8 +2,8 @@
 	"clean": false,
 	"windows": {
 		"python_executable": "C:\\Python31\\python.exe",
-		"ark2d_dir": "D:\\Dropbox\\ARK2D\\ark2d",
-		"gyp_executable": "D:\\Dropbox\\ark2d\\ARK2D\\lib\\gyp-read-only\\gyp",
+		"ark2d_dir": "D:\\Git\\ark2d\\ARK2D",
+		"gyp_executable": "D:\\Git\\ark2d\\ARK2D\\lib\\gyp-read-only\\gyp",
 		"android":{
 			"sdk_dir": "C:\\Users\\Ashley\\.android\\adt-bundle-windows-x86-20130917\\sdk",
 			"ndk_dir": "C:\\Users\\Ashley\\.android\\android-ndk-r9"
