@@ -6,8 +6,8 @@
  *      		...with much help from
  */
 
-#ifndef SHADER_H_
-#define SHADER_H_
+#ifndef ARK_GRAPHICS_SHADER_H_
+#define ARK_GRAPHICS_SHADER_H_
 
 
 //#include "../Includes.h"
@@ -43,9 +43,9 @@ namespace ARK {
 		 * http://www.lighthouse3d.com
 		 *
 		 */
-		class ARK2D_API Shader {
+		class ARK2D_API ShaderInternals {
 			public:
-				Shader();
+				ShaderInternals();
 				void addVertexShader(string file);
 				void addFragmentShader(string file);
 				void addVertexShaderFromString(string file);
@@ -53,6 +53,12 @@ namespace ARK {
 				void addVertexShaderFromData(void* data, unsigned int datalength);
 				void addFragmentShaderFromData(void* data, unsigned int datalength);
 				signed int getId();
+
+				void setName(string s) { m_name = s; }
+				string getName() { return m_name; }
+
+				bool hasError() { return m_error; }
+				string getErrorString() { return m_errorString; }
 
 				// getting/setting uniform shader vars -- these don't (can't) change inbetween begin/end calls within the shader.
 				int getUniformVariable(string var); 
@@ -79,8 +85,8 @@ namespace ARK {
 
 				// bind things
 				void bindAttributeLocation(unsigned int loc, string var);
-				//void bindAttributeLocationVertexArray(unsigned int loc, string var);
 				void bindFragmentDataLocation(unsigned int loc, string var);
+				//void bindAttributeLocationVertexArray(unsigned int loc, string var);
 
 				void link();
 				virtual void linkDX();
@@ -88,17 +94,7 @@ namespace ARK {
 				void initVariables(); // do MANUALLY after link to get ARK2D variable references.
 				int getInittedVariable(string s);
 
-				virtual void bind();
-				virtual void predraw(); // set any extra vbos/data prior to drawing.
-				virtual void unbind();
-				
-				virtual ~Shader();
-
-				void setName(string s) { m_name = s; }
-				string getName() { return m_name; }
-
-				bool hasError() { return m_error; }
-				string getErrorString() { return m_errorString; }
+				virtual ~ShaderInternals();
 
 				static string processGLSLForIncludes(string ss);
 
@@ -107,7 +103,7 @@ namespace ARK {
 				unsigned int addShaderFromString(string contents, GLuint type);
 				bool checkShaderCompiled(unsigned int shaderId);
 
-			private:
+			protected:
 				string m_name;
 				signed int m_programId;
 				Vector<int> m_vertexShaders;
@@ -139,7 +135,40 @@ namespace ARK {
 				#endif
 		};
 
+		class Shader : public ShaderInternals {
+			public:
+				
+				// Uniforms
+				unsigned int ark_ModelMatrix;
+				unsigned int ark_ViewMatrix;
+				unsigned int ark_ProjectionMatrix;
+				unsigned int ark_NormalMatrix;
+
+				// Textures? Uhhhhhh....
+				unsigned int ark_TextureId;
+
+				// Attributes/varyings (per-vertex properties)
+				unsigned int ark_VertexPositionIn;
+				unsigned int ark_VertexNormalIn;
+				unsigned int ark_VertexTexCoordIn;
+				unsigned int ark_VertexColorIn;
+
+				// Length of data being used.
+				signed int length;
+
+			public:
+				Shader();
+				virtual void load();
+				virtual void bind();
+				virtual void unbind();
+				virtual void setData(float* verts, float* normals, float* texcoords, unsigned char* colors, unsigned int length);
+				virtual void drawTriangleStrip();
+				virtual void drawTriangleFan();
+				virtual void drawTriangles();
+				virtual ~Shader();
+		};
+
 	}
 }
 
-#endif/* SHADER_H_ */
+#endif /* ARK_GRAPHICS_SHADER_H_ */

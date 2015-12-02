@@ -29,8 +29,7 @@ namespace ARK {
 		Matrix44<float> Transform::toMatrix() {
 			Matrix44<float> m;
 			m.translate(position.getX(), position.getY(), position.getZ());
-    		//m.rotate(float(rotation.w), *rotation.x, *rotation.y, *rotation.z);
-    		//m *= rotation.toMatrix();
+    		m *= rotation.toMatrix();
     		m.scale(scale.getX(), scale.getY(), scale.getZ());
     		return m;
 		}

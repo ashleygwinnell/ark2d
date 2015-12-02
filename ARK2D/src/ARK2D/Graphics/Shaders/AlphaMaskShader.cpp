@@ -20,8 +20,9 @@ namespace ARK {
 			addVertexShader("ark2d/shaders/alphamask/geometry-glsl150-vertex.txt");
 			addFragmentShader("ark2d/shaders/alphamask/geometry-glsl150-fragment.txt");
 
-			bindAttributeLocation(0, "ark_VertexPosition");
-			bindAttributeLocation(1, "ark_VertexColorIn");
+			bindAttributeLocation(0, "ark_VertexPositionIn");
+            bindAttributeLocation(1, "ark_VertexNormalIn");
+			bindAttributeLocation(2, "ark_VertexColorIn");
 			bindFragmentDataLocation(0, "ark_FragColor");
 
 			link(); 
@@ -34,8 +35,10 @@ namespace ARK {
 			_ModelMatrix = getUniformVariable("ark_ModelMatrix");
 			_ViewMatrix = getUniformVariable("ark_ViewMatrix");
 			_ProjectionMatrix = getUniformVariable("ark_ProjectionMatrix");
+            _NormalMatrix = getUniformVariable("ark_NormalMatrix");
 			_VertexPositionIn = 0;
-			_VertexColorIn = 1;
+            _VertexNormalIn = 1;
+            _VertexColorIn = 2;
 
 			RendererState::start(RendererState::GEOMETRY);
 		}
@@ -66,29 +69,11 @@ namespace ARK {
 			stopInternal();
 		}
 		void AlphaMaskGeometryShader::startInternal() {
-			RendererState::start(RendererState::NONE);
-			m_shaderBasicGeometry 					= Renderer::s_shaderBasicGeometry;
-			m_shaderBasicGeometry_ModelMatrix		= Renderer::s_shaderBasicGeometry_ModelMatrix;
-			m_shaderBasicGeometry_ViewMatrix		= Renderer::s_shaderBasicGeometry_ViewMatrix;
-			m_shaderBasicGeometry_ProjectionMatrix 	= Renderer::s_shaderBasicGeometry_ProjectionMatrix;
-			m_shaderBasicGeometry_VertexPositionIn 	= Renderer::s_shaderBasicGeometry_VertexPosition;
-			m_shaderBasicGeometry_VertexColorIn 	= Renderer::s_shaderBasicGeometry_VertexColorIn;
-
-			Renderer::s_shaderBasicGeometry 					= this;
-			Renderer::s_shaderBasicGeometry_ModelMatrix 		= _ModelMatrix;
-			Renderer::s_shaderBasicGeometry_ViewMatrix 			= _ViewMatrix;
-			Renderer::s_shaderBasicGeometry_ProjectionMatrix 	= _ProjectionMatrix;
-			Renderer::s_shaderBasicGeometry_VertexPosition		= _VertexPositionIn;
-			Renderer::s_shaderBasicGeometry_VertexColorIn 		= _VertexColorIn;
-		}
+			m_shaderBasicGeometry = Renderer::s_shaderBasicGeometry;
+            Renderer::s_shaderBasicGeometry = this;
+        }
 		void AlphaMaskGeometryShader::stopInternal() {
-			Renderer::s_shaderBasicGeometry 					= m_shaderBasicGeometry;
-			Renderer::s_shaderBasicGeometry_ModelMatrix 		= m_shaderBasicGeometry_ModelMatrix;
-			Renderer::s_shaderBasicGeometry_ViewMatrix 			= m_shaderBasicGeometry_ViewMatrix;
-			Renderer::s_shaderBasicGeometry_ProjectionMatrix 	= m_shaderBasicGeometry_ProjectionMatrix;
-			Renderer::s_shaderBasicGeometry_VertexPosition		= m_shaderBasicGeometry_VertexPositionIn;
-			Renderer::s_shaderBasicGeometry_VertexColorIn 		= m_shaderBasicGeometry_VertexColorIn;
-			RendererState::start(RendererState::NONE);
+			Renderer::s_shaderBasicGeometry = m_shaderBasicGeometry;
 		}
 		AlphaMaskGeometryShader::~AlphaMaskGeometryShader() {
 
@@ -107,9 +92,10 @@ namespace ARK {
 			addFragmentShader("ark2d/shaders/alphamask/texture-glsl150-fragment.txt");
 
 			bindAttributeLocation(0, "ark_TextureId");
-			bindAttributeLocation(1, "ark_VertexPosition");
-			bindAttributeLocation(2, "ark_VertexTexCoordIn");
-			bindAttributeLocation(3, "ark_VertexColorIn");
+			bindAttributeLocation(1, "ark_VertexPositionIn");
+            bindAttributeLocation(2, "ark_VertexNormalIn");
+			bindAttributeLocation(3, "ark_VertexTexCoordIn");
+			bindAttributeLocation(4, "ark_VertexColorIn");
 			bindFragmentDataLocation(0, "ark_FragColor");
 			link(); 
 			linkDX(); 
@@ -121,11 +107,13 @@ namespace ARK {
 			_ModelMatrix = getUniformVariable("ark_ModelMatrix");
 			_ViewMatrix = getUniformVariable("ark_ViewMatrix");
 			_ProjectionMatrix = getUniformVariable("ark_ProjectionMatrix");
+            _NormalMatrix = getUniformVariable("ark_NormalMatrix");
 			
 			_TextureId = getUniformVariable("ark_TextureId");
 			_VertexPositionIn = 1;
-			_VertexTexCoordIn = 2;
-			_VertexColorIn = 3;
+            _VertexNormalIn = 2;
+			_VertexTexCoordIn = 3;
+			_VertexColorIn = 4;
 
 			RendererState::start(RendererState::GEOMETRY);
 		}
@@ -156,35 +144,11 @@ namespace ARK {
 			stopInternal();
 		}
 		void AlphaMaskTextureShader::startInternal() {
-			RendererState::start(RendererState::NONE);
-			m_shaderBasicTexture 					= Renderer::s_shaderBasicTexture;
-			m_shaderBasicTexture_ModelMatrix		= Renderer::s_shaderBasicTexture_ModelMatrix;
-			m_shaderBasicTexture_ViewMatrix			= Renderer::s_shaderBasicTexture_ViewMatrix;
-			m_shaderBasicTexture_ProjectionMatrix 	= Renderer::s_shaderBasicTexture_ProjectionMatrix;
-			m_shaderBasicTexture_VertexPositionIn 	= Renderer::s_shaderBasicTexture_VertexPosition;
-			m_shaderBasicTexture_VertexTexCoordIn 	= Renderer::s_shaderBasicTexture_VertexTexCoordIn;
-			m_shaderBasicTexture_VertexColorIn 		= Renderer::s_shaderBasicTexture_VertexColorIn;
-			m_shaderBasicTexture_TextureId 			= Renderer::s_shaderBasicTexture_TextureId;
-
-			Renderer::s_shaderBasicTexture 					= this;
-			Renderer::s_shaderBasicTexture_ModelMatrix 		= _ModelMatrix;
-			Renderer::s_shaderBasicTexture_ViewMatrix 		= _ViewMatrix;
-			Renderer::s_shaderBasicTexture_ProjectionMatrix = _ProjectionMatrix;
-			Renderer::s_shaderBasicTexture_VertexPosition	= _VertexPositionIn;
-			Renderer::s_shaderBasicTexture_VertexTexCoordIn = _VertexTexCoordIn;
-			Renderer::s_shaderBasicTexture_VertexColorIn 	= _VertexColorIn;
-			Renderer::s_shaderBasicTexture_TextureId 		= _TextureId;
+			m_shaderBasicTexture = Renderer::s_shaderBasicTexture;
+			Renderer::s_shaderBasicTexture = this;
 		}
 		void AlphaMaskTextureShader::stopInternal() {
-			Renderer::s_shaderBasicTexture 					= m_shaderBasicTexture;
-			Renderer::s_shaderBasicTexture_ModelMatrix 		= m_shaderBasicTexture_ModelMatrix;
-			Renderer::s_shaderBasicTexture_ViewMatrix 		= m_shaderBasicTexture_ViewMatrix;
-			Renderer::s_shaderBasicTexture_ProjectionMatrix = m_shaderBasicTexture_ProjectionMatrix;
-			Renderer::s_shaderBasicTexture_VertexPosition	= m_shaderBasicTexture_VertexPositionIn;
-			Renderer::s_shaderBasicTexture_VertexTexCoordIn = m_shaderBasicTexture_VertexTexCoordIn;
-			Renderer::s_shaderBasicTexture_VertexColorIn 	= m_shaderBasicTexture_VertexColorIn;
-			Renderer::s_shaderBasicTexture_TextureId 		= m_shaderBasicTexture_TextureId;
-			RendererState::start(RendererState::NONE);
+			Renderer::s_shaderBasicTexture = m_shaderBasicTexture;
 		}
 		AlphaMaskTextureShader::~AlphaMaskTextureShader() {
 

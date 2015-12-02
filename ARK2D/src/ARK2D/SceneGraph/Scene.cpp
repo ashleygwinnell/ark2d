@@ -354,7 +354,7 @@ namespace ARK {
 		}
 		void SceneNode::render() {
 			if (!visible) { return; }
-			ARK2D::getLog()->v(string("Renderering: ") + name);
+			// ARK2D::getLog()->v(string("Renderering: ") + name);
 			renderChildren();
 		}
 		void SceneNode::renderChildren() {

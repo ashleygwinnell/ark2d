@@ -3,9 +3,12 @@
 uniform mat4 ark_ModelMatrix;
 uniform mat4 ark_ViewMatrix;
 uniform mat4 ark_ProjectionMatrix;
+
+uniform mat3 ark_NormalMatrix;
 						
-in vec4 ark_VertexPosition;
+in vec4 ark_VertexPositionIn;
 in vec2 ark_VertexTexCoordIn;
+in vec4 ark_VertexNormalIn;
 in vec4 ark_VertexColorIn;
 						
 out vec2 ark_VertexTexCoordOut;
@@ -15,5 +18,5 @@ void main(void)
 {
 	ark_VertexTexCoordOut = ark_VertexTexCoordIn;
 	ark_VertexColorOut = ark_VertexColorIn;
-	gl_Position = ark_ProjectionMatrix * ark_ViewMatrix * ark_ModelMatrix * ark_VertexPosition;
+	gl_Position = ark_ProjectionMatrix * ark_ViewMatrix * ark_ModelMatrix * ark_VertexPositionIn;
 }

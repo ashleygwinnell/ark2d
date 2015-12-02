@@ -1,12 +1,12 @@
 /*
- * HSVShader.h
+ * BasicShader.h
  *
- *  Created on: 4 May 2015
+ *  Created on: 1 Dec 2015
  *      Author: Ashley
  */
 
-#ifndef ARK_GRAPHICS_SHADERS_HSVSHADER_H_
-#define ARK_GRAPHICS_SHADERS_HSVSHADER_H_
+#ifndef ARK_GRAPHICS_SHADERS_BASICSHADER_H_
+#define ARK_GRAPHICS_SHADERS_BASICSHADER_H_
 
 #include "../../ARK2D.h"
 #include "../Shader.h"
@@ -14,21 +14,16 @@
 namespace ARK { 
 	namespace Graphics { 
 
-		class ARK2D_API HSVGeometryShader : public ARK::Graphics::Shader 
-		{ 
+		class ARK2D_API BasicGeometryShader : public Shader {
 			public:
 				unsigned int _ModelMatrix;
 				unsigned int _ViewMatrix;
 				unsigned int _ProjectionMatrix;
-				unsigned int _NormalMatrix;
-				unsigned int _HSVIn;
-
+                unsigned int _NormalMatrix;
 				unsigned int _VertexPositionIn;
-				unsigned int _VertexNormalIn;
+                unsigned int _VertexNormalIn;
 				unsigned int _VertexColorIn;
 				
-				Shader* m_shaderBasicGeometry;
-				QuadVBO* m_vbo; 
 				unsigned int m_shaderBasicGeometry_ModelMatrix;
 				unsigned int m_shaderBasicGeometry_ViewMatrix;
 				unsigned int m_shaderBasicGeometry_ProjectionMatrix;
@@ -37,39 +32,23 @@ namespace ARK {
 				unsigned int m_shaderBasicGeometry_VertexNormalIn;
 				unsigned int m_shaderBasicGeometry_VertexColorIn;
 
-				float h;
-				float s;
-				float v;
-				
-			public:
-				HSVGeometryShader();  
+				BasicGeometryShader();  
 				void load();
-				virtual void bind();
-				virtual void unbind();
-
-				void start();
-				void stop();
-				virtual ~HSVGeometryShader();
+				virtual ~BasicGeometryShader();
 		};
-		
-		class ARK2D_API HSVTextureShader : public ARK::Graphics::Shader 
-		{ 
+		class ARK2D_API BasicTextureShader : public Shader {
 			public:
 				unsigned int _ModelMatrix;
 				unsigned int _ViewMatrix;
 				unsigned int _ProjectionMatrix;
 				unsigned int _NormalMatrix;
-				unsigned int _TextureId;
-				unsigned int _HSVIn;
 
+				unsigned int _TextureId;
 				unsigned int _VertexPositionIn;
 				unsigned int _VertexNormalIn;
 				unsigned int _VertexTexCoordIn;
 				unsigned int _VertexColorIn;
-
-				Shader* m_shaderBasicTexture;
-				QuadVBO* m_vbo; 
-				unsigned int m_shaderBasicTexture_TextureId;
+				
 				unsigned int m_shaderBasicTexture_ModelMatrix;
 				unsigned int m_shaderBasicTexture_ViewMatrix;
 				unsigned int m_shaderBasicTexture_ProjectionMatrix;
@@ -78,39 +57,27 @@ namespace ARK {
 				unsigned int m_shaderBasicTexture_VertexNormalIn;
 				unsigned int m_shaderBasicTexture_VertexTexCoordIn;
 				unsigned int m_shaderBasicTexture_VertexColorIn;
+				unsigned int m_shaderBasicTexture_TextureId;
 
-				float h;
-				float s;
-				float v;
-				
-			public:
-				HSVTextureShader();  
+				BasicTextureShader();  
 				void load();
-				virtual void bind();
-				virtual void unbind();
-
 				void start();
 				void stop();
-				virtual ~HSVTextureShader();
+				void startInternal();
+				void stopInternal();
+				virtual ~BasicTextureShader();
 		};
-
-		class ARK2D_API HSVShader
-		{ 
-			HSVGeometryShader* geometry;
-			HSVTextureShader* texture;
+		class ARK2D_API BasicShader {
+			public:
+				BasicGeometryShader* geometry;
+				BasicTextureShader* texture;
 				
 			public:
-				HSVShader();
+				BasicShader();
 				void load();
-				void set(float h, float s, float v);
-				float getH();
-				float getS();
-				float getV();
-				void start();
-				void stop();
-				virtual ~HSVShader();
+				virtual ~BasicShader();
 		};
 	}
 }
 
-#endif /* ARK_GRAPHICS_SHADERS_HSVSHADER_H_ */
+#endif

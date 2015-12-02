@@ -364,7 +364,7 @@ asIScriptEngine* AngelScriptUtil::getEngine() {
 		r = s_engine->RegisterObjectMethod("Renderer", "void scale(float x, float y, float z)", asMETHODPR(Renderer, scale, (float, float ,float) const, void), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Renderer", "void rotate(float degrees)", asMETHODPR(Renderer, rotate, (float) const, void), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Renderer", "void fillRect(float x, float y, int width, int height)", asMETHODPR(Renderer, fillRect, (float, float, float, int, int) const, void), asCALL_THISCALL); assert( r >= 0 );
-		r = s_engine->RegisterObjectMethod("Renderer", "void fillCircle(float x, float y, int radius, int points)", asMETHOD(Renderer,fillCircle), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("Renderer", "void fillCircle(float x, float y, int radius, int points)", asMETHODPR(Renderer,fillCircle, (float, float, int, int) const, void), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Renderer", "void drawLine(float x1, float y1, float x2, float y2)", asMETHODPR(Renderer, drawLine, (float, float, float, float) const, void), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Renderer", "void setDrawColor(float r, float g, float b, float a)", asMETHODPR(Renderer, setDrawColorf, (float, float, float, float), void), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Renderer", "void setDrawColor(string hex)", asMETHODPR(Renderer, setDrawColor, (string), void), asCALL_THISCALL); assert( r >= 0 );

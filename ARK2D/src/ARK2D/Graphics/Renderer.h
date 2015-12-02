@@ -63,8 +63,8 @@ namespace ARK {
 				static int s_multitextureId0;
 				static int s_multitextureId1;
 
-				static void start(int renderMode);
-				static void start(int renderMode, int textureId);
+				static Shader* start(int renderMode);
+				static Shader* start(int renderMode, int textureId);
 				//static void start(int renderMode, int textureId, int textureId2);
 				//static void start(int renderMode, Shader* s);
 
@@ -159,7 +159,13 @@ namespace ARK {
 				Mat44VBO();
 				void setData(float* data);
 				void bind();
-		}; 
+		};
+        class ARK2D_API Mat33VBO : public VBO {
+            public:
+                Mat33VBO();
+                void setData(float* data);
+                void bind();
+        };
 
 		class ARK2D_API VAO {
 			public:
@@ -183,12 +189,14 @@ namespace ARK {
 		class ARK2D_API RendererBatchItem_GeomTri {
 			public:
 				float vertexData[9];
+				float normalData[9];
 				unsigned char colorData[12];
 				RendererBatchItem_GeomTri();
 		};
 		class ARK2D_API RendererBatchItem_TexTri {
 			public:
 				float vertexData[9];
+				float normalData[9];
 				float textureData[6];
 				unsigned char colorData[12];
 				RendererBatchItem_TexTri();
@@ -243,11 +251,14 @@ namespace ARK {
 				inline bool isEnabled() { return enabled; }
 				void setEnabled(bool b, bool fromSceneGraph = false);
 
-				void addGeometryTri(float* verts, unsigned char* colors);
+				void addGeometryTri(float* verts, float* normals, unsigned char* colors);
 				void addGeometryTri(
 					float x1, float y1, float z1,
 					float x2, float y2, float z2,
 					float x3, float y3, float z3,
+					float nx1, float ny1, float nz1,
+					float nx2, float ny2, float nz2,
+					float nx3, float ny3, float nz3,
 					unsigned char c1r, unsigned char c1g, unsigned char c1b, unsigned char c1a,
 					unsigned char c2r, unsigned char c2g, unsigned char c2b, unsigned char c2a,
 					unsigned char c3r, unsigned char c3g, unsigned char c3b, unsigned char c3a
@@ -257,29 +268,40 @@ namespace ARK {
 					float x2, float y2, float z2,
 					float x3, float y3, float z3,
 					float x4, float y4, float z4,
+					float nx1, float ny1, float nz1,
+					float nx2, float ny2, float nz2,
+					float nx3, float ny3, float nz3,
+					float nx4, float ny4, float nz4,
 					unsigned char c1r, unsigned char c1g, unsigned char c1b, unsigned char c1a,
 					unsigned char c2r, unsigned char c2g, unsigned char c2b, unsigned char c2a,
 					unsigned char c3r, unsigned char c3g, unsigned char c3b, unsigned char c3a,
 					unsigned char c4r, unsigned char c4g, unsigned char c4b, unsigned char c4a);
 				
-				void addTexturedTri(unsigned int texId, float* verts, float* texcoords, unsigned char* colors);
+				void addTexturedTri(unsigned int texId, float* verts, float* normals, float* texcoords, unsigned char* colors);
 				void addTexturedTri(
 					unsigned int texId, 
 					float x1, float y1, float z1,
 					float x2, float y2, float z2,
 					float x3, float y3, float z3,
+					float nx1, float ny1, float nz1,
+					float nx2, float ny2, float nz2,
+					float nx3, float ny3, float nz3,
 					float tx1, float ty1, float tx2, float ty2, float tx3, float ty3,
 					unsigned char c1r, unsigned char c1g, unsigned char c1b, unsigned char c1a,
 					unsigned char c2r, unsigned char c2g, unsigned char c2b, unsigned char c2a,
 					unsigned char c3r, unsigned char c3g, unsigned char c3b, unsigned char c3a);
 
-				void addTexturedQuad(unsigned int texId, float* verts, float* texcoords, unsigned char* colors);
+				void addTexturedQuad(unsigned int texId, float* verts, float* normals, float* texcoords, unsigned char* colors);
 				void addTexturedQuad(
 					unsigned int texId, 
 					float x1, float y1, float z1,
 					float x2, float y2, float z2,
 					float x3, float y3, float z3,
 					float x4, float y4, float z4,
+					float nx1, float ny1, float nz1,
+					float nx2, float ny2, float nz2,
+					float nx3, float ny3, float nz3,
+					float nx4, float ny4, float nz4,
 					float tx1, float ty1, float tx2, float ty2, float tx3, float ty3, float tx4, float ty4,
 					unsigned char c1r, unsigned char c1g, unsigned char c1b, unsigned char c1a,
 					unsigned char c2r, unsigned char c2g, unsigned char c2b, unsigned char c2a,
@@ -393,11 +415,13 @@ namespace ARK {
 				static MatrixStack* s_matrixProjection;
 				static MatrixStack* s_matrixView;
 				static MatrixStack* s_matrixModel;
+				static Matrix33<float>* s_matrixNormal;
 			public:
 				static MatrixStack* getMatrix();
 				static MatrixStack* getMatrix(unsigned int type);
 				static void multiplyMatrix(Matrix44<float>* by);
 				static void matrixMode(unsigned int mode);
+				static Matrix33<float>* getNormalMatrix();
 
 			#if defined (ARK2D_RENDERER_DIRECTX)
 				static ID3D11Buffer* s_d3d_matrixBuffer;
@@ -412,32 +436,22 @@ namespace ARK {
 				static Shader* getShader();
 				
 				static Shader* s_shaderBasicGeometry;
-				static unsigned int s_shaderBasicGeometry_ModelMatrix;
-				static unsigned int s_shaderBasicGeometry_ViewMatrix;
-				static unsigned int s_shaderBasicGeometry_ProjectionMatrix;
-				static unsigned int s_shaderBasicGeometry_VertexPosition;
-				static unsigned int s_shaderBasicGeometry_VertexColorIn;
-				static Shader* getBasicGeometryShader();
-				
-				
 				static Shader* s_shaderBasicTexture;
-				static unsigned int s_shaderBasicTexture_ModelMatrix;
-				static unsigned int s_shaderBasicTexture_ViewMatrix;
-				static unsigned int s_shaderBasicTexture_ProjectionMatrix;
-				static unsigned int s_shaderBasicTexture_VertexPosition;
-				static unsigned int s_shaderBasicTexture_VertexColorIn;
-				static unsigned int s_shaderBasicTexture_VertexTexCoordIn;
-				static unsigned int s_shaderBasicTexture_TextureId;
+				static Shader* s_shaderBasicGeometryDefault;
+				static Shader* s_shaderBasicTextureDefault;
+				static Shader* getBasicGeometryShader();
 				static Shader* getBasicTextureShader();
-				
+				static void resetBasicShaders();
 
 			// VBO bits
 			public:
 				static Mat44VBO* s_vboMatrixProjection;
 				static Mat44VBO* s_vboMatrixView;
 				static Mat44VBO* s_vboMatrixModel;
+                static Mat33VBO* s_vboMatrixNormal;
 				static QuadVBO* s_vboQuadVerts;
 				static QuadVBO* s_vboQuadTexCoords;
+				static QuadVBO* s_vboQuadNormals;
 				static QuadVBO* s_vboQuadColors;
 				static VBO* s_vboIndices;
 				static VAO* s_vaoQuad;
@@ -569,10 +583,10 @@ namespace ARK {
 				void fillQuad(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4) const;
 				void texturedQuad(unsigned int texId, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, float tx1, float ty1, float tx2, float ty2, float tx3, float ty3, float tx4, float ty4);
 				void texturedQuad(unsigned int texId, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4, float tx1, float ty1, float tx2, float ty2, float tx3, float ty3, float tx4, float ty4);
-				void texturedQuads(unsigned int texId, float* verts, float* texcoords, unsigned char* colors, unsigned int count);
+				void texturedQuads(unsigned int texId, float* verts, float* normals, float* texcoords, unsigned char* colors, unsigned int count);
 
-				void fillTriangles(float* verts, unsigned char* colors, unsigned int count, bool fromBatch=false);
-				void texturedTriangles(unsigned int texId, float* verts, float* texcoords, unsigned char* colors, unsigned int count, bool fromBatch=false);
+				void fillTriangles(float* verts, float* normals, unsigned char* colors, unsigned int count, bool fromBatch=false);
+				void texturedTriangles(unsigned int texId, float* verts, float* normals, float* texcoords, unsigned char* colors, unsigned int count, bool fromBatch=false);
 
 				void fillTriangle(int x, int y, int width, int height) const;
 				void fillTriangle(float x1, float y1, float x2, float y2, float x3, float y3) const;
@@ -585,9 +599,13 @@ namespace ARK {
 				void drawCircle(ARK::Geometry::Circle<float>* circle);
 				void drawCircle(float x, float y, int radius);
 				void drawCircle(float x, float y, int radius, int points);
+				void drawCircle(float x, float y, float z, int radius, int points);
+
 				void fillCircle(float x, float y, int radius, int points) const;
+				void fillCircle(float x, float y, float z, int radius, int points) const;
 
 				void fillEllipse(float x, float y, float rx, float ry) const;
+				void fillEllipse(float x, float y, float z, float rx, float ry) const;
 
 				void drawCircleSpikey(float x, float y, int radius, int points) const;
 				void fillCircleSpikey(float x, float y, int radius, int points) const;

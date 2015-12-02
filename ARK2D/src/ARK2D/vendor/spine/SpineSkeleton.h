@@ -65,6 +65,7 @@ namespace ARK {
 
 				float m_x;
 				float m_y;
+				float m_z;
 
 				vector<SpineCallback*> m_callbacks;
 				bool m_invokingCallbacks;
@@ -119,9 +120,11 @@ namespace ARK {
 
 				float getX();
 				float getY();
+				float getZ();
 				
 				void setY(float y);
 				void setLocation(float x, float y);
+				void setLocation(float x, float y, float z);
 				//void setLocation(float x, float y, string bone);
 				void setScale(float x, float y);
 

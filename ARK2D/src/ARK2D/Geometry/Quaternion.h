@@ -98,20 +98,24 @@ class Quaternion {
 		}
 		Vector3<T> toEuler() {
 			Vector3<T> ret;
-			ret.m_x = atan2(2*y*w - 2*x*z, 1 - 2*y*y - 2*z*z);
- 			ret.m_y = atan2(2*x*w - 2*y*z, 1 - 2*x*x - 2*z*z);
- 			ret.m_z = asin(2*x*y + 2*z*w);
+			ret.x = atan2(2*y*w - 2*x*z, 1 - 2*y*y - 2*z*z);
+ 			ret.y = atan2(2*x*w - 2*y*z, 1 - 2*x*x - 2*z*z);
+ 			ret.z = asin(2*x*y + 2*z*w);
  			return ret;
 		}
 
+        // angle in degrees
 		T angle() {
-			return 2 * acos(w);
+            return angleRadians() * (180.0/QUAT_PI);
 		}
+        T angleRadians() {
+            return 2 * acos(w);
+        }
 		Vector3<T> axis() {
 			Vector3<T> ret;
-			ret.m_x = x / sqrt(1-w*w);
-			ret.m_y = y / sqrt(1-w*w);
-			ret.m_z = z / sqrt(1-w*w);
+			ret.x = x / sqrt(1-w*w);
+			ret.y = y / sqrt(1-w*w);
+			ret.z = z / sqrt(1-w*w);
 			return ret;
 		}
 

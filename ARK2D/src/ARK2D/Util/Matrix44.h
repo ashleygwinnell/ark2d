@@ -53,6 +53,9 @@ namespace ARK {
 					z = &col[2];
 				}
 				Matrix33(Matrix44<T>& mat44): col() {
+					set(mat44);
+				}
+				void set(Matrix44<T>& mat44) {
 					col[0][0] = mat44[0][0];
 					col[0][1] = mat44[0][1];
 					col[0][2] = mat44[0][2];
