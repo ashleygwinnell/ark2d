@@ -10,7 +10,7 @@
 #include "../Util/Log.h"
 
 #include <string>
-using namespace std;
+//using namespace std;
 
 namespace ARK {
 	namespace Graphics {
@@ -51,8 +51,8 @@ namespace ARK {
 			map<unsigned int, Shader*>::iterator it;
 			for (it = m_map.begin(); it != m_map.end(); it++) 
 			{
-				string s = it->second->getName();
-				s += string(" is shader id: ");
+				std::string s = it->second->getName();
+				s += std::string(" is shader id: ");
 				s += Cast::toString<unsigned int>(it->second->getId());
 				ARK2D::getLog()->v(s);
 			}

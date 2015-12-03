@@ -178,8 +178,8 @@ namespace ARK {
 				else if (renderMode == SHADER) { startShader(textureId); }
 			 #else */
 			if (renderMode == NONE) { startNone(); }
-			else if (renderMode == GEOMETRY && (renderMode != s_renderMode || s_renderMode == 0)) { startGeometry(); }
-			else if (renderMode == TEXTURE && (textureId != s_textureId || s_textureId == 0)) { startTexture(textureId); }
+            else if (renderMode == GEOMETRY && (renderMode != s_renderMode || s_renderMode == 0 || Renderer::s_shaderBasicGeometry->getId() != s_shaderId)) { startGeometry(); }
+			else if (renderMode == TEXTURE && (textureId != s_textureId || s_textureId == 0 || Renderer::s_shaderBasicTexture->getId() != s_shaderId)) { startTexture(textureId); }
 			else if (renderMode == SHADER && (textureId != s_shaderId || s_shaderId == 0)) { startShader(textureId); }
 			//	else if (renderMode == MULTITEXTURE && (textureId != s_multitextureId0 || s_multitextureId0 == 0 || textureId2 != s_multitextureId1 || s_multitextureId1 == 0)) { startMultitexture(textureId, textureId2); }
 			//#endif
@@ -316,10 +316,10 @@ namespace ARK {
 					s_shaderId = Renderer::s_shaderBasicTexture->getId();
 
 					#if defined(ARK2D_OPENGL_ES_2_0)
-						glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexPositionIn);
-						glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexNormalIn);
-						glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexTexCoordIn);
-						glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexColorIn);
+						//glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexPositionIn);
+						//glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexNormalIn);
+						//glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexTexCoordIn);
+						//glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexColorIn);
 						RendererStats::s_glCalls += 3;
 					#endif
 				#endif
@@ -1526,6 +1526,14 @@ namespace ARK {
 		Shader* Renderer::s_shaderBasicTextureDefault = NULL;
 		Shader* Renderer::getBasicTextureShader() {
 			return s_shaderBasicTexture;  
+		}
+		void Renderer::overrideBasicShaders(Shader* geometry, Shader* texture) {
+			if (geometry != NULL) {
+				s_shaderBasicGeometry = geometry;
+			}
+			if (texture != NULL) {
+				s_shaderBasicTexture = texture;
+			}
 		}
 		void Renderer::resetBasicShaders() {
 			s_shaderBasicGeometry = s_shaderBasicGeometryDefault;

@@ -1,0 +1,22 @@
+#version 130
+
+uniform mat4 ark_ProjectionMatrix; 
+uniform mat4 ark_ViewMatrix;
+uniform mat4 ark_ModelMatrix;
+
+uniform mat3 ark_NormalMatrix;
+
+in vec3 ark_VertexPositionIn;
+in vec3 ark_VertexNormalIn;
+in vec4 ark_VertexColorIn;
+
+out vec3 ark_VertexNormal;
+out vec4 ark_VertexColor;
+
+void main()
+{
+	ark_VertexNormal = ark_NormalMatrix * ark_VertexNormalIn;
+	ark_VertexColor = ark_VertexColorIn;
+
+	gl_Position = ark_ProjectionMatrix * ark_ViewMatrix * ark_ModelMatrix * vec4(ark_VertexPositionIn, 1.0);
+}

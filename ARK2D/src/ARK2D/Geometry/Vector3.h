@@ -62,6 +62,9 @@ namespace ARK {
 				void set(Vector3<T>* v) {
 					set(v->getX(), v->getY(), v->getZ());
 				}
+                void set(const Vector3<T>& v) {
+                    set(v.x, v.y, v.z);
+                }
 				void set(T lx, T ly, T lz) {
 					x = lx;
 					y = ly;
@@ -270,6 +273,13 @@ namespace ARK {
 						z * lx - x * lz, 
 						x * ly - y * lx);
 				}
+                static Vector3<T> cross(const Vector3<T>& lhs, const Vector3<T>& rhs) {
+                    return Vector3<T>(
+                        lhs.y * rhs.z - lhs.z * rhs.y,
+                        lhs.z * rhs.x - lhs.x * rhs.z,
+                        lhs.x * rhs.y - lhs.y * rhs.x
+                    );
+                }
 
 				T lengthSquared() const {
 					return (x*x) + (y * y) + (z * z);

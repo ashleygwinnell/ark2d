@@ -1,0 +1,31 @@
+#version 330
+
+uniform mat4 ark_ProjectionMatrix; 
+uniform mat4 ark_ViewMatrix;
+uniform mat4 ark_ModelMatrix;
+
+uniform mat3 ark_NormalMatrix;
+
+layout (location = 0) in vec3 ark_VertexPositionIn;
+layout (location = 1) in vec3 ark_VertexNormalIn;
+layout (location = 2) in vec4 ark_VertexColorIn;
+
+smooth out vec3 ark_VertexNormal;
+smooth out vec4 ark_VertexColor;
+smooth out vec3 u_eyeSpacePos;
+smooth out vec3 u_worldPos;
+
+void main()
+{
+	vec4 eyeSpacePosVertex = ark_ViewMatrix * ark_ModelMatrix * vec4(ark_VertexPositionIn, 1.0);
+	u_eyeSpacePos = eyeSpacePosVertex.xyz;
+
+	// ark_VertexNormal = ark_NormalMatrix * ark_VertexNormalIn;
+	ark_VertexNormal = ark_VertexNormalIn;
+	ark_VertexColor = ark_VertexColorIn;
+
+	vec4 worldPosVertex = ark_ModelMatrix * vec4(ark_VertexPositionIn, 1.0);
+	u_worldPos = worldPosVertex.xyz;
+
+	gl_Position = ark_ProjectionMatrix * eyeSpacePosVertex;
+}

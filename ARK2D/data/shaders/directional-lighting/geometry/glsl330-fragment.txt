@@ -1,0 +1,18 @@
+#version 330
+
+#include "ark2d/shaders/directional-lighting/header.h"
+
+uniform mat4 ark_ModelMatrix;
+uniform DirectionalLight u_sunlight;
+
+uniform mat3 ark_NormalMatrix;
+
+smooth in vec3 ark_VertexNormal;
+smooth in vec4 ark_VertexColor;
+
+out vec4 ark_FragColor; 
+
+void main()
+{
+	 ark_FragColor = ark_VertexColor * getDirectionalLightColor(u_sunlight, ark_VertexNormal);
+}

@@ -1,0 +1,26 @@
+#version 330
+
+#include "ark2d/shaders/directional-lighting/header.h"
+#include "ark2d/shaders/point-lighting/header.h"
+ 
+uniform DirectionalLight u_sunlight;
+uniform PointLight u_pointlight;
+
+uniform mat3 ark_NormalMatrix;
+
+uniform sampler2D ark_TextureId;
+
+smooth in vec3 ark_VertexNormal;
+smooth in vec2 ark_VertexTexCoord;
+smooth in vec4 ark_VertexColor;
+smooth in vec3 u_eyeSpacePos;
+smooth in vec3 u_worldPos;
+
+out vec4 ark_FragColor; 
+
+void main() 
+{
+	vec3 normalized = normalize(ark_NormalMatrix * ark_VertexNormal);
+	vec4 pointLightColor = getDirectionalLightColor(u_sunlight, ark_VertexNormal) + getPointLightColor(u_pointlight, u_worldPos, normalized);
+	ark_FragColor = texture(ark_TextureId, ark_VertexTexCoord) * ark_VertexColor * pointLightColor;
+}

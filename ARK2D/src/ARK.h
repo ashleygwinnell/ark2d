@@ -78,6 +78,8 @@
 #include "ARK2D/Graphics/Shaders/AlphaMaskShader.h"
 #include "ARK2D/Graphics/Shaders/HSVShader.h"
 #include "ARK2D/Graphics/Shaders/StencilShader.h"
+#include "ARK2D/Graphics/Shaders/DirectionalLightingShader.h"
+#include "ARK2D/Graphics/Shaders/PointLightingShader.h"
 #include "ARK2D/Graphics/Skybox.h"
 
 // Math

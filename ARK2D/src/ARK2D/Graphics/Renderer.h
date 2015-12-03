@@ -435,12 +435,14 @@ namespace ARK {
 				static Shader* s_shaderCurrent;
 				static Shader* getShader();
 				
+				
 				static Shader* s_shaderBasicGeometry;
 				static Shader* s_shaderBasicTexture;
 				static Shader* s_shaderBasicGeometryDefault;
 				static Shader* s_shaderBasicTextureDefault;
 				static Shader* getBasicGeometryShader();
 				static Shader* getBasicTextureShader();
+				static void overrideBasicShaders(Shader* geometry, Shader* texture);
 				static void resetBasicShaders();
 
 			// VBO bits

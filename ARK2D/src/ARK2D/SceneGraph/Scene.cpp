@@ -336,7 +336,7 @@ namespace ARK {
 			ARK::Geometry::Cube* bounds = getBounds();
 			Renderer* r = ARK2D::getRenderer();
 			r->pushMatrix();
-			r->translate(pivot.getX() * bounds->getWidth() * -1.0f, pivot.getY() * bounds->getHeight() * -1.0f, pivot.getZ() * bounds->getDepth() * -1.0f);
+			r->translate(pivot.getX() * bounds->getWidth() * -1.0f, pivot.getY() * bounds->getHeight() * -1.0f, pivot.getZ() * bounds->getDepth());
 		}
 		void SceneNode::postRenderFromPivot() {
 			ARK::Geometry::Cube* bounds = getBounds();

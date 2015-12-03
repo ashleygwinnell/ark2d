@@ -793,6 +793,8 @@ namespace ARK {
 				RendererStats::s_glCalls += 10;
 
 				if (rawTexCoords != NULL) {
+					//glActiveTexture(GL_TEXTURE0);	
+					//glBindTexture(GL_TEXTURE_2D, dg->m_clouds->getTexture()->getId());
 					glUniform1i(ark_TextureId, 0); 
 				}
 

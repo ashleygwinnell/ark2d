@@ -8,7 +8,7 @@ uniform mat3 ark_NormalMatrix;
 						
 in vec4 ark_VertexPositionIn;
 in vec2 ark_VertexTexCoordIn;
-in vec3 ark_VertexNormalIn;
+in vec4 ark_VertexNormalIn;
 in vec4 ark_VertexColorIn;
 						
 out vec2 ark_VertexTexCoordOut;

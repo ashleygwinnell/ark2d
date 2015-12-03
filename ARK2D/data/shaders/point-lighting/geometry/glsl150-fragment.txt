@@ -1,0 +1,23 @@
+#version 150
+
+#include "ark2d/shaders/directional-lighting/header.h"
+#include "ark2d/shaders/point-lighting/header.h"
+ 
+uniform DirectionalLight u_sunlight;
+uniform PointLight u_pointlight;
+
+uniform mat3 ark_NormalMatrix;
+
+in vec3 ark_VertexNormal;
+in vec4 ark_VertexColor;
+in vec3 u_eyeSpacePos;
+in vec3 u_worldPos;
+
+out vec4 ark_FragColor; 
+
+void main() 
+{
+	vec3 normalized = normalize(ark_NormalMatrix * ark_VertexNormal);
+	vec4 pointLightColor = getDirectionalLightColor(u_sunlight, ark_VertexNormal) + getPointLightColor(u_pointlight, u_worldPos, normalized);
+	ark_FragColor = ark_VertexColor * pointLightColor;
+}
