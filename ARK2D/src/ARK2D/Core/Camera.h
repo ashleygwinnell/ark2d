@@ -39,6 +39,7 @@ namespace ARK {
 				int viewportHeight;
 				float viewportAspectRatio;
 				bool viewportAutosize;
+				float viewportOrtho3dScale;
 
 				float fieldOfView;
 				float nearClip;

@@ -7,6 +7,7 @@
 
 #include "AlphaMaskShader.h"
 #include "../Image.h"
+#include "../ShaderStore.h"
 
 namespace ARK { 
 	namespace Graphics { 
@@ -29,6 +30,7 @@ namespace ARK {
 			linkDX();
 
             showAnyGlErrorAndExitMacro();
+            ShaderStore::getInstance()->addShader(m_programId, this);
 
 			RendererState::start(RendererState::SHADER, getId());
 
@@ -40,7 +42,7 @@ namespace ARK {
             _VertexNormalIn = 1;
             _VertexColorIn = 2;
 
-			RendererState::start(RendererState::GEOMETRY);
+			RendererState::start(RendererState::NONE);
 		}
 		void AlphaMaskGeometryShader::startStatic(AlphaMaskGeometryShader* obj) { obj->startInternal(); }
 		void AlphaMaskGeometryShader::stopStatic(AlphaMaskGeometryShader* obj) { obj->stopInternal(); }
@@ -101,6 +103,7 @@ namespace ARK {
 			linkDX(); 
 
 			showAnyGlErrorAndExitMacro();
+			ShaderStore::getInstance()->addShader(m_programId, this);
 
 			RendererState::start(RendererState::SHADER, getId());
 
@@ -115,7 +118,7 @@ namespace ARK {
 			_VertexTexCoordIn = 3;
 			_VertexColorIn = 4;
 
-			RendererState::start(RendererState::GEOMETRY);
+			RendererState::start(RendererState::NONE);
 		}
 		void AlphaMaskTextureShader::startStatic(AlphaMaskTextureShader* obj) { obj->startInternal(); }
 		void AlphaMaskTextureShader::stopStatic(AlphaMaskTextureShader* obj) { obj->stopInternal(); }

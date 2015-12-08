@@ -103,6 +103,12 @@ namespace ARK {
 			class PNGImage;
 			class TargaImage;
 		}
+
+		//! Classes for loading different 3d models as SceneNodes.
+		namespace Model {
+			class ImageModel;
+			class ObjModel;
+		}
 	}
 
 	//! Contains classes for Maths / Random numbers.
@@ -262,6 +268,7 @@ using namespace ARK::Geometry;
 using namespace ARK::GJ;
 using namespace ARK::Graphics;
 using namespace ARK::Graphics::ImageIO;
+using namespace ARK::Graphics::Model;
 using namespace ARK::Tiled;
 using namespace ARK::Tween;
 using namespace ARK::Threading;

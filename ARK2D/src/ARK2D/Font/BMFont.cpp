@@ -331,12 +331,14 @@ namespace ARK {
 		{
 			if (m_loaded == false) { return; } 
 			if (Str.length() == 0) { return; }
+			//return; 
 
 			int CharX, CharY, Width, WidthOriginal, Height, HeightOriginal, OffsetX, OffsetY, XAdvance;
 
 			#if (defined(ARK2D_OPENGL_3_2) || defined(ARK2D_OPENGL_ES_2_0) || defined(ARK2D_RENDERER_DIRECTX))
 
 				const int numVerts = Str.length() * 6 * 3;
+				const int numTVerts = Str.length() * 6 * 2;
 				const int numCVerts = Str.length() * 6 * 4;
 				
 				
@@ -344,7 +346,7 @@ namespace ARK {
 				#ifdef ARK2D_WINDOWS_VS
 					float* rawVertices = (float*)alloca(numVerts * sizeof(float));
                     float* rawNormals = (float*)alloca(numVerts * sizeof(float));
-					float* rawTextureCoords = (float*)alloca(numVerts * sizeof(float));
+					float* rawTextureCoords = (float*)alloca(numTVerts * sizeof(float));
 					unsigned char* rawColors = (unsigned char*)alloca(numCVerts * sizeof(unsigned char));
 
 					//Assert(rawVertices);
@@ -353,7 +355,7 @@ namespace ARK {
 				#else
 					float rawVertices[numVerts];
                     float rawNormals[numVerts];
-					float rawTextureCoords[numVerts];
+					float rawTextureCoords[numTVerts];
 					unsigned char rawColors[numCVerts];
 				#endif
 
@@ -467,116 +469,117 @@ namespace ARK {
 					float heightPC = ((HeightOriginal / float(m_Image->getHeight())) * m_Image->getTextureH());
 
 					int vert = (i * 18);
+					int vertt = (i * 12);
 					int vertc = (i * 24);
                     
                     // tl
 					rawVertices[vert] = drawx+OffsetX + (i*m_kerning);
 					rawVertices[vert+1] = drawy+OffsetY;
                     rawVertices[vert+2] = drawz;
+
+                    rawNormals[vert]   = 0;
+                    rawNormals[vert+1] = 0;
+                    rawNormals[vert+2] = 1;
 					
-					rawTextureCoords[vert] = charXPC;
-					rawTextureCoords[vert+1] = charYPC;
+					rawTextureCoords[vertt] = charXPC;
+					rawTextureCoords[vertt+1] = charYPC;
 
 					rawColors[vertc] = color_r;
 					rawColors[vertc+1] = color_g;
 					rawColors[vertc+2] = color_b;
 					rawColors[vertc+3] = color_a;
 
+
 					// tr
 					rawVertices[vert+3] = drawx+OffsetX + (i*m_kerning) + Width;
 					rawVertices[vert+4] = drawy+OffsetY;
                     rawVertices[vert+5] = drawz;
 
-					rawTextureCoords[vert+2] = charXPC + widthPC;
-					rawTextureCoords[vert+3] = charYPC;
+					rawNormals[vert+3] = 0;
+                    rawNormals[vert+4] = 0;
+                    rawNormals[vert+5] = 1;
+
+					rawTextureCoords[vertt+2] = charXPC + widthPC;
+					rawTextureCoords[vertt+3] = charYPC;
 
 					rawColors[vertc+4] = color_r;
 					rawColors[vertc+5] = color_g;
 					rawColors[vertc+6] = color_b;
 					rawColors[vertc+7] = color_a;
 
+
 					// bl
 					rawVertices[vert+6] = drawx+OffsetX + (i*m_kerning);
 					rawVertices[vert+7] = drawy+OffsetY + Height;
                     rawVertices[vert+8] = drawz;
 
-					rawTextureCoords[vert+4] = charXPC;
-					rawTextureCoords[vert+5] = charYPC + heightPC;
+                    rawNormals[vert+6] = 0;
+                    rawNormals[vert+7] = 0;
+                    rawNormals[vert+8] = 1;
+
+					rawTextureCoords[vertt+4] = charXPC;
+					rawTextureCoords[vertt+5] = charYPC + heightPC;
 
 					rawColors[vertc+8] = color_r;
 					rawColors[vertc+9] = color_g;
 					rawColors[vertc+10] = color_b;
 					rawColors[vertc+11] = color_a;
 
+
 					// bl
 					rawVertices[vert+9] = drawx+OffsetX + (i*m_kerning);
 					rawVertices[vert+10] = drawy+OffsetY + Height;
                     rawVertices[vert+11] = drawz;
 
-					rawTextureCoords[vert+6] = charXPC;
-					rawTextureCoords[vert+7] = charYPC + heightPC;
+                    rawNormals[vert+9] = 0;
+                    rawNormals[vert+10] = 0;
+                    rawNormals[vert+11] = 1;
+
+					rawTextureCoords[vertt+6] = charXPC;
+					rawTextureCoords[vertt+7] = charYPC + heightPC;
 
 					rawColors[vertc+12] = color_r;
 					rawColors[vertc+13] = color_g;
 					rawColors[vertc+14] = color_b;
 					rawColors[vertc+15] = color_a;
 
+
 					// tr
 					rawVertices[vert+12] = drawx+OffsetX + (i*m_kerning) + Width;
 					rawVertices[vert+13] = drawy+OffsetY;
                     rawVertices[vert+14] = drawz;
 
-					rawTextureCoords[vert+8] = charXPC + widthPC;
-					rawTextureCoords[vert+9] = charYPC;
+                    rawNormals[vert+12] = 0;
+                    rawNormals[vert+13] = 0;
+                    rawNormals[vert+14] = 1;
+
+					rawTextureCoords[vertt+8] = charXPC + widthPC;
+					rawTextureCoords[vertt+9] = charYPC;
 
 					rawColors[vertc+16] = color_r;
 					rawColors[vertc+17] = color_g;
 					rawColors[vertc+18] = color_b;
 					rawColors[vertc+19] = color_a;
 
+
 					// br
 					rawVertices[vert+15] = drawx+OffsetX + (i*m_kerning) + Width;
 					rawVertices[vert+16] = drawy+OffsetY + Height;
                     rawVertices[vert+17] = drawz;
+					
+					rawNormals[vert+15] = 0;
+                    rawNormals[vert+16] = 0;
+                    rawNormals[vert+17] = 1;
 
-					rawTextureCoords[vert+10] = charXPC + widthPC;
-					rawTextureCoords[vert+11] = charYPC + heightPC;
+					rawTextureCoords[vertt+10] = charXPC + widthPC;
+					rawTextureCoords[vertt+11] = charYPC + heightPC;
 
 					rawColors[vertc+20] = color_r;
 					rawColors[vertc+21] = color_g;
 					rawColors[vertc+22] = color_b;
 					rawColors[vertc+23] = color_a;
                     
-                    // normals
-                    rawNormals[vert]   = 0;
-                    rawNormals[vert+1] = 0;
-                    rawNormals[vert+2] = 1;
-
-                    rawNormals[vert+3] = 0;
-                    rawNormals[vert+4] = 0;
-                    rawNormals[vert+5] = 1;
-
-                    rawNormals[vert+6] = 0;
-                    rawNormals[vert+7] = 0;
-                    rawNormals[vert+8] = 1;
-                    
-                    rawNormals[vert+9] = 0;
-                    rawNormals[vert+10] = 0;
-                    rawNormals[vert+11] = 1;
-                    
-                    rawNormals[vert+12] = 0;
-                    rawNormals[vert+13] = 0;
-                    rawNormals[vert+14] = 1;
-                    
-                    rawNormals[vert+15] = 0;
-                    rawNormals[vert+16] = 0;
-                    rawNormals[vert+17] = 1;
-
-
-
-
-					// multiply position coordinates
-
+                  	// multiply position coordinates (???)
 					drawx += XAdvance;
 					//++pos;
 					//++i;
@@ -587,7 +590,7 @@ namespace ARK {
 				//for( signed int i = 0; i < (signed int) Str.length(); ++i )
 				//{
 				//}
-				r->texturedQuads(m_Image->getTexture()->getId(), rawVertices, rawNormals, rawTextureCoords, rawColors, Str.length());
+				r->texturedTriangles(m_Image->getTexture()->getId(), rawVertices, rawNormals, rawTextureCoords, rawColors, Str.length()*2, false);
 			
 				//#ifdef ARK2D_WINDOWS_VS
 				//	free(rawVertices);

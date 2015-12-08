@@ -7,6 +7,7 @@
 
 #include "../Shader.h"
 #include "StencilShader.h"
+#include "../ShaderStore.h"
 
 namespace ARK { 
 	namespace Graphics { 
@@ -42,6 +43,8 @@ namespace ARK {
 			link(); 
 			linkDX(); 
 
+			ShaderStore::getInstance()->addShader(m_programId, this);
+
 			RendererState::start(RendererState::SHADER, getId());
 
 			_ModelMatrix = getUniformVariable("ark_ModelMatrix");
@@ -55,7 +58,7 @@ namespace ARK {
 			_VertexTexCoordIn = 3;
 			_VertexColorIn = 4;
 			
-			RendererState::start(RendererState::GEOMETRY);
+			RendererState::start(RendererState::NONE);
 		}
 
 		void StencilShader::startStatic(StencilShader* obj) { obj->startInternal(); }

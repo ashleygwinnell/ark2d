@@ -7,6 +7,7 @@
 
 #include "HSVShader.h"
 #include "../Image.h"
+#include "../ShaderStore.h"
 
 namespace ARK { 
 	namespace Graphics { 
@@ -45,6 +46,7 @@ namespace ARK {
 			linkDX(); 
 
 			showAnyGlErrorAndExitMacro();
+			ShaderStore::getInstance()->addShader(m_programId, this);
 
 			RendererState::start(RendererState::SHADER, getId());
 
@@ -59,7 +61,7 @@ namespace ARK {
 			_VertexColorIn = 2;
 			
 			
-			RendererState::start(RendererState::GEOMETRY);
+			RendererState::start(RendererState::NONE);
 		}
 
 		void HSVGeometryShader::bind() {
@@ -119,15 +121,16 @@ namespace ARK {
 				}
 			}
 
-			bindAttributeLocation(0, "ark_VertexPositionIn");
-			bindAttributeLocation(1, "ark_VertexNormalIn");
-			bindAttributeLocation(2, "ark_VertexTexCoordIn");
-			bindAttributeLocation(3, "ark_VertexColorIn");
+			bindAttributeLocation(1, "ark_VertexPositionIn");
+			bindAttributeLocation(2, "ark_VertexNormalIn");
+			bindAttributeLocation(3, "ark_VertexTexCoordIn");
+			bindAttributeLocation(4, "ark_VertexColorIn");
 			bindFragmentDataLocation(0, "ark_FragColor");
 			link(); 
 			linkDX(); 
 
 			showAnyGlErrorAndExitMacro();
+			ShaderStore::getInstance()->addShader(m_programId, this);
 
 			RendererState::start(RendererState::SHADER, getId());
 
@@ -138,12 +141,12 @@ namespace ARK {
 			_TextureId = getUniformVariable("ark_TextureId");
 			_HSVIn = getUniformVariable("ark_HSV");
 
-			_VertexPositionIn = 0;
-			_VertexNormalIn = 1;
-			_VertexTexCoordIn = 2;
-			_VertexColorIn = 3;
+			_VertexPositionIn = 1;
+			_VertexNormalIn = 2;
+			_VertexTexCoordIn = 3;
+			_VertexColorIn = 4;
 			
-			RendererState::start(RendererState::GEOMETRY);
+			RendererState::start(RendererState::NONE);
 		}
 
 		void HSVTextureShader::bind() {

@@ -16,6 +16,13 @@
 namespace ARK {
 	namespace Geometry {
 
+		struct PlaneIntersection {
+			bool intersects;
+			Vector3<float> intersectsAtPoint;
+			float intersectsDistance;
+			bool inside; // its possible for a line to be entirely inside a plane. check for this! 
+		};
+
 		/*!
 		 * \brief A point and angle/rotation/direction that separate two 3d spaces.
 		 *
@@ -23,7 +30,7 @@ namespace ARK {
 		 */
 		template <class T>
 		class PlaneTemplate {
-			private:
+			public:
 				Vector3<T> normal;
 				T d;
 
@@ -53,8 +60,10 @@ namespace ARK {
 				}
 
 				void set(Vector3<T> p1, Vector3<T> p2, Vector3<T> p3) {
-					normal.set(p1).subtract(p2).cross(p2.x - p3.x, p2.y-p3.y, p2.z-p3.z).normalise();
-					d = p1.dot(normal) * -1;
+                    normal = p1;
+                    normal -= p2;
+                    normal.cross(p2.x - p3.x, p2.y-p3.y, p2.z-p3.z).normalise();
+					d = p1.dot(&normal) * -1;
 				}
 				void set(T nx, T ny, T nz, T dist) {
 					normal.set(nx, ny, nz);
@@ -79,6 +88,39 @@ namespace ARK {
 					else
 						return 1; //PlaneSide.Front;
 				}
+
+				PlaneIntersection intersects(const Vector3<float>& lineStart, const Vector3<float>& lineDirection) {
+					return intersects(*this, lineStart, lineDirection);
+				}
+				static PlaneIntersection intersects(const PlaneTemplate<T>& plane, const Vector3<float>& lineStart, const Vector3<float>& lineDirection)
+				{
+				    PlaneIntersection result;
+				    result.intersects = false;
+
+				    // Find t.
+				    float t = - (Vector3<float>::dot(plane.normal, lineStart) + plane.d) / (Vector3<float>::dot(plane.normal, lineDirection));
+				    if (t < 0) { // the ray does not hit the surface, that is, the surface is "behind" the ray
+				        return result;
+					}
+
+				    // Get a point on the plane.
+				    Vector3<float> p = lineStart + (lineDirection * t);
+
+				    // Does the ray intersect the plane inside or outside?
+				    Vector3<float> planeToRayStart = lineStart - p;
+				    double dot = Vector3<float>::dot(planeToRayStart, plane.normal);
+				    if (dot > 0) {
+				        result.inside = false;
+				    } else {
+				        result.inside = true;
+				    }
+				    result.intersects = true;
+				    result.intersectsAtPoint = p;
+				    result.intersectsDistance = t;
+				    return result;
+				}
+
+
 				virtual string toString() {
 					string nl = "\r\n";
 					string str;
@@ -110,6 +152,10 @@ namespace ARK {
 				Plane(Vector3<float> norm, Vector3<float> point):
 					PlaneTemplate(norm, point) {
 					
+				}
+				Plane(Vector3<float> p1, Vector3<float> p2, Vector3<float> p3):
+					PlaneTemplate(p1, p2, p3) {
+
 				}
 				
 				//virtual ARK2D_API bool collides(Shape<float>* s);

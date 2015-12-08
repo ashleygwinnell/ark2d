@@ -2,6 +2,7 @@
 #define TILEDMAP_PROPERTY_H_
 
 #include "../Includes.h"
+#include "../Namespaces.h"
 
 #include "../Core/ToString.h"
 

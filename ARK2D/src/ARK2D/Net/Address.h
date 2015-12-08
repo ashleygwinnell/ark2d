@@ -9,6 +9,7 @@
 #define ARK_NET_ADDRESS_H_
 
 #include "../Includes.h"
+#include "../Namespaces.h"
 
 namespace ARK {
 	namespace Net {

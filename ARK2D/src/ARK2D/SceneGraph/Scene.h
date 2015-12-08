@@ -142,6 +142,12 @@ namespace ARK {
 				virtual bool keyReleased(unsigned int key);
 				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 		};
+
+		class ARK2D_API LetterboxNode : public SceneNode {
+			public:
+            	LetterboxNode();
+            	virtual void render();
+		};
 	}
 }
 

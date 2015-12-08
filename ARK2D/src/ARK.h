@@ -81,6 +81,8 @@
 #include "ARK2D/Graphics/Shaders/DirectionalLightingShader.h"
 #include "ARK2D/Graphics/Shaders/PointLightingShader.h"
 #include "ARK2D/Graphics/Skybox.h"
+#include "ARK2D/Graphics/Model/ObjModel.h"
+#include "ARK2D/Graphics/Model/ImageModel.h"
 
 // Math
 #include "ARK2D/Math/Random.h" 

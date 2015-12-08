@@ -164,6 +164,14 @@ namespace ARK {
 					}
 					return false;
 				}
+				static bool collision_pointCube(T x1, T y1, T z1, T x2, T y2, T z2, T w2, T h2, T d2) {
+					if (x1 >= x2 && x1 <= (x2 + w2) &&
+						y1 >= y2 && y1 <= (y2 + h2) &&
+						z1 >= z2 && z1 <= (z2 + d2)) {
+						return true;
+					}
+					return false;
+				}
 				static Vector3<T> collision_cubeCubeVec(T x1, T y1, T z1, T w1, T h1, T d1, T x2, T y2, T z2, T w2, T h2, T d2) {
 					Vector3<T> adjustmentVector(0, 0, 0);
 					if ((x1 + w1) > x2 && x1 < (x2 + w2) && 

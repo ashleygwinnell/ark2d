@@ -522,7 +522,13 @@ namespace ARK {
 			return root->mouseMoved(x, y, oldx, oldy);
 		}
 
+		LetterboxNode::LetterboxNode(): 
+			SceneNode("letterbox") {
 
+		}
+		void LetterboxNode::render() {
+			ARK2D::getRenderer()->drawScissorBoxes();
+		}
 		
 
 

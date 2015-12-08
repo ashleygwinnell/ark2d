@@ -1163,9 +1163,8 @@ namespace ARK {
 			return this;
 		}
 		SceneNode* Image::rotate(double angle) {
-            SceneNode::transform.rotation += Quaternion<float>::angleAxis(angle, 0,0,1);
-			m_dirty = true;
-			return this;
+			double newAngle = angle + SceneNode::transform.rotation.angle();
+            return setRotation(newAngle);
 		}
 		Image* Image::setCenterOfRotation(int x, int y) {
 			m_CenterX = x;
@@ -1748,7 +1747,7 @@ namespace ARK {
 				}
 
 				if (SceneNode::transform.rotation.angle() != 0) {
-					MathUtil::rotateQuadAroundPoint(batch_rawVertices, x + m_CenterX, y + m_CenterY, SceneNode::transform.rotation.angle());
+					MathUtil::rotate3dQuadAroundPoint<float>(batch_rawVertices, x + m_CenterX, y + m_CenterY, SceneNode::transform.rotation.angle());
 				}
 				
 				Renderer::getBatch()->addTexturedQuad(
@@ -1801,7 +1800,7 @@ namespace ARK {
 			//ARK2D::getLog()->v("temp: 2");
 
 			// rotation
-			if (SceneNode::transform.rotation.angle() != 0) {
+			if (SceneNode::transform.rotation.angle() != 0.0f) {
 				float angle = SceneNode::transform.rotation.angle();
 				Vector3<float> axis = SceneNode::transform.rotation.axis();
 				r->translate(x + m_CenterX, y + m_CenterY, z);
@@ -1974,7 +1973,7 @@ namespace ARK {
 
 			r->popMatrix();
 
-			if (SceneNode::transform.rotation.angle() != 0) {
+			if (SceneNode::transform.rotation.angle() != 0.0f) {
 				float angle = SceneNode::transform.rotation.angle();
 				Vector3<float> axis = SceneNode::transform.rotation.axis();
 				r->translate(x + m_CenterX, y + m_CenterY, z);

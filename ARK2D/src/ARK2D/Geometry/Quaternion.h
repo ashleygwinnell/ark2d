@@ -64,8 +64,8 @@ class Quaternion {
 		void fromVecAngle(T vecX, T vecY, T vecZ, T degrees) {
             T radians = degrees * QUAT_PI/180.0f;
 			
-			T s = sinf(radians * 0.5);
-			T c = cosf(radians * 0.5);
+			T s = sin(radians * 0.5);
+			T c = cos(radians * 0.5);
 
 			w = c;
 			x = vecX * s;
@@ -83,12 +83,12 @@ class Quaternion {
             T radiansX = degreesX * QUAT_PI/180.0f; //MathUtil::toRadians(degreesX);
 
 			// Finds the Sin and Cosin for each half angles.
-			T sY = sinf(radiansY * 0.5);
-			T cY = cosf(radiansY * 0.5);
-			T sZ = sinf(radiansZ * 0.5);
-			T cZ = cosf(radiansZ * 0.5); 
-			T sX = sinf(radiansX * 0.5);
-			T cX = cosf(radiansX * 0.5);
+			T sY = sin(radiansY * 0.5);
+			T cY = cos(radiansY * 0.5);
+			T sZ = sin(radiansZ * 0.5);
+			T cZ = cos(radiansZ * 0.5); 
+			T sX = sin(radiansX * 0.5);
+			T cX = cos(radiansX * 0.5);
 
 			// Formula to construct a new Quaternion based on Euler Angles.
 			w = cY * cZ * cX - sY * sZ * sX;
@@ -109,7 +109,7 @@ class Quaternion {
             return angleRadians() * (180.0/QUAT_PI);
 		}
         T angleRadians() {
-            return 2 * acos(w);
+            return 2.0f * acos(w);
         }
 		Vector3<T> axis() {
 			Vector3<T> ret;

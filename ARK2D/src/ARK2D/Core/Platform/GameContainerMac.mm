@@ -100,6 +100,7 @@
 					scene->addChild(ARK2D::s_camera);
 					scene->addChild(ARK2D::s_game);
 					scene->addChild(ARK2D::s_log);
+					scene->addChild(new LetterboxNode());
 
 					ARK2D::getRenderer()->preinit();
 				

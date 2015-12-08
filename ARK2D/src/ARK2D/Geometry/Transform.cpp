@@ -14,7 +14,7 @@ namespace ARK {
 		Transform::Transform():
 			position(0, 0, 0),
 			scale(1.0f, 1.0f, 1.0f),
-			rotation()
+			rotation(0.0f, 0,0,1, true)
 			{
 
 		}

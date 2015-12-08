@@ -11,6 +11,7 @@
 //#include "../ARK2D.h" 
 //#include "../Util/Log.h"
 //#include "../Core/String.h"
+#include "../Util/Cast.h"
 #include <string>
 using std::string;
 
@@ -260,6 +261,9 @@ namespace ARK {
 				T dot(T lx, T ly, T lz) {
 					return (x * lx) + (y * ly) + (z * lz);
 				}
+				static T dot(const Vector3<T> lhs, const Vector3<T>& rhs) {
+					return (lhs.x * rhs.x) + (lhs.y * rhs.y) + (lhs.z * rhs.z);
+				}
 
 				Vector3<T> cross(const Vector3<T>& rhs) {
 					return cross(rhs.x, rhs.y, rhs.z);
@@ -310,6 +314,9 @@ namespace ARK {
 				}
 				Vector3<T> operator*(float other) {
 					return Vector3<T>(x*other, y*other, z*other);
+				}
+				Vector3<T> operator*(float other) const {
+					return Vector3<T>(x*other, y*other, z*other);
 				} 
 
 				Vector3<T> operator+=(const Vector3<T>& other) { 
@@ -340,17 +347,16 @@ namespace ARK {
 			
 
 				string toString() {
-					/*ARK::Core::String s;
+					string s;
 					s += "{";
 					s += "\"x\":";
-					s += m_x;
+                    s += ARK::Util::Cast::toString<T>(x);
 					s += ", \"y\":";
-					s += m_y;
+					s += ARK::Util::Cast::toString<T>(y);
 					s += ", \"z\":";
-					s += m_z;
-					s += "}";*/
-					//return s.get();
-					return "{}";
+					s += ARK::Util::Cast::toString<T>(z);
+					s += "}";
+					return s;
 					// TODO: dop this without incl;uding ark2d.h
 				}
 				

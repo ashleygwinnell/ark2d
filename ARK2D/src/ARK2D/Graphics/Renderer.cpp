@@ -894,7 +894,6 @@ namespace ARK {
 			bool wasEnabled = enabled;
 			enabled = b; 
 
-			
 			MatrixStack* ms = Renderer::getMatrix();
 			if (!wasEnabled && b) {
 				ms->pushMatrix();
@@ -1029,12 +1028,12 @@ namespace ARK {
 
             if (startedAtMatrixIndex != Renderer::getMatrix()->height()) {
 				// Multiply coordinates by top matrix.
-				//float z = 1.0f;
+				float z = 1.0f;
 				Matrix44<float>* cur = Renderer::getMatrix()->current();
-				multiplymatrixtest(x1, y1, z1, cur);
-				multiplymatrixtest(x2, y2, z2, cur);
-				multiplymatrixtest(x3, y3, z3, cur);
-				multiplymatrixtest(x4, y4, z4, cur);
+				multiplymatrixtest(x1, y1, z, cur);
+				multiplymatrixtest(x2, y2, z, cur);
+				multiplymatrixtest(x3, y3, z, cur);
+				multiplymatrixtest(x4, y4, z, cur);
 			}
 
 			RendererBatchItem_GeomTri one;
@@ -1151,11 +1150,11 @@ namespace ARK {
 
             if (startedAtMatrixIndex != Renderer::getMatrix()->height()) {
 				// Multiply coordinates by top matrix.
-				//float z = 1.0f;
+				float z = 1.0f;
 				Matrix44<float>* cur = Renderer::getMatrix()->current();
-				multiplymatrixtest(x1, y1, z1, cur);
-				multiplymatrixtest(x2, y2, z2, cur);
-				multiplymatrixtest(x3, y3, z3, cur);
+				multiplymatrixtest(x1, y1, z, cur);
+				multiplymatrixtest(x2, y2, z, cur);
+				multiplymatrixtest(x3, y3, z, cur);
 			}
 
 			RendererBatchItem_TexTri one;
@@ -1260,12 +1259,12 @@ namespace ARK {
 
             if (startedAtMatrixIndex != Renderer::getMatrix()->height()) { 
 				// Multiply coordinates by top matrix.
-				//float z = 1.0f;
+				float z = 1.0f;
 				Matrix44<float>* cur = Renderer::getMatrix()->current();
-				multiplymatrixtest(x1, y1, z1, cur);
-				multiplymatrixtest(x2, y2, z2, cur);
-				multiplymatrixtest(x3, y3, z3, cur);
-				multiplymatrixtest(x4, y4, z4, cur);
+				multiplymatrixtest(x1, y1, z, cur);
+				multiplymatrixtest(x2, y2, z, cur);
+				multiplymatrixtest(x3, y3, z, cur);
+				multiplymatrixtest(x4, y4, z, cur);
 			}
 
 			RendererBatchItem_TexTri one;
@@ -3776,7 +3775,7 @@ namespace ARK {
 			// WRONG: tl, tr, bl, br
 			// CORRECT tl, tr, bl, bl, tr, br.
 			if (Renderer::isBatching()) { 
-				for(unsigned int i = 0; i < count; i++) { 
+				/*for(unsigned int i = 0; i < count; i++) { 
 					//s_batch->addTexturedQuad(texId, &verts[i*6], &texcoords[i*6], &colors[i*12]);
 					const int ii = i * 12; 
 					const int iii = i * 24;
@@ -3799,10 +3798,11 @@ namespace ARK {
 						colors[iii+8], colors[iii+9], colors[iii+10], colors[iii+11],
 						colors[iii+20], colors[iii+21], colors[iii+22], colors[iii+23]
 					);
-				}
+				}*/
+ 				ARK2D::getLog()->w("Textured quads removed from batch renderer");
 				return;
 			}
-
+			
 			
 
             #if defined(ARK2D_RENDERER_OPENGL) || defined(ARK2D_OPENGL_3_2) || defined(ARK2D_OPENGL_ES_2_0) || defined(ARK2D_FLASCC)
@@ -3905,7 +3905,7 @@ namespace ARK {
 		{
 			if (isBatching() && !fromBatch) {
 				for(unsigned int i = 0; i < count; i++) {
-					s_batch->addGeometryTri(&verts[i*6], &normals[i*6], &colors[i*12]);
+					s_batch->addGeometryTri(&verts[i*9], &normals[i*9], &colors[i*12]);
 				}
 				return;
 			}
@@ -3980,7 +3980,7 @@ namespace ARK {
 		
 			if (isBatching() && !fromBatch) {
 				for(unsigned int i = 0; i < count; i++) {
-					s_batch->addTexturedTri(texId, &verts[i*6], &normals[i*6], &texcoords[i*6], &colors[i*12]);
+					s_batch->addTexturedTri(texId, &verts[i*9], &normals[i*9], &texcoords[i*6], &colors[i*12]);
 				}
 				return;
 			}
@@ -4993,24 +4993,10 @@ namespace ARK {
 			m_ScissorBoxColors[2] = bottom;
 			m_ScissorBoxColors[3] = right;
 		}
-		void Renderer::drawScissorBoxes() { 
+		/*void Renderer::drawScissorBoxes() { 
 			GameContainer* container = ARK2D::getContainer();
 			// draw scissor boxes because glScissor does not work on some HTC phones.
-			//Color cc = container->getClearColor();
-			//setDrawColor(cc.getRed(), cc.getGreen(), cc.getBlue(), cc.getAlpha());
-
-			// if (container->isOrientationInverted()) {
-
-			// 	int xAxisBoxLength = (int) container->getTranslateY();
-			// 	// top edge (from the game's point of view... left side on the screen)
-			// 	setDrawColor(m_ScissorBoxColors[0].getRed(), m_ScissorBoxColors[0].getGreen(), m_ScissorBoxColors[0].getBlue(), m_ScissorBoxColors[0].getAlpha());
-			// 	fillRect(0, 0, xAxisBoxLength, container->getDynamicHeight());
-
-			// 	// bottom edge (from the game's point of view... right side on the screen)
-			// 	setDrawColor(m_ScissorBoxColors[2].getRed(), m_ScissorBoxColors[2].getGreen(), m_ScissorBoxColors[2].getBlue(), m_ScissorBoxColors[2].getAlpha());
-			// 	fillRect(0, xAxisBoxLength + (container->getHeight()*container->getScaleY()),
-			// 				xAxisBoxLength, container->getDynamicHeight());
-			// } else {
+			
 				float width = container->getWidth();
 				float height = container->getHeight();
 				float dynamicWidth = container->getDynamicWidth();
@@ -5041,6 +5027,40 @@ namespace ARK {
 							dynamicWidth+1, (int) container->getTranslateY()+1);
 							//container->getWidth() * container->getScaleX(), container->getTranslateY());
 			//}
+			setDrawColor(Color::white); 
+		}*/
+		void Renderer::drawScissorBoxes() { 
+			GameContainer* container = ARK2D::getContainer();
+			
+			
+				float width = container->getWidth();
+				float height = container->getHeight();
+				float dynamicWidth = container->getDynamicWidth();
+				float dynamicHeight = container->getDynamicHeight();
+				if (container->isOrientationInverted()) {
+					width = container->getHeight();
+					height = container->getWidth();
+					dynamicWidth = container->getDynamicHeight();
+					dynamicHeight = container->getDynamicWidth();
+				}
+
+				// left edge  
+				setDrawColor(m_ScissorBoxColors[1].getRed(), m_ScissorBoxColors[1].getGreen(), m_ScissorBoxColors[1].getBlue(), m_ScissorBoxColors[1].getAlpha());
+				fillRect(0, int(container->getTranslateX())*-1, (int) container->getTranslateX(), dynamicHeight);// * container->getScaleY());
+
+				// right edge
+				setDrawColor(m_ScissorBoxColors[3].getRed(), m_ScissorBoxColors[3].getGreen(), m_ScissorBoxColors[3].getBlue(), m_ScissorBoxColors[3].getAlpha());
+				fillRect(container->getTranslateX() + (width * container->getScaleX()), 0,
+							(int) container->getTranslateX()+3, dynamicHeight);// * container->getScaleY());
+
+				// top edge
+				setDrawColor(m_ScissorBoxColors[0].getRed(), m_ScissorBoxColors[0].getGreen(), m_ScissorBoxColors[0].getBlue(), m_ScissorBoxColors[0].getAlpha());
+				fillRect(0,(container->getTranslateY()+1)*-1, dynamicWidth, (int) container->getTranslateY()+1);
+
+				// bottom edge
+				setDrawColor(m_ScissorBoxColors[2].getRed(), m_ScissorBoxColors[2].getGreen(), m_ScissorBoxColors[2].getBlue(), m_ScissorBoxColors[2].getAlpha());
+				fillRect(0, (height * container->getScaleY()) - (container->getTranslateY()+1),
+							dynamicWidth+1, (int) container->getTranslateY()+1);
 
 			setDrawColor(Color::white); 
 		}

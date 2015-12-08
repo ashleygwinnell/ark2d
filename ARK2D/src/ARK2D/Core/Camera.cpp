@@ -23,6 +23,7 @@ namespace ARK {
 //			camera_position_delta = glm::vec3(0, 0, 0);
 //			camera_scale = .5f;
 			
+			viewportOrtho3dScale = 1.5f;
 			viewportAutosize = true;
 
 			transform.position.x = 0.0f;
@@ -67,10 +68,10 @@ namespace ARK {
 		    	//our projection matrix will be an orthogonal one in this case
 				//if the values are not floating point, this command does not work properly
 				//need to multiply by aspect!!! (otherise will not scale properly)
-				float scaleMaybe = 1.5f;
+				
 				//projection = glm::ortho((scaleMaybe*-1) * float(viewportAspectRatio), scaleMaybe * float(viewportAspectRatio), scaleMaybe*-1, scaleMaybe, nearClip, farClip);
                 projection.identity();
-                projection.ortho2d((scaleMaybe*-1) * float(viewportAspectRatio), scaleMaybe * float(viewportAspectRatio), scaleMaybe*-1, scaleMaybe, nearClip, farClip);
+                projection.ortho2d((viewportOrtho3dScale*-1) * float(viewportAspectRatio), viewportOrtho3dScale * float(viewportAspectRatio), viewportOrtho3dScale*-1, viewportOrtho3dScale, nearClip, farClip);
 
 
 					// http://www.opengl-tutorial.org/beginners-tutorials/tutorial-6-keyboard-and-mouse/
@@ -90,7 +91,8 @@ namespace ARK {
                 projection.identity();
                 projection.ortho2d(float(viewportX), float(viewportWidth), float(viewportHeight), float(viewportY), float(nearClip), float(farClip));
 
-				
+                lookAt = transform.position + direction;
+
 			} else if (type == TYPE_PERSPECTIVE) {
 				//projection = glm::perspective(fieldOfView, viewportAspectRatio, nearClip, farClip);
                 projection.identity();
@@ -136,9 +138,10 @@ namespace ARK {
 				//view = glm::scale(view, glm::vec3(container->getScaleX(), container->getScaleY(), 0.0f) );
 				GameContainer* container = ARK2D::getContainer();
 				view.identity();
+				view.lookAt(transform.position.x, transform.position.y, transform.position.z, lookAt.x, lookAt.y, lookAt.z, up.x, up.y, up.z);
                 view.translate(container->getTranslateX(), container->getTranslateY(), 0.0f);
-                view.scale(container->getScaleX(), container->getScaleY(), 0.0f);
-
+                view.scale(container->getScaleX(), container->getScaleY(), 1.0f);
+                
                 model.identity(); // = glm::mat4(1.0f);
 
 			} else if (type == TYPE_PERSPECTIVE || type == TYPE_ORTHO) {

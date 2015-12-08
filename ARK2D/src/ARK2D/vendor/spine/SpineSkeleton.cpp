@@ -681,7 +681,7 @@ namespace ARK {
 						re, g, b, a
 					};
 
-					r->texturedQuads(texId, &rawVertices[0], &rawNormals[0], &rawTexCoords[0], &rawColors[0], 1);
+					r->texturedTriangles(texId, &rawVertices[0], &rawNormals[0], &rawTexCoords[0], &rawColors[0], 2);
 					
 					
 				} else if (attachment->type == SP_ATTACHMENT_MESH) {
