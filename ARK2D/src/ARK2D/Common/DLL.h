@@ -28,6 +28,16 @@
 			#define ARK2D_API __declspec( dllimport )
 			#define ANGELSCRIPT_DLL_LIBRARY_IMPORT
 		#endif 
+
+	
+		#ifndef SAFE_RELEASE
+		#define SAFE_RELEASE(x) \
+		   if(x != NULL)        \
+		   {                    \
+		      x->Release();     \
+		      x = NULL;         \
+		   }
+		#endif
 	#endif
 	
 

@@ -11,6 +11,7 @@
 #if defined(ARK2D_WINDOWS)
 	#include <windows.h>
 	#include <regstr.h>
+	#include <Xinput.h>
 #elif defined(ARK2D_MACINTOSH)
 	#include <IOKit/hid/IOHIDLib.h>
 	#include <limits.h>
@@ -99,6 +100,7 @@ namespace ARK {
 				std::map<signed int, unsigned int> buttonsInverse; // SomeController::BUTTON_A -> Gamepad::BUTTON_A.
 				std::map<signed int, unsigned int> axesInverse;
 				bool shared_triggers_axis;
+				bool xinput;
 				void toInverse();
 				void toRegular(); 
 				string toString();
@@ -200,6 +202,8 @@ namespace ARK {
 					JOYINFOEX lastState;
 					int povXAxisIndex;
 					int povYAxisIndex;
+					bool xinput;
+					XINPUT_STATE lastStateXInput;
 
 				#elif defined(ARK2D_ANDROID)
 					

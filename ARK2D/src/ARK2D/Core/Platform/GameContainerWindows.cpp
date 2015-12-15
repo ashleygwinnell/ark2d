@@ -31,6 +31,7 @@
  	#include "../../Util/Callbacks.h"
 	
 	#include <VersionHelpers.h>
+	#include <XInput.h>
 
  			
 
@@ -969,244 +970,401 @@
 
 				for (unsigned int i = 0; i < m_gamepads.size(); i++) {
 					Gamepad* p = m_gamepads.at(i);
-					info.dwFlags = JOY_RETURNALL | JOY_RETURNPOVCTS;
-					info.dwSize = sizeof(info);
 
-					ARK2D::getLog()->v(StringUtil::append("Processing input for gamepad: ", p->id));
+					if (p->xinput && true) { 
+						XINPUT_STATE state;
+						ZeroMemory( &state, sizeof(XINPUT_STATE) );
 
-					result = joyGetPosEx(p->id, &info);
-					if (result == JOYERR_UNPLUGGED) {
-						ARK2D::getLog()->v("unplugged");
-						m_gamepads.erase(m_gamepads.begin() + i);
+						// Simply get the state of the controller from XInput.
+						DWORD dwResult = XInputGetState(i, &state);
 
-						// Give event to game
-						Game* g = ARK2D::getGame();
-						GamepadListener* gl = NULL;
-						gl = dynamic_cast<GamepadListener*>(g);
-						if (gl != NULL) {
-							gl->gamepadDisconnected(p);
+						if( dwResult == ERROR_SUCCESS )
+						{
+							// Controller is connected 
+
+							// packet numbers is different if the state has changed at all.
+							if (p->lastStateXInput.dwPacketNumber != state.dwPacketNumber) { 
+								
+								float LX = state.Gamepad.sThumbLX / 32767.0f;
+								float LY = state.Gamepad.sThumbLY / 32767.0f;
+								float RX = state.Gamepad.sThumbRX / 32767.0f;
+	  							float RY = state.Gamepad.sThumbRY / 32767.0f;
+								float LT = int(state.Gamepad.bLeftTrigger) / 255.0f;
+								float RT = int(state.Gamepad.bRightTrigger) / 255.0f;
+	  							
+								// AXES
+								if (state.Gamepad.sThumbLX != p->lastStateXInput.Gamepad.sThumbLX) {
+									p->moveAxis(Gamepad::ANALOG_STICK_1_X, LX);
+								}
+								if (state.Gamepad.sThumbLY != p->lastStateXInput.Gamepad.sThumbLY) {
+									p->moveAxis(Gamepad::ANALOG_STICK_1_Y, -LY);
+								}
+								if (state.Gamepad.sThumbRX != p->lastStateXInput.Gamepad.sThumbRX) {
+									p->moveAxis(Gamepad::ANALOG_STICK_2_X, RX);
+								}
+								if (state.Gamepad.sThumbRY != p->lastStateXInput.Gamepad.sThumbRY) {
+									p->moveAxis(Gamepad::ANALOG_STICK_2_Y, -RY);
+								}
+								if (state.Gamepad.bLeftTrigger != p->lastStateXInput.Gamepad.bLeftTrigger) {
+									p->moveAxis(Gamepad::TRIGGER_1, LT);
+								}
+								if (state.Gamepad.bRightTrigger != p->lastStateXInput.Gamepad.bRightTrigger) {
+									p->moveAxis(Gamepad::TRIGGER_2, RT);
+								}
+								
+
+	  							// BUTTONS
+								// a button
+	  							if (state.Gamepad.wButtons & XINPUT_GAMEPAD_A && !(p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_A)) {
+	  								p->pressButton(Gamepad::BUTTON_A);
+	  							} else if (!(state.Gamepad.wButtons & XINPUT_GAMEPAD_A) && p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_A) {
+	  								p->releaseButton(Gamepad::BUTTON_A);
+	  							}
+
+	  							// b button
+	  							if (state.Gamepad.wButtons & XINPUT_GAMEPAD_B && !(p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_B)) {
+	  								p->pressButton(Gamepad::BUTTON_B);
+	  							} else if (!(state.Gamepad.wButtons & XINPUT_GAMEPAD_B) && p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_B) {
+	  								p->releaseButton(Gamepad::BUTTON_B);
+	  							}
+
+	  							// x button
+	  							if (state.Gamepad.wButtons & XINPUT_GAMEPAD_X && !(p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_X)) {
+	  								p->pressButton(Gamepad::BUTTON_X);
+	  							} else if (!(state.Gamepad.wButtons & XINPUT_GAMEPAD_X) && p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_X) {
+	  								p->releaseButton(Gamepad::BUTTON_X);
+	  							}
+
+	  							// y button
+	  							if (state.Gamepad.wButtons & XINPUT_GAMEPAD_Y && !(p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_Y)) {
+	  								p->pressButton(Gamepad::BUTTON_Y);
+	  							} else if (!(state.Gamepad.wButtons & XINPUT_GAMEPAD_Y) && p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_Y) {
+	  								p->releaseButton(Gamepad::BUTTON_Y);
+	  							}
+
+	  							// dpad
+	  							if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP && !(p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP)) {
+	  								p->pressButton(Gamepad::DPAD_UP);
+	  							} else if (!(state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) && p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) {
+	  								p->releaseButton(Gamepad::DPAD_UP);
+	  							}
+	  							if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN && !(p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN)) {
+	  								p->pressButton(Gamepad::DPAD_DOWN);
+	  							} else if (!(state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) && p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) {
+	  								p->releaseButton(Gamepad::DPAD_DOWN);
+	  							}
+	  							if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT && !(p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT)) {
+	  								p->pressButton(Gamepad::DPAD_LEFT);
+	  							} else if (!(state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) && p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) {
+	  								p->releaseButton(Gamepad::DPAD_LEFT);
+	  							}
+	  							if (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT && !(p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT)) {
+	  								p->pressButton(Gamepad::DPAD_RIGHT);
+	  							} else if (!(state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) && p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) {
+	  								p->releaseButton(Gamepad::DPAD_RIGHT);
+	  							}
+
+	  							// start
+	  							if (state.Gamepad.wButtons & XINPUT_GAMEPAD_START && !(p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_START)) {
+	  								p->pressButton(Gamepad::BUTTON_START);
+	  							} else if (!(state.Gamepad.wButtons & XINPUT_GAMEPAD_START) && p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_START) {
+	  								p->releaseButton(Gamepad::BUTTON_START);
+	  							}
+	  							// back
+	  							if (state.Gamepad.wButtons & XINPUT_GAMEPAD_BACK && !(p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_BACK)) {
+	  								p->pressButton(Gamepad::BUTTON_BACK);
+	  							} else if (!(state.Gamepad.wButtons & XINPUT_GAMEPAD_BACK) && p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_BACK) {
+	  								p->releaseButton(Gamepad::BUTTON_BACK);
+	  							}
+
+	  							// left thumb
+	  							if (state.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_THUMB && !(p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_THUMB)) {
+	  								p->pressButton(Gamepad::BUTTON_L3);
+	  							} else if (!(state.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_THUMB) && p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_THUMB) {
+	  								p->releaseButton(Gamepad::BUTTON_L3);
+	  							}
+	  							// right thumb
+	  							if (state.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB && !(p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB)) {
+	  								p->pressButton(Gamepad::BUTTON_R3);
+	  							} else if (!(state.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) && p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) {
+	  								p->releaseButton(Gamepad::BUTTON_R3);
+	  							}
+
+	  							// left shoulder
+	  							if (state.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER && !(p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER)) {
+	  								p->pressButton(Gamepad::BUTTON_LBUMPER);
+	  							} else if (!(state.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) && p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) {
+	  								p->releaseButton(Gamepad::BUTTON_LBUMPER);
+	  							}
+	  							// right shoulder
+	  							if (state.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER && !(p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER)) {
+	  								p->pressButton(Gamepad::BUTTON_RBUMPER);
+	  							} else if (!(state.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) && p->lastStateXInput.Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) {
+	  								p->releaseButton(Gamepad::BUTTON_RBUMPER);
+	  							}
+
+
+	  						}
+
+  							p->lastStateXInput = state;
+
 						}
-						//i = 0;
+						else
+						{
+							// Controller is not connected 
+							ARK2D::getLog()->v("unplugged");
+							m_gamepads.erase(m_gamepads.begin() + i);
 
-					} else if (result == JOYERR_NOERROR) {
-
-						ARK2D::getLog()->v("no errors for this gamepad");
-
-						//handleAxisChange(device, devicePrivate->xAxisIndex, info.dwXpos);
-
-						//if (info.dwXPos < 0) {
-
-						//}
-
-
-						/*p.rAxisIndex = info.dwRpos;
-						p.uAxisIndex = info.dwUpos;
-						p.vAxisIndex = info.dwVpos;*/
-
-						//unsigned int max = std::numeric_limits<signed short>::max();
-						//if (info.dwZpos == max) {
-						//p->xAxisIndex = info.dwXpos - max;  
-						//p->yAxisIndex = info.dwYpos - max; 
-						//p->zAxisIndex = info.dwZpos - max;
-
-						if (info.dwXpos != p->lastState.dwXpos) {
-							__handleAxisChange(p, Gamepad::ANALOG_STICK_1_X, info.dwXpos);
-						}
-						if (info.dwYpos != p->lastState.dwYpos) {
-							__handleAxisChange(p, Gamepad::ANALOG_STICK_1_Y, info.dwYpos); 
-						}
-						
-
-						if (info.dwZpos != p->lastState.dwZpos) {     
-							//	ARK2D::getLog()->i(StringUtil::append("ltrigger changed: ", info.dwZpos));
-							//	ARK2D::getLog()->i(StringUtil::append("r pos: ", info.dwRpos));
-							//	ARK2D::getLog()->i(StringUtil::append("u pos: ", info.dwUpos));  
-							//	ARK2D::getLog()->i(StringUtil::append("v pos: ", info.dwVpos));
-							__handleAxisChange(p, Gamepad::ANALOG_STICK_2_X, info.dwZpos);
+							// Give event to game
+							Game* g = ARK2D::getGame();
+							GamepadListener* gl = NULL;
+							gl = dynamic_cast<GamepadListener*>(g);
+							if (gl != NULL) {
+								gl->gamepadDisconnected(p);
+							}
 						}
 
-						if (info.dwRpos != p->lastState.dwRpos) {
-							__handleAxisChange(p, Gamepad::ANALOG_STICK_2_Y, info.dwRpos);
-						}
+					} else { 
 
-						if (info.dwUpos != p->lastState.dwUpos) {
-							__handleAxisChange(p, Gamepad::TRIGGER_1, info.dwUpos); 
-						}
- 
-						if (info.dwVpos != p->lastState.dwVpos) {
-							__handleAxisChange(p, Gamepad::TRIGGER_2, info.dwVpos);
-						} 
- 
-						p->lastState = info;
-						
+						info.dwFlags = JOY_RETURNALL | JOY_RETURNPOVCTS;
+						info.dwSize = sizeof(info);
 
-						//(value - devicePrivate->axisRanges[axisIndex][0]) / (float) (devicePrivate->axisRanges[axisIndex][1] - devicePrivate->axisRanges[axisIndex][0]) * 2.0f - 1.0f;
+						ARK2D::getLog()->v(StringUtil::append("Processing input for gamepad: ", p->id));
 
-						//if (info.dwXpos != devicePrivate->lastState.dwXpos) {
+						result = joyGetPosEx(p->id, &info);
+						if (result == JOYERR_UNPLUGGED) {
+							ARK2D::getLog()->v("unplugged");
+							m_gamepads.erase(m_gamepads.begin() + i);
+
+							// Give event to game
+							Game* g = ARK2D::getGame();
+							GamepadListener* gl = NULL;
+							gl = dynamic_cast<GamepadListener*>(g);
+							if (gl != NULL) {
+								gl->gamepadDisconnected(p);
+							}
+							//i = 0;
+
+						} else if (result == JOYERR_NOERROR) {
+
+							ARK2D::getLog()->v("no errors for this gamepad");
+
 							//handleAxisChange(device, devicePrivate->xAxisIndex, info.dwXpos);
-						//}
 
-						// update the dpad position for continuous reading.
-						unsigned int dpadThisUpdate = Gamepad::DPAD_NONE;
+							//if (info.dwXPos < 0) {
 
-						if (info.dwPOV == 4500) {
-							p->dpadPosition = Gamepad::DPAD_UP_RIGHT;
-							dpadThisUpdate = Gamepad::DPAD_UP_RIGHT;
-							if (!p->isButtonDown(Gamepad::DPAD_UP_RIGHT)) {
-								p->pressButton(Gamepad::DPAD_UP_RIGHT);
-							}
-						} else if (info.dwPOV == 13500) {
-							p->dpadPosition = Gamepad::DPAD_DOWN_RIGHT;
-							dpadThisUpdate = Gamepad::DPAD_DOWN_RIGHT;
-							if (!p->isButtonDown(Gamepad::DPAD_DOWN_RIGHT)) {
-								p->pressButton(Gamepad::DPAD_DOWN_RIGHT);
-							}
-						} else if (info.dwPOV == 22500) {
-							p->dpadPosition = Gamepad::DPAD_DOWN_LEFT;
-							dpadThisUpdate = Gamepad::DPAD_DOWN_LEFT;
-							if (!p->isButtonDown(Gamepad::DPAD_DOWN_LEFT)) {
-								p->pressButton(Gamepad::DPAD_DOWN_LEFT);
-							}
-						} else if (info.dwPOV == 31500) {
-							p->dpadPosition = Gamepad::DPAD_UP_LEFT;
-							dpadThisUpdate = Gamepad::DPAD_UP_LEFT;
-							if (!p->isButtonDown(Gamepad::DPAD_UP_LEFT)) {
-								p->pressButton(Gamepad::DPAD_UP_LEFT);
-							}
-						} else if (info.dwPOV == JOY_POVLEFT) {
-							p->dpadPosition = Gamepad::DPAD_LEFT;
-							dpadThisUpdate = Gamepad::DPAD_LEFT;
-							if (!p->isButtonDown(Gamepad::DPAD_LEFT)) {
-								p->pressButton(Gamepad::DPAD_LEFT);
-							}
-						} else if (info.dwPOV == JOY_POVRIGHT) {
-							p->dpadPosition = Gamepad::DPAD_RIGHT;
-							dpadThisUpdate = Gamepad::DPAD_RIGHT;
-							if (!p->isButtonDown(Gamepad::DPAD_RIGHT)) {
-								p->pressButton(Gamepad::DPAD_RIGHT);
-							}
-						} else if (info.dwPOV == JOY_POVFORWARD) {
-							p->dpadPosition = Gamepad::DPAD_UP;
-							dpadThisUpdate = Gamepad::DPAD_UP;
-							if (!p->isButtonDown(Gamepad::DPAD_UP)) {
-								p->pressButton(Gamepad::DPAD_UP);
-							}
-						} else if (info.dwPOV == JOY_POVBACKWARD) {
-							p->dpadPosition = Gamepad::DPAD_DOWN;
-							dpadThisUpdate = Gamepad::DPAD_DOWN;
-							if (!p->isButtonDown(Gamepad::DPAD_DOWN)) {
-								p->pressButton(Gamepad::DPAD_DOWN);
-							}
-						} else if (info.dwPOV == JOY_POVCENTERED) {
-							p->dpadPosition = Gamepad::DPAD_NONE;
-							dpadThisUpdate = Gamepad::DPAD_NONE;
-							//if (!p->isButtonDown(Gamepad::DPAD_NONE)) {
-							//	p->pressButton(Gamepad::DPAD_NONE);
 							//}
-						} else {
-							p->dpadPosition = Gamepad::DPAD_NONE;
-							dpadThisUpdate = Gamepad::DPAD_NONE;
-							//if (!p->isButtonDown(Gamepad::DPAD_NONE)) {
-							//	p->pressButton(Gamepad::DPAD_NONE);
+
+
+							/*p.rAxisIndex = info.dwRpos;
+							p.uAxisIndex = info.dwUpos;
+							p.vAxisIndex = info.dwVpos;*/
+
+							//unsigned int max = std::numeric_limits<signed short>::max();
+							//if (info.dwZpos == max) {
+							//p->xAxisIndex = info.dwXpos - max;  
+							//p->yAxisIndex = info.dwYpos - max; 
+							//p->zAxisIndex = info.dwZpos - max;
+
+							if (info.dwXpos != p->lastState.dwXpos) {
+								__handleAxisChange(p, Gamepad::ANALOG_STICK_1_X, info.dwXpos);
+							}
+							if (info.dwYpos != p->lastState.dwYpos) {
+								__handleAxisChange(p, Gamepad::ANALOG_STICK_1_Y, info.dwYpos); 
+							}
+							
+
+							if (info.dwZpos != p->lastState.dwZpos) {     
+								//	ARK2D::getLog()->i(StringUtil::append("ltrigger changed: ", info.dwZpos));
+								//	ARK2D::getLog()->i(StringUtil::append("r pos: ", info.dwRpos));
+								//	ARK2D::getLog()->i(StringUtil::append("u pos: ", info.dwUpos));  
+								//	ARK2D::getLog()->i(StringUtil::append("v pos: ", info.dwVpos));
+								__handleAxisChange(p, Gamepad::ANALOG_STICK_2_X, info.dwZpos);
+							}
+
+							if (info.dwRpos != p->lastState.dwRpos) {
+								__handleAxisChange(p, Gamepad::ANALOG_STICK_2_Y, info.dwRpos);
+							}
+
+							if (info.dwUpos != p->lastState.dwUpos) {
+								__handleAxisChange(p, Gamepad::TRIGGER_1, info.dwUpos); 
+							}
+	 
+							if (info.dwVpos != p->lastState.dwVpos) {
+								__handleAxisChange(p, Gamepad::TRIGGER_2, info.dwVpos);
+							} 
+	 
+							p->lastState = info;
+							
+
+							//(value - devicePrivate->axisRanges[axisIndex][0]) / (float) (devicePrivate->axisRanges[axisIndex][1] - devicePrivate->axisRanges[axisIndex][0]) * 2.0f - 1.0f;
+
+							//if (info.dwXpos != devicePrivate->lastState.dwXpos) {
+								//handleAxisChange(device, devicePrivate->xAxisIndex, info.dwXpos);
 							//}
-						}
 
-						//if (!p->isButtonDown(Gamepad::DPAD_NONE)) {// && dpadThisUpdate != Gamepad::DPAD_NONE) {
-						//	p->releaseButton(Gamepad::DPAD_NONE);
-						//}
-						if (p->isButtonDown(Gamepad::DPAD_UP_RIGHT) && dpadThisUpdate != Gamepad::DPAD_UP_RIGHT) {
-							p->releaseButton(Gamepad::DPAD_UP_RIGHT);
-						}
-						if (p->isButtonDown(Gamepad::DPAD_UP) && dpadThisUpdate != Gamepad::DPAD_UP) {
-							p->releaseButton(Gamepad::DPAD_UP);
-						}
-						if (p->isButtonDown(Gamepad::DPAD_RIGHT) && dpadThisUpdate != Gamepad::DPAD_RIGHT) {
-							p->releaseButton(Gamepad::DPAD_RIGHT);
-						}
-						if (p->isButtonDown(Gamepad::DPAD_DOWN_RIGHT) && dpadThisUpdate != Gamepad::DPAD_DOWN_RIGHT) {
-							p->releaseButton(Gamepad::DPAD_DOWN_RIGHT);
-						}
-						if (p->isButtonDown(Gamepad::DPAD_DOWN) && dpadThisUpdate != Gamepad::DPAD_DOWN) {
-							p->releaseButton(Gamepad::DPAD_DOWN);
-						}
-						if (p->isButtonDown(Gamepad::DPAD_DOWN_LEFT) && dpadThisUpdate != Gamepad::DPAD_DOWN_LEFT) {
-							p->releaseButton(Gamepad::DPAD_DOWN_LEFT);
-						}
-						if (p->isButtonDown(Gamepad::DPAD_LEFT) && dpadThisUpdate != Gamepad::DPAD_LEFT) {
-							p->releaseButton(Gamepad::DPAD_LEFT);
-						}
-						if (p->isButtonDown(Gamepad::DPAD_UP_LEFT) && dpadThisUpdate != Gamepad::DPAD_UP_LEFT) {
-							p->releaseButton(Gamepad::DPAD_UP_LEFT);
-						}
+							// update the dpad position for continuous reading.
+							unsigned int dpadThisUpdate = Gamepad::DPAD_NONE;
+
+							if (info.dwPOV == 4500) {
+								p->dpadPosition = Gamepad::DPAD_UP_RIGHT;
+								dpadThisUpdate = Gamepad::DPAD_UP_RIGHT;
+								if (!p->isButtonDown(Gamepad::DPAD_UP_RIGHT)) {
+									p->pressButton(Gamepad::DPAD_UP_RIGHT);
+								}
+							} else if (info.dwPOV == 13500) {
+								p->dpadPosition = Gamepad::DPAD_DOWN_RIGHT;
+								dpadThisUpdate = Gamepad::DPAD_DOWN_RIGHT;
+								if (!p->isButtonDown(Gamepad::DPAD_DOWN_RIGHT)) {
+									p->pressButton(Gamepad::DPAD_DOWN_RIGHT);
+								}
+							} else if (info.dwPOV == 22500) {
+								p->dpadPosition = Gamepad::DPAD_DOWN_LEFT;
+								dpadThisUpdate = Gamepad::DPAD_DOWN_LEFT;
+								if (!p->isButtonDown(Gamepad::DPAD_DOWN_LEFT)) {
+									p->pressButton(Gamepad::DPAD_DOWN_LEFT);
+								}
+							} else if (info.dwPOV == 31500) {
+								p->dpadPosition = Gamepad::DPAD_UP_LEFT;
+								dpadThisUpdate = Gamepad::DPAD_UP_LEFT;
+								if (!p->isButtonDown(Gamepad::DPAD_UP_LEFT)) {
+									p->pressButton(Gamepad::DPAD_UP_LEFT);
+								}
+							} else if (info.dwPOV == JOY_POVLEFT) {
+								p->dpadPosition = Gamepad::DPAD_LEFT;
+								dpadThisUpdate = Gamepad::DPAD_LEFT;
+								if (!p->isButtonDown(Gamepad::DPAD_LEFT)) {
+									p->pressButton(Gamepad::DPAD_LEFT);
+								}
+							} else if (info.dwPOV == JOY_POVRIGHT) {
+								p->dpadPosition = Gamepad::DPAD_RIGHT;
+								dpadThisUpdate = Gamepad::DPAD_RIGHT;
+								if (!p->isButtonDown(Gamepad::DPAD_RIGHT)) {
+									p->pressButton(Gamepad::DPAD_RIGHT);
+								}
+							} else if (info.dwPOV == JOY_POVFORWARD) {
+								p->dpadPosition = Gamepad::DPAD_UP;
+								dpadThisUpdate = Gamepad::DPAD_UP;
+								if (!p->isButtonDown(Gamepad::DPAD_UP)) {
+									p->pressButton(Gamepad::DPAD_UP);
+								}
+							} else if (info.dwPOV == JOY_POVBACKWARD) {
+								p->dpadPosition = Gamepad::DPAD_DOWN;
+								dpadThisUpdate = Gamepad::DPAD_DOWN;
+								if (!p->isButtonDown(Gamepad::DPAD_DOWN)) {
+									p->pressButton(Gamepad::DPAD_DOWN);
+								}
+							} else if (info.dwPOV == JOY_POVCENTERED) {
+								p->dpadPosition = Gamepad::DPAD_NONE;
+								dpadThisUpdate = Gamepad::DPAD_NONE;
+								//if (!p->isButtonDown(Gamepad::DPAD_NONE)) {
+								//	p->pressButton(Gamepad::DPAD_NONE);
+								//}
+							} else {
+								p->dpadPosition = Gamepad::DPAD_NONE;
+								dpadThisUpdate = Gamepad::DPAD_NONE;
+								//if (!p->isButtonDown(Gamepad::DPAD_NONE)) {
+								//	p->pressButton(Gamepad::DPAD_NONE);
+								//}
+							}
+
+							//if (!p->isButtonDown(Gamepad::DPAD_NONE)) {// && dpadThisUpdate != Gamepad::DPAD_NONE) {
+							//	p->releaseButton(Gamepad::DPAD_NONE);
+							//}
+							if (p->isButtonDown(Gamepad::DPAD_UP_RIGHT) && dpadThisUpdate != Gamepad::DPAD_UP_RIGHT) {
+								p->releaseButton(Gamepad::DPAD_UP_RIGHT);
+							}
+							if (p->isButtonDown(Gamepad::DPAD_UP) && dpadThisUpdate != Gamepad::DPAD_UP) {
+								p->releaseButton(Gamepad::DPAD_UP);
+							}
+							if (p->isButtonDown(Gamepad::DPAD_RIGHT) && dpadThisUpdate != Gamepad::DPAD_RIGHT) {
+								p->releaseButton(Gamepad::DPAD_RIGHT);
+							}
+							if (p->isButtonDown(Gamepad::DPAD_DOWN_RIGHT) && dpadThisUpdate != Gamepad::DPAD_DOWN_RIGHT) {
+								p->releaseButton(Gamepad::DPAD_DOWN_RIGHT);
+							}
+							if (p->isButtonDown(Gamepad::DPAD_DOWN) && dpadThisUpdate != Gamepad::DPAD_DOWN) {
+								p->releaseButton(Gamepad::DPAD_DOWN);
+							}
+							if (p->isButtonDown(Gamepad::DPAD_DOWN_LEFT) && dpadThisUpdate != Gamepad::DPAD_DOWN_LEFT) {
+								p->releaseButton(Gamepad::DPAD_DOWN_LEFT);
+							}
+							if (p->isButtonDown(Gamepad::DPAD_LEFT) && dpadThisUpdate != Gamepad::DPAD_LEFT) {
+								p->releaseButton(Gamepad::DPAD_LEFT);
+							}
+							if (p->isButtonDown(Gamepad::DPAD_UP_LEFT) && dpadThisUpdate != Gamepad::DPAD_UP_LEFT) {
+								p->releaseButton(Gamepad::DPAD_UP_LEFT);
+							}
 
 
-						/*std::cout << " x: " << p.xAxisIndex;
-						std::cout << " y: " << p.yAxisIndex;
-						std::cout << " z: " << p.zAxisIndex;
-						std::cout << std::endl;*/
+							/*std::cout << " x: " << p.xAxisIndex;
+							std::cout << " y: " << p.yAxisIndex;
+							std::cout << " z: " << p.zAxisIndex;
+							std::cout << std::endl;*/
 
-						//handleButtonChange(device, devicePrivate->lastState.dwButtons, info.dwButtons);
-						//handleButtonChange(struct Gamepad_device * device, DWORD lastValue, DWORD value) {
+							//handleButtonChange(device, devicePrivate->lastState.dwButtons, info.dwButtons);
+							//handleButtonChange(struct Gamepad_device * device, DWORD lastValue, DWORD value) {
 
-						for (unsigned int buttonIndex = 0; buttonIndex < p->numButtons; buttonIndex++) {
-							//if ((p.win32_dwButtons ^ info.dwButtons) & (1 << buttonIndex)) {
+							for (unsigned int buttonIndex = 0; buttonIndex < p->numButtons; buttonIndex++) {
+								//if ((p.win32_dwButtons ^ info.dwButtons) & (1 << buttonIndex)) {
 
-								GamepadButton* but = p->buttons.at(buttonIndex);
-								unsigned int newId = Gamepad::convertSystemButtonToARKButton(p, but->id); 
+									GamepadButton* but = p->buttons.at(buttonIndex);
+									unsigned int newId = Gamepad::convertSystemButtonToARKButton(p, but->id); 
 
-								if (p->isPS4Controller() && newId == but->id && (but->id == 6 || but->id == 7)) { continue; }
-								 
-								if (p->m_triggersSendBumperEvents && 
-										(newId == Gamepad::BUTTON_LBUMPER || newId == Gamepad::BUTTON_RBUMPER || 
-										newId == Gamepad::TRIGGER_1 || newId == Gamepad::TRIGGER_2
-										)) { 
+									if (p->isPS4Controller() && newId == but->id && (but->id == 6 || but->id == 7)) { continue; }
+									 
+									if (p->m_triggersSendBumperEvents && 
+											(newId == Gamepad::BUTTON_LBUMPER || newId == Gamepad::BUTTON_RBUMPER || 
+											newId == Gamepad::TRIGGER_1 || newId == Gamepad::TRIGGER_2
+											)) { 
 
-									unsigned int triggerIndex = (newId == Gamepad::BUTTON_LBUMPER || newId == Gamepad::TRIGGER_1) ? Gamepad::TRIGGER_1 : Gamepad::TRIGGER_2;
+										unsigned int triggerIndex = (newId == Gamepad::BUTTON_LBUMPER || newId == Gamepad::TRIGGER_1) ? Gamepad::TRIGGER_1 : Gamepad::TRIGGER_2;
 
-									bool b = !!(info.dwButtons & (1 << but->id));
+										bool b = !!(info.dwButtons & (1 << but->id));
 
-									//if (b == true && (!p->isButtonDown(newId) && p->getAxisValue(triggerIndex) < 0.5f ) ) {
-									//	p->pressButton(newId);
-									//} else if (b == false && (p->isButtonDown(newId) && p->getAxisValue(triggerIndex) > 0.5f) ) {
-									//	p->releaseButton(newId);
-									//}
- 
-									if (b && !p->isButtonDown(newId)) {
-										//if (p->getAxisValue(triggerIndex) > 0.5f) {
-											p->pressButton(newId);
+										//if (b == true && (!p->isButtonDown(newId) && p->getAxisValue(triggerIndex) < 0.5f ) ) {
+										//	p->pressButton(newId);
+										//} else if (b == false && (p->isButtonDown(newId) && p->getAxisValue(triggerIndex) > 0.5f) ) {
+										//	p->releaseButton(newId);
 										//}
-									} else if (!b && p->isButtonDown(newId)) {
-										if (p->getAxisValue(triggerIndex) < 0.5f) {
+	 
+										if (b && !p->isButtonDown(newId)) {
+											//if (p->getAxisValue(triggerIndex) > 0.5f) {
+												p->pressButton(newId);
+											//}
+										} else if (!b && p->isButtonDown(newId)) {
+											if (p->getAxisValue(triggerIndex) < 0.5f) {
+												p->releaseButton(newId);
+											}
+										}
+	 
+
+									} else { 
+
+										bool b = !!(info.dwButtons & (1 << but->id));
+
+										if (b == true && p->isButtonDown(newId) == false) {
+
+											ARK2D::getLog()->i(StringUtil::append("old button id: ", but->id));
+											ARK2D::getLog()->i(StringUtil::append("new button id: ", newId)); 
+
+											p->pressButton(newId);
+										} else if (b == false && p->isButtonDown(newId) == true) {
 											p->releaseButton(newId);
 										}
 									}
- 
 
-								} else { 
+									//std::cout << "button " << buttonIndex << " is " << p.buttonStates.at(buttonIndex) << std::endl;
+								//}
+							}
 
-									bool b = !!(info.dwButtons & (1 << but->id));
+							
 
-									if (b == true && p->isButtonDown(newId) == false) {
 
-										ARK2D::getLog()->i(StringUtil::append("old button id: ", but->id));
-										ARK2D::getLog()->i(StringUtil::append("new button id: ", newId)); 
 
-										p->pressButton(newId);
-									} else if (b == false && p->isButtonDown(newId) == true) {
-										p->releaseButton(newId);
-									}
-								}
-
-								//std::cout << "button " << buttonIndex << " is " << p.buttonStates.at(buttonIndex) << std::endl;
-							//}
+						} else {
+							ARK2D::getLog()->w(StringUtil::append("joyGetPosEx returned result: ", result));
 						}
-
-						
-
-
-
-					} else {
-						ARK2D::getLog()->w(StringUtil::append("joyGetPosEx returned result: ", result));
 					}
 				}
 
@@ -1219,6 +1377,120 @@
 			void GameContainer::setIcon(const std::string& path) {
 				m_platformSpecific.m_iconpath = path;
 			}
+
+			//-----------------------------------------------------------------------------
+			// Enum each PNP device using WMI and check each device ID to see if it contains 
+			// "IG_" (ex. "VID_045E&PID_028E&IG_00").  If it does, then it's an XInput device
+			// Unfortunately this information can not be found by just using DirectInput 
+			//-----------------------------------------------------------------------------
+			bool GameContainerPlatform::isXInputDevice( const GUID* pGuidProductFromDirectInput )
+			{
+			    /*IWbemLocator*           pIWbemLocator  = NULL;
+			    IEnumWbemClassObject*   pEnumDevices   = NULL;
+			    IWbemClassObject*       pDevices[20]   = {0};
+			    IWbemServices*          pIWbemServices = NULL;
+			    BSTR                    bstrNamespace  = NULL;
+			    BSTR                    bstrDeviceID   = NULL;
+			    BSTR                    bstrClassName  = NULL;
+			    DWORD                   uReturned      = 0;
+			    bool                    bIsXinputDevice= false;
+			    UINT                    iDevice        = 0;
+			    VARIANT                 var;
+			    HRESULT                 hr;
+
+			    // CoInit if needed
+			    hr = CoInitialize(NULL);
+			    bool bCleanupCOM = SUCCEEDED(hr);
+
+			    // Create WMI
+			    hr = CoCreateInstance( __uuidof(WbemLocator),
+			                           NULL,
+			                           CLSCTX_INPROC_SERVER,
+			                           __uuidof(IWbemLocator),
+			                           (LPVOID*) &pIWbemLocator);
+			    if( FAILED(hr) || pIWbemLocator == NULL )
+			        goto LCleanup;
+
+			    bstrNamespace = SysAllocString( L"\\\\.\\root\\cimv2" );if( bstrNamespace == NULL ) goto LCleanup;        
+			    bstrClassName = SysAllocString( L"Win32_PNPEntity" );   if( bstrClassName == NULL ) goto LCleanup;        
+			    bstrDeviceID  = SysAllocString( L"DeviceID" );          if( bstrDeviceID == NULL )  goto LCleanup;        
+			    
+			    // Connect to WMI 
+			    hr = pIWbemLocator->ConnectServer( bstrNamespace, NULL, NULL, 0L, 
+			                                       0L, NULL, NULL, &pIWbemServices );
+			    if( FAILED(hr) || pIWbemServices == NULL )
+			        goto LCleanup;
+
+			    // Switch security level to IMPERSONATE. 
+			    CoSetProxyBlanket( pIWbemServices, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, NULL, 
+			                       RPC_C_AUTHN_LEVEL_CALL, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE );                    
+
+			    hr = pIWbemServices->CreateInstanceEnum( bstrClassName, 0, NULL, &pEnumDevices ); 
+			    if( FAILED(hr) || pEnumDevices == NULL )
+			        goto LCleanup;
+
+			    // Loop over all devices
+			    for( ;; )
+			    {
+			        // Get 20 at a time
+			        hr = pEnumDevices->Next( 10000, 20, pDevices, &uReturned );
+			        if( FAILED(hr) )
+			            goto LCleanup;
+			        if( uReturned == 0 )
+			            break;
+
+			        for( iDevice=0; iDevice<uReturned; iDevice++ )
+			        {
+			            // For each device, get its device ID
+			            hr = pDevices[iDevice]->Get( bstrDeviceID, 0L, &var, NULL, NULL );
+			            if( SUCCEEDED( hr ) && var.vt == VT_BSTR && var.bstrVal != NULL )
+			            {
+			                // Check if the device ID contains "IG_".  If it does, then it's an XInput device
+							    // This information can not be found from DirectInput 
+			                if( wcsstr( var.bstrVal, L"IG_" ) )
+			                {
+			                    // If it does, then get the VID/PID from var.bstrVal
+			                    DWORD dwPid = 0, dwVid = 0;
+			                    WCHAR* strVid = wcsstr( var.bstrVal, L"VID_" );
+			                    if( strVid && swscanf( strVid, L"VID_%4X", &dwVid ) != 1 )
+			                        dwVid = 0;
+			                    WCHAR* strPid = wcsstr( var.bstrVal, L"PID_" );
+			                    if( strPid && swscanf( strPid, L"PID_%4X", &dwPid ) != 1 )
+			                        dwPid = 0;
+
+			                    // Compare the VID/PID to the DInput device
+			                    DWORD dwVidPid = MAKELONG( dwVid, dwPid );
+			                    if( dwVidPid == pGuidProductFromDirectInput->Data1 )
+			                    {
+			                        bIsXinputDevice = true;
+			                        goto LCleanup;
+			                    }
+			                }
+			            }   
+			            SAFE_RELEASE( pDevices[iDevice] );
+			        }
+			    }*/
+
+			//LCleanup:
+			    /*if(bstrNamespace)
+			        SysFreeString(bstrNamespace);
+			    if(bstrDeviceID)
+			        SysFreeString(bstrDeviceID);
+			    if(bstrClassName)
+			        SysFreeString(bstrClassName);
+			    for( iDevice=0; iDevice<20; iDevice++ )
+			        SAFE_RELEASE( pDevices[iDevice] );
+			    SAFE_RELEASE( pEnumDevices );
+			    SAFE_RELEASE( pIWbemLocator );
+			    SAFE_RELEASE( pIWbemServices );
+
+			    if( bCleanupCOM )
+			        CoUninitialize();*/
+
+			   // return bIsXinputDevice;
+			    	return false;
+			}
+
 
 			void GameContainer::initGamepads() {
 
@@ -1249,6 +1521,14 @@
 							joyGetDevCaps(joystickId, &caps, sizeof(JOYCAPS)) == JOYERR_NOERROR) {
 
 							//cout << "Reading gamepad " << joystickId << endl;
+
+							//GUID guid;
+							//guid.Data1 = MAKELONG(caps.wMid, caps.wPid);
+
+							//if (m_platformSpecific.isXInputDevice(&guid)) {
+							//	ErrorDialog::createAndShow("xinput device");
+							//}
+
 
 							bool duplicate = false;
 							for (unsigned int j = 0; j < numPadsSupported && j < 10; j++) 
@@ -1293,9 +1573,10 @@
 							GamepadMapping* mapping = gamepad->getMapping();
 							if (mapping != NULL) { 
 								gamepad->m_sharedTriggerAxis = mapping->shared_triggers_axis;
+								gamepad->xinput = mapping->xinput;
 							} 
-
-						//	ARK2D::getLog()->i(StringUtil::append("Gamepad description: ", gamepad->name));
+							
+							//	ARK2D::getLog()->i(StringUtil::append("Gamepad description: ", gamepad->name));
 
 							gamepad->numButtons = caps.wNumButtons;
 							for (unsigned int j = 0; j < gamepad->numButtons; j++) {
