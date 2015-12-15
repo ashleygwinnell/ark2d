@@ -83,6 +83,7 @@
 #include "ARK2D/Graphics/Skybox.h"
 #include "ARK2D/Graphics/Model/ObjModel.h"
 #include "ARK2D/Graphics/Model/ImageModel.h"
+#include "ARK2D/Graphics/MatrixStack.h"
 
 // Math
 #include "ARK2D/Math/Random.h" 

@@ -433,6 +433,8 @@ namespace ARK {
 
 				int getMouseX() const;
 				int getMouseY() const;
+				int getMouseXRaw() const;
+				int getMouseYRaw() const;
 
 				vector<Gamepad*>* getGamepads();
 				signed int countGamepads();
@@ -445,6 +447,8 @@ namespace ARK {
 			public:
 				int mouse_x;
 				int mouse_y;
+				int mouse_x_raw;
+				int mouse_y_raw;
 				void setGameContainer(GameContainer* c);
 				set<int> pressedEvents;
 				set<int> releasedEvents;

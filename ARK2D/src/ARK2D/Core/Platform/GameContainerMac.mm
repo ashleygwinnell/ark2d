@@ -88,7 +88,7 @@
 					m_platformSpecific.m_container = this;
 				
 					m_input.setGameContainer(this);
-		
+		 
 					ARK2D::s_container = this;
 					ARK2D::s_game = &m_game;
 					ARK2D::s_graphics = &m_graphics;

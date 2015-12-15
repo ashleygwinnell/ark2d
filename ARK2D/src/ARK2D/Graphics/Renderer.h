@@ -11,6 +11,7 @@
 #include <string>
 #include "../Font/BMFont.h"
 #include "Color.h"
+#include "MatrixStack.h"
 #include "../Util/StringUtil.h"
 #include "../Util/Matrix44.h"
 #include "../Font/Font.h"
@@ -78,50 +79,7 @@ namespace ARK {
 				
 		};
 
-		class ARK2D_API MatrixStack {
-			public:
-				unsigned int m_type;
-
-				vector<Matrix44<float> > m_stack;
-				unsigned int m_stackIndex;
-				unsigned int m_root; // the lowest stack index after ark2d does its bits. e.g. letterboxing. 
-									 // we reset to this instead of the identity matrix when starting new renderbatches.
-
-				bool m_dirty;
-
-				static const unsigned int TYPE_NULL = 0;
-				static const unsigned int TYPE_PROJECTION = 1; 
-				static const unsigned int TYPE_VIEW = 2;
-				static const unsigned int TYPE_MODEL = 3;
-	 
-				MatrixStack(unsigned int type); 
-				void translate(float x, float y, float z = 0.0f); 			// glTranslatef(x,y,0);
-				void rotate(float angle, float x, float y, float z = 0.0f); // glRotatef(angle, 0, 0, 1);
-				void scale(float x, float y, float z = 0.0f); 				// glScalef(x, y, 0.0f);
-				void ortho2d(float l, float r, float b, float t, float n, float f);
-				void frustum(float l, float r, float b, float t, float n, float f);
-				void perspective(float fov, float aspect, float n, float f);
-				void lookAt(float eyeX, float eyeY, float eyeZ, float lookAtX, float lookAtY, float lookAtZ, float upX, float upY, float upZ);
-				void identity();
-				float* data(float* mx);
-				void* pointer();  
-				#ifdef ARK2D_RENDERER_DIRECTX
-					DirectX::XMMATRIX d3dpointer();  
-				#endif
-				Matrix44<float>* current();
-				Matrix44<float>* at(unsigned int index);
-				void pushMatrix(bool setroot = false);
-				void popMatrix();
-				void toStringDialog();
-				bool isDirty();
-				void setDirty(bool b);
-				unsigned int height();
-				unsigned int root();
-
-				virtual ~MatrixStack();
-
-				
-		};
+		
 
 		class ARK2D_API VBO {
 			public:
@@ -211,12 +169,19 @@ namespace ARK {
 				static const unsigned int TYPE_STENCIL_INVERSE = 4;
 				static const unsigned int TYPE_STENCIL_STOP = 5; 
 				static const unsigned int TYPE_STENCIL_DISABLE = 6;
-				static const unsigned int TYPE_MULTISAMPLING_ENABLE = 7;
-				static const unsigned int TYPE_MULTISAMPLING_DISABLE = 8;
-				static const unsigned int TYPE_BACKFACECULLING_ENABLE = 9;
-				static const unsigned int TYPE_BACKFACECULLING_DISABLE = 10;
-				static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 11;
-				static const unsigned int TYPE_CUSTOM_FUNCTION = 12;
+				static const unsigned int TYPE_MATRIX_MODE = 7;
+				static const unsigned int TYPE_MATRIX_IDENTITY = 8;
+				static const unsigned int TYPE_MATRIX_PUSH = 9;
+				static const unsigned int TYPE_MATRIX_POP = 10;
+				static const unsigned int TYPE_MATRIX_TRANSLATE = 11;
+				static const unsigned int TYPE_MATRIX_ROTATE = 12;
+				static const unsigned int TYPE_MATRIX_SCALE = 13;
+				static const unsigned int TYPE_MULTISAMPLING_ENABLE = 14;
+				static const unsigned int TYPE_MULTISAMPLING_DISABLE = 15;
+				static const unsigned int TYPE_BACKFACECULLING_ENABLE = 16;
+				static const unsigned int TYPE_BACKFACECULLING_DISABLE = 17;
+				static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 18;
+				static const unsigned int TYPE_CUSTOM_FUNCTION = 19;
 
 			public:
 				vector<RendererBatchItem_GeomTri> geomtris;
@@ -226,6 +191,10 @@ namespace ARK {
 				unsigned int m_shaderId;
 				void* m_objectPointer;
 				void* m_functionPointer;
+				float m_float1;
+				float m_float2;
+				float m_float3;
+				float m_float4;
 
 			public:
 				RendererBatchItem();

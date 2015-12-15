@@ -1150,7 +1150,7 @@ namespace ARK {
 			}
 		}
 
-		unsigned int Image::getWidth() const {
+		unsigned int Image::getWidth() const { 
 			return (unsigned int) m_Width;
 		}
 		unsigned int Image::getHeight() const {
@@ -1158,13 +1158,21 @@ namespace ARK {
 		}
 		
 		SceneNode* Image::setRotation(double angle) {
+			// clamp angles between 0 and 360
+			//  because quaternions are silly. 
+			if (angle < 0.0f) { 
+				angle = fmod(7200.0 - (angle * -1.0), 360.0);
+			} else if (angle > 360.0f) {
+				angle = fmod(angle, 360.0);
+			}
+
             SceneNode::transform.rotation = Quaternion<float>::angleAxis(angle, 0,0,1);
 			m_dirty = true;
 			return this;
 		}
 		SceneNode* Image::rotate(double angle) {
 			double newAngle = angle + SceneNode::transform.rotation.angle();
-            return setRotation(newAngle);
+			return setRotation(newAngle);
 		}
 		Image* Image::setCenterOfRotation(int x, int y) {
 			m_CenterX = x;
@@ -1210,6 +1218,7 @@ namespace ARK {
 				sub->setHeight(desc.getWidth());
 				sub->m_originalWidth = sub->m_Width;
 				sub->m_originalHeight = sub->m_Height;
+				sub->setDirty(true);
 				sub->clean();
 				return sub;
 			} 
@@ -2509,6 +2518,10 @@ namespace ARK {
 			SceneNode::rotation = tempRotation;*/
 			//draw(0, 0);
 
+			if (m_dirty) {
+				clean();
+			}
+
 			preRenderFromPivot();
             
             Renderer* r = ARK2D::getRenderer();
@@ -2537,7 +2550,7 @@ namespace ARK {
 			Renderer::getBatch()->addTexturedQuad(
 				m_texture->getId(), 
 				batch_rawVertices[0], batch_rawVertices[1], batch_rawVertices[2],
-				batch_rawVertices[4], batch_rawVertices[4], batch_rawVertices[5],
+				batch_rawVertices[3], batch_rawVertices[4], batch_rawVertices[5],
 				batch_rawVertices[6], batch_rawVertices[7], batch_rawVertices[8],
 				batch_rawVertices[15], batch_rawVertices[16], batch_rawVertices[17],
                   0,0,1,

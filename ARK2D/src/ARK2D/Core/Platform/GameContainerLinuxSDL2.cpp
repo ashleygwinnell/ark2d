@@ -1,5 +1,6 @@
 
 #include "../GameContainer.h"
+#include "../Camera.h"
 #include "GameContainerLinux.h"
 
 
@@ -181,15 +182,19 @@
 				m_strTitle = m_game.getTitle();
 				
 				m_input.setGameContainer(this);
-
+ 
 				ARK2D::s_container = this;
 				ARK2D::s_game = &m_game;
 				ARK2D::s_graphics = &m_graphics;
 				ARK2D::s_input = &m_input;
+				ARK2D::s_camera = new ARK::Core::Camera();
+				ARK2D::s_camera->setViewport(0, 0, m_width, m_height);
 				ARK2D::s_log = ARK::Util::Log::getInstance(); 
 				scene = new Scene();
+				scene->addChild(ARK2D::s_camera);
 				scene->addChild(ARK2D::s_game);
 				scene->addChild(ARK2D::s_log);
+				scene->addChild(new LetterboxNode());
 
 				m_graphics.preinit();
 
@@ -910,14 +915,15 @@
 					//processGamepadInput();
 
 					//ARK2D::getLog()->v("Update Log");
-					ARK2D::getLog()->update();
+					//ARK2D::getLog()->update();
 
 					m_platformSpecific.detectGamepads();
 
 					//ARK2D::getLog()->v("Update Game");
-					m_game.preUpdate(this, &m_timer);
-					m_game.update(this, &m_timer);
-					m_game.postUpdate(this, &m_timer);
+					//m_game.preUpdate(this, &m_timer);
+					//m_game.update(this, &m_timer);
+					//m_game.postUpdate(this, &m_timer);
+					scene->update();
 					m_input.clearKeyPressedRecord();
 					for (unsigned int i = 0; i < m_gamepads.size(); i++) {
 						m_gamepads.at(i)->clearButtonPressedRecord();

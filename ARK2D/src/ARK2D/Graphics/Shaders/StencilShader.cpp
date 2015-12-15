@@ -47,16 +47,16 @@ namespace ARK {
 
 			RendererState::start(RendererState::SHADER, getId());
 
-			_ModelMatrix = getUniformVariable("ark_ModelMatrix");
-			_ViewMatrix = getUniformVariable("ark_ViewMatrix");
-			_ProjectionMatrix = getUniformVariable("ark_ProjectionMatrix");
-			_NormalMatrix = getUniformVariable("ark_NormalMatrix");
+			ark_ModelMatrix = getUniformVariable("ark_ModelMatrix");
+			ark_ViewMatrix = getUniformVariable("ark_ViewMatrix");
+			ark_ProjectionMatrix = getUniformVariable("ark_ProjectionMatrix");
+			ark_NormalMatrix = getUniformVariable("ark_NormalMatrix");
 			
-			_TextureId = getUniformVariable("ark_TextureId");
-			_VertexPositionIn = 1;
-			_VertexNormalIn = 2;
-			_VertexTexCoordIn = 3;
-			_VertexColorIn = 4;
+			ark_TextureId = getUniformVariable("ark_TextureId");
+			ark_VertexPositionIn = 1;
+			ark_VertexNormalIn = 2;
+			ark_VertexTexCoordIn = 3;
+			ark_VertexColorIn = 4;
 			
 			RendererState::start(RendererState::NONE);
 		}
@@ -90,13 +90,13 @@ namespace ARK {
 		}
 
 		void StencilShader::startInternal() {
-            // Replace existing texture shader... how novel!
-			m_shaderBasicTexture = Renderer::s_shaderBasicTexture;
-			Renderer::s_shaderBasicTexture = this;
+            Renderer* r = ARK2D::getRenderer();
+			r->overrideBasicShaders(NULL, this);
 		} 
 
 		void StencilShader::stopInternal() {
-			Renderer::s_shaderBasicTexture = m_shaderBasicTexture;
+			Renderer* r = ARK2D::getRenderer();
+			r->resetBasicShaders();
         }
 		  
 		StencilShader::~StencilShader() { 

@@ -127,6 +127,7 @@
 			"src/ARK2D/Graphics/Texture.cpp",
 			"src/ARK2D/Graphics/TextureStore.cpp",
 			"src/ARK2D/Graphics/ShaderStore.cpp",
+			"src/ARK2D/Graphics/MatrixStack.cpp",
 			"src/ARK2D/Graphics/ImageIO/BMPImage.cpp",
 			"src/ARK2D/Graphics/ImageIO/PNGImage.cpp",
 			"src/ARK2D/Graphics/ImageIO/TargaImage.cpp",
@@ -135,6 +136,7 @@
 			"src/ARK2D/Graphics/Shaders/AlphaMaskShader.cpp",
 			"src/ARK2D/Graphics/Shaders/StencilShader.cpp",
 			"src/ARK2D/Graphics/Skybox.cpp",
+
 			"src/ARK2D/Geometry/GigaRectangle.cpp",
 			"src/ARK2D/Geometry/Vector2.cpp",
 			"src/ARK2D/Geometry/Shape.cpp",

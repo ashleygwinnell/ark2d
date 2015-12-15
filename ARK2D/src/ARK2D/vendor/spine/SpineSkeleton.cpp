@@ -709,12 +709,12 @@ namespace ARK {
 					
 					#ifdef ARK2D_WINDOWS_VS
 						float* rawVertices = (float*)malloc((mesh->trianglesCount * 3) * sizeof(float));
-						float* rawNormals = (float*)malloc((mesh->trianglesCount * 3) * sizeof(float));
+						float* rawNormalsLocal = (float*)malloc((mesh->trianglesCount * 3) * sizeof(float));
 						float* rawTexCoords = (float*)malloc((mesh->trianglesCount * 2) * sizeof(float));
 						unsigned char* rawColors = (unsigned char*)malloc((mesh->trianglesCount * 4) * sizeof(unsigned char));
 					#else
 						float rawVertices[mesh->trianglesCount*3];
-						float rawNormals[mesh->trianglesCount*3];
+						float rawNormalsLocal[mesh->trianglesCount*3];
 						float rawTexCoords[mesh->trianglesCount*2];
 						unsigned char rawColors[mesh->trianglesCount*4];
 					#endif
@@ -734,30 +734,30 @@ namespace ARK {
 					int m = 0;
 					for (int j = 0; j < mesh->trianglesCount; ++j) {
 						int index = mesh->triangles[j] << 1;
-						
 						rawVertices[k] = worldVertices[index];
 						rawVertices[k+1] = worldVertices[index+1];
 						rawVertices[k+2] = m_z;
 
-						rawNormals[k] = 0;
-						rawNormals[k+1] = 0;
-						rawNormals[k+2] = 1;
+						rawNormalsLocal[k] = 0;
+						rawNormalsLocal[k+1] = 0;
+						rawNormalsLocal[k+2] = 1;
 
 						rawTexCoords[m] = mesh->uvs[index] * sx;
 						rawTexCoords[m+1] = mesh->uvs[index + 1] * sy;
+						
 						rawColors[l] = re;
 						rawColors[l+1] = g;
 						rawColors[l+2] = b;
-						rawColors[l+3] = a; 
+						rawColors[l+3] = a;
 						k += 3;
 						m += 2;
 						l += 4;
 					}
-					r->texturedTriangles(texId, &rawVertices[0], &rawTexCoords[0], &rawNormals[0], &rawColors[0], mesh->trianglesCount/3);
+					r->texturedTriangles(texId, &rawVertices[0], &rawTexCoords[0], &rawNormalsLocal[0], &rawColors[0], mesh->trianglesCount/3);
  
 					#ifdef ARK2D_WINDOWS_VS
 						free(rawVertices);
-						free(rawNormals);
+						free(rawNormalsLocal);
 						free(rawTexCoords);
 						free(rawColors);
 					#endif
@@ -784,13 +784,13 @@ namespace ARK {
 					unsigned char a =  (unsigned char) (rr_a * a_f  * 255.0f);
 
 					#ifdef ARK2D_WINDOWS_VS
-						float* rawVertices = (float*)malloc((mesh->trianglesCount * 9) * sizeof(float));
-						float* rawNormals = (float*)malloc((mesh->trianglesCount * 9) * sizeof(float));
-						float* rawTexCoords = (float*)malloc((mesh->trianglesCount * 6) * sizeof(float));
-						unsigned char* rawColors = (unsigned char*)malloc((mesh->trianglesCount * 12) * sizeof(unsigned char));
+						float* rawVertices = (float*)malloc((mesh->trianglesCount * 3) * sizeof(float));
+						float* rawNormalsLocal = (float*)malloc((mesh->trianglesCount * 3) * sizeof(float));
+						float* rawTexCoords = (float*)malloc((mesh->trianglesCount * 2) * sizeof(float));
+						unsigned char* rawColors = (unsigned char*)malloc((mesh->trianglesCount * 4) * sizeof(unsigned char));
 					#else
 						float rawVertices[mesh->trianglesCount * 3];
-						float rawNormals[mesh->trianglesCount * 3];
+						float rawNormalsLocal[mesh->trianglesCount * 3];
 						float rawTexCoords[mesh->trianglesCount * 2];
 						unsigned char rawColors[mesh->trianglesCount * 4];
 					#endif
@@ -804,9 +804,9 @@ namespace ARK {
 						rawVertices[k] = worldVertices[index];
 						rawVertices[k+1] = worldVertices[index+1];
 						rawVertices[k+2] = m_z;
-						rawNormals[k] = 0;
-						rawNormals[k+1] = 0;
-						rawNormals[k+2] = 1;
+						rawNormalsLocal[k] = 0;
+						rawNormalsLocal[k+1] = 0;
+						rawNormalsLocal[k+2] = 1;
 						rawTexCoords[m] = mesh->uvs[index] * sx;
 						rawTexCoords[m+1] = mesh->uvs[index + 1] * sy;
 						rawColors[l] = re;
@@ -819,11 +819,11 @@ namespace ARK {
 
 					}
 					
-					r->texturedTriangles(texId, &rawVertices[0], &rawNormals[0], &rawTexCoords[0], &rawColors[0], mesh->trianglesCount/3);
+					r->texturedTriangles(texId, &rawVertices[0], &rawNormalsLocal[0], &rawTexCoords[0], &rawColors[0], mesh->trianglesCount/3);
 
 					#ifdef ARK2D_WINDOWS_VS
 						free(rawVertices);
-						free(rawNormals);
+						free(rawNormalsLocal);
 						free(rawTexCoords);
 						free(rawColors);
 					#endif

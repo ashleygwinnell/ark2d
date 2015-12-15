@@ -15,7 +15,13 @@ namespace ARK {
 
 		Camera::Camera():
 			ARK::SceneGraph::SceneNode("camera", SceneNode::TYPE_CAMERA),
-			type(TYPE_ORTHO_2D)
+			type(TYPE_ORTHO_2D),
+			projection(),
+			view(),
+			model()
+			//projection(MatrixStack::TYPE_PROJECTION),
+			//view(MatrixStack::TYPE_VIEW),
+			//model(MatrixStack::TYPE_MODEL)
 		{
 			up = Vector3<float>(0, 1, 0);
 			fieldOfView = 45;
@@ -140,6 +146,7 @@ namespace ARK {
 				view.identity();
 				view.lookAt(transform.position.x, transform.position.y, transform.position.z, lookAt.x, lookAt.y, lookAt.z, up.x, up.y, up.z);
                 view.translate(container->getTranslateX(), container->getTranslateY(), 0.0f);
+                // todo: rotate
                 view.scale(container->getScaleX(), container->getScaleY(), 1.0f);
                 
                 model.identity(); // = glm::mat4(1.0f);
@@ -164,8 +171,21 @@ namespace ARK {
                 model.identity();
 			}
 
-			MVP = projection * view * model;
+			//MVP = projection * view * model;
 
+		}
+
+		void Camera::rendererUpdate() {
+			Renderer* r = ARK2D::getRenderer();
+			//r->matrixMode(MatrixStack::TYPE_PROJECTION);
+			//r->loadIdentity();
+			//r->multiplyMatrix(&projection.m_stack[projection.m_stackIndex]);
+			//r->multiplyMatrix(&projection);
+
+			//r->matrixMode(MatrixStack::TYPE_VIEW);
+			//r->loadIdentity();
+			//r->multiplyMatrix(&view.m_stack[view.m_stackIndex]);
+			//r->multiplyMatrix(&view);
 		}
 
 		void Camera::render() {
@@ -176,13 +196,8 @@ namespace ARK {
 			r->viewport(viewportX, viewportY, viewportWidth, viewportHeight);
 			//r->clear(clearColor);
 
-			r->matrixMode(MatrixStack::TYPE_PROJECTION);
-			r->loadIdentity();
-			r->multiplyMatrix(&projection);
+			//updateMatrices()
 
-			r->matrixMode(MatrixStack::TYPE_VIEW);
-			r->loadIdentity();
-			r->multiplyMatrix(&view);
 			/*r->matrixMode(MatrixStack::TYPE_PROJECTION);
 			MatrixStack* projectionStack = r->getMatrix(MatrixStack::TYPE_PROJECTION);
 				Matrix44<float>* mymat = projectionStack->current();
@@ -422,10 +437,15 @@ namespace ARK {
 		}*/
 
 		Vector3<float> Camera::worldToScreenPoint(const Vector3<float>& p) {
-
+			
 			// http://webglfactory.blogspot.co.uk/2011/05/how-to-convert-world-to-screen.html
 			Vector4<float> point3d = Vector4<float>(p.getX(), p.getY(), p.getZ(), 0);
-			Matrix44<float> viewProjectionMatrix = projection * view;
+			if (type == TYPE_ORTHO_2D) {
+				point3d.x -= viewportWidth * 0.5f;
+				point3d.y -= viewportHeight * 0.5f;
+			}
+			Matrix44<float> viewProjectionMatrix = projection.m_stack[projection.m_stackIndex] * view.m_stack[view.m_stackIndex];
+			//Matrix44<float> viewProjectionMatrix = *projection.current() * *view.current();
 			
 			// transform world to clipping coordinates
 			point3d = viewProjectionMatrix * point3d;
@@ -435,17 +455,32 @@ namespace ARK {
 			float newY = round( (( 1 - point3d.y ) / 2.0) * viewportHeight );
 
 			return Vector3<float>(newX, newY, 0.0f);
+		//	return Vector3<float>(0,0,0);
 		}
 		Vector3<float> Camera::screenToWorldPoint(const Vector3<float>& p) {
 
-			double x = 2.0 * p.getX() / viewportWidth - 1;
-			double y = - 2.0 * p.getY() / viewportHeight + 1;
-			Matrix44<float> viewProjection = projection * view;
+			double x = p.x;
+			double y = p.y;
+			//if (type == TYPE_ORTHO || type == TYPE_PERSPECTIVE) { 
+				x = 2.0 * p.getX() / viewportWidth - 1;
+				y = -2.0 * p.getY() / viewportHeight + 1;
+			//} else if (type == TYPE_ORTHO_2D) {
+			//	x = p.getX() / viewportWidth;
+			//	y = -p.getY() / viewportHeight;
+			//}
+			//Matrix44<float> viewProjection = *projection.current() * *view.current();
+			Matrix44<float> viewProjection = projection.m_stack[projection.m_stackIndex] * view.m_stack[view.m_stackIndex];
             viewProjection.inverse();
 
             Vector4<float> point4d(x, y, 0, 0);
             point4d = viewProjection * point4d;
-			return Vector3<float>(point4d.x, point4d.y, 0.0f);
+			Vector3<float> ret(point4d.x, point4d.y, 0.0f);
+			if (type == TYPE_ORTHO_2D) {
+				ret.x += viewportWidth * 0.5f;
+				ret.y += viewportHeight * 0.5f;
+			}
+			return ret;
+			//return Vector3<float>(0,0,0);
 		}
 
 		void Camera::rotate(Vector3<float>* axis, float angle) {

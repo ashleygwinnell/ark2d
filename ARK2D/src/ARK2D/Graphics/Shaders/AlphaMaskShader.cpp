@@ -34,13 +34,13 @@ namespace ARK {
 
 			RendererState::start(RendererState::SHADER, getId());
 
-			_ModelMatrix = getUniformVariable("ark_ModelMatrix");
-			_ViewMatrix = getUniformVariable("ark_ViewMatrix");
-			_ProjectionMatrix = getUniformVariable("ark_ProjectionMatrix");
-            _NormalMatrix = getUniformVariable("ark_NormalMatrix");
-			_VertexPositionIn = 0;
-            _VertexNormalIn = 1;
-            _VertexColorIn = 2;
+			ark_ModelMatrix = getUniformVariable("ark_ModelMatrix");
+			ark_ViewMatrix = getUniformVariable("ark_ViewMatrix");
+			ark_ProjectionMatrix = getUniformVariable("ark_ProjectionMatrix");
+            ark_NormalMatrix = getUniformVariable("ark_NormalMatrix");
+			ark_VertexPositionIn = 0;
+            ark_VertexNormalIn = 1;
+            ark_VertexColorIn = 2;
 
 			RendererState::start(RendererState::NONE);
 		}
@@ -71,11 +71,10 @@ namespace ARK {
 			stopInternal();
 		}
 		void AlphaMaskGeometryShader::startInternal() {
-			m_shaderBasicGeometry = Renderer::s_shaderBasicGeometry;
-            Renderer::s_shaderBasicGeometry = this;
+			ARK2D::getRenderer()->overrideBasicShaders(this, NULL);
         }
 		void AlphaMaskGeometryShader::stopInternal() {
-			Renderer::s_shaderBasicGeometry = m_shaderBasicGeometry;
+			ARK2D::getRenderer()->resetBasicShaders();
 		}
 		AlphaMaskGeometryShader::~AlphaMaskGeometryShader() {
 
@@ -107,16 +106,16 @@ namespace ARK {
 
 			RendererState::start(RendererState::SHADER, getId());
 
-			_ModelMatrix = getUniformVariable("ark_ModelMatrix");
-			_ViewMatrix = getUniformVariable("ark_ViewMatrix");
-			_ProjectionMatrix = getUniformVariable("ark_ProjectionMatrix");
-            _NormalMatrix = getUniformVariable("ark_NormalMatrix");
+			ark_ModelMatrix = getUniformVariable("ark_ModelMatrix");
+			ark_ViewMatrix = getUniformVariable("ark_ViewMatrix");
+			ark_ProjectionMatrix = getUniformVariable("ark_ProjectionMatrix");
+            ark_NormalMatrix = getUniformVariable("ark_NormalMatrix");
 			
-			_TextureId = getUniformVariable("ark_TextureId");
-			_VertexPositionIn = 1;
-            _VertexNormalIn = 2;
-			_VertexTexCoordIn = 3;
-			_VertexColorIn = 4;
+			ark_TextureId = getUniformVariable("ark_TextureId");
+			ark_VertexPositionIn = 1;
+            ark_VertexNormalIn = 2;
+			ark_VertexTexCoordIn = 3;
+			ark_VertexColorIn = 4;
 
 			RendererState::start(RendererState::NONE);
 		}
@@ -147,11 +146,10 @@ namespace ARK {
 			stopInternal();
 		}
 		void AlphaMaskTextureShader::startInternal() {
-			m_shaderBasicTexture = Renderer::s_shaderBasicTexture;
-			Renderer::s_shaderBasicTexture = this;
+			ARK2D::getRenderer()->overrideBasicShaders(NULL, this);
 		}
 		void AlphaMaskTextureShader::stopInternal() {
-			Renderer::s_shaderBasicTexture = m_shaderBasicTexture;
+			ARK2D::getRenderer()->resetBasicShaders();
 		}
 		AlphaMaskTextureShader::~AlphaMaskTextureShader() {
 

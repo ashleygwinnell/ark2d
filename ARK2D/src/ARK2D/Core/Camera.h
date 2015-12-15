@@ -7,6 +7,7 @@
 
 #include "../Geometry/Vector3.h"
 #include "../Graphics/Color.h"
+#include "../Graphics/MatrixStack.h"
 #include "../SceneGraph/Scene.h"
 
 #include "../Namespaces.h"
@@ -56,10 +57,10 @@ namespace ARK {
 				Vector3<float> up;
 				Quaternion<float> rotation_quaternion;
 				
-				Matrix44<float> projection;
-				Matrix44<float> view;
-				Matrix44<float> model;
-				Matrix44<float> MVP;
+				MatrixStack projection;
+				MatrixStack view;
+				MatrixStack model;
+				//Matrix44<float> MVP;
 
 			public:
 				Camera();
@@ -117,6 +118,7 @@ namespace ARK {
 				virtual void update();
 
 				virtual void render();
+				virtual void rendererUpdate();
 				
 				void reset();
 				string toString();

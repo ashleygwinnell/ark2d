@@ -7,6 +7,7 @@
   
 #include "GameContainerWindows.h"
 #include "../GameContainer.h" 
+#include "../Camera.h"
 #include "../../ARK2D.h"
 
 #include "../../Namespaces.h"
@@ -628,10 +629,14 @@
 				ARK2D::s_game = &m_game;
 				ARK2D::s_graphics = &m_graphics;
 				ARK2D::s_input = &m_input;
+				ARK2D::s_camera = new ARK::Core::Camera();
+				ARK2D::s_camera->setViewport(0, 0, m_width, m_height);
 				ARK2D::s_log = ARK::Util::Log::getInstance();
 				scene = new Scene();
+				scene->addChild(ARK2D::s_camera);
 				scene->addChild(ARK2D::s_game);
 				scene->addChild(ARK2D::s_log);
+				scene->addChild(new LetterboxNode());
 
 
 				m_platformSpecific.m_windowRect.left = (long) 0; 			// Set Left Value To 0
@@ -3145,15 +3150,17 @@
 					//	this->m_game->update(this, dt - myAverageDelta);
 					//}
 					//ARK2D::getLog()->v("Update Log");
-					ARK2D::getLog()->update();
+					//ARK2D::getLog()->update();
+					
 
 
-
+ 
 					//int delta = (int) (m_timer.getDelta() * 1000);
 					//ARK2D::getLog()->v("Update Game");
-					m_game.preUpdate(this, &m_timer);
-					m_game.update(this, &m_timer);
-					m_game.postUpdate(this, &m_timer);
+					scene->update();
+					//m_game.preUpdate(this, &m_timer);
+					//m_game.update(this, &m_timer);
+					//m_game.postUpdate(this, &m_timer);
 					m_input.clearKeyPressedRecord();
 					for (unsigned int i = 0; i < m_gamepads.size(); i++) {
 						m_gamepads.at(i)->clearButtonPressedRecord();

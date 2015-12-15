@@ -96,6 +96,8 @@ namespace ARK {
 		class TextureStore;
 		
 		class Skybox;
+        
+        class MatrixStack;
 
 		//! Classes for loading different images types in to pixel buffers.
 		namespace ImageIO {

@@ -61,10 +61,6 @@ namespace ARK {
 
 				BasicTextureShader();  
 				void load();
-				void start();
-				void stop();
-				void startInternal();
-				void stopInternal();
 				virtual ~BasicTextureShader();
 		};
 		class ARK2D_API BasicShader {
