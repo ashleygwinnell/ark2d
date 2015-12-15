@@ -54,6 +54,7 @@ namespace ARK {
 				static double anglef(float x1, float y1, float x2, float y2, bool enforce_abs);
 				static double forcePositiveAngle(double angle);
 				static double toRadians(double angle);
+				static double toDegrees(double angle);
 				static double getPercentage(int top, int denominator);
 				static const char* getPercentage_CSTR(int top, int denominator);
 				static void snap(int& snap, int& x, int& y);
@@ -268,6 +269,65 @@ namespace ARK {
 					*(points+11) = brY;
 				}
 
+				template <class T>
+				static void rotate3dQuadAroundPoint(T* points, T centerOfRotationX, T centerOfRotationY, float angle) {
+					double newAngle = MathUtil::toRadians((double) angle);
+
+					*points   -= centerOfRotationX;
+					*(points+1) -= centerOfRotationY;
+					//*(points+2)
+
+					*(points+3) -= centerOfRotationX;
+					*(points+4) -= centerOfRotationY;
+					//*(points+5)
+					
+					*(points+6) -= centerOfRotationX;
+					*(points+7) -= centerOfRotationY;
+					//*(points+8)
+					
+					*(points+9) -= centerOfRotationX;
+					*(points+10) -= centerOfRotationY;
+					//*(points+11)
+					
+					*(points+12) -= centerOfRotationX;
+					*(points+13) -= centerOfRotationY;
+					//*(points+14)
+					
+					*(points+15) -= centerOfRotationX;
+					*(points+16) -= centerOfRotationY;
+					//*(points+17)
+					
+					T tlX = centerOfRotationX + ((*points) * cos(newAngle)) - (*(points+1) * sin(newAngle));
+					T tlY = centerOfRotationY + ((*points) * sin(newAngle)) + (*(points+1) * cos(newAngle));
+
+					T trX = centerOfRotationX + (*(points+3) * cos(newAngle)) - (*(points+4) * sin(newAngle));
+					T trY = centerOfRotationY + (*(points+3) * sin(newAngle)) + (*(points+4) * cos(newAngle));
+
+					T blX = centerOfRotationX + (*(points+6) * cos(newAngle)) - (*(points+7) * sin(newAngle));
+					T blY = centerOfRotationY + (*(points+6) * sin(newAngle)) + (*(points+7) * cos(newAngle));
+					
+					T brX = centerOfRotationX + (*(points+15) * cos(newAngle)) - (*(points+16) * sin(newAngle));
+					T brY = centerOfRotationY + (*(points+15) * sin(newAngle)) + (*(points+16) * cos(newAngle));
+
+					*(points)   = tlX;
+					*(points+1) = tlY;
+
+					*(points+3) = trX;
+					*(points+4) = trY;
+
+					*(points+6) = blX;
+					*(points+7) = blY;
+					
+					*(points+9) = blX;
+					*(points+10) = blY;
+					
+					*(points+12) = trX;
+					*(points+13) = trY;
+					
+					*(points+15) = brX;
+					*(points+16) = brY;
+				}
+
 				//template <class T>
 				//static Vector2<T> s_moveAngleFromOriginV;
 
@@ -364,6 +424,25 @@ namespace ARK {
 					float cross = (leftX * rightY) - (leftY * rightX);
 					return cross < 0;
 				}
+
+				static Vector3<float> calculateFaceNormal(Vector3<float>* a, Vector3<float>* b, Vector3<float>* c) {
+					bool clockwise = isVertexOrderClockwise(a, b, c);
+					                
+					// sort out normals  
+				   	if (clockwise) {
+				       	Vector3<float>* temp = c;
+				       	c = b;
+				       	b = c;
+				    } 
+					Vector3<float> normal = Vector3<float>::cross(*b - *a, *c - *a).normalise();
+					//	if (!clockwise && normal.x == 0 && normal.y == 0 && normal.z == -1) {
+					//		normal.z *= -1;
+					//	}
+					return normal;
+				}
+				static bool isVertexOrderClockwise(Vector3<float>* a, Vector3<float>* b, Vector3<float>* c) {
+					return ((b->x - a->x) * (c->y - a->y) - (c->x - a->x) * (b->y - a->y) < 0) ? true:false; 
+				} 
 
 				static bool isVertexInsidePolygon(vector<Vector2<float> >* polygon, Vector2<float>* position, bool toleranceOnOutside = true)
 				{

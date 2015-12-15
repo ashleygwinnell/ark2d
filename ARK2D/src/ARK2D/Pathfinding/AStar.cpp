@@ -519,7 +519,7 @@ namespace ARK {
 			unsigned int ux = (unsigned int) x;
 			unsigned int uy = (unsigned int) y;
 			unsigned int index = (uy * m_width) + ux;
-			if (index < 0 || index >= m_nodes.size()) { return NULL;  }
+			if (index >= m_nodes.size()) { return NULL;  }
 
 			//ARK2D::getLog()->v(StringUtil::append("Getting Node at index: ", index));
 			return m_nodes.get(index);

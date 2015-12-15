@@ -27,6 +27,7 @@ namespace ARK {
 	//! Core framework classes for Windowing, Default Objects, Events, Resources.
 	namespace Core {
 		class Constants;
+        class Camera;
 		class Event;
 		class Exception;
 		class Game;
@@ -93,12 +94,22 @@ namespace ARK {
 
 		class Texture;
 		class TextureStore;
+		
+		class Skybox;
+        
+        class MatrixStack;
 
 		//! Classes for loading different images types in to pixel buffers.
 		namespace ImageIO {
 			class BMPImage;
 			class PNGImage;
 			class TargaImage;
+		}
+
+		//! Classes for loading different 3d models as SceneNodes.
+		namespace Model {
+			class ImageModel;
+			class ObjModel;
 		}
 	}
 
@@ -228,6 +239,7 @@ namespace ARK {
 		class Callback;
 		class DisplayUtil;
 		class Wobble;
+		//class Transform;
 
 		template <class T>
 		class Matrix44;
@@ -258,6 +270,7 @@ using namespace ARK::Geometry;
 using namespace ARK::GJ;
 using namespace ARK::Graphics;
 using namespace ARK::Graphics::ImageIO;
+using namespace ARK::Graphics::Model;
 using namespace ARK::Tiled;
 using namespace ARK::Tween;
 using namespace ARK::Threading;

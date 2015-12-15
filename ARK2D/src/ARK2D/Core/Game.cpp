@@ -58,7 +58,10 @@ namespace ARK {
 		void Game::postRender(GameContainer* container, Renderer* r) { 
 			postRender();
 		}
-
+		
+		void Game::update() {
+			update(ARK2D::getContainer(), ARK2D::getTimer());
+		}
 		void Game::render() {
 			if (!visible) { return; }
 			render(ARK2D::getContainer(), ARK2D::getRenderer());

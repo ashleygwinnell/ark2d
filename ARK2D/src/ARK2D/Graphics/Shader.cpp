@@ -13,11 +13,12 @@
 #include "../Includes.h"
 #include "../Util/Containers/Vector.h"
 #include "Image.h"
+ #include "ShaderStore.h"
 
 namespace ARK {
 	namespace Graphics {
   
-		Shader::Shader():
+		ShaderInternals::ShaderInternals():
 			m_programId(0), 
 			m_vertexShaders(),
 			m_fragmentShaders(), 
@@ -33,22 +34,23 @@ namespace ARK {
 				#endif
 				RendererStats::s_glCalls++;
 			#endif
+
 		}
 
 		#if defined(ARK2D_RENDERER_DIRECTX)
 
-			ID3D11Device* Shader::getD3D11Device() 
+			ID3D11Device* ShaderInternals::getD3D11Device() 
 			{
 				return ARK2D::getContainer()->m_platformSpecific.m_device;
 			}
-			ID3D11DeviceContext* Shader::getD3D11DeviceContext() 
+			ID3D11DeviceContext* ShaderInternals::getD3D11DeviceContext() 
 			{
 				return ARK2D::getContainer()->m_platformSpecific.m_deviceContext;
 			}
 
 		#endif
  
-		void Shader::addVertexShader(string file) {
+		void ShaderInternals::addVertexShader(string file) {
 			#ifdef SHADER_SUPPORT
 				#if defined(ARK2D_RENDERER_OPENGL)
 					ARK2D::getLog()->v("Loading Vertex Shader");
@@ -65,7 +67,7 @@ namespace ARK {
 			#endif
 		}
 
-		void Shader::addFragmentShader(string file) {
+		void ShaderInternals::addFragmentShader(string file) {
 			#ifdef SHADER_SUPPORT 
 				#if defined(ARK2D_RENDERER_OPENGL)
 					ARK2D::getLog()->v("Loading Fragment Shader");
@@ -81,14 +83,14 @@ namespace ARK {
 			#endif
 		}
 
-		void Shader::addVertexShaderFromString(string contents) {
+		void ShaderInternals::addVertexShaderFromString(string contents) {
 			addVertexShaderFromData((void*) contents.c_str(), contents.length());
 		}
-		void Shader::addFragmentShaderFromString(string contents) {
+		void ShaderInternals::addFragmentShaderFromString(string contents) {
 			addFragmentShaderFromData((void*) contents.c_str(), contents.length());
 		}
 
-		void Shader::addVertexShaderFromData(void* contents, unsigned int datalength) {
+		void ShaderInternals::addVertexShaderFromData(void* contents, unsigned int datalength) {
 			#ifdef SHADER_SUPPORT
 				#if defined(ARK2D_RENDERER_OPENGL)
 					ARK2D::getLog()->v("Loading Vertex Shader from Data");
@@ -121,7 +123,7 @@ namespace ARK {
 				m_vertexShaders.add(0);
 			#endif
 		}
-		void Shader::addFragmentShaderFromData(void* contents, unsigned int datalength) {
+		void ShaderInternals::addFragmentShaderFromData(void* contents, unsigned int datalength) {
 			#ifdef SHADER_SUPPORT
 				#if defined(ARK2D_RENDERER_OPENGL)
 					ARK2D::getLog()->v("Loading Fragment Shader from Data");
@@ -157,7 +159,7 @@ namespace ARK {
 		}
 
 
-		unsigned int Shader::addShader(string file, GLuint type) {
+		unsigned int ShaderInternals::addShader(string file, GLuint type) {
 			#ifdef SHADER_SUPPORT
 
 				#if defined(ARK2D_RENDERER_OPENGL)
@@ -222,7 +224,7 @@ namespace ARK {
 			#endif
 			return 0;
 		}
-		unsigned int Shader::addShaderFromString(string contents, GLuint type) {
+		unsigned int ShaderInternals::addShaderFromString(string contents, GLuint type) {
 			#ifdef SHADER_SUPPORT
 
 				#if defined(ARK2D_RENDERER_OPENGL)
@@ -273,11 +275,11 @@ namespace ARK {
 			#endif
 			return 0;
 		}
-		signed int Shader::getId() {
+		signed int ShaderInternals::getId() {
 			return m_programId;
 		}
 
-		bool Shader::checkShaderCompiled(unsigned int shaderId) {
+		bool ShaderInternals::checkShaderCompiled(unsigned int shaderId) {
 			#if defined(ARK2D_RENDERER_OPENGL)
 
 				m_error = false;
@@ -318,7 +320,7 @@ namespace ARK {
 		}
  
 		// get shader vars
-		int Shader::getUniformVariable(string var) {
+		int ShaderInternals::getUniformVariable(string var) {
 			#ifdef SHADER_SUPPORT
 				#if defined(ARK2D_RENDERER_OPENGL)
 					RendererStats::s_glCalls++;
@@ -332,7 +334,7 @@ namespace ARK {
 		}
 
 		// set shader vars
-		void Shader::setUniformVariableF(int var, float value) {
+		void ShaderInternals::setUniformVariableF(int var, float value) {
 			#ifdef SHADER_SUPPORT
 				#if defined(ARK2D_RENDERER_OPENGL)
 					RendererStats::s_glCalls++;
@@ -342,7 +344,7 @@ namespace ARK {
 				#endif
 			#endif
 		}
-		void Shader::setUniformVariableI(int var, int value) {
+		void ShaderInternals::setUniformVariableI(int var, int value) {
 			#ifdef SHADER_SUPPORT
 				#if defined(ARK2D_RENDERER_OPENGL)
 					glUniform1i(var, value);
@@ -352,7 +354,7 @@ namespace ARK {
 			#endif
 		}
 		// set shader vars arrays
-		void Shader::setUniformVariableF(int var, int count, float* values) {
+		void ShaderInternals::setUniformVariableF(int var, int count, float* values) {
 			#ifdef SHADER_SUPPORT
 				#if defined(ARK2D_RENDERER_OPENGL)
 					glUniform1fv(var, count, values);
@@ -361,7 +363,7 @@ namespace ARK {
 				#endif
 			#endif
 		}
-		void Shader::setUniformVariableI(int var, int count, int* values) {
+		void ShaderInternals::setUniformVariableI(int var, int count, int* values) {
 			#ifdef SHADER_SUPPORT
 				#if defined(ARK2D_RENDERER_OPENGL)
 					RendererStats::s_glCalls++;
@@ -374,7 +376,7 @@ namespace ARK {
 
 
 		// ehhh?
-		void Shader::setUniformVariable2I(int var, int v1, int v2) {
+		void ShaderInternals::setUniformVariable2I(int var, int v1, int v2) {
 			#ifdef SHADER_SUPPORT
 				#if defined(ARK2D_RENDERER_OPENGL)
 					RendererStats::s_glCalls++;
@@ -385,7 +387,7 @@ namespace ARK {
 			#endif
 		}
 		// ehhh?
-		void Shader::setUniformVariable2F(int var, float v1, float v2) {
+		void ShaderInternals::setUniformVariable2F(int var, float v1, float v2) {
 			#ifdef SHADER_SUPPORT
 				#if defined(ARK2D_RENDERER_OPENGL)
 					RendererStats::s_glCalls++;
@@ -395,7 +397,7 @@ namespace ARK {
 				#endif
 			#endif
 		}
-		void Shader::setUniformVariable3F(int var, float v1, float v2, float v3) {
+		void ShaderInternals::setUniformVariable3F(int var, float v1, float v2, float v3) {
 			#ifdef SHADER_SUPPORT
 				#if defined(ARK2D_RENDERER_OPENGL)
 					RendererStats::s_glCalls++;
@@ -404,7 +406,8 @@ namespace ARK {
 
 				#endif
 			#endif
-		}void Shader::setUniformVariable4FV(int var, int count, float* data) {
+		}
+		void ShaderInternals::setUniformVariable4FV(int var, int count, float* data) {
 			#ifdef SHADER_SUPPORT
 				#if defined(ARK2D_RENDERER_OPENGL)
 					RendererStats::s_glCalls++;
@@ -415,7 +418,7 @@ namespace ARK {
 				#endif
 			#endif
 		}
-		void Shader::setUniformVariableMat4f(int var, float* mat) {
+		void ShaderInternals::setUniformVariableMat4f(int var, float* mat) {
 			#ifdef SHADER_SUPPORT
 				#if defined(ARK2D_RENDERER_OPENGL)
 					RendererStats::s_glCalls++;
@@ -428,7 +431,7 @@ namespace ARK {
 
 
 
-		int Shader::getAttributeVariable(string var) {
+		int ShaderInternals::getAttributeVariable(string var) {
 			#ifdef SHADER_SUPPORT
 				#if defined(ARK2D_RENDERER_OPENGL)
 					RendererStats::s_glCalls++;
@@ -440,7 +443,7 @@ namespace ARK {
 			#endif
 			return 0;
 		}
-		int Shader::getAttributeVariableVertexArray(string var) {
+		int ShaderInternals::getAttributeVariableVertexArray(string var) {
 			#ifdef SHADER_SUPPORT
 				#if defined(ARK2D_RENDERER_OPENGL)
 					RendererStats::s_glCalls += 2;
@@ -454,7 +457,7 @@ namespace ARK {
 			#endif
 			return 0;
 		}
-		void Shader::enableVertexAttribArray(int var) {
+		void ShaderInternals::enableVertexAttribArray(int var) {
 			#if defined(ARK2D_RENDERER_OPENGL)
 				RendererStats::s_glCalls++;
 				glEnableVertexAttribArray(var);
@@ -462,7 +465,7 @@ namespace ARK {
 
 			#endif
 		}
-		void Shader::setAttributeVariableF(int var, float value) {
+		void ShaderInternals::setAttributeVariableF(int var, float value) {
 			#if defined(ARK2D_RENDERER_OPENGL)
 				#ifdef SHADER_SUPPORT
 					RendererStats::s_glCalls++;
@@ -472,7 +475,7 @@ namespace ARK {
 
 			#endif
 		}
-		void Shader::setAttributeVariableVertexPointerFloat(int var, int sz, bool normalise, float* data) {
+		void ShaderInternals::setAttributeVariableVertexPointerFloat(int var, int sz, bool normalise, float* data) {
 			#if defined(ARK2D_RENDERER_OPENGL)
 				#ifdef SHADER_SUPPORT
 					RendererStats::s_glCalls++;
@@ -482,7 +485,7 @@ namespace ARK {
 
 			#endif
 		}
-		void Shader::setAttributeVariableVertexPointerFloatStride(int var, int sz, bool normalise, float* data, unsigned int stride) {
+		void ShaderInternals::setAttributeVariableVertexPointerFloatStride(int var, int sz, bool normalise, float* data, unsigned int stride) {
 			#if defined(ARK2D_RENDERER_OPENGL)
 				#ifdef SHADER_SUPPORT
 					RendererStats::s_glCalls++;
@@ -493,7 +496,7 @@ namespace ARK {
 			#endif
 		}
 
-		void Shader::setAttributeVariableVertexPointerStride(int var, int sz, bool normalise, unsigned int stride, void* data) {
+		void ShaderInternals::setAttributeVariableVertexPointerStride(int var, int sz, bool normalise, unsigned int stride, void* data) {
 			#if defined(ARK2D_RENDERER_OPENGL)
 				#ifdef SHADER_SUPPORT
 					RendererStats::s_glCalls++;
@@ -504,7 +507,7 @@ namespace ARK {
 			#endif
 		}
 
-		void Shader::setAttributeVariableVertexPointerUnsignedChar(int var, int sz, void* data) {
+		void ShaderInternals::setAttributeVariableVertexPointerUnsignedChar(int var, int sz, void* data) {
 			#if defined(ARK2D_RENDERER_OPENGL)
 				#ifdef SHADER_SUPPORT
 					RendererStats::s_glCalls++;
@@ -516,7 +519,7 @@ namespace ARK {
 		}
 		
 
-		void Shader::link() {
+		void ShaderInternals::link() {
 			#if defined(ARK2D_RENDERER_OPENGL)
 				#ifdef SHADER_SUPPORT
 					ARK2D::getLog()->i("Linking...");
@@ -545,8 +548,8 @@ namespace ARK {
 			#endif
 		} 
 
-		void Shader::linkDX() {
-#if defined(ARK2D_RENDERER_DIRECTX)
+		void ShaderInternals::linkDX() {
+			#if defined(ARK2D_RENDERER_DIRECTX)
 
 			ID3D11Device* dxdevice = getD3D11Device();
 			ID3D11DeviceContext* dxcontext = getD3D11DeviceContext();
@@ -588,11 +591,12 @@ namespace ARK {
 		}
 
 
-		void Shader::initVariables() {
+		void ShaderInternals::initVariables() {
 
-			int ref_ProjectionMatrix = getUniformVariable("ark_ProjectionMatrix");
-			int ref_ModelViewMatrix = getUniformVariable("ark_ModelViewMatrix");
-			int ref_VertexPosition = getAttributeVariable("ark_VertexPosition");
+			/*int ref_ProjectionMatrix = getUniformVariable("ark_ProjectionMatrix");
+			int ref_ViewMatrix = getUniformVariable("ark_ViewMatrix");
+			int ref_ModelMatrix = getUniformVariable("ark_ModelMatrix");
+			int ref_VertexPosition = getAttributeVariable("ark_VertexPositionIn");
 			int ref_VertexColorIn = getAttributeVariable("ark_VertexColorIn");
  
  			#if defined(ARK2D_RENDERER_OPENGL)
@@ -603,49 +607,23 @@ namespace ARK {
 			#endif
 
 			m_variables["ark_ProjectionMatrix"] = ref_ProjectionMatrix;
-			m_variables["ark_ModelViewMatrix"] = ref_ModelViewMatrix;
-			m_variables["ark_VertexPosition"] = ref_VertexPosition;
+			m_variables["ark_ViewMatrix"] = ref_ViewMatrix;
+			m_variables["ark_ModelMatrix"] = ref_ModelMatrix;
+			m_variables["ark_VertexPositionIn"] = ref_VertexPosition;
 			m_variables["ark_VertexColorIn"] = ref_VertexColorIn;
 
-			RendererStats::s_glCalls += 6; 
+			RendererStats::s_glCalls += 6; */
+			ARK2D::getLog()->e("Shader::initVariables deprecated!");
 		}
-		int Shader::getInittedVariable(string s) {
+		int ShaderInternals::getInittedVariable(string s) {
 			return m_variables[s.c_str()];
 		}
 		
 
 		
  
-		void Shader::bind() {
-			#ifdef SHADER_SUPPORT
-				#if defined(ARK2D_RENDERER_OPENGL)
-					glUseProgram(m_programId);
-				#elif defined(ARK2D_RENDERER_DIRECTX)
-					ID3D11DeviceContext* dxcontext = getD3D11DeviceContext();
-					dxcontext->VSSetShader(m_d3d_vertexShader, NULL, 0); 
-					dxcontext->PSSetShader(m_d3d_pixelShader, NULL, 0);
-					dxcontext->IASetInputLayout( m_d3d_inputLayout );
-				#endif
-				RendererStats::s_glCalls++;
-			#endif
-		}
-		
-		void Shader::predraw() {
 
-		}
-
-		void Shader::unbind() {
-			#ifdef SHADER_SUPPORT
-				#if defined(ARK2D_RENDERER_OPENGL)
-					glUseProgram(0);
-				#elif defined(ARK2D_RENDERER_DIRECTX)
-
-				#endif
-				RendererStats::s_glCalls++;
-			#endif
-		}
-
-		void Shader::bindAttributeLocation(unsigned int loc, string var) {
+		void ShaderInternals::bindAttributeLocation(unsigned int loc, string var) {
 			#if defined(ARK2D_RENDERER_OPENGL)
 				glBindAttribLocation(m_programId, loc, var.c_str());
 				RendererStats::s_glCalls++;
@@ -657,14 +635,14 @@ namespace ARK {
 //			glBindAttribLocation(m_programId, loc, var.c_str());
 //			glEnableVertexAttribArray(loc);
 //		}
-		void Shader::bindFragmentDataLocation(unsigned int loc, string var) {
+		void ShaderInternals::bindFragmentDataLocation(unsigned int loc, string var) {
 			#if defined(ARK2D_OPENGL_3_2)
 				glBindFragDataLocation(m_programId, loc, var.c_str());
 				RendererStats::s_glCalls++;
 			#endif
 		}
 
-		string Shader::processGLSLForIncludes(string ss) {
+		string ShaderInternals::processGLSLForIncludes(string ss) {
 			
 			vector<string> lines = StringUtil::split(ss, "\n");
 			for(unsigned int i = 0; i < lines.size(); ++i) {
@@ -690,7 +668,7 @@ namespace ARK {
 			return result;
 		}
 
-		Shader::~Shader() {
+		ShaderInternals::~ShaderInternals() {
 
 			#ifdef SHADER_SUPPORT
 
@@ -721,5 +699,174 @@ namespace ARK {
 
 			#endif
 		}
+
+
+
+
+		Shader::Shader():
+			ShaderInternals() {
+
+		}
+
+		void Shader::load() {
+			// Add shaders / load from file.
+			// Bind attribute locations.
+			// Bind fragment data location.
+			// Link
+			// Link DX
+			// Assign shader properties to locations. 
+			// Add to shader store.
+			// ShaderStore::getInstance()->addShader(m_programId, this);
+		}
+
+		void Shader::bind() {
+			#if defined(ARK2D_RENDERER_OPENGL)
+
+				glUseProgram(m_programId);
+
+			#elif defined(ARK2D_RENDERER_DIRECTX)
+
+				ID3D11DeviceContext* dxcontext = getD3D11DeviceContext();
+				dxcontext->VSSetShader(m_d3d_vertexShader, NULL, 0); 
+				dxcontext->PSSetShader(m_d3d_pixelShader, NULL, 0);
+				dxcontext->IASetInputLayout( m_d3d_inputLayout );
+
+			#endif
+			RendererStats::s_glCalls++;
+		}
+		void Shader::unbind() {
+			#if defined(ARK2D_RENDERER_OPENGL)
+
+				glUseProgram(0);
+				RendererStats::s_glCalls++;
+
+			#elif defined(ARK2D_RENDERER_DIRECTX)
+
+			#endif
+		}
+	
+		void Shader::setData(float* rawVertices, float* rawNormals, float* rawTexCoords, unsigned char* rawColors, unsigned int length)
+		{
+			this->length = length;
+
+			#if defined(ARK2D_RENDERER_OPENGL) && defined(ARK2D_OPENGL_3_2)
+
+				Renderer::s_vboQuadVerts->setWidth(3);
+	            Renderer::s_vboQuadNormals->setWidth(3);
+	            Renderer::s_vboQuadColors->setWidth(4);
+	            if (rawTexCoords != NULL) { Renderer::s_vboQuadTexCoords->setWidth(2); }
+
+				Renderer::s_vboQuadVerts->setHeight(length);
+	            Renderer::s_vboQuadNormals->setHeight(length);
+	            Renderer::s_vboQuadColors->setHeight(length);
+	            if (rawTexCoords != NULL) { Renderer::s_vboQuadTexCoords->setHeight(length); }
+
+				Renderer::s_vaoQuad->bind();
+				glEnableVertexAttribArray(ark_VertexPositionIn);
+                glEnableVertexAttribArray(ark_VertexNormalIn);
+                glEnableVertexAttribArray(ark_VertexColorIn);
+                if (rawTexCoords != NULL) { glEnableVertexAttribArray(ark_VertexTexCoordIn); } 
+		
+				Renderer::s_vboQuadVerts->bind();
+				Renderer::s_vboQuadVerts->setData(&rawVertices[0]);
+				glVertexAttribPointer(ark_VertexPositionIn, 3, GL_FLOAT, GL_FALSE, 0, 0);
+            
+                Renderer::s_vboQuadNormals->bind();
+                Renderer::s_vboQuadNormals->setData(&rawNormals[0]);
+                glVertexAttribPointer(ark_VertexNormalIn, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+                Renderer::s_vboQuadColors->bind();
+				Renderer::s_vboQuadColors->setData(&rawColors[0]);
+				glVertexAttribPointer(ark_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, 0);
+
+				if (rawTexCoords != NULL) { 
+                	Renderer::s_vboQuadTexCoords->bind();
+            	    Renderer::s_vboQuadTexCoords->setData(&rawTexCoords[0]);
+            	    glVertexAttribPointer(ark_VertexTexCoordIn, 2, GL_FLOAT, GL_FALSE, 0, 0);
+                }
+				
+				glUniformMatrix4fv(ark_ModelMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODEL)->pointer());
+				glUniformMatrix4fv(ark_ViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_VIEW)->pointer());
+				glUniformMatrix4fv(ark_ProjectionMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_PROJECTION)->pointer());
+                glUniformMatrix3fv(ark_NormalMatrix, 1, GL_FALSE, (float*) Renderer::getNormalMatrix()->pointer());
+
+				RendererStats::s_glCalls += 10;
+
+				if (rawTexCoords != NULL) {
+					//glActiveTexture(GL_TEXTURE0);	
+					//glBindTexture(GL_TEXTURE_2D, dg->m_clouds->getTexture()->getId());
+					glUniform1i(ark_TextureId, 0); 
+				}
+
+			#elif defined(ARK2D_RENDERER_OPENGL) && defined(ARK2D_OPENGL_ES_2_0) 
+
+				glVertexAttribPointer(ark_VertexPositionIn, 3, GL_FLOAT, GL_FALSE, 0, &rawVertices);
+                glVertexAttribPointer(ark_VertexNormalIn, 3, GL_FLOAT, GL_FALSE, 0, &rawNormals);
+                glVertexAttribPointer(ark_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, &rawColors); 
+                if (rawTexCoords != NULL) {
+                	glVertexAttribPointer(ark_VertexTexCoordIn, 2, GL_FLOAT, GL_FALSE, 0, &rawTexCoords);
+                }
+					
+				glUniformMatrix4fv(ark_ModelMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODEL)->pointer());
+				glUniformMatrix4fv(ark_ViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_VIEW)->pointer());
+				glUniformMatrix4fv(ark_ProjectionMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_PROJECTION)->pointer());
+                glUniformMatrix3fv(ark_NormalMatrix, 1, GL_FALSE, (float*) Renderer::getNormalMatrix()->pointer());
+
+                if (rawTexCoords != NULL) {
+					glUniform1i(ark_TextureId, 0); 
+				}
+
+                RendererStats::s_glCalls += 7;
+
+            #elif defined(ARK2D_RENDERER_OPENGL)
+
+                glVertexPointer(3, GL_FLOAT, 0, rawVertices);
+                glNormalPointer(3, GL_FLOAT, 0, rawNormals);
+                glColorPointer(4, GL_UNSIGNED_BYTE, 0, rawColors);
+                if (rawTexCoords != NULL) {
+                	glTexCoordPointer(2, GL_FLOAT, 0, rawTexCoords);
+                }
+
+                if (rawTexCoords != NULL) {
+					glUniform1i(ark_TextureId, 0); 
+				}
+				
+				RendererStats::s_glCalls += 3;
+
+			#elif defined(ARK2D_RENDERER_DIRECTX) 
+				// ...
+			#endif
+		}
+		void Shader::drawTriangleStrip() {
+			#if defined(ARK2D_RENDERER_OPENGL)
+
+				glDrawArrays(GL_TRIANGLE_STRIP, 0, length);
+				RendererStats::s_tris += (length-2);
+				RendererStats::s_glCalls += 1;
+
+			#endif
+		}
+		void Shader::drawTriangleFan() {
+			#if defined(ARK2D_RENDERER_OPENGL)
+
+				glDrawArrays(GL_TRIANGLE_FAN, 0, length);
+				RendererStats::s_tris += length;
+				RendererStats::s_glCalls += 1;
+
+			#endif
+		}
+		void Shader::drawTriangles() {
+			#if defined(ARK2D_RENDERER_OPENGL)
+
+				glDrawArrays(GL_TRIANGLES, 0, length);
+				RendererStats::s_tris += length/3;
+				RendererStats::s_glCalls += 1;
+
+			#endif
+		}
+		Shader::~Shader() {
+			
+		}
+
 	}
 }

@@ -17,18 +17,24 @@ namespace ARK {
 		class ARK2D_API HSVGeometryShader : public ARK::Graphics::Shader 
 		{ 
 			public:
-				unsigned int _ModelViewMatrix;
+				unsigned int _ModelMatrix;
+				unsigned int _ViewMatrix;
 				unsigned int _ProjectionMatrix;
+				unsigned int _NormalMatrix;
 				unsigned int _HSVIn;
 
 				unsigned int _VertexPositionIn;
+				unsigned int _VertexNormalIn;
 				unsigned int _VertexColorIn;
 				
 				Shader* m_shaderBasicGeometry;
 				QuadVBO* m_vbo; 
-				unsigned int m_shaderBasicGeometry_ModelViewMatrix;
+				unsigned int m_shaderBasicGeometry_ModelMatrix;
+				unsigned int m_shaderBasicGeometry_ViewMatrix;
 				unsigned int m_shaderBasicGeometry_ProjectionMatrix;
+				unsigned int m_shaderBasicGeometry_NormalMatrix;
 				unsigned int m_shaderBasicGeometry_VertexPositionIn;
+				unsigned int m_shaderBasicGeometry_VertexNormalIn;
 				unsigned int m_shaderBasicGeometry_VertexColorIn;
 
 				float h;
@@ -49,21 +55,27 @@ namespace ARK {
 		class ARK2D_API HSVTextureShader : public ARK::Graphics::Shader 
 		{ 
 			public:
-				unsigned int _ModelViewMatrix;
+				unsigned int _ModelMatrix;
+				unsigned int _ViewMatrix;
 				unsigned int _ProjectionMatrix;
+				unsigned int _NormalMatrix;
 				unsigned int _TextureId;
 				unsigned int _HSVIn;
 
 				unsigned int _VertexPositionIn;
+				unsigned int _VertexNormalIn;
 				unsigned int _VertexTexCoordIn;
 				unsigned int _VertexColorIn;
 
 				Shader* m_shaderBasicTexture;
 				QuadVBO* m_vbo; 
 				unsigned int m_shaderBasicTexture_TextureId;
-				unsigned int m_shaderBasicTexture_ModelViewMatrix;
+				unsigned int m_shaderBasicTexture_ModelMatrix;
+				unsigned int m_shaderBasicTexture_ViewMatrix;
 				unsigned int m_shaderBasicTexture_ProjectionMatrix;
+				unsigned int m_shaderBasicTexture_NormalMatrix;
 				unsigned int m_shaderBasicTexture_VertexPositionIn;
+				unsigned int m_shaderBasicTexture_VertexNormalIn;
 				unsigned int m_shaderBasicTexture_VertexTexCoordIn;
 				unsigned int m_shaderBasicTexture_VertexColorIn;
 

@@ -85,26 +85,26 @@ namespace ARK {
             	: SceneNode::s_dummyCube;
 			if (m_splitType == SPLIT_HORIZONTAL) {
 				if (m_firstComponent != NULL) { 
-					m_firstComponent->position.set(0.0f, 0.0f, 0.0f);
-   					m_firstComponent->scale.set(1.0f, 1.0f, 1.0f);
+					m_firstComponent->transform.position.set(0.0f, 0.0f, 0.0f);
+   					m_firstComponent->transform.scale.set(1.0f, 1.0f, 1.0f);
                 	m_firstComponent->setBounds((bounds->getWidth()*m_splitLocation), bounds->getHeight(), 0.0f);
                 }
                 if (m_secondComponent != NULL) { 
-					m_secondComponent->position.set(bounds->getWidth()*m_splitLocation, 0.0f, 0.0f);
-                	m_secondComponent->scale.set(1.0f, 1.0f, 1.0f);
+					m_secondComponent->transform.position.set(bounds->getWidth()*m_splitLocation, 0.0f, 0.0f);
+                	m_secondComponent->transform.scale.set(1.0f, 1.0f, 1.0f);
                 	m_secondComponent->setBounds(bounds->getWidth()*(1.0f-m_splitLocation), bounds->getHeight(), 0.0f);
                 }
 			} else if (m_splitType == SPLIT_VERTICAL)
             {
 				if (m_firstComponent != NULL) { 
-					m_firstComponent->position.set(0.0f, 0.0f, 0.0f);
-                	m_firstComponent->scale.set(1.0f, 1.0f, 1.0f);
+					m_firstComponent->transform.position.set(0.0f, 0.0f, 0.0f);
+                	m_firstComponent->transform.scale.set(1.0f, 1.0f, 1.0f);
 					m_firstComponent->setBounds(bounds->getWidth(), bounds->getHeight()*m_splitLocation, 0.0f);
 				}
 
 				if (m_secondComponent != NULL) { 
-					m_secondComponent->position.set(0.0f, bounds->getHeight()*m_splitLocation, 0.0f);
-                	m_secondComponent->scale.set(1.0f, 1.0f, 1.0f);
+					m_secondComponent->transform.position.set(0.0f, bounds->getHeight()*m_splitLocation, 0.0f);
+                	m_secondComponent->transform.scale.set(1.0f, 1.0f, 1.0f);
 					m_secondComponent->setBounds(bounds->getWidth(), bounds->getHeight()*(1.0f-m_splitLocation), 0.0f);
 				}
 			}

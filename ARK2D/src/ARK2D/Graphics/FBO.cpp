@@ -317,7 +317,7 @@ namespace ARK {
 	 
 					r->ortho2d(0, 0, w, h, -1.0f, 1.0f);
 
-					r->matrixMode(MatrixStack::TYPE_MODELVIEW);
+					r->matrixMode(MatrixStack::TYPE_VIEW);
 					r->pushMatrix();
 					r->loadIdentity(); 
 

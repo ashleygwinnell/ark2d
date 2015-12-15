@@ -1,7 +1,13 @@
 #version 100
-uniform highp mat4 ark_ModelViewMatrix;
+
+uniform highp mat4 ark_ModelMatrix;
+uniform highp mat4 ark_ViewMatrix;
 uniform highp mat4 ark_ProjectionMatrix;
-attribute vec4 ark_VertexPosition; 
+
+uniform mat3 ark_NormalMatrix;
+
+attribute vec4 ark_VertexPositionIn; 
+attribute vec4 ark_VertexNormalIn; 
 
 attribute vec2 ark_VertexTexCoordIn;
 varying vec2 ark_VertexTexCoordOut;
@@ -13,5 +19,5 @@ void main(void)
 {
 	ark_VertexTexCoordOut = ark_VertexTexCoordIn;
 	ark_VertexColorOut = ark_VertexColorIn;
-	gl_Position = ark_ProjectionMatrix * ark_ModelViewMatrix * ark_VertexPosition;
+	gl_Position = ark_ProjectionMatrix * ark_ViewMatrix * ark_ModelMatrix * ark_VertexPositionIn;
 }

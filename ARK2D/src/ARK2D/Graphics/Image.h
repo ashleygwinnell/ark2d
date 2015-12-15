@@ -98,8 +98,9 @@ namespace ARK {
 				//	Renderer_InterleavingTextureVertexData m_vertices[4];
 				//#else
 					bool m_dirty;
-					float m_verts[8];
+					float m_verts[12];
 					float m_texCoords[8];
+					float m_normals[12];
 					unsigned char m_colors[16];
 				//#endif
 
@@ -184,6 +185,7 @@ namespace ARK {
 				void draw();
 				void draw(int x, int y);
 				void draw(float x, float y);
+				void draw(float x, float y, float z);
 				void draw(float x, float y, unsigned int w, unsigned int h);
 				void drawAligned(float x, float y, signed int alignX, signed int alignY, float scale=1.0f);
 				void drawPivoted(float x, float y, signed int pivotX, signed int pivotY, float scale);

@@ -523,6 +523,8 @@
 
 		#import <QTKit/QTKit.h>
 
+		#include <execinfo.h>
+
  		#include "vendor/libcurl/curl.h"
  		#include "vendor/spine/includes/spine/spine.h"
  		

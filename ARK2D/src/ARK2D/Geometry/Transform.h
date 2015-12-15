@@ -9,6 +9,7 @@
 #define ARK_MATH_TRANSFORM_H_
 
 #include "Vector3.h"
+#include "Quaternion.h"
 #include "../Util/Vector4.h"
 
 #include <vector>
@@ -21,15 +22,13 @@ namespace ARK {
 			public:
 				Vector3<float> position;
 				Vector3<float> scale;
-				Vector4<float> rotation;
+				Quaternion<float> rotation;
 				
-				Transform* parent;
-				vector<Transform> children;
-
 				Transform();
-				void translate(float x, float y, float z);
-				void toMatrix(Matrix44<float>* out);
-				~Transform();
+				// void translate(float x, float y, float z); // use += on position
+                // void scale(float x, float y, float z); // use *= on scale
+				Matrix44<float> toMatrix();
+				virtual ~Transform();
 		};
 
 	}

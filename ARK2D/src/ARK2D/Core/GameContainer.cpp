@@ -116,6 +116,8 @@ namespace ARK {
 		}
 
 		void GameContainer::enable2D() {
+			return ;
+
 			ARK2D::getLog()->i("enable 2d");
 			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))// || defined(ARK2D_FLASCC))
 
@@ -123,12 +125,12 @@ namespace ARK {
 				Renderer* r = ARK2D::getRenderer();
 				r->matrixMode(MatrixStack::TYPE_PROJECTION);
 				r->pushMatrix();
-				r->loadIdentity(); 
+				r->loadIdentity();
  
 				//r->ortho2d(0, 0, m_width, m_height, -1.0f, 1.0f);
 				r->ortho2d(0, 0, m_width, m_height, -1.0f, 1.0f);
 
-				r->matrixMode(MatrixStack::TYPE_MODELVIEW);
+				r->matrixMode(MatrixStack::TYPE_VIEW);
 				r->pushMatrix();
 				r->loadIdentity();
 				
@@ -169,13 +171,14 @@ namespace ARK {
 		}*/
 
 		void GameContainer::disable2D() {
+			return;
 			//ARK2D::getLog()->i("disable 2d");
 			
 			Renderer* r = ARK2D::getRenderer();
 			r->matrixMode(MatrixStack::TYPE_PROJECTION);
 			r->popMatrix();
 
-			r->matrixMode(MatrixStack::TYPE_MODELVIEW);
+			r->matrixMode(MatrixStack::TYPE_VIEW);
 			r->popMatrix();			
 
 			/*Image::showAnyGlErrorAndExit();
@@ -216,6 +219,8 @@ namespace ARK {
 		}
 
 		void GameContainer::preRender() {
+			return; 
+
 			Renderer* r = ARK2D::getRenderer();
 			GameContainer* container = this;
 			#if defined(ARK2D_ANDROID) || defined(ARK2D_WINDOWS_PHONE_8)
@@ -269,6 +274,8 @@ namespace ARK {
 			r->pushMatrix(true);
 		}
 		void GameContainer::postRender() {
+			return; 
+
 			Renderer* r = ARK2D::getRenderer();
 			GameContainer* container = this;
 			#if defined(ARK2D_IPHONE)
@@ -305,6 +312,8 @@ namespace ARK {
 			RendererStats::endframe();
 		}
 		void GameContainer::resizeGame() {
+			//return; 
+
 			GameContainer* container = this;
 			#if defined(ARK2D_ANDROID)
 				if (container->getResizeBehaviour() == GameContainer::RESIZE_BEHAVIOUR_SCALE) {
@@ -450,10 +459,10 @@ namespace ARK {
                 	ARK2D::getLog()->i(StringUtil::append("translate y: ", ty));
                 }
 
-                Renderer* r = ARK2D::getRenderer();
-                r->loadIdentity();
-                r->viewport(0, 0, container->m_width, container->m_height);
-                container->enable2D();
+                //Renderer* r = ARK2D::getRenderer();
+                //r->loadIdentity();
+                //r->viewport(0, 0, container->m_width, container->m_height);
+                //container->enable2D();
 
                 //glLoadIdentity();
 				//glViewport(0, 0, width, height);

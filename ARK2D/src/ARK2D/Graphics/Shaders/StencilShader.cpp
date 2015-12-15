@@ -7,6 +7,7 @@
 
 #include "../Shader.h"
 #include "StencilShader.h"
+#include "../ShaderStore.h"
 
 namespace ARK { 
 	namespace Graphics { 
@@ -34,24 +35,30 @@ namespace ARK {
 			}
 
 			bindAttributeLocation(0, "ark_TextureId");
-			bindAttributeLocation(1, "ark_VertexPosition");
-			bindAttributeLocation(2, "ark_VertexTexCoordIn");
-			bindAttributeLocation(3, "ark_VertexColorIn");
+			bindAttributeLocation(1, "ark_VertexPositionIn");
+			bindAttributeLocation(2, "ark_VertexNormalIn");
+			bindAttributeLocation(3, "ark_VertexTexCoordIn");
+			bindAttributeLocation(4, "ark_VertexColorIn");
 			bindFragmentDataLocation(0, "ark_FragColor");
 			link(); 
 			linkDX(); 
 
+			ShaderStore::getInstance()->addShader(m_programId, this);
+
 			RendererState::start(RendererState::SHADER, getId());
 
-			_ModelViewMatrix = getUniformVariable("ark_ModelViewMatrix");
-			_ProjectionMatrix = getUniformVariable("ark_ProjectionMatrix");
+			ark_ModelMatrix = getUniformVariable("ark_ModelMatrix");
+			ark_ViewMatrix = getUniformVariable("ark_ViewMatrix");
+			ark_ProjectionMatrix = getUniformVariable("ark_ProjectionMatrix");
+			ark_NormalMatrix = getUniformVariable("ark_NormalMatrix");
 			
-			_TextureId = getUniformVariable("ark_TextureId");
-			_VertexPositionIn = 1;
-			_VertexTexCoordIn = 2;
-			_VertexColorIn = 3;
+			ark_TextureId = getUniformVariable("ark_TextureId");
+			ark_VertexPositionIn = 1;
+			ark_VertexNormalIn = 2;
+			ark_VertexTexCoordIn = 3;
+			ark_VertexColorIn = 4;
 			
-			RendererState::start(RendererState::GEOMETRY);
+			RendererState::start(RendererState::NONE);
 		}
 
 		void StencilShader::startStatic(StencilShader* obj) { obj->startInternal(); }
@@ -83,41 +90,14 @@ namespace ARK {
 		}
 
 		void StencilShader::startInternal() {
-		
-			//RendererState::s_shaderId = getId();
-			//Shader::bind();
-
-			// Replace existing texture shader... how novel! 
-			m_shaderBasicTexture 					= Renderer::s_shaderBasicTexture;
-			m_shaderBasicTexture_ModelViewMatrix	= Renderer::s_shaderBasicTexture_ModelViewMatrix;
-			m_shaderBasicTexture_ProjectionMatrix 	= Renderer::s_shaderBasicTexture_ProjectionMatrix;
-			m_shaderBasicTexture_VertexPositionIn 	= Renderer::s_shaderBasicTexture_VertexPosition;
-			m_shaderBasicTexture_VertexTexCoordIn 	= Renderer::s_shaderBasicTexture_VertexTexCoordIn;
-			m_shaderBasicTexture_VertexColorIn 		= Renderer::s_shaderBasicTexture_VertexColorIn;
-			m_shaderBasicTexture_TextureId 			= Renderer::s_shaderBasicTexture_TextureId;
-
-			Renderer::s_shaderBasicTexture 					= this;
-			Renderer::s_shaderBasicTexture_ModelViewMatrix 	= _ModelViewMatrix;
-			Renderer::s_shaderBasicTexture_ProjectionMatrix = _ProjectionMatrix;
-			Renderer::s_shaderBasicTexture_VertexPosition	= _VertexPositionIn;
-			Renderer::s_shaderBasicTexture_VertexTexCoordIn = _VertexTexCoordIn;
-			Renderer::s_shaderBasicTexture_VertexColorIn 	= _VertexColorIn;
-			Renderer::s_shaderBasicTexture_TextureId 		= _TextureId;
-
-
+            Renderer* r = ARK2D::getRenderer();
+			r->overrideBasicShaders(NULL, this);
 		} 
 
 		void StencilShader::stopInternal() {
-			//Shader::unbind();
-
-			Renderer::s_shaderBasicTexture 					= m_shaderBasicTexture;
-			Renderer::s_shaderBasicTexture_ModelViewMatrix 	= m_shaderBasicTexture_ModelViewMatrix;
-			Renderer::s_shaderBasicTexture_ProjectionMatrix = m_shaderBasicTexture_ProjectionMatrix;
-			Renderer::s_shaderBasicTexture_VertexPosition	= m_shaderBasicTexture_VertexPositionIn;
-			Renderer::s_shaderBasicTexture_VertexTexCoordIn = m_shaderBasicTexture_VertexTexCoordIn;
-			Renderer::s_shaderBasicTexture_VertexColorIn 	= m_shaderBasicTexture_VertexColorIn;
-			Renderer::s_shaderBasicTexture_TextureId 		= m_shaderBasicTexture_TextureId;
-		}
+			Renderer* r = ARK2D::getRenderer();
+			r->resetBasicShaders();
+        }
 		  
 		StencilShader::~StencilShader() { 
 			 

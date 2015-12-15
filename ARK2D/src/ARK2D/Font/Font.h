@@ -29,6 +29,7 @@ class FTFont;
 			public:
 				Font();
 				virtual void drawString(const string& str, int x, int y) = 0;
+				virtual void drawString(const string& str, int x, int y, int drawz) = 0;
 				virtual void drawStringCentered(const string& Str, int left_x, int right_x, int y);
 				virtual void drawStringCenteredAt(const string& Str, int x, int y);
 				virtual unsigned int getStringWidth(const string& Str) const = 0;

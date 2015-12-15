@@ -98,6 +98,8 @@ namespace ARK {
 			keyChars(),
 			mouse_x(0), 
 			mouse_y(0),
+			mouse_x_raw(0), 
+			mouse_y_raw(0),
 			pressedEvents(),
 			releasedEvents(),
 			m_touchPointers()
@@ -544,6 +546,12 @@ namespace ARK {
 		}
 		int Input::getMouseY() const {
 			return mouse_y;
+		}
+		int Input::getMouseXRaw() const {
+			return mouse_x_raw;
+		}
+		int Input::getMouseYRaw() const {
+			return mouse_y_raw;
 		} 
 		void Input::setGameContainer(ARK::Core::GameContainer* c) {
 			m_container = c;

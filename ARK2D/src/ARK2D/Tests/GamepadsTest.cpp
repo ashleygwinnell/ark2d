@@ -452,7 +452,7 @@ namespace ARK {
 			m_alertButtons->setMargin(10);
 			m_alertButtons->setChecked(false);
 			m_alertButtons->setStateChangedEvent((void*) &alertButtonsCheckboxEvent);
-			m_alertButtons->position.set(container->getWidth() - 50, 50);
+			m_alertButtons->transform.position.set(container->getWidth() - 50, 50);
 			m_alertButtons->pivot.set(1.0f, 0.0f);
 
 			addChild(m_alertButtons);
@@ -461,7 +461,7 @@ namespace ARK {
 			m_alertAxes->setMargin(10);
 			m_alertAxes->setChecked(false);
 			m_alertAxes->setStateChangedEvent((void*) &alertAxesCheckboxEvent);
-			m_alertAxes->position.set(container->getWidth() - 50, 100);
+			m_alertAxes->transform.position.set(container->getWidth() - 50, 100);
 			m_alertAxes->pivot.set(1.0f, 0.0f);
 			addChild(m_alertAxes);
 
@@ -474,7 +474,7 @@ namespace ARK {
 			m_autoConfig->setSize(100, 30);
 			m_autoConfig->setEvent((void*) &configureButtonEvent);
 			m_autoConfig->setMargin(10); 
-			m_autoConfig->position.set(container->getWidth() - 85, 150);
+			m_autoConfig->transform.position.set(container->getWidth() - 85, 150);
 			m_autoConfig->pivot.set(0.5, 0.5f);
 			addChild(m_autoConfig);
  

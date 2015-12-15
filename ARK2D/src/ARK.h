@@ -18,6 +18,7 @@
 #include "ARK2D/Core/Event.h"
 #include "ARK2D/Core/Resource.h"
 #include "ARK2D/Core/ToString.h" 
+#include "ARK2D/Core/Camera.h"
 
 // Geometry
 #include "ARK2D/Geometry/Vector2.h"
@@ -31,6 +32,7 @@
 #include "ARK2D/Geometry/Line.h" 
 #include "ARK2D/Geometry/Transform.h" 
 #include "ARK2D/Geometry/AdvancedPolygon.h" 
+#include "ARK2D/Geometry/Plane.h" 
 
 // Game Jolt
 #include "ARK2D/GJ/GameJolt.h"
@@ -71,9 +73,17 @@
 #include "ARK2D/Graphics/Image.h"
 #include "ARK2D/Graphics/Texture.h"
 #include "ARK2D/Graphics/TextureStore.h"
+#include "ARK2D/Graphics/ShaderStore.h"
+#include "ARK2D/Graphics/Shaders/BasicShader.h"
 #include "ARK2D/Graphics/Shaders/AlphaMaskShader.h"
 #include "ARK2D/Graphics/Shaders/HSVShader.h"
 #include "ARK2D/Graphics/Shaders/StencilShader.h"
+#include "ARK2D/Graphics/Shaders/DirectionalLightingShader.h"
+#include "ARK2D/Graphics/Shaders/PointLightingShader.h"
+#include "ARK2D/Graphics/Skybox.h"
+#include "ARK2D/Graphics/Model/ObjModel.h"
+#include "ARK2D/Graphics/Model/ImageModel.h"
+#include "ARK2D/Graphics/MatrixStack.h"
 
 // Math
 #include "ARK2D/Math/Random.h" 

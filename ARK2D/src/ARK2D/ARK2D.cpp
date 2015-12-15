@@ -7,6 +7,7 @@
 
 #include "ARK2D.h"
 #include "Core/String.h"
+#include "Core/Camera.h"
 #include "Util/Log.h"
 #include "Core/GameContainer.h"
 #include "Util/FileUtil.h"
@@ -23,6 +24,7 @@ Game* ARK2D::s_game = 0;
 Renderer* ARK2D::s_graphics = 0; 
 Input* ARK2D::s_input = 0;  
 Log* ARK2D::s_log = 0;
+Camera* ARK2D::s_camera = 0;
 Strings* ARK2D::s_strings = 0;
 bool ARK2D::s_debug = false;
 bool ARK2D::s_expo = false;

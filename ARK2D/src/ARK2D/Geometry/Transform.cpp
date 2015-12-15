@@ -14,25 +14,24 @@ namespace ARK {
 		Transform::Transform():
 			position(0, 0, 0),
 			scale(1.0f, 1.0f, 1.0f),
-			rotation(0, 1, 0, 0),
-			parent(NULL),
-			children()
+			rotation(0.0f, 0,0,1, true)
 			{
 
 		}
 
-		void Transform::translate(float x, float y, float z) {
-			position.adjust(x, y, z);
-		}
+		//void Transform::translate(float x, float y, float z) {
+		//	position.adjust(x, y, z);
+		//}
 		//void Transform::scale(float x, float y, float z) {
 		//	scale.multiply(x, y, z);
 		//}
 
-		void Transform::toMatrix(Matrix44<float>* out) {
-			out->identity();
-			out->scale(scale.getX(), scale.getY(), scale.getZ());
-			out->rotate(rotation.getW(), rotation.getX(), rotation.getY(), rotation.getZ()); // angle, x, y, z
-			out->translate(position.getX(), position.getY(), position.getZ());
+		Matrix44<float> Transform::toMatrix() {
+			Matrix44<float> m;
+			m.translate(position.getX(), position.getY(), position.getZ());
+    		m *= rotation.toMatrix();
+    		m.scale(scale.getX(), scale.getY(), scale.getZ());
+    		return m;
 		}
 
 		Transform::~Transform() {

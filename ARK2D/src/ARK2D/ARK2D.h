@@ -69,6 +69,7 @@ class ARK2D_API ARK2D {
 		static Renderer* s_graphics;
 		static Input* s_input;
 		static Log* s_log;
+		static Camera* s_camera;
 		static Strings* s_strings;
 		static bool s_debug;
 		static bool s_expo;

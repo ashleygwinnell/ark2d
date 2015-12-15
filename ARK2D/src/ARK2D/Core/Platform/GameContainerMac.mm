@@ -6,8 +6,9 @@
  */
  
 #include "../GameContainer.h"
-#include "GameContainerMac.h"  
-#include "../../Util/Log.h" 
+#include "../Camera.h"
+#include "GameContainerMac.h"
+#include "../../Util/Log.h"
 #include "../../Graphics/Color.h"
 #include "../../Graphics/Image.h"
 #include "../../Audio/Sound.h"
@@ -87,15 +88,19 @@
 					m_platformSpecific.m_container = this;
 				
 					m_input.setGameContainer(this);
-		
+		 
 					ARK2D::s_container = this;
 					ARK2D::s_game = &m_game;
 					ARK2D::s_graphics = &m_graphics;
 					ARK2D::s_input = &m_input;
+					ARK2D::s_camera = new ARK::Core::Camera();
+					ARK2D::s_camera->setViewport(0, 0, m_width, m_height);
 					ARK2D::s_log = ARK::Util::Log::getInstance();
 					scene = new Scene();
+					scene->addChild(ARK2D::s_camera);
 					scene->addChild(ARK2D::s_game);
 					scene->addChild(ARK2D::s_log);
+					scene->addChild(new LetterboxNode());
 
 					ARK2D::getRenderer()->preinit();
 				
@@ -1046,12 +1051,13 @@
 					
 					processGamepadInput(); 
 				   
-					ARK2D::getLog()->update();
+					//ARK2D::getLog()->update();
 				   
 					int delta = (int) (m_timer.getDeltaNoModifiers() * 1000);
-					m_game.preUpdate(this, &m_timer);
-					m_game.update(this, &m_timer);
-					m_game.postUpdate(this, &m_timer);
+					scene->update();
+					//m_game.preUpdate(this, &m_timer);
+					//m_game.update(this, &m_timer);
+					//m_game.postUpdate(this, &m_timer);
 					m_input.clearKeyPressedRecord();
 					for (unsigned int i = 0; i < m_gamepads.size(); i++) {
 						m_gamepads.at(i)->clearButtonPressedRecord();

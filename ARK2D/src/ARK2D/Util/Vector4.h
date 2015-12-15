@@ -24,83 +24,81 @@ namespace ARK {
 		template <class T=float>
 		class Vector4 {
 			public:
-				T row[4];
+				//T row[4];
 				/*T* m_x;
 				T* m_y;
 				T* m_z;
 				T* m_w;*/
+
+				T x;
+				T y;
+				T z;
+				T w;
+
  
 			public:
 				Vector4() {
-					init();
+
+				}
+				Vector4(const Vector4<T>& r):
+					x(r.x),
+					y(r.y),
+					z(r.z),
+					w(r.w) {
+
 				}
 				Vector4(T coords[]) {
-					init();
-
-					row[0] = coords[0];
-					row[1] = coords[1];
-					row[2] = coords[2];
-					row[3] = coords[3];
+					x = coords[0];
+					y = coords[1];
+					z = coords[2];
+					w = coords[3];
 				}
-				Vector4(T x, T y, T z, T w) {
-					init();
-
-					row[0] = x;
-					row[1] = y;
-					row[2] = z;
-					row[3] = w;
+				Vector4(T lx, T ly, T lz, T lw) {
+					x = lx;
+					y = ly;
+					z = lz;
+					w = lw;
 				}
 
-				void init() {
-					row[0] = 0;
-					row[1] = 0;
-					row[2] = 0;
-					row[3] = 0;
-					//m_x = &row[0];
-					//m_y = &row[1];
-					//m_z = &row[2];
-					//m_w = &row[3];
-				}
+				T getX() { return x; }
+				T getY() { return y; }
+				T getZ() { return z; }
+				T getW() { return w; }
 
-				T getX() { return row[0]; }
-				T getY() { return row[1]; }
-				T getZ() { return row[2]; }
-				T getW() { return row[3]; }
-
-				void setX(T x) { row[0] = x; }
-				void setY(T y) { row[1] = y; }
-				void setZ(T z) { row[2] = z; }
-				void setW(T w) { row[3] = w; }
+				void setX(T lx) { x = lx; }
+				void setY(T ly) { y = ly; }
+				void setZ(T lz) { z = lz; }
+				void setW(T lw) { w = lw; }
 
 				Vector4* add(Vector4 v) {
 					return add(v.getX(), v.getY(), v.getZ(), v.getW());
 				}
-				Vector4* add(T x, T y, T z, T w) {
-					row[0] += x;
-					row[1] += y;
-					row[2] += z;
-					row[3] += w;
+				Vector4* add(T lx, T ly, T lz, T lw) {
+					x += lx;
+					y += ly;
+					z += lz;
+					w += lw;
 					return this;
 				}
 
 				void set(Vector4 v) {
 					set(v.getX(), v.getY(), v.getZ(), v.getW());
 				}
-				void set(T x, T y, T z, T w) {
-					row[0] = x;
-					row[1] = y;
-					row[2] = z;
-					row[3] = w;
+				void set(T lx, T ly, T lz, T lw) {
+					x = lx;
+					y = ly;
+					z = lz;
+					w = lw;
 				}
 
 				Vector4* subtract(Vector4 v) {
 					return subtract(v.getX(), v.getY(), v.getZ(), v.getW());
 				}
-				Vector4* subtract(T x, T y, T z, T w) {
-					row[0] -= x;
-					row[1] -= y;
-					row[2] -= z;
-					row[3] -= w;
+				Vector4* subtract(T lx, T ly, T lz, T lw) {
+					x -= lx;
+					y -= ly;
+					z -= lz;
+					w -= lw;
 					return this;
 				}
 
@@ -111,20 +109,19 @@ namespace ARK {
 				Vector4* multiply(Vector4<T>* v) {
 					return multiply(v->getX(), v->getY(), v->getZ(), v->getW());
 				}
-				Vector4* multiply(T x, T y, T z, T w) {
-					row[0] *= x;
-					row[1] *= y;
-					row[2] *= z;
-					row[3] *= w;
+				Vector4* multiply(T lx, T ly, T lz, T lw) {
+					x *= lx;
+					y *= ly;
+					z *= lz;
+					w *= lw;
 					return this;
 				}
 				
-
 				void toValue(T v) {
-					row[0] = v;
-					row[1] = v;
-					row[2] = v;
-					row[3] = v;
+					x = v;
+					y = v;
+					z = v;
+					w = v;
 				}
 				void toZero() {
 					toValue(0);
@@ -134,21 +131,21 @@ namespace ARK {
 				}
 
 				Vector4<T> copy() {
-					return Vector4<T>(row[0], row[1], row[2], row[3]);
+					return Vector4<T>(x, y, z, w);
 				}
 
 				T& operator[](unsigned int i) {
-					//assert (i<4); 
-					//if (i >= 4) { ErrorDialog::createAndShow("Invalid vector4[] index."); exit(0); }
-					//return(i == 0) ? m_x : (i == 1) ? m_y : (i == 2) ? m_z : m_w;
-					return row[i];
+                    return *(&x + i);
+                    //T* p = &x;
+					//p += i;
+					//return *p;
 				}
 
 				const T& operator[](unsigned int i) const {
-					//assert (i<4); 
-					//if (i >= 4) { ErrorDialog::createAndShow("Invalid vector4[] index."); exit(0); }
-					//return(i == 0) ? m_x : (i == 1) ? m_y : (i == 2) ? m_z : m_w;
-					return row[i];
+					return *(&x + i);
+					//const T* p = &x;
+					//p += i;
+					//return *p;
 				}
 
 				Vector4<T> operator+=(const Vector4<T>& other) { 
@@ -167,8 +164,13 @@ namespace ARK {
 					multiply(other, other, other, other);  
 					return *this; 
 				}
+				Vector4<T> operator*(const Matrix44<T>& m) {
+                    Vector4<T> ret(*this);
+                    ret *= m;
+                    return ret;
+				}
 				Vector4<T> operator*=(const Matrix44<T>& m) {
-                    Vector4<T>::multMatrix44(row[0], row[1], row[2], row[3], m);
+                    Vector4<T>::multMatrix44(x, y, z, w, m);
 				    return *this;
 				}
 
@@ -188,6 +190,8 @@ namespace ARK {
 				}
 
 		};
+
+
 	}
 }
 

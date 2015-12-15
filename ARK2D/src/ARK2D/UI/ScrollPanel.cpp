@@ -86,8 +86,8 @@ namespace ARK {
 
 			for (signed int i = children.size() - 1; i >= 0; i--) {
 				ARK::Geometry::Cube* bounds = children[i]->getBounds();
-                float maxX = children[i]->position.getX() + (bounds->getWidth()*(1.0f - children[i]->pivot.getX()));
-                float maxY = children[i]->position.getY() + (bounds->getHeight()*(1.0f - children[i]->pivot.getY()));
+                float maxX = children[i]->transform.position.getX() + (bounds->getWidth()*(1.0f - children[i]->pivot.getX()));
+                float maxY = children[i]->transform.position.getY() + (bounds->getHeight()*(1.0f - children[i]->pivot.getY()));
 				if (maxX > m_calculatedWidth) {
                     m_calculatedWidth = maxX;
 				}
@@ -126,10 +126,10 @@ namespace ARK {
 
 			int syh = (int) ((float(bounds->getHeight()-30) / float(m_calculatedHeight)) * bounds->getHeight());
 			
-			m_upButton.position.set(bounds->getWidth()-15, 0);
+			m_upButton.transform.position.set(bounds->getWidth()-15, 0);
 			m_scrollYButton.setHeight(syh);
-			m_scrollYButton.position.set(bounds->getWidth()-15, 15); // set position based on m_offsetY;
-			m_downButton.position.set(bounds->getWidth()-15, bounds->getHeight()-15);
+			m_scrollYButton.transform.position.set(bounds->getWidth()-15, 15); // set position based on m_offsetY;
+			m_downButton.transform.position.set(bounds->getWidth()-15, bounds->getHeight()-15);
 
 			if (m_layout == LAYOUT_FLOW) {
 

@@ -100,6 +100,7 @@
 			"src/ARK2D/Core/Sort.cpp",
 			"src/ARK2D/Core/String.cpp",
 			"src/ARK2D/Core/Platform/GameContainerWindows.cpp",
+			"src/ARK2D/Core/Camera.cpp",
 			
 			"src/ARK2D/Font/Font.cpp",
 			"src/ARK2D/Font/FTFont.cpp",
@@ -125,12 +126,17 @@
 			"src/ARK2D/Graphics/Image.cpp",
 			"src/ARK2D/Graphics/Texture.cpp",
 			"src/ARK2D/Graphics/TextureStore.cpp",
+			"src/ARK2D/Graphics/ShaderStore.cpp",
+			"src/ARK2D/Graphics/MatrixStack.cpp",
 			"src/ARK2D/Graphics/ImageIO/BMPImage.cpp",
 			"src/ARK2D/Graphics/ImageIO/PNGImage.cpp",
 			"src/ARK2D/Graphics/ImageIO/TargaImage.cpp",
+			"src/ARK2D/Graphics/Shaders/BasicShader.cpp",
 			"src/ARK2D/Graphics/Shaders/HSVShader.cpp",
 			"src/ARK2D/Graphics/Shaders/AlphaMaskShader.cpp",
 			"src/ARK2D/Graphics/Shaders/StencilShader.cpp",
+			"src/ARK2D/Graphics/Skybox.cpp",
+
 			"src/ARK2D/Geometry/GigaRectangle.cpp",
 			"src/ARK2D/Geometry/Vector2.cpp",
 			"src/ARK2D/Geometry/Shape.cpp",
@@ -140,6 +146,7 @@
 			"src/ARK2D/Geometry/Polygon.cpp",
 			"src/ARK2D/Geometry/Line.cpp",
 			"src/ARK2D/Geometry/AdvancedPolygon.cpp",
+			"src/ARK2D/Geometry/Transform.cpp",
 
 			"src/ARK2D/Math/Random.cpp",
 			

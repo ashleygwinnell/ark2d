@@ -33,9 +33,27 @@ namespace ARK {
 				thisRotation += 90;
 			}
 
-			node->position.set(thisX, thisY);
-			node->scale.set(bone->scaleY, bone->scaleX);
-			node->rotation = thisRotation;
+			node->transform.position.set(thisX, thisY);
+			node->transform.scale.set(bone->scaleY, bone->scaleX);
+            node->transform.rotation = Quaternion<float>::angleAxis(thisRotation, 0,0,1);
+		}
+		void SpineUtil::transformFromBoneName(float* posX, float* posY, float* scaleX, float* scaleY, float* rotation, Skeleton* skeleton, string boneName) {
+			spBone* bone = skeleton->getBone(boneName);
+
+			float thisX = bone->x;
+			float thisY = bone->y*-1.0f;
+			float thisRotation = bone->rotation*-1;
+			if (bone->parent && bone->data->inheritRotation && bone->parent == skeleton->getRoot()) {
+				thisX += skeleton->getX();
+				thisY += skeleton->getY();
+				thisRotation += 90;
+			}
+
+			(*posX) = thisX;
+			(*posY) = thisY;
+			(*scaleX) = bone->scaleY;
+			(*scaleY) = bone->scaleX;
+			(*rotation) = thisRotation;
 		}
 
 		void spineCallback(spAnimationState* state, int trackIndex, spEventType type, spEvent* event, int loopCount) 
@@ -164,6 +182,7 @@ namespace ARK {
 			m_scaleY(1.0f),
 			m_x(0.0f),
 			m_y(0.0f),
+			m_z(0.0f),
 			m_callbacks(),
 			m_invokingCallbacks(true),
 			m_copy(false)
@@ -192,6 +211,7 @@ namespace ARK {
 			m_scaleY(1.0f),
 			m_x(0.0f),
 			m_y(0.0f),
+			m_z(0.0f),
 			m_callbacks(),
 			m_invokingCallbacks(false),
 			m_copy(false)
@@ -233,6 +253,7 @@ namespace ARK {
 			sk->m_scaleY = m_scaleY;
 			sk->m_x = m_x;
 			sk->m_y = m_y;
+			sk->m_z = m_z;
 			sk->m_invokingCallbacks = m_invokingCallbacks;
 			sk->m_copy = true;
 
@@ -553,6 +574,22 @@ namespace ARK {
 			//m_skeleton->x = x;
 			//m_skeleton->y = y * -1;
 		}
+		void Skeleton::setLocation(float x, float y, float z) { 
+			m_x = x;
+			m_y = y;
+			m_z = z;
+
+			/*m_root->x = x; 
+			m_root->y = y * -1;*/
+			m_skeleton->x = x;
+			m_skeleton->y = y;
+//			m_skeleton->z = z;
+
+			spSkeleton_updateWorldTransform(m_skeleton);
+
+			//m_skeleton->x = x;
+			//m_skeleton->y = y * -1;
+		}
 		void Skeleton::setScale(float x, float y) { 
 			m_scaleX = x;
 			m_scaleY = y;
@@ -565,6 +602,9 @@ namespace ARK {
 		float Skeleton::getY() {
 			return m_y;
 		}
+		float Skeleton::getZ() {
+			return m_z;
+		}
 
 		void Skeleton::render() {
 
@@ -576,6 +616,15 @@ namespace ARK {
 			float rr_g = r->getDrawColor().getGreenf();
 			float rr_b = r->getDrawColor().getBluef();
 			float rr_a = r->getDrawColor().getAlphaf();
+
+			float rawNormals[] = {
+				0,0,1,
+				0,0,1,
+				0,0,1,
+				0,0,1,
+				0,0,1,
+				0,0,1
+			};
 
 			//r->setDrawColor(Color::white); 
 			float worldVertices[SPINE_MESH_VERTEX_COUNT_MAX];
@@ -602,13 +651,14 @@ namespace ARK {
 					float sy = img->getTextureH();
 					
 					float rawVertices[] = {
-						worldVertices[SP_VERTEX_X1], worldVertices[SP_VERTEX_Y1],
-						worldVertices[SP_VERTEX_X2], worldVertices[SP_VERTEX_Y2],
-						worldVertices[SP_VERTEX_X4], worldVertices[SP_VERTEX_Y4],
-						worldVertices[SP_VERTEX_X4], worldVertices[SP_VERTEX_Y4],
-						worldVertices[SP_VERTEX_X2], worldVertices[SP_VERTEX_Y2],
-						worldVertices[SP_VERTEX_X3], worldVertices[SP_VERTEX_Y3]
+						worldVertices[SP_VERTEX_X1], worldVertices[SP_VERTEX_Y1], m_z,
+						worldVertices[SP_VERTEX_X2], worldVertices[SP_VERTEX_Y2], m_z,
+						worldVertices[SP_VERTEX_X4], worldVertices[SP_VERTEX_Y4], m_z,
+						worldVertices[SP_VERTEX_X4], worldVertices[SP_VERTEX_Y4], m_z,
+						worldVertices[SP_VERTEX_X2], worldVertices[SP_VERTEX_Y2], m_z,
+						worldVertices[SP_VERTEX_X3], worldVertices[SP_VERTEX_Y3], m_z
 					};
+
 					float rawTexCoords[] = {
 						regionAttachment->uvs[SP_VERTEX_X1] * sx, regionAttachment->uvs[SP_VERTEX_Y1] * sy,
 						regionAttachment->uvs[SP_VERTEX_X2] * sx, regionAttachment->uvs[SP_VERTEX_Y2] * sy,
@@ -631,7 +681,7 @@ namespace ARK {
 						re, g, b, a
 					};
 
-					r->texturedQuads(texId, &rawVertices[0], &rawTexCoords[0], &rawColors[0], 1);
+					r->texturedTriangles(texId, &rawVertices[0], &rawNormals[0], &rawTexCoords[0], &rawColors[0], 2);
 					
 					
 				} else if (attachment->type == SP_ATTACHMENT_MESH) {
@@ -658,11 +708,13 @@ namespace ARK {
 					unsigned char a =  (unsigned char) (rr_a * a_f  * 255.0f);
 					
 					#ifdef ARK2D_WINDOWS_VS
-						float* rawVertices = (float*)malloc((mesh->trianglesCount * 2) * sizeof(float));
+						float* rawVertices = (float*)malloc((mesh->trianglesCount * 3) * sizeof(float));
+						float* rawNormalsLocal = (float*)malloc((mesh->trianglesCount * 3) * sizeof(float));
 						float* rawTexCoords = (float*)malloc((mesh->trianglesCount * 2) * sizeof(float));
 						unsigned char* rawColors = (unsigned char*)malloc((mesh->trianglesCount * 4) * sizeof(unsigned char));
 					#else
-						float rawVertices[mesh->trianglesCount*2];
+						float rawVertices[mesh->trianglesCount*3];
+						float rawNormalsLocal[mesh->trianglesCount*3];
 						float rawTexCoords[mesh->trianglesCount*2];
 						unsigned char rawColors[mesh->trianglesCount*4];
 					#endif
@@ -679,24 +731,33 @@ namespace ARK {
 
 					int k = 0;
 					int l = 0;
+					int m = 0;
 					for (int j = 0; j < mesh->trianglesCount; ++j) {
 						int index = mesh->triangles[j] << 1;
-						
 						rawVertices[k] = worldVertices[index];
 						rawVertices[k+1] = worldVertices[index+1];
-						rawTexCoords[k] = mesh->uvs[index] * sx;
-						rawTexCoords[k+1] = mesh->uvs[index + 1] * sy;
+						rawVertices[k+2] = m_z;
+
+						rawNormalsLocal[k] = 0;
+						rawNormalsLocal[k+1] = 0;
+						rawNormalsLocal[k+2] = 1;
+
+						rawTexCoords[m] = mesh->uvs[index] * sx;
+						rawTexCoords[m+1] = mesh->uvs[index + 1] * sy;
+						
 						rawColors[l] = re;
 						rawColors[l+1] = g;
 						rawColors[l+2] = b;
-						rawColors[l+3] = a; 
-						k += 2;
+						rawColors[l+3] = a;
+						k += 3;
+						m += 2;
 						l += 4;
 					}
-					r->texturedTriangles(texId, &rawVertices[0], &rawTexCoords[0], &rawColors[0], mesh->trianglesCount/3);
+					r->texturedTriangles(texId, &rawVertices[0], &rawTexCoords[0], &rawNormalsLocal[0], &rawColors[0], mesh->trianglesCount/3);
  
 					#ifdef ARK2D_WINDOWS_VS
 						free(rawVertices);
+						free(rawNormalsLocal);
 						free(rawTexCoords);
 						free(rawColors);
 					#endif
@@ -723,37 +784,46 @@ namespace ARK {
 					unsigned char a =  (unsigned char) (rr_a * a_f  * 255.0f);
 
 					#ifdef ARK2D_WINDOWS_VS
-						float* rawVertices = (float*)malloc((mesh->trianglesCount * 6) * sizeof(float));
-						float* rawTexCoords = (float*)malloc((mesh->trianglesCount * 6) * sizeof(float));
-						unsigned char* rawColors = (unsigned char*)malloc((mesh->trianglesCount * 12) * sizeof(unsigned char));
+						float* rawVertices = (float*)malloc((mesh->trianglesCount * 3) * sizeof(float));
+						float* rawNormalsLocal = (float*)malloc((mesh->trianglesCount * 3) * sizeof(float));
+						float* rawTexCoords = (float*)malloc((mesh->trianglesCount * 2) * sizeof(float));
+						unsigned char* rawColors = (unsigned char*)malloc((mesh->trianglesCount * 4) * sizeof(unsigned char));
 					#else
-						float rawVertices[mesh->trianglesCount * 2];
+						float rawVertices[mesh->trianglesCount * 3];
+						float rawNormalsLocal[mesh->trianglesCount * 3];
 						float rawTexCoords[mesh->trianglesCount * 2];
 						unsigned char rawColors[mesh->trianglesCount * 4];
 					#endif
 
 					int k = 0;
+					int m = 0;
 					int l = 0;
 					for (int j = 0; j < mesh->trianglesCount; ++j) {
 						int index = mesh->triangles[j] << 1;
 						
 						rawVertices[k] = worldVertices[index];
 						rawVertices[k+1] = worldVertices[index+1];
-						rawTexCoords[k] = mesh->uvs[index] * sx;
-						rawTexCoords[k+1] = mesh->uvs[index + 1] * sy;
+						rawVertices[k+2] = m_z;
+						rawNormalsLocal[k] = 0;
+						rawNormalsLocal[k+1] = 0;
+						rawNormalsLocal[k+2] = 1;
+						rawTexCoords[m] = mesh->uvs[index] * sx;
+						rawTexCoords[m+1] = mesh->uvs[index + 1] * sy;
 						rawColors[l] = re;
 						rawColors[l+1] = g;
 						rawColors[l+2] = b;
 						rawColors[l+3] = a;
-						k += 2;
+						k += 3;
+						m += 2;
 						l += 4;
 
 					}
 					
-					r->texturedTriangles(texId, &rawVertices[0], &rawTexCoords[0], &rawColors[0], mesh->trianglesCount/3);
+					r->texturedTriangles(texId, &rawVertices[0], &rawNormalsLocal[0], &rawTexCoords[0], &rawColors[0], mesh->trianglesCount/3);
 
 					#ifdef ARK2D_WINDOWS_VS
 						free(rawVertices);
+						free(rawNormalsLocal);
 						free(rawTexCoords);
 						free(rawColors);
 					#endif

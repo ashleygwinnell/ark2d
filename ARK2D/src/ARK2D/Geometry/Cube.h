@@ -27,9 +27,9 @@ namespace ARK {
 				T m_x;
 				T m_y;
 				T m_z;
-				int m_width;
-				int m_height;
-				int m_depth;
+				T m_width;
+				T m_height;
+				T m_depth;
 
 			public:
 				CubeTemplate():
@@ -52,7 +52,7 @@ namespace ARK {
                     m_depth(d) {
                     
                 }
-				CubeTemplate(T x, T y, T z, int width, int height, int depth):
+				CubeTemplate(T x, T y, T z, T width, T height, T depth):
 					Shape<T>(), 
 					m_x(x), 
 					m_y(y), 
@@ -66,9 +66,9 @@ namespace ARK {
 					m_x = x;
 					m_y = y; 
 					m_z = z; 
-					m_width = (int) width;
-					m_height = (int) height;
-					m_depth = (int) depth;
+					m_width = width;
+					m_height = height;
+					m_depth = depth;
 				}
 
 				virtual T getMinX() {
@@ -223,6 +223,9 @@ namespace ARK {
 				}
 				virtual bool contains(T x, T y, T z) {
 					return (x > m_x && x < getMaxX() && y > m_y && y < getMaxY() && z > m_z && z < getMaxZ());
+				}
+				virtual bool collides(T x, T y, T z) {
+					return (x >= m_x && x <= getMaxX() && y >= m_y && y <= getMaxY() && z >= m_z && z <= getMaxZ());
 				}
 				
 				virtual bool collides(Shape<T>* s) {

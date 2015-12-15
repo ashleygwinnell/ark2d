@@ -41,6 +41,7 @@ namespace ARK {
 				virtual void postRender(GameContainer* container, Renderer* g);
 
 				// SceneNode overrides
+				virtual void update();
 				virtual void render();
 				virtual void preRender();
 				virtual void postRender();

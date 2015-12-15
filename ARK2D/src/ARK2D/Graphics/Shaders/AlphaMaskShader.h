@@ -16,17 +16,6 @@ namespace ARK {
 
 		class ARK2D_API AlphaMaskGeometryShader : public Shader {
 			public:
-				Shader* m_shaderBasicGeometry;
-				unsigned int _ModelViewMatrix;
-				unsigned int _ProjectionMatrix;
-				unsigned int _VertexPositionIn;
-				unsigned int _VertexColorIn;
-				
-				unsigned int m_shaderBasicGeometry_ModelViewMatrix;
-				unsigned int m_shaderBasicGeometry_ProjectionMatrix;
-				unsigned int m_shaderBasicGeometry_VertexPositionIn;
-				unsigned int m_shaderBasicGeometry_VertexColorIn;
-
 				AlphaMaskGeometryShader();  
 				void load();
 				void start();
@@ -39,22 +28,6 @@ namespace ARK {
 		};
 		class ARK2D_API AlphaMaskTextureShader : public Shader {
 			public:
-				Shader* m_shaderBasicTexture;
-				unsigned int _ModelViewMatrix;
-				unsigned int _ProjectionMatrix;
-
-				unsigned int _TextureId;
-				unsigned int _VertexPositionIn;
-				unsigned int _VertexTexCoordIn;
-				unsigned int _VertexColorIn;
-				
-				unsigned int m_shaderBasicTexture_ModelViewMatrix;
-				unsigned int m_shaderBasicTexture_ProjectionMatrix;
-				unsigned int m_shaderBasicTexture_VertexPositionIn;
-				unsigned int m_shaderBasicTexture_VertexTexCoordIn;
-				unsigned int m_shaderBasicTexture_VertexColorIn;
-				unsigned int m_shaderBasicTexture_TextureId;
-
 				AlphaMaskTextureShader();  
 				void load();
 				void start();

@@ -11,6 +11,7 @@
 #include <string>
 #include "../Font/BMFont.h"
 #include "Color.h"
+#include "MatrixStack.h"
 #include "../Util/StringUtil.h"
 #include "../Util/Matrix44.h"
 #include "../Font/Font.h"
@@ -63,8 +64,8 @@ namespace ARK {
 				static int s_multitextureId0;
 				static int s_multitextureId1;
 
-				static void start(int renderMode);
-				static void start(int renderMode, int textureId);
+				static Shader* start(int renderMode);
+				static Shader* start(int renderMode, int textureId);
 				//static void start(int renderMode, int textureId, int textureId2);
 				//static void start(int renderMode, Shader* s);
 
@@ -78,49 +79,7 @@ namespace ARK {
 				
 		};
 
-		class ARK2D_API MatrixStack {
-			public:
-				unsigned int m_type;
-
-				vector<Matrix44<float> > m_stack;
-				unsigned int m_stackIndex;
-				unsigned int m_root; // the lowest stack index after ark2d does its bits. e.g. letterboxing. 
-									 // we reset to this instead of the identity matrix when starting new renderbatches.
-
-				bool m_dirty;
-
-				static const unsigned int TYPE_NULL = 0;
-				static const unsigned int TYPE_PROJECTION = 1; 
-				static const unsigned int TYPE_MODELVIEW = 2;
-	 
-				MatrixStack(unsigned int type); 
-				void translate(float x, float y, float z = 0.0f); 			// glTranslatef(x,y,0);
-				void rotate(float angle, float x, float y, float z = 0.0f); // glRotatef(angle, 0, 0, 1);
-				void scale(float x, float y, float z = 0.0f); 				// glScalef(x, y, 0.0f);
-				void ortho2d(float l, float r, float b, float t, float n, float f);
-				void frustum(float l, float r, float b, float t, float n, float f);
-				void perspective(float fov, float aspect, float n, float f);
-				void lookAt(float eyeX, float eyeY, float eyeZ, float lookAtX, float lookAtY, float lookAtZ, float upX, float upY, float upZ);
-				void identity();
-				float* data(float* mx);
-				void* pointer();  
-				#ifdef ARK2D_RENDERER_DIRECTX
-					DirectX::XMMATRIX d3dpointer();  
-				#endif
-				Matrix44<float>* current();
-				Matrix44<float>* at(unsigned int index);
-				void pushMatrix(bool setroot = false);
-				void popMatrix();
-				void toStringDialog();
-				bool isDirty();
-				void setDirty(bool b);
-				unsigned int height();
-				unsigned int root();
-
-				virtual ~MatrixStack();
-
-				
-		};
+		
 
 		class ARK2D_API VBO {
 			public:
@@ -158,7 +117,13 @@ namespace ARK {
 				Mat44VBO();
 				void setData(float* data);
 				void bind();
-		}; 
+		};
+        class ARK2D_API Mat33VBO : public VBO {
+            public:
+                Mat33VBO();
+                void setData(float* data);
+                void bind();
+        };
 
 		class ARK2D_API VAO {
 			public:
@@ -181,13 +146,15 @@ namespace ARK {
 		//class ARK2D_API RendererBatchItem_StencilStart {
 		class ARK2D_API RendererBatchItem_GeomTri {
 			public:
-				float vertexData[6];
+				float vertexData[9];
+				float normalData[9];
 				unsigned char colorData[12];
 				RendererBatchItem_GeomTri();
 		};
 		class ARK2D_API RendererBatchItem_TexTri {
 			public:
-				float vertexData[6];
+				float vertexData[9];
+				float normalData[9];
 				float textureData[6];
 				unsigned char colorData[12];
 				RendererBatchItem_TexTri();
@@ -202,10 +169,19 @@ namespace ARK {
 				static const unsigned int TYPE_STENCIL_INVERSE = 4;
 				static const unsigned int TYPE_STENCIL_STOP = 5; 
 				static const unsigned int TYPE_STENCIL_DISABLE = 6;
-				static const unsigned int TYPE_MULTISAMPLING_ENABLE = 7;
-				static const unsigned int TYPE_MULTISAMPLING_DISABLE = 8;
-				static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 9;
-				static const unsigned int TYPE_CUSTOM_FUNCTION = 10;
+				static const unsigned int TYPE_MATRIX_MODE = 7;
+				static const unsigned int TYPE_MATRIX_IDENTITY = 8;
+				static const unsigned int TYPE_MATRIX_PUSH = 9;
+				static const unsigned int TYPE_MATRIX_POP = 10;
+				static const unsigned int TYPE_MATRIX_TRANSLATE = 11;
+				static const unsigned int TYPE_MATRIX_ROTATE = 12;
+				static const unsigned int TYPE_MATRIX_SCALE = 13;
+				static const unsigned int TYPE_MULTISAMPLING_ENABLE = 14;
+				static const unsigned int TYPE_MULTISAMPLING_DISABLE = 15;
+				static const unsigned int TYPE_BACKFACECULLING_ENABLE = 16;
+				static const unsigned int TYPE_BACKFACECULLING_DISABLE = 17;
+				static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 18;
+				static const unsigned int TYPE_CUSTOM_FUNCTION = 19;
 
 			public:
 				vector<RendererBatchItem_GeomTri> geomtris;
@@ -215,6 +191,10 @@ namespace ARK {
 				unsigned int m_shaderId;
 				void* m_objectPointer;
 				void* m_functionPointer;
+				float m_float1;
+				float m_float2;
+				float m_float3;
+				float m_float4;
 
 			public:
 				RendererBatchItem();
@@ -240,38 +220,57 @@ namespace ARK {
 				inline bool isEnabled() { return enabled; }
 				void setEnabled(bool b, bool fromSceneGraph = false);
 
-				void addGeometryTri(float* verts, unsigned char* colors);
+				void addGeometryTri(float* verts, float* normals, unsigned char* colors);
 				void addGeometryTri(
-					float x1, float y1, 
-					float x2, float y2, 
-					float x3, float y3, 
+					float x1, float y1, float z1,
+					float x2, float y2, float z2,
+					float x3, float y3, float z3,
+					float nx1, float ny1, float nz1,
+					float nx2, float ny2, float nz2,
+					float nx3, float ny3, float nz3,
 					unsigned char c1r, unsigned char c1g, unsigned char c1b, unsigned char c1a,
 					unsigned char c2r, unsigned char c2g, unsigned char c2b, unsigned char c2a,
 					unsigned char c3r, unsigned char c3g, unsigned char c3b, unsigned char c3a
 				);
 				void addGeometryQuad(
-					float x1, float y1, 
-					float x2, float y2, 
-					float x3, float y3, 
-					float x4, float y4, 
+					float x1, float y1, float z1,
+					float x2, float y2, float z2,
+					float x3, float y3, float z3,
+					float x4, float y4, float z4,
+					float nx1, float ny1, float nz1,
+					float nx2, float ny2, float nz2,
+					float nx3, float ny3, float nz3,
+					float nx4, float ny4, float nz4,
 					unsigned char c1r, unsigned char c1g, unsigned char c1b, unsigned char c1a,
 					unsigned char c2r, unsigned char c2g, unsigned char c2b, unsigned char c2a,
 					unsigned char c3r, unsigned char c3g, unsigned char c3b, unsigned char c3a,
 					unsigned char c4r, unsigned char c4g, unsigned char c4b, unsigned char c4a);
 				
-				void addTexturedTri(unsigned int texId, float* verts, float* texcoords, unsigned char* colors);
+				void addTexturedTri(unsigned int texId, float* verts, float* normals, float* texcoords, unsigned char* colors);
 				void addTexturedTri(
 					unsigned int texId, 
-					float x1, float y1, float x2, float y2, float x3, float y3, 
+					float x1, float y1, float z1,
+					float x2, float y2, float z2,
+					float x3, float y3, float z3,
+					float nx1, float ny1, float nz1,
+					float nx2, float ny2, float nz2,
+					float nx3, float ny3, float nz3,
 					float tx1, float ty1, float tx2, float ty2, float tx3, float ty3,
 					unsigned char c1r, unsigned char c1g, unsigned char c1b, unsigned char c1a,
 					unsigned char c2r, unsigned char c2g, unsigned char c2b, unsigned char c2a,
 					unsigned char c3r, unsigned char c3g, unsigned char c3b, unsigned char c3a);
 
-				void addTexturedQuad(unsigned int texId, float* verts, float* texcoords, unsigned char* colors);
+				void addTexturedQuad(unsigned int texId, float* verts, float* normals, float* texcoords, unsigned char* colors);
 				void addTexturedQuad(
 					unsigned int texId, 
-					float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, 
+					float x1, float y1, float z1,
+					float x2, float y2, float z2,
+					float x3, float y3, float z3,
+					float x4, float y4, float z4,
+					float nx1, float ny1, float nz1,
+					float nx2, float ny2, float nz2,
+					float nx3, float ny3, float nz3,
+					float nx4, float ny4, float nz4,
 					float tx1, float ty1, float tx2, float ty2, float tx3, float ty3, float tx4, float ty4,
 					unsigned char c1r, unsigned char c1g, unsigned char c1b, unsigned char c1a,
 					unsigned char c2r, unsigned char c2g, unsigned char c2b, unsigned char c2a,
@@ -383,12 +382,15 @@ namespace ARK {
 			private:
 				static MatrixStack* s_matrix;
 				static MatrixStack* s_matrixProjection;
-				static MatrixStack* s_matrixModelView;
+				static MatrixStack* s_matrixView;
+				static MatrixStack* s_matrixModel;
+				static Matrix33<float>* s_matrixNormal;
 			public:
 				static MatrixStack* getMatrix();
 				static MatrixStack* getMatrix(unsigned int type);
 				static void multiplyMatrix(Matrix44<float>* by);
 				static void matrixMode(unsigned int mode);
+				static Matrix33<float>* getNormalMatrix();
 
 			#if defined (ARK2D_RENDERER_DIRECTX)
 				static ID3D11Buffer* s_d3d_matrixBuffer;
@@ -402,30 +404,25 @@ namespace ARK {
 				static Shader* s_shaderCurrent;
 				static Shader* getShader();
 				
+				
 				static Shader* s_shaderBasicGeometry;
-				static unsigned int s_shaderBasicGeometry_ModelViewMatrix;
-				static unsigned int s_shaderBasicGeometry_ProjectionMatrix;
-				static unsigned int s_shaderBasicGeometry_VertexPosition;
-				static unsigned int s_shaderBasicGeometry_VertexColorIn;
-				static Shader* getBasicGeometryShader();
-				
-				
 				static Shader* s_shaderBasicTexture;
-				static unsigned int s_shaderBasicTexture_ModelViewMatrix;
-				static unsigned int s_shaderBasicTexture_ProjectionMatrix;
-				static unsigned int s_shaderBasicTexture_VertexPosition;
-				static unsigned int s_shaderBasicTexture_VertexColorIn;
-				static unsigned int s_shaderBasicTexture_VertexTexCoordIn;
-				static unsigned int s_shaderBasicTexture_TextureId;
+				static Shader* s_shaderBasicGeometryDefault;
+				static Shader* s_shaderBasicTextureDefault;
+				static Shader* getBasicGeometryShader();
 				static Shader* getBasicTextureShader();
-				
+				static void overrideBasicShaders(Shader* geometry, Shader* texture);
+				static void resetBasicShaders();
 
 			// VBO bits
 			public:
 				static Mat44VBO* s_vboMatrixProjection;
-				static Mat44VBO* s_vboMatrixModelView;
+				static Mat44VBO* s_vboMatrixView;
+				static Mat44VBO* s_vboMatrixModel;
+                static Mat33VBO* s_vboMatrixNormal;
 				static QuadVBO* s_vboQuadVerts;
 				static QuadVBO* s_vboQuadTexCoords;
+				static QuadVBO* s_vboQuadNormals;
 				static QuadVBO* s_vboQuadColors;
 				static VBO* s_vboIndices;
 				static VAO* s_vaoQuad;
@@ -517,6 +514,9 @@ namespace ARK {
 				void enableMultisampling() const;
 				void disableMultisampling() const; 
 
+				void enableBackfaceCulling() const;
+				void disableBackfaceCulling() const; 
+
 				void pushMatrix(bool setasroot = false) const;
 				void popMatrix() const;
 				void loadIdentity() const;
@@ -526,33 +526,42 @@ namespace ARK {
 
 				void drawLine(int x1, int y1, int x2, int y2) const;
 				void drawLine(float x1, float y1, float x2, float y2) const;
+				void drawLine(float x1, float y1, float z1, float x2, float y2, float z2) const;
 				void texturedLineOverlay_data(float* data, Image* img, float scale, float x1, float y1, float x2, float y2, float startX, float startY, float endX, float endY);
 				void texturedLineOverlay(Image* img, float scale, float x1, float y1, float x2, float y2, float startX, float startY, float endX, float endY);
 
 				void drawRect(ARK::Geometry::RectangleTemplate<int>* rect) const;
 				void drawRect(ARK::Geometry::RectangleTemplate<float>* rect) const;
 				void drawRect(float x, float y, int width, int height) const;
+				void drawRect(float x, float y, float z, int width, int height) const;
 				void drawRects(float rects[], int colors[] = NULL) const;
 				
 				void fillRect(float x, float y, int width, int height) const;
+				void fillRect(float x, float y, float z, int width, int height) const;
 				void fillRoundedRect(float x, float y, int width, int height, int radius) const;
 				void fillRoundedRect(float x, float y, int width, int height, int radius, int segs) const;
 
 				void fillGradientRect(float x, float y, float width, float height, Color* top, Color* bottom) const;
+				void fillGradientRect(float x, float y, float z, float width, float height, Color* top, Color* bottom) const;
 
 				void texturedRect(unsigned int texId, float x, float y, int width, int height) const;
+				void texturedRect(unsigned int texId, float x, float y, float z, int width, int height) const;
 				void texturedRectAlpha(unsigned int texId, float x, float y, int width, int height, float alpha) const;
+				void texturedRectAlpha(unsigned int texId, float x, float y, float z, int width, int height, float alpha) const;
 				//void texturedRectShader(Shader* useShader, const map<string, float>& vars, unsigned int texId, float x, float y, int width, int height) const;
 
 				void fillQuad(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) const;
+				void fillQuad(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4) const;
 				void texturedQuad(unsigned int texId, float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, float tx1, float ty1, float tx2, float ty2, float tx3, float ty3, float tx4, float ty4);
-				void texturedQuads(unsigned int texId, float* verts, float* texcoords, unsigned char* colors, unsigned int count);
+				void texturedQuad(unsigned int texId, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4, float tx1, float ty1, float tx2, float ty2, float tx3, float ty3, float tx4, float ty4);
+				void texturedQuads(unsigned int texId, float* verts, float* normals, float* texcoords, unsigned char* colors, unsigned int count);
 
-				void fillTriangles(float* verts, unsigned char* colors, unsigned int count, bool fromBatch=false);
-				void texturedTriangles(unsigned int texId, float* verts, float* texcoords, unsigned char* colors, unsigned int count, bool fromBatch=false);
+				void fillTriangles(float* verts, float* normals, unsigned char* colors, unsigned int count, bool fromBatch=false);
+				void texturedTriangles(unsigned int texId, float* verts, float* normals, float* texcoords, unsigned char* colors, unsigned int count, bool fromBatch=false);
 
 				void fillTriangle(int x, int y, int width, int height) const;
 				void fillTriangle(float x1, float y1, float x2, float y2, float x3, float y3) const;
+				void fillTriangle(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3) const;
 
 				void drawPoint(int x, int y) const;
 				void drawPoint(float x, float y) const;
@@ -561,15 +570,19 @@ namespace ARK {
 				void drawCircle(ARK::Geometry::Circle<float>* circle);
 				void drawCircle(float x, float y, int radius);
 				void drawCircle(float x, float y, int radius, int points);
+				void drawCircle(float x, float y, float z, int radius, int points);
+
 				void fillCircle(float x, float y, int radius, int points) const;
+				void fillCircle(float x, float y, float z, int radius, int points) const;
 
 				void fillEllipse(float x, float y, float rx, float ry) const;
+				void fillEllipse(float x, float y, float z, float rx, float ry) const;
 
 				void drawCircleSpikey(float x, float y, int radius, int points) const;
 				void fillCircleSpikey(float x, float y, int radius, int points) const;
 
-				void setLineWidth(unsigned int i);
-				unsigned int getLineWidth();
+				void setLineWidth(float i);
+				float getLineWidth();
 
 				void setPointSize(float i);
 				float getPointSize();
@@ -605,7 +618,7 @@ namespace ARK {
 				ARK::Font::Font* m_Font;
 				Color m_DrawColor;
 				Color m_MaskColor;
-				unsigned int m_LineWidth;
+				float m_LineWidth;
 				float m_pointSize;
 				unsigned int m_blendMode;
 

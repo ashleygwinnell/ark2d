@@ -13,6 +13,13 @@
 #include "MathUtil.h"
 #include "../UI/ErrorDialog.h" 
 
+ #include "../vendor/glm/glm.hpp"
+#include "../vendor/glm/gtx/transform.hpp"
+#include "../vendor/glm/gtc/quaternion.hpp"
+#include "../vendor/glm/gtx/quaternion.hpp"
+#include "../vendor/glm/gtc/matrix_transform.hpp"
+#include "../vendor/glm/gtc/type_ptr.hpp"
+
 namespace ARK {
 	namespace Util {
 
@@ -46,6 +53,9 @@ namespace ARK {
 					z = &col[2];
 				}
 				Matrix33(Matrix44<T>& mat44): col() {
+					set(mat44);
+				}
+				void set(Matrix44<T>& mat44) {
 					col[0][0] = mat44[0][0];
 					col[0][1] = mat44[0][1];
 					col[0][2] = mat44[0][2];
@@ -80,7 +90,7 @@ namespace ARK {
 
 				void transpose()
 				{
-					int n = 3;
+					/*int n = 3;
 					int i, j;
 					float temp;
 
@@ -90,18 +100,63 @@ namespace ARK {
 							col[i][j] = col[j][i];
 							col[j][i] = temp;
 						}
-					}
+					}*/
+
+					glm::mat3 mat;
+					mat[0][0] = col[0][0];
+					mat[0][1] = col[0][1];
+					mat[0][2] = col[0][2];
+					mat[1][0] = col[1][0];
+					mat[1][1] = col[1][1];
+					mat[1][2] = col[1][2];
+					mat[2][0] = col[2][0];
+					mat[2][1] = col[2][1];
+					mat[2][2] = col[2][2];
+
+					mat = glm::transpose(mat);
+
+					col[0][0] = mat[0][0];
+					col[0][1] = mat[0][1];
+					col[0][2] = mat[0][2];
+					col[1][0] = mat[1][0];
+					col[1][1] = mat[1][1];
+					col[1][2] = mat[1][2];
+					col[2][0] = mat[2][0];
+					col[2][1] = mat[2][1];
+					col[2][2] = mat[2][2];
 				}
 
 				void inverse() {
-					float d = determinant();
+					/*float d = determinant();
 					for (int i = 0; i < 3; ++i)
 					{
 						for (int j = 0; j < 3; ++j)
 						{
 							col[i][j] /= d;
 						}
-					}
+					}*/
+					glm::mat3 mat;
+					mat[0][0] = col[0][0];
+					mat[0][1] = col[0][1];
+					mat[0][2] = col[0][2];
+					mat[1][0] = col[1][0];
+					mat[1][1] = col[1][1];
+					mat[1][2] = col[1][2];
+					mat[2][0] = col[2][0];
+					mat[2][1] = col[2][1];
+					mat[2][2] = col[2][2];
+
+					mat = glm::inverse(mat);
+
+					col[0][0] = mat[0][0];
+					col[0][1] = mat[0][1];
+					col[0][2] = mat[0][2];
+					col[1][0] = mat[1][0];
+					col[1][1] = mat[1][1];
+					col[1][2] = mat[1][2];
+					col[2][0] = mat[2][0];
+					col[2][1] = mat[2][1];
+					col[2][2] = mat[2][2];
 				}
 				T* pointer() { 
 					return &col[0][0];
@@ -110,10 +165,10 @@ namespace ARK {
 					return &col[0][0];
 				}
 
-				Vector4<T>& operator[](unsigned int i) {
+				Vector3<T>& operator[](unsigned int i) {
 					return col[i];
 				}
-				const Vector4<T>& operator[](unsigned int i) const {
+				const Vector3<T>& operator[](unsigned int i) const {
 					return col[i];
 				}
 		};
@@ -143,6 +198,29 @@ namespace ARK {
 					m_w = &col[3];
 					
 					identity();
+				}
+				Matrix44(float vals[16]): col() {
+					m_x = &col[0];
+					m_y = &col[1];
+					m_z = &col[2];
+					m_w = &col[3];
+					
+					col[0][0] = vals[0];
+					col[0][1] = vals[1];
+					col[0][2] = vals[2];
+					col[0][3] = vals[3];
+					col[1][0] = vals[4];
+					col[1][1] = vals[5];
+					col[1][2] = vals[6];
+					col[1][3] = vals[7];
+					col[2][0] = vals[8];
+					col[2][1] = vals[9];
+					col[2][2] = vals[10];
+					col[2][3] = vals[11];
+					col[3][0] = vals[12];
+					col[3][1] = vals[13];
+					col[3][2] = vals[14];
+					col[3][3] = vals[15];
 				}
 				const Vector4<T>& getX() { return *m_x; }
 				const Vector4<T>& getY() { return *m_y; }
@@ -210,6 +288,10 @@ namespace ARK {
 
 				void ortho2d(float l, float r, float b, float t, float n, float f) {
 					//http://www.gruzzlymug.com/projects/viseng/doc/d9/d7b/matrix44_8cpp-source.html
+					glm::mat4 m = glm::ortho(l, r, b, t, n, f);
+					set(m);
+					return;
+
 					float width = r - l;
 					float height = t - b;
 					float depth = f - n;
@@ -257,12 +339,15 @@ namespace ARK {
 				}
 				void perspective(float fovDegrees, float aspectRatio, float znear, float zfar)
 				{
-					float scale = tan(MathUtil::toRadians(fovDegrees * 0.5)) * znear;
+					glm::mat4 m = glm::perspective(fovDegrees, aspectRatio, znear, zfar); 
+					set(m);
+					return;
+					/*float scale = tan(MathUtil::toRadians(fovDegrees * 0.5)) * znear;
 				    float r = aspectRatio * scale;
 				    float l = -r;
 				    float t = scale;
 				    float b = -t;
-				    frustum(l, r, b, t, znear, zfar);
+				    frustum(l, r, b, t, znear, zfar);*/
 
 					/*float ymax = znear * tan(fov * PI_OVER_360);
 					float ymin = -ymax;
@@ -305,6 +390,15 @@ namespace ARK {
 
 				void lookAt(float eyeX, float eyeY, float eyeZ, float lookAtX, float lookAtY, float lookAtZ, float upX, float upY, float upZ) {
 					
+					glm::mat4 m = glm::lookAt(
+						glm::vec3(eyeX, eyeY, eyeZ), 
+						glm::vec3(lookAtX, lookAtY, lookAtZ), 
+						glm::vec3(upX, upY, upZ)
+					);
+					set(m);
+					return;
+
+					/*
 					//detail::tvec3<T, P> f(normalize(center - eye));
 					//detail::tvec3<T, P> s(normalize(cross(f, up)));
 					//detail::tvec3<T, P> u(cross(s, f));
@@ -341,14 +435,14 @@ namespace ARK {
 					lookAtMatrix[3][1] = MathUtil::dotproductvec3(ux, uy, uz, eyeX, eyeY, eyeZ) * -1.0f; // -dot(u, eye);
 					lookAtMatrix[3][2] = MathUtil::dotproductvec3(fx, fy, fz, eyeX, eyeY, eyeZ); // dot(f, eye);
 					
-					/*lookAtMatrix[0][3] = 0.0f;
-					lookAtMatrix[1][3] = 0.0f;
-					lookAtMatrix[2][3] = 0.0f;
-					lookAtMatrix[3][3] = 1.0f;*/
+					//lookAtMatrix[0][3] = 0.0f;
+					//lookAtMatrix[1][3] = 0.0f;
+					//lookAtMatrix[2][3] = 0.0f;
+					//lookAtMatrix[3][3] = 1.0f;
 
 					*this *= lookAtMatrix;
 
-					//return Result;
+					//return Result;*/
 				}
 				
 
@@ -442,6 +536,29 @@ namespace ARK {
 
 					return rotMatrix;
 				}
+            
+                void inverse() {
+                    glm::mat4 mat;
+                    mat[0][0] = col[0][0];
+                    mat[0][1] = col[0][1];
+                    mat[0][2] = col[0][2];
+                    mat[0][3] = col[0][3];
+                    mat[1][0] = col[1][0];
+                    mat[1][1] = col[1][1];
+                    mat[1][2] = col[1][2];
+                    mat[1][3] = col[1][3];
+                    mat[2][0] = col[2][0];
+                    mat[2][1] = col[2][1];
+                    mat[2][2] = col[2][2];
+                    mat[2][3] = col[2][3];
+                    mat[3][0] = col[3][0];
+                    mat[3][1] = col[3][1];
+                    mat[3][2] = col[3][2];
+                    mat[3][3] = col[3][3];
+                    
+                    mat = glm::inverse(mat);
+                    set(mat);
+                }
 
 				Vector4<T>& operator[](unsigned int i) {
 					//assert (i<4);
@@ -453,8 +570,52 @@ namespace ARK {
 					//if (i >= 4) { ErrorDialog::createAndShow("Invalid matrix44[] index."); exit(0); }
 					return col[i];
 				}
-			
-				Matrix44<T>& operator*=(const Matrix44<T>& m) {
+                Vector4<T> operator*(const Vector4<T>& other) const {
+                    Vector4<T> ret(other);
+                    ret *= *this;
+                    return ret;
+                }
+				Matrix44<T> operator*(const Matrix44<T>& m) const {
+					
+					glm::mat4 lhs;
+					lhs[0][0] = col[0][0];
+					lhs[0][1] = col[0][1];
+					lhs[0][2] = col[0][2];
+					lhs[0][3] = col[0][3];
+					lhs[1][0] = col[1][0];
+					lhs[1][1] = col[1][1];
+					lhs[1][2] = col[1][2];
+					lhs[1][3] = col[1][3];
+					lhs[2][0] = col[2][0];
+					lhs[2][1] = col[2][1];
+					lhs[2][2] = col[2][2];
+					lhs[2][3] = col[2][3];
+					lhs[3][0] = col[3][0];
+					lhs[3][1] = col[3][1];
+					lhs[3][2] = col[3][2];
+					lhs[3][3] = col[3][3];
+					glm::mat4 rhs;
+					rhs[0][0] = m[0][0];
+					rhs[0][1] = m[0][1];
+					rhs[0][2] = m[0][2];
+					rhs[0][3] = m[0][3];
+					rhs[1][0] = m[1][0];
+					rhs[1][1] = m[1][1];
+					rhs[1][2] = m[1][2];
+					rhs[1][3] = m[1][3];
+					rhs[2][0] = m[2][0];
+					rhs[2][1] = m[2][1];
+					rhs[2][2] = m[2][2];
+					rhs[2][3] = m[2][3];
+					rhs[3][0] = m[3][0];
+					rhs[3][1] = m[3][1];
+					rhs[3][2] = m[3][2];
+					rhs[3][3] = m[3][3];
+					glm::mat4 rs = lhs * rhs;
+					Matrix44<T> ret;
+					ret.set(rs);
+					return ret;
+
 					Matrix44<T> t;
 					/*for (unsigned int r = 0; r < 4; r++)
 					{
@@ -499,7 +660,10 @@ namespace ARK {
 					
 					//t[c][r] = (col[0][r] * m[c][0]) + (col[1][r] * m[c][1]) + (col[2][r] * m[c][2]) + (col[3][r] * m[c][3]);
 
-					*this = t;
+					return t;
+				}
+				Matrix44<T>& operator*=(const Matrix44<T>& m) {
+					*this = *this * m;
 					return *this;
 				}
 				string toString() {
@@ -548,6 +712,27 @@ namespace ARK {
 					col[3][2] = m[3][2];
 					col[3][3] = m[3][3];
 				}
+				void set(const glm::mat4& m) {
+					col[0][0] = m[0][0];
+					col[0][1] = m[0][1];
+					col[0][2] = m[0][2];
+					col[0][3] = m[0][3];
+
+					col[1][0] = m[1][0];
+					col[1][1] = m[1][1];
+					col[1][2] = m[1][2];
+					col[1][3] = m[1][3];
+ 
+					col[2][0] = m[2][0];
+					col[2][1] = m[2][1];
+					col[2][2] = m[2][2];
+					col[2][3] = m[2][3];
+
+					col[3][0] = m[3][0];
+					col[3][1] = m[3][1];
+					col[3][2] = m[3][2];
+					col[3][3] = m[3][3];
+				}
 
 				T* pointer() { 
 					return &col[0][0];
@@ -555,6 +740,7 @@ namespace ARK {
 				const T* pointer() const { 
 					return &col[0][0];
 				}
+				
 				
 
 				virtual ~Matrix44() {

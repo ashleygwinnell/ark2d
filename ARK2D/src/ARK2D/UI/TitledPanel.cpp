@@ -11,7 +11,7 @@ namespace ARK {
 			m_title(""), 
 			m_content(NULL) {
 			m_content = new Panel();
-			m_content->position.setY(20); 
+			m_content->transform.position.setY(20);
 			m_content->setName("content");
 			Panel::addChild(m_content);
 		}
@@ -19,7 +19,7 @@ namespace ARK {
 			Panel(), 
 			m_title(title),
 			m_content(content) {
-			m_content->position.setY(20);
+			m_content->transform.position.setY(20);
 			m_content->setName("content");
 			Panel::addChild(m_content); 
 		}
@@ -33,7 +33,7 @@ namespace ARK {
 			Panel::setBounds(w,h,d);
 			m_content->setBounds(w, h - 20.0f, d);
 			//m_content->position.set(0, 20, 0);
-			m_content->scale.set(1.0f, 1.0f, 1.0f);
+			m_content->transform.scale.set(1.0f, 1.0f, 1.0f);
 			
 		}
 		void TitledPanel::render() {
@@ -65,7 +65,7 @@ namespace ARK {
    			//m_content->position.set(pivot.getX() * bounds->getWidth() * -1.0f, (pivot.getY() * bounds->getHeight() * -1.0f) + 20.0f, 0);
    			//m_content->pivot.set(0.0f, 0.0f, 0.0f);
 
-   			m_content->position.set(0, 20 * (1.0f - pivot.getY()), 0);
+   			m_content->transform.position.set(0, 20 * (1.0f - pivot.getY()), 0);
    			m_content->pivot.set(pivot.getX(), pivot.getY(), pivot.getZ());
 
 			m_content->preRender();
