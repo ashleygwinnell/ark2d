@@ -35,7 +35,7 @@ namespace ARK {
 		{
 			if (addressIndex >= m_addresses.size()) {
 				ARK2D::getLog()->e("Could not send packet because addressIndex was out of bounds. ");
-				return;
+				return false;
 			}
 			#ifdef NET_UNIT_TEST
 				if ( reliabilitySystems[addressIndex].GetLocalSequence() & packet_loss_mask )

@@ -20,6 +20,8 @@
 
 #if defined(ARK2D_WINDOWS)
 
+	#include "../../Math/Random.h"
+
 	#include "../../Geometry/GigaRectangle.h"
 
 	#include "../../Windres.h"
