@@ -135,7 +135,7 @@ namespace ARK {
 				#endif
 		};
 
-		class Shader : public ShaderInternals {
+		class ARK2D_API Shader : public ShaderInternals {
 			public:
 				
 				// Uniforms

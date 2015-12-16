@@ -32,6 +32,13 @@
 			#include <string>
 			#include <vector>
 
+			 #include <wbemidl.h>
+			#include <oleauto.h>
+			//#include <wmsstd.h>
+
+
+
+
 	 			// https://github.com/GameTechDev/Windows-Desktop-Sensors/blob/master/WindowsSensors.cpp
 				//
 				// Screen auto-rotation defines
@@ -221,6 +228,8 @@
 						void setFullscreen_Fake(bool fullscreen);
 
 						bool isRetina();
+
+						bool isXInputDevice(const GUID* pGuidProductFromDirectInput);
 
 						bool mySetDisplayAutoRotationPreferences(MY_ORIENTATION_PREFERENCE pref);
 						bool myGetDisplayAutoRotationPreferences(MY_ORIENTATION_PREFERENCE* pref);

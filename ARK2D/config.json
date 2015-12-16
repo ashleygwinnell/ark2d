@@ -131,9 +131,11 @@
 			"src/ARK2D/Graphics/ImageIO/BMPImage.cpp",
 			"src/ARK2D/Graphics/ImageIO/PNGImage.cpp",
 			"src/ARK2D/Graphics/ImageIO/TargaImage.cpp",
-			"src/ARK2D/Graphics/Shaders/BasicShader.cpp",
-			"src/ARK2D/Graphics/Shaders/HSVShader.cpp",
 			"src/ARK2D/Graphics/Shaders/AlphaMaskShader.cpp",
+			"src/ARK2D/Graphics/Shaders/BasicShader.cpp",
+			"src/ARK2D/Graphics/Shaders/DirectionalLightingShader.cpp",
+			"src/ARK2D/Graphics/Shaders/HSVShader.cpp",
+			"src/ARK2D/Graphics/Shaders/PointLightingShader.cpp",
 			"src/ARK2D/Graphics/Shaders/StencilShader.cpp",
 			"src/ARK2D/Graphics/Skybox.cpp",
 

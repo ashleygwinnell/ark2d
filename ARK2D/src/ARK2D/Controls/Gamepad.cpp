@@ -67,6 +67,12 @@ namespace ARK {
 						if (sharedTriggersNode) {
 							mapping.shared_triggers_axis = sharedTriggersNode->NodeAsBool();
 						}
+
+						mapping.xinput = false;
+						JSONNode* xinputNode = pad->GetNode("xinput");
+						if (xinputNode) {
+							mapping.xinput = xinputNode->NodeAsBool(); 
+						}
 						
 
 						mapping.toInverse();
@@ -169,6 +175,7 @@ namespace ARK {
 
 				povXAxisIndex(0),
 				povYAxisIndex(0),
+				xinput(false),
 
 			#endif
 
