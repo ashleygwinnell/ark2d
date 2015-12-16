@@ -26,7 +26,10 @@ namespace ARK {
 
 			for(signed int i = 0; i < ARK::Controls::Gamepad::s_gamepadMapping->size(); ++i) {
 				GamepadMapping* map = &ARK::Controls::Gamepad::s_gamepadMapping->at(i);
-				if (map->vendorId == gamepad->vendorId && map->productId == gamepad->productId) {
+				if (map->vendorId == gamepad->vendorId && 
+					map->productId == gamepad->productId && 
+					map->name == gamepad->name 
+					) {
 					ARK2D::getLog()->e("Erasing configuration of controller before reconfiguring.");
 					ARK::Controls::Gamepad::s_gamepadMapping->erase(ARK::Controls::Gamepad::s_gamepadMapping->begin() + i);
 					break;
@@ -442,6 +445,25 @@ namespace ARK {
 			configure->m_state = GamepadConfigureGameState::STATE_A;
 			gamepadsTest->enterState(configure);
 		}
+		void removeConfigurationButtonEvent() {
+			GamepadsTestGameState* test = dynamic_cast<GamepadsTestGameState*>( gamepadsTest->getState(0) );
+			Gamepad* thispad = ARK2D::getInput()->getGamepadByIndex(test->m_gamepadIndex);
+
+			bool removed = false;
+			vector<GamepadMapping>* map = ARK::Controls::Gamepad::s_gamepadMapping;
+			for(unsigned int i = 0; i < map->size(); i++) {
+				if (map->at(i).vendorId == thispad->vendorId && 
+					map->at(i).productId == thispad->productId) {
+					map->erase(map->begin() + i);
+					removed = true;
+					break;
+				}
+			}
+
+			if (removed) {
+				ARK2D::getLog()->e("removed mapping");
+			}
+		}
 
 
 		void GamepadsTestGameState::init(GameContainer* container, StateBasedGame* game) {
@@ -477,6 +499,15 @@ namespace ARK {
 			m_autoConfig->transform.position.set(container->getWidth() - 85, 150);
 			m_autoConfig->pivot.set(0.5, 0.5f);
 			addChild(m_autoConfig);
+
+			m_removeConfig = new ARK::UI::Button();
+			m_removeConfig->setText("Remove Configuration");
+			m_removeConfig->setSize(100, 30);
+			m_removeConfig->setEvent((void*) &removeConfigurationButtonEvent);
+			m_removeConfig->setMargin(10); 
+			m_removeConfig->transform.position.set(container->getWidth() - 85, 200);
+			m_removeConfig->pivot.set(0.5, 0.5f);
+			addChild(m_removeConfig);
  
 			// scene->addChild(m_alertButtons);
 			// scene->addChild(m_alertAxes);
@@ -785,8 +816,11 @@ namespace ARK {
 				container->setFullscreen(!container->isFullscreen());
 			}
 		}
+		void GamepadsTest::render() {
+			StateBasedGame::render();
+		}
 		void GamepadsTest::render(GameContainer* container, Renderer* r) {
-			StateBasedGame::render(container, r);
+			//StateBasedGame::render(container, r);
 		}
 		void GamepadsTest::resize(GameContainer* container, int width, int height) {
 			StateBasedGame::resize(container, width, height);

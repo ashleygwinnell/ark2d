@@ -431,7 +431,9 @@ namespace ARK {
 			for(unsigned int i = 0; i < len; ++i) 
 			{
 				GamepadMapping* mapping = &s_gamepadMapping->at(i);
-				if (mapping->vendorId == this->vendorId && mapping->productId == this->productId) {
+				if (mapping->vendorId == this->vendorId && 
+					mapping->productId == this->productId && 
+					mapping->name == this->name) {
 					return mapping;
 				}
 			}
