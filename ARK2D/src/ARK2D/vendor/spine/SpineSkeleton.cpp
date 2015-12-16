@@ -32,7 +32,8 @@ namespace ARK {
 				thisY += skeleton->getY();
 				thisRotation += 90;
 			}
-
+			thisRotation = MathUtil::absangle<double>(thisRotation);
+ 
 			node->transform.position.set(thisX, thisY);
 			node->transform.scale.set(bone->scaleY, bone->scaleX);
             node->transform.rotation = Quaternion<float>::angleAxis(thisRotation, 0,0,1);

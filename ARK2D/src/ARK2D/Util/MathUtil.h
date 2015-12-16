@@ -677,6 +677,16 @@ namespace ARK {
     			static float linear(float p0, float p1, float t) {
         			return (p1 - p0) * t + p0;	
     			}
+
+    			template <class T>
+    			static T absangle(T angle) {
+    				if (angle < 0.0f) { 
+						angle = fmod(720000.0 - (angle * -1.0), 360.0);
+					} else if (angle > 360.0f) {
+						angle = fmod(angle, 360.0);
+					}
+					return angle;
+    			}
 				
 
 		};

@@ -1160,11 +1160,7 @@ namespace ARK {
 		SceneNode* Image::setRotation(double angle) {
 			// clamp angles between 0 and 360
 			//  because quaternions are silly. 
-			if (angle < 0.0f) { 
-				angle = fmod(7200.0 - (angle * -1.0), 360.0);
-			} else if (angle > 360.0f) {
-				angle = fmod(angle, 360.0);
-			}
+			angle = MathUtil::absangle<double>(angle);
 
             SceneNode::transform.rotation = Quaternion<float>::angleAxis(angle, 0,0,1);
 			m_dirty = true;
