@@ -78,6 +78,7 @@ namespace ARK {
 				CheckBox* m_alertButtons;
 				CheckBox* m_alertAxes;
                 ARK::UI::Button* m_autoConfig;
+                ARK::UI::Button* m_removeConfig;
                 GameState* m_returnToState;
 			public:
 				GamepadsTestGameState();
@@ -112,6 +113,7 @@ namespace ARK {
 				virtual void initStates(GameContainer* container);
 				virtual void update(GameContainer* container, GameTimer* timer);
 				virtual void render(GameContainer* container, Renderer* r);
+				virtual void render();
 				virtual void resize(GameContainer* container, int width, int height);
 
 				static int start();

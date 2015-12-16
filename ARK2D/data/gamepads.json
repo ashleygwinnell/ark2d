@@ -297,38 +297,38 @@
 			}
 		},
 		{
-            "name": "Wireless 360 Controller",
-            "comment":"Xbox 360",
-            "vendorId": 1118,
-            "productId": 654,
-            "buttons": {
-	            "DPAD_LEFT": 7,
-	            "DPAD_RIGHT": 8,
-	            "DPAD_UP": 5,
-	            "DPAD_DOWN": 6,
-	            "A": 16,
-	            "B": 17,
-	            "X": 18,
-	            "Y": 19,
-	            "LBUMPER": 13,
-	            "RBUMPER": 14,
-	            "LTRIGGER": -1,
-	            "RTRIGGER": -1,
-	            "L3": 11,
-	            "R3": 12, 
-	            "BACK": 10, 
-	            "START": 9, 
-	            "ACTIVATE": -1 
-            },
-            "axes": { 
-	            "LX": 0, 
-	            "LY": 1, 
-	            "RX": 2, 
-	            "RY": 3, 
-	            "LT": 4, 
-	            "RT": 5 
-            }
-		},
+			"name": "Wireless 360 Controller", 
+			"vendorId": 1118, 
+			"productId": 654, 
+			"buttons": { 
+				"DPAD_LEFT": 7, 
+				"DPAD_RIGHT": 8, 
+				"DPAD_UP": 5, 
+				"DPAD_DOWN": 6, 
+				"A": 16, 
+				"B": 17, 
+				"X": 18, 
+				"Y": 19, 
+				"LBUMPER": 13, 
+				"RBUMPER": 14, 
+				"LTRIGGER": -1, 
+				"RTRIGGER": -1, 
+				"L3": 11, 
+				"R3": 12, 
+				"BACK": 10, 
+				"START": 9, 
+				"ACTIVATE": -1 
+			},
+			"axes": { 
+				"LX": 0, 
+				"LY": 1, 
+				"RX": 2, 
+				"RY": 3, 
+				"LT": 4, 
+				"RT": 5 
+			}
+		}
+	
         {
             "name": "Wireless Controller",
             "comment": "PS4 Controller",
