@@ -7,7 +7,7 @@
 
 #include "Address.h"
 #include "Includes.h"
-#include "../util/Cast.h"
+#include "../Util/Cast.h"
 
 namespace ARK {
 	namespace Net { 
@@ -19,7 +19,7 @@ namespace ARK {
 	
 		Address::Address(unsigned int address, unsigned short port):
 			m_address(address),
-			m_port(port) {
+			m_port(port) { 
 			
 		}
 

@@ -29,7 +29,7 @@
 #include "ShaderStore.h"
 #include "FBO.h" 
 
-#include "shaders/BasicShader.h"
+#include "Shaders/BasicShader.h"
 
 #include "../Common/OpenGL.h"
 

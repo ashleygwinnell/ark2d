@@ -1,7 +1,7 @@
 /*
  * Random.cpp
  *
- *  Created on: 22 Nov 2015
+ *  Created on: 22 Nov 2015 
  *      Author: Ashley
  */
 
@@ -22,7 +22,7 @@ namespace ARK {
 		}
 		void RandomImplementation::seed() {
 			seed(ARK2D::getContainer()->getTimer()->millis());
-		}
+		} 
 		float RandomImplementation::randBetweenf(float lower, float upper) {
 			if (lower == upper) { return upper; }
 			if (lower > upper) { float teacup = lower; lower = upper; upper = teacup; }
