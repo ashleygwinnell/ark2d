@@ -496,7 +496,10 @@ namespace ARK {
 				}*/
 			#endif
 		}
- 
+ 		
+ 		void GameContainer::setHint(unsigned int hinttype, unsigned int val) {
+ 			hints[hinttype] = val;
+ 		}
 
 		void GameContainer::deinitGamepads() {
 

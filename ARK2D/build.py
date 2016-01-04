@@ -380,18 +380,18 @@ class ARK2DBuildSystem:
 		elif(sys.platform == "darwin"):
 			self.build_artifact = self.build_folder + self.ds + self.game_name.replace(" ", "_");
 
-		"""
+		
 		# open config
-		f = open(self.game_dir + "/config.json", "r");
+		"""f = open(self.game_dir + "/config.json", "r");
 		fcontents = f.read();
 		f.close();
 		config = json.loads(fcontents);
-
+		"""
 		#create ARK.h file
 		self.generateARKH(self.game_dir + self.ds + "src" + self.ds + "ARK.h");
 
-		self.config = config;
-		"""
+		#self.config = config;
+		
 			
 
 
@@ -420,6 +420,7 @@ class ARK2DBuildSystem:
 		if (sys.platform == "win32"):
 			nl = "\n"; 
 
+		"""
 		arkh  = ""; 
 		arkh += "#if defined(ARK2D_WINDOWS) || defined(ARK2D_ANDROID_ON_WINDOWS) || defined(ARK2D_WINDOWS_PHONE_8) " + nl;
 		arkh += "	#include \"" + self.str_replace(self.ark_config['windows']['ark2d_dir'], [("\\", "\\\\")]) + "\\\\src\\\\ARK.h\"" + nl;
@@ -429,6 +430,10 @@ class ARK2DBuildSystem:
 		#if "linux" in config:
 		arkh += "	#include \"" + self.ark_config['linux']['ark2d_dir'] + "/src/ARK.h\"" + nl;
 		arkh += "#endif" + nl;
+		"""
+
+		arkh = "#include <ARK.h>" + nl;
+
 		f = open(floc, "w");
 		f.write(arkh);
 		f.close();
@@ -3981,7 +3986,9 @@ build:
 			subprocess.call([game_resources_copy], shell=True); #libark2d
 			
 			print("Copy ark2d resources in to xcode dir");
-			subprocess.call(["cp -r " + self.ark2d_dir + "/data " + self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "data/ark2d/"], shell=True); #libark2d
+			ark2d_resources_copy_line = "cp -r " + self.ark2d_dir + "/data " + self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "data/ark2d/";
+			print(ark2d_resources_copy_line);
+			subprocess.call([ark2d_resources_copy_line], shell=True); #libark2d
 			
 			print("Copy ark2d dylib in to xcode dir");
 			subprocess.call(["cp " + self.ark2d_dir + "/build/osx/DerivedData/ark2d/Build/Products/Default/libark2d-OSX.dylib " + self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "data/ark2d/libark2d.dylib"], shell=True); #libark2d

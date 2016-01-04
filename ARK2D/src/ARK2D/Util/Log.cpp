@@ -70,9 +70,10 @@ namespace ARK {
 
  			//m_scene = new Scene();
 
+ 			GameContainer* container = ARK2D::getContainer();
  			SplitPane* splitHorizontal = new SplitPane(SplitPane::SPLIT_HORIZONTAL);
  			splitHorizontal->setName("split_horizontal");
- 			splitHorizontal->setBounds(1280, 720, 0);
+ 			splitHorizontal->setBounds(container->getWidth(), container->getHeight(), 0);
  			splitHorizontal->setSplitLocation(0.2f);
  			
  			
