@@ -15,6 +15,7 @@
 #include "../../Audio/Sound.h"
 #include "../../Graphics/ImageIO/PNGImage.h"
 #include "../../Graphics/Image.h"
+#include "../../Math/Random.h"
 
 	#include <dirent.h>
 	#include <errno.h>

@@ -10,6 +10,9 @@
 
 #include <string>
 #include <sstream>
+#include <cstring>
+#include <stdio.h>
+#include <iostream>
 using namespace std;
 
 namespace ARK {

@@ -687,6 +687,19 @@ namespace ARK {
 					}
 					return angle;
     			}
+
+
+
+				static inline unsigned long long S_to_binary_(const char *s)
+				{
+				        unsigned long long i = 0;
+				        while (*s) {
+				                i <<= 1;
+				                i += *s++ - '0';
+				        }
+				        return i;
+				}
+				#define B(x) MathUtil::S_to_binary_(#x)
 				
 
 		};

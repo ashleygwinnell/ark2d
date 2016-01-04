@@ -16,12 +16,12 @@ namespace ARK {
 		GameState::GameState(): 
 			SceneNode("GameState",TYPE_NODE)
 		{
-
+			visible = false;
 		}
 		GameState::GameState(string nm):
 			SceneNode(nm,TYPE_NODE)
 		{
-
+			visible = false;
 		}
 
 		void GameState::preEnter(GameContainer* container, StateBasedGame* game, GameState* from) {

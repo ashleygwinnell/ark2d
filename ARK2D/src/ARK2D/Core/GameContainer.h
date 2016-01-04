@@ -183,6 +183,8 @@ namespace ARK {
 				void resizeGame();
 	//	#endif
 
+				void setHint(unsigned int hinttype, unsigned int val);
+
 				void close() const;
 				virtual ~GameContainer();
 
@@ -221,13 +223,13 @@ namespace ARK {
 			private:
 				//ARK::Geometry::Rectangle<int>* m_window_rectangle;
 
-
 			// Generic items.
 				GameTimer m_timer;
 				Game& m_game;
 				Input m_input;
 				Renderer m_graphics;
 				vector<ARK::Controls::Gamepad*> m_gamepads;
+				map<unsigned int, unsigned int> hints;
 
 			public:
 				Scene* scene;
@@ -279,6 +281,10 @@ namespace ARK {
 				GameContainerPlatform* getPlatformSpecific() { return &m_platformSpecific; }
 				static const int RESIZE_BEHAVIOUR_SCALE = 0;
 				static const int RESIZE_BEHAVIOUR_NOSCALE = 1;
+
+				static const unsigned int HINT_MULTISAMPLING = 0;
+				static const unsigned int HINT_MULTISAMPLING_NONE = 1;
+				static const unsigned int HINT_MULTISAMPLING_4X = 2;
 
 
 

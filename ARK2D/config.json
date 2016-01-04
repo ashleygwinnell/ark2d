@@ -20,7 +20,7 @@
 	},
 	"linux": {
 		"python_executable": "/usr/bin/python3.4",
-		"ark2d_dir": "/home/forceofhabit/Dropbox/ark2d/ARK2D",
+		"ark2d_dir": "/home/forceofhabit/git/ark2d/ARK2D",
 		"android": {
         	"sdk_dir": "/home/forceofhabit/android_sdk",
 			"ndk_dir": "/home/forceofhabit/android_ndk"

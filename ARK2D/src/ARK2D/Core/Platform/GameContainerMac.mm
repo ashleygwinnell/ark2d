@@ -54,6 +54,7 @@
 				m_input(),
 				m_graphics(),
 				m_gamepads(),
+				hints(),
 				scene(NULL),
 				m_originalWidth(width),    
 				m_originalHeight(height),
@@ -110,131 +111,8 @@
 						SetFrontProcess(&psn);
 					}  
 				 	
+                    [pool release];
 					
-					// Get location of current app bundle and make sure there's a resources path.
-					m_platformSpecific.m_resourcePath = [[[NSBundle mainBundle] resourcePath] fileSystemRepresentation];
-					m_platformSpecific.m_resourcePath += "/data/";
-					ARK2D::getLog()->i(StringUtil::append("Resource Path: ", m_platformSpecific.m_resourcePath));
-					
-					if (NSApp == nil) {
-						[NSApplication sharedApplication];
-						[NSApp finishLaunching];
-					} 
-					if ([NSApp delegate] == nil) {
-						//[NSApp setDelegate:[[GameContainerMacAppDelegate alloc] init]];
-						
-					}
-
-					NSRect screenRect = [[NSScreen mainScreen] frame];
-					m_screenWidth = screenRect.size.width;
-					m_screenHeight = screenRect.size.height;
-					
-					NSWindow* window = m_platformSpecific.m_window;
-					NSRect rect;
-					unsigned int style;
-					
-					rect.origin.x = 0;
-					rect.origin.y = 0;
-					rect.size.width = width;
-					rect.size.height = height;
-					rect.origin.x = (CGDisplayPixelsWide(kCGDirectMainDisplay)/2) - (rect.size.width/2);
-					rect.origin.y = (CGDisplayPixelsHigh(kCGDirectMainDisplay)/2)- (rect.size.height/2) + 25;
-					
-					style = (NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask);
-					
-					//  Create window
-					window = [[NSWindow alloc] initWithContentRect:rect styleMask:style backing:NSBackingStoreBuffered defer:FALSE];
-					[window setTitle:[NSString stringWithCString:m_game.getTitle().c_str() encoding:NSUTF8StringEncoding]];
-					[window makeKeyAndOrderFront:nil];
-					[window orderFrontRegardless];
-					[window makeKeyWindow];
-				 
-					[window setAcceptsMouseMovedEvents:YES];
-					[window setReleasedWhenClosed:YES];
-		
-					GameContainerMacWindowListener* listener = [GameContainerMacWindowListener alloc];
-					[listener init:window];
-					[window setDelegate:listener];
-
-					m_platformSpecific.m_listener = listener;
-					
-					//if (isLionPlus()) {
-					//	[window setRestorable:NO]; 
-					//} 
-					
-					m_platformSpecific.m_window = window;
-
-
-					// Create menu bar(ish)
-					/*NSMenu* mainMenu = [[NSApplication sharedApplication] mainMenu];
-					NSMenu* appMenu = [[mainMenu itemAtIndex:0] submenu];
-                    for (NSMenuItem *item in [appMenu itemArray]) {
-                        NSLog(@"%@", [item title]);
-                    }
-                    
-                    [appMenu addItemWithTitle:@"About" action:@selector(aboutMenu:) keyEquivalent:@""];
-                    for (NSMenuItem *item in [appMenu itemArray]) {
-                        NSLog(@"%@", [item title]);
-                    }*/
-					NSApplication* app = [NSApplication sharedApplication];
-                    NSMenu* appMenu = [[NSMenu alloc] initWithTitle:@""];
-
-                    // about
-                    NSString* firstString = @"About ";
-                    NSString* nameStr = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
-                    NSString* aboutMenuString = [firstString stringByAppendingString:nameStr];
-                    NSMenu* menu = [[NSMenu alloc] initWithTitle: @""];
-                    NSMenuItem* mi = [menu addItemWithTitle:@"" action:nil keyEquivalent:@""];
-                    [appMenu addItemWithTitle:aboutMenuString action:@selector(aboutMenu:) keyEquivalent:@""];
-                    
-                    // separator
-                    [appMenu addItem:[NSMenuItem separatorItem]];
-                    
-                    // close
-                    NSString* firstStringQ = @"Quit ";
-                    NSString* quitMenuString = [firstStringQ stringByAppendingString:nameStr];
-                    [appMenu addItemWithTitle:quitMenuString action:@selector(quitMenu:) keyEquivalent:@"q"];
-                    
-                    [mi setSubmenu:appMenu];
-                    
-                    [app setMainMenu:menu];
-
-					
-					NSOpenGLContext* context = m_platformSpecific.createGLContext();
-					m_platformSpecific.makeContextCurrent(window, context);
-					m_platformSpecific.m_context = context;
-					
-					Image::showAnyGlErrorAndExit();
-
-					// maybe it should be on.. i don't know...
-					//glEnable(GL_MULTISAMPLE);
-
-					//enable gl
-					ARK2D::getLog()->v("enable texture 2d and do viewport");
-					//glEnable(GL_TEXTURE_2D);
-					glViewport(0, 0, width, height);
-
-					Image::showAnyGlErrorAndExit();
-					
-					ARK2D::getLog()->v("clearing and blending");
-					glClear( GL_COLOR_BUFFER_BIT );
-					glEnable(GL_BLEND);
-					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-					//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
-					Image::showAnyGlErrorAndExit();
-		 
-					// enable 2d!
-					enable2D();
-					
-					[pool release];
-
-					ARK2D::getRenderer()->init();
-
-					// gamepads
-					m_platformSpecific.m_hidManager = NULL;
-					
-					m_bRunning = true;
 		
 			} 
 			
@@ -996,6 +874,133 @@
 			}
 		
 			void ARK::Core::GameContainer::start() {
+                
+                NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+
+				// Get location of current app bundle and make sure there's a resources path.
+					m_platformSpecific.m_resourcePath = [[[NSBundle mainBundle] resourcePath] fileSystemRepresentation];
+					m_platformSpecific.m_resourcePath += "/data/";
+					ARK2D::getLog()->i(StringUtil::append("Resource Path: ", m_platformSpecific.m_resourcePath));
+					
+					if (NSApp == nil) {
+						[NSApplication sharedApplication];
+						[NSApp finishLaunching];
+					} 
+					if ([NSApp delegate] == nil) {
+						//[NSApp setDelegate:[[GameContainerMacAppDelegate alloc] init]];
+						
+					}
+
+					NSRect screenRect = [[NSScreen mainScreen] frame];
+					m_screenWidth = screenRect.size.width;
+					m_screenHeight = screenRect.size.height;
+					
+					NSWindow* window = m_platformSpecific.m_window;
+					NSRect rect;
+					unsigned int style;
+					
+					rect.origin.x = 0;
+					rect.origin.y = 0;
+					rect.size.width = m_width;
+					rect.size.height = m_height;
+					rect.origin.x = (CGDisplayPixelsWide(kCGDirectMainDisplay)/2) - (rect.size.width/2);
+					rect.origin.y = (CGDisplayPixelsHigh(kCGDirectMainDisplay)/2)- (rect.size.height/2) + 25;
+					
+					style = (NSTitledWindowMask|NSClosableWindowMask|NSMiniaturizableWindowMask);
+					
+					//  Create window
+					window = [[NSWindow alloc] initWithContentRect:rect styleMask:style backing:NSBackingStoreBuffered defer:FALSE];
+					[window setTitle:[NSString stringWithCString:m_game.getTitle().c_str() encoding:NSUTF8StringEncoding]];
+					[window makeKeyAndOrderFront:nil];
+					[window orderFrontRegardless];
+					[window makeKeyWindow];
+				 
+					[window setAcceptsMouseMovedEvents:YES];
+					[window setReleasedWhenClosed:YES];
+		
+					GameContainerMacWindowListener* listener = [GameContainerMacWindowListener alloc];
+					[listener init:window];
+					[window setDelegate:listener];
+
+					m_platformSpecific.m_listener = listener;
+					
+					//if (isLionPlus()) {
+					//	[window setRestorable:NO]; 
+					//} 
+					
+					m_platformSpecific.m_window = window;
+
+
+					// Create menu bar(ish)
+					/*NSMenu* mainMenu = [[NSApplication sharedApplication] mainMenu];
+					NSMenu* appMenu = [[mainMenu itemAtIndex:0] submenu];
+                    for (NSMenuItem *item in [appMenu itemArray]) {
+                        NSLog(@"%@", [item title]);
+                    }
+                    
+                    [appMenu addItemWithTitle:@"About" action:@selector(aboutMenu:) keyEquivalent:@""];
+                    for (NSMenuItem *item in [appMenu itemArray]) {
+                        NSLog(@"%@", [item title]);
+                    }*/
+					NSApplication* app = [NSApplication sharedApplication];
+                    NSMenu* appMenu = [[NSMenu alloc] initWithTitle:@""];
+
+                    // about
+                    NSString* firstString = @"About ";
+                    NSString* nameStr = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
+                    NSString* aboutMenuString = [firstString stringByAppendingString:nameStr];
+                    NSMenu* menu = [[NSMenu alloc] initWithTitle: @""];
+                    NSMenuItem* mi = [menu addItemWithTitle:@"" action:nil keyEquivalent:@""];
+                    [appMenu addItemWithTitle:aboutMenuString action:@selector(aboutMenu:) keyEquivalent:@""];
+                    
+                    // separator
+                    [appMenu addItem:[NSMenuItem separatorItem]];
+                    
+                    // close
+                    NSString* firstStringQ = @"Quit ";
+                    NSString* quitMenuString = [firstStringQ stringByAppendingString:nameStr];
+                    [appMenu addItemWithTitle:quitMenuString action:@selector(quitMenu:) keyEquivalent:@"q"];
+                    
+                    [mi setSubmenu:appMenu];
+                    
+                    [app setMainMenu:menu];
+
+					
+					NSOpenGLContext* context = m_platformSpecific.createGLContext();
+					m_platformSpecific.makeContextCurrent(window, context);
+					m_platformSpecific.m_context = context;
+					
+					Image::showAnyGlErrorAndExit();
+
+					// maybe it should be on.. i don't know...
+					//glEnable(GL_MULTISAMPLE);
+
+					//enable gl
+					ARK2D::getLog()->v("enable texture 2d and do viewport");
+					//glEnable(GL_TEXTURE_2D);
+					glViewport(0, 0, m_width, m_height);
+
+					Image::showAnyGlErrorAndExit();
+					
+					ARK2D::getLog()->v("clearing and blending");
+					glClear( GL_COLOR_BUFFER_BIT );
+					glEnable(GL_BLEND);
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+					//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+					Image::showAnyGlErrorAndExit();
+		 
+					// enable 2d!
+					enable2D();
+					
+					[pool release];
+
+					ARK2D::getRenderer()->init();
+
+					// gamepads
+					m_platformSpecific.m_hidManager = NULL;
+					
+					m_bRunning = true;
 			
 				// seed the random 
 				Random::init();
@@ -1101,9 +1106,21 @@
 			NSOpenGLContext* ARK::Core::GameContainerPlatform::createGLContext() 
 			{
 			    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+                
+                int multisamplingBuffers = 1;
+                int multisamplingSamples = 4;
+                
+                unsigned int multisamplingHint = GameContainer::HINT_MULTISAMPLING;
+                std::map<unsigned int, unsigned int>::iterator it = m_container->hints.find(multisamplingHint);
+                if (it != m_container->hints.end() && it->second == GameContainer::HINT_MULTISAMPLING_NONE) {
+                    multisamplingBuffers = 0;
+                    multisamplingSamples = 0;
+                }
+                ARK2D::getLog()->e("-- Create GL context --");
+                ARK2D::getLog()->e(StringUtil::append("multisamplingBuffers: ", multisamplingBuffers));
+                ARK2D::getLog()->e(StringUtil::append("multisamplingSamples: ", multisamplingSamples));
 			    
-			    NSOpenGLPixelFormatAttribute attr[] =
-			    {
+			    NSOpenGLPixelFormatAttribute attr[] = {
 					NSOpenGLPFAOpenGLProfile, NSOpenGLProfileVersion3_2Core,
 					NSOpenGLPFADoubleBuffer, 
 					NSOpenGLPFAAccelerated, 
@@ -1114,12 +1131,15 @@
 					//NSOpenGLPFAStencilSize, 1, 
 					NSOpenGLPFAStencilSize, 8,  
 					
-					NSOpenGLPFASampleBuffers, (NSOpenGLPixelFormatAttribute)1,
-					NSOpenGLPFASamples, (NSOpenGLPixelFormatAttribute)4,
+					NSOpenGLPFASampleBuffers, (NSOpenGLPixelFormatAttribute) multisamplingBuffers,
+					NSOpenGLPFASamples, (NSOpenGLPixelFormatAttribute) multisamplingSamples,
 
 			        NSOpenGLPFAScreenMask, CGDisplayIDToOpenGLDisplayMask(CGMainDisplayID()),
 					0 
 				};
+                
+                
+                
 				NSOpenGLPixelFormat* format = [[NSOpenGLPixelFormat alloc] initWithAttributes:attr];
 
 				if (format == nil) {
