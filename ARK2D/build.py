@@ -1413,8 +1413,8 @@ class ARK2DBuildSystem:
 			shutil.copy(self.ark2d_dir + "\\lib\\windows\\wrap_oal.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\wrap_oal.dll");
 			shutil.copy(self.ark2d_dir + "\\lib\\windows\\zlib1.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\zlib1.dll");
 			shutil.copy(self.ark2d_dir + "\\lib\\windows\\OpenAL32.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\OpenAL32.dll");
-			shutil.copy(self.ark2d_dir + "\\lib\\windows\\vs2013\\x86\\msvcr120d.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.platform + "\\Debug\\msvcr120d.dll");
-			shutil.copy(self.ark2d_dir + "\\lib\\windows\\vs2013\\x86\\msvcp120d.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.platform + "\\Debug\\msvcp120d.dll");
+			shutil.copy(self.ark2d_dir + "\\lib\\windows\\vs2013\\x86\\msvcr120d.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\msvcr120d.dll");
+			shutil.copy(self.ark2d_dir + "\\lib\\windows\\vs2013\\x86\\msvcp120d.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\msvcp120d.dll");
 			#shutil.copy(self.ark2d_dir + "\\lib\\windows\\vs2013\\x86\\msvcr120.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\msvcr120.dll");
 			#shutil.copy(self.ark2d_dir + "\\lib\\windows\\vs2013\\x86\\msvcp120.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\msvcp120.dll");
 			shutil.copy(self.ark2d_dir + "\\lib\\windows\\angelscript\\angelscriptd.dll", self.game_dir + self.ds + self.build_folder + self.ds + self.output + "\\Debug\\angelscriptd.dll");

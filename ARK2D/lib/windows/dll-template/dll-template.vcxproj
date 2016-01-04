@@ -108,7 +108,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\windows\alut.lib;..\..\lib\windows\OpenAL32.lib;..\..\lib\windows\freetype6.lib;..\..\lib\windows\zlib1.lib;..\..\lib\windows\curl\Debug\curllib.lib;..\..\lib\windows\angelscript\angelscriptd.lib;opengl32.lib;msvcrtd.lib;winmm.lib</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\windows\alut.lib;..\..\lib\windows\OpenAL32.lib;..\..\lib\windows\freetype6.lib;..\..\lib\windows\zlib1.lib;..\..\lib\windows\curl\Debug\curllib.lib;..\..\lib\windows\angelscript\angelscriptd.lib;opengl32.lib;msvcrtd.lib;winmm.lib;XInput9_1_0.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <NoEntryPoint>false</NoEntryPoint>
@@ -134,7 +134,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\windows\alut.lib;..\..\lib\windows\OpenAL32.lib;..\..\lib\windows\freetype6.lib;..\..\lib\windows\zlib1.lib;..\..\lib\windows\curl\Debug\curllib.lib;..\..\lib\windows\angelscript\angelscript.lib;opengl32.lib;msvcrt.lib;libcmt.lib;winmm.lib</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\windows\alut.lib;..\..\lib\windows\OpenAL32.lib;..\..\lib\windows\freetype6.lib;..\..\lib\windows\zlib1.lib;..\..\lib\windows\curl\Debug\curllib.lib;..\..\lib\windows\angelscript\angelscript.lib;opengl32.lib;msvcrt.lib;libcmt.lib;winmm.lib;XInput9_1_0.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <IgnoreSpecificDefaultLibraries>msvcrtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <NoEntryPoint>false</NoEntryPoint>
@@ -159,7 +159,7 @@
       
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\..\lib\windows\alut.lib;..\..\lib\windows\OpenAL32.lib;..\..\lib\windows\freetype6.lib;..\..\lib\windows\zlib1.lib;..\..\lib\windows\curl\Debug\curllib.lib;..\..\lib\windows\angelscript\angelscript.lib;opengl32.lib;msvcrt.lib;libcmt.lib;winmm.lib</AdditionalDependencies>
+      <AdditionalDependencies>..\..\lib\windows\alut.lib;..\..\lib\windows\OpenAL32.lib;..\..\lib\windows\freetype6.lib;..\..\lib\windows\zlib1.lib;..\..\lib\windows\curl\Debug\curllib.lib;..\..\lib\windows\angelscript\angelscript.lib;opengl32.lib;msvcrt.lib;libcmt.lib;winmm.lib;XInput9_1_0.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <IgnoreSpecificDefaultLibraries>msvcrtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <NoEntryPoint>false</NoEntryPoint>
