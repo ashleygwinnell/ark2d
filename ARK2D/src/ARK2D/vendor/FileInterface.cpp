@@ -337,12 +337,12 @@ size_t        fi_fwrite(const void *buffer,size_t size,size_t count,FILE_INTERFA
 	return ret;
 }
 
-size_t        fi_fprintf(FILE_INTERFACE *fph,const char *fmt,...)
+size_t        fi_fprintf(FILE_INTERFACE *fph, const char *fmt,...)
 { 
 	size_t ret = 0;
 
-#if (defined(ARK2D_ANDROID) || defined(ARK2D_MACINTOSH) || defined (ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_UBUNTU_LINUX) || defined(ARK2D_EMSCRIPTEN_JS) )
-
+#if (defined(ARK2D_ANDROID) || defined(ARK2D_MACINTOSH) || defined (ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_UBUNTU_LINUX) || defined(ARK2D_EMSCRIPTEN_JS) ) || defined(ARK2D_IPHONE)
+    
 #else
 
 	char buffer[2048];

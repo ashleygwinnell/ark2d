@@ -10,10 +10,10 @@
 	#elif defined(ARK2D_EMSCRIPTEN_JS)
 		
 	// Android
-	#elif defined(ARK2D_ANDROID)
+	// #elif defined(ARK2D_ANDROID)
 		
 	// iOS
-	//#elif defined(ARK2D_IPHONE)
+	// #elif defined(ARK2D_IPHONE)
 		
 	// WP8
 	#elif defined(ARK2D_WINDOWS_PHONE_8)
@@ -31,8 +31,8 @@
 			#define ARK2D_API __declspec( dllimport )
 		#endif 
 
-	// OS X & Linux
-	#elif defined(ARK2D_MACINTOSH) || defined(__linux__) || defined(ARK2D_UBUNTU_LINUX) || defined(ARK2D_IPHONE)
+	// OS X & Linux & Android.
+	#elif defined(ARK2D_MACINTOSH) || defined(__linux__) || defined(ARK2D_UBUNTU_LINUX) || defined(ARK2D_IPHONE) || defined(ARK2D_ANDROID)
 
 		#define ARK2D_API
 

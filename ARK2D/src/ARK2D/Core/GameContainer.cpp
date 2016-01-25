@@ -218,6 +218,7 @@ namespace ARK {
 			m_graphics.drawString(fps, getDynamicWidth() - 10 - m_graphics.getFont()->getStringWidth(fps), 10);
 		}
 
+
 		void GameContainer::preRender() {
 			return; 
 
@@ -334,9 +335,11 @@ namespace ARK {
 					// we pop to below the stack if this is the init cycle, so only do this on artificial resize.
 					//if (!GameContainerPlatform::s_nativeResizing) { 
 					if (!GameContainerPlatform::s_gamePaused) { 
-						container->disable2D();  
+						//container->disable2D();  
 					}
 					//}   
+					int width = container->getWidth();
+					int height = container->getHeight();
   
 					container->m_platformSpecific.initGL("", width, height);
 					container->m_platformSpecific.initGL2D(width, height);
@@ -347,7 +350,10 @@ namespace ARK {
 				}
 			#elif defined(ARK2D_IPHONE)
 				if (container->getResizeBehaviour() == GameContainer::RESIZE_BEHAVIOUR_SCALE) {
-					if (container->getOrientation() == GameContainer::ORIENTATION_PORTRAIT)
+                    int width = container->getWidth();
+                    int height = container->getHeight();
+
+                    if (container->getOrientation() == GameContainer::ORIENTATION_PORTRAIT)
                  	{
                         float tx = float(container->getDynamicWidth() - (float(container->getWidth())*container->getScale()))/2;
                         float ty = float(container->getDynamicHeight() - (float(container->getHeight())*container->getScale()))/2;
@@ -584,7 +590,7 @@ namespace ARK {
 					
 					ARK2D::getLog()->i(StringUtil::appendf("Scale: ", m_scale));
 
-		    	} else { 
+		    	} else {  
 			    	m_scaleX = (float) width / (float) m_originalWidth;
 					m_scaleY = (float) height / (float) m_originalHeight;
 
@@ -638,9 +644,12 @@ namespace ARK {
 		}
 		unsigned int GameContainer::getScreenOrientation() {
 			#if defined(ARK2D_WINDOWS) || defined(ARK2D_MACINTOSH) || defined(ARK2D_UBUNTU_LINUX) || defined(ARK2D_ANDROID) || defined(ARK2D_WINDOWS_PHONE_8)
-				return (m_screenWidth >= m_screenHeight) 
-					? ORIENTATION_LANDSCAPE
-					: ORIENTATION_PORTRAIT;
+				if (m_screenWidth >= m_screenHeight) {
+					return ORIENTATION_LANDSCAPE;
+				} else {
+					return ORIENTATION_PORTRAIT;
+				}
+					
 			#else
 				ARK2D::getLog()->w("getScreenOrientation not support on this platform.");
 			#endif

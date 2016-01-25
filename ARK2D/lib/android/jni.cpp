@@ -13,6 +13,7 @@ GameContainer* container = NULL;
 Renderer* r = NULL;
 GameTimer* timer = NULL;
 %GAME_CLASS_NAME%* game = NULL;
+Scene* scene = NULL;
 Log* arklog = NULL;
 JNIEnv* s_env = NULL;
 JavaVM* s_jvm = NULL;
@@ -105,6 +106,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	arklog->i("Initialising Gamepads... ");
 	s_thisInitGamepads();
 	
+	scene = container->scene;
 
 	// init pluggable?
 	//delete container->m_platformSpecific.m_pluggable;
@@ -118,6 +120,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	ARK2D::getRenderer()->init();
 
 	arklog->i("init fonts");
+	Renderer::setInterpolation(Renderer::INTERPOLATION_NEAREST);
 	ARK::Font::BMFont* fnt = Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont(); //new BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
 	fnt->scale(0.5f);
 	r->setDefaultFont(fnt);
@@ -135,7 +138,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	arklog->init();
 
 	arklog->i("Initialising Localisations");
-	container->initLocalisation();
+	//container->initLocalisation();
 
 	arklog->i("init game class");
 	game->init(container);
@@ -151,9 +154,11 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	if (container != NULL) {
 		
 		// have we just come from a resume? 
+		arklog->i("game class nativeResize!");
 		if (GameContainerPlatform::s_gamePaused == true) 
 		{ 
 			// do this after the context is created otherwise it won't work. 
+			arklog->i("game class nativeResize - game was paused and now it is not.");
 			Renderer* r = ARK2D::getRenderer();
 			r->init();
 			FBOStore::getInstance()->reloadFBOs();
@@ -165,7 +170,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 			//game->resize(container, (int) w, (int) h);
 			//container->setSize((int) w, (int) h); 
 			//GameContainerPlatform::s_nativeResizing = true;
-			container->setSize((int) w, (int) h); 
+			container->setSize((int) w, (int) h, true); 
 			//GameContainerPlatform::s_nativeResizing = false; 
 		//}
 		
@@ -284,9 +289,10 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 			gamepads->at(i)->update();
 		}
 
-		game->preUpdate(container, timer);
-		game->update(container, timer);
-		game->postUpdate(container, timer);
+		//game->preUpdate(container, timer);
+		//game->update(container, timer);
+		//game->postUpdate(container, timer);
+		scene->update();
 		ARK2D::getInput()->clearKeyPressedRecord();
 		
 		for (unsigned int i = 0; i < gamepads->size(); i++) {
@@ -297,10 +303,13 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		//fillRect(100,100,10,10);
 		RendererStats::reset();
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-		game->preRender(container, r);
-		game->render(container, r);
-		ARK2D::getLog()->render(container, r);
-		game->postRender(container, r);
+		//game->preRender(container, r);
+		//game->render(container, r);
+		//ARK2D::getLog()->render(container, r);
+		//game->postRender(container, r);
+		//container->preRender();
+		scene->render();
+		//container->postRender();
 		//if (container->isShowingFPS()) { container->renderFPS(); }
 		
 
@@ -750,7 +759,7 @@ JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAM
 		if (thisGamepad != NULL) {
 
 			// convert OuyaController.DPAD_UP (19) into Gamepad::DPAD_UP (103)  
-			unsigned int actualButton = Gamepad::convertIdToButton(thisGamepad,  (unsigned int) buttonid );
+			unsigned int actualButton = Gamepad::convertButtonToId(thisGamepad,  (unsigned int) buttonid );
 			/*bool buttonExists = thisGamepad->hasButton((unsigned int) actualButton);
 			if (!buttonExists && (
 					actualButton == Gamepad::DPAD_UP || 
@@ -788,7 +797,7 @@ JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAM
 			//if (!thisGamepad->hasButton((unsigned int) buttonid)) {
 			//	addButtonToGamepad(thisGamepad, (unsigned int) buttonid);	
 			//} 
-			unsigned int actualButton = Gamepad::convertIdToButton(thisGamepad, (unsigned int) buttonid );
+			unsigned int actualButton = Gamepad::convertButtonToId(thisGamepad, (unsigned int) buttonid );
 			thisGamepad->releaseButton(actualButton);
 		}
 	}

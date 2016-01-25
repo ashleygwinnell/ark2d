@@ -113,7 +113,11 @@ namespace ARK {
 	                }
 
 					setOpen(!isOpen());
-					m_state = (mib)?Button::STATE_OVER:Button::STATE_OFF;
+					if (mib) {
+						m_state = Button::STATE_OVER;
+					} else {
+						m_state = Button::STATE_OFF;
+					}
 					if (consumed) {
 						return consumed;
 					}

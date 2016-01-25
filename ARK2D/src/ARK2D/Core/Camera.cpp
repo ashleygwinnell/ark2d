@@ -16,6 +16,28 @@ namespace ARK {
 		Camera::Camera():
 			ARK::SceneGraph::SceneNode("camera", SceneNode::TYPE_CAMERA),
 			type(TYPE_ORTHO_2D),
+			viewportX(0),
+			viewportY(0),
+			viewportWidth(1),
+			viewportHeight(1),
+			viewportAspectRatio(1.0f),
+			viewportAutosize(true),
+			viewportOrtho3dScale(1.5f),
+
+			fieldOfView(45.0f),
+			nearClip(0.001f),
+			farClip(1000.0f),
+				
+			camera_heading(0),
+			camera_pitch(0),
+
+			clearColor(Color::black),
+
+			lookAt(0.0f, 0.0f, 0.0f),
+			direction(0.0f, 0.0f, 0.0f),
+			up(0,1,0),
+			rotation_quaternion(),
+
 			projection(),
 			view(),
 			model()
@@ -26,8 +48,8 @@ namespace ARK {
 			up = Vector3<float>(0, 1, 0);
 			fieldOfView = 45;
 			rotation_quaternion = Quaternion<float>();
-//			camera_position_delta = glm::vec3(0, 0, 0);
-//			camera_scale = .5f;
+			// camera_position_delta = glm::vec3(0, 0, 0);
+			// camera_scale = .5f;
 			
 			viewportOrtho3dScale = 1.5f;
 			viewportAutosize = true;

@@ -4199,7 +4199,8 @@ build:
 			ark2ddir = self.ark2d_dir + "/src/ARK2D";
 			gypfiletargetcondition['include_dirs'] = [
 				ark2ddir + '/vendor/iphone',
-				ark2ddir + '/vendor/spine/includes'
+				ark2ddir + '/vendor/spine/includes',
+				ark2ddir + '/vendor/angelscript'
 			];
 			
 			gypfiletargetcondition['xcode_settings'] = {};
@@ -4390,6 +4391,7 @@ build:
 	          	'$(SDKROOT)/System/Library/Frameworks/OpenGLES.framework',
 	          	'$(SDKROOT)/System/Library/Frameworks/UIKit.framework',
 	          	self.ark2d_dir + '/lib/iphone/libfreetype.a',
+	          	self.ark2d_dir + '/lib/iphone/libangelscriptd.a',
 	          	self.ark2d_dir + '/lib/iphone/libGoogleAnalyticsServices.a',
 	          	self.ark2d_dir + '/build/ios/DerivedData/ark2d/Build/Products/Default-iphoneos/libark2d-iPhone.a'
 			];
@@ -4418,9 +4420,11 @@ build:
 
 			ark2ddir = self.ark2d_dir + "/src/ARK2D";
 			gypfiletargetcondition['include_dirs'] = [ 
+				self.ark2d_dir + "/src",
 				ark2ddir, 
 				ark2ddir + '/vendor/iphone',
-				ark2ddir + '/vendor/spine/includes'
+				ark2ddir + '/vendor/spine/includes',
+				ark2ddir + '/vendor/angelscript'
 			];
 			
 			gypfiletargetcondition['xcode_settings'] = {};
@@ -5293,7 +5297,12 @@ build:
 			android_make_file += "LOCAL_PATH := $(call my-dir)/../../" + nl + nl;
 			android_make_file += "include $(CLEAR_VARS)" + nl+nl;
 			android_make_file += "LOCAL_MODULE    := " + self.game_name_safe +  nl+nl; # Here we give our module name and source file(s)
-			android_make_file += "LOCAL_C_INCLUDES := " + self.ark2d_dir + "/src/ARK2D/vendor/android/libzip/jni/ " + self.ark2d_dir + "/src/ARK2D/vendor/spine/includes " + nl;
+			android_make_file += "LOCAL_C_INCLUDES := ";
+			android_make_file += self.ark2d_dir + "/src/ARK2D/vendor/android/libzip/jni/ ";
+			android_make_file += self.ark2d_dir + "/src/ARK2D/vendor/spine/includes "; 
+			android_make_file += self.ark2d_dir + "/src/ARK2D/vendor/angelscript "; 
+			android_make_file += self.ark2d_dir + "/src"; 
+			android_make_file += nl;
 			
 			android_make_file += "LOCAL_CFLAGS := -DARK2D_ANDROID "; 
 			if (self.platformOn == "windows"):
@@ -5306,7 +5315,7 @@ build:
 			if (self.firetv == True):
 				android_make_file += "-DARK2D_AMAZON ";
 
-			android_make_file += "-fno-exceptions -fno-rtti -Wno-psabi ";
+			android_make_file += "-fno-exceptions -fno-rtti -fexceptions  -Wno-psabi ";
 			if (self.debug):
 				android_make_file += " -DARK2D_DEBUG -DDEBUG -DNDK_DEBUG -O0 ";
 			else:
@@ -5395,7 +5404,8 @@ build:
 			#subprocess.call(["cp -r " +self.ark2d_dir + "/build/android/libs/armeabi-v7a/ " + ndkdir + "/platforms/"+ndkappplatform+"/arch-x86/usr/lib/"], shell=True);
 			
 			shutil.copy2(self.ark2d_dir + self.ds + "build" + self.ds + "android" + self.ds + "libs" + self.ds + "armeabi-v7a" + self.ds + "libark2d.so", self.android_ndkdir + self.ds + "platforms"+self.ds+ndkappplatform+self.ds+"arch-arm" + self.ds + "usr" + self.ds + "lib" + self.ds);
-			shutil.copy2(self.ark2d_dir + self.ds + "build" + self.ds + "android" + self.ds + "libs" + self.ds + "x86" + self.ds + "libark2d.so", self.android_ndkdir + self.ds + "platforms"+self.ds+ndkappplatform+self.ds+"arch-x86" + self.ds + "usr" + self.ds + "lib" + self.ds);
+			if not self.debug: 
+				shutil.copy2(self.ark2d_dir + self.ds + "build" + self.ds + "android" + self.ds + "libs" + self.ds + "x86" + self.ds + "libark2d.so", self.android_ndkdir + self.ds + "platforms"+self.ds+ndkappplatform+self.ds+"arch-x86" + self.ds + "usr" + self.ds + "lib" + self.ds);
 
 			#print ("Copying game libraries into android sdk"):
 
@@ -5478,10 +5488,11 @@ build:
 			];
 			
 			# game services bits in java files.
-			editsGameServices = [("%GAME_SERVICES_BLOCKSTART%", "/*"), ("%GAME_SERVICES_BLOCKEND%", "*/") ];
-			if "game_services" in self.android_config:
-				if (self.android_config['game_services']['use']):
-					editsGameServices = [("%GAME_SERVICES_BLOCKSTART%", ""), ("%GAME_SERVICES_BLOCKEND%", "") ];
+			#editsGameServices = [("%GAME_SERVICES_BLOCKSTART%", "/*"), ("%GAME_SERVICES_BLOCKEND%", "*/") ];
+			#if "game_services" in self.android_config:
+			#	if (self.android_config['game_services']['use']):
+			#		editsGameServices = [("%GAME_SERVICES_BLOCKSTART%", ""), ("%GAME_SERVICES_BLOCKEND%", "") ];
+			editsGameServices = [("%GAME_SERVICES_BLOCKSTART%", ""), ("%GAME_SERVICES_BLOCKEND%", "") ];
 
 			# stuff to hide from old android
 			editsOldAndroid23 = [
@@ -5681,7 +5692,7 @@ build:
 					icon_hdpi = self.str_replace(icon_hdpi, [("%PREPRODUCTION_DIR%", self.game_preproduction_dir)]);
 					icon_mdpi = self.str_replace(icon_mdpi, [("%PREPRODUCTION_DIR%", self.game_preproduction_dir)]);
 					icon_nodpi = self.str_replace(icon_nodpi, [("%PREPRODUCTION_DIR%", self.game_preproduction_dir)]);
-
+ 
 					#subprocess.call(['cp ' + icon_xxhdpi + " " + rootPath+"/build/android/project/res/drawable-xxhdpi/ic_launcher.png"], shell=True);
 					#subprocess.call(['cp ' + icon_xhdpi + " " + rootPath+"/build/android/project/res/drawable-xhdpi/ic_launcher.png"], shell=True);
 					#subprocess.call(['cp ' + icon_hdpi + " " + rootPath+"/build/android/project/res/drawable-hdpi/ic_launcher.png"], shell=True);
@@ -6006,6 +6017,23 @@ build:
 				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"libzip"+ds+"libs"+ds+"x86", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"libs"+ds+"x86");
 				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"libzip"+ds+"libs"+ds+"x86", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"obj"+ds+"local"+ds+"x86");
 			
+			#
+			# libangelscript
+			# 
+			print("copying in libangelscript library");
+			#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/angelscript/libs/armeabi-v7a/ " + rootPath+"/build/android/project/libs/armeabi-v7a"], shell=True); #libzip
+			#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/angelscript/libs/armeabi-v7a/ " + rootPath+"/build/android/project/obj/local/armeabi-v7a"], shell=True);
+			self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"angelscript"+ds+"libs"+ds+"armeabi-v7a", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"libs"+ds+"armeabi-v7a");
+			self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"angelscript"+ds+"libs"+ds+"armeabi-v7a", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"obj"+ds+"local"+ds+"armeabi-v7a");
+			if (not self.debug):
+				#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/angelscript/libs/armeabi/ " + rootPath+"/build/android/project/libs/armeabi"], shell=True); #libzip
+				#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/angelscript/libs/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi"], shell=True);
+				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"angelscript"+ds+"libs"+ds+"armeabi", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"libs"+ds+"armeabi");
+				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"angelscript"+ds+"libs"+ds+"armeabi", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"obj"+ds+"local"+ds+"armeabi");
+				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"angelscript"+ds+"libs"+ds+"x86", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"libs"+ds+"x86");
+				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"angelscript"+ds+"libs"+ds+"x86", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"obj"+ds+"local"+ds+"x86");
+			
+
 			# 
 			# custom libraries e.g. fmod, spine...  
 			# 
@@ -6142,6 +6170,15 @@ build:
 			#subprocess.call(['cp -r ' + libzipdir + "/libs/armeabi-v7a/libzip.so " + ndkdir + "/platforms/"+ndkappplatform+"/arch-arm/usr/lib"], shell=True);
 			shutil.copy(libzipdir + self.ds + "libs" + self.ds + "armeabi-v7a" + self.ds + "libzip.so", self.android_ndkdir + self.ds + "platforms" + self.ds + ndkappplatform+ self.ds + "arch-arm" + self.ds + "usr" + self.ds + "lib" + self.ds);
 			shutil.copy(libzipdir + self.ds + "libs" + self.ds + "x86" + self.ds + "libzip.so", self.android_ndkdir + self.ds + "platforms" + self.ds + ndkappplatform+ self.ds + "arch-x86" + self.ds + "usr" + self.ds + "lib" + self.ds);
+
+			print("Compiling vendor sources (libangelscript)");
+			libangelscriptdir = ndkprojectpath + self.ds + "src" + self.ds + "ARK2D" + self.ds + "vendor" + self.ds + "android" + self.ds + "angelscript";
+			compilelibangelscript1 = self.android_ndkdir + self.ds + "ndk-build NDK_PROJECT_PATH=" + libangelscriptdir +" APP_PROJECT_PATH=" + libangelscriptdir + " APP_BUILD_SCRIPT=" + libangelscriptdir + self.ds + "jni" + self.ds + "Android.mk APP_PLATFORM=" + ndkappplatform;  
+			print(compilelibangelscript1);
+			subprocess.call([compilelibangelscript1], shell=True);
+			#subprocess.call(['cp -r ' + libangelscriptdir + "/libs/armeabi-v7a/libangelscript.so " + ndkdir + "/platforms/"+ndkappplatform+"/arch-arm/usr/lib"], shell=True);
+			shutil.copy(libangelscriptdir + self.ds + "libs" + self.ds + "armeabi-v7a" + self.ds + "libangelscript.so", self.android_ndkdir + self.ds + "platforms" + self.ds + ndkappplatform+ self.ds + "arch-arm" + self.ds + "usr" + self.ds + "lib" + self.ds);
+			shutil.copy(libangelscriptdir + self.ds + "libs" + self.ds + "x86" + self.ds + "libangelscript.so", self.android_ndkdir + self.ds + "platforms" + self.ds + ndkappplatform+ self.ds + "arch-x86" + self.ds + "usr" + self.ds + "lib" + self.ds);
 			
 			
 			#libcurl
@@ -6162,7 +6199,11 @@ build:
 			android_make_file += "include $(CLEAR_VARS)" + nl+nl;
 			android_make_file += "LOCAL_MODULE    := ark2d" + nl+nl; # Here we give our module name and source file(s)
 			#android_make_file += "LOCAL_C_INCLUDES := $(LOCAL_PATH)/../libzip/ $(LOCAL_PATH)/../libpng/" + nl;
-			android_make_file += "LOCAL_C_INCLUDES := $(LOCAL_PATH)" + mds + "src" + mds + "ARK2D" + mds + "vendor" + mds + "android" + mds + "libzip" + mds + "jni" + mds + " $(LOCAL_PATH)/src/ARK2D/vendor/spine/includes " + nl;
+			android_make_file += "LOCAL_C_INCLUDES := ";
+			android_make_file += "$(LOCAL_PATH)" + mds + "src" + mds + "ARK2D" + mds + "vendor" + mds + "android" + mds + "libzip" + mds + "jni" + mds + " ";
+			android_make_file += "$(LOCAL_PATH)/src/ARK2D/vendor/spine/includes ";
+			android_make_file += "$(LOCAL_PATH)/src/ARK2D/vendor/angelscript ";
+			android_make_file += nl;
 			#android_make_file += "LOCAL_STATIC_LIBRARIES := libzip libpng" + nl;
 			#android_make_file += "LOCAL_C_INCLUDES += external/stlport/stlport" + nl+nl;
 			android_make_file += "LOCAL_SHARED_LIBRARIES += libstdc++ " + nl+nl;
@@ -6178,7 +6219,7 @@ build:
 			if (self.firetv == True):
 				android_make_file += "-DARK2D_AMAZON ";
 
-			android_make_file += "-DDISABLE_IMPORTGL -fno-exceptions -fno-rtti -Wno-psabi ";
+			android_make_file += "-DDISABLE_IMPORTGL -fno-exceptions -fno-rtti -fexceptions -Wno-psabi ";
 			if (self.debug):
 				android_make_file += " -DARK2D_DEBUG -DDEBUG -DNDK_DEBUG -O0 ";
 			else:
@@ -6192,7 +6233,7 @@ build:
 			android_make_file += nl;
 			#android_make_file += "LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz -lfreetype -lopenal -lzip" + nl+nl;
 			#android_make_file += "LOCAL_LDLIBS := -lGLESv2 -lGLESv1_CM -ldl -llog -lz -lfreetype -lopenal -lzip" + nl+nl;
-			android_make_file += "LOCAL_LDLIBS := -lGLESv2 -lEGL -ldl -llog -lz -lopenal -lzip " + nl+nl; # -lfreetype
+			android_make_file += "LOCAL_LDLIBS := -lGLESv2 -lEGL -ldl -llog -lz -lopenal -lzip -langelscript" + nl+nl; # -lfreetype
 			#android_make_file += "LOCAL_SHARED_LIBRARIES :=   " + nl+nl;
 
 

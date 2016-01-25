@@ -13,6 +13,9 @@
 
 #import "GameContainerIPhoneAppDelegate.h"
 #import "../../Util/ICloudUtil.h"
+#import "../../Math/Random.h"
+#import "../../Graphics/Image.h"
+#import "../../Audio/Sound.h"
 
 namespace ARK {
 	namespace Core {
@@ -289,10 +292,10 @@ namespace ARK {
 
 	void ARK::Core::GameContainerPlatform::initGame() {
 		ARK2D::getLog()->i("Initialising Log");
-		ARK2D::s_log->init();
+		ARK2D::getLog()->init();
 
 		ARK2D::getLog()->i("Initialising Localisations");
-		initLocalisation();
+		m_container->initLocalisation();
 		
 		// initialise game.
 		ARK2D::getLog()->i("Initialising "); ARK2D::getLog()->i(m_container->m_game.getTitle()); ARK2D::getLog()->i("...");
@@ -323,14 +326,12 @@ namespace ARK {
 		m_timer->tick();
 		//doEvents();
 		
-		ARK2D::getLog()->update();
-
+		
 		
 	   
 		//int delta = (int) (m_timer->getDelta() * 1000);
-		m_game->preUpdate(m_container, m_timer);
-		m_game->update(m_container, m_timer);
-		m_game->postUpdate(m_container, m_timer);
+        m_container->scene->update();
+        
 		m_input->clearKeyPressedRecord();
 		for (unsigned int i = 0; i < m_container->m_gamepads.size(); i++) {
 			m_container->m_gamepads.at(i)->clearButtonPressedRecord();
@@ -339,11 +340,7 @@ namespace ARK {
 		RendererStats::reset();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		m_game->preRender(m_container, m_graphics);
-		m_game->render(m_container, m_graphics);
-		ARK2D::getLog()->render(m_container, m_graphics); 
-		m_game->postRender(m_container, m_graphics);
-		
+        m_container->scene->render();
 		//if (m_container->m_showingFPS) { m_container->renderFPS(); }
 		
 		 

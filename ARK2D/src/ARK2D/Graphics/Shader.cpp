@@ -758,7 +758,7 @@ namespace ARK {
 
 				Renderer::s_vboQuadVerts->setHeight(length);
 	            Renderer::s_vboQuadNormals->setHeight(length);
-	            Renderer::s_vboQuadColors->setHeight(length);
+	            Renderer::s_vboQuadColors->setHeight(length); 
 	            if (rawTexCoords != NULL) { Renderer::s_vboQuadTexCoords->setHeight(length); }
 
 				Renderer::s_vaoQuad->bind();
@@ -799,6 +799,11 @@ namespace ARK {
 				}
 
 			#elif defined(ARK2D_RENDERER_OPENGL) && defined(ARK2D_OPENGL_ES_2_0) 
+
+				glEnableVertexAttribArray(ark_VertexPositionIn);
+				glEnableVertexAttribArray(ark_VertexNormalIn);
+				glEnableVertexAttribArray(ark_VertexColorIn);
+				if (rawTexCoords != NULL) { glEnableVertexAttribArray(ark_VertexTexCoordIn); }
 
 				glVertexAttribPointer(ark_VertexPositionIn, 3, GL_FLOAT, GL_FALSE, 0, &rawVertices);
                 glVertexAttribPointer(ark_VertexNormalIn, 3, GL_FLOAT, GL_FALSE, 0, &rawNormals);

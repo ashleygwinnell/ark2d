@@ -167,15 +167,13 @@ namespace ARK {
 
 				bool isShowingFPS();
 				void setShowingFPS(bool b);
-		#if defined(ARK2D_ANDROID) || defined(ARK2D_FLASCC)
-				void renderFPS();
-		#else
-			private:
+		
+		
 				void renderFPS();
 				virtual void preRender();
 				virtual void postRender();
 			public:
-		#endif
+		
 
 	//	#if (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS) || defined(ARK2D_FLASCC) || defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 				void resizeBehaviourNoCallback(int width, int height);
@@ -209,7 +207,7 @@ namespace ARK {
 
 
 				float time();
-
+			public:
 				void initLocalisation();
 
 				void initGamepads();

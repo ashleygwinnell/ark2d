@@ -98,7 +98,11 @@ namespace ARK {
 			}
 
 			if (in->isKeyPressed(Input::KEY_SPACE)) {
-				m_type = (m_type == TYPE_GRID) ? TYPE_VISIBILITYGRAPH : TYPE_GRID;
+				if (m_type == TYPE_GRID) {
+					m_type = TYPE_VISIBILITYGRAPH;
+				} else { 
+					m_type = TYPE_GRID;
+				}
 				// refresh();
 			}
 		}

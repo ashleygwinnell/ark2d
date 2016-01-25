@@ -10,13 +10,16 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include <stdexcept>
 #include "BMFont.h"
 
 #include "../Graphics/Color.h"
 #include "../Graphics/Image.h"
 #include "../Graphics/Texture.h"
 #include "../Core/GameContainer.h"
+
 #include "../vendor/utf8/utf8.h"
+
 
 namespace ARK {
 	namespace Font {
