@@ -36,7 +36,7 @@ namespace ARK {
 			SceneNode("log"),
 			m_messages(),
 			m_messagesPool(), 
-			m_maxMessages(128),
+			m_maxMessages(256),
 			
 			m_watchedVariables(),
 
@@ -296,19 +296,19 @@ namespace ARK {
 				}
 			}
 
-			if (s.length() < 1024) { 
-				LogMessage* item = m_messagesPool.back();
-				item->level = type;
-				item->message = s;
-				m_messages.push_back(item);
-				m_messagesPool.pop_back();
-			} else {
-				LogMessage* item = m_messagesPool.back();
-				item->level = type;
-				item->message = s.substr(0, 1024);
-				m_messages.push_back(item);
-				m_messagesPool.pop_back();
+			LogMessage* item = m_messagesPool.at(m_messagesPool.size()-1);
+			if (item == NULL) {
+				item = new LogMessage();
+				m_messagesPool.push_back(item);
 			}
+			item->level = type;
+			if (s.length() < 1024) { 
+				item->message = s;
+			} else {
+				item->message = s.substr(0, 1024);
+			}
+			m_messages.push_back(item);
+			m_messagesPool.pop_back();
 
 			if (isLoggingToFile()) {
 				std::ofstream log_file("log.txt", std::ios_base::out | std::ios_base::app );

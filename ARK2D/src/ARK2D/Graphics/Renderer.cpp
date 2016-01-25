@@ -615,7 +615,19 @@ namespace ARK {
 					r->enableBackfaceCulling();
 				} else if (m_type == TYPE_BACKFACECULLING_DISABLE) {
 					r->disableBackfaceCulling();
-				} 
+				} else if (m_type == TYPE_FBO_BIND) {
+					FBO* fbo = (FBO*) m_objectPointer;
+					fbo->bind();
+				} else if (m_type == TYPE_FBO_UNBIND) {
+					FBO* fbo = (FBO*) m_objectPointer;
+					fbo->unbind();
+				} else if (m_type == TYPE_FBO_BIND2D) {
+					FBO* fbo = (FBO*) m_objectPointer;
+					fbo->bind_2d();
+				} else if (m_type == TYPE_FBO_UNBIND2D) {
+					FBO* fbo = (FBO*) m_objectPointer;
+					fbo->unbind_2d();
+				}
 				else if (m_type == TYPE_CUSTOM_OBJECT_FUNCTION) {
 					void (*pt)(void*) = (void(*)(void*)) m_functionPointer;
 					pt(m_objectPointer);

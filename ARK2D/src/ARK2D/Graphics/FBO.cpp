@@ -239,6 +239,16 @@ namespace ARK {
 
 		void FBO::bind(unsigned int vw, unsigned int vh) { 
 			if (!isSupported()) { return; }
+
+			if (Renderer::isBatching()) {
+				RendererBatchItem stateChange;
+				stateChange.m_type = RendererBatchItem::TYPE_FBO_BIND;
+				stateChange.m_objectPointer = this;
+				stateChange.m_float1 = vw;
+				stateChange.m_float2 = vh;
+				Renderer::s_batch->items.push_back(stateChange);
+				return;
+			}
 			 
 			#ifdef ARK2D_RENDERER_OPENGL
 				#ifdef FBO_SUPPORT
@@ -306,6 +316,16 @@ namespace ARK {
 		void FBO::bind_2d(unsigned int w, unsigned int h) {
 			if (!isSupported()) { return; }
 
+			if (Renderer::isBatching()) {
+				RendererBatchItem stateChange;
+				stateChange.m_type = RendererBatchItem::TYPE_FBO_BIND2D;
+				stateChange.m_objectPointer = this;
+				stateChange.m_float1 = w;
+				stateChange.m_float2 = h;
+				Renderer::s_batch->items.push_back(stateChange);
+				return;
+			}
+
 			#ifdef ARK2D_RENDERER_OPENGL
 				#ifdef FBO_SUPPORT
 
@@ -328,6 +348,14 @@ namespace ARK {
 		void FBO::unbind_2d() {
 			if (!isSupported()) { return; }
 
+			if (Renderer::isBatching()) {
+				RendererBatchItem stateChange;
+				stateChange.m_type = RendererBatchItem::TYPE_FBO_UNBIND2D;
+				stateChange.m_objectPointer = this;
+				Renderer::s_batch->items.push_back(stateChange);
+				return;
+			}
+
 			#ifdef ARK2D_RENDERER_OPENGL 
 				#ifdef FBO_SUPPORT
 					ARK2D::getContainer()->disable2D();
@@ -337,6 +365,14 @@ namespace ARK {
 
 		void FBO::unbind() {
 			if (!isSupported()) { return; }
+
+			if (Renderer::isBatching()) {
+				RendererBatchItem stateChange;
+				stateChange.m_type = RendererBatchItem::TYPE_FBO_UNBIND;
+				stateChange.m_objectPointer = this;
+				Renderer::s_batch->items.push_back(stateChange);
+				return;
+			}
 
 			#ifdef ARK2D_RENDERER_OPENGL
 

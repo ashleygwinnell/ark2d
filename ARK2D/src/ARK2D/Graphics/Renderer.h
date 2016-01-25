@@ -180,8 +180,12 @@ namespace ARK {
 				static const unsigned int TYPE_MULTISAMPLING_DISABLE = 15;
 				static const unsigned int TYPE_BACKFACECULLING_ENABLE = 16;
 				static const unsigned int TYPE_BACKFACECULLING_DISABLE = 17;
-				static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 18;
-				static const unsigned int TYPE_CUSTOM_FUNCTION = 19;
+				static const unsigned int TYPE_FBO_BIND2D = 18;
+				static const unsigned int TYPE_FBO_UNBIND2D = 19;
+				static const unsigned int TYPE_FBO_BIND = 20;
+				static const unsigned int TYPE_FBO_UNBIND = 21;
+				static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 22;
+				static const unsigned int TYPE_CUSTOM_FUNCTION = 23;
 
 			public:
 				vector<RendererBatchItem_GeomTri> geomtris;
