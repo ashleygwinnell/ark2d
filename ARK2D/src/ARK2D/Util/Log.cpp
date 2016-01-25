@@ -1058,7 +1058,7 @@ namespace ARK {
 			}
 
 			float panelX = 500 + ((gamepad->id%3)*300);
-			float panelY = 120 + (floor(gamepad->id/3)*240);
+			float panelY = 120 + (floor(double(gamepad->id)/3)*240);
 
             SceneNode* root = ARK2D::getLog();//->getScene()->getRoot();
             	

@@ -148,7 +148,11 @@ namespace ARK {
 		bool Panel::mouseMoved(int x, int y, int oldx, int oldy) {
 			if (!visible) { return false; }
 
-			m_state = (isGlobalPositionInBounds(x, y)) ? STATE_OVER : STATE_OFF;
+			if (isGlobalPositionInBounds(x, y)) {
+				m_state = STATE_OVER;
+			} else {
+				m_state = STATE_OFF;
+			}
 
 			bool consumed = false;
 			for(unsigned int i = 0; i < children.size(); i++) {

@@ -466,7 +466,7 @@ namespace ARK {
 
 			#elif defined(ARK2D_ANDROID)
 				GameContainer* container = ARK2D::getContainer();
-				container->getPlatformSpecific()->openSoftwareKeyboard();
+				container->getPlatformSpecific()->m_pluggable->openSoftwareKeyboard();
 				return true;
 			#endif
 			ARK2D::getLog()->e("openSoftwareKeyboard not implemented on this platform.");

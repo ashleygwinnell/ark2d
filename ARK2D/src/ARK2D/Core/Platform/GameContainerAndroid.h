@@ -10,6 +10,7 @@
 
 #include "../../ARK2D.h"
 
+
 namespace ARK {
 	namespace Core {
 

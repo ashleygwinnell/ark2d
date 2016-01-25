@@ -495,7 +495,7 @@ namespace ARK {
 						case 103:
 							return BUTTON_RBUMPER;
 					}
-					return id; 
+					return button; 
 				} else if (ARK2D::getContainer()->getPlatformSpecific()->getPluggable()->ouya_isOuya()) {
 					switch(button) {
 						case 19:

@@ -219,10 +219,10 @@ namespace ARK {
 
 							//glDisableClientState(GL_COLOR_ARRAY);
 						#elif defined(ARK2D_OPENGL_ES_2_0)
-							//glDisableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexPositionIn);
-							//glDisableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexNormalIn);
-							//glDisableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexTexCoordIn);
-							//glDisableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexColorIn);
+							//glDisableVertexAttribArray(Renderer::s_shaderBasicTexture->ark_VertexPositionIn);
+							//glDisableVertexAttribArray(Renderer::s_shaderBasicTexture->ark_VertexNormalIn);
+							//glDisableVertexAttribArray(Renderer::s_shaderBasicTexture->ark_VertexTexCoordIn);
+							//glDisableVertexAttribArray(Renderer::s_shaderBasicTexture->ark_VertexColorIn);
 							RendererStats::s_glCalls += 3;
 						#endif
 
@@ -242,9 +242,9 @@ namespace ARK {
 				//#endif
 			} else if (current == (unsigned int) RendererState::GEOMETRY) {
 				#if defined(ARK2D_OPENGL_ES_2_0)
-					//glDisableVertexAttribArray(Renderer::s_shaderBasicGeometry_VertexPositionIn);
-					//glDisableVertexAttribArray(Renderer::s_shaderBasicGeometry_VertexNormalIn);
-					//glDisableVertexAttribArray(Renderer::s_shaderBasicGeometry_VertexColorIn);
+					//glDisableVertexAttribArray(Renderer::s_shaderBasicGeometry->ark_VertexPositionIn);
+					//glDisableVertexAttribArray(Renderer::s_shaderBasicGeometry->ark_VertexNormalIn);
+					//glDisableVertexAttribArray(Renderer::s_shaderBasicGeometry->ark_VertexColorIn);
 					RendererStats::s_glCalls += 2;
 				#endif	
 			}
@@ -278,9 +278,9 @@ namespace ARK {
 					s_shaderId = Renderer::s_shaderBasicGeometry->getId();
 
 					#if defined(ARK2D_OPENGL_ES_2_0)
-						glEnableVertexAttribArray(Renderer::s_shaderBasicGeometry_VertexPositionIn);
-						glEnableVertexAttribArray(Renderer::s_shaderBasicGeometry_VertexNormalIn);
-						glEnableVertexAttribArray(Renderer::s_shaderBasicGeometry_VertexColorIn);
+						//glEnableVertexAttribArray(Renderer::s_shaderBasicGeometry->ark_VertexPositionIn);
+						//glEnableVertexAttribArray(Renderer::s_shaderBasicGeometry->ark_VertexNormalIn);
+						//glEnableVertexAttribArray(Renderer::s_shaderBasicGeometry->ark_VertexColorIn);
 						RendererStats::s_glCalls += 2;
 					#endif
 				#endif
@@ -317,10 +317,10 @@ namespace ARK {
 					s_shaderId = Renderer::s_shaderBasicTexture->getId();
 
 					#if defined(ARK2D_OPENGL_ES_2_0)
-						//glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexPositionIn);
-						//glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexNormalIn);
-						//glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexTexCoordIn);
-						//glEnableVertexAttribArray(Renderer::s_shaderBasicTexture_VertexColorIn);
+						//glEnableVertexAttribArray(Renderer::s_shaderBasicTexture->ark_VertexPositionIn);
+						//glEnableVertexAttribArray(Renderer::s_shaderBasicTexture->ark_VertexNormalIn);
+						//glEnableVertexAttribArray(Renderer::s_shaderBasicTexture->ark_VertexTexCoordIn);
+						//glEnableVertexAttribArray(Renderer::s_shaderBasicTexture->ark_VertexColorIn);
 						RendererStats::s_glCalls += 3;
 					#endif
 				#endif
@@ -1722,6 +1722,8 @@ namespace ARK {
 				s_vboIndices->init();
 
 				showAnyGlErrorAndExitMacro();
+
+				glBindBuffer(GL_ARRAY_BUFFER, 0); 
  
                 s_shaderBasicGeometry = new BasicGeometryShader();
                 s_shaderBasicGeometry->load();
@@ -1743,7 +1745,9 @@ namespace ARK {
 					//glEnable(GL_DEPTH_TEST);
 					//glDepthFunc(GL_LEQUAL);
 					
-					//glDisable(GL_CULL_FACE);
+					#ifdef ARK2D_ANDROID
+						glDisable(GL_CULL_FACE);
+					#endif
 					
 					//glEnable(GL_CULL_FACE);
 				    //glCullFace(GL_BACK); 
@@ -4960,11 +4964,11 @@ namespace ARK {
 
 				// left edge  
 				setDrawColor(m_ScissorBoxColors[1].getRed(), m_ScissorBoxColors[1].getGreen(), m_ScissorBoxColors[1].getBlue(), m_ScissorBoxColors[1].getAlpha());
-				fillRect(0, int(container->getTranslateX())*-1, (int) container->getTranslateX(), dynamicHeight);// * container->getScaleY());
+				fillRect(container->getTranslateX()*-1.0f, 0, (int) container->getTranslateX(), dynamicHeight);// * container->getScaleY());
 
 				// right edge
 				setDrawColor(m_ScissorBoxColors[3].getRed(), m_ScissorBoxColors[3].getGreen(), m_ScissorBoxColors[3].getBlue(), m_ScissorBoxColors[3].getAlpha());
-				fillRect(container->getTranslateX() + (width * container->getScaleX()), 0,
+				fillRect((width * container->getScaleX()) , 0,
 							(int) container->getTranslateX()+3, dynamicHeight);// * container->getScaleY());
 
 				// top edge

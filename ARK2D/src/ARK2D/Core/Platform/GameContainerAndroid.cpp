@@ -9,6 +9,10 @@
 #include "../GameContainer.h"
 #include "../../ARK2D.h"
 
+#include "../../Graphics/Image.h" 
+#include "../../Audio/Sound.h" 
+#include "../Camera.h" 
+
 namespace ARK {
 	namespace Core {
  
@@ -21,6 +25,7 @@ namespace ARK {
 			m_input(),
 			m_graphics(),
 			m_gamepads(), 
+			hints(),
 			scene(NULL),
 			m_originalWidth(width),
 			m_originalHeight(height),
@@ -56,10 +61,15 @@ namespace ARK {
 			ARK2D::s_game = &m_game;
 			ARK2D::s_graphics = &m_graphics;
 			ARK2D::s_input = &m_input;
-			ARK2D::s_log = ARK2D::getLog();
+			ARK2D::s_camera = new ARK::Core::Camera();
+			ARK2D::s_camera->setViewport(0, 0, m_width, m_height);
+			//ARK2D::s_camera->setClipping(-1, 1);
+			ARK2D::s_log = ARK::Util::Log::getInstance();
 			scene = new Scene();
+			scene->addChild(ARK2D::s_camera);
 			scene->addChild(ARK2D::s_game);
 			scene->addChild(ARK2D::s_log);
+			//scene->addChild(new LetterboxNode());
 
 
 			ARK2D::getRenderer()->preinit();
@@ -67,36 +77,13 @@ namespace ARK {
 
 		
 		void GameContainer::setSizeNoCallback(int width, int height) {
-			m_screenWidth = width;
-			m_screenHeight = height;
-
-			if (m_resizeBehaviour == RESIZE_BEHAVIOUR_SCALE) {
-				m_scaleX = float(width) / float(m_originalWidth);
-				m_scaleY = float(height) / float(m_originalHeight);
-				if (m_scaleX > m_scaleY) {
-					m_scale = m_scaleY; 
-					m_scaleX = m_scaleY;
-					//m_scaleY = 1.0f;
-				} else { // y > x
-					m_scale = m_scaleX;
-					m_scaleY = m_scaleX; 
-					//m_scaleX = 1.0f;
-				}
-
-				m_width = width;
-				m_height = height;
-				
-			} else if (m_resizeBehaviour == RESIZE_BEHAVIOUR_NOSCALE) {
-				m_width = width;
-				m_height = height;
-				
-			}
+			setSize(width, height, false);
 		}
 
-		void GameContainer::setSize(int width, int height) {
+		void GameContainer::setSize(int width, int height, bool docallback) {
 			m_screenWidth = width;
 			m_screenHeight = height; 
-
+			/*
 			if (m_resizeBehaviour == RESIZE_BEHAVIOUR_SCALE) {
 				m_scaleX = float(width) / float(m_originalWidth);
 				m_scaleY = float(height) / float(m_originalHeight);
@@ -119,7 +106,8 @@ namespace ARK {
 				m_width = width;
 				m_height = height;
 				ARK2D::s_game->resize(this, width, height);
-			}
+			}*/
+			resizeBehaviour(width, height, docallback);
 		}
 
 		void GameContainer::setFullscreen(bool fullscreen) {
@@ -222,7 +210,7 @@ namespace ARK {
 			ARK2D::getLog()->v("enable 2d"); 
 			Image::showAnyGlErrorAndExit();
 
-			Renderer* r = ARK2D::getRenderer();
+			/*Renderer* r = ARK2D::getRenderer();
 			r->matrixMode(MatrixStack::TYPE_PROJECTION);
 			r->pushMatrix();
 			r->loadIdentity(); 
@@ -232,13 +220,13 @@ namespace ARK {
 			r->matrixMode(MatrixStack::TYPE_VIEW);
 			r->pushMatrix();
 			r->loadIdentity();
-			
+			 
 			Image::showAnyGlErrorAndExit(); 
 
 			ARK2D::getLog()->v("disables");
 			ARK2D::getLog()->v("disables depth");
 			glDisable( GL_DEPTH_TEST );
-			Image::showAnyGlErrorAndExit();
+			Image::showAnyGlErrorAndExit();*/
 
 			//ARK2D::getLog()->v("disables lighting");
 			//glDisable( GL_LIGHTING ); 

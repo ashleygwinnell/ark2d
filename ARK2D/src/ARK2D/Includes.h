@@ -116,6 +116,12 @@
  
  		#include "Common/Audio.h"
  		#include "Common/OpenGL.h"
+ 		#include "Common/DLL.h"
+
+ 		#include "vendor/angelscript/angelscript.h"
+ 		#include "vendor/angelscript/add_on/scriptstdstring/scriptstdstring.h"
+ 		#include "vendor/angelscript/add_on/scriptarray/scriptarray.h"
+ 		#include "vendor/angelscript/add_on/scriptbuilder/scriptbuilder.h"
 
 	 	using namespace std;
 
@@ -161,6 +167,13 @@
 		#include "vendor/iphone/ga/GAI.h"
 		#include "vendor/iphone/ga/GAIDictionaryBuilder.h"
 		#include "vendor/iphone/ga/GAIFields.h"
+
+ 		#include "Common/DLL.h"
+
+ 		#include "vendor/angelscript/angelscript.h"
+ 		#include "vendor/angelscript/add_on/scriptstdstring/scriptstdstring.h"
+ 		#include "vendor/angelscript/add_on/scriptarray/scriptarray.h"
+ 		#include "vendor/angelscript/add_on/scriptbuilder/scriptbuilder.h"
 
 		#if (TARGET_IPHONE_SIMULATOR)
  			#define ARK2D_IPHONE_SIMULATOR
