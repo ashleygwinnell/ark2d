@@ -184,8 +184,11 @@ namespace ARK {
 				static const unsigned int TYPE_FBO_UNBIND2D = 19;
 				static const unsigned int TYPE_FBO_BIND = 20;
 				static const unsigned int TYPE_FBO_UNBIND = 21;
-				static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 22;
-				static const unsigned int TYPE_CUSTOM_FUNCTION = 23;
+				static const unsigned int TYPE_VIEWPORT = 22;
+				static const unsigned int TYPE_ORTHO2D = 23;
+				static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 24;
+				static const unsigned int TYPE_CUSTOM_FUNCTION = 25;
+                static map<unsigned int, string>* s_types;
 
 			public:
 				vector<RendererBatchItem_GeomTri> geomtris;

@@ -124,6 +124,7 @@ namespace ARK {
 			public:
 				SceneNode* root;
 				bool batching;
+				bool bPrintRendererStack;
 			public: 
 				Scene();
 				void setRoot(SceneNode* node);
@@ -137,6 +138,8 @@ namespace ARK {
 
 				bool isBatching();
 				void setBatching(bool b);
+
+				void printRendererStack();
 
 				virtual bool keyPressed(unsigned int key);
 				virtual bool keyReleased(unsigned int key);
