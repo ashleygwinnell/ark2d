@@ -3467,6 +3467,7 @@
 
 					//ARK2D::getLog()->v("Render Reset");
 					#if defined(ARK2D_RENDERER_OPENGL)
+						glClearColor(m_clearColor.getRedf(), m_clearColor.getGreenf(), m_clearColor.getBluef(), m_clearColor.getAlpha());
 						glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 					#elif defined(ARK2D_RENDERER_DIRECTX)
 						/*D2D1_COLOR_F d;

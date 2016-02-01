@@ -100,7 +100,7 @@
       <AssemblyDebug>false</AssemblyDebug>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <IgnoreSpecificDefaultLibraries>msvcr120d.lib</IgnoreSpecificDefaultLibraries>
-      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>%ARK2D_DIR%\src;%ARK2D_DIR%\src\ARK2D;%ARK2D_DIR%\src\ARK2D\vendor\windows;%ARK2D_DIR%\src\ARK2D\vendor\spine\includes;%ARK2D_DIR%\lib\windows\includes;%ADDITIONAL_INCLUDE_DIRECTORIES%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -129,7 +129,7 @@
       <AssemblyDebug>false</AssemblyDebug>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <IgnoreSpecificDefaultLibraries>msvcr120d.lib</IgnoreSpecificDefaultLibraries>
-      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>%ARK2D_DIR%\src;%ARK2D_DIR%\src\ARK2D;%ARK2D_DIR%\src\ARK2D\vendor\windows;%ARK2D_DIR%\src\ARK2D\vendor\spine\includes;%ARK2D_DIR%\lib\windows\includes;%ADDITIONAL_INCLUDE_DIRECTORIES%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
