@@ -462,7 +462,8 @@ namespace ARK {
 
 		Scene::Scene():
 			root(NULL),
-			batching(true)
+			batching(true),
+			bPrintRendererStack(false)
 		{
 			root = new SceneNode();
 			root->setName("root");
@@ -502,6 +503,10 @@ namespace ARK {
 				root->postRender();
 				if (batching) {
 					r->getBatch()->setEnabled(false, true);
+					if (bPrintRendererStack) {
+						ARK2D::getLog()->w(r->getBatch()->toString());
+						bPrintRendererStack = false;
+					}
 					r->getBatch()->render();
 				}
 			}
@@ -511,6 +516,9 @@ namespace ARK {
 		}
 		void Scene::setBatching(bool b) {
 			batching = b;
+		}
+		void Scene::printRendererStack() {
+			bPrintRendererStack = true;
 		}
 		bool Scene::keyPressed(unsigned int key) { 
 			return root->keyPressed(key);

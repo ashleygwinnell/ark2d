@@ -1069,6 +1069,7 @@
 					}
 					
 					RendererStats::reset();
+					glClearColor(m_clearColor.getRedf(), m_clearColor.getGreenf(), m_clearColor.getBluef(), m_clearColor.getAlpha());
 					glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 					preRender();
 					scene->render();

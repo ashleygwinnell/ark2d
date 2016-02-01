@@ -3986,7 +3986,7 @@ build:
 			subprocess.call([game_resources_copy], shell=True); #libark2d
 			
 			print("Copy ark2d resources in to xcode dir");
-			ark2d_resources_copy_line = "cp -r " + self.ark2d_dir + "/data " + self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "data/ark2d/";
+			ark2d_resources_copy_line = "cp -r " + self.ark2d_dir + "/data/ " + self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "data/ark2d/";
 			print(ark2d_resources_copy_line);
 			subprocess.call([ark2d_resources_copy_line], shell=True); #libark2d
 			

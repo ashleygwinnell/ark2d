@@ -14,7 +14,9 @@ namespace ARK {
 			private:
 				unsigned int _internalId;
 				static unsigned int _internalIdCount;
-
+			public:
+				string name;
+			private:
 				unsigned int fbo;
 				unsigned int fbo_depth;
 				unsigned int fbo_texture;

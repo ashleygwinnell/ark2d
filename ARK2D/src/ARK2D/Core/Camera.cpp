@@ -38,9 +38,9 @@ namespace ARK {
 			up(0,1,0),
 			rotation_quaternion(),
 
-			projection(),
-			view(),
-			model()
+			projection(MatrixStack::TYPE_PROJECTION),
+			view(MatrixStack::TYPE_VIEW),
+			model(MatrixStack::TYPE_MODEL)
 			//projection(MatrixStack::TYPE_PROJECTION),
 			//view(MatrixStack::TYPE_VIEW),
 			//model(MatrixStack::TYPE_MODEL)

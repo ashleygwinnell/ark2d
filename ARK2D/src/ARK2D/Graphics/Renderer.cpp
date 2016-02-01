@@ -386,13 +386,43 @@ namespace ARK {
 
 		// BATCH STUFF
 		RendererBatch* Renderer::s_batch = new RendererBatch();
+		map<unsigned int, string>* RendererBatchItem::s_types = NULL; 
 		RendererBatchItem::RendererBatchItem():
 			geomtris(),
 			textris(),
 			m_type(TYPE_GEOMETRY_TRIS),
 			m_textureId(0)
  		{
-
+ 			if (s_types == NULL) {
+ 				s_types = new map<unsigned int, string>();
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_GEOMETRY_TRIS, "TYPE_GEOMETRY_TRIS" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_TEXTURE_TRIS, "TYPE_TEXTURE_TRIS" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_STENCIL_ENABLE, "TYPE_STENCIL_ENABLE" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_STENCIL_START, "TYPE_STENCIL_START" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_STENCIL_INVERSE, "TYPE_STENCIL_INVERSE" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_STENCIL_STOP, "TYPE_STENCIL_STOP" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_STENCIL_DISABLE, "TYPE_STENCIL_DISABLE" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_MATRIX_MODE, "TYPE_MATRIX_MODE" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_MATRIX_IDENTITY, "TYPE_MATRIX_IDENTITY" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_MATRIX_PUSH, "TYPE_MATRIX_PUSH" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_MATRIX_POP, "TYPE_MATRIX_POP" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_MATRIX_TRANSLATE, "TYPE_MATRIX_TRANSLATE" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_MATRIX_ROTATE, "TYPE_MATRIX_ROTATE" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_MATRIX_SCALE, "TYPE_MATRIX_SCALE" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_MULTISAMPLING_ENABLE, "TYPE_MULTISAMPLING_ENABLE" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_MULTISAMPLING_DISABLE, "TYPE_MULTISAMPLING_DISABLE" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_BACKFACECULLING_ENABLE, "TYPE_BACKFACECULLING_ENABLE" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_BACKFACECULLING_DISABLE, "TYPE_BACKFACECULLING_DISABLE" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_FBO_BIND2D, "TYPE_FBO_BIND2D" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_FBO_UNBIND2D, "TYPE_FBO_UNBIND2D" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_FBO_BIND, "TYPE_FBO_BIND" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_FBO_UNBIND, "TYPE_FBO_UNBIND" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_VIEWPORT, "TYPE_VIEWPORT" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_ORTHO2D, "TYPE_ORTHO2D" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_CUSTOM_OBJECT_FUNCTION, "TYPE_CUSTOM_OBJECT_FUNCTION" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_CUSTOM_FUNCTION, "TYPE_CUSTOM_FUNCTION" ));
+                
+ 			}
 		}
 		void RendererBatchItem::clear() {
 			geomtris.clear();
@@ -594,7 +624,7 @@ namespace ARK {
 				} else if (m_type == TYPE_STENCIL_DISABLE) {
 					r->disableStencil();
 				} else if (m_type == TYPE_MATRIX_MODE) {
-					// r->matrixMode();
+					r->matrixMode(m_textureId);
 				} else if (m_type == TYPE_MATRIX_IDENTITY) {
 					r->loadIdentity();
 				} else if (m_type == TYPE_MATRIX_PUSH) {
@@ -628,6 +658,11 @@ namespace ARK {
 					FBO* fbo = (FBO*) m_objectPointer;
 					fbo->unbind_2d();
 				}
+				else if (m_type == TYPE_VIEWPORT) {
+					r->viewport(m_float1, m_float2, m_float3, m_float4);
+				} else if (m_type == TYPE_ORTHO2D) {
+					r->ortho2d(m_textureId, m_shaderId, (int) m_float1, (int) m_float2, m_float3, m_float4);
+				}
 				else if (m_type == TYPE_CUSTOM_OBJECT_FUNCTION) {
 					void (*pt)(void*) = (void(*)(void*)) m_functionPointer;
 					pt(m_objectPointer);
@@ -640,7 +675,26 @@ namespace ARK {
 		}
 		string RendererBatchItem::toString() {
 			string s = string("{");
-				s += string("m_type: \""); s += Cast::toString<unsigned int>(m_type); s += string("\"");
+				s += string("m_type: \""); 
+				//s += Cast::toString<unsigned int>(m_type); 
+				s += s_types->find(m_type)->second;
+				s += string("\"");
+				if (m_type == TYPE_FBO_BIND || m_type == TYPE_FBO_UNBIND || m_type == TYPE_FBO_BIND2D || m_type == TYPE_FBO_UNBIND2D) {
+					s += string(", fbo: \"");
+					FBO* fbo = (FBO*) m_objectPointer;
+					s += fbo->name;
+					s += string("\"");
+				} else if (m_type == TYPE_MATRIX_PUSH || m_type == TYPE_MATRIX_POP || m_type == TYPE_MATRIX_MODE) {
+					s += string(", matrix: \"");
+					if (m_textureId == MatrixStack::TYPE_MODEL) {
+						s += string("MODEL");
+					} else if (m_textureId == MatrixStack::TYPE_VIEW) {
+						s += string("VIEW");
+					} else if (m_textureId == MatrixStack::TYPE_PROJECTION) {
+						s += string("PROJECTION");
+					} 
+					s += string("\"");
+				}
 			s += string("}");
 			return s;
 		}
@@ -699,6 +753,8 @@ namespace ARK {
 			bool wasEnabled = enabled;
 			enabled = b; 
 
+			Renderer* r = ARK2D::getRenderer();
+			r->matrixMode(MatrixStack::TYPE_MODEL);
 			MatrixStack* ms = Renderer::getMatrix();
 			if (!wasEnabled && b) {
 				ms->pushMatrix();
@@ -1221,6 +1277,14 @@ namespace ARK {
 			subject *= *by;
 		}
 		void Renderer::matrixMode(unsigned int mode) {
+			if (Renderer::isBatching()) { 
+				RendererBatchItem stateChange;
+				stateChange.m_type = RendererBatchItem::TYPE_MATRIX_MODE;
+				stateChange.m_textureId = mode;
+				s_batch->items.push_back(stateChange);
+				//return;
+			}
+
 			//ARK2D::getLog()->i("matrixMode");
 			if (mode == MatrixStack::TYPE_PROJECTION) {
 				s_matrix = s_matrixProjection;
@@ -1261,6 +1325,7 @@ namespace ARK {
 			if (Renderer::isBatching()) { 
 				RendererBatchItem stateChange;
 				stateChange.m_type = RendererBatchItem::TYPE_MATRIX_PUSH;
+				stateChange.m_textureId = s_matrix->m_type;
 				s_batch->items.push_back(stateChange);
 				return;
 			}
@@ -1280,6 +1345,7 @@ namespace ARK {
 			if (Renderer::isBatching()) { 
 				RendererBatchItem stateChange;
 				stateChange.m_type = RendererBatchItem::TYPE_MATRIX_POP;
+				stateChange.m_textureId = s_matrix->m_type;
 				s_batch->items.push_back(stateChange);
 				return;
 			}
@@ -2139,7 +2205,7 @@ namespace ARK {
 		}
 		void Renderer::disableBackfaceCulling() const {
 			#ifdef ARK2D_RENDERER_OPENGL
-			if (Renderer::isBatching()) { 
+				if (Renderer::isBatching()) { 
 					RendererBatchItem stateChange;
 					stateChange.m_type = RendererBatchItem::TYPE_BACKFACECULLING_DISABLE;
 					s_batch->items.push_back(stateChange);
@@ -2195,6 +2261,16 @@ namespace ARK {
 			#endif
 		}
 		void Renderer::viewport(int x, int y, int w, int h) const {
+			if (Renderer::isBatching()) { 
+				RendererBatchItem stateChange;
+				stateChange.m_type = RendererBatchItem::TYPE_VIEWPORT;
+				stateChange.m_float1 = x;
+				stateChange.m_float2 = y;
+				stateChange.m_float3 = w;
+				stateChange.m_float4 = h;
+				s_batch->items.push_back(stateChange);
+				return;
+			}
 			#if defined(ARK2D_RENDERER_OPENGL)
 				glViewport(x, y, w, h);
 			#elif defined(ARK2D_RENDERER_DIRECTX)
@@ -2206,6 +2282,19 @@ namespace ARK {
 			ortho2d(x, y, w, h, -1.0f, 1.0f);
 		}
 		void Renderer::ortho2d(int x, int y, int w, int h, float n, float f) {
+			if (Renderer::isBatching()) { 
+				RendererBatchItem stateChange;
+				stateChange.m_type = RendererBatchItem::TYPE_ORTHO2D;
+				stateChange.m_textureId = x;
+				stateChange.m_shaderId = y;
+				stateChange.m_float1 = w;
+				stateChange.m_float2 = h;
+				stateChange.m_float3 = n;
+				stateChange.m_float4 = f;
+				s_batch->items.push_back(stateChange);
+				return;
+			}
+
 			//
 			//glOrtho(0, w, h, 0, -1, 1);
 		

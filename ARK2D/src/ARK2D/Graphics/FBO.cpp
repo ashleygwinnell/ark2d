@@ -18,6 +18,7 @@ namespace ARK {
 		bool FBO::m_supportedChecked = false;
  
 		FBO::FBO():
+			name(""),
 			m_dummy(false),
 			m_clearScreenOnBind(true),
 			clearColor()
@@ -32,6 +33,7 @@ namespace ARK {
 			addFBOToStore();
 		}
 		FBO::FBO(bool dummy):
+			name(""),
 			m_dummy(dummy),
 			m_clearScreenOnBind(true),
 			clearColor()
@@ -46,6 +48,7 @@ namespace ARK {
 		}
 
 		FBO::FBO(unsigned int w, unsigned int h):
+			name(""),
 			m_dummy(false),
 			m_clearScreenOnBind(true)
 		{
@@ -256,7 +259,7 @@ namespace ARK {
 					Renderer* r = ARK2D::getRenderer();
 
 					#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE) || defined(NO_FIXED_FUNCTION_PIPELINE))
-						ARK2D::getGame()->postRender(ARK2D::getContainer(), ARK2D::getRenderer());
+						//ARK2D::getGame()->postRender(ARK2D::getContainer(), ARK2D::getRenderer());
 						glBindFramebufferARK(GL_FRAMEBUFFER_ARK, fbo); // Bind our frame buffer for rendering  
 						RendererStats::s_glCalls++;
 					#else 
@@ -274,7 +277,7 @@ namespace ARK {
 					int ww = vw;//window_width
 					int wh = vh;//window_height;
 	 
-					glViewport(0, 0, ww, wh);
+					r->viewport(0, 0, ww, wh);
 					RendererStats::s_glCalls++;   
 					//glViewport(0, 0, ww, wh);
 					 
@@ -287,6 +290,7 @@ namespace ARK {
 					}
 					RendererStats::s_glCalls += 2;
 		  
+		  			r->matrixMode(MatrixStack::TYPE_PROJECTION);
 					r->pushMatrix();
 					//ARK2D::getContainer()->enable2D();
 					r->loadIdentity();  // Reset the modelview matrix 
@@ -358,7 +362,13 @@ namespace ARK {
 
 			#ifdef ARK2D_RENDERER_OPENGL 
 				#ifdef FBO_SUPPORT
-					ARK2D::getContainer()->disable2D();
+					//ARK2D::getContainer()->disable2D();
+					Renderer* r = ARK2D::getRenderer();
+					r->matrixMode(MatrixStack::TYPE_PROJECTION);
+					r->popMatrix();
+
+					r->matrixMode(MatrixStack::TYPE_VIEW);
+					r->popMatrix();			
 				#endif
 			#endif
 		}
@@ -378,11 +388,13 @@ namespace ARK {
 
 				#ifdef FBO_SUPPORT
 		 
+		 			Renderer* r = ARK2D::getRenderer();
+		 			r->matrixMode(MatrixStack::TYPE_PROJECTION);
+					r->popMatrix();
 					#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE) || defined(NO_FIXED_FUNCTION_PIPELINE))
-						Renderer* r = ARK2D::getRenderer();
-						r->popMatrix();
+						
 
-						glViewport(0, 0, ARK2D::getContainer()->getDynamicWidth(),  ARK2D::getContainer()->getDynamicHeight());
+						r->viewport(0, 0, ARK2D::getContainer()->getDynamicWidth(),  ARK2D::getContainer()->getDynamicHeight());
 
 						Color c = ARK2D::getContainer()->getClearColor(); 
 						glClearColor (c.getRedf(), c.getGreenf(), c.getBluef(), c.getAlphaf());
@@ -393,7 +405,7 @@ namespace ARK {
 							glBindFramebufferARK(GL_FRAMEBUFFER_ARK, 0); // Unbind our texture  
 						#endif
 
-						ARK2D::getGame()->preRender(ARK2D::getContainer(), ARK2D::getRenderer());
+						//ARK2D::getGame()->preRender(ARK2D::getContainer(), ARK2D::getRenderer());
 					#else 
 						glPopAttrib(); // Restore our glEnable and glViewport states  
 						glBindFramebufferARK(GL_FRAMEBUFFER_ARK, 0); // Unbind our texture  
