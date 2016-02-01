@@ -1272,7 +1272,7 @@ class ARK2DBuildSystem:
 
 			# make spritesheets
 			print("Generating spritesheets...");
-			#self.generateSpriteSheets();
+			self.generateSpriteSheets();
 
 			# resources to copy to game project. gotta do this early to generate the VS project
 			game_resources_list = [];
