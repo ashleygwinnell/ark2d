@@ -126,6 +126,7 @@ namespace ARK {
 				Image* setAlpha(float f);
 				float getAlpha() const;
 
+				void setColor(const Color& c); // color overrides alpha... or does it now?
 				void setColor(Color* c); // color overrides alpha... or does it now?
 				void setColor(float r, float g, float b, float a);
 				Color* getColor() const;

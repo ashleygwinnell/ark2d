@@ -1487,6 +1487,14 @@ namespace ARK {
 			return m_alpha;
 		}
 
+		void Image::setColor(const Color& c) {
+			if (m_color == NULL) { 
+				m_color = new Color(c);
+			} else { 
+				m_color->set(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
+			}
+			m_dirty = true;
+		}
 		void Image::setColor(Color* c) {
 			m_color = c;
 			m_dirty = true;
