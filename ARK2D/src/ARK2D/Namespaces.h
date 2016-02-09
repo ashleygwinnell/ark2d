@@ -28,6 +28,7 @@ namespace ARK {
 	namespace Core {
 		class Constants;
         class Camera;
+        class DummyCamera;
 		class Event;
 		class Exception;
 		class Game;

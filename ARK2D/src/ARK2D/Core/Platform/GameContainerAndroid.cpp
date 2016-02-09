@@ -69,7 +69,7 @@ namespace ARK {
 			scene->addChild(ARK2D::s_camera);
 			scene->addChild(ARK2D::s_game);
 			scene->addChild(ARK2D::s_log);
-			//scene->addChild(new LetterboxNode());
+			scene->addChild(new LetterboxNode());
 
 
 			ARK2D::getRenderer()->preinit();
@@ -162,6 +162,8 @@ namespace ARK {
 			m_container->setClearColor(clearColor);
 
 			Image::showAnyGlErrorAndExit();
+
+			//glEnable(GL_TEXTURE_2D);
 
 			ARK2D::getLog()->v("viewport");
 			glViewport(0, 0, w, h); 

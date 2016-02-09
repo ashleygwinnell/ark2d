@@ -749,94 +749,100 @@ namespace ARK {
 		{
 			this->length = length;
 
-			#if defined(ARK2D_RENDERER_OPENGL) && defined(ARK2D_OPENGL_3_2)
-
-				Renderer::s_vboQuadVerts->setWidth(3);
-	            Renderer::s_vboQuadNormals->setWidth(3);
-	            Renderer::s_vboQuadColors->setWidth(4);
-	            if (rawTexCoords != NULL) { Renderer::s_vboQuadTexCoords->setWidth(2); }
-
-				Renderer::s_vboQuadVerts->setHeight(length);
-	            Renderer::s_vboQuadNormals->setHeight(length);
-	            Renderer::s_vboQuadColors->setHeight(length); 
-	            if (rawTexCoords != NULL) { Renderer::s_vboQuadTexCoords->setHeight(length); }
-
-				Renderer::s_vaoQuad->bind();
-				glEnableVertexAttribArray(ark_VertexPositionIn);
-                glEnableVertexAttribArray(ark_VertexNormalIn);
-                glEnableVertexAttribArray(ark_VertexColorIn);
-                if (rawTexCoords != NULL) { glEnableVertexAttribArray(ark_VertexTexCoordIn); } 
-		
-				Renderer::s_vboQuadVerts->bind();
-				Renderer::s_vboQuadVerts->setData(&rawVertices[0]);
-				glVertexAttribPointer(ark_VertexPositionIn, 3, GL_FLOAT, GL_FALSE, 0, 0);
-            
-                Renderer::s_vboQuadNormals->bind();
-                Renderer::s_vboQuadNormals->setData(&rawNormals[0]);
-                glVertexAttribPointer(ark_VertexNormalIn, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-                Renderer::s_vboQuadColors->bind();
-				Renderer::s_vboQuadColors->setData(&rawColors[0]);
-				glVertexAttribPointer(ark_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, 0);
-
-				if (rawTexCoords != NULL) { 
-                	Renderer::s_vboQuadTexCoords->bind();
-            	    Renderer::s_vboQuadTexCoords->setData(&rawTexCoords[0]);
-            	    glVertexAttribPointer(ark_VertexTexCoordIn, 2, GL_FLOAT, GL_FALSE, 0, 0);
-                }
+			#if defined(ARK2D_RENDERER_OPENGL)
 				
-				glUniformMatrix4fv(ark_ModelMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODEL)->pointer());
-				glUniformMatrix4fv(ark_ViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_VIEW)->pointer());
-				glUniformMatrix4fv(ark_ProjectionMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_PROJECTION)->pointer());
-                glUniformMatrix3fv(ark_NormalMatrix, 1, GL_FALSE, (float*) Renderer::getNormalMatrix()->pointer());
+				#if defined(ARK2D_OPENGL_3_2)
 
-				RendererStats::s_glCalls += 10;
+					Renderer::s_vboQuadVerts->setWidth(3);
+		            Renderer::s_vboQuadNormals->setWidth(3);
+		            Renderer::s_vboQuadColors->setWidth(4);
+		            if (rawTexCoords != NULL) { Renderer::s_vboQuadTexCoords->setWidth(2); }
 
-				if (rawTexCoords != NULL) {
-					//glActiveTexture(GL_TEXTURE0);	
-					//glBindTexture(GL_TEXTURE_2D, dg->m_clouds->getTexture()->getId());
-					glUniform1i(ark_TextureId, 0); 
-				}
+					Renderer::s_vboQuadVerts->setHeight(length);
+		            Renderer::s_vboQuadNormals->setHeight(length);
+		            Renderer::s_vboQuadColors->setHeight(length); 
+		            if (rawTexCoords != NULL) { Renderer::s_vboQuadTexCoords->setHeight(length); }
 
-			#elif defined(ARK2D_RENDERER_OPENGL) && defined(ARK2D_OPENGL_ES_2_0) 
+					Renderer::s_vaoQuad->bind();
+					glEnableVertexAttribArray(ark_VertexPositionIn);
+	                glEnableVertexAttribArray(ark_VertexNormalIn);
+	                glEnableVertexAttribArray(ark_VertexColorIn);
+	                if (rawTexCoords != NULL) { glEnableVertexAttribArray(ark_VertexTexCoordIn); } 
+			
+					Renderer::s_vboQuadVerts->bind();
+					Renderer::s_vboQuadVerts->setData(&rawVertices[0]);
+					glVertexAttribPointer(ark_VertexPositionIn, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	            
+	                Renderer::s_vboQuadNormals->bind();
+	                Renderer::s_vboQuadNormals->setData(&rawNormals[0]);
+	                glVertexAttribPointer(ark_VertexNormalIn, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-				glEnableVertexAttribArray(ark_VertexPositionIn);
-				glEnableVertexAttribArray(ark_VertexNormalIn);
-				glEnableVertexAttribArray(ark_VertexColorIn);
-				if (rawTexCoords != NULL) { glEnableVertexAttribArray(ark_VertexTexCoordIn); }
+	                Renderer::s_vboQuadColors->bind();
+					Renderer::s_vboQuadColors->setData(&rawColors[0]);
+					glVertexAttribPointer(ark_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, 0);
 
-				glVertexAttribPointer(ark_VertexPositionIn, 3, GL_FLOAT, GL_FALSE, 0, &rawVertices);
-                glVertexAttribPointer(ark_VertexNormalIn, 3, GL_FLOAT, GL_FALSE, 0, &rawNormals);
-                glVertexAttribPointer(ark_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, &rawColors); 
-                if (rawTexCoords != NULL) {
-                	glVertexAttribPointer(ark_VertexTexCoordIn, 2, GL_FLOAT, GL_FALSE, 0, &rawTexCoords);
-                }
+					if (rawTexCoords != NULL) { 
+	                	Renderer::s_vboQuadTexCoords->bind();
+	            	    Renderer::s_vboQuadTexCoords->setData(&rawTexCoords[0]);
+	            	    glVertexAttribPointer(ark_VertexTexCoordIn, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	                }
 					
-				glUniformMatrix4fv(ark_ModelMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODEL)->pointer());
-				glUniformMatrix4fv(ark_ViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_VIEW)->pointer());
-				glUniformMatrix4fv(ark_ProjectionMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_PROJECTION)->pointer());
-                glUniformMatrix3fv(ark_NormalMatrix, 1, GL_FALSE, (float*) Renderer::getNormalMatrix()->pointer());
+					glUniformMatrix4fv(ark_ModelMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODEL)->pointer());
+					glUniformMatrix4fv(ark_ViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_VIEW)->pointer());
+					glUniformMatrix4fv(ark_ProjectionMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_PROJECTION)->pointer());
+	                glUniformMatrix3fv(ark_NormalMatrix, 1, GL_FALSE, (float*) Renderer::getNormalMatrix()->pointer());
 
-                if (rawTexCoords != NULL) {
-					glUniform1i(ark_TextureId, 0); 
-				}
+					RendererStats::s_glCalls += 10;
 
-                RendererStats::s_glCalls += 7;
+					if (rawTexCoords != NULL) {
+						//glActiveTexture(GL_TEXTURE0);	
+						//glBindTexture(GL_TEXTURE_2D, dg->m_clouds->getTexture()->getId());
+						glUniform1i(ark_TextureId, 0); 
+					}
 
-            #elif defined(ARK2D_RENDERER_OPENGL)
+				#elif defined(ARK2D_OPENGL_ES_2_0) 
 
-                glVertexPointer(3, GL_FLOAT, 0, rawVertices);
-                glNormalPointer(3, GL_FLOAT, 0, rawNormals);
-                glColorPointer(4, GL_UNSIGNED_BYTE, 0, rawColors);
-                if (rawTexCoords != NULL) {
-                	glTexCoordPointer(2, GL_FLOAT, 0, rawTexCoords);
-                }
+					//ARK2D::getLog()->e("this is rendering");
 
-                if (rawTexCoords != NULL) {
-					glUniform1i(ark_TextureId, 0); 
-				}
-				
-				RendererStats::s_glCalls += 3;
+					glEnableVertexAttribArray(ark_VertexPositionIn);
+					glEnableVertexAttribArray(ark_VertexNormalIn);
+					glEnableVertexAttribArray(ark_VertexColorIn);
+					if (rawTexCoords != NULL) { glEnableVertexAttribArray(ark_VertexTexCoordIn); }
+
+					glVertexAttribPointer(ark_VertexPositionIn, 3, GL_FLOAT, GL_FALSE, 0, rawVertices);
+	                glVertexAttribPointer(ark_VertexNormalIn, 3, GL_FLOAT, GL_FALSE, 0, rawNormals);
+	                glVertexAttribPointer(ark_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, rawColors); 
+	                if (rawTexCoords != NULL) {
+	                	glVertexAttribPointer(ark_VertexTexCoordIn, 2, GL_FLOAT, GL_FALSE, 0, rawTexCoords);
+	                }
+						
+					glUniformMatrix4fv(ark_ModelMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODEL)->pointer());
+					glUniformMatrix4fv(ark_ViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_VIEW)->pointer());
+					glUniformMatrix4fv(ark_ProjectionMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_PROJECTION)->pointer());
+	                glUniformMatrix3fv(ark_NormalMatrix, 1, GL_FALSE, (float*) Renderer::getNormalMatrix()->pointer());
+
+	                if (rawTexCoords != NULL) {
+						glUniform1i(ark_TextureId, 0); 
+					}
+
+	                RendererStats::s_glCalls += 7;
+
+            	#else
+
+	                glVertexPointer(3, GL_FLOAT, 0, rawVertices);
+	                glNormalPointer(3, GL_FLOAT, 0, rawNormals);
+	                glColorPointer(4, GL_UNSIGNED_BYTE, 0, rawColors);
+	                if (rawTexCoords != NULL) {
+	                	glTexCoordPointer(2, GL_FLOAT, 0, rawTexCoords);
+	                }
+
+	                if (rawTexCoords != NULL) {
+						glUniform1i(ark_TextureId, 0); 
+					}
+					
+					RendererStats::s_glCalls += 3;
+				#endif
+
 
 			#elif defined(ARK2D_RENDERER_DIRECTX) 
 				// ...

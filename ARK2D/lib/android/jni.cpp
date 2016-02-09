@@ -163,6 +163,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 			r->init();
 			FBOStore::getInstance()->reloadFBOs();
 			TextureStore::getInstance()->reloadTextures();
+			//ShaderStore::getInstance()->reloadShaders();
 
 			GameContainerPlatform::s_gamePaused = false;
 		} //else { 

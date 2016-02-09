@@ -589,6 +589,17 @@ namespace ARK {
 			}
 		}
 
+		// DUMMY CAMERA THAT DOES NOTHING
+		DummyCamera::DummyCamera(): Camera() {
+
+		}
+		void DummyCamera::update() {
+
+		}
+		void DummyCamera::render() {
+			
+		}
+
 	}
 
 }

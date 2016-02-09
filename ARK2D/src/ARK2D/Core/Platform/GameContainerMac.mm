@@ -193,7 +193,7 @@
 			        [m_platformSpecific.m_context update];
 					m_fullscreen = fullscreen;
 
-					resizeBehaviour((int) mainDisplayRect.size.width, (int) mainDisplayRect.size.height);
+					resizeBehaviour((int) mainDisplayRect.size.width, (int) mainDisplayRect.size.height, true);
 
 				} else {
 					
@@ -201,7 +201,7 @@
 					NSRect windowFrame = [window frame];
 
 					//setSize();
-					resizeBehaviour((int) m_originalWidth, (int) m_originalHeight);
+					resizeBehaviour((int) m_originalWidth, (int) m_originalHeight, true);
 					
 					int width = (signed int) getWidth();
 					int height = (signed int) getHeight();

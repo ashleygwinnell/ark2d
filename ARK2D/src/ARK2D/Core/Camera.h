@@ -141,6 +141,13 @@ namespace ARK {
 				void update();
 		};
 
+		class ARK2D_API DummyCamera : public Camera {
+			public:	
+				DummyCamera();
+				virtual void update();
+				virtual void render();
+		};
+
 	}
 }
 #endif

@@ -169,7 +169,7 @@ namespace ARK {
 				m_Charset.Chars[i].XAdvance = (unsigned int) (float(m_Charset.Chars[i].XAdvance) * f);
 			}*/
 			//CharDescriptor Chars[256];
-
+ 
 
 			m_Charset.LineHeight = m_Charset.LineHeight * f;
 			m_Charset.Base = m_Charset.Base * f;
@@ -336,7 +336,7 @@ namespace ARK {
 			if (Str.length() == 0) { return; }
 			//return; 
 
-			int CharX, CharY, Width, WidthOriginal, Height, HeightOriginal, OffsetX, OffsetY, XAdvance;
+			float CharX, CharY, Width, WidthOriginal, Height, HeightOriginal, OffsetX, OffsetY, XAdvance;
 
 			#if (defined(ARK2D_OPENGL_3_2) || defined(ARK2D_OPENGL_ES_2_0) || defined(ARK2D_RENDERER_DIRECTX))
 

@@ -6233,7 +6233,7 @@ build:
 			android_make_file += nl;
 			#android_make_file += "LOCAL_LDLIBS := -lGLESv1_CM -ldl -llog -lz -lfreetype -lopenal -lzip" + nl+nl;
 			#android_make_file += "LOCAL_LDLIBS := -lGLESv2 -lGLESv1_CM -ldl -llog -lz -lfreetype -lopenal -lzip" + nl+nl;
-			android_make_file += "LOCAL_LDLIBS := -lGLESv2 -lEGL -ldl -llog -lz -lopenal -lzip -langelscript" + nl+nl; # -lfreetype
+			android_make_file += "LOCAL_LDLIBS := -lGLESv2 -lEGL -ldl -llog -lz -lopenal -lzip -langelscript " + nl+nl; # -lfreetype
 			#android_make_file += "LOCAL_SHARED_LIBRARIES :=   " + nl+nl;
 
 
@@ -6261,8 +6261,6 @@ build:
 				application_make_file += "x86 ";
 				application_make_file += nl; #x86" + nl;
 			
-
-
 			application_make_file += "APP_STL := stlport_static" + nl; 
 			f = open(appbuildscript3, "w");
 			f.write(application_make_file);
@@ -6723,7 +6721,7 @@ if __name__ == "__main__":
 
 		if (clean):
 			a.clean();
-			exit(0);
+			#exit(0);
 
 		a.start();	
 

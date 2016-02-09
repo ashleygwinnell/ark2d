@@ -179,6 +179,15 @@ namespace ARK {
 //                delete geometryFragmentShaderStruct.data;
 //            #endif
 		}
+		void BasicGeometryShader::bind() {
+			Shader::bind();
+			#if defined(ARK2D_OPENGL_ES_2_0)
+				glEnableVertexAttribArray(ark_VertexPositionIn);
+				glEnableVertexAttribArray(ark_VertexNormalIn);
+				glEnableVertexAttribArray(ark_VertexColorIn);
+				RendererStats::s_glCalls += 2;
+			#endif
+		}
 		
 		BasicGeometryShader::~BasicGeometryShader() {
 
@@ -354,6 +363,16 @@ namespace ARK {
 			#ifndef ARK2D_ANDROID
 				delete textureVertexShaderStruct.data;
 				delete textureFragmentShaderStruct.data;
+			#endif
+		}
+		void BasicTextureShader::bind() {
+			Shader::bind();
+			#if defined(ARK2D_OPENGL_ES_2_0)
+				glEnableVertexAttribArray(ark_VertexPositionIn);
+				glEnableVertexAttribArray(ark_VertexNormalIn);
+				glEnableVertexAttribArray(ark_VertexTexCoordIn);
+				glEnableVertexAttribArray(ark_VertexColorIn);
+				RendererStats::s_glCalls += 3;
 			#endif
 		}
 		

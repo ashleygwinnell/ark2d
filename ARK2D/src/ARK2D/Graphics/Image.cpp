@@ -1891,10 +1891,11 @@ namespace ARK {
 				
 				#ifdef NO_FIXED_FUNCTION_PIPELINE
 
-            		#if defined(ARK2D_OPENGL_3_2) ||  defined(ARK2D_OPENGL_ES_2_0)
-
+            		#if defined(ARK2D_OPENGL_3_2) || defined(ARK2D_OPENGL_ES_2_0)
+ 
+						clean();
                         Shader* shader = RendererState::start(RendererState::TEXTURE, m_texture->m_id);
-                        shader->setData(&m_verts[0], &m_normals[0], &m_texCoords[0], &m_colors[0], 6);
+                        shader->setData(&m_verts[0], &m_normals[0], &m_texCoords[0], &m_colors[0], 4);
                         shader->drawTriangleStrip();
 
 					#elif defined(ARK2D_RENDERER_DIRECTX)

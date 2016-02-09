@@ -1,5 +1,5 @@
-#ifndef UTIL_H_
-#define UTIL_H_
+#ifndef ARK_UTIL_H_
+#define ARK_UTIL_H_
 
 	
 	#include "../Core/GameObject.h"
@@ -10,7 +10,7 @@
 	using namespace std;
 
 
-	#if !defined(ARK2D_WINDOWS_VS) && !defined(ARK2D_EMSCRIPTEN_JS)
+	#if !defined(ARK2D_WINDOWS_VS) && !defined(ARK2D_EMSCRIPTEN_JS) && !defined(ARK2D_IPHONE)
 
 		template <typename T>
 		struct remove_const

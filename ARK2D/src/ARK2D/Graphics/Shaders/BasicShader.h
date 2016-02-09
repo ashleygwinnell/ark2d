@@ -19,6 +19,7 @@ namespace ARK {
 			
 				BasicGeometryShader();  
 				void load();
+				virtual void bind();
 				virtual ~BasicGeometryShader();
 		};
 		class ARK2D_API BasicTextureShader : public Shader {
@@ -27,6 +28,7 @@ namespace ARK {
 
 				BasicTextureShader();  
 				void load();
+				virtual void bind();
 				virtual ~BasicTextureShader();
 		};
 		class ARK2D_API BasicShader {

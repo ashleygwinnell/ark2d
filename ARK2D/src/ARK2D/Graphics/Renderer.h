@@ -439,7 +439,7 @@ namespace ARK {
 			public:
 				static RendererBatch* s_batch;
 				static inline RendererBatch* getBatch() { return s_batch; }
-				static inline bool isBatching() { return (s_batch->isEnabled()); }
+				static bool isBatching();
 
 
 			public:

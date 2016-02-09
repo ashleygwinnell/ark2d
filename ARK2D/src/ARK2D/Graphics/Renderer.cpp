@@ -241,6 +241,7 @@ namespace ARK {
 				//	glUseProgram(0);
 				//#endif
 			} else if (current == (unsigned int) RendererState::GEOMETRY) {
+				
 				#if defined(ARK2D_OPENGL_ES_2_0)
 					//glDisableVertexAttribArray(Renderer::s_shaderBasicGeometry->ark_VertexPositionIn);
 					//glDisableVertexAttribArray(Renderer::s_shaderBasicGeometry->ark_VertexNormalIn);
@@ -277,17 +278,12 @@ namespace ARK {
 					RendererStats::s_glCalls++;
 					s_shaderId = Renderer::s_shaderBasicGeometry->getId();
 
-					#if defined(ARK2D_OPENGL_ES_2_0)
-						//glEnableVertexAttribArray(Renderer::s_shaderBasicGeometry->ark_VertexPositionIn);
-						//glEnableVertexAttribArray(Renderer::s_shaderBasicGeometry->ark_VertexNormalIn);
-						//glEnableVertexAttribArray(Renderer::s_shaderBasicGeometry->ark_VertexColorIn);
-						RendererStats::s_glCalls += 2;
-					#endif
 				#endif
 
 			#elif defined(ARK2D_RENDERER_DIRECTX)
 
 				Renderer::s_shaderBasicGeometry->bind();
+				s_shaderId = Renderer::s_shaderBasicGeometry->getId();
 			
 			#endif
 		}
@@ -316,13 +312,6 @@ namespace ARK {
 					RendererStats::s_glCalls++;
 					s_shaderId = Renderer::s_shaderBasicTexture->getId();
 
-					#if defined(ARK2D_OPENGL_ES_2_0)
-						//glEnableVertexAttribArray(Renderer::s_shaderBasicTexture->ark_VertexPositionIn);
-						//glEnableVertexAttribArray(Renderer::s_shaderBasicTexture->ark_VertexNormalIn);
-						//glEnableVertexAttribArray(Renderer::s_shaderBasicTexture->ark_VertexTexCoordIn);
-						//glEnableVertexAttribArray(Renderer::s_shaderBasicTexture->ark_VertexColorIn);
-						RendererStats::s_glCalls += 3;
-					#endif
 				#endif
 
 			#elif defined(ARK2D_RENDERER_DIRECTX)
@@ -332,6 +321,7 @@ namespace ARK {
 				deviceContext->PSSetSamplers(0, 1, &tx->m_dxSampler);
 				deviceContext->PSSetShaderResources(0, 1, &tx->m_dxResourceView);
 				Renderer::s_shaderBasicTexture->bind();
+				s_shaderId = Renderer::s_shaderBasicTexture->getId();
 
 			#endif
 			
@@ -748,6 +738,9 @@ namespace ARK {
 			s += string("]\n"); 
  			s += string("}");
 			return s;
+		}
+		bool Renderer::isBatching() { 
+			return (s_batch->isEnabled()); 
 		}
 		void RendererBatch::setEnabled(bool b, bool fromSceneGraph) { 
 			bool wasEnabled = enabled;
@@ -3278,7 +3271,7 @@ namespace ARK {
 			showAnyGlErrorAndExitMacro();
 		}
         void Renderer::fillRect(float x, float y, int width, int height) const {
-            fillRect(x, y, 0, width, height);
+            fillRect(x, y, 0.0f, width, height);
         }
         void Renderer::fillRect(float x, float y, float z, int width, int height) const {
 			

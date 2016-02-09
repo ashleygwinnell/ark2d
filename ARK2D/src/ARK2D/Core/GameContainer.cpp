@@ -343,6 +343,8 @@ namespace ARK {
   
 					container->m_platformSpecific.initGL("", width, height);
 					container->m_platformSpecific.initGL2D(width, height);
+
+					//ARK2D::getRenderer()->init();
 				}
 				else
 				{ 
@@ -623,8 +625,9 @@ namespace ARK {
 		    	//ARK2D::getRenderer()->setScissorTestEnabled(false);
 		    	//ARK2D::getRenderer()->scissor(0,0,width,height);
 		    }
+		    showAnyGlErrorAndExitMacro();
 		    if (docallback) { 
-		    	//ARK2D::s_game->resize(this, width, height);
+		    	ARK2D::s_game->resize(this, width, height);
 		    	resizeGame();
 		    }
 		}

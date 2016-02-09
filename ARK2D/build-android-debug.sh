@@ -1,1 +1,1 @@
-python build.py clean=false debug=true target=android
+python build.py clean=true debug=true target=android
