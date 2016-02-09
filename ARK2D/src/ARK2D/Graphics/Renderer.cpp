@@ -4881,6 +4881,9 @@ namespace ARK {
 		void Renderer::setDrawColor(Color* c) {
 			setDrawColor(c->getRed(), c->getGreen(), c->getBlue(), c->getAlpha());
 		}
+		void Renderer::setDrawColor(Color* rgb, float alpha) {
+			setDrawColorf(rgb->getRedf(), rgb->getGreenf(), rgb->getBluef(), rgb->getAlphaf() * alpha);
+		}
 		const Color& Renderer::getDrawColor() const {
 			return m_DrawColor;
 		}

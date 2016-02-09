@@ -488,6 +488,7 @@ namespace ARK {
 				void setDrawColorf(float r, float g, float b, float a);
 				void setDrawColor(const Color& c);
 				void setDrawColor(Color* c);
+   				void setDrawColor(Color* rgb, float alpha);
 				const Color& getDrawColor() const;
 
 				void setMaskColor(const Color& c);
