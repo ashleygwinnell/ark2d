@@ -628,6 +628,12 @@ namespace ARK {
 		void BMFont::setKerning(int k) {
 			m_kerning = k;
 		}
+		float BMFont::getCharXAdvance(unsigned char ch) {
+			return m_Charset.Chars[ch].XAdvance;
+		}
+		float BMFont::getCharXOffset(unsigned char ch) {
+			return m_Charset.Chars[ch].XOffset;
+		}
  
  		unsigned int BMFont::getStringWidth(const string& Str) const {
  			if (m_loaded == false) { return 0; }
