@@ -18,6 +18,8 @@
 		    typedef T type;
 		};
 
+#if !(__cplusplus > 199711L)
+
 		template <typename T>
 		struct remove_const<const T>
 		{
@@ -51,6 +53,8 @@
 		{
 		    typedef T type;
 		};
+
+#endif
 
 		//
 		//struct this_sort_function

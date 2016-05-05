@@ -7,7 +7,7 @@
 #include "Renderer.h"
 #include "Color.h"
 #include "../Font/Font.h"
-#include "../Font/BMFont.h" 
+#include "../Font/BMFont.h"
 #include "../Font/FTFont.h"
 
 #include "../Includes.h"
@@ -18,16 +18,16 @@
 #include "../Geometry/Rectangle.h"
 #include "../Geometry/Circle.h"
 #include "../Geometry/Polygon.h"
-#include "../Geometry/Line.h" 
-#include "../Geometry/Cube.h" 
+#include "../Geometry/Line.h"
+#include "../Geometry/Cube.h"
 
 #include "../Util/Cast.h"
 
-#include "Texture.h" 
+#include "Texture.h"
 #include "TextureStore.h"
 #include "Shader.h"
 #include "ShaderStore.h"
-#include "FBO.h" 
+#include "FBO.h"
 
 #include "Shaders/BasicShader.h"
 
@@ -36,12 +36,12 @@
 //#if defined(ARK2D_WINDOWS_PHONE_8)
 	#include "../Util/FileUtil.h"
 //#endif
- 
-namespace ARK {  
+
+namespace ARK {
 	namespace Graphics {
 
 		#if !defined(ARK2D_WINDOWS_VS) // && !defined(ARK2D_UBUNTU_LINUX)
-			const int Renderer::ALIGN_LEFT; 
+			const int Renderer::ALIGN_LEFT;
 			const int Renderer::ALIGN_RIGHT;
 			const int Renderer::ALIGN_TOP;
 			const int Renderer::ALIGN_BOTTOM;
@@ -51,8 +51,8 @@ namespace ARK {
 		#ifdef ARK2D_RENDERER_DIRECTX
 
 		#elif (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH) || (defined(ARK2D_WINDOWS) && defined(ARK2D_RENDERER_OPENGL)) || defined(ARK2D_UBUNTU_LINUX) || defined(ARK2D_EMSCRIPTEN_JS) )
-			
-			bool Renderer::gluCheckExtensionARK(const GLubyte* extName, const GLubyte* extString) { 
+
+			bool Renderer::gluCheckExtensionARK(const GLubyte* extName, const GLubyte* extString) {
 				GLboolean flag=GL_FALSE;
 				char* word;
 				char* lookHere;
@@ -63,11 +63,11 @@ namespace ARK {
 				 return GL_FALSE;
 				}
 
-				deleteThis=lookHere=(char*)malloc(strlen((const char*)extString)+1); 
+				deleteThis=lookHere=(char*)malloc(strlen((const char*)extString)+1);
 				if (lookHere==NULL)
 				{
 				 return GL_FALSE;
-				} 
+				}
 
 				/* strtok() will modify string, so copy it somewhere */
 				strcpy(lookHere,(const char*)extString);
@@ -79,7 +79,7 @@ namespace ARK {
 				    flag=GL_TRUE;
 				    break;
 				 }
-				 lookHere=NULL; /* get next token */ 
+				 lookHere=NULL; /* get next token */
 				}
 				free((void*)deleteThis);
 
@@ -89,51 +89,51 @@ namespace ARK {
 			/*void Renderer::gl3wGenVertexArrays(GLsizei n, GLuint* arrays) {
 
 					}
-					void Renderer::gl3wBindVertexArray(GLuint array) {  
+					void Renderer::gl3wBindVertexArray(GLuint array) {
 
-					} */  
+					} */
 
-		#else 
+		#else
 
-				bool Renderer::gluCheckExtensionARK(const GLubyte* extName, const GLubyte* extString) { 
+				bool Renderer::gluCheckExtensionARK(const GLubyte* extName, const GLubyte* extString) {
 					#if (defined(ARK2D_WINDOWS) || defined(ARK2D_FLASCC) || defined(ARK2D_WINDOWS_PHONE_8))
 						return false;
 					#else
 						RendererStats::s_glCalls++;
-						return gluCheckExtension(extName, extString);  
+						return gluCheckExtension(extName, extString);
 					#endif
 				}
 
 				#ifdef ARK2D_UBUNTU_LINUX
 
-					
+
 
 				#else
 
 					void Renderer::glGenVertexArrays(GLsizei n, GLuint* arrays) {
 
 					}
-					void Renderer::glBindVertexArray(GLuint array) {  
+					void Renderer::glBindVertexArray(GLuint array) {
 
 					}
-				#endif 
+				#endif
 
 
-		#endif 
+		#endif
 
 		// renderer statistics
 		unsigned int RendererStats::s_glCalls = 0;
 		unsigned int RendererStats::s_lines = 0;
 		unsigned int RendererStats::s_tris = 0;
-		unsigned int RendererStats::s_textureSwaps = 0;	
-		unsigned int RendererStats::s_shaderSwaps = 0;	
-		unsigned int RendererStats::s_textureAllocatedBytes = 0;	
+		unsigned int RendererStats::s_textureSwaps = 0;
+		unsigned int RendererStats::s_shaderSwaps = 0;
+		unsigned int RendererStats::s_textureAllocatedBytes = 0;
 
 		unsigned int RendererStats::s_previousframe_glCalls = 0;
 		unsigned int RendererStats::s_previousframe_lines = 0;
 		unsigned int RendererStats::s_previousframe_tris = 0;
-		unsigned int RendererStats::s_previousframe_textureSwaps = 0;	
-		unsigned int RendererStats::s_previousframe_shaderSwaps = 0;	
+		unsigned int RendererStats::s_previousframe_textureSwaps = 0;
+		unsigned int RendererStats::s_previousframe_shaderSwaps = 0;
 
 		RendererStats::RendererStats() {
 
@@ -155,7 +155,7 @@ namespace ARK {
 			s_previousframe_shaderSwaps = s_shaderSwaps;
 		}
 		RendererStats::~RendererStats() {
- 
+
 		}
 
 
@@ -171,7 +171,7 @@ namespace ARK {
 		}
 		Shader* RendererState::start(int renderMode, int textureId) {
 			//start(renderMode, textureId);//, 0);
-			
+
 			/*#if defined(ARK2D_FLASCC)
 				if (renderMode == NONE) { startNone(); }
 				else if (renderMode == GEOMETRY) { startGeometry(); }
@@ -184,12 +184,12 @@ namespace ARK {
 			else if (renderMode == SHADER && (textureId != s_shaderId || s_shaderId == 0)) { startShader(textureId); }
 			//	else if (renderMode == MULTITEXTURE && (textureId != s_multitextureId0 || s_multitextureId0 == 0 || textureId2 != s_multitextureId1 || s_multitextureId1 == 0)) { startMultitexture(textureId, textureId2); }
 			//#endif
-			
+
 			s_renderMode = renderMode;
 
 			return ShaderStore::getInstance()->getShader(s_shaderId);
-			
-		}  
+
+		}
 		//void RendererState::start(int renderMode, int textureId, int textureId2)
 		//{
 		//
@@ -205,15 +205,15 @@ namespace ARK {
 				RendererState::s_textureId = 0;
 				RendererStats::s_textureSwaps++;
 
-				if (to == (unsigned int) RendererState::GEOMETRY || to == (unsigned int) RendererState::NONE) { 
+				if (to == (unsigned int) RendererState::GEOMETRY || to == (unsigned int) RendererState::NONE) {
 
 					#if defined(ARK2D_RENDERER_OPENGL)
 
 						glBindTexture(GL_TEXTURE_2D, 0);
 						RendererStats::s_glCalls++;
-					 
-						#ifndef NO_FIXED_FUNCTION_PIPELINE 
-							glDisable(GL_TEXTURE_2D); 
+
+						#ifndef NO_FIXED_FUNCTION_PIPELINE
+							glDisable(GL_TEXTURE_2D);
 							glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 							RendererStats::s_glCalls += 2;
 
@@ -232,22 +232,22 @@ namespace ARK {
 
 					#endif
 
-				} 
+				}
 
 			} else if (current == (unsigned int) RendererState::SHADER) {
 				RendererState::s_shaderId = 0;
-				RendererStats::s_shaderSwaps++; 
- 				//#ifndef NO_FIXED_FUNCTION_PIPELINE 
+				RendererStats::s_shaderSwaps++;
+ 				//#ifndef NO_FIXED_FUNCTION_PIPELINE
 				//	glUseProgram(0);
 				//#endif
 			} else if (current == (unsigned int) RendererState::GEOMETRY) {
-				
+
 				#if defined(ARK2D_OPENGL_ES_2_0)
 					//glDisableVertexAttribArray(Renderer::s_shaderBasicGeometry->ark_VertexPositionIn);
 					//glDisableVertexAttribArray(Renderer::s_shaderBasicGeometry->ark_VertexNormalIn);
 					//glDisableVertexAttribArray(Renderer::s_shaderBasicGeometry->ark_VertexColorIn);
 					RendererStats::s_glCalls += 2;
-				#endif	
+				#endif
 			}
 
 			//#endif
@@ -260,10 +260,10 @@ namespace ARK {
 		void RendererState::startGeometry() {
 			//ARK2D::getLog()->v("RendererState::startGeometry");
 			switchRendererState(s_renderMode, GEOMETRY);
-			
+
 			#if defined(ARK2D_RENDERER_OPENGL)
 
-				#ifndef NO_FIXED_FUNCTION_PIPELINE 
+				#ifndef NO_FIXED_FUNCTION_PIPELINE
 					glEnableClientState(GL_VERTEX_ARRAY);
 					glEnableClientState(GL_COLOR_ARRAY);
 					RendererStats::s_glCalls += 2;
@@ -274,7 +274,7 @@ namespace ARK {
 					RendererStats::s_shaderSwaps++;
 
 					// same as shader bind but eh
-					Renderer::s_shaderBasicGeometry->bind(); 
+					Renderer::s_shaderBasicGeometry->bind();
 					RendererStats::s_glCalls++;
 					s_shaderId = Renderer::s_shaderBasicGeometry->getId();
 
@@ -284,7 +284,7 @@ namespace ARK {
 
 				Renderer::s_shaderBasicGeometry->bind();
 				s_shaderId = Renderer::s_shaderBasicGeometry->getId();
-			
+
 			#endif
 		}
 		void RendererState::startTexture(int textureId) {
@@ -293,13 +293,13 @@ namespace ARK {
 
 			#if defined(ARK2D_RENDERER_OPENGL)
 
-				#ifndef NO_FIXED_FUNCTION_PIPELINE 
+				#ifndef NO_FIXED_FUNCTION_PIPELINE
 					glEnable(GL_TEXTURE_2D);
 					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 					glEnableClientState(GL_VERTEX_ARRAY);
 					glEnableClientState(GL_COLOR_ARRAY);
 					RendererStats::s_glCalls += 2;
-				#endif 
+				#endif
 
 				glBindTexture(GL_TEXTURE_2D, textureId);
 				RendererStats::s_glCalls++;
@@ -317,15 +317,15 @@ namespace ARK {
 			#elif defined(ARK2D_RENDERER_DIRECTX)
 
 				ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->getPlatformSpecific()->m_deviceContext;
-				Texture* tx = TextureStore::getInstance()->getTexture(textureId); 
+				Texture* tx = TextureStore::getInstance()->getTexture(textureId);
 				deviceContext->PSSetSamplers(0, 1, &tx->m_dxSampler);
 				deviceContext->PSSetShaderResources(0, 1, &tx->m_dxResourceView);
 				Renderer::s_shaderBasicTexture->bind();
 				s_shaderId = Renderer::s_shaderBasicTexture->getId();
 
 			#endif
-			
-			s_textureId = textureId;  
+
+			s_textureId = textureId;
 			RendererStats::s_textureSwaps++;
 		}
 		void RendererState::startShader(int shaderId) {
@@ -334,7 +334,7 @@ namespace ARK {
 			switchRendererState(s_renderMode, SHADER);
 
 			ShaderStore::getInstance()->getShader(shaderId)->bind();
-			
+
 			s_shaderId = shaderId;
 			RendererStats::s_shaderSwaps++;
 			RendererStats::s_glCalls++;
@@ -350,7 +350,7 @@ namespace ARK {
 		void RendererState::internalBindTexture(int textureId) {
 			#if defined(ARK2D_RENDERER_OPENGL)
 
-				#ifndef NO_FIXED_FUNCTION_PIPELINE 
+				#ifndef NO_FIXED_FUNCTION_PIPELINE
 					glEnable(GL_TEXTURE_2D);
 					RendererStats::s_glCalls++;
 				#endif
@@ -362,13 +362,13 @@ namespace ARK {
 				//glActiveTexture(GL_TEXTURE0);
 				//glBindTexture(GL_TEXTURE_2D, textureId);
 			#endif
-			 
+
 			s_textureId = textureId;
-		} 
+		}
 
 
 
-		
+
 
 
 
@@ -376,7 +376,7 @@ namespace ARK {
 
 		// BATCH STUFF
 		RendererBatch* Renderer::s_batch = new RendererBatch();
-		map<unsigned int, string>* RendererBatchItem::s_types = NULL; 
+		map<unsigned int, string>* RendererBatchItem::s_types = NULL;
 		RendererBatchItem::RendererBatchItem():
 			geomtris(),
 			textris(),
@@ -411,7 +411,7 @@ namespace ARK {
  				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_ORTHO2D, "TYPE_ORTHO2D" ));
  				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_CUSTOM_OBJECT_FUNCTION, "TYPE_CUSTOM_OBJECT_FUNCTION" ));
  				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_CUSTOM_FUNCTION, "TYPE_CUSTOM_FUNCTION" ));
-                
+
  			}
 		}
 		void RendererBatchItem::clear() {
@@ -423,21 +423,21 @@ namespace ARK {
 
 		void* dx_fillTriangles_data = NULL;
 		unsigned int dx_fillTriangles_size = 0;
-		
+
 		void* dx_texturedTriangles_data = NULL;
 		unsigned int dx_texturedTriangles_size = 0;
-		
+
 		void* dx_renderBatch_data = NULL;
 		unsigned int dx_renderBatch_size = 0;
 
 		void RendererBatchItem::renderDX() {
 			#ifdef ARK2D_RENDERER_DIRECTX
 				// Optimisations for DirectX. Less memory allocated.
-				if (m_type == TYPE_GEOMETRY_TRIS) 
+				if (m_type == TYPE_GEOMETRY_TRIS)
 				{
 					unsigned int countTriangles = geomtris.size();
 					if (countTriangles == 0) { clear(); return; }
-					
+
 					RendererState::start(RendererState::GEOMETRY);
 
 					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
@@ -465,11 +465,11 @@ namespace ARK {
 
 						rawVertices[i+2].vertex = DirectX::XMFLOAT4(tri->vertexData[4], tri->vertexData[5], 0.0f, 0.0f);
 						rawVertices[i+2].color = DirectX::XMFLOAT4(tri->colorData[8]/255.0f, tri->colorData[9]/255.0f, tri->colorData[10]/255.0f, tri->colorData[11]/255.0f);
-						
+
 						count++;
 					}
 					Renderer::s_vboQuadVerts->setData((void*)&rawVertices[0], memorySize);
-					
+
 					unsigned int stride = sizeof(Renderer_DX_InterleavingGeometryVertexData);
 					unsigned int offset = 0;
 					deviceContext->IASetVertexBuffers(0, 1, &Renderer::s_vboQuadVerts->m_buffer, &stride, &offset);
@@ -481,7 +481,7 @@ namespace ARK {
 				{
 					unsigned int countTriangles = textris.size();
 					if (countTriangles == 0) { clear(); return; }
-					
+
 					RendererState::start(RendererState::TEXTURE, m_textureId);
 
 					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
@@ -512,11 +512,11 @@ namespace ARK {
 						rawVertices[i+2].vertex = DirectX::XMFLOAT4(tri->vertexData[4], tri->vertexData[5], 0.0f, 0.0f);
 						rawVertices[i+2].texcoord = DirectX::XMFLOAT2(tri->textureData[4], tri->textureData[5]);
 						rawVertices[i+2].color = DirectX::XMFLOAT4(tri->colorData[8]/255.0f, tri->colorData[9]/255.0f, tri->colorData[10]/255.0f, tri->colorData[11]/255.0f);
-						
+
 						count++;
 					}
 					Renderer::s_vboQuadVerts->setData((void*)&rawVertices[0], memorySize);
-					
+
 					unsigned int stride = sizeof(Renderer_DX_InterleavingTextureVertexData);
 					unsigned int offset = 0;
 					deviceContext->IASetVertexBuffers(0, 1, &Renderer::s_vboQuadVerts->m_buffer, &stride, &offset);
@@ -529,9 +529,9 @@ namespace ARK {
 		void RendererBatchItem::render() {
 			#if defined(ARK2D_RENDERER_DIRECTX)
 				renderDX();
-			#else 
+			#else
 				Renderer* r = ARK2D::getRenderer();
-				if (m_type == TYPE_GEOMETRY_TRIS) 
+				if (m_type == TYPE_GEOMETRY_TRIS)
 				{
 					unsigned int tsz = geomtris.size();
 					int sz = tsz * 9;
@@ -541,7 +541,7 @@ namespace ARK {
 						float* all_vertexData = (float*) alloca(sz * sizeof(float));
                         float* all_normalData = (float*) alloca(sz * sizeof(float));
                         unsigned char* all_colorData = (unsigned char*)alloca(sz * 2 * sizeof(unsigned char));
-					
+
 						Assert(all_vertexData);
                         Assert(all_normalData);
 						Assert(all_colorData);
@@ -550,9 +550,9 @@ namespace ARK {
                         float all_normalData[sz];
 						unsigned char all_colorData[sz*2];
 					#endif
-					
 
-					for(unsigned int i = 0; i < tsz; i++) { 
+
+					for(unsigned int i = 0; i < tsz; i++) {
 						memcpy(&all_vertexData[i*9], &geomtris[i].vertexData, sizeof(float) * 9);
                         memcpy(&all_normalData[i*9], &geomtris[i].normalData, sizeof(float) * 9);
 						memcpy(&all_colorData[i*12], &geomtris[i].colorData, sizeof(unsigned char) * 12);
@@ -565,7 +565,7 @@ namespace ARK {
 					//	free(all_colorData);
 					//#endif
 				}
-				else if (m_type == TYPE_TEXTURE_TRIS) 
+				else if (m_type == TYPE_TEXTURE_TRIS)
 				{
 					unsigned int tsz = textris.size();
 					int sz = tsz * 9;
@@ -589,7 +589,7 @@ namespace ARK {
 						unsigned char all_colorData[sz*2];
 					#endif
 
-					for(unsigned int i = 0; i < tsz; i++) { 
+					for(unsigned int i = 0; i < tsz; i++) {
 						memcpy(&all_vertexData[i*9], &textris[i].vertexData, sizeof(float) * 9);
                         memcpy(&all_normalData[i*9], &textris[i].normalData, sizeof(float) * 9);
 						memcpy(&all_textureData[i*6], &textris[i].textureData, sizeof(float) * 6);
@@ -658,15 +658,15 @@ namespace ARK {
 					pt(m_objectPointer);
 				} else if (m_type == TYPE_CUSTOM_FUNCTION) {
 					void (*pt)() = (void(*)()) m_functionPointer;
-					pt();					
+					pt();
 				}
 				clear();
 			#endif
 		}
 		string RendererBatchItem::toString() {
 			string s = string("{");
-				s += string("m_type: \""); 
-				//s += Cast::toString<unsigned int>(m_type); 
+				s += string("m_type: \"");
+				//s += Cast::toString<unsigned int>(m_type);
 				s += s_types->find(m_type)->second;
 				s += string("\"");
 				if (m_type == TYPE_FBO_BIND || m_type == TYPE_FBO_UNBIND || m_type == TYPE_FBO_BIND2D || m_type == TYPE_FBO_UNBIND2D) {
@@ -682,20 +682,20 @@ namespace ARK {
 						s += string("VIEW");
 					} else if (m_textureId == MatrixStack::TYPE_PROJECTION) {
 						s += string("PROJECTION");
-					} 
+					}
 					s += string("\"");
 				}
 			s += string("}");
 			return s;
 		}
-		RendererBatchItem::~RendererBatchItem() { 
+		RendererBatchItem::~RendererBatchItem() {
 			clear();
 		}
 
-		RendererBatchItem_GeomTri::RendererBatchItem_GeomTri(): 
-			vertexData(), 
-			colorData() 
-		{ 
+		RendererBatchItem_GeomTri::RendererBatchItem_GeomTri():
+			vertexData(),
+			colorData()
+		{
 			//vertexData[0] = 0;
 			//vertexData[1] = 0;
 			//vertexData[2] = 0;
@@ -708,7 +708,7 @@ namespace ARK {
 			textureData(),
 			colorData()
 		{
- 
+
 		}
 
 		inline void multiplymatrixtest(float& x, float& y, float& z, Matrix44<float>* m) {
@@ -720,7 +720,7 @@ namespace ARK {
 			float w = 1.0f;
 			Vector4<float>::multMatrix44(x, y, z, w, *m);
 		}
-		
+
 		RendererBatch::RendererBatch():
 			items(),
 			enabled(false),
@@ -735,23 +735,23 @@ namespace ARK {
 				s += items[i].toString();
 				s += string("\n");
 			}
-			s += string("]\n"); 
+			s += string("]\n");
  			s += string("}");
 			return s;
 		}
-		bool Renderer::isBatching() { 
-			return (s_batch->isEnabled()); 
+		bool Renderer::isBatching() {
+			return (s_batch->isEnabled());
 		}
-		void RendererBatch::setEnabled(bool b, bool fromSceneGraph) { 
+		void RendererBatch::setEnabled(bool b, bool fromSceneGraph) {
 			bool wasEnabled = enabled;
-			enabled = b; 
+			enabled = b;
 
 			Renderer* r = ARK2D::getRenderer();
 			r->matrixMode(MatrixStack::TYPE_MODEL);
 			MatrixStack* ms = Renderer::getMatrix();
 			if (!wasEnabled && b) {
 				ms->pushMatrix();
-				if (fromSceneGraph) { 
+				if (fromSceneGraph) {
 					//Matrix44<float>* settoroot = ms->at(ms->root());
 					//ms->current()->set( *settoroot );
 					ms->identity();
@@ -786,7 +786,7 @@ namespace ARK {
 				colors[0], colors[1], colors[2], colors[3],
 				colors[4], colors[5], colors[6], colors[7],
 				colors[8], colors[9], colors[10], colors[11]
-			); 
+			);
 		}
 		void RendererBatch::addGeometryTri(
 			float x1, float y1, float z1,
@@ -797,15 +797,15 @@ namespace ARK {
                float nx3, float ny3, float nz3,
 			unsigned char c1r, unsigned char c1g, unsigned char c1b, unsigned char c1a,
 			unsigned char c2r, unsigned char c2g, unsigned char c2b, unsigned char c2a,
-			unsigned char c3r, unsigned char c3g, unsigned char c3b, unsigned char c3a) 
+			unsigned char c3r, unsigned char c3g, unsigned char c3b, unsigned char c3a)
 		{
-			if (items.size() == 0 || 
+			if (items.size() == 0 ||
 				//items.at(items.size()-1).m_type == RendererBatchItem::TYPE_TEXTURE_TRIS
 				items.at(items.size()-1).m_type != RendererBatchItem::TYPE_GEOMETRY_TRIS
 				) {
 				items.push_back(RendererBatchItem());
 			}
- 
+
 			RendererBatchItem* item = &items.at(items.size()-1);
 			item->m_type = RendererBatchItem::TYPE_GEOMETRY_TRIS;
 			item->m_textureId = 0;
@@ -854,7 +854,7 @@ namespace ARK {
 			item->geomtris.push_back(one);
 
 		}
-        
+
         void RendererBatch::addGeometryQuad(
 			float x1, float y1, float z1,
 			float x2, float y2, float z2,
@@ -867,9 +867,9 @@ namespace ARK {
 			unsigned char c1r, unsigned char c1g, unsigned char c1b, unsigned char c1a,
 			unsigned char c2r, unsigned char c2g, unsigned char c2b, unsigned char c2a,
 			unsigned char c3r, unsigned char c3g, unsigned char c3b, unsigned char c3a,
-			unsigned char c4r, unsigned char c4g, unsigned char c4b, unsigned char c4a) 
+			unsigned char c4r, unsigned char c4g, unsigned char c4b, unsigned char c4a)
 		{
-			if (items.size() == 0 || 
+			if (items.size() == 0 ||
 				//items.at(items.size()-1).m_type == RendererBatchItem::TYPE_TEXTURE_TRIS
 				items.at(items.size()-1).m_type != RendererBatchItem::TYPE_GEOMETRY_TRIS
 				) {
@@ -959,7 +959,7 @@ namespace ARK {
 		void RendererBatch::addTexturedTri(unsigned int texId, float* verts, float* normals, float* texcoords, unsigned char* colors)
 		{
 			addTexturedTri(
-				texId, 
+				texId,
 				verts[0], verts[1], verts[2],
 				verts[3], verts[4], verts[5],
 				verts[6], verts[7], verts[8],
@@ -967,15 +967,15 @@ namespace ARK {
                normals[3], normals[4], normals[5],
                normals[6], normals[7], normals[8],
 				texcoords[0], texcoords[1],
-				texcoords[2], texcoords[3], 
-				texcoords[4], texcoords[5], 
+				texcoords[2], texcoords[3],
+				texcoords[4], texcoords[5],
 				colors[0], colors[1], colors[2], colors[3],
 				colors[4], colors[5], colors[6], colors[7],
 				colors[8], colors[9], colors[10], colors[11]
-			); 
+			);
 		}
 		void RendererBatch::addTexturedTri(
-			unsigned int texId, 
+			unsigned int texId,
 			float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3,
            float nx1, float ny1, float nz1,
            float nx2, float ny2, float nz2,
@@ -983,13 +983,13 @@ namespace ARK {
 			float tx1, float ty1, float tx2, float ty2, float tx3, float ty3,
 			unsigned char c1r, unsigned char c1g, unsigned char c1b, unsigned char c1a,
 			unsigned char c2r, unsigned char c2g, unsigned char c2b, unsigned char c2a,
-			unsigned char c3r, unsigned char c3g, unsigned char c3b, unsigned char c3a) 
+			unsigned char c3r, unsigned char c3g, unsigned char c3b, unsigned char c3a)
 		{
-			if (items.size() == 0 || 
-				//items.at(items.size()-1).m_type == RendererBatchItem::TYPE_GEOMETRY_TRIS || 
-				items.at(items.size()-1).m_type != RendererBatchItem::TYPE_TEXTURE_TRIS || 
+			if (items.size() == 0 ||
+				//items.at(items.size()-1).m_type == RendererBatchItem::TYPE_GEOMETRY_TRIS ||
+				items.at(items.size()-1).m_type != RendererBatchItem::TYPE_TEXTURE_TRIS ||
 				((
-					items.at(items.size()-1).m_type == RendererBatchItem::TYPE_TEXTURE_TRIS) && 
+					items.at(items.size()-1).m_type == RendererBatchItem::TYPE_TEXTURE_TRIS) &&
 					(items.at(items.size()-1).m_textureId != texId ||
                 	 items.at(items.size()-1).m_shaderId != RendererState::s_shaderId)
 				)) {
@@ -1052,32 +1052,32 @@ namespace ARK {
 		}
 		void RendererBatch::addTexturedQuad(unsigned int texId, float* verts, float* normals, float* texcoords, unsigned char* colors) {
 			addTexturedQuad(
-				texId, 
-				
+				texId,
+
 				verts[0], verts[1], verts[2],
 				verts[3], verts[4], verts[5],
 				verts[6], verts[7], verts[8],
 				verts[9], verts[10], verts[11],
-                            
+
                 normals[0], normals[1], normals[2],
                 normals[3], normals[4], normals[5],
                 normals[6], normals[7], normals[8],
                 normals[9], normals[10], normals[11],
-				
-				texcoords[0], texcoords[1], 
-				texcoords[2], texcoords[3], 
-				texcoords[4], texcoords[5], 
+
+				texcoords[0], texcoords[1],
+				texcoords[2], texcoords[3],
+				texcoords[4], texcoords[5],
 				texcoords[10], texcoords[11],
 
 				colors[0], colors[1], colors[2], colors[3],
 				colors[4], colors[5], colors[6], colors[7],
 				colors[8], colors[9], colors[10], colors[11],
-				colors[20], colors[21], colors[22], colors[23] 
-			); 
-		} 
-		
+				colors[20], colors[21], colors[22], colors[23]
+			);
+		}
+
 		void RendererBatch::addTexturedQuad(
-			unsigned int texId,  
+			unsigned int texId,
 			float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4,
             float nx1, float ny1, float nz1,
             float nx2, float ny2, float nz2,
@@ -1089,17 +1089,17 @@ namespace ARK {
 			unsigned char c3r, unsigned char c3g, unsigned char c3b, unsigned char c3a,
 			unsigned char c4r, unsigned char c4g, unsigned char c4b, unsigned char c4a) {
 
-			/*if (items.size() == 0 || 
+			/*if (items.size() == 0 ||
 				items.at(items.size()-1).m_type == RendererBatchItem::TYPE_GEOMETRY_TRIS ||
 				items.at(items.size()-1).m_textureId != texId ||
 				items.at(items.size()-1).m_shaderId != RendererState::s_shaderId
 				) {
 				items.push_back(RendererBatchItem());
 			}*/
-			if (items.size() == 0 || 
-				items.at(items.size()-1).m_type != RendererBatchItem::TYPE_TEXTURE_TRIS || 
+			if (items.size() == 0 ||
+				items.at(items.size()-1).m_type != RendererBatchItem::TYPE_TEXTURE_TRIS ||
 				((
-					items.at(items.size()-1).m_type == RendererBatchItem::TYPE_TEXTURE_TRIS) && 
+					items.at(items.size()-1).m_type == RendererBatchItem::TYPE_TEXTURE_TRIS) &&
 					(items.at(items.size()-1).m_textureId != texId ||
                 	 items.at(items.size()-1).m_shaderId != RendererState::s_shaderId)
 				)) {
@@ -1110,7 +1110,7 @@ namespace ARK {
 			item->m_textureId = texId;
 			item->m_shaderId = RendererState::s_shaderId;
 
-            //if (startedAtMatrixIndex != Renderer::getMatrix()->height()) { 
+            //if (startedAtMatrixIndex != Renderer::getMatrix()->height()) {
 				// Multiply coordinates by top matrix.
 				// float z = 1.0f;
 				// Matrix44<float>* cur = Renderer::getMatrix(MatrixStack::TYPE_MODEL)->current();
@@ -1223,7 +1223,7 @@ namespace ARK {
 		signed int Renderer::s_interpolation = Renderer::INTERPOLATION_NEAREST;
 		signed int Renderer::getInterpolation() {
 			return s_interpolation;
-		} 
+		}
 		void Renderer::setInterpolation(signed int i) {
 			s_interpolation = i;
 		}
@@ -1237,7 +1237,7 @@ namespace ARK {
 				}
 				return GL_NEAREST;
 			#else
-				return 0; 
+				return 0;
 			#endif
 		}
 
@@ -1255,9 +1255,9 @@ namespace ARK {
 			Renderer_DX_ModelViewProjectionMatrixBuffer* Renderer::s_d3d_matrixBufferData = NULL;
 		#endif
 
-		MatrixStack* Renderer::getMatrix() { 
-			return s_matrix;  
-		}  
+		MatrixStack* Renderer::getMatrix() {
+			return s_matrix;
+		}
 		MatrixStack* Renderer::getMatrix(unsigned int type) {
 			if (type == MatrixStack::TYPE_PROJECTION) { return s_matrixProjection; }
 			else if (type == MatrixStack::TYPE_VIEW) { return s_matrixView; }
@@ -1270,7 +1270,7 @@ namespace ARK {
 			subject *= *by;
 		}
 		void Renderer::matrixMode(unsigned int mode) {
-			if (Renderer::isBatching()) { 
+			if (Renderer::isBatching()) {
 				RendererBatchItem stateChange;
 				stateChange.m_type = RendererBatchItem::TYPE_MATRIX_MODE;
 				stateChange.m_textureId = mode;
@@ -1295,13 +1295,13 @@ namespace ARK {
 			} /*else if (mode == MatrixStack::TYPE_MODELVIEW) {
 				s_matrix = s_matrixModelView;
 
-				#ifndef NO_FIXED_FUNCTION_PIPELINE 
+				#ifndef NO_FIXED_FUNCTION_PIPELINE
 					//ARK2D::getLog()->v("fixed-function-pipeline");
 					glMatrixMode(GL_MODELVIEW);
 					RendererStats::s_glCalls++;
 				#endif
 
-			} */else { 
+			} */else {
 				ARK2D::getLog()->e(StringUtil::append("Invalid Matrix Mode", mode));
 			}
 			showAnyGlErrorAndExitMacro();
@@ -1315,7 +1315,7 @@ namespace ARK {
 		void Renderer::pushMatrix(bool setasroot) const {
 			//ARK2D::getLog()->v("pushMatrix");
 
-			if (Renderer::isBatching()) { 
+			if (Renderer::isBatching()) {
 				RendererBatchItem stateChange;
 				stateChange.m_type = RendererBatchItem::TYPE_MATRIX_PUSH;
 				stateChange.m_textureId = s_matrix->m_type;
@@ -1323,7 +1323,7 @@ namespace ARK {
 				return;
 			}
 
-			s_matrix->pushMatrix(setasroot);  
+			s_matrix->pushMatrix(setasroot);
 			#ifndef NO_FIXED_FUNCTION_PIPELINE
 				glPushMatrix();
 				RendererStats::s_glCalls++;
@@ -1331,11 +1331,11 @@ namespace ARK {
 			#endif
 
 			showAnyGlErrorAndExitMacro();
-		} 
+		}
 		void Renderer::popMatrix() const {
 			//ARK2D::getLog()->v("popMatrix");
 
-			if (Renderer::isBatching()) { 
+			if (Renderer::isBatching()) {
 				RendererBatchItem stateChange;
 				stateChange.m_type = RendererBatchItem::TYPE_MATRIX_POP;
 				stateChange.m_textureId = s_matrix->m_type;
@@ -1361,7 +1361,7 @@ namespace ARK {
 				s_batch->items.push_back(stateChange);
 				return;
 			}
- 
+
 			s_matrix->identity(); // only changes the topmost matrix.
 			#ifndef NO_FIXED_FUNCTION_PIPELINE
 				//ARK2D::getLog()->v("fixed-function-pipeline");
@@ -1382,7 +1382,7 @@ namespace ARK {
 		void Renderer::loadMatrix(const Matrix44<float>& m) const {
 			#ifndef NO_FIXED_FUNCTION_PIPELINE
 				glLoadMatrixf((const GLfloat*) m.pointer());//&m[0][0]);
-				showAnyGlErrorAndExitMacro(); 
+				showAnyGlErrorAndExitMacro();
 				RendererStats::s_glCalls++;
 			#endif
 		}
@@ -1407,7 +1407,7 @@ namespace ARK {
 		Shader* Renderer::s_shaderBasicTexture = NULL;
 		Shader* Renderer::s_shaderBasicTextureDefault = NULL;
 		Shader* Renderer::getBasicTextureShader() {
-			return s_shaderBasicTexture;  
+			return s_shaderBasicTexture;
 		}
 		void Renderer::overrideBasicShaders(Shader* geometry, Shader* texture) {
 			if (geometry != NULL) {
@@ -1424,7 +1424,7 @@ namespace ARK {
 
 
 		// VAO and VBO bits
-		Mat44VBO* Renderer::s_vboMatrixProjection = new Mat44VBO(); 
+		Mat44VBO* Renderer::s_vboMatrixProjection = new Mat44VBO();
 		Mat44VBO* Renderer::s_vboMatrixView = new Mat44VBO();
 		Mat44VBO* Renderer::s_vboMatrixModel = new Mat44VBO();
 		Mat33VBO* Renderer::s_vboMatrixNormal = new Mat33VBO();
@@ -1433,10 +1433,10 @@ namespace ARK {
 		QuadVBO* Renderer::s_vboQuadNormals = new QuadVBO();
 		QuadVBO* Renderer::s_vboQuadColors = new QuadVBO();
 		VBO* Renderer::s_vboIndices = new VBO();
-		VAO* Renderer::s_vaoQuad = new VAO(); 
- 
-		VBO::VBO(): 
-			m_id(0), 
+		VAO* Renderer::s_vaoQuad = new VAO();
+
+		VBO::VBO():
+			m_id(0),
 			m_msize(0)
 			#if defined( ARK2D_RENDERER_DIRECTX )
 				, m_buffer(NULL)
@@ -1444,23 +1444,23 @@ namespace ARK {
 				, m_bufferData()
 			#endif
 		{
-			
-		} 
+
+		}
 		void VBO::setSize(unsigned int szbytes) {
 			ARK2D::getLog()->v(StringUtil::append("Setting buffer sz: ", szbytes));
 			m_msize = szbytes;
 		}
-		unsigned int VBO::getId() { 
-			return m_id; 
+		unsigned int VBO::getId() {
+			return m_id;
 		}
-		void VBO::init() { 
+		void VBO::init() {
 			#if defined(ARK2D_RENDERER_OPENGL)
-				glGenBuffers(1, &m_id); 
+				glGenBuffers(1, &m_id);
 			#elif defined(ARK2D_RENDERER_DIRECTX)
 
 				ARK2D::getLog()->v(StringUtil::append("Buffer sz: ", m_msize));
-				
-				void* data = malloc( m_msize ); 
+
+				void* data = malloc( m_msize );
 
 				D3D11_BUFFER_DESC vertexBufferDesc = {0};
 				ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
@@ -1515,16 +1515,16 @@ namespace ARK {
 				glBufferData(GL_ARRAY_BUFFER, size, data, GL_DYNAMIC_DRAW);
 
 			#elif defined(ARK2D_RENDERER_DIRECTX)
-				
+
 				//ARK2D::getLog()->v("Updating VBO...");
 				ID3D11DeviceContext* context = ARK2D::getContainer()->m_platformSpecific.m_deviceContext;
-				
+
 				if (size > m_msize) {
 
 					// dynamically resize this buffer. eesh.
 					m_buffer->Release();
 					//delete m_buffer;
-					
+
 					m_msize = size;
 					init();
 
@@ -1544,52 +1544,52 @@ namespace ARK {
 					exit(0);
 				}
 
-				
+
 				memcpy(r.pData, data, size);
 				context->Unmap(m_buffer, 0);
-				
-				//m_msize = size;        		
+
+				//m_msize = size;
 
 			#endif
-			RendererStats::s_glCalls++; 
+			RendererStats::s_glCalls++;
 		}
-		void VBO::bind() { 
+		void VBO::bind() {
 			#if defined(ARK2D_RENDERER_OPENGL)
-				glBindBuffer(GL_ARRAY_BUFFER, m_id); 
+				glBindBuffer(GL_ARRAY_BUFFER, m_id);
 			#elif defined(ARK2D_RENDERER_DIRECTX)
 
 			#endif
 			RendererStats::s_glCalls++;
 		}
-		void VBO::unbind() { 
+		void VBO::unbind() {
 			#if defined(ARK2D_RENDERER_OPENGL)
-				glBindBuffer(GL_ARRAY_BUFFER, 0); 
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
 			#elif defined(ARK2D_RENDERER_DIRECTX)
 
 			#endif
 			RendererStats::s_glCalls++;
 		}
-		
-		QuadVBO::QuadVBO(): VBO(), m_width(2), m_height(4) { 
+
+		QuadVBO::QuadVBO(): VBO(), m_width(2), m_height(4) {
 			#if defined(ARK2D_RENDERER_DIRECTX)
 				//setSize( sizeof(Renderer_DX_InterleavingGeometryVertexData)*4 );
 				setSize(sizeof(Renderer_DX_InterleavingTextureVertexData) * 4);
 			#endif
 		}
-		void QuadVBO::setWidth(int w) { 
-			m_width = w;  
+		void QuadVBO::setWidth(int w) {
+			m_width = w;
 		}
-		void QuadVBO::setHeight(int h) { 
-			m_height = h;  
+		void QuadVBO::setHeight(int h) {
+			m_height = h;
 		}
 		void QuadVBO::setData(void* data, unsigned int size) {
 			VBO::setData(data, size);
 		}
 		void QuadVBO::setData(float* data) {
-			#if defined(ARK2D_RENDERER_OPENGL) 
-				
+			#if defined(ARK2D_RENDERER_OPENGL)
+
 				if (m_width == 0 || m_height == 0) { return; }
-				/*#ifdef ARK2D_WINDOWS_VS 
+				/*#ifdef ARK2D_WINDOWS_VS
 					if (sizeof(float) * m_width * m_height != sizeof(data)) {
 						ARK2D::getLog()->w("Invalid buffer. Size mis-match.");
 						ARK2D::getLog()->w(StringUtil::append("buffer: ", sizeof(float) * m_width * m_height));
@@ -1597,26 +1597,26 @@ namespace ARK {
 					}
 				#endif*/
 
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m_width * m_height, data, GL_DYNAMIC_DRAW); 
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m_width * m_height, data, GL_DYNAMIC_DRAW);
 			#elif defined(ARK2D_RENDERER_DIRECTX)
 				VBO::setData((void*) data, sizeof(float) * m_width * m_height);
 			#endif
 			RendererStats::s_glCalls++;
 		}
-		void QuadVBO::setData(unsigned char* data) { 
+		void QuadVBO::setData(unsigned char* data) {
 			#if defined(ARK2D_RENDERER_OPENGL)
-				
+
 				if (m_width == 0 || m_height == 0) { return; }
-				
-				/*#ifdef ARK2D_WINDOWS_VS 
+
+				/*#ifdef ARK2D_WINDOWS_VS
 					if (sizeof(unsigned char) * m_width * m_height != sizeof(data)) {
 						ARK2D::getLog()->w("Invalid buffer. Size mis-match.");
 						ARK2D::getLog()->w(StringUtil::append("buffer: ", sizeof(unsigned char) * m_width * m_height));
 						ARK2D::getLog()->w(StringUtil::append("data: ", sizeof(data)));
 					}
 				#endif*/
-				
-				glBufferData(GL_ARRAY_BUFFER, sizeof(unsigned char) * m_width * m_height, data, GL_DYNAMIC_DRAW); 
+
+				glBufferData(GL_ARRAY_BUFFER, sizeof(unsigned char) * m_width * m_height, data, GL_DYNAMIC_DRAW);
 			#elif defined(ARK2D_RENDERER_DIRECTX)
 				VBO::setData((void*) data, sizeof(unsigned char) * m_width * m_height);
 			#endif
@@ -1627,10 +1627,10 @@ namespace ARK {
 			#if defined(ARK2D_RENDERER_DIRECTX)
 				setSize( sizeof(float)*16 );
 			#endif
-		} 
-		void Mat44VBO::setData(float* data) { 
+		}
+		void Mat44VBO::setData(float* data) {
 			#if defined(ARK2D_RENDERER_OPENGL)
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 16, data, GL_DYNAMIC_DRAW); 
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 16, data, GL_DYNAMIC_DRAW);
 			#elif defined(ARK2D_RENDERER_DIRECTX)
 				VBO::setData((void*) data, sizeof(float) * 16);
 			#endif
@@ -1645,10 +1645,10 @@ namespace ARK {
 			#if defined(ARK2D_RENDERER_DIRECTX)
 				setSize( sizeof(float)*9 );
 			#endif
-		} 
-		void Mat33VBO::setData(float* data) { 
+		}
+		void Mat33VBO::setData(float* data) {
 			#if defined(ARK2D_RENDERER_OPENGL)
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 9, data, GL_DYNAMIC_DRAW); 
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 9, data, GL_DYNAMIC_DRAW);
 			#elif defined(ARK2D_RENDERER_DIRECTX)
 				VBO::setData((void*) data, sizeof(float) * 9);
 			#endif
@@ -1660,44 +1660,44 @@ namespace ARK {
 			#endif
 		}
 
-		signed int VAO::s_currentVAO = -1; 
-		VAO::VAO(): m_id(0) { } 
-		signed int VAO::getId() { 
-			return m_id; 
+		signed int VAO::s_currentVAO = -1;
+		VAO::VAO(): m_id(0) { }
+		signed int VAO::getId() {
+			return m_id;
 		}
-		void VAO::init() { 
-			if (FBO::isVAOSupported()) { 
+		void VAO::init() {
+			if (FBO::isVAOSupported()) {
 				glGenVertexArraysARK( 1, &m_id );
 				RendererStats::s_glCalls++;
 			}
-		} 
+		}
 		bool VAO::bind() {
 			if (s_currentVAO == (signed int) m_id) { return false; }
 
-			if (FBO::isVAOSupported()) { 
+			if (FBO::isVAOSupported()) {
 				glBindVertexArrayARK(m_id);
 				RendererStats::s_glCalls++;
 			}
-			s_currentVAO = (signed int) m_id;  
+			s_currentVAO = (signed int) m_id;
 			return true;
 		}
 
 
 
-		// renderer 
+		// renderer
 		Renderer::Renderer():
 			m_DefaultFont(NULL),
-			m_Font(NULL),  
+			m_Font(NULL),
 			m_DrawColor(255, 255, 255),
 			m_MaskColor(255, 0, 255),
 			m_LineWidth(1.0f),
-			m_pointSize(1), 
-			m_blendMode(BLEND_NORMAL), 
+			m_pointSize(1),
+			m_blendMode(BLEND_NORMAL),
 			m_ScissorBoxColors()
 		{
 			//m_DefaultFont = new BMFont("data/calibri.fnt", "data/calibri.bmp", Color::magenta);
 			//m_Font = m_DefaultFont;
-		} 
+		}
 		void Renderer::preinit() {
 			s_matrixProjection = &Camera::current->projection; // new MatrixStack(MatrixStack::TYPE_PROJECTION);
 			s_matrixModel = &Camera::current->model; // new MatrixStack(MatrixStack::TYPE_MODEL);
@@ -1708,35 +1708,35 @@ namespace ARK {
 		void Renderer::init() {
 			// this should be called when opengl is set up and ready to start loading shaders and crap
 			ARK2D::getLog()->v("Renderer::init");
-			#ifdef SHADER_SUPPORT 
+			#ifdef SHADER_SUPPORT
 
 				bool fbosupport = FBO::isSupported();
 
 				#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 					glGenVertexArraysOES = NULL;
 					glBindVertexArrayOES = NULL;
-			
+
 					#if defined(ARK2D_ANDROID)
-				
+
 						if (FBO::isVAOSupported()) {
 							glGenVertexArraysOES = (PFNGLGENVERTEXARRAYSOESPROC) eglGetProcAddress("glGenVertexArraysOES");
 							glBindVertexArrayOES = (PFNGLBINDVERTEXARRAYOESPROC) eglGetProcAddress("glBindVertexArrayOES");
 						}
-			
+
 					#endif
-			
+
 				#endif
 
 				#if defined (ARK2D_RENDERER_DIRECTX)
 					ARK2D::getLog()->v("Creating Matrix Buffer...");
 					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
-					
+
 					CD3D11_BUFFER_DESC bufferDesc(sizeof(Renderer_DX_ModelViewProjectionMatrixBuffer), D3D11_BIND_CONSTANT_BUFFER);
 					HRESULT result = device->CreateBuffer(&bufferDesc, NULL, &s_d3d_matrixBuffer);
 					if (FAILED(result)) {
 						ErrorDialog::createAndShow("Could not create Matrix Buffer.");
 						exit(0);
-					} 
+					}
 					s_d3d_matrixBufferDesc = bufferDesc;
 
 					s_d3d_matrixBufferData = new Renderer_DX_ModelViewProjectionMatrixBuffer();
@@ -1746,8 +1746,8 @@ namespace ARK {
 					s_vboMatrixModel->m_indexType = D3D11_BIND_CONSTANT_BUFFER;
 					s_vboMatrixNormal->m_indexType = D3D11_BIND_CONSTANT_BUFFER;
 					s_vboQuadVerts->m_indexType = D3D11_BIND_VERTEX_BUFFER;
-					s_vboQuadTexCoords->m_indexType = D3D11_BIND_VERTEX_BUFFER; // not used? 
-					s_vboQuadNormals->m_indexType = D3D11_BIND_VERTEX_BUFFER; // not used? 
+					s_vboQuadTexCoords->m_indexType = D3D11_BIND_VERTEX_BUFFER; // not used?
+					s_vboQuadNormals->m_indexType = D3D11_BIND_VERTEX_BUFFER; // not used?
 					s_vboQuadColors->m_indexType = D3D11_BIND_VERTEX_BUFFER; // not used?
 					s_vboIndices->m_indexType = D3D11_BIND_INDEX_BUFFER;
 
@@ -1764,7 +1764,7 @@ namespace ARK {
 				s_vboQuadVerts->init();
 				s_vboQuadVerts->setWidth(3);
 				s_vboQuadVerts->setHeight(4);
-			
+
 				s_vboQuadTexCoords->init();
 				s_vboQuadTexCoords->setWidth(2);
 				s_vboQuadTexCoords->setHeight(4);
@@ -1772,18 +1772,18 @@ namespace ARK {
 				s_vboQuadNormals->init();
 				s_vboQuadNormals->setWidth(3);
 				s_vboQuadNormals->setHeight(4);
-				
+
 				s_vboQuadColors->init();
-				s_vboQuadColors->setWidth(4); 
+				s_vboQuadColors->setWidth(4);
 				s_vboQuadColors->setHeight(4);
 
-				s_vboIndices->setSize(sizeof(unsigned int) * 6); 
+				s_vboIndices->setSize(sizeof(unsigned int) * 6);
 				s_vboIndices->init();
 
 				showAnyGlErrorAndExitMacro();
 
-				glBindBuffer(GL_ARRAY_BUFFER, 0); 
- 
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+
                 s_shaderBasicGeometry = new BasicGeometryShader();
                 s_shaderBasicGeometry->load();
                 s_shaderBasicGeometryDefault = s_shaderBasicGeometry;
@@ -1799,42 +1799,42 @@ namespace ARK {
 
 				// other init bits?
 				#if defined(ARK2D_RENDERER_DIRECTX)
-					// ... 
+					// ...
 				#elif defined(ARK2D_RENDERER_OPENGL)
 					//glEnable(GL_DEPTH_TEST);
 					//glDepthFunc(GL_LEQUAL);
-					
+
 					#ifdef ARK2D_ANDROID
 						glDisable(GL_CULL_FACE);
 					#endif
-					
+
 					//glEnable(GL_CULL_FACE);
-				    //glCullFace(GL_BACK); 
+				    //glCullFace(GL_BACK);
 				    //glFrontFace(GL_CCW);
 				#endif
 
 			#endif
 			ARK2D::getLog()->v("Renderer::init complete");
 			showAnyGlErrorAndExitMacro();
-		} 
+		}
 
 		void* Renderer::readPixels(int x, int y, int w, int h) {
 			//void* data[w * h];// = malloc(w * h * 8);
 			//glReadPixels(x, y, w, h, GL_RGBA, GL_UNSIGNED_BYTE, &data);
-	
+
 			GLubyte* pixels = NULL;
 			/*{
 				int size = w * h * 4;
 				GLubyte* pixels = new GLubyte[size];
-				if (pixels == NULL) return NULL; 
+				if (pixels == NULL) return NULL;
 				glReadPixels(x, y, w, h, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 			}*/
 
 			#if defined(ARK2D_RENDERER_OPENGL)
 				{
-					int size = (w * h) * 4; 
+					int size = (w * h) * 4;
 					pixels = new GLubyte[size];
-					if (pixels == NULL) return NULL;  
+					if (pixels == NULL) return NULL;
 					glReadPixels(x, y, w, h, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 					RendererStats::s_glCalls++;
 
@@ -1842,9 +1842,9 @@ namespace ARK {
 				}
 			#endif
 
-			//delete[] pixels; 
+			//delete[] pixels;
 			return pixels;
-		} 
+		}
 		void Renderer::flush() {
 			#if defined(ARK2D_RENDERER_OPENGL)
 				glFlush();
@@ -1864,7 +1864,7 @@ namespace ARK {
 
 		void Renderer::setFont(ARK::Font::Font* f) {
 			m_Font = f;
-		} 
+		}
 		void Renderer::setDefaultFont(ARK::Font::Font* f) {
 			m_DefaultFont = f;
 		}
@@ -1874,7 +1874,7 @@ namespace ARK {
 		}
 		ARK::Font::Font* Renderer::getDefaultFont() const {
 			return m_DefaultFont;
-		} 
+		}
 
 		void Renderer::translate(int x, int y) const {
 			// glTranslatef(x,y,0);
@@ -1897,7 +1897,7 @@ namespace ARK {
 				showAnyGlErrorAndExitMacro();
 				RendererStats::s_glCalls++;
 			#endif
-		} 
+		}
 		void Renderer::translate(float x, float y) const {
 			//glTranslatef(x,y,0);
 
@@ -1906,7 +1906,7 @@ namespace ARK {
 				stateChange.m_type = RendererBatchItem::TYPE_MATRIX_TRANSLATE;
 				stateChange.m_float1 = x;
 				stateChange.m_float2 = y;
-				stateChange.m_float3 = 0; 
+				stateChange.m_float3 = 0;
 				s_batch->items.push_back(stateChange);
 				return;
 			}
@@ -1919,9 +1919,9 @@ namespace ARK {
 				showAnyGlErrorAndExitMacro();
 				RendererStats::s_glCalls++;
 			#endif
-		} 
+		}
 		void Renderer::translate(float x, float y, float z) const {
-				
+
 			if (Renderer::isBatching()) {
 				RendererBatchItem stateChange;
 				stateChange.m_type = RendererBatchItem::TYPE_MATRIX_TRANSLATE;
@@ -1941,7 +1941,7 @@ namespace ARK {
 			#endif
 		}
 
-		void Renderer::rotate(int angle) const {  
+		void Renderer::rotate(int angle) const {
 
 			if (Renderer::isBatching()) {
 				RendererBatchItem stateChange;
@@ -1954,7 +1954,7 @@ namespace ARK {
 				return;
 			}
 
-			//glRotatef(angle, 0, 0, 1); 
+			//glRotatef(angle, 0, 0, 1);
 			s_matrix->rotate(angle, 0, 0, 1);
 
 			#ifndef NO_FIXED_FUNCTION_PIPELINE
@@ -1964,7 +1964,7 @@ namespace ARK {
 				RendererStats::s_glCalls++;
 			#endif
 		}
-		void Renderer::rotate(float angle) const { 
+		void Renderer::rotate(float angle) const {
 
 			if (Renderer::isBatching()) {
 				RendererBatchItem stateChange;
@@ -2000,9 +2000,9 @@ namespace ARK {
 			}
 
 			s_matrix->rotate(angle, x, y, z);
-		
+
 			#ifndef NO_FIXED_FUNCTION_PIPELINE
-				//glLoadMatrixf((float*)s_matrix->pointer());	
+				//glLoadMatrixf((float*)s_matrix->pointer());
 				glRotatef(angle, x, y, z);
 				showAnyGlErrorAndExitMacro();
 				RendererStats::s_glCalls++;
@@ -2031,7 +2031,7 @@ namespace ARK {
 			#endif
 		}
 		void Renderer::scale(float x, float y, float z) const {
-			
+
 			if (Renderer::isBatching()) {
 				RendererBatchItem stateChange;
 				stateChange.m_type = RendererBatchItem::TYPE_MATRIX_SCALE;
@@ -2055,7 +2055,7 @@ namespace ARK {
 		void Renderer::enableStencil() const {
 			#ifdef ARK2D_RENDERER_OPENGL
 
-				if (Renderer::isBatching()) { 
+				if (Renderer::isBatching()) {
 					RendererBatchItem stateChange;
 					stateChange.m_type = RendererBatchItem::TYPE_STENCIL_ENABLE;
 					s_batch->items.push_back(stateChange);
@@ -2069,7 +2069,7 @@ namespace ARK {
 		}
 		void Renderer::startStencil() const {
 			#ifdef ARK2D_RENDERER_OPENGL
-				if (Renderer::isBatching()) { 
+				if (Renderer::isBatching()) {
 					RendererBatchItem stateChange;
 					stateChange.m_type = RendererBatchItem::TYPE_STENCIL_START;
 					s_batch->items.push_back(stateChange);
@@ -2084,7 +2084,7 @@ namespace ARK {
 
 			    // Place a 1 where rendered
 			    glStencilFunc( GL_ALWAYS, 1, 1 );
-			   
+
 			    // Replace where rendered
 			    glStencilOp( GL_REPLACE, GL_REPLACE, GL_REPLACE );
 
@@ -2095,7 +2095,7 @@ namespace ARK {
 		void Renderer::inverseStencil() const {
 			#ifdef ARK2D_RENDERER_OPENGL
 
-				if (Renderer::isBatching()) { 
+				if (Renderer::isBatching()) {
 					RendererBatchItem stateChange;
 					stateChange.m_type = RendererBatchItem::TYPE_STENCIL_INVERSE;
 					s_batch->items.push_back(stateChange);
@@ -2120,7 +2120,7 @@ namespace ARK {
 		}
 		void Renderer::stopStencil() const {
 			#ifdef ARK2D_RENDERER_OPENGL
-				if (Renderer::isBatching()) { 
+				if (Renderer::isBatching()) {
 					RendererBatchItem stateChange;
 					stateChange.m_type = RendererBatchItem::TYPE_STENCIL_STOP;
 					s_batch->items.push_back(stateChange);
@@ -2141,7 +2141,7 @@ namespace ARK {
 		}
 		void Renderer::disableStencil() const {
 			#ifdef ARK2D_RENDERER_OPENGL
-				if (Renderer::isBatching()) { 
+				if (Renderer::isBatching()) {
 					RendererBatchItem stateChange;
 					stateChange.m_type = RendererBatchItem::TYPE_STENCIL_DISABLE;
 					s_batch->items.push_back(stateChange);
@@ -2158,7 +2158,7 @@ namespace ARK {
 		void Renderer::enableMultisampling() const {
 			#ifdef ARK2D_RENDERER_OPENGL
 				#ifdef ARK2D_OPENGL_3_2
-					if (Renderer::isBatching()) { 
+					if (Renderer::isBatching()) {
 						RendererBatchItem stateChange;
 						stateChange.m_type = RendererBatchItem::TYPE_MULTISAMPLING_ENABLE;
 						s_batch->items.push_back(stateChange);
@@ -2172,7 +2172,7 @@ namespace ARK {
 		void Renderer::disableMultisampling() const {
 			#ifdef ARK2D_RENDERER_OPENGL
 				#ifdef ARK2D_OPENGL_3_2
-					if (Renderer::isBatching()) { 
+					if (Renderer::isBatching()) {
 						RendererBatchItem stateChange;
 						stateChange.m_type = RendererBatchItem::TYPE_MULTISAMPLING_DISABLE;
 						s_batch->items.push_back(stateChange);
@@ -2184,10 +2184,10 @@ namespace ARK {
 			#endif
 		}
 
-		// CULLING 
+		// CULLING
 		void Renderer::enableBackfaceCulling() const {
 			#ifdef ARK2D_RENDERER_OPENGL
-				if (Renderer::isBatching()) { 
+				if (Renderer::isBatching()) {
 					RendererBatchItem stateChange;
 					stateChange.m_type = RendererBatchItem::TYPE_BACKFACECULLING_ENABLE;
 					s_batch->items.push_back(stateChange);
@@ -2198,7 +2198,7 @@ namespace ARK {
 		}
 		void Renderer::disableBackfaceCulling() const {
 			#ifdef ARK2D_RENDERER_OPENGL
-				if (Renderer::isBatching()) { 
+				if (Renderer::isBatching()) {
 					RendererBatchItem stateChange;
 					stateChange.m_type = RendererBatchItem::TYPE_BACKFACECULLING_DISABLE;
 					s_batch->items.push_back(stateChange);
@@ -2207,7 +2207,7 @@ namespace ARK {
 				glDisable(GL_CULL_FACE);
 			#endif
 		}
-		
+
 		// SCISSORING
 		void Renderer::setScissorTestEnabled(bool b) const {
 			#ifdef ARK2D_RENDERER_OPENGL
@@ -2254,7 +2254,7 @@ namespace ARK {
 			#endif
 		}
 		void Renderer::viewport(int x, int y, int w, int h) const {
-			if (Renderer::isBatching()) { 
+			if (Renderer::isBatching()) {
 				RendererBatchItem stateChange;
 				stateChange.m_type = RendererBatchItem::TYPE_VIEWPORT;
 				stateChange.m_float1 = x;
@@ -2275,7 +2275,7 @@ namespace ARK {
 			ortho2d(x, y, w, h, -1.0f, 1.0f);
 		}
 		void Renderer::ortho2d(int x, int y, int w, int h, float n, float f) {
-			if (Renderer::isBatching()) { 
+			if (Renderer::isBatching()) {
 				RendererBatchItem stateChange;
 				stateChange.m_type = RendererBatchItem::TYPE_ORTHO2D;
 				stateChange.m_textureId = x;
@@ -2290,45 +2290,45 @@ namespace ARK {
 
 			//
 			//glOrtho(0, w, h, 0, -1, 1);
-		
+
 			//ARK2D::getContainer()->disable2D();
 			//ARK2D::getContainer()->enable2D();
-			
+
 			//#if (defined(ARK2D_WINDOWS) || defined(ARK2D_FLASCC))
-			#if (defined(ARK2D_FLASCC))		
+			#if (defined(ARK2D_FLASCC))
 				ARK2D::getLog()->v("ortho2d");
 				string ortho2dStr = "";
 				ortho2dStr += "l: ";
 				ortho2dStr += Cast::toString<double>(x);
-				ortho2dStr += " r: ";  
+				ortho2dStr += " r: ";
 				ortho2dStr += Cast::toString<double>(x + w);
 				ortho2dStr += " b: ";
 				ortho2dStr += Cast::toString<double>(y + h);
-				ortho2dStr += " t: "; 
+				ortho2dStr += " t: ";
 				ortho2dStr += Cast::toString<double>(y);
 				ortho2dStr += " n: ";
 				ortho2dStr += Cast::toString<float>(n);
-				ortho2dStr += " f: "; 
+				ortho2dStr += " f: ";
 				ortho2dStr += Cast::toString<float>(f);
 				ARK2D::getLog()->v(ortho2dStr);
 
 				s_matrix->ortho2d(float(x), float(x + w), float(y + h), float(y), n, f);
 				glOrtho(
-					double(x), 
-					double(x + w), 
-					double(y + h),  
+					double(x),
+					double(x + w),
+					double(y + h),
 					double(y),
 					double(n),
 					double(f)
 				);
-				//glLoadMatrixf((float*)s_matrix->pointer());	
-		
-			#else 
-				//ARK2D::getLog()->i("ortho2d");  
+				//glLoadMatrixf((float*)s_matrix->pointer());
+
+			#else
+				//ARK2D::getLog()->i("ortho2d");
 				s_matrix->ortho2d(x, (x + w), (y + h), y, n, f);
-				
+
 				#if !defined(NO_FIXED_FUNCTION_PIPELINE)
-					//glOrtho(x, x + w, y + h, y, n, f); 
+					//glOrtho(x, x + w, y + h, y, n, f);
 
 					glOrtho(x, (x + w), (y + h), y, n, f);
 
@@ -2344,14 +2344,14 @@ namespace ARK {
 
 		void Renderer::drawString(const std::string str, int x, int y) const {
 			if (m_Font == NULL) { ARK2D::getLog()->e("Renderer::m_Font is NULL..."); return; }
-			//ARK2D::getLog()->i("draw string"); 
+			//ARK2D::getLog()->i("draw string");
 			//m_Font->asBMFont()->getImage()->draw(x, y);
-			m_Font->drawString(str, x, y); 
+			m_Font->drawString(str, x, y);
 		}
-		void Renderer::drawString(const string str, float x, float y, signed int alignX, signed int alignY, float rotation, float sc) 
+		void Renderer::drawString(const string str, float x, float y, signed int alignX, signed int alignY, float rotation, float sc)
 		{
 			if (m_Font == NULL && m_DefaultFont == NULL) { return; }
-			
+
 			ARK::Font::Font* thisFont = m_Font;
 			if (m_Font == NULL) {
 				thisFont = m_DefaultFont;
@@ -2360,7 +2360,7 @@ namespace ARK {
 			float strHeight = float(thisFont->getLineHeight()) * sc;
 
 			//if (rotation != 0 && alignY == ALIGN_CENTER) // there's gotta be a better way of calculating height of rotated rectangle.
-			//{ 
+			//{
 				/*float cx = x + (strWidth/2);
 				float cy = y + (strHeight/2);
 				Vector2<float> tl(x, y);
@@ -2373,11 +2373,11 @@ namespace ARK {
 				MathUtil::rotatePointAroundPoint<float>(&bl, &c, rotation);
 				MathUtil::rotatePointAroundPoint<float>(&br, &c, rotation);
 				MathUtil::rotatePointAroundPoint<float>(&tr, &c, rotation);
-				
+
 				vector<Vector2<float>* > coords();
-				coords.push_back(&tl);  
-				coords.push_back(&bl); 
-				coords.push_back(&br);  
+				coords.push_back(&tl);
+				coords.push_back(&bl);
+				coords.push_back(&br);
 				coords.push_back(&tr);
 
 				Vector2<float> mincoord = *(MathUtil::minY<float>(coords));
@@ -2391,59 +2391,59 @@ namespace ARK {
 			/*if (alignX == ALIGN_CENTER) {
 				x -= strWidth/2;
 			} else if (alignX == ALIGN_RIGHT || alignX == ALIGN_END) {
-				x -= strWidth; 
+				x -= strWidth;
 			}
 
 			if (alignY == ALIGN_CENTER) {
 				y -= strHeight/2;
 			} else if (alignY == ALIGN_END || alignY == ALIGN_BOTTOM) {
 				y -= strHeight;
-			}*/ 
+			}*/
 
 			float inv_scale = 1.0f / sc;
 
 			float offsetX = 0.0f;
-			if (alignX == ALIGN_CENTER) { 
-				offsetX = (strWidth/2.0f) * -1.0f;	
+			if (alignX == ALIGN_CENTER) {
+				offsetX = (strWidth/2.0f) * -1.0f;
 			} else if (alignX == ALIGN_LEFT || alignX == ALIGN_START) {
-				
+
 			} else if (alignX == ALIGN_RIGHT || alignX == ALIGN_END) {
 				offsetX = strWidth * -1.0f;
-			} 
+			}
 
 			float offsetY = 0.0f;
-			if (alignY == ALIGN_CENTER) { 
-				offsetY = (strHeight/2.0f) * -1.0f;	
+			if (alignY == ALIGN_CENTER) {
+				offsetY = (strHeight/2.0f) * -1.0f;
 			} else if (alignY == ALIGN_START || alignY == ALIGN_TOP) {
-				
+
 			} else if (alignY == ALIGN_END || alignY == ALIGN_BOTTOM) {
 				offsetY = strHeight * -1.0f;
-			} 
+			}
 
 
 			pushMatrix();
 			//if (isBatching()) { getMatrix()->identity(); }
-			translate(x, y); 
+			translate(x, y);
 
 			bool doRot = false;
-			if (rotation != 0.0f) { 
+			if (rotation != 0.0f) {
 				doRot = true;
 				pushMatrix();
 				rotate(rotation);
 			}
-			
+
 			pushMatrix();
 
-			if (sc != 1.0f) 
+			if (sc != 1.0f)
 				scale(sc, sc);
 
 
 
 			thisFont->drawString(str, int(0 + (offsetX*inv_scale)), int(0 + (offsetY*inv_scale)));
 
-			//if (sc != 1.0f) 
+			//if (sc != 1.0f)
 			//	scale(1.0f/sc, 1.0f/sc);
-			
+
 			popMatrix();
 
 			if (doRot)
@@ -2453,7 +2453,7 @@ namespace ARK {
 			//	rotate(rotation * -1);
 
 			//translate(x * -1, y * -1, 0);
-			
+
 
 			popMatrix();
 
@@ -2462,19 +2462,19 @@ namespace ARK {
 			m_Font->drawStringCenteredAt(str, x, y);
 		}
 		void Renderer::drawStringWordWrap(const std::string str, int x, int y, int maxWidth, int ySpacing) const {
-			
+
 			drawStringWordWrap(str, x, y, maxWidth, ySpacing, Renderer::ALIGN_LEFT);
 		}
 
 		void Renderer::drawStringWordWrap(const std::string str, int x, int y, int maxWidth, int ySpacing, int alignX) const {
-			
+
 			Renderer* r = const_cast<Renderer*>(this);
 
-			int drawX = x; 
+			int drawX = x;
 
 			if (alignX == Renderer::ALIGN_CENTER) {
 				drawX += maxWidth/2;
-			} else if (alignX == Renderer::ALIGN_RIGHT) { 
+			} else if (alignX == Renderer::ALIGN_RIGHT) {
 				drawX += maxWidth;
 			}
 
@@ -2485,7 +2485,7 @@ namespace ARK {
 			}
 		}
 
-		
+
 		void Renderer::readPixels(void* data, int x, int y, int w, int h) {
 			#if defined(ARK2D_RENDERER_OPENGL)
 				glReadPixels(x, y, w, h, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -2502,12 +2502,12 @@ namespace ARK {
 			#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE) || defined(ARK2D_FLASCC) || defined(NO_FIXED_FUNCTION_PIPELINE) || defined(ARK2D_WINDOWS))
 				float angle = MathUtil::anglef(x1, y1, x2, y2, true);
 
-				float topLeftX = x1; 
+				float topLeftX = x1;
 				float topLeftY = y1;
 				float topLeftZ = z1;
 				float topRightX = x1;
-				float topRightY = y1; 
-				float topRightZ = z1; 
+				float topRightY = y1;
+				float topRightZ = z1;
 
 				float bottomLeftX = x2;
 				float bottomLeftY = y2;
@@ -2515,13 +2515,13 @@ namespace ARK {
 				float bottomRightX = x2;
 				float bottomRightY = y2;
 				float bottomRightZ = z2;
-				
+
 				MathUtil::moveAngle(topLeftX, topLeftY, angle - 90, m_LineWidth/2.0f);
 				MathUtil::moveAngle(topRightX, topRightY, angle + 90, m_LineWidth/2.0f);
 
 				MathUtil::moveAngle(bottomLeftX, bottomLeftY, angle - 90, m_LineWidth/2.0f);
 				MathUtil::moveAngle(bottomRightX, bottomRightY, angle + 90, m_LineWidth/2.0f);
-				
+
 				fillQuad(topLeftX, topLeftY, topLeftZ, bottomLeftX, bottomLeftY, bottomLeftZ, topRightX, topRightY, topRightZ, bottomRightX, bottomRightY, bottomRightZ);
 			#else
 				RendererState::start(RendererState::GEOMETRY);
@@ -2538,38 +2538,38 @@ namespace ARK {
 		}
 		// image, scale... line coordinates. image line subcoordinates.
 		void Renderer::texturedLineOverlay_data (
-			float* data, 
-			Image* img, 
-			float scale, 
-			float x1, float y1, 
+			float* data,
+			Image* img,
+			float scale,
+			float x1, float y1,
 			float x2, float y2,
-			float startX, float startY, 
-			float endX, float endY) 
+			float startX, float startY,
+			float endX, float endY)
 		{
 			Vector2<float> tempVector(0, 0);
 			Vector2<float> tempVector2(0, 0);
 
 			float lineAngle = MathUtil::anglef(x1, y1, x2, y2);
 
-			// top left. 
+			// top left.
 			tempVector.set( (startX * -1) * scale, (startY * -1) * scale);
 			MathUtil::rotatePointAroundPoint(&tempVector, &tempVector2, lineAngle);
 			float tl_x = x1 + tempVector.getX();
 			float tl_y = y1 + tempVector.getY();
 
-			// bottom left. 
+			// bottom left.
 			tempVector.set( (startX * -1) * scale, (img->getHeight() - startY) * scale);
 			MathUtil::rotatePointAroundPoint(&tempVector, &tempVector2, lineAngle);
 			float bl_x = x1 + tempVector.getX();
 			float bl_y = y1 + tempVector.getY();
 
-			// top right. 
+			// top right.
 			tempVector.set( (img->getWidth() - endX) * scale, (endY * -1) * scale);
 			MathUtil::rotatePointAroundPoint(&tempVector, &tempVector2, lineAngle);
 			float tr_x = x2 + tempVector.getX();
 			float tr_y = y2 + tempVector.getY();
 
-			// bottom right. 
+			// bottom right.
 			tempVector.set( (img->getWidth() - endX) * scale, (img->getHeight() - endY) * scale);
 			MathUtil::rotatePointAroundPoint(&tempVector, &tempVector2, lineAngle);
 			float br_x = x2 + tempVector.getX();
@@ -2587,12 +2587,12 @@ namespace ARK {
 
 		// image, scale... line coordinates. image line subcoordinates.
 		void Renderer::texturedLineOverlay(
-			Image* img, 
-			float scale, 
-			float x1, float y1, 
+			Image* img,
+			float scale,
+			float x1, float y1,
 			float x2, float y2,
-			float startX, float startY, 
-			float endX, float endY) 
+			float startX, float startY,
+			float endX, float endY)
 		{
 			float data[8] = {0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f};
 			texturedLineOverlay_data(&data[0], img, scale, x1, y1, x2, y2, startX, startY, endX, endY);
@@ -2601,16 +2601,16 @@ namespace ARK {
 				glColor4f(1.0f, 1.0f, 1.0f, img->getAlpha());
 				RendererStats::s_glCalls++;
 			#endif
-			texturedQuad(img->getTexture()->getId(), 
-				data[0], data[1], 
-				data[2], data[3], 
-				data[4], data[5], 
-				data[6], data[7], 
-				img->getTextureX(), img->getTextureY(), 
+			texturedQuad(img->getTexture()->getId(),
+				data[0], data[1],
+				data[2], data[3],
+				data[4], data[5],
+				data[6], data[7],
+				img->getTextureX(), img->getTextureY(),
 				img->getTextureX(), img->getTextureY() + img->getTextureH(),
 				img->getTextureX() + img->getTextureW(), img->getTextureY(),
 				img->getTextureX() + img->getTextureW(), img->getTextureY() + img->getTextureH()
-				
+
 			);
 			#ifndef NO_FIXED_FUNCTION_PIPELINE
 				glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
@@ -2626,12 +2626,12 @@ namespace ARK {
 
 			if (isBatching()) {
 
-				float halfwidth = width / 2.0f; 
+				float halfwidth = width / 2.0f;
 				float halfheight = height / 2.0f;
 
 				float diffAngle = endAngle - startAngle;
 				float eachAngle = diffAngle / float(segs);
-				for(signed int i = 0; i < segs; i++) 
+				for(signed int i = 0; i < segs; i++)
 				{
 					float rawVertices[9];
                     float rawNormals[9];
@@ -2643,21 +2643,21 @@ namespace ARK {
 						nextAngle = endAngle;
 					}
 
-					double angle = 2 * MY_PI * localStartAngle / 360; 
-					double nangle = 2 * MY_PI * (nextAngle) / 360; 
+					double angle = 2 * MY_PI * localStartAngle / 360;
+					double nangle = 2 * MY_PI * (nextAngle) / 360;
 
 					rawVertices[0] = cx;
 					rawVertices[1] = cy;
                     rawVertices[2] = 0;
-                    
+
 					rawVertices[3] = cx + float(cos(angle) * halfwidth);
 					rawVertices[4] = cy + float(sin(angle) * halfheight);
                     rawVertices[5] = 0;
-                    
+
 					rawVertices[6] = cx + float(cos(nangle) * halfwidth);
 					rawVertices[7] = cy + float(sin(nangle) * halfheight);
                     rawVertices[8] = 0;
-                    
+
                     rawNormals[0] = 0;
                     rawNormals[1] = 0;
                     rawNormals[2] = 1;
@@ -2670,28 +2670,28 @@ namespace ARK {
 
 					rawColors[0] = m_DrawColor.getRedc();
 					rawColors[1] = m_DrawColor.getGreenc();
-					rawColors[2] = m_DrawColor.getBluec(); 
+					rawColors[2] = m_DrawColor.getBluec();
 					rawColors[3] = m_DrawColor.getAlphac();
 					rawColors[4] = m_DrawColor.getRedc();
 					rawColors[5] = m_DrawColor.getGreenc();
-					rawColors[6] = m_DrawColor.getBluec(); 
+					rawColors[6] = m_DrawColor.getBluec();
 					rawColors[7] = m_DrawColor.getAlphac();
 					rawColors[8] = m_DrawColor.getRedc();
 					rawColors[9] = m_DrawColor.getGreenc();
-					rawColors[10] = m_DrawColor.getBluec(); 
+					rawColors[10] = m_DrawColor.getBluec();
 					rawColors[11] = m_DrawColor.getAlphac();
 
 					s_batch->addGeometryTri(&rawVertices[0], &rawNormals[0], &rawColors[0]);
 				}
 
 				return;
-				
+
 			}
 
 			#if defined(ARK2D_RENDERER_OPENGL) && defined(ARK2D_OPENGL_3_2)
 
-				
-				float halfwidth = width / 2.0f; 
+
+				float halfwidth = width / 2.0f;
 				float halfheight = height / 2.0f;
 
 				float diffAngle = endAngle - startAngle;
@@ -2715,8 +2715,8 @@ namespace ARK {
 						nextAngle = endAngle;
 					}
 
-					double angle = 2 * MY_PI * localStartAngle / 360; 
-					double nangle = 2 * MY_PI * (nextAngle) / 360; 
+					double angle = 2 * MY_PI * localStartAngle / 360;
+					double nangle = 2 * MY_PI * (nextAngle) / 360;
 
 					rawVertices[j] = cx;
 					rawVertices[j+1] = cy;
@@ -2729,11 +2729,11 @@ namespace ARK {
 					rawVertices[j+6] = cx + (cos(nangle) * halfwidth);
 					rawVertices[j+7] = cy + (sin(nangle) * halfheight);
                     rawVertices[j+8] = 0;
-                    
+
                     rawNormals[j]   = 0;
                     rawNormals[j+1] = 0;
                     rawNormals[j+2] = 1;
-                    
+
                     rawNormals[j+3] = 0;
                     rawNormals[j+4] = 0;
                     rawNormals[j+5] = 1;
@@ -2748,7 +2748,7 @@ namespace ARK {
                 for(unsigned int i = 0; i < ((segs*3)*4); i += 4 ) {
 					rawColors[i+0] = m_DrawColor.getRedc();
 					rawColors[i+1] = m_DrawColor.getGreenc();
-					rawColors[i+2] = m_DrawColor.getBluec(); 
+					rawColors[i+2] = m_DrawColor.getBluec();
 					rawColors[i+3] = m_DrawColor.getAlphac();
 				}
 
@@ -2795,7 +2795,7 @@ namespace ARK {
 
 		//	#if defined(ARK2D_RENDERER_OPENGL) && defined(ARK2D_OPENGL_3_2)
 
-		//		float halfwidth = width / 2.0f; 
+		//		float halfwidth = width / 2.0f;
 		//		float halfheight = height / 2.0f;
 
 		//		float diffAngle = endAngle - startAngle;
@@ -2812,8 +2812,8 @@ namespace ARK {
 		//				nextAngle = endAngle;
 		//			}
 
-		//			double angle = 2 * MY_PI * localStartAngle / 360; 
-		//			double nangle = 2 * MY_PI * (nextAngle) / 360; 
+		//			double angle = 2 * MY_PI * localStartAngle / 360;
+		//			double nangle = 2 * MY_PI * (nextAngle) / 360;
 
 		//			rawVertices[j] = cx;
 		//			rawVertices[j+1] = cy;
@@ -2823,16 +2823,16 @@ namespace ARK {
 
 		//			rawVertices[j+4] = cx + (cos(nangle) * halfwidth);
 		//			rawVertices[j+5] = cy + (sin(nangle) * halfheight);
- 
+
 		//			j+=6;
 		//		}
 
 
-		//		
+		//
 		//		for(unsigned int i = 0; i < ((segs*3)*4); i += 4 ) {
 		//			rawColors[i+0] = m_DrawColor.getRedc();
 		//			rawColors[i+1] = m_DrawColor.getGreenc();
-		//			rawColors[i+2] = m_DrawColor.getBluec(); 
+		//			rawColors[i+2] = m_DrawColor.getBluec();
 		//			rawColors[i+3] = m_DrawColor.getAlphac();
 		//		}
 
@@ -2840,9 +2840,9 @@ namespace ARK {
 
 		//		s_vboQuadVerts->setWidth(2);
 		//		s_vboQuadVerts->setHeight(segs*3);
-		//		s_vboQuadColors->setWidth(4); 
-		//		s_vboQuadColors->setHeight(segs*3); 
-		//	
+		//		s_vboQuadColors->setWidth(4);
+		//		s_vboQuadColors->setHeight(segs*3);
+		//
 		//		s_vaoQuad->bind();
 		//		glEnableVertexAttribArray(Renderer::s_shaderBasicGeometry_VertexPositionIn);
 		//		glEnableVertexAttribArray(Renderer::s_shaderBasicGeometry_VertexColorIn);
@@ -2850,16 +2850,16 @@ namespace ARK {
 		//		s_vboQuadVerts->bind();
 		//		s_vboQuadVerts->setData(&rawVertices[0]);
 		//		glVertexAttribPointer(Renderer::s_shaderBasicGeometry_VertexPosition, 2, GL_FLOAT, GL_FALSE, 0, 0); //&rawVertices);
-		//		
+		//
 		//		s_vboQuadColors->bind();
 		//		s_vboQuadColors->setData(&rawColors[0]);
-		//		glVertexAttribPointer(Renderer::s_shaderBasicGeometry_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, 0); //&rawColors); 
-		//		
+		//		glVertexAttribPointer(Renderer::s_shaderBasicGeometry_VertexColorIn, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, 0); //&rawColors);
+		//
 		//		glUniformMatrix4fv(Renderer::s_shaderBasicGeometry_ModelMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_MODEL)->pointer());
 		//		glUniformMatrix4fv(Renderer::s_shaderBasicGeometry_ViewMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_VIEW)->pointer());
 		//		glUniformMatrix4fv(Renderer::s_shaderBasicGeometry_ProjectionMatrix, 1, GL_FALSE, (float*) Renderer::getMatrix(MatrixStack::TYPE_PROJECTION)->pointer());
 
-		//		glDrawArrays(GL_TRIANGLES, 0, segs*3); 
+		//		glDrawArrays(GL_TRIANGLES, 0, segs*3);
 
 		//		s_vboQuadVerts->setHeight(4);
 		//		s_vboQuadColors->setHeight(4);
@@ -2873,7 +2873,7 @@ namespace ARK {
 		//		// TODO...
 		//	#else
 
-		//		
+		//
 		//	#endif
 		//}
 
@@ -2896,7 +2896,7 @@ namespace ARK {
 			fillArc(x + width - radius, y + height - radius, 2*radius, 2*radius, 270, 360, segs);
 		}
 
-		
+
 		/*
 		 * Immediate Mode rendering! :(
 		 * ...what ever happened to vertex arrays?
@@ -2905,7 +2905,7 @@ namespace ARK {
 		void Renderer::drawRect(ARK::Geometry::RectangleTemplate<int>* rect) const {
 		 	drawRect(rect->getMinX(), rect->getMinY(), rect->getWidth(), rect->getHeight());
 		}
-		void Renderer::drawRect(ARK::Geometry::RectangleTemplate<float>* rect) const { 
+		void Renderer::drawRect(ARK::Geometry::RectangleTemplate<float>* rect) const {
 		 	drawRect(rect->getMinX(), rect->getMinY(), (int) rect->getWidth(), (int) rect->getHeight());
 		}
         void Renderer::drawRect(float x, float y, int width, int height) const {
@@ -2914,7 +2914,7 @@ namespace ARK {
 		void Renderer::drawRect(float x, float y, float z, int width, int height) const {
 			//#if defined(ARK2D_ANDROID)
 
-			if (Renderer::isBatching()) { 
+			if (Renderer::isBatching()) {
 				float hlw = (m_LineWidth/2.0f);
 				float fw = (float) width;
 				float fh = (float) height;
@@ -2929,9 +2929,9 @@ namespace ARK {
                                          0,0,1,
                                          0,0,1,
                                          0,0,1,
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac()
 				);
 
@@ -2946,8 +2946,8 @@ namespace ARK {
                                          0,0,1,
                                          0,0,1,
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac()
 				);
 
@@ -2962,8 +2962,8 @@ namespace ARK {
                                          0,0,1,
                                          0,0,1,
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac()
 				);
 
@@ -2978,13 +2978,13 @@ namespace ARK {
                                          0,0,1,
                                          0,0,1,
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac()
 				);
-				return; 
+				return;
 			}
-            
+
             float rawNormals[] = {
                 0,0,1,  0,0,1,  0,0,1,  0,0,1,  0,0,1,  0,0,1, // left side
                 0,0,1,  0,0,1,  0,0,1,  0,0,1,  0,0,1,  0,0,1, // right side
@@ -2992,13 +2992,13 @@ namespace ARK {
                 0,0,1,  0,0,1,  0,0,1,  0,0,1,  0,0,1,  0,0,1 // bottom side
             };
 
-			
+
 			#if defined(ARK2D_RENDERER_OPENGL) || defined(ARK2D_OPENGL_3_2) || defined(ARK2D_OPENGL_ES_2_0) || defined(ARK2D_FLASCC)
-				
+
 				float hlw = (m_LineWidth/2.0f);
 				float fw = (float) width;
 				float fh = (float) height;
-				
+
 				float rawVertices[] = {
 					// left side
 					x - hlw,		y,			z, // tl
@@ -3087,14 +3087,14 @@ namespace ARK {
 				fillRect(x - hlw, y, hlw*2, fh); // left
 				fillRect(x - hlw + fw, y, hlw*2, fh); // right
 				return;
-				
+
 				unsigned int countVerts = 16;
 				unsigned int memorySize = countVerts * sizeof(Renderer_DX_InterleavingGeometryVertexData);
 				if (dx_texturedTriangles_data == NULL || dx_texturedTriangles_size < memorySize) {
 					dx_texturedTriangles_data = realloc(dx_texturedTriangles_data, memorySize);
 					dx_texturedTriangles_size = memorySize;
 				}
-				
+
 				Renderer_DX_InterleavingGeometryVertexData* rawVertices = (Renderer_DX_InterleavingGeometryVertexData*) dx_texturedTriangles_data;
 
 				// Left side
@@ -3120,7 +3120,7 @@ namespace ARK {
 				rawVertices[13].vertex = DirectX::XMFLOAT4(x + fw, y + fh - hlw, 0.0f, 0.0f); // tr
 				rawVertices[14].vertex = DirectX::XMFLOAT4(x, 	   y + fh + hlw, 0.0f, 0.0f); // bl
 				rawVertices[15].vertex = DirectX::XMFLOAT4(x + fw, y + fh + hlw, 0.0f, 0.0f); // br
-				
+
 				rawVertices[0].color  = DirectX::XMFLOAT4(m_DrawColor.getRedf(), m_DrawColor.getGreenf(), m_DrawColor.getBluef(), m_DrawColor.getAlphaf());
 				rawVertices[1].color  = DirectX::XMFLOAT4(m_DrawColor.getRedf(), m_DrawColor.getGreenf(), m_DrawColor.getBluef(), m_DrawColor.getAlphaf());
 				rawVertices[2].color  = DirectX::XMFLOAT4(m_DrawColor.getRedf(), m_DrawColor.getGreenf(), m_DrawColor.getBluef(), m_DrawColor.getAlphaf());
@@ -3137,7 +3137,7 @@ namespace ARK {
 				rawVertices[13].color = DirectX::XMFLOAT4(m_DrawColor.getRedf(), m_DrawColor.getGreenf(), m_DrawColor.getBluef(), m_DrawColor.getAlphaf());
 				rawVertices[14].color = DirectX::XMFLOAT4(m_DrawColor.getRedf(), m_DrawColor.getGreenf(), m_DrawColor.getBluef(), m_DrawColor.getAlphaf());
 				rawVertices[15].color = DirectX::XMFLOAT4(m_DrawColor.getRedf(), m_DrawColor.getGreenf(), m_DrawColor.getBluef(), m_DrawColor.getAlphaf());
-				
+
 				unsigned int rawIndices[] = {
 					0, 1, 2, 2, 1, 3, // left side
 					4, 5, 6, 6, 5, 7, // right side
@@ -3146,10 +3146,10 @@ namespace ARK {
 				};
 				s_vboQuadVerts->setData((void*) rawVertices, memorySize);
 				s_vboIndices->setData((void*) rawIndices, sizeof(unsigned int) * 24);
-				
+
 				// Set the vertex buffer to active in the input assembler so it can be rendered.
 				unsigned int stride = sizeof(Renderer_DX_InterleavingGeometryVertexData);
-				unsigned int offset = 0; 
+				unsigned int offset = 0;
 				deviceContext->IASetVertexBuffers(0, 1, &s_vboQuadVerts->m_buffer, &stride, &offset);
 				deviceContext->IASetIndexBuffer(s_vboIndices->m_buffer, DXGI_FORMAT_R32_UINT, 0);
 
@@ -3160,7 +3160,7 @@ namespace ARK {
 				RendererStats::s_glCalls += 4;
 
 			#endif
-		
+
 			showAnyGlErrorAndExitMacro();
 		}
 		//! @todo: drawRects is broken.
@@ -3171,11 +3171,11 @@ namespace ARK {
 
 			#ifndef NO_FIXED_FUNCTION_PIPELINE
 				int total = (sizeof(&rects) / sizeof(int))/8;
-				
+
 				//glDisable(GL_TEXTURE_2D);
 				//glEnableClientState(GL_VERTEX_ARRAY);
 				RendererState::start(RendererState::GEOMETRY);
-				
+
 				if (colors != NULL) {
 					glEnableClientState(GL_COLOR_ARRAY);
 					glColorPointer(4, GL_UNSIGNED_INT, 0, &colors);
@@ -3201,8 +3201,8 @@ namespace ARK {
             fillGradientRect(x, y, 0, width, height, top, bottom);
         }
 		void Renderer::fillGradientRect(float x, float y, float z, float width, float height, Color* top, Color* bottom) const {
-			
-			if (Renderer::isBatching()) { 
+
+			if (Renderer::isBatching()) {
 				s_batch->addGeometryQuad(
 					x, 			y,          z,
 					x + width, 	y,          z,
@@ -3217,31 +3217,31 @@ namespace ARK {
 					bottom->getRedc(), 	bottom->getGreenc(), bottom->getBluec(), 	bottom->getAlphac(), 	// bl
 					bottom->getRedc(), 	bottom->getGreenc(), bottom->getBluec(), 	bottom->getAlphac() 	// br
 				);
-				return; 
+				return;
 			}
-			
+
             float rawNormals[] = { 0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1 };
-            
+
             #if defined(ARK2D_OPENGL_3_2) || defined(ARK2D_OPENGL_ES_2_0)
-            
+
                 float rawVertices[] = {
                     x,					y,		  				z, // tl
                     x + (float) width,	y,						z, // tr
                     x,					y + (float) height,	  	z, // bl
                     x + (float) width,	y + (float) height, 	z  // br
                 };
-                
+
                 unsigned char rawColors[] = {
                     top->getRedc(), top->getGreenc(), top->getBluec(), top->getAlphac(),	// tl
                     top->getRedc(), top->getGreenc(), top->getBluec(), top->getAlphac(),	// tr
                     bottom->getRedc(), bottom->getGreenc(), bottom->getBluec(), bottom->getAlphac(),	// bl
                     bottom->getRedc(), bottom->getGreenc(), bottom->getBluec(), bottom->getAlphac()		// br
                 };
-                
+
                 Shader* shader = RendererState::start(RendererState::GEOMETRY);
                 shader->setData(rawVertices, rawNormals, NULL, rawColors, 4);
                 shader->drawTriangleStrip();
-            
+
 			#elif defined(ARK2D_FLASCC)
 
 				float rawVertices[] = {
@@ -3254,18 +3254,18 @@ namespace ARK {
 				};
 
 				unsigned char rawColors[] = {
-					top->getRedc(), 	top->getGreenc(), 	 top->getBluec(), 		top->getAlphac(), 		// tl 
+					top->getRedc(), 	top->getGreenc(), 	 top->getBluec(), 		top->getAlphac(), 		// tl
 					top->getRedc(), 	top->getGreenc(), 	 top->getBluec(), 		top->getAlphac(), 		// tr
 					bottom->getRedc(), 	bottom->getGreenc(), bottom->getBluec(), 	bottom->getAlphac(), 	// bl
 					bottom->getRedc(), 	bottom->getGreenc(), bottom->getBluec(),  	bottom->getAlphac(), 	// bl
 					top->getRedc(), 	top->getGreenc(),  	 top->getBluec(),  		top->getAlphac(), 		// tr
 					bottom->getRedc(), 	bottom->getGreenc(), bottom->getBluec(), 	bottom->getAlphac() 	// br
 				};
-            
+
                 Shader* shader = RendererState::start(RendererState::GEOMETRY);
                 shader->setData(rawVertices, rawNormals, NULL, rawClors, 6);
                 shader->drawTriangles();
-            
+
 			#endif
 
 			showAnyGlErrorAndExitMacro();
@@ -3274,8 +3274,8 @@ namespace ARK {
             fillRect(x, y, 0.0f, width, height);
         }
         void Renderer::fillRect(float x, float y, float z, int width, int height) const {
-			
-			if (Renderer::isBatching()) { 
+
+			if (Renderer::isBatching()) {
 				s_batch->addGeometryQuad(
 					x, 			y,          z,
 					x + width, 	y,          z,
@@ -3286,13 +3286,13 @@ namespace ARK {
 					0,0,1,
 					0,0,1,
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac()
 				);
-				return; 
+				return;
 			}
-            
+
             #if defined(ARK2D_RENDERER_OPENGL) && (defined(ARK2D_OPENGL_3_2) || defined(ARK2D_OPENGL_ES_2_0))
 
 				float rawVertices[] = {
@@ -3301,7 +3301,7 @@ namespace ARK {
 					x,					y + (float) height,	z, // bl
 					x + (float) width,	y + (float) height,	z  // br
 				};
-				float rawNormals[] = { 
+				float rawNormals[] = {
 					0,0,1,
 					0,0,1,
 					0,0,1,
@@ -3312,7 +3312,7 @@ namespace ARK {
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac()
-				}; 
+				};
 
 				Shader* shader = RendererState::start(RendererState::GEOMETRY);
 				shader->setData(rawVertices, rawNormals, NULL, rawColors, 4);
@@ -3328,7 +3328,7 @@ namespace ARK {
 					x + (float) width,	y,						z, // tr
 					x + (float) width,	y + (float)height,		z  // br
 				};
-            
+
                 float rawNormals[] = {
                     0,0,1,
                     0,0,1,
@@ -3353,13 +3353,13 @@ namespace ARK {
 
 			#elif defined(ARK2D_RENDERER_DIRECTX)
 
-			/*	RendererState::start(RendererState::GEOMETRY); 
+			/*	RendererState::start(RendererState::GEOMETRY);
 
 				ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
 				ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.m_deviceContext;
-				
+
 				__internalsDXUpdateMatrices();
-								
+
 				Renderer_DX_InterleavingGeometryVertexData rawVertices[] = {
 					{ DirectX::XMFLOAT4(x, y, z, 0.0f), DirectX::XMFLOAT4(m_DrawColor.getRedf(), m_DrawColor.getGreenf(), m_DrawColor.getBluef(), m_DrawColor.getAlphaf()) },
 					{ DirectX::XMFLOAT4(x + width, y, z, 0.0f), DirectX::XMFLOAT4(m_DrawColor.getRedf(), m_DrawColor.getGreenf(), m_DrawColor.getBluef(), m_DrawColor.getAlphaf()) },
@@ -3376,17 +3376,17 @@ namespace ARK {
 
 				// Set the vertex buffer to active in the input assembler so it can be rendered.
 				unsigned int stride = sizeof(Renderer_DX_InterleavingGeometryVertexData);
-				unsigned int offset = 0; 
+				unsigned int offset = 0;
 				deviceContext->IASetVertexBuffers(0, 1, &s_vboQuadVerts->m_buffer, &stride, &offset);
- 
+
 				// Set the index buffer to active in the input assembler so it can be rendered.
 				deviceContext->IASetIndexBuffer(s_vboIndices->m_buffer, DXGI_FORMAT_R32_UINT, 0);
 
 				// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
 				deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-				// DRAW! 
-				deviceContext->DrawIndexed(6, 0, 0);				 
+				// DRAW!
+				deviceContext->DrawIndexed(6, 0, 0);
 				//deviceContext->Draw(6, 0);//, 0, 0);		*/
 
 			#endif
@@ -3398,10 +3398,10 @@ namespace ARK {
             texturedRect(texId, x, y, 0, width, height);
         }
 		void Renderer::texturedRect(unsigned int texId, float x, float y, float z, int width, int height) const {
-			
-			if (Renderer::isBatching()) { 
+
+			if (Renderer::isBatching()) {
 				s_batch->addTexturedQuad(
-					texId, 
+					texId,
 					x, y, z,
 					x + width, y, z,
 					x, y + height, z,
@@ -3420,12 +3420,12 @@ namespace ARK {
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac()
 				);
 
-				return; 
+				return;
 			}
 
 
-            #if defined(ARK2D_RENDERER_OPENGL) 
-            
+            #if defined(ARK2D_RENDERER_OPENGL)
+
 				float rawVertices[] = {
 					x,					y,					z, // tl
 					x + (float) width, 	y,					z, // tr
@@ -3489,7 +3489,7 @@ namespace ARK {
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac()
 				};
-            
+
                 Shader* shader = RendererState::start(RendererState::TEXTURE, texId);
                 shader->setData(rawVertices, rawNormals, rawTextureCoords, rawColors, 6);
                 shader->drawTriangles();
@@ -3503,7 +3503,7 @@ namespace ARK {
 			showAnyGlErrorAndExitMacro();
 		}
 
-		/*void Renderer::texturedRectShader(Shader* useShader, const map<string, float>&, unsigned int texId, float x, float y, int width, int height) const 
+		/*void Renderer::texturedRectShader(Shader* useShader, const map<string, float>&, unsigned int texId, float x, float y, int width, int height) const
 		{
 			#ifdef SHADER_SUPPORT
 	 			float rawVertices[] = {
@@ -3528,27 +3528,27 @@ namespace ARK {
 				pushMatrix();
 				translate(x, y);
 
-				useShader->bind();  
+				useShader->bind();
 				useShader->setUniformVariableMat4f(useShader->getInittedVariable("ark_ModelMatrix"), (float*) Renderer::getMatrix(MatrixStack::TYPE_MODEL)->pointer());
 				useShader->setUniformVariableMat4f(useShader->getInittedVariable("ark_ViewMatrix"), (float*) Renderer::getMatrix(MatrixStack::TYPE_VIEW)->pointer());
 				useShader->setUniformVariableMat4f(useShader->getInittedVariable("ark_ProjectionMatrix"), (float*) Renderer::getMatrix(MatrixStack::TYPE_PROJECTION)->pointer());
-				
-				useShader->setAttributeVariableVertexPointerFloat(useShader->getInittedVariable("ark_VertexPosition"), 2, false, &rawVertices); 
-				useShader->setAttributeVariableVertexPointerFloat(useShader->getInittedVariable("ark_VertexTexCoordIn"), 2, false, &rawTextureCoords); 
-				useShader->setAttributeVariableVertexPointerFloat(useShader->getInittedVariable("ark_VertexColorIn"), 4, false, &rawColors); 
 
-				//glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexPosition, 2, GL_FLOAT, GL_FALSE, 0, );  
+				useShader->setAttributeVariableVertexPointerFloat(useShader->getInittedVariable("ark_VertexPosition"), 2, false, &rawVertices);
+				useShader->setAttributeVariableVertexPointerFloat(useShader->getInittedVariable("ark_VertexTexCoordIn"), 2, false, &rawTextureCoords);
+				useShader->setAttributeVariableVertexPointerFloat(useShader->getInittedVariable("ark_VertexColorIn"), 4, false, &rawColors);
+
+				//glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexPosition, 2, GL_FLOAT, GL_FALSE, 0, );
 				//glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexTexCoordIn, 2, GL_FLOAT, GL_FALSE, 0, &);
-				//glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexColorIn, 4, GL_FLOAT, GL_FALSE, 0, &); 
-				
+				//glVertexAttribPointer(Renderer::s_shaderBasicTexture_VertexColorIn, 4, GL_FLOAT, GL_FALSE, 0, &);
+
 				glUniform1i(Renderer::s_shaderBasicTexture_TextureId, 0);
 
 				glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-				
+
 				useShader->unbind();
 
 				popMatrix();
-				RendererStats::s_tris += 2; 
+				RendererStats::s_tris += 2;
 
 			#else
 				ARK2D::getLog()->w("Not shader support -- cannot use 'texturedRectShader'.");
@@ -3564,9 +3564,9 @@ namespace ARK {
 			//translate(x, y);
 
 
-			if (Renderer::isBatching()) { 
+			if (Renderer::isBatching()) {
 				s_batch->addTexturedQuad(
-					texId, 
+					texId,
 					x, y, z,
 					x + width, y, z,
 					x, y + height, z,
@@ -3585,18 +3585,18 @@ namespace ARK {
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), (unsigned char) (m_DrawColor.getAlphac() * alpha)
 				);
 
-				return; 
+				return;
 			}
 
 
-            
+
             float rawNormals[] = {
                 0,0,1,
                 0,0,1,
                 0,0,1,
                 0,0,1
             };
-			
+
             #if defined(ARK2D_RENDERER_OPENGL) || defined(ARK2D_OPENGL_3_2) || defined(ARK2D_OPENGL_ES_2_0)
 
 				float rawVertices[] = {
@@ -3605,7 +3605,7 @@ namespace ARK {
 					x,					y + (float) height,	z, // bl
 					x + (float) width,	y + (float) height,	z // br
 				};
-            
+
                 float rawTextureCoords[] = {
 					0.0f,	0.0f,	// tl
 					1.0f,	0.0f,	// tr
@@ -3619,12 +3619,12 @@ namespace ARK {
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), (unsigned char) (m_DrawColor.getAlphac() * alpha),
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), (unsigned char) (m_DrawColor.getAlphac() * alpha)
 				};
-            
+
                 Shader* shader = RendererState::start(RendererState::TEXTURE, texId);
                 shader->setData(rawVertices, rawNormals, rawTextureCoords, rawColors, 4);
                 shader->drawTriangleStrip();
 
-			
+
 			#elif defined(ARK2D_FLASCC)
 
 				float rawVertices[] = {
@@ -3642,7 +3642,7 @@ namespace ARK {
 					0.0f,	1.0f,	// bl
 					1.0f,	0.0f,	// tr
 					1.0f,	1.0f	// br
-				}; 
+				};
 				unsigned char rawColors[] = {
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), (unsigned char) (m_DrawColor.getAlphac() * alpha),
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), (unsigned char) (m_DrawColor.getAlphac() * alpha),
@@ -3651,7 +3651,7 @@ namespace ARK {
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), (unsigned char) (m_DrawColor.getAlphac() * alpha),
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), (unsigned char) (m_DrawColor.getAlphac() * alpha)
 				};
-            
+
                 Shader* shader = RendererState::start(RendererState::TEXTURE, texId);
                 shader->setData(rawVertices, rawNormals, rawTextureCoords, rawColors, 6);
                 shader->drawTriangles();
@@ -3665,15 +3665,15 @@ namespace ARK {
 			showAnyGlErrorAndExitMacro();
 		}
 
-		// order: anti-clockwise. 
+		// order: anti-clockwise.
 		void Renderer::fillQuad(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) const {
 			fillQuad(x1, y1, 0, x2, y2, 0, x3, y3, 0, x4, y4, 0);
 		}
-		void Renderer::fillQuad(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4) const 
+		void Renderer::fillQuad(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4) const
 		{
 			showAnyGlErrorAndExitMacro();
 
-			if (Renderer::isBatching()) { 
+			if (Renderer::isBatching()) {
 				s_batch->addGeometryQuad(
 					x1, y1, z1,
 					x2, y2, z2,
@@ -3684,15 +3684,15 @@ namespace ARK {
                      0,0,1,
                      0,0,1,
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac()
 				);
 				return;
 			}
 
 			RendererState::start(RendererState::GEOMETRY);
-            
+
             float rawNormals[] = {
                 0, 0, 1,
                 0, 0, 1,
@@ -3714,11 +3714,11 @@ namespace ARK {
 				};
 
 				unsigned char rawColors[] = {
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac()
 				};
                 Shader* shader = RendererState::start(RendererState::GEOMETRY);
@@ -3732,7 +3732,7 @@ namespace ARK {
 
 				ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
 				ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.m_deviceContext;
-				 
+
 				__internalsDXUpdateMatrices();
 
 				Renderer_DX_InterleavingGeometryVertexData rawVertices[] = {
@@ -3761,7 +3761,7 @@ namespace ARK {
 				// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
 				deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-				// DRAW! 
+				// DRAW!
 				deviceContext->DrawIndexed(6, 0, 0);	*/
 
 			#endif
@@ -3774,13 +3774,13 @@ namespace ARK {
 		{
 			// WRONG: tl, tr, bl, br
 			// CORRECT tl, tr, bl, bl, tr, br.
-			if (Renderer::isBatching()) { 
-				/*for(unsigned int i = 0; i < count; i++) { 
+			if (Renderer::isBatching()) {
+				/*for(unsigned int i = 0; i < count; i++) {
 					//s_batch->addTexturedQuad(texId, &verts[i*6], &texcoords[i*6], &colors[i*12]);
-					const int ii = i * 12; 
+					const int ii = i * 12;
 					const int iii = i * 24;
 					s_batch->addTexturedQuad(
-						texId, 
+						texId,
 						verts[ii], verts[ii+1], verts[ii+2],
 						verts[ii+3], verts[ii+4], verts[ii+5],
 						verts[ii+6], verts[ii+7],  verts[ii+8],
@@ -3790,9 +3790,9 @@ namespace ARK {
                          normals[ii+6], normals[ii+7],  normals[ii+8],
                          normals[ii+9], normals[ii+10], normals[ii+11],
 						texcoords[ii], texcoords[ii+1],
-						texcoords[ii+2], texcoords[ii+3], 
-						texcoords[ii+4], texcoords[ii+5], 
-						texcoords[ii+10], texcoords[ii+11], 
+						texcoords[ii+2], texcoords[ii+3],
+						texcoords[ii+4], texcoords[ii+5],
+						texcoords[ii+10], texcoords[ii+11],
 						colors[iii+0], colors[iii+1], colors[iii+2], colors[iii+3],
 						colors[iii+4], colors[iii+5], colors[iii+6], colors[iii+7],
 						colors[iii+8], colors[iii+9], colors[iii+10], colors[iii+11],
@@ -3802,8 +3802,8 @@ namespace ARK {
  				ARK2D::getLog()->w("Textured quads removed from batch renderer");
 				return;
 			}
-			
-			
+
+
 
             #if defined(ARK2D_RENDERER_OPENGL) || defined(ARK2D_OPENGL_3_2) || defined(ARK2D_OPENGL_ES_2_0) || defined(ARK2D_FLASCC)
 
@@ -3859,19 +3859,19 @@ namespace ARK {
 					vcount += 12;
 					ccount += 24;
 				}
-				
+
 				s_vboQuadVerts->setData((void*) rawVertices, memorySize);
-				
+
 				// Set the vertex buffer to active in the input assembler so it can be rendered.
 				unsigned int stride = sizeof(Renderer_DX_InterleavingTextureVertexData);
-				unsigned int offset = 0; 
+				unsigned int offset = 0;
 				deviceContext->IASetVertexBuffers(0, 1, &s_vboQuadVerts->m_buffer, &stride, &offset);
 
 				deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 				deviceContext->Draw(countVerts, 0);*/
 
 			#endif
- 
+
 			showAnyGlErrorAndExitMacro();
 		}
 
@@ -3916,7 +3916,7 @@ namespace ARK {
                 Shader* shader = RendererState::start(RendererState::GEOMETRY);
                 shader->setData(verts, normals, NULL, colors, count * 3);
                 shader->drawTriangles();
-            
+
 			#elif defined(ARK2D_RENDERER_DIRECTX)
 
 				//ARK2D::getLog()->w("Renderer::fillTriangles");
@@ -3928,8 +3928,8 @@ namespace ARK {
 
 				unsigned int countVerts = count * 3;
 				unsigned int memorySize = countVerts * sizeof(Renderer_DX_InterleavingGeometryVertexData);
-				
-				// check memory is the right size. reduce allocations. 
+
+				// check memory is the right size. reduce allocations.
 				if (dx_fillTriangles_data == NULL || dx_fillTriangles_size < memorySize) {
 					dx_fillTriangles_data = realloc(dx_fillTriangles_data, memorySize);
 					dx_fillTriangles_size = memorySize;
@@ -3950,11 +3950,11 @@ namespace ARK {
 					iv += 6;
 					ic += 12;
 				}
-				
+
 				// Lock the vertex buffer so it can be written to. Get a pointer to the data in the vertex buffer.
 				// Copy the data into the vertex buffer. Unlock the vertex buffer.
 				s_vboQuadVerts->setData((void*)&rawVertices[0], memorySize);
-				
+
 				// Set the vertex buffer to active in the input assembler so it can be rendered.
 				unsigned int stride = sizeof(Renderer_DX_InterleavingGeometryVertexData);
 				unsigned int offset = 0;
@@ -3963,34 +3963,34 @@ namespace ARK {
 				// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
 				deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-				// DRAW! 
+				// DRAW!
 				deviceContext->Draw(countVerts, 0);
-            
-            
+
+
                 RendererStats::s_tris += count;
 
 
 			#endif
- 
+
 			showAnyGlErrorAndExitMacro();
 		}
 
-		
+
 		void Renderer::texturedTriangles(unsigned int texId, float* verts, float* normals, float* texcoords, unsigned char* colors, unsigned int count, bool fromBatch) {
-		
+
 			if (isBatching() && !fromBatch) {
 				for(unsigned int i = 0; i < count; i++) {
 					s_batch->addTexturedTri(texId, &verts[i*9], &normals[i*9], &texcoords[i*6], &colors[i*12]);
 				}
 				return;
 			}
-            
+
             #if defined(ARK2D_RENDERER_OPENGL) || defined(ARK2D_OPENGL_3_2) || defined(ARK2D_OPENGL_ES_2_0) || defined(ARK2D_FLASCC)
 
                 Shader* shader = RendererState::start(RendererState::TEXTURE, texId);
                 shader->setData(verts, normals, texcoords, colors, count * 3);
                 shader->drawTriangles();
-           
+
 			#elif defined(ARK2D_RENDERER_DIRECTX)
 
 				//ARK2D::getLog()->w("Renderer::texturedTriangles.");
@@ -4002,8 +4002,8 @@ namespace ARK {
 
 				unsigned int countVerts = count * 3;
 				unsigned int memorySize = countVerts * sizeof(Renderer_DX_InterleavingTextureVertexData);
-				
-				// check memory is the right size. reduce allocations. 
+
+				// check memory is the right size. reduce allocations.
 				if (dx_texturedTriangles_data == NULL || dx_texturedTriangles_size < memorySize) {
 					dx_texturedTriangles_data = realloc(dx_texturedTriangles_data, memorySize);
 					dx_texturedTriangles_size = memorySize;
@@ -4012,7 +4012,7 @@ namespace ARK {
 				Renderer_DX_InterleavingTextureVertexData* rawVertices = (Renderer_DX_InterleavingTextureVertexData*) dx_texturedTriangles_data;
 				unsigned int iv = 0;
 				unsigned int ic = 0;
-				for (unsigned int i = 0; i < countVerts; i += 3) { 
+				for (unsigned int i = 0; i < countVerts; i += 3) {
 					rawVertices[i].vertex = DirectX::XMFLOAT4(verts[iv], verts[iv + 1], 0.0f, 0.0f);
 					rawVertices[i].texcoord = DirectX::XMFLOAT2(texcoords[iv], texcoords[iv + 1]);
 					rawVertices[i].color = DirectX::XMFLOAT4(colors[ic] / 255.0f, colors[ic + 1] / 255.0f, colors[ic + 2] / 255.0f, colors[ic + 3] / 255.0f);
@@ -4027,11 +4027,11 @@ namespace ARK {
 					iv += 6;
 					ic += 12;
 				}
-				
+
 				// Lock the vertex buffer so it can be written to. Get a pointer to the data in the vertex buffer.
 				// Copy the data into the vertex buffer. Unlock the vertex buffer.
 				s_vboQuadVerts->setData((void*)&rawVertices[0], memorySize);
-				
+
 				// Set the vertex buffer to active in the input assembler so it can be rendered.
 				unsigned int stride = sizeof(Renderer_DX_InterleavingTextureVertexData);
 				unsigned int offset = 0;
@@ -4040,15 +4040,15 @@ namespace ARK {
 				// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
 				deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-				// DRAW! 
+				// DRAW!
 				deviceContext->Draw(countVerts, 0);
 
 				//free(rawVertices);
                 RendererStats::s_tris += count;
 
 			#endif
- 
-			
+
+
 			showAnyGlErrorAndExitMacro();
 		}
 
@@ -4060,12 +4060,12 @@ namespace ARK {
         }
         void Renderer::texturedQuad(unsigned int texId,
 			float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4,
-			float tx1, float ty1, float tx2, float ty2, float tx3, float ty3, float tx4, float ty4) 
+			float tx1, float ty1, float tx2, float ty2, float tx3, float ty3, float tx4, float ty4)
 		{
-			
-			if (Renderer::isBatching()) { 
+
+			if (Renderer::isBatching()) {
 				s_batch->addTexturedQuad(
-					texId, 
+					texId,
 					x1, y1, z1,
 					x2, y2, z2,
 					x3, y3, z3,
@@ -4084,10 +4084,10 @@ namespace ARK {
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac()
 				);
 
-				return; 
+				return;
 			}
 
-			
+
             float rawNormals[] = {
                 0,0,1,
                 0,0,1,
@@ -4096,7 +4096,7 @@ namespace ARK {
                 0,0,1,
                 0,0,1
             };
-            
+
             #if defined(ARK2D_RENDERER_OPENGL) || defined(ARK2D_OPENGL_3_2) || defined(ARK2D_OPENGL_ES_2_0) || defined(ARK2D_FLASCC)
 
 				float rawVertices[] = {
@@ -4107,7 +4107,7 @@ namespace ARK {
 					x2,		y2,		z2, // tr
 					x4, 	y4,		z4  // br
 				};
-				
+
 				float rawTextureCoords[] = {
 					tx1,	ty1,	// tl
 					tx2,	ty2,	// tr
@@ -4118,18 +4118,18 @@ namespace ARK {
 				};
 
 				unsigned char rawColors[] = {
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac()
 				};
 
                 Shader* shader = RendererState::start(RendererState::TEXTURE, texId);
                 shader->setData(rawVertices, rawNormals, rawTextureCoords, rawColors, 6);
                 shader->drawTriangles();
-            
+
 			#elif defined(ARK2D_RENDERER_DIRECTX)
 
 				ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
@@ -4143,7 +4143,7 @@ namespace ARK {
 					dx_texturedTriangles_data = realloc(dx_texturedTriangles_data, memorySize);
 					dx_texturedTriangles_size = memorySize;
 				}
-				
+
 				Renderer_DX_InterleavingTextureVertexData* rawVertices = (Renderer_DX_InterleavingTextureVertexData*) dx_texturedTriangles_data;
 				rawVertices[0].vertex = DirectX::XMFLOAT4(x1, y1, z1, 0.0f);
 				rawVertices[0].texcoord = DirectX::XMFLOAT2(tx1, ty1);
@@ -4157,14 +4157,14 @@ namespace ARK {
 				rawVertices[3].vertex = DirectX::XMFLOAT4(x4, y4, z4, 0.0f);
 				rawVertices[3].texcoord = DirectX::XMFLOAT2(tx4, ty4);
 				rawVertices[3].color = DirectX::XMFLOAT4(m_DrawColor.getRedf(), m_DrawColor.getGreenf(), m_DrawColor.getBluef(), m_DrawColor.getAlphaf());
-				
+
 				unsigned int rawIndices[] = {0, 1, 2, 2, 1, 3};
 				s_vboQuadVerts->setData((void*) rawVertices, memorySize);
 				s_vboIndices->setData((void*) rawIndices, sizeof(unsigned int) * 6);
-				
+
 				// Set the vertex buffer to active in the input assembler so it can be rendered.
 				unsigned int stride = sizeof(Renderer_DX_InterleavingTextureVertexData);
-				unsigned int offset = 0; 
+				unsigned int offset = 0;
 				deviceContext->IASetVertexBuffers(0, 1, &s_vboQuadVerts->m_buffer, &stride, &offset);
 
 				deviceContext->IASetIndexBuffer(s_vboIndices->m_buffer, DXGI_FORMAT_R32_UINT, 0);
@@ -4172,7 +4172,7 @@ namespace ARK {
 				deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 				deviceContext->DrawIndexed(countVerts, 0, 0);
 
-		
+
                 RendererStats::s_tris += 2;
 			#endif
 
@@ -4195,33 +4195,33 @@ namespace ARK {
 
 				RendererStats::s_tris += 1;
 				RendererStats::s_glCalls += 5;
-			#endif 
+			#endif
 			showAnyGlErrorAndExitMacro();
 		}
-		
+
         void Renderer::fillTriangle(float x1, float y1, float x2, float y2, float x3, float y3) const {
             fillTriangle(x1, y1, 0, x2, y2, 0, x3, y3, 0);
         }
         void Renderer::fillTriangle(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3) const {
-			
-			if (Renderer::isBatching()) { 
+
+			if (Renderer::isBatching()) {
 				/*float rawVertices[] = {
 					x1,		y1,		// tl
 					x2,		y2,		// tr
 					x3,		y3
 				};
 				unsigned char rawColors[] = {
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac()
 				};*/
 
-				//  
+				//
 				// DON'T DO THIS IT CRASHES ON MAC!
-				// See: http://pastebin.com/PfQ3P9Ji 
-				//  
+				// See: http://pastebin.com/PfQ3P9Ji
+				//
 				/*s_batch->addGeometryTri(
-					&rawVertices[0], 
+					&rawVertices[0],
 					&rawColors[0]
 				);*/
 
@@ -4233,14 +4233,14 @@ namespace ARK {
                     0,0,1,
                     0,0,1,
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac()
 				);
 				return;
 			}
 
 
-            
+
             float rawNormals[] = { 0,0,1, 0,0,1, 0,0,1 };
 
             #if defined(ARK2D_RENDERER_OPENGL) || defined(ARK2D_OPENGL_3_2) || defined(ARK2D_OPENGL_ES_2_0) || defined(ARK2D_FLASCC)
@@ -4250,13 +4250,13 @@ namespace ARK {
 					x2,		y2,		z2, // tr
 					x3,		y3,     z3
 				};
-				
+
 				unsigned char rawColors[] = {
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
-					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(), 
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
+					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac(),
 					m_DrawColor.getRedc(), m_DrawColor.getGreenc(), m_DrawColor.getBluec(), m_DrawColor.getAlphac()
 				};
-            
+
                 Shader* shader = RendererState::start(RendererState::GEOMETRY);
                 shader->setData(rawVertices, rawNormals, NULL, rawColors, 3);
                 shader->drawTriangles();
@@ -4268,17 +4268,17 @@ namespace ARK {
 
 				__internalsDXUpdateMatrices();
 
-				Renderer_DX_InterleavingGeometryVertexData rawVertices[] = { 
+				Renderer_DX_InterleavingGeometryVertexData rawVertices[] = {
 					{ DirectX::XMFLOAT4(x1, y1, z1,, 0.0f), DirectX::XMFLOAT4(m_DrawColor.getRedf(), m_DrawColor.getGreenf(), m_DrawColor.getBluef(), m_DrawColor.getAlphaf()) },
 					{ DirectX::XMFLOAT4(x2, y2, z2,, 0.0f), DirectX::XMFLOAT4(m_DrawColor.getRedf(), m_DrawColor.getGreenf(), m_DrawColor.getBluef(), m_DrawColor.getAlphaf()) },
 					{ DirectX::XMFLOAT4(x3, y3, z3, 0.0f), DirectX::XMFLOAT4(m_DrawColor.getRedf(), m_DrawColor.getGreenf(), m_DrawColor.getBluef(), m_DrawColor.getAlphaf()) }
 				};
 
-				
+
 				// Lock the vertex buffer so it can be written to. Get a pointer to the data in the vertex buffer.
 				// Copy the data into the vertex buffer. Unlock the vertex buffer.
 				s_vboQuadVerts->setData((void*)&rawVertices[0], (unsigned int) sizeof(Renderer_DX_InterleavingGeometryVertexData) * 3);
-				
+
 				// Set the vertex buffer to active in the input assembler so it can be rendered.
 				unsigned int stride = sizeof(Renderer_DX_InterleavingGeometryVertexData);
 				unsigned int offset = 0;
@@ -4287,9 +4287,9 @@ namespace ARK {
 				// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
 				deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-				// DRAW! 
+				// DRAW!
 				deviceContext->Draw(3, 0);
-            
+
                 RendererStats::s_tris += 1;
                 RendererStats::s_glCalls += 3;
 
@@ -4317,7 +4317,7 @@ namespace ARK {
 				glEnable(GL_POINT_SMOOTH);
 				glBegin(GL_POINTS);
 				glVertex2f(x, y);
-				glEnd(); 
+				glEnd();
 				glDisable(GL_POINT_SMOOTH);
 				RendererStats::s_glCalls += 5;
 			#endif
@@ -4344,7 +4344,7 @@ namespace ARK {
 				/*float each = 360.0f / float(points);
 				float verts[(points+1)*2];
 				int j = 0;
-				for(float i = 0; i <= 360; i += each) { 
+				for(float i = 0; i <= 360; i += each) {
 					double angle = 2 * MY_PI * i / 360;
 					verts[j] = float(0 + cos(angle) * radius);
 					verts[j+1] = float(0 + sin(angle) * radius);
@@ -4370,7 +4370,7 @@ namespace ARK {
 					unsigned char colors[points * 6 * 4];
 				#endif
 
-				int vertsIndex = 0; 
+				int vertsIndex = 0;
 				int colorsIndex = 0;
 				for(signed int i = 0; i < points; i++)
 				{
@@ -4394,11 +4394,11 @@ namespace ARK {
 					verts[vertsIndex + 0] = tl_x;
 					verts[vertsIndex + 1] = tl_y;
                     verts[vertsIndex + 2] = z;
-                    
+
 					verts[vertsIndex + 3] = tr_x;
 					verts[vertsIndex + 4] = tr_y;
                     verts[vertsIndex + 5] = z;
-                    
+
 					verts[vertsIndex + 6] = bl_x;
 					verts[vertsIndex + 7] = bl_y;
                     verts[vertsIndex + 8] = z;
@@ -4406,11 +4406,11 @@ namespace ARK {
 					verts[vertsIndex + 9] = bl_x;
 					verts[vertsIndex + 10] = bl_y;
                     verts[vertsIndex + 11] = z;
-                    
+
 					verts[vertsIndex + 12] = tr_x;
 					verts[vertsIndex + 13] = tr_y;
                     verts[vertsIndex + 14] = z;
-                    
+
 					verts[vertsIndex + 15] = br_x;
 					verts[vertsIndex + 16] = br_y;
                     verts[vertsIndex + 17] = z;
@@ -4418,28 +4418,28 @@ namespace ARK {
                     normals[vertsIndex + 0] = 0;
                     normals[vertsIndex + 1] = 0;
                     normals[vertsIndex + 2] = 1;
-                    
+
                     normals[vertsIndex + 3] = 0;
                     normals[vertsIndex + 4] = 0;
                     normals[vertsIndex + 5] = 1;
-                    
+
                     normals[vertsIndex + 6] = 0;
                     normals[vertsIndex + 7] = 0;
                     normals[vertsIndex + 8] = 1;
-                    
+
                     normals[vertsIndex + 9] = 0;
                     normals[vertsIndex + 10] = 0;
                     normals[vertsIndex + 11] = 1;
-                    
+
                     normals[vertsIndex + 12] = 0;
                     normals[vertsIndex + 13] = 0;
                     normals[vertsIndex + 14] = 1;
-                    
+
                     normals[vertsIndex + 15] = 0;
                     normals[vertsIndex + 16] = 0;
                     normals[vertsIndex + 17] = 1;
 
-                    
+
 					colors[colorsIndex + 0] = m_DrawColor.getRedc();
 					colors[colorsIndex + 1] = m_DrawColor.getGreenc();
 					colors[colorsIndex + 2] = m_DrawColor.getBluec();
@@ -4488,11 +4488,11 @@ namespace ARK {
 			/*#else
 			//#if defined(ARK2D_ANDROID)
 				//ARK2D::getLog()->i("drawCircle - preparation");
- 
+
 				float each = 360.0f / float(points);
 				float verts[(points+1)*2];
 				int j = 0;
-				for(float i = 0; i <= 360; i += each) { 
+				for(float i = 0; i <= 360; i += each) {
 					double angle = 2 * MY_PI * i / 360;
 					verts[j] = float(0 + cos(angle) * radius);
 					verts[j+1] = float(0 + sin(angle) * radius);
@@ -4505,11 +4505,11 @@ namespace ARK {
 				RendererState::start(RendererState::GEOMETRY);
 				pushMatrix();
 				translate(x, y);
- 
+
 				glVertexPointer(2, GL_FLOAT, 0, verts);
 				glDrawArrays(GL_LINE_LOOP, 0, points+1);
 
-				//translate(x * -1, y * -1, 0); 
+				//translate(x * -1, y * -1, 0);
 				popMatrix();
 
 				RendererStats::s_lines += points;
@@ -4542,8 +4542,8 @@ namespace ARK {
 				float each = 360.0f / float(points);
 				for(signed int i = 0; i < points; i++) {
 					float j = float(i) * each;
-					double angle = 2 * MY_PI * j / 360; 
-					double nangle = 2 * MY_PI * (j+each) / 360; 
+					double angle = 2 * MY_PI * j / 360;
+					double nangle = 2 * MY_PI * (j+each) / 360;
 
 					float rawVertices[9];
                     float rawNormals[9];
@@ -4568,25 +4568,25 @@ namespace ARK {
                     rawNormals[6] = 0;
                     rawNormals[7] = 0;
                     rawNormals[8] = 1;
-                    
+
 					rawColors[0] = m_DrawColor.getRedc();
 					rawColors[1] = m_DrawColor.getGreenc();
-					rawColors[2] = m_DrawColor.getBluec(); 
+					rawColors[2] = m_DrawColor.getBluec();
 					rawColors[3] = m_DrawColor.getAlphac();
 					rawColors[4] = m_DrawColor.getRedc();
 					rawColors[5] = m_DrawColor.getGreenc();
-					rawColors[6] = m_DrawColor.getBluec(); 
+					rawColors[6] = m_DrawColor.getBluec();
 					rawColors[7] = m_DrawColor.getAlphac();
 					rawColors[8] = m_DrawColor.getRedc();
 					rawColors[9] = m_DrawColor.getGreenc();
-					rawColors[10] = m_DrawColor.getBluec(); 
+					rawColors[10] = m_DrawColor.getBluec();
 					rawColors[11] = m_DrawColor.getAlphac();
 
 					s_batch->addGeometryTri(&rawVertices[0], &rawNormals[0], &rawColors[0]);
 				}
 
 				return;
-				
+
 			}
 
 			#if defined(ARK2D_RENDERER_OPENGL) || defined(ARK2D_OPENGL_3_2) || defined(ARK2D_OPENGL_ES_2_0)
@@ -4607,7 +4607,7 @@ namespace ARK {
                 rawVertices[2] = z;
 				int j = 3;
 				for(float i = 0; i <= 360; i += each) {
-					double angle = 2 * MY_PI * i / 360; 
+					double angle = 2 * MY_PI * i / 360;
 					rawVertices[j] = x + float(cos(angle) * radius);
 					rawVertices[j+1] = y + float(sin(angle) * radius);
                     rawVertices[j+2] = z;
@@ -4620,18 +4620,18 @@ namespace ARK {
 				for(unsigned int i = 0; i < ((points+3)*4); i += 4 ) {
 					rawColors[i+0] = m_DrawColor.getRedc();
 					rawColors[i+1] = m_DrawColor.getGreenc();
-					rawColors[i+2] = m_DrawColor.getBluec(); 
+					rawColors[i+2] = m_DrawColor.getBluec();
 					rawColors[i+3] = m_DrawColor.getAlphac();
 				}
 
                 Shader* shader = RendererState::start(RendererState::GEOMETRY);
                 shader->setData(rawVertices, rawNormals, NULL, rawColors, points+2);
                 shader->drawTriangleFan();
-				
+
 			#elif defined(ARK2D_RENDERER_DIRECTX)
 
 				ARK2D::getLog()->w("Renderer::fillCircle not implemented in Direct X.");
-				
+
 			#else
 
 				// convert fan to TRIANGLES.
@@ -4647,11 +4647,11 @@ namespace ARK {
                     float rawNormals[(points*3)*3];
 					unsigned char rawColors[(points*3)*4];
 				#endif
-				
+
 				int j = 0;
 				for(float i = 0; i <= 360; i += each) {
-					double angle = 2 * MY_PI * i / 360; 
-					double nangle = 2 * MY_PI * (i+each) / 360; 
+					double angle = 2 * MY_PI * i / 360;
+					double nangle = 2 * MY_PI * (i+each) / 360;
 					rawVertices[j+0] = x;
 					rawVertices[j+1] = y;
                     rawVertices[j+2] = z;
@@ -4661,7 +4661,7 @@ namespace ARK {
 					rawVertices[j+6] = x + float(cos(nangle) * radius);
 					rawVertices[j+7] = y + float(sin(nangle) * radius);
                     rawVertices[j+8] = z;
-                    
+
                     rawNormals[j+0] = 0;
                     rawNormals[j+1] = 0;
                     rawNormals[j+2] = 1;
@@ -4673,31 +4673,31 @@ namespace ARK {
                     rawNormals[j+8] = 1;
 					j+=9;
 				}
-			
+
 				for(signed int i = 0; i < ((points*3)*4); i += 12) {
 					rawColors[i+0] = m_DrawColor.getRedc();
 					rawColors[i+1] = m_DrawColor.getGreenc();
-					rawColors[i+2] = m_DrawColor.getBluec(); 
+					rawColors[i+2] = m_DrawColor.getBluec();
 					rawColors[i+3] = m_DrawColor.getAlphac();
 
 					rawColors[i+4] = m_DrawColor.getRedc();
 					rawColors[i+5] = m_DrawColor.getGreenc();
-					rawColors[i+6] = m_DrawColor.getBluec(); 
+					rawColors[i+6] = m_DrawColor.getBluec();
 					rawColors[i+7] = m_DrawColor.getAlphac();
 
 					rawColors[i+8] = m_DrawColor.getRedc();
 					rawColors[i+9] = m_DrawColor.getGreenc();
-					rawColors[i+10] = m_DrawColor.getBluec(); 
+					rawColors[i+10] = m_DrawColor.getBluec();
 					rawColors[i+11] = m_DrawColor.getAlphac();
 				}
-            
+
                 Shader* shader = RendererState::start(RendererState::GEOMETRY);
                 shader->setData(rawVertices, rawNormals, NULL, rawColors, points*3);
                 shader->drawTriangles();
 
-			#endif  
+			#endif
 
-			
+
 
 			showAnyGlErrorAndExitMacro();
 		}
@@ -4707,15 +4707,15 @@ namespace ARK {
         }
 		void Renderer::fillEllipse(float x, float y, float z, float rx, float ry) const
 		{
-			const int points = 30; 
+			const int points = 30;
 
 			if (isBatching()) {
 
 				float each = 360.0f / float(points);
 				for(signed int i = 0; i < points; i++) {
 					float j = float(i) * each;
-					double angle = 2 * MY_PI * j / 360; 
-					double nangle = 2 * MY_PI * (j+each) / 360; 
+					double angle = 2 * MY_PI * j / 360;
+					double nangle = 2 * MY_PI * (j+each) / 360;
 
                     float rawVertices[9];
                     float rawNormals[9];
@@ -4730,7 +4730,7 @@ namespace ARK {
 					rawVertices[6] = x + float(cos(nangle) * rx);
 					rawVertices[7] = y + float(sin(nangle) * ry);
                     rawVertices[8] = z;
-                    
+
                     rawNormals[0] = 0;
                     rawNormals[1] = 0;
                     rawNormals[2] = 1;
@@ -4740,18 +4740,18 @@ namespace ARK {
                     rawNormals[6] = 0;
                     rawNormals[7] = 0;
                     rawNormals[8] = 1;
-                    
+
 					rawColors[0] = m_DrawColor.getRedc();
 					rawColors[1] = m_DrawColor.getGreenc();
-					rawColors[2] = m_DrawColor.getBluec(); 
+					rawColors[2] = m_DrawColor.getBluec();
 					rawColors[3] = m_DrawColor.getAlphac();
 					rawColors[4] = m_DrawColor.getRedc();
 					rawColors[5] = m_DrawColor.getGreenc();
-					rawColors[6] = m_DrawColor.getBluec(); 
+					rawColors[6] = m_DrawColor.getBluec();
 					rawColors[7] = m_DrawColor.getAlphac();
 					rawColors[8] = m_DrawColor.getRedc();
 					rawColors[9] = m_DrawColor.getGreenc();
-					rawColors[10] = m_DrawColor.getBluec(); 
+					rawColors[10] = m_DrawColor.getBluec();
 					rawColors[11] = m_DrawColor.getAlphac();
 
 					s_batch->addGeometryTri(&rawVertices[0], &rawNormals[0], &rawColors[0]);
@@ -4773,7 +4773,7 @@ namespace ARK {
                 rawNormals[2] = 1;
 				int j = 3;
 				for(float i = 0; i <= 360; i += each) {
-					double angle = 2 * MY_PI * i / 360; 
+					double angle = 2 * MY_PI * i / 360;
 					rawVertices[j] = x + float(cos(angle) * rx);
 					rawVertices[j+1] = y + float(sin(angle) * ry);
                     rawVertices[j+2] = z;
@@ -4795,18 +4795,18 @@ namespace ARK {
 				for(unsigned int i = 0; i < ((points+3)*4); i += 4 ) {
 					rawColors[i+0] = m_DrawColor.getRedc();
 					rawColors[i+1] = m_DrawColor.getGreenc();
-					rawColors[i+2] = m_DrawColor.getBluec(); 
+					rawColors[i+2] = m_DrawColor.getBluec();
 					rawColors[i+3] = m_DrawColor.getAlphac();
 				}
 
 				Shader* shader = RendererState::start(RendererState::GEOMETRY);
                 shader->setData(rawVertices, rawNormals, NULL, rawColors, points+2);
                 shader->drawTriangleFan();
-            
+
 			#elif defined(ARK2D_RENDERER_DIRECTX)
 
 				ARK2D::getLog()->w("Renderer::fillEllipse not implemented in Direct X.");
-			
+
 			#endif
 
 			showAnyGlErrorAndExitMacro();
@@ -4854,7 +4854,7 @@ namespace ARK {
 			m_DrawColor.setRed(r);
 			m_DrawColor.setGreen(g);
 			m_DrawColor.setBlue(b);
-			m_DrawColor.setAlpha(a); 
+			m_DrawColor.setAlpha(a);
 
 			#ifndef NO_FIXED_FUNCTION_PIPELINE
 				glColor4f(m_DrawColor.getRed()/255.f, m_DrawColor.getGreen()/255.f, m_DrawColor.getBlue()/255.f, m_DrawColor.getAlpha()/255.f);
@@ -4863,7 +4863,7 @@ namespace ARK {
 		}
 		void Renderer::setDrawColorf(float r, float g, float b, float a) {
 			m_DrawColor.setRed((float) r);
-			m_DrawColor.setGreen((float) g); 
+			m_DrawColor.setGreen((float) g);
 			m_DrawColor.setBlue((float) b);
 			m_DrawColor.setAlpha((float) a);
 
@@ -4896,7 +4896,7 @@ namespace ARK {
 		}
 
 		void Renderer::setPointSize(float f) {
-			#ifndef NO_FIXED_FUNCTION_PIPELINE 
+			#ifndef NO_FIXED_FUNCTION_PIPELINE
 				glPointSize(f);
 			#endif
 		}
@@ -4905,12 +4905,12 @@ namespace ARK {
 		}
 
 		unsigned int Renderer::getMaxTextureSize() {
-			#ifdef ARK2D_RENDERER_OPENGL 
+			#ifdef ARK2D_RENDERER_OPENGL
 				#if defined(ARK2D_IPHONE) || defined(ARK2D_ANDROID) || defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS)
 					//ARK2D::getLog()->w("Renderer::getMaxTextureSize not supported. ");
-					return 0;  
+					return 0;
 				#else
-					GLint max; 
+					GLint max;
 					glGetIntegerv(GL_MAX_TEXTURE_SIZE, &max);
 					return (unsigned int) max;
 				#endif
@@ -4938,10 +4938,10 @@ namespace ARK {
 					RendererStats::s_glCalls++;
 				} else {
 					if (m_blendMode == BLEND_NONE) { // it was disabled, enable it.
-						glEnable(GL_BLEND);	
+						glEnable(GL_BLEND);
 						RendererStats::s_glCalls++;
 					}
-					
+
 					if (blendMode == BLEND_NORMAL) {
 						glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 					} else if (blendMode == BLEND_ADDITIVE) {
@@ -4966,8 +4966,8 @@ namespace ARK {
 				}
 
 
-			#elif defined(ARK2D_RENDERER_DIRECTX) 
-				
+			#elif defined(ARK2D_RENDERER_DIRECTX)
+
 				//ARK2D::getLog()->w("Renderer::setBlendMode not implemented in Direct X.");
 				GameContainerPlatform* platform = ARK2D::getContainer()->getPlatformSpecific();
 				ID3D11Device* device = platform->m_device;
@@ -4996,10 +4996,10 @@ namespace ARK {
 			m_ScissorBoxColors[2] = bottom;
 			m_ScissorBoxColors[3] = right;
 		}
-		/*void Renderer::drawScissorBoxes() { 
+		/*void Renderer::drawScissorBoxes() {
 			GameContainer* container = ARK2D::getContainer();
 			// draw scissor boxes because glScissor does not work on some HTC phones.
-			
+
 				float width = container->getWidth();
 				float height = container->getHeight();
 				float dynamicWidth = container->getDynamicWidth();
@@ -5011,7 +5011,7 @@ namespace ARK {
 					dynamicHeight = container->getDynamicWidth();
 				}
 
-				// left edge  
+				// left edge
 				setDrawColor(m_ScissorBoxColors[1].getRed(), m_ScissorBoxColors[1].getGreen(), m_ScissorBoxColors[1].getBlue(), m_ScissorBoxColors[1].getAlpha());
 				fillRect(0,0, (int) container->getTranslateX(), dynamicHeight);// * container->getScaleY());
 
@@ -5030,12 +5030,12 @@ namespace ARK {
 							dynamicWidth+1, (int) container->getTranslateY()+1);
 							//container->getWidth() * container->getScaleX(), container->getTranslateY());
 			//}
-			setDrawColor(Color::white); 
+			setDrawColor(Color::white);
 		}*/
-		void Renderer::drawScissorBoxes() { 
+		void Renderer::drawScissorBoxes() {
 			GameContainer* container = ARK2D::getContainer();
-			
-			
+
+
 				float width = container->getWidth();
 				float height = container->getHeight();
 				float dynamicWidth = container->getDynamicWidth();
@@ -5047,7 +5047,7 @@ namespace ARK {
 					dynamicHeight = container->getDynamicWidth();
 				}
 
-				// left edge  
+				// left edge
 				setDrawColor(m_ScissorBoxColors[1].getRed(), m_ScissorBoxColors[1].getGreen(), m_ScissorBoxColors[1].getBlue(), m_ScissorBoxColors[1].getAlpha());
 				fillRect(container->getTranslateX()*-1.0f, 0, (int) container->getTranslateX(), dynamicHeight);// * container->getScaleY());
 
@@ -5065,10 +5065,10 @@ namespace ARK {
 				fillRect(0, (height * container->getScaleY()) - ((container->getTranslateY()*2)+1),
 							dynamicWidth+1, (int) container->getTranslateY()+1);
 
-			setDrawColor(Color::white); 
+			setDrawColor(Color::white);
 		}
 
-		
+
 		void Renderer::__internalsDrawArray_triangleStrip(int first, int amount) {
 			#ifdef ARK2D_RENDERER_OPENGL
 				glDrawArrays(GL_TRIANGLE_STRIP, first, amount);
