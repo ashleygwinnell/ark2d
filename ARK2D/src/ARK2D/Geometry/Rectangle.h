@@ -15,8 +15,8 @@
 #include "../Graphics/Renderer.h"
 
 
-  
-namespace ARK { 
+
+namespace ARK {
 	namespace Geometry {
 
 		/*!
@@ -24,7 +24,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-        
+
 		template <class T>
 		class RectangleTemplate: public Shape<T> {
 			protected:
@@ -40,9 +40,12 @@ namespace ARK {
 				RectangleTemplate(T x, T y, int width, int height):Shape<T>(), m_x(x), m_y(y), m_width(width), m_height(height) {
 
 				}
+				virtual void set(const RectangleTemplate& t) {
+					set(t.m_x, t.m_y, t.m_width, t.m_height);
+				}
 				virtual void set(T x, T y, T width, T height) {
 					m_x = x;
-					m_y = y; 
+					m_y = y;
 					m_width = (int) width;
 					m_height = (int) height;
 				}
@@ -89,19 +92,19 @@ namespace ARK {
 					m_y = y - (m_height/2);
 				}
 				virtual void setLocationByAlignment(T x, T y, signed int alignX, signed int alignY) {
-					
-					if (alignX == Renderer::ALIGN_CENTER) { 
+
+					if (alignX == Renderer::ALIGN_CENTER) {
 						x -= m_width / 2.0f;
 					} else if (alignX == Renderer::ALIGN_RIGHT || alignX == Renderer::ALIGN_END) {
 						x -= m_width;
-					} 
+					}
 
-					if (alignY == Renderer::ALIGN_CENTER) { 
+					if (alignY == Renderer::ALIGN_CENTER) {
 						y -= m_height / 2.0f;
 					} else if (alignY == Renderer::ALIGN_END || alignY == Renderer::ALIGN_BOTTOM) {
 						y -= m_height;
-					} 
-					
+					}
+
 					m_x = x;
 					m_y = y;
 
@@ -114,7 +117,7 @@ namespace ARK {
 				}
 
 				virtual void adjustX(T x) {
-					m_x += x; 
+					m_x += x;
 				}
 				virtual void adjustY(T y) {
 					m_y += y;
@@ -147,14 +150,14 @@ namespace ARK {
 					ARK2D::getRenderer()->drawRect(this);
 				}
 
-				// this polygon should have four points on it! 
+				// this polygon should have four points on it!
 				// OR ELSE FAILLLL!!
-				Polygon<T>* asPolygon(Polygon<T>* polygon, float rotation) 
+				Polygon<T>* asPolygon(Polygon<T>* polygon, float rotation)
 				{
 					polygon->getPoint(0)->set(getMinX(), getMinY());
 					polygon->getPoint(1)->set(getMinX(), getMaxY());
 					polygon->getPoint(2)->set(getMaxX(), getMaxY());
-					polygon->getPoint(3)->set(getMaxX(), getMinY()); 
+					polygon->getPoint(3)->set(getMaxX(), getMinY());
 					polygon->rotate(rotation);
 					return polygon;
 				}
@@ -180,7 +183,7 @@ namespace ARK {
 		};
 
 		class Rectangle : public RectangleTemplate<float> {
-			public: 
+			public:
 				Rectangle():
 					RectangleTemplate() {
 
