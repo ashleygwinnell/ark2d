@@ -14,9 +14,9 @@
 
 		// FreeType Headers
 		#if (defined(ARK2D_IPHONE) || defined(ARK2D_ANDROID) || defined(ARK2D_WINDOWS) || defined(ARK2D_MACINTOSH) || defined(ARK2D_FLASCC) || defined(ARK2D_WINDOWS_PHONE_8))
-		
+
 		 	#include <ft2build.h>
- 		
+
 			#include <freetype/freetype.h>
 			#include <freetype/ftglyph.h>
 			#include <freetype/ftoutln.h>
@@ -85,7 +85,7 @@
 						FTFontData* m_data;
 					public:
 						FTFont(string filename, unsigned int height);
-						void drawString(const string& str, int x, int y);
+						void drawString(const string& str, float x, float y);
 						unsigned int getStringWidth(const string& Str) const;
 						unsigned int getStringHeight(const string& Str) const;
 						unsigned int getLineHeight() const;
@@ -108,6 +108,6 @@
 		}
 	}
 
-#endif	
+#endif
 
 #endif /* FTFONT_H_ */

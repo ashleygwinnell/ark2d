@@ -2439,7 +2439,7 @@ namespace ARK {
 
 
 
-			thisFont->drawString(str, int(0 + (offsetX*inv_scale)), int(0 + (offsetY*inv_scale)));
+			thisFont->drawString(str, offsetX * inv_scale, offsetY * inv_scale);
 
 			//if (sc != 1.0f)
 			//	scale(1.0f/sc, 1.0f/sc);

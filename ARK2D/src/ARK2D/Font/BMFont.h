@@ -52,16 +52,16 @@ namespace ARK {
 			float XAdvance;
 			float Page;
 
-			CharDescriptor(): 
-				x( 0 ), 
-				y( 0 ), 
-				Width( 0 ), 
-				Height( 0 ), 
-				WidthOriginal(0), 
-				HeightOriginal(0), 
-				XOffset( 0 ), 
+			CharDescriptor():
+				x( 0 ),
+				y( 0 ),
+				Width( 0 ),
+				Height( 0 ),
+				WidthOriginal(0),
+				HeightOriginal(0),
+				XOffset( 0 ),
 				YOffset( 0 ),
-				XAdvance( 0 ), 
+				XAdvance( 0 ),
 				Page( 0 )
 			{ }
 		};
@@ -78,13 +78,13 @@ namespace ARK {
 			float Pages;
 			CharDescriptor Chars[256];
 
-			Charset(): 
-				LineHeight(1), 
-				Base(1), 
-				Width(1), 
-				Height(1), 
+			Charset():
+				LineHeight(1),
+				Base(1),
+				Width(1),
+				Height(1),
 				Chars() {
-				
+
 			}
 		};
 		struct FontVertex {
@@ -110,7 +110,7 @@ namespace ARK {
 				Image* m_Image;
 				map<int, Image*> m_letterImages;
 
-				int m_kerning; 
+				int m_kerning;
 
 			public:
 				BMFont();
@@ -118,8 +118,8 @@ namespace ARK {
 				BMFont(void* data, Image* i);
 				BMFont(const string& f, const string& i);
 				BMFont(const string& f, const string& i, const Color& mask);
-				virtual void drawString(const string& Str, int drawx, int drawy);
-				virtual void drawString(const string& Str, int drawx, int drawy, int drawz);
+				virtual void drawString(const string& Str, float drawx, float drawy);
+				virtual void drawString(const string& Str, float drawx, float drawy, float drawz);
 				void drawString(const std::string str, float x, float y, signed int alignX, signed int alignY, float rotation=0.0f, float scale=1.0f);
 				unsigned int getStringWidth(const string& Str) const;
 				unsigned int getStringHeight(const string& Str) const;

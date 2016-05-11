@@ -27,9 +27,9 @@ namespace ARK {
 		BMFont::BMFont():
 			#ifdef ARK2D_WINDOWS_VS
 				ARK::Font::Font(),
-			#else 
+			#else
 				Font::Font(),
-			#endif 
+			#endif
 			m_loaded(false),
 			m_data(NULL),
 			m_FontFile(""),
@@ -45,9 +45,9 @@ namespace ARK {
 		BMFont::BMFont(unsigned int fntResource, unsigned int imgResource, unsigned int imgResourceType):
 			#ifdef ARK2D_WINDOWS_VS
 				ARK::Font::Font(),
-			#else 
+			#else
 				Font::Font(),
-			#endif 
+			#endif
 			m_loaded(false),
 			m_data(NULL),
 			m_FontFile(""),
@@ -70,9 +70,9 @@ namespace ARK {
 		BMFont::BMFont(void* data, Image* i):
 			#ifdef ARK2D_WINDOWS_VS
 				ARK::Font::Font(),
-			#else 
+			#else
 				Font::Font(),
-			#endif 
+			#endif
 			m_loaded(false),
 			m_data(NULL),
 			m_FontFile(""),
@@ -95,9 +95,9 @@ namespace ARK {
 		BMFont::BMFont(const string& f, const string& i):
 			#ifdef ARK2D_WINDOWS_VS
 				ARK::Font::Font(),
-			#else 
+			#else
 				Font::Font(),
-			#endif 
+			#endif
 			m_loaded(false),
 			m_data(NULL),
 			m_FontFile(f),
@@ -109,7 +109,7 @@ namespace ARK {
 		{
 			ARK2D::getLog()->i("Loading BMFont: ");
 			ARK2D::getLog()->i(f);
-			
+
 			m_Image = ARK::Core::Resource::get(i)->asImage();
 			bool success = Parse();
 			if (!success) {
@@ -121,18 +121,18 @@ namespace ARK {
 		BMFont::BMFont(const string& f, const string& i, const Color& mask):
 			#ifdef ARK2D_WINDOWS_VS
 				ARK::Font::Font(),
-			#else 
+			#else
 				Font::Font(),
-			#endif 
+			#endif
 			m_loaded(false),
 			m_data(NULL),
 			m_FontFile(f),
 			m_ImageFile(i),
 			m_Charset(),
-			m_Image(NULL), 
+			m_Image(NULL),
 			m_letterImages(),
 			m_kerning(0)
-		{ 
+		{
 			ARK2D::getLog()->i("Loading BMFont: ");
 			ARK2D::getLog()->i(f);
 
@@ -149,7 +149,7 @@ namespace ARK {
 
 			// @todo memory mangement: loop through m_letterImages and delete them.
 		}
- 
+
 		Image* BMFont::getImage() const {
 			return m_Image;
 		}
@@ -160,7 +160,7 @@ namespace ARK {
 
 	/*		m_Charset.LineHeight = (unsigned int) (float(m_Charset.LineHeight) * f);
 			m_Charset.Base = (unsigned int) (float(m_Charset.Base) * f);
-			
+
 			for(unsigned int i = 0; i <= 255; ++i) { //m_Charset.Chars.length
 				m_Charset.Chars[i].Width = (unsigned int) (float(m_Charset.Chars[i].Width) * f);
 				m_Charset.Chars[i].Height = (unsigned int) (float(m_Charset.Chars[i].Height) * f);
@@ -169,11 +169,11 @@ namespace ARK {
 				m_Charset.Chars[i].XAdvance = (unsigned int) (float(m_Charset.Chars[i].XAdvance) * f);
 			}*/
 			//CharDescriptor Chars[256];
- 
+
 
 			m_Charset.LineHeight = m_Charset.LineHeight * f;
 			m_Charset.Base = m_Charset.Base * f;
-			
+
 			for(unsigned int i = 0; i <= 255; ++i) { //m_Charset.Chars.length
 				m_Charset.Chars[i].Width = m_Charset.Chars[i].Width * f;
 				m_Charset.Chars[i].Height = m_Charset.Chars[i].Height * f;
@@ -198,35 +198,35 @@ namespace ARK {
 					((stringbuf*)fb)->str(m_data);
 				}
 				istream Stream(fb);
- 
+
 				string Line;
 				string Read, Key, Value;
 				std::size_t i;
 
 				while( !Stream.eof() )
-				{ 
+				{
 					stringstream LineStream;
 					std::getline( Stream, Line );
 
-					bool skippingLine = false;  
+					bool skippingLine = false;
 
 					//#ifdef ARK2D_FLASCC
 						//std::cout << Line << std::endl;
 					//#endif
 
-					if (Line.length() == 0) { break; } 
+					if (Line.length() == 0) { break; }
 					//if (Line == -1) {
 					//	return false;
-					//} 
+					//}
 					//if (*ret == -1) { break; }
 					LineStream << Line;
 
 					//read the line's type
-					LineStream >> Read; 
+					LineStream >> Read;
 					if( Read == "common" )
 					{
 						//this holds common data
-						while( !LineStream.eof() ) 
+						while( !LineStream.eof() )
 						{
 							stringstream Converter;
 							LineStream >> Read;
@@ -240,9 +240,9 @@ namespace ARK {
 								Converter >> m_Charset.LineHeight;
 							else if( Key == "base" )
 								Converter >> m_Charset.Base;
-							else if( Key == "scaleW" ) 
+							else if( Key == "scaleW" )
 								Converter >> m_Charset.Width;
-							else if( Key == "scaleH" ) 
+							else if( Key == "scaleH" )
 								Converter >> m_Charset.Height;
 							else if( Key == "pages" )
 								Converter >> m_Charset.Pages;
@@ -267,7 +267,7 @@ namespace ARK {
 
 							//assign the correct value
 							Converter << Value;
-							if( Key == "id" )  
+							if( Key == "id" )
 								Converter >> CharID;
 								if (CharID > 255) {
 									// no non-ascii (only 255 or below) plz
@@ -276,13 +276,13 @@ namespace ARK {
 									skippingLine = true;
 									continue;
 								}
-							else if( Key == "x" ) 
+							else if( Key == "x" )
 								Converter >> m_Charset.Chars[CharID].x;
 							else if( Key == "y" )
 								Converter >> m_Charset.Chars[CharID].y;
 							else if( Key == "width" )
 								Converter >> m_Charset.Chars[CharID].Width;
-							else if( Key == "height" ) 
+							else if( Key == "height" )
 								Converter >> m_Charset.Chars[CharID].Height;
 							else if( Key == "xoffset" )
 								Converter >> m_Charset.Chars[CharID].XOffset;
@@ -301,7 +301,7 @@ namespace ARK {
 				} else {
 				//	((stringbuf*)fb)->close();
 				}
- 
+
 				for(unsigned int i = 0; i <= 255; ++i) { //m_Charset.Chars.length
 					m_Charset.Chars[i].WidthOriginal = m_Charset.Chars[i].Width;
 					m_Charset.Chars[i].HeightOriginal = m_Charset.Chars[i].Height;
@@ -313,28 +313,28 @@ namespace ARK {
 				ErrorDialog::createAndShow("error loading font");
 				return false;
 			}
-		#endif 
+		#endif
 			ARK2D::getLog()->i("Loaded fnt data.");
 			return true;
 		}
 
 
-		
+
 
 		void BMFont::drawString(const string str, float x, float y, signed int alignX, signed int alignY, float rotation, float scale) {
 			Renderer* r = ARK2D::getRenderer();
-			r->setFont(this); 
+			r->setFont(this);
 			r->drawString(str, x, y, alignX, alignY, rotation, scale);
 		}
 
-        void BMFont::drawString(const string& Str, int drawx, int drawy) {
+        void BMFont::drawString(const string& Str, float drawx, float drawy) {
             drawString(Str, drawx, drawy, 0);
         }
-        void BMFont::drawString(const string& Str, int drawx, int drawy, int drawz)
+        void BMFont::drawString(const string& Str, float drawx, float drawy, float drawz)
 		{
-			if (m_loaded == false) { return; } 
+			if (m_loaded == false) { return; }
 			if (Str.length() == 0) { return; }
-			//return; 
+			//return;
 
 			float CharX, CharY, Width, WidthOriginal, Height, HeightOriginal, OffsetX, OffsetY, XAdvance;
 
@@ -343,8 +343,8 @@ namespace ARK {
 				const int numVerts = Str.length() * 6 * 3;
 				const int numTVerts = Str.length() * 6 * 2;
 				const int numCVerts = Str.length() * 6 * 4;
-				
-				
+
+
 
 				#ifdef ARK2D_WINDOWS_VS
 					float* rawVertices = (float*)alloca(numVerts * sizeof(float));
@@ -369,7 +369,7 @@ namespace ARK {
 				unsigned char color_b = r->getDrawColor().getBluec();
 				unsigned char color_a = (unsigned char) ((m_Image->getAlpha() * r->getDrawColor().getAlphaf()) * 255);
 
-				if (m_Image->getColor() != NULL) { 
+				if (m_Image->getColor() != NULL) {
 					color_r = (unsigned char) (m_Image->getColor()->getRedc() * r->getDrawColor().getRedf());
 					color_g = (unsigned char) (m_Image->getColor()->getGreenc() * r->getDrawColor().getGreenf());
 					color_b = (unsigned char) (m_Image->getColor()->getBluec() * r->getDrawColor().getBluef());
@@ -405,8 +405,8 @@ namespace ARK {
 							drawx2, drawy2 + Height,
 							drawx2 + Width, drawy2 + Height,
 
-							charXPC, charYPC, 
-							charXPC + widthPC, charYPC, 
+							charXPC, charYPC,
+							charXPC + widthPC, charYPC,
 							charXPC, charYPC + heightPC,
 							charXPC + widthPC, charYPC + heightPC,
 
@@ -415,7 +415,7 @@ namespace ARK {
 							color_r, color_g, color_b, color_a,
 							color_r, color_g, color_b, color_a
 						);
-						
+
 					}
 					return;
 				}*/
@@ -432,7 +432,7 @@ namespace ARK {
 //				ARK2D::getLog()->e(Str);
 //                ARK2D::getLog()->e(Cast::toString<unsigned int>(len));
 //				ARK2D::getLog()->e(Cast::toString<unsigned int>(len2));
-            
+
                 char* str = (char*)Str.c_str();    // utf-8 string
                 char* str_i = str;                  // string iterator
                 char* end = str+strlen(str)+1;      // end iterator
@@ -441,7 +441,7 @@ namespace ARK {
 				//signed int i = 0;
               //  unsigned int charid;
 				//for(signed int i = 0; i < len; ++i)
-				for(signed int i = 0; i < len; ++i) { 
+				for(signed int i = 0; i < len; ++i) {
 					//charid = utf8string::u8_nextchar(u8Str, &i);
                     uint32_t charid = utf8::next(str_i, end);
 
@@ -465,7 +465,7 @@ namespace ARK {
 					OffsetX = m_Charset.Chars[charid].XOffset;
 					OffsetY = m_Charset.Chars[charid].YOffset;
 					XAdvance = m_Charset.Chars[charid].XAdvance;
-  
+
 					float charXPC = ((CharX / float(m_Image->getWidth())) * m_Image->getTextureW()) + m_Image->getTextureX();
 					float charYPC = ((CharY / float(m_Image->getHeight())) * m_Image->getTextureH()) + m_Image->getTextureY();
 					float widthPC = ((WidthOriginal / float(m_Image->getWidth())) * m_Image->getTextureW());
@@ -474,7 +474,7 @@ namespace ARK {
 					int vert = (i * 18);
 					int vertt = (i * 12);
 					int vertc = (i * 24);
-                    
+
                     // tl
 					rawVertices[vert] = drawx+OffsetX + (i*m_kerning);
 					rawVertices[vert+1] = drawy+OffsetY;
@@ -483,7 +483,7 @@ namespace ARK {
                     rawNormals[vert]   = 0;
                     rawNormals[vert+1] = 0;
                     rawNormals[vert+2] = 1;
-					
+
 					rawTextureCoords[vertt] = charXPC;
 					rawTextureCoords[vertt+1] = charYPC;
 
@@ -569,7 +569,7 @@ namespace ARK {
 					rawVertices[vert+15] = drawx+OffsetX + (i*m_kerning) + Width;
 					rawVertices[vert+16] = drawy+OffsetY + Height;
                     rawVertices[vert+17] = drawz;
-					
+
 					rawNormals[vert+15] = 0;
                     rawNormals[vert+16] = 0;
                     rawNormals[vert+17] = 1;
@@ -581,27 +581,27 @@ namespace ARK {
 					rawColors[vertc+21] = color_g;
 					rawColors[vertc+22] = color_b;
 					rawColors[vertc+23] = color_a;
-                    
+
                   	// multiply position coordinates (???)
 					drawx += XAdvance;
 					//++pos;
 					//++i;
 					//i++;
-					
+
                 } //while ( str_i < end );
 
 				//for( signed int i = 0; i < (signed int) Str.length(); ++i )
 				//{
 				//}
 				r->texturedTriangles(m_Image->getTexture()->getId(), rawVertices, rawNormals, rawTextureCoords, rawColors, Str.length()*2, false);
-			
+
 				//#ifdef ARK2D_WINDOWS_VS
 				//	free(rawVertices);
 				//	free(rawTextureCoords);
 				//	free(rawColors);
 				//#endif
 
-			#else 
+			#else
 
 				m_Image->drawSubImageStart();
 				for( unsigned int i = 0; i < Str.length(); ++i )
@@ -622,7 +622,7 @@ namespace ARK {
 				}
 				m_Image->drawSubImageEnd();
 			#endif
-		
+
 		}
 
 		void BMFont::setKerning(int k) {
@@ -634,14 +634,14 @@ namespace ARK {
 		float BMFont::getCharXOffset(unsigned char ch) {
 			return m_Charset.Chars[ch].XOffset;
 		}
- 
+
  		unsigned int BMFont::getStringWidth(const string& Str) const {
  			if (m_loaded == false) { return 0; }
 
             char* str_i = (char*) Str.c_str();
             char* end = str_i+strlen(str_i)+1;
  			signed int len = StringUtil::utf8strlen(str_i);
-            
+
             unsigned int total = 0;
 			for (signed int i = 0; i < len; i++ )
             {
@@ -656,7 +656,7 @@ namespace ARK {
  		}
 		unsigned int BMFont::getStringHeight(const string& Str) const {
 			if (m_loaded == false) { return 0; }
-            
+
             char* str_i = (char*) Str.c_str();
             char* end = str_i+strlen(str_i)+1;
             unsigned int len = StringUtil::utf8strlen(str_i);
@@ -666,14 +666,14 @@ namespace ARK {
             {
                 uint32_t charid = utf8::next(str_i, end);
                 if (charid == 0) { continue; }
-                
+
 				if ((m_Charset.Chars[charid].Height + m_Charset.Chars[charid].YOffset) > max) {
 					max = (m_Charset.Chars[charid].Height + m_Charset.Chars[charid].YOffset);
 				}
 			}
 			return max;
 		}
-		
+
 		unsigned int BMFont::getLineHeight() const {
 			if (m_loaded == false) { return 0; }
 

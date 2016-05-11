@@ -60,7 +60,7 @@
 							(i >= bitmap.width || j >= bitmap.rows)
 								?0
 								:bitmap.buffer[i + bitmap.width*j];
-					} 
+					}
 				}
 
 				// do some texture shizzle.
@@ -169,7 +169,7 @@
 				}
 
 				// The object in which freetype holds information on a given font is called a "Face".
-				FT_Face face = FT_Face(); 
+				FT_Face face = FT_Face();
 				m_lineHeight = face->height;
 
 				// Load in the font information from the file.
@@ -185,7 +185,7 @@
 				FT_Set_Char_Size(face, h << 6, h << 6, 96, 96);
 
 				#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH))
-				
+
 				#else
 
 					// here we ask opengl to allocate resources for all the
@@ -219,9 +219,9 @@
 			FTFont::FTFont(string filename, unsigned int height):
 				#ifdef ARK2D_WINDOWS_VS
 					ARK::Font::Font(),
-				#else 
+				#else
 					Font::Font(),
-				#endif 
+				#endif
 				m_data(NULL) {
 				m_data = new FTFontData();
 				m_data->init(filename.c_str(), height);
@@ -231,22 +231,22 @@
 				ARK2D::getLog()->e("FTFont scale not implemented.");
 				exit(0);
 			}
-	 
-			void FTFont::drawString(const string& str, int x, int y) {
+
+			void FTFont::drawString(const string& str, float x, float y) {
 				#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH))
 				#else
 					Renderer* r = ARK2D::getRenderer();
 					//GLuint font = m_data->list_base;
 					//glEnable(GL_TEXTURE_2D);
-					
+
 					//glListBase(font);
 					for( unsigned int i = 0; i < str.size(); ++i ) {
 						unsigned char in = (unsigned char) str[i];
 						FTFontCharData& d = m_data->characterDatas[in];
 						r->pushMatrix();
 						r->translate(
-							(int) (x + d.offsetx),
-							(int) (y + d.offsety + m_data->m_height)
+							(float) (x + d.offsetx),
+							(float) (y + d.offsety + m_data->m_height)
 						);
 						// glCallLists(1, GL_UNSIGNED_BYTE, (GLvoid*) &in);
 						//glBindTexture(GL_TEXTURE_2D, d.tid);
@@ -264,7 +264,7 @@
 
 					}
 					//glBindTexture(GL_TEXTURE_2D, 0);
-				#endif 
+				#endif
 			}
 			unsigned int FTFont::getStringWidth(const string& Str) const {
 				unsigned int total = 0;

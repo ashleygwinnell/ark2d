@@ -11,10 +11,10 @@
 
 namespace ARK {
 	namespace Font {
-		Font::Font(): 
-			ARK::Core::Resource() 
+		Font::Font():
+			ARK::Core::Resource()
 			{
- 
+
 		}
 
 
@@ -23,7 +23,7 @@ namespace ARK {
 			drawString(Str, c_x - (getStringWidth(Str)/2), y);
 		}
 
-		void Font::drawStringCenteredAt(const string& Str, int x, int y) {
+		void Font::drawStringCenteredAt(const string& Str, float x, float y) {
 			drawString(Str, x - (getStringWidth(Str)/2), y - (getStringHeight(Str)/2));
 		}
 
