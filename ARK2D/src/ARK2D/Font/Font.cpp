@@ -34,6 +34,10 @@ namespace ARK {
 			return dynamic_cast<ARK::Font::FTFont*>(this);
 		}
 
+		uint32_t Font::getLetterColor( int position ) {
+			return 0;
+		}
+
 		Font::~Font() {
 
 		}

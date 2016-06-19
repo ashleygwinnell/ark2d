@@ -8,7 +8,7 @@
 #ifndef ARK_GEOMETRY_VECTOR3_H_
 #define ARK_GEOMETRY_VECTOR3_H_
 
-//#include "../ARK2D.h" 
+//#include "../ARK2D.h"
 //#include "../Util/Log.h"
 //#include "../Core/String.h"
 #include "../Util/Cast.h"
@@ -16,7 +16,7 @@
 using std::string;
 
 namespace ARK {
-	namespace Geometry { 
+	namespace Geometry {
 
 		/*!
 		 * \brief A 3d point in spaaaaace.
@@ -91,7 +91,7 @@ namespace ARK {
 					z += lz;
 				}
 
-				// Add 
+				// Add
 				Vector3* add(Vector3<T>* v) {
 					return add(v->getX(), v->getY(), v->getZ());
 				}
@@ -187,7 +187,7 @@ namespace ARK {
 				void distance(Vector3<T>* v, Vector3<T>* result) {
 					distance(v->getX(), v->getY(), v->getZ(), result);
 				}
-				void distance(T lx, T ly, T lz, Vector3<T>* result) { 
+				void distance(T lx, T ly, T lz, Vector3<T>* result) {
 					result->set(abs(x - lx), abs(y - ly), abs(z - lz));
 				}
 
@@ -223,13 +223,13 @@ namespace ARK {
 						z += lz;
 						if (z > 0) { z = 0; }
 					} else if (z > 0) {
-						z -= lz; 
+						z -= lz;
 						if (z < 0) { z = 0; }
 					}
 					return this;
 				}
 
-				// Restrict 
+				// Restrict
 				void restrictMax(Vector3<T>* max) {
 					restrictMax(max->getX(), max->getY(), max->getZ());
 				}
@@ -239,10 +239,10 @@ namespace ARK {
 					}
 					if (y > ly) {
 						y = ly;
-					} 
+					}
 					if (z > lz) {
 						z = lz;
-					} 
+					}
 
 					if (x < lx * -1) {
 						x = lx * -1;
@@ -251,7 +251,7 @@ namespace ARK {
 						y = ly * -1;
 					}
 					if (z < lz * -1) {
-						z = lz * -1; 
+						z = lz * -1;
 					}
 				}
 
@@ -273,8 +273,8 @@ namespace ARK {
 				}
 				Vector3<T> cross(T lx, T ly, T lz) {
 					return Vector3<T>(
-						y * lz - z * ly, 
-						z * lx - x * lz, 
+						y * lz - z * ly,
+						z * lx - x * lz,
 						x * ly - y * lx);
 				}
                 static Vector3<T> cross(const Vector3<T>& lhs, const Vector3<T>& rhs) {
@@ -300,41 +300,41 @@ namespace ARK {
 					return Vector3<T>(x,y,z);
 				}
 
-				Vector3<T> operator*=(const Vector3<T>& other) { 
+				Vector3<T> operator*=(const Vector3<T>& other) {
 					x *= other.x;
 					y *= other.y;
 					z *= other.z;
-					return *this; 
+					return *this;
 				}
-				Vector3<T> operator*=(float other) { 
+				Vector3<T> operator*=(float other) {
 					x *= other;
 					y *= other;
 					z *= other;
-					return *this; 
+					return *this;
 				}
 				Vector3<T> operator*(float other) {
 					return Vector3<T>(x*other, y*other, z*other);
 				}
 				Vector3<T> operator*(float other) const {
 					return Vector3<T>(x*other, y*other, z*other);
-				} 
-
-				Vector3<T> operator+=(const Vector3<T>& other) { 
-					add(other.x, other.y, other.z); 
-					return *this; 
-				}
-				Vector3<T> operator+=(float other) { 
-					add(other, other, other); 
-					return *this; 
 				}
 
-				Vector3<T> operator-=(const Vector3<T>& other) { 
-					subtract(other.x, other.y, other.z); 
-					return *this; 
+				Vector3<T> operator+=(const Vector3<T>& other) {
+					add(other.x, other.y, other.z);
+					return *this;
 				}
-				Vector3<T> operator-=(float other) { 
-					subtract(other, other, other); 
-					return *this; 
+				Vector3<T> operator+=(float other) {
+					add(other, other, other);
+					return *this;
+				}
+
+				Vector3<T> operator-=(const Vector3<T>& other) {
+					subtract(other.x, other.y, other.z);
+					return *this;
+				}
+				Vector3<T> operator-=(float other) {
+					subtract(other, other, other);
+					return *this;
 				}
 				Vector3<T> operator+(const Vector3<T>& rhs) const {
 					return Vector3<T>(x+rhs.x, y+rhs.y, z+rhs.z);
@@ -344,7 +344,7 @@ namespace ARK {
 				}
 
 
-			
+
 
 				string toString() {
 					string s;
@@ -359,7 +359,7 @@ namespace ARK {
 					return s;
 					// TODO: dop this without incl;uding ark2d.h
 				}
-				
+
 				T& operator[](unsigned int i) {
 					return *(&x + i);
 				}

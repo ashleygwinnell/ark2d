@@ -13,7 +13,7 @@
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
-#include <iostream> 
+#include <iostream>
 
 namespace ARK {
 	namespace Graphics {
@@ -24,7 +24,7 @@ namespace ARK {
 		const Color Color::white = Color(255, 255, 255);
 
 		const Color Color::red = Color(255, 0, 0);
-		const Color Color::green = Color(0, 255, 0); 
+		const Color Color::green = Color(0, 255, 0);
 		const Color Color::cyan = Color(0, 255, 255);
 		const Color Color::blue = Color(0, 0, 255);
 		const Color Color::magenta = Color(255, 0, 255);
@@ -80,7 +80,7 @@ namespace ARK {
 		{
 
 		}
-		
+
 		Color::Color(float r, float g, float b, float a):
 			m_r(0),
 			m_g(0),
@@ -113,7 +113,7 @@ namespace ARK {
 		void Color::setAlpha(unsigned int a) {
 			m_a = a;
 		}
-		
+
 
 		void Color::set(float r, float g, float b, float a) {
 			m_r = (unsigned int) (r * 255.0f);
@@ -144,8 +144,8 @@ namespace ARK {
 		}
 
 		void Color::set(const std::string hexString) {
-			char hex[2]; 
-			strncpy(hex, &hexString[0], 1); 
+			char hex[2];
+			strncpy(hex, &hexString[0], 1);
 			hex[1] = 0;
 
 			//std::cout << hex << " : " << hexString << std::endl;
@@ -153,19 +153,19 @@ namespace ARK {
 				ErrorDialog::createAndShow("Color::Color(string) constructor's hex color must begin with a hash symbol.");
 				exit(0);
 			}
-			
-			char red[3]; 
-			strncpy(red, &hexString[1], 2); 
+
+			char red[3];
+			strncpy(red, &hexString[1], 2);
 			red[2] = 0;
 
-			char green[3]; 
-			strncpy(green, &hexString[3], 2); 
+			char green[3];
+			strncpy(green, &hexString[3], 2);
 			green[2] = 0;
 
-			char blue[3]; 
-			strncpy(blue, &hexString[5], 2); 
+			char blue[3];
+			strncpy(blue, &hexString[5], 2);
 			blue[2] = 0;
-			
+
 			//std::cout << "Loaded Color: #" << red << green << blue << std::endl;
 			m_r = Cast::hextoint(&red[0]);
 			m_g = Cast::hextoint(&green[0]);
@@ -192,7 +192,7 @@ namespace ARK {
 		Color* Color::pointer() const {
 			return const_cast<Color*>( this );
 		}
-		
+
 		float Color::getRedf() const {
 			return float(m_r)/255.0f;
 		}
@@ -212,8 +212,11 @@ namespace ARK {
 			returnStr += Cast::inttohexcolor(m_b);
 			return returnStr;
 		}
+		uint32_t Color::asInt() const {
+			return pack(*this);
+		}
 
-		void Color::bind() const { 
+		void Color::bind() const {
 			#ifndef NO_FIXED_FUNCTION_PIPELINE
 				glColor4f(getRedf(), getGreenf(), getBluef(), getAlphaf());
 			#endif
@@ -234,5 +237,39 @@ namespace ARK {
 		Color::~Color() {
 
 		}
+
+
+		uint32_t Color::pack(Color c) {
+			return pack( &c );
+		}
+		uint32_t Color::pack(Color* c) {
+			return pack( c->m_r, c->m_g, c->m_b, c->m_a );
+		}
+		uint32_t Color::pack(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
+			uint32_t u = (unsigned char) r;
+			u <<= 8; 					// now u would be 11001010 00000000
+			u |= (unsigned char) g;		// now u would be 11001010 11111110
+			u <<= 8;					// now u would be 11001010 11111110 00000000
+			u |= (unsigned char) b;		// now u would be 11001010 11111110 10111010
+			u <<= 8; 					// now u would be 11001010 11111110 10111010 00000000
+			u |= (unsigned char) a;		// now u would be 11001010 11111110 10111010 10111110
+			            				// This is how        r        g        b        a
+			            				// are packed into one integer u.
+			return u;
+		}
+		unsigned char Color::unpackRed(uint32_t c) {
+			return (c >> 24) & 0xff;
+		}
+		unsigned char Color::unpackGreen(uint32_t c) {
+			return (c >> 16) & 0xff;
+		}
+		unsigned char Color::unpackBlue(uint32_t c) {
+			return (c >> 8) & 0xff;
+		}
+		unsigned char Color::unpackAlpha(uint32_t c) {
+			return c & 0xff;
+		}
+
+
 	}
 }

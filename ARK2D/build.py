@@ -449,6 +449,7 @@ class ARK2DBuildSystem:
 			f = open(path, "w");
 			f.write("{}");
 			f.close();
+		print("created cache file " + path);
 
 	def openCacheFile(self, file):
 		self.createCacheFile(file);
@@ -456,6 +457,7 @@ class ARK2DBuildSystem:
 		fcontents = f.read();
 		f.close();
 		fjson = json.loads(fcontents);
+		print("opened cache file " + file);
 		return fjson;
 
 	def rmdir_recursive(self, dir):
@@ -3272,6 +3274,8 @@ build:
 			for spritesheet in self.config["resources"]["spritesheets"]:
 
 				spritesheetName = spritesheet["name"];
+				print(spritesheetName);
+
 				generateThisSheet = False;
 				for imageFile in spritesheet["files"]:
 					#print( imageFile + " : " + str(cacheJSON[spritesheetName][imageFile]['date_modified']) + " : " + str(os.stat(self.game_dir + self.ds + imageFile).st_mtime) );
@@ -3301,6 +3305,7 @@ build:
 						print(compileLine);
 						subprocess.call([compileLine], shell=True); # player
 
+
 					#redocache
 					cacheChanged = True;
 					cacheJSON[spritesheetName] = {};
@@ -3325,6 +3330,7 @@ build:
 			if (cacheChanged == True):
 				self.saveCache("spritesheets", cacheJSON);
 
+			pass;
 		pass;
 
 	def openCache(self, filename):
@@ -3647,6 +3653,98 @@ build:
 			gypfiletargetcondition['defines'] = ['ARK2D_MACINTOSH', 'ARK2D_DESKTOP']; #, 'CF_EXCLUDE_CSTD_HEADERS'];
 			gypfiletargetcondition['defines'].extend(self.preprocessor_definitions);
 			gypfiletargetcondition['sources'] = [];
+
+			"""
+			gypfiletargetcondition['actions'] = [
+			{
+				'variables': {
+					'arraylist': [
+						'value1',
+						'value2',
+						'value3',
+					],
+				},
+				'action_name': 'test',
+				'inputs': [
+				 	#'<@(arraylist)',
+				],
+				'outputs': [ ],
+				'action': ['osascript', '-e', 'tell app "Finder" to display dialog "Hello World"'],
+				'message': 'hello world'
+			} ];
+			"""
+
+			gypfiletargetcondition['actions'] = [
+				# python /Users/username/ark2d/ARK2D/build.py spritesheets=true
+				{
+					'action_name': 'generate spritesheets',
+					'inputs': [],
+					'outputs': [],
+					'action': [
+						'python',
+						self.ark2d_dir + '/build.py',
+						'dir=' + self.game_dir,
+						'spritesheets=true',
+						'newconfig=true',
+						'type=game',
+						'target=' + self.target_config_file
+					],
+					'message': 'generate spritesheets'
+				},
+				{
+					'action_name': 'generate localised strings table',
+					'inputs': [],
+					'outputs': [],
+					'action': [
+						'python',
+						self.ark2d_dir + '/build.py',
+						'dir=' + self.game_dir,
+						'strings=true',
+						'newconfig=true',
+						'type=game',
+						'target=' + self.target_config_file
+					],
+					'message': 'generate localised strings table'
+				},
+				{
+					'action_name': 'Copy game assets into Xcode project',
+					'inputs': [],
+					'outputs': [],
+					'action': [
+						'cp',
+						'-r',
+						self.game_resources_dir + '/',
+						self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "data/"
+					],
+					'message': 'copy game assets'
+				},
+				{
+					'action_name': 'Copy ark2d assets into Xcode project',
+					'inputs': [],
+					'outputs': [],
+					'action': [
+						'cp',
+						'-r',
+						self.ark2d_dir + '/data/',
+						self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + 'data/ark2d/'
+					],
+					'message': 'copy ark2d assets'
+				},
+				{
+					'action_name': 'Copy ark2d library into Xcode project',
+					'inputs': [],
+					'outputs': [],
+					'action': [
+						'cp',
+						self.ark2d_dir + '/build/osx/DerivedData/ark2d/Build/Products/Default/libark2d-OSX.dylib',
+						self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + 'data/ark2d/libark2d.dylib'
+					],
+					'message': 'copy ark2d library'
+				},
+
+			];
+
+
 			gypfiletargetcondition['sources!'] = [];
 			gypfiletargetcondition['link_settings'] = {};
 			gypfiletargetcondition['link_settings']['libraries'] = [
@@ -3663,7 +3761,11 @@ build:
 	          	#config['osx']['ark2d_dir'] + '/lib/osx/libcurl.a',
 	          	#config['osx']['ark2d_dir'] + '/build/xcode/XcodeData/ark2d/Build/Products/Default/libark2d-OSX.dylib'
 	          	#self.ark2d_dir + '/lib/osx/libangelscript.a',
+
+	          	# in current project
 	          	self.game_dir + '/build/' + self.output + '/data/ark2d/libark2d.dylib'
+	          	# in ark2d dir -- we copy the latest in now!
+	          	# self.ark2d_dir + '/build/osx/DerivedData/ark2d/Build/Products/Default/libark2d-OSX.dylib'
 			];
 			gypfiletargetcondition['link_settings']['libraries'] = self.addLibrariesToArray(gypfiletargetcondition['link_settings']['libraries'], self.libs);
 
@@ -3765,7 +3867,7 @@ build:
 				print("could not delete xcode project");
 
 			# run gyp file.
-			os.system("python " + gyp_executable + "_main.py " + gypfilename + " --depth=../../src");
+			os.system("python " + gyp_executable + "_main.py " + gypfilename + " --depth=../../src --debug=all");
 
 			# hack into xcode project to add steam / other libs that need to go next to the executable.
 			#if "libs" in config['osx']:
@@ -3990,18 +4092,18 @@ build:
 			self.generateStrings();
 
 			#copy ark2d resources in to project data folder.
-			print("Copy game resources in to xcode dir");
-			game_resources_copy = "cp -r " + self.game_resources_dir + "/ " + self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "data/";
-			print(game_resources_copy);
-			subprocess.call([game_resources_copy], shell=True); #libark2d
+			#print("Copy game resources in to xcode dir");
+			#game_resources_copy = "cp -r " + self.game_resources_dir + "/ " + self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "data/";
+			#print(game_resources_copy);
+			#subprocess.call([game_resources_copy], shell=True); #libark2d
 
-			print("Copy ark2d resources in to xcode dir");
-			ark2d_resources_copy_line = "cp -r " + self.ark2d_dir + "/data/ " + self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "data/ark2d/";
-			print(ark2d_resources_copy_line);
-			subprocess.call([ark2d_resources_copy_line], shell=True); #libark2d
+			#print("Copy ark2d resources in to xcode dir");
+			#ark2d_resources_copy_line = "cp -r " + self.ark2d_dir + "/data/ " + self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "data/ark2d/";
+			#print(ark2d_resources_copy_line);
+			#subprocess.call([ark2d_resources_copy_line], shell=True); #libark2d
 
-			print("Copy ark2d dylib in to xcode dir");
-			subprocess.call(["cp " + self.ark2d_dir + "/build/osx/DerivedData/ark2d/Build/Products/Default/libark2d-OSX.dylib " + self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "data/ark2d/libark2d.dylib"], shell=True); #libark2d
+			#print("Copy ark2d dylib in to xcode dir");
+			#subprocess.call(["cp " + self.ark2d_dir + "/build/osx/DerivedData/ark2d/Build/Products/Default/libark2d-OSX.dylib " + self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "data/ark2d/libark2d.dylib"], shell=True); #libark2d
 
 			#generate icons
 			"""
@@ -5181,30 +5283,22 @@ build:
 		# define vars.
 		nl = "\r\n";
 
-
-
-		#self.android_sdkdir = self.android_sdkdir; #config[self.platformOn]['android']['sdk_dir'];
-		#ndkdir = config[self.platformOn]['android']['ndk_dir'];
-
-
 		if (self.building_game):
+
+			android_projectType = 'intellij';
 
 			#sdk version, not NDK.
 			appplatformno = self.android_config['sdk_version'];
-			appplatform= "android-" + str(appplatformno);
+			appplatform = "android-" + str(appplatformno);
 			ndkappplatformno = self.android_config['ndk_version'];
 			ndkappplatform = "android-" + str(ndkappplatformno);
 
 			print ("Android sdk version: " + str(appplatformno));
 
-			#game specific vars
-			#game_name = #config['game_name'];
-			#game_name_safe = config['game_name_safe'];
-			#game_short_name = config['game_short_name'];
-			#game_description = config['game_description'];
-			#game_resources_dir = config[self.platformOn]['game_resources_dir'];
-			#company_name = config['company_name'];
-			#company_name_safe = config['company_name_safe'];
+			self.android_billing = self.android_config['billing'] or False;
+			if (self.android_billing):
+				self.android_config['gradle_libraries'] = ["market_licensing"];
+
 			javaPackageName = "org." + self.developer_name_safe + "." + self.game_name_safe;
 
 			audio_quality = self.android_config['audio_quality'];
@@ -5214,38 +5308,71 @@ build:
 			ndkprojectpath = self.game_dir;
 			thisCreateDirs = [self.game_dir + self.ds + "build"];
 			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "build-cache"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "assets"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "assets" + self.ds + "ark2d"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "src"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "gen"]);
-			#thisCreateDirs.extend([rootPath+"/build/android/project/lib"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "libs"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "libs" + self.ds + "armeabi"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "libs" + self.ds + "armeabi-v7a"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "libs" + self.ds + "x86"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "obj"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "obj" + self.ds + "local"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "obj" + self.ds + "local" + self.ds + "armeabi"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "obj" + self.ds + "local" + self.ds + "armeabi-v7a"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "obj" + self.ds + "local" + self.ds + "x86"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "res"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "res" + self.ds + "raw"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "res" + self.ds + "drawable"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "res" + self.ds + "drawable-mdpi"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "res" + self.ds + "drawable-hdpi"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "res" + self.ds + "drawable-xhdpi"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "res" + self.ds + "drawable-xxhdpi"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "res" + self.ds + "values"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "src" + self.ds + "org"]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "src" + self.ds + "org" + self.ds + "" + self.developer_name_safe]);
-			thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "src" + self.ds + "org" + self.ds + "" + self.developer_name_safe + self.ds + self.game_name_safe]);
+
+			if (android_projectType == 'intellij'):
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe ]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "build"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "assets"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "assets" + self.ds + "ark2d"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "java"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "java" + self.ds + "org"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "java" + self.ds + "org" + self.ds + self.developer_name_safe]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "java" + self.ds + "org" + self.ds + self.developer_name_safe + self.ds + self.game_name_safe ]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "jniLibs" + self.ds + "armeabi"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "jniLibs" + self.ds + "armeabi-v7a"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "jniLibs" + self.ds + "x86"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res" + self.ds + "raw"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res" + self.ds + "drawable"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res" + self.ds + "drawable-mdpi"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res" + self.ds + "drawable-hdpi"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res" + self.ds + "drawable-xhdpi"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res" + self.ds + "drawable-xxhdpi"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res" + self.ds + "values"]);
+
+				if (self.android_billing):
+					thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "aidl"]);
+					thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "aidl" + self.ds + "com"]);
+					thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "aidl" + self.ds + "com" + self.ds + "android" + self.ds + "vending" + self.ds + "billing" ]);
+					thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "java" + self.ds + "org" + self.ds + self.developer_name_safe + self.ds + self.game_name_safe + self.ds + "iab_util"]);
+
+
+			else:
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "assets"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "assets" + self.ds + "ark2d"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "src"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "gen"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "libs"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "libs" + self.ds + "armeabi"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "libs" + self.ds + "armeabi-v7a"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "libs" + self.ds + "x86"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "obj"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "obj" + self.ds + "local"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "obj" + self.ds + "local" + self.ds + "armeabi"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "obj" + self.ds + "local" + self.ds + "armeabi-v7a"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "obj" + self.ds + "local" + self.ds + "x86"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "res"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "res" + self.ds + "raw"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "res" + self.ds + "drawable"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "res" + self.ds + "drawable-mdpi"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "res" + self.ds + "drawable-hdpi"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "res" + self.ds + "drawable-xhdpi"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "res" + self.ds + "drawable-xxhdpi"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "res" + self.ds + "values"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "src" + self.ds + "org"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "src" + self.ds + "org" + self.ds + "" + self.developer_name_safe]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "src" + self.ds + "org" + self.ds + "" + self.developer_name_safe + self.ds + self.game_name_safe]);
+				pass;
 			pass;
 		else:
 
 			#sdk version, not NDK.
 			appplatformno = self.android_config['sdk_version'];
-			appplatform= "android-" + str(appplatformno);
+			appplatform = "android-" + str(appplatformno);
 			ndkappplatformno = self.android_config['ndk_version'];
 			ndkappplatform = "android-" + str(ndkappplatformno);
 
@@ -5282,14 +5409,19 @@ build:
 		if (self.building_game):
 
 			if (self.platform == "android" and self.ouya == True):
+
+				if (android_projectType == 'intellij'):
+					print("intellij not supported - ouya");
+					exit();
+
 				print("copying Ouya libs");
-				shutil.copy(self.ouya_config['sdk'] + "/libs/ouya-sdk.jar", self.game_dir + self.ds + "build" + self.ds + self.output + self.ds + "project" + self.ds + "libs" + self.ds + "ouya-sdk.jar");
+				shutil.copy(self.ouya_config['sdk'] + "/libs/ouya-sdk.jar", self.game_dir + self.ds + "build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "libs" + self.ds + "ouya-sdk.jar");
 
 				print("copying Ouya store graphic");
 				#if "ouya" in config:
 				if "store_icon" in self.ouya_config:
 					ouya_icon_full = self.str_replace(self.ouya_config['store_icon'], [("%PREPRODUCTION_DIR%", self.game_preproduction_dir)]);
-					shutil.copy(ouya_icon_full, self.game_dir + self.ds + "build" + self.ds + self.output + self.ds + "project" + self.ds + "res" + self.ds + "drawable-xhdpi" + self.ds + "ouya_icon.png");
+					shutil.copy(ouya_icon_full, self.game_dir + self.ds + "build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "res" + self.ds + "drawable-xhdpi" + self.ds + "ouya_icon.png");
 
 			if (self.platform == "android" and self.firetv == True):
 				print("TODO: copy firetv libs...");
@@ -5302,6 +5434,7 @@ build:
 			#if "libs" not in config['android']:
 			#	config['android']['libs'] = [];
 
+			print("NDK");
 			print("Creating Android.mk");
 			android_make_file = "";
 			android_make_file += "LOCAL_PATH := $(call my-dir)/../../" + nl + nl;
@@ -5325,7 +5458,7 @@ build:
 			if (self.firetv == True):
 				android_make_file += "-DARK2D_AMAZON ";
 
-			android_make_file += "-fno-exceptions -fno-rtti -fexceptions  -Wno-psabi ";
+			android_make_file += "-fno-exceptions -fexceptions  -Wno-psabi "; # -fno-rtti
 			if (self.debug):
 				android_make_file += " -DARK2D_DEBUG -DDEBUG -DNDK_DEBUG -O0 ";
 			else:
@@ -5376,16 +5509,15 @@ build:
 			android_make_file += lib_search_path;
 			android_make_file += nl+nl;
 
-
-
 			android_make_file += "include $(BUILD_SHARED_LIBRARY)" + nl;
 			f = open(appbuildscript, "w");
 			f.write(android_make_file);
 			f.close();
 
-			#make application.mk
+			# make application.mk
 			print("Creating Application.mk");
 			application_make_file = "";
+			application_make_file += "NDK_TOOLCHAIN_VERSION := 4.8" + nl;
 			application_make_file += "APP_PROJECT_PATH := " + ndkprojectpath + nl;
 			application_make_file += "APP_BUILD_SCRIPT := " + appbuildscript + nl;
 			application_make_file += "NDK_APP_OUT=" + appbuilddir + nl;
@@ -5397,11 +5529,13 @@ build:
 			if (self.debug):
 				application_make_file += "APP_ABI := armeabi-v7a " + nl;
 			else:
-				application_make_file += "APP_ABI := armeabi armeabi-v7a ";
-				application_make_file += "x86 ";
+				application_make_file += "APP_ABI := armeabi armeabi-v7a x86 ";
 				application_make_file += nl;
 
-			application_make_file += "APP_STL := stlport_static" + nl;
+			application_make_file += "APP_CPPFLAGS += -std=c++11 -frtti " + nl;
+			application_make_file += "APP_STL := gnustl_shared" + nl; #c++_shared" + nl; #stlport_static
+			application_make_file += "LOCAL_C_INCLUDES += " + self.android_ndkdir + "/sources/cxx-stl/gnu-libstdc++/4.8/include" + nl;
+
 			f = open(appbuildscript3, "w");
 			f.write(application_make_file);
 			f.close();
@@ -5410,34 +5544,67 @@ build:
 
 			#copy ark2d in to project
 			print("Copying ARK2D in to android sdk");
-			#subprocess.call(["cp -r " +self.ark2d_dir + "/build/android/libs/armeabi-v7a/ " + ndkdir + "/platforms/"+ndkappplatform+"/arch-arm/usr/lib/"], shell=True);
-			#subprocess.call(["cp -r " +self.ark2d_dir + "/build/android/libs/armeabi-v7a/ " + ndkdir + "/platforms/"+ndkappplatform+"/arch-x86/usr/lib/"], shell=True);
-
 			shutil.copy2(self.ark2d_dir + self.ds + "build" + self.ds + "android" + self.ds + "libs" + self.ds + "armeabi-v7a" + self.ds + "libark2d.so", self.android_ndkdir + self.ds + "platforms"+self.ds+ndkappplatform+self.ds+"arch-arm" + self.ds + "usr" + self.ds + "lib" + self.ds);
 			if not self.debug:
 				shutil.copy2(self.ark2d_dir + self.ds + "build" + self.ds + "android" + self.ds + "libs" + self.ds + "x86" + self.ds + "libark2d.so", self.android_ndkdir + self.ds + "platforms"+self.ds+ndkappplatform+self.ds+"arch-x86" + self.ds + "usr" + self.ds + "lib" + self.ds);
 
-			#print ("Copying game libraries into android sdk"):
+			#
+			# Generate IntelliJ / Android Studio project.
+			#
+			if (android_projectType == 'intellij'):
+
+				intellij_template_folder = self.ark2d_dir + self.ds + "lib" + self.ds + "android" + self.ds + "project-intellj";
+				intellij_folder = rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij";
+
+				# write settings.gradle
+				f = open(intellij_folder + self.ds + "settings.gradle", "w");
+				f.write("include ':" + self.game_name_safe + "'\n");
+
+				if 'gradle_libraries' in self.android_config:
+					for gradle_library in self.android_config['gradle_libraries']:
+						f.write("include ':" + gradle_library + "'\n");
+				f.close();
+
+				# copy project.iml, gradlew.bat, gradle.sh, build.gradle
+				shutil.copy2(intellij_template_folder + self.ds + "build.gradle", intellij_folder + self.ds );
+				shutil.copy2(intellij_template_folder + self.ds + "project-intellij.iml", intellij_folder + self.ds );
+				shutil.copy2(intellij_template_folder + self.ds + "gradlew.bat", intellij_folder + self.ds );
+				shutil.copy2(intellij_template_folder + self.ds + "gradlew",     intellij_folder + self.ds );
+
+				# write local.properties ( this should not ever go in vcs )
+				f = open(intellij_folder + self.ds + "local.properties", "w");
+				f.write("sdk.dir=" + self.android_sdkdir);
+				f.close();
+
+				# copy libraries in.
+				if 'gradle_libraries' in self.android_config:
+					for gradle_library in self.android_config['gradle_libraries']:
+						self.mycopytree( intellij_template_folder + self.ds + gradle_library, intellij_folder + self.ds + gradle_library );
+
+				project_manifest_dir = intellij_folder + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main";
+				project_assets_dir = intellij_folder + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "assets";
+				project_src_dir = intellij_folder + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "java" + self.ds + "org" + self.ds + self.developer_name_safe + self.ds + self.game_name_safe;
+				project_res_dir = intellij_folder + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res";
+				project_nlib_dir = intellij_folder + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "jniLibs";
+
+				#copy iab aidl in.
+				if (self.android_billing):
+					shutil.copy2(intellij_template_folder + "/market_billing/IInAppBillingService.aidl", project_manifest_dir + "/aidl/com/android/vending/billing/");
+
+			elif (android_projectType == 'eclipse'):
+
+				project_manifest_dir = rootPath + "/build/" + self.output + "/project-eclipse";
+				project_assets_dir = rootPath + self.ds + "build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "assets";
+				project_src_dir = rootPath + "/build/" + self.output + "/project-eclipse/src/org/" + self.developer_name_safe + self.ds + self.game_name_safe;
+				project_res_dir = rootPath + "/build/" + self.output + "/project-eclipse" + self.ds + "res";
+				project_nlib_dir = rootPath + "/build/" + self.output + "/project-eclipse" + self.ds + "libs";
 
 
-			#return;
-
-			#copy resources in to "assets" dir.
-			#print("Copying game resources in to project");
-			#subprocess.call(["cp -r " + game_resources_dir + "/ " + rootPath + "/build/android/project/assets/"], shell=True);
-
+			# making asset directories
 			print("Making new asset directories");
 			directoriesToCreate = self.listDirectories(self.game_resources_dir, False);
 			for dir in directoriesToCreate:
-				self.makeDirectories([rootPath + self.ds+"build" + self.ds + self.output + self.ds + "project" + self.ds + "assets" + self.ds + dir]);
-			#self.makeDirectories(directoriesToCreate);
-
-			#print("making directories for the 'lib's to copy in");
-			#if ("libs" in config['android']):
-			#	for lib in config['android']['libs']:
-			#		td = lib[0:lib.rfind(self.ds)];
-			#		self.makeDirectories([rootPath + "/build/android/project/" + td]);
-
+				self.makeDirectories([project_assets_dir + self.ds + dir]);
 
 			#generate game spritesheets
 			self.generateSpriteSheets();
@@ -5452,7 +5619,7 @@ build:
 			print(filesToCopy);
 			for file in filesToCopy:
 				fromfile = self.game_resources_dir + self.ds + file;
-				tofile = rootPath + self.ds + "build" + self.ds + self.output + self.ds + "project" + self.ds + "assets" + self.ds + file;
+				tofile = project_assets_dir + self.ds + file;
 
 				#replace spaces in paths on max osx with slash-spaces
 				#fromfile = fromfile.replace(" ", "\ ");
@@ -5488,6 +5655,7 @@ build:
 			editsStrReplace = [
 				("%GAME_CLASS_NAME%", self.game_class_name),
 				("%GAME_SHORT_NAME%", self.game_name_safe),
+				("%GAME_NAME_SAFE%", self.game_name_safe),
 				("%COMPANY_NAME%", self.developer_name_safe),
 				("%PACKAGE_DOT_NOTATION%", javaPackageName),
 				("%GAME_WIDTH%", str(self.android_config['game_width'])),
@@ -5503,6 +5671,10 @@ build:
 			#	if (self.android_config['game_services']['use']):
 			#		editsGameServices = [("%GAME_SERVICES_BLOCKSTART%", ""), ("%GAME_SERVICES_BLOCKEND%", "") ];
 			editsGameServices = [("%GAME_SERVICES_BLOCKSTART%", ""), ("%GAME_SERVICES_BLOCKEND%", "") ];
+
+			editsInAppBilling = [("%INAPPBILLING_BLOCKSTART%", "/*"), ("%INAPPBILLING_BLOCKEND%", "*/"), ("%INAPPBILLING_PUBLICKEY%", "") ];
+			if (self.android_billing):
+				editsInAppBilling = [("%INAPPBILLING_BLOCKSTART%", ""), ("%INAPPBILLING_BLOCKEND%", ""), ("%INAPPBILLING_PUBLICKEY%", self.android_config['billing_signature'] ) ];
 
 			# stuff to hide from old android
 			editsOldAndroid23 = [
@@ -5535,7 +5707,7 @@ build:
 			if (self.ouya == True):
 				if "key_file" in self.ouya_config:
 					actual_key_file = self.str_replace(self.ouya_config['key_file'], [("%PREPRODUCTION_DIR%", self.game_preproduction_dir)]);
-					actual_kf_copy_cmd = "cp " + actual_key_file + " " + rootPath+"/build/" + self.output + "/project/res/raw/key.der";
+					actual_kf_copy_cmd = "cp " + actual_key_file + " " + rootPath+"/build/" + self.output + "/project-eclipse/res/raw/key.der";
 					print("Copying key file");
 					print(actual_kf_copy_cmd);
 					subprocess.call([actual_kf_copy_cmd], shell=True);
@@ -5589,7 +5761,7 @@ build:
 			try:
 				print("using custom AndroidManifest.xml");
 				androidManifestPath = self.android_config['override_manifest'];
-				subprocess.call(['cp ' + androidManifestPath + " " + rootPath+"/build/" + self.output + "/project/AndroidManifest.xml"], shell=True);
+				subprocess.call(['cp ' + androidManifestPath + " " + project_manifest_dir + "/AndroidManifest.xml"], shell=True);
 				#todo: copy this to rootPath+"/build/android/project/AndroidManifest.xml";
 			except:
 
@@ -5610,11 +5782,14 @@ build:
 				else:
 					androidManifestContents += "	android:installLocation=\"internalOnly\"" + nl;
 				androidManifestContents += "	android:versionCode=\"1\" " + nl;
-				androidManifestContents += "	android:versionName=\"1.0\"> " + nl;
+				androidManifestContents += "	android:versionName=\"" + self.game_version + "\"> " + nl;
 				androidManifestContents += "	<uses-sdk android:minSdkVersion=\"" + minSdkVersion + "\" android:targetSdkVersion=\"" + targetSdkVersion + "\"/>" + nl;
 				androidManifestContents += "	<uses-feature android:glEsVersion=\"0x00020000\" android:required=\"true\" />" + nl;
 				for permission in self.android_config['permissions']:
 					androidManifestContents += "	<uses-permission android:name=\"android.permission." + permission + "\" />" + nl;
+				if ('BILLING' in self.android_config['permissions']):
+					androidManifestContents += "	<uses-permission android:name=\"com.android.vending.BILLING\" />" + nl;
+
 				androidManifestContents += "	<application" + nl;
 
 				if self.ouya == True or self.firetv == True:
@@ -5678,17 +5853,17 @@ build:
 				androidManifestContents += "		</activity>" + nl;
 				androidManifestContents += "	</application>" + nl;
 				androidManifestContents += "</manifest>" + nl;
-				f = open(rootPath+"/build/" + self.output + "/project/AndroidManifest.xml", "w");
+				f = open( project_manifest_dir + "/AndroidManifest.xml", "w");
 				f.write(androidManifestContents);
 				f.close();
-				androidManifestPath = rootPath+"/build/" + self.output + "/project/AndroidManifest.xml";
+				androidManifestPath = project_manifest_dir + "/AndroidManifest.xml";
 
 			# ...
 			ic_launcher_name = "ic_launcher.png";
 			if self.ouya == True or self.firetv == True:
 				ic_launcher_name = "app_icon.png";
 
-			print("copying icon in to project: ");
+			print("copying icon in to eclipse project: ");
 			if ("icon" in self.android_config):
 				if not self.android_config['icon']['use_master_icon']:
 					icon_xxhdpi = self.android_config['icon']['xxhdpi'];
@@ -5703,35 +5878,37 @@ build:
 					icon_mdpi = self.str_replace(icon_mdpi, [("%PREPRODUCTION_DIR%", self.game_preproduction_dir)]);
 					icon_nodpi = self.str_replace(icon_nodpi, [("%PREPRODUCTION_DIR%", self.game_preproduction_dir)]);
 
-					#subprocess.call(['cp ' + icon_xxhdpi + " " + rootPath+"/build/android/project/res/drawable-xxhdpi/ic_launcher.png"], shell=True);
-					#subprocess.call(['cp ' + icon_xhdpi + " " + rootPath+"/build/android/project/res/drawable-xhdpi/ic_launcher.png"], shell=True);
-					#subprocess.call(['cp ' + icon_hdpi + " " + rootPath+"/build/android/project/res/drawable-hdpi/ic_launcher.png"], shell=True);
-					#subprocess.call(['cp ' + icon_mdpi + " " + rootPath+"/build/android/project/res/drawable-mdpi/ic_launcher.png"], shell=True);
-					#subprocess.call(['cp ' + icon_nodpi + " " + rootPath+"/build/android/project/res/drawable/ic_launcher.png"], shell=True);
+					#subprocess.call(['cp ' + icon_xxhdpi + " " + rootPath+"/build/android/project-eclipse/res/drawable-xxhdpi/ic_launcher.png"], shell=True);
+					#subprocess.call(['cp ' + icon_xhdpi + " " + rootPath+"/build/android/project-eclipse/res/drawable-xhdpi/ic_launcher.png"], shell=True);
+					#subprocess.call(['cp ' + icon_hdpi + " " + rootPath+"/build/android/project-eclipse/res/drawable-hdpi/ic_launcher.png"], shell=True);
+					#subprocess.call(['cp ' + icon_mdpi + " " + rootPath+"/build/android/project-eclipse/res/drawable-mdpi/ic_launcher.png"], shell=True);
+					#subprocess.call(['cp ' + icon_nodpi + " " + rootPath+"/build/android/project-eclipse/res/drawable/ic_launcher.png"], shell=True);
 
-					shutil.copy2(icon_xxhdpi, rootPath + self.ds + "build" + self.ds + self.output + self.ds + "project" + self.ds + "res" + self.ds + "drawable-xxhdpi" + self.ds + ic_launcher_name);
-					shutil.copy2(icon_xhdpi, rootPath + self.ds + "build" + self.ds + self.output + self.ds + "project" + self.ds + "res" + self.ds + "drawable-xhdpi" + self.ds + ic_launcher_name);
-					shutil.copy2(icon_hdpi, rootPath + self.ds + "build" + self.ds + self.output + self.ds + "project" + self.ds + "res" + self.ds + "drawable-hdpi" + self.ds + ic_launcher_name);
-					shutil.copy2(icon_mdpi, rootPath + self.ds + "build" + self.ds + self.output + self.ds + "project" + self.ds + "res" + self.ds + "drawable-mdpi" + self.ds + ic_launcher_name);
-					shutil.copy2(icon_nodpi, rootPath + self.ds + "build" + self.ds + self.output + self.ds + "project" + self.ds + "res" + self.ds + "drawable" + self.ds + ic_launcher_name);
+					shutil.copy2(icon_xxhdpi, project_res_dir + self.ds + "drawable-xxhdpi" + self.ds + ic_launcher_name);
+					shutil.copy2(icon_xhdpi, project_res_dir + self.ds + "drawable-xhdpi" + self.ds + ic_launcher_name);
+					shutil.copy2(icon_hdpi, project_res_dir + self.ds + "drawable-hdpi" + self.ds + ic_launcher_name);
+					shutil.copy2(icon_mdpi, project_res_dir + self.ds + "drawable-mdpi" + self.ds + ic_launcher_name);
+					shutil.copy2(icon_nodpi, project_res_dir + self.ds + "drawable" + self.ds + ic_launcher_name);
 
 				else:
 					if (self.android_config['icon']['icon'] != ''):
-						subprocess.call(['cp ' + self.android_config['icon']['icon'] + " " + rootPath+"/build/" + self.output + "/project/res/drawable/" + ic_launcher_name], shell=True);
+						subprocess.call(['cp ' + self.android_config['icon']['icon'] + " " + project_res_dir + "/drawable/" + ic_launcher_name], shell=True);
 					#else:
-					#	subprocess.call(['cp ' + self.ark2d_dir + "/__preproduction/icon/512.png " + rootPath+"/build/android/project/res/drawable/ic_launcher.png"], shell=True);
+					#	subprocess.call(['cp ' + self.ark2d_dir + "/__preproduction/icon/512.png " + rootPath+"/build/android/project-eclipse/res/drawable/ic_launcher.png"], shell=True);
 
 
 			# adding default libs & library projects
 			self.android_config['ark_libs'] = [];
-			self.android_config['ark_libs'].extend([self.ark2d_dir + "/lib/android/libs/android-support-v4.jar"]);
-			self.android_config['ark_libs'].extend([self.ark2d_dir + "/lib/android/libs/libGoogleAnalyticsV2.jar"]);
+			if (android_projectType == 'eclipse'):
+				self.android_config['ark_libs'].extend([self.ark2d_dir + "/lib/android/libs/android-support-v4.jar"]);
+				self.android_config['ark_libs'].extend([self.ark2d_dir + "/lib/android/libs/libGoogleAnalyticsV2.jar"]);
 
 
 			self.android_config['ark_library_projects'] = [];
 			temp_library_projects = [];
-			temp_library_projects.extend([self.ark2d_dir + "/lib/android/library_projects/play_licensing/library"]);
-			temp_library_projects.extend([self.ark2d_dir + "/lib/android/library_projects/play_services"]);
+			if (android_projectType == 'eclipse'):
+				temp_library_projects.extend([self.ark2d_dir + "/lib/android/library_projects/play_licensing/library"]);
+				temp_library_projects.extend([self.ark2d_dir + "/lib/android/library_projects/play_services"]);
 
 			if (self.firetv == True):
 				temp_library_projects.extend([self.ark2d_dir + "/lib/android/library_projects/GameCircleSDK"]);
@@ -5755,63 +5932,97 @@ build:
 			#config['android']['ark_library_projects']
 
 
+			if (android_projectType == 'eclipse'):
+				print("------");
+				print("Copying libs to eclipse project...");
+				#if ("libs" in self.android_config):
+				if (len(self.android_libs) > 0):
+					for lib in self.android_libs: #config['libs']:
+						libf = lib[lib.rfind(self.ds)+1:len(lib)];
+						print("	copying " + lib + " in to project as " + libf + "...");
 
-			print("------");
-			print("Copying libs to project...");
-			#if ("libs" in self.android_config):
-			if (len(self.android_libs) > 0):
-				for lib in self.android_libs: #config['libs']:
+						#subprocess.call(['cp ' + rootPath + "/" + lib + " " + rootPath+"/build/android/project-eclipse/libs/" + libf], shell=True);
+						shutil.copy2(lib, rootPath + self.ds + "build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "libs" + self.ds + libf);
+
+				print("------");
+				print("Copying ark libs to eclipse project...")
+				for lib in self.android_config['ark_libs']:
 					libf = lib[lib.rfind(self.ds)+1:len(lib)];
 					print("	copying " + lib + " in to project as " + libf + "...");
+					shutil.copy2(lib, rootPath + self.ds + "build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "libs" + self.ds + libf);
 
-					#subprocess.call(['cp ' + rootPath + "/" + lib + " " + rootPath+"/build/android/project/libs/" + libf], shell=True);
-					shutil.copy2(lib, rootPath + self.ds + "build" + self.ds + self.output + self.ds + "project" + self.ds + "libs" + self.ds + libf);
+				print("------");
+				print("generating eclipse project.properties");
+				projectPropertiesContents = "";
 
-			print("------");
-			print("Copying ark libs to project...")
-			for lib in self.android_config['ark_libs']:
-				libf = lib[lib.rfind(self.ds)+1:len(lib)];
-				print("	copying " + lib + " in to project as " + libf + "...");
-				shutil.copy2(lib, rootPath + self.ds + "build" + self.ds + self.output + self.ds + "project" + self.ds + "libs" + self.ds + libf);
+				if (self.firetv):
+					projectPropertiesContents += "target=Amazon.com:Amazon Fire TV SDK Addon:17";
+				else:
+					projectPropertiesContents += "target=" + appplatform;
 
-			print("------");
-			print("generating project.properties");
-			projectPropertiesContents = "";
+				library_project_count = 1;
 
-			if (self.firetv):
-				projectPropertiesContents += "target=Amazon.com:Amazon Fire TV SDK Addon:17";
-			else:
-				projectPropertiesContents += "target=" + appplatform;
-
-			library_project_count = 1;
-
-			if len(self.android_libraryprojects) > 0:
-				projectPropertiesContents += nl;
-				for library_project in self.android_libraryprojects: #android_config['library_projects']:
-					projectPropertiesContents += "android.library.reference." + str(library_project_count) + "=../../../" + library_project;
+				if len(self.android_libraryprojects) > 0:
 					projectPropertiesContents += nl;
-					library_project_count += 1;
+					for library_project in self.android_libraryprojects: #android_config['library_projects']:
+						projectPropertiesContents += "android.library.reference." + str(library_project_count) + "=../../../" + library_project;
+						projectPropertiesContents += nl;
+						library_project_count += 1;
 
-			if "ark_library_projects" in self.android_config:
-				projectPropertiesContents += nl;
-				for library_project in self.android_config['ark_library_projects']:
-					projectPropertiesContents += "android.library.reference." + str(library_project_count) + "=" + library_project;
+				if "ark_library_projects" in self.android_config:
 					projectPropertiesContents += nl;
-					library_project_count += 1;
+					for library_project in self.android_config['ark_library_projects']:
+						projectPropertiesContents += "android.library.reference." + str(library_project_count) + "=" + library_project;
+						projectPropertiesContents += nl;
+						library_project_count += 1;
 
 
-			f = open(rootPath+"/build/" + self.output + "/project/project.properties", "w");
-			f.write(projectPropertiesContents);
-			f.close();
+				f = open(rootPath+"/build/" + self.output + "/project-eclipse/project.properties", "w");
+				f.write(projectPropertiesContents);
+				f.close();
 
-			#generate ids.xml
+				#generate project .classpath file
+				print("------");
+				print("create project .classpath file");
+				androidProjectClasspathContents = "";
+				androidProjectClasspathContents += "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + nl;
+				androidProjectClasspathContents += "<classpath> " + nl;
+				androidProjectClasspathContents += "	<classpathentry kind=\"src\" path=\"src\"/> " + nl;
+				androidProjectClasspathContents += "	<classpathentry kind=\"src\" path=\"gen\"/> " + nl;
+				androidProjectClasspathContents += "	<classpathentry kind=\"con\" path=\"com.android.ide.eclipse.adt.ANDROID_FRAMEWORK\"/> " + nl;
+				androidProjectClasspathContents += "	<classpathentry exported=\"true\" kind=\"con\" path=\"com.android.ide.eclipse.adt.LIBRARIES\"/> " + nl;
+				androidProjectClasspathContents += " 	<classpathentry kind=\"con\" path=\"com.android.ide.eclipse.adt.DEPENDENCIES\" /> ";
+
+				if ("libs" in self.android_config):
+					for lib in self.android_libs: #_config['libs']:
+						libf = lib[lib.rfind(self.ds)+1:len(lib)];
+						androidProjectClasspathContents += "<classpathentry exported=\"true\" kind=\"lib\" path=\"libs/" + libf + "\"/>" + nl;
+
+				if ("ark_libs" in self.android_config):
+					for lib in self.android_config['ark_libs']:
+						libf = lib[lib.rfind(self.ds)+1:len(lib)];
+						androidProjectClasspathContents += "<classpathentry exported=\"true\" kind=\"lib\" path=\"libs/" + libf + "\"/>" + nl;
+
+				# force ouya-sdk lib into classpath
+				if self.ouya == True:
+					androidProjectClasspathContents += "<classpathentry exported=\"true\" kind=\"lib\" path=\"libs/ouya-sdk.jar\"/>" + nl;
+
+				androidProjectClasspathContents += "	<classpathentry kind=\"output\" path=\"bin/classes\"/> " + nl;
+				androidProjectClasspathContents += "</classpath> " + nl;
+				f = open(rootPath+"/build/"+ self.output + "/project-eclipse/.classpath", "w");
+				f.write(androidProjectClasspathContents);
+				f.close();
+
+			#
+			# generate ids.xml
+			#
 			print("------");
 			print("create ids.xml");
 			if "override_ids" in self.android_config:
 				print("using custom ids.xml");
 				androidIdsPath = self.android_config['override_ids'];
-				subprocess.call(['cp ' + androidIdsPath + " " + rootPath+"/build/" + self.output + "/project/res/values/ids.xml"], shell=True);
-				#todo: copy this to rootPath+"/build/android/project/res/values/ids.xml";
+				subprocess.call(['cp ' + androidIdsPath + " " + project_res_dir + "/values/ids.xml"], shell=True);
+				#todo: copy this to rootPath+"/build/android/project-eclipse/res/values/ids.xml";
 			else:
 				print("generating default ids.xml");
 
@@ -5832,19 +6043,20 @@ build:
 				androidStringsXmlContents += "</string>" + nl;
 				androidStringsXmlContents += "	<string name=\"achievement_id_test\">1</string>" + nl;
 				androidStringsXmlContents += "</resources>" + nl;
-				f = open(rootPath+"/build/" + self.output + "/project/res/values/ids.xml", "w");
+				f = open(project_res_dir + "/values/ids.xml", "w");
 				f.write(androidStringsXmlContents);
 				f.close();
 
-
-			#generate strings.xml
+			#
+			# generate strings.xml
+			#
 			print("------");
 			print("create strings.xml");
 			if "override_strings" in self.android_config:
 				print("using custom strings.xml");
 				androidStringsPath = self.android_config['override_strings'];
-				subprocess.call(['cp ' + androidStringsPath + " " + rootPath+"/build/" + self.output + "/project/res/values/strings.xml"], shell=True);
-				#todo: copy this to rootPath+"/build/android/project/res/values/ids.xml";
+				subprocess.call(['cp ' + androidStringsPath + " " + project_res_dir + "/values/strings.xml"], shell=True);
+				#todo: copy this to rootPath+"/build/android/project-eclipse/res/values/ids.xml";
 
 			else:
 				game_name_forstrings = self.game_name.replace("'", "\\'");
@@ -5859,44 +6071,33 @@ build:
 				androidStringsXmlContents += "	<string name=\"gamehelper_license_failed\">License check failed.</string>" + nl;
 				androidStringsXmlContents += "	<string name=\"gamehelper_unknown_error\">Unknown error.</string>" + nl;
 				androidStringsXmlContents += "</resources>" + nl;
-				f = open(rootPath+"/build/" + self.output + "/project/res/values/strings.xml", "w");
+				f = open(project_res_dir +  "/values/strings.xml", "w");
 				f.write(androidStringsXmlContents);
 				f.close();
 
-			#generate project .classpath file
-			print("------");
-			print("create project .classpath file");
-			androidProjectClasspathContents = "";
-			androidProjectClasspathContents += "<?xml version=\"1.0\" encoding=\"UTF-8\"?> " + nl;
-			androidProjectClasspathContents += "<classpath> " + nl;
-			androidProjectClasspathContents += "	<classpathentry kind=\"src\" path=\"src\"/> " + nl;
-			androidProjectClasspathContents += "	<classpathentry kind=\"src\" path=\"gen\"/> " + nl;
-			androidProjectClasspathContents += "	<classpathentry kind=\"con\" path=\"com.android.ide.eclipse.adt.ANDROID_FRAMEWORK\"/> " + nl;
-			androidProjectClasspathContents += "	<classpathentry exported=\"true\" kind=\"con\" path=\"com.android.ide.eclipse.adt.LIBRARIES\"/> " + nl;
-			androidProjectClasspathContents += " 	<classpathentry kind=\"con\" path=\"com.android.ide.eclipse.adt.DEPENDENCIES\" /> ";
+			#
+			# more intellij/gradle files
+			#
+			if (android_projectType == 'intellij'):
+				# write build.gradle
+				f = open(intellij_template_folder + self.ds + "game" + self.ds + "build.gradle", "r");
+				fcontents = f.read(); f.close();
+				fcontents = self.str_replace(fcontents, editsStrReplace);
+				f = open(intellij_folder + self.ds + self.game_name_safe + self.ds + "build.gradle", "w");
+				f.write(fcontents);
+				f.close();
 
-			if ("libs" in self.android_config):
-				for lib in self.android_libs: #_config['libs']:
-					libf = lib[lib.rfind(self.ds)+1:len(lib)];
-					androidProjectClasspathContents += "<classpathentry exported=\"true\" kind=\"lib\" path=\"libs/" + libf + "\"/>" + nl;
+				#write nine.iml file
+				f = open(intellij_template_folder + self.ds + "game" + self.ds + "game.iml", "r");
+				fcontents = f.read(); f.close();
+				fcontents = self.str_replace(fcontents, editsStrReplace);
+				f = open(intellij_folder + self.ds + self.game_name_safe + self.ds + self.game_name_safe + ".iml", "w");
+				f.write(fcontents);
+				f.close();
 
-			if ("ark_libs" in self.android_config):
-				for lib in self.android_config['ark_libs']:
-					libf = lib[lib.rfind(self.ds)+1:len(lib)];
-					androidProjectClasspathContents += "<classpathentry exported=\"true\" kind=\"lib\" path=\"libs/" + libf + "\"/>" + nl;
-
-			# force ouya-sdk lib into classpath
-			if self.ouya == True:
-				androidProjectClasspathContents += "<classpathentry exported=\"true\" kind=\"lib\" path=\"libs/ouya-sdk.jar\"/>" + nl;
-
-			androidProjectClasspathContents += "	<classpathentry kind=\"output\" path=\"bin/classes\"/> " + nl;
-			androidProjectClasspathContents += "</classpath> " + nl;
-			f = open(rootPath+"/build/"+ self.output + "/project/.classpath", "w");
-			f.write(androidProjectClasspathContents);
-			f.close();
-
-
-			#copy sample game java files...
+			#
+			# copy sample game java files...
+			#
 			fgamefile = "";
 			fgamecontents = "";
 			try:
@@ -5913,9 +6114,10 @@ build:
 			fgamecontents = self.str_replace(fgamecontents, editsStrReplace);
 			fgamecontents = self.str_replace(fgamecontents, editsOldAndroid23);
 			fgamecontents = self.str_replace(fgamecontents, editsGameServices);
+			fgamecontents = self.str_replace(fgamecontents, editsInAppBilling);
 			fgamecontents = self.str_replace(fgamecontents, editsOuya);
 			fgamecontents = self.str_replace(fgamecontents, editsFireTV);
-			f = open(rootPath+"/build/" + self.output + "/project/src/org/" + self.developer_name_safe + self.ds + self.game_name_safe + self.ds + self.game_class_name + "Activity.java", "w");
+			f = open(project_src_dir + self.ds + self.game_class_name + "Activity.java", "w");
 			f.write(fgamecontents);
 			f.close();
 
@@ -5924,31 +6126,43 @@ build:
 				#ARK Game Helper
 				print("using GameHelper.java, BaseGameActivity.java, etc.");
 
-				f = open(self.ark2d_dir + "/lib/android/GameHelper.java", "r");
-				fgamecontents = f.read(); f.close();
-				fgamecontents = self.str_replace(fgamecontents, editsStrReplace);
-				fgamecontents = self.str_replace(fgamecontents, editsOldAndroid23);
-				fgamecontents = self.str_replace(fgamecontents, editsGameServices);
-				f = open(rootPath+"/build/" + self.output + "/project/src/org/" + self.developer_name_safe + self.ds + self.game_name_safe + self.ds +  "GameHelper.java", "w");
-				f.write(fgamecontents);
-				f.close();
+				base_classes = [
+					'BaseGameActivity.java',
+					'BaseGameUtils.java',
+					'GameHelper.java',
+					'GameHelperUtils.java'
+				];
+				if (self.android_billing):
+					base_classes.extend([
+						'iab_util/Base64.java',
+						'iab_util/Base64DecoderException.java',
+						'iab_util/IabException.java',
+						'iab_util/IabHelper.java',
+						'iab_util/IabResult.java',
+						'iab_util/Inventory.java',
+						'iab_util/Purchase.java',
+						'iab_util/Security.java',
+						'iab_util/SkuDetails.java'
+					]);
 
-				# Google play game.
-				f = open(self.ark2d_dir + "/lib/android/BaseGameActivity.java", "r");
-				fgamecontents = f.read(); f.close();
-				fgamecontents = self.str_replace(fgamecontents, editsStrReplace);
-				fgamecontents = self.str_replace(fgamecontents, editsOldAndroid23);
-				fgamecontents = self.str_replace(fgamecontents, editsGameServices);
-				f = open(rootPath+"/build/" + self.output + "/project/src/org/" + self.developer_name_safe + self.ds + self.game_name_safe + self.ds +  "BaseGameActivity.java", "w");
-				f.write(fgamecontents);
-				f.close();
+				for jfile in base_classes:
+					f = open(self.ark2d_dir + "/lib/android/" + jfile, "r");
+					fgamecontents = f.read(); f.close();
+					fgamecontents = self.str_replace(fgamecontents, editsStrReplace);
+					fgamecontents = self.str_replace(fgamecontents, editsOldAndroid23);
+					fgamecontents = self.str_replace(fgamecontents, editsGameServices);
+					fgamecontents = self.str_replace(fgamecontents, editsInAppBilling);
+					f = open(project_src_dir + self.ds +  jfile, "w");
+					f.write(fgamecontents);
+					f.close();
 
-				# copy android-support-v4 in.
-				f = open(self.ark2d_dir + "/lib/android/libs/android-support-v4.jar", "r");
-				fgamecontents = f.read(); f.close();
-				f = open(rootPath+"/build/" + self.output + "/project/libs/android-support-v4.jar", "w");
-				f.write(fgamecontents);
-				f.close();
+				if (android_projectType == 'eclipse'):
+					# copy android-support-v4 in.
+					f = open(self.ark2d_dir + "/lib/android/libs/android-support-v4.jar", "r");
+					fgamecontents = f.read(); f.close();
+					f = open(rootPath+"/build/" + self.output + "/project-eclipse/libs/android-support-v4.jar", "w");
+					f.write(fgamecontents);
+					f.close();
 
 
 			# additional source files
@@ -5967,7 +6181,7 @@ build:
 					#newf = src_file[0:findex] + ".o";
 					#newfd = src_file[0:findex] + ".d";
 
-					f = open(rootPath+"/build/" + self.output + "/project/src/org/" + self.developer_name_safe + self.ds + self.game_name_safe + self.ds + small_src_file, "w");
+					f = open(project_src_dir + self.ds + small_src_file, "w");
 					f.write(extrasrccontents);
 					f.close();
 
@@ -5982,67 +6196,59 @@ build:
 			#
 			print("copying in freetype library");
 			"""
-			#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/freetype/obj/local/armeabi-v7a/ " + rootPath+"/build/android/project/libs/armeabi-v7a"], shell=True); #libfreetype
-			#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/freetype/obj/local/armeabi-v7a/ " + rootPath+"/build/android/project/obj/local/armeabi-v7a"], shell=True);
-			self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"freetype"+ds+"obj"+ds+"local"+ds+"armeabi-v7a", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"libs"+ds+"armeabi-v7a");
-			self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"freetype"+ds+"obj"+ds+"local"+ds+"armeabi-v7a", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"obj"+ds+"local"+ds+"armeabi-v7a");
+			#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/freetype/obj/local/armeabi-v7a/ " + rootPath+"/build/android/project-eclipse/libs/armeabi-v7a"], shell=True); #libfreetype
+			#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/freetype/obj/local/armeabi-v7a/ " + rootPath+"/build/android/project-eclipse/obj/local/armeabi-v7a"], shell=True);
+			self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"freetype"+ds+"obj"+ds+"local"+ds+"armeabi-v7a", rootPath+ds+"build"+ds+self.output+ds+"project-eclipse"+ds+"libs"+ds+"armeabi-v7a");
+			self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"freetype"+ds+"obj"+ds+"local"+ds+"armeabi-v7a", rootPath+ds+"build"+ds+self.output+ds+"project-eclipse"+ds+"obj"+ds+"local"+ds+"armeabi-v7a");
 			if (not self.debug):
-				#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/freetype/obj/local/armeabi/ " + rootPath+"/build/android/project/libs/armeabi"], shell=True); #libfreetype
-				#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/freetype/obj/local/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi"], shell=True);
-				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"freetype"+ds+"obj"+ds+"local"+ds+"armeabi", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"libs"+ds+"armeabi");
-				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"freetype"+ds+"obj"+ds+"local"+ds+"armeabi", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"obj"+ds+"local"+ds+"armeabi");
+				#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/freetype/obj/local/armeabi/ " + rootPath+"/build/android/project-eclipse/libs/armeabi"], shell=True); #libfreetype
+				#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/freetype/obj/local/armeabi/ " + rootPath+"/build/android/project-eclipse/obj/local/armeabi"], shell=True);
+				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"freetype"+ds+"obj"+ds+"local"+ds+"armeabi", rootPath+ds+"build"+ds+self.output+ds+"project-eclipse"+ds+"libs"+ds+"armeabi");
+				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"freetype"+ds+"obj"+ds+"local"+ds+"armeabi", rootPath+ds+"build"+ds+self.output+ds+"project-eclipse"+ds+"obj"+ds+"local"+ds+"armeabi");
 			"""
 
+			vendor_android = self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android";
 
 			#
 			# openal
 			#
 			print("copying in openal library");
-			#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/openal/libs/armeabi-v7a/ " + rootPath+"/build/android/project/libs/armeabi-v7a"], shell=True); #libfreetype
-			#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/openal/libs/armeabi-v7a/ " + rootPath+"/build/android/project/obj/local/armeabi-v7a"], shell=True);
-			self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"openal"+ds+"libs"+ds+"armeabi-v7a", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"libs"+ds+"armeabi-v7a");
-			self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"openal"+ds+"libs"+ds+"armeabi-v7a", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"obj"+ds+"local"+ds+"armeabi-v7a");
+			self.mycopytree(vendor_android+ds+"openal"+ds+"libs"+ds+"armeabi-v7a", project_nlib_dir+ds+"armeabi-v7a");
 			if (not self.debug):
-				#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/openal/libs/armeabi/ " + rootPath+"/build/android/project/libs/armeabi"], shell=True); #libfreetype
-				#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/openal/libs/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi"], shell=True);
-				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"openal"+ds+"libs"+ds+"armeabi", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"libs"+ds+"armeabi");
-				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"openal"+ds+"libs"+ds+"armeabi", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"obj"+ds+"local"+ds+"armeabi");
-				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"openal"+ds+"libs"+ds+"x86", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"libs"+ds+"x86");
-				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"openal"+ds+"libs"+ds+"x86", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"obj"+ds+"local"+ds+"x86");
-
+				self.mycopytree(vendor_android+ds+"openal"+ds+"libs"+ds+"armeabi", project_nlib_dir+ds+"armeabi");
+				self.mycopytree(vendor_android+ds+"openal"+ds+"libs"+ds+"x86", project_nlib_dir+ds+"x86");
 
 			#
 			# libzip
 			#
 			print("copying in libzip library");
-			#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/libzip/libs/armeabi-v7a/ " + rootPath+"/build/android/project/libs/armeabi-v7a"], shell=True); #libzip
-			#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/libzip/libs/armeabi-v7a/ " + rootPath+"/build/android/project/obj/local/armeabi-v7a"], shell=True);
-			self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"libzip"+ds+"libs"+ds+"armeabi-v7a", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"libs"+ds+"armeabi-v7a");
-			self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"libzip"+ds+"libs"+ds+"armeabi-v7a", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"obj"+ds+"local"+ds+"armeabi-v7a");
+			self.mycopytree(vendor_android+ds+"libzip"+ds+"libs"+ds+"armeabi-v7a", project_nlib_dir+ds+"armeabi-v7a");
 			if (not self.debug):
-				#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/libzip/libs/armeabi/ " + rootPath+"/build/android/project/libs/armeabi"], shell=True); #libzip
-				#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/libzip/libs/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi"], shell=True);
-				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"libzip"+ds+"libs"+ds+"armeabi", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"libs"+ds+"armeabi");
-				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"libzip"+ds+"libs"+ds+"armeabi", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"obj"+ds+"local"+ds+"armeabi");
-				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"libzip"+ds+"libs"+ds+"x86", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"libs"+ds+"x86");
-				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"libzip"+ds+"libs"+ds+"x86", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"obj"+ds+"local"+ds+"x86");
+				self.mycopytree(vendor_android+ds+"libzip"+ds+"libs"+ds+"armeabi", project_nlib_dir+ds+"armeabi");
+				self.mycopytree(vendor_android+ds+"libzip"+ds+"libs"+ds+"x86", project_nlib_dir+ds+"x86");
 
 			#
 			# libangelscript
 			#
 			print("copying in libangelscript library");
-			#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/angelscript/libs/armeabi-v7a/ " + rootPath+"/build/android/project/libs/armeabi-v7a"], shell=True); #libzip
-			#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/angelscript/libs/armeabi-v7a/ " + rootPath+"/build/android/project/obj/local/armeabi-v7a"], shell=True);
-			self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"angelscript"+ds+"libs"+ds+"armeabi-v7a", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"libs"+ds+"armeabi-v7a");
-			self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"angelscript"+ds+"libs"+ds+"armeabi-v7a", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"obj"+ds+"local"+ds+"armeabi-v7a");
+			self.mycopytree(vendor_android+ds+"angelscript"+ds+"libs"+ds+"armeabi-v7a", project_nlib_dir+ds+"armeabi-v7a");
 			if (not self.debug):
-				#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/angelscript/libs/armeabi/ " + rootPath+"/build/android/project/libs/armeabi"], shell=True); #libzip
-				#subprocess.call(["cp -r " +self.ark2d_dir + "/src/ARK2D/vendor/android/angelscript/libs/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi"], shell=True);
-				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"angelscript"+ds+"libs"+ds+"armeabi", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"libs"+ds+"armeabi");
-				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"angelscript"+ds+"libs"+ds+"armeabi", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"obj"+ds+"local"+ds+"armeabi");
-				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"angelscript"+ds+"libs"+ds+"x86", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"libs"+ds+"x86");
-				self.mycopytree(self.ark2d_dir+ds+"src"+ds+"ARK2D"+ds+"vendor"+ds+"android"+ds+"angelscript"+ds+"libs"+ds+"x86", rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"obj"+ds+"local"+ds+"x86");
+				self.mycopytree(vendor_android+ds+"angelscript"+ds+"libs"+ds+"armeabi", project_nlib_dir+ds+"armeabi");
+				self.mycopytree(vendor_android+ds+"angelscript"+ds+"libs"+ds+"x86", project_nlib_dir+ds+"x86");
 
+			# extra obj/locals for eclipse. are these debug libs?
+			if (android_projectType == 'eclipse'):
+				self.mycopytree(vendor_android+ds+"openal"+ds+"libs"+ds+"armeabi-v7a", rootPath+ds+"build"+ds+self.output+ds+"project-eclipse"+ds+"obj"+ds+"local"+ds+"armeabi-v7a");
+				self.mycopytree(vendor_android+ds+"libzip"+ds+"libs"+ds+"armeabi-v7a", rootPath+ds+"build"+ds+self.output+ds+"project-eclipse"+ds+"obj"+ds+"local"+ds+"armeabi-v7a");
+				self.mycopytree(vendor_android+ds+"angelscript"+ds+"libs"+ds+"armeabi-v7a", rootPath+ds+"build"+ds+self.output+ds+"project-eclipse"+ds+"obj"+ds+"local"+ds+"armeabi-v7a");
+
+				if (not self.debug):
+					self.mycopytree(vendor_android+ds+"openal"+ds+"libs"+ds+"armeabi", rootPath+ds+"build"+ds+self.output+ds+"project-eclipse"+ds+"obj"+ds+"local"+ds+"armeabi");
+					self.mycopytree(vendor_android+ds+"openal"+ds+"libs"+ds+"x86", 	   rootPath+ds+"build"+ds+self.output+ds+"project-eclipse"+ds+"obj"+ds+"local"+ds+"x86");
+					self.mycopytree(vendor_android+ds+"libzip"+ds+"libs"+ds+"armeabi", rootPath+ds+"build"+ds+self.output+ds+"project-eclipse"+ds+"obj"+ds+"local"+ds+"armeabi");
+					self.mycopytree(vendor_android+ds+"libzip"+ds+"libs"+ds+"x86", 	   rootPath+ds+"build"+ds+self.output+ds+"project-eclipse"+ds+"obj"+ds+"local"+ds+"x86");
+					self.mycopytree(vendor_android+ds+"angelscript"+ds+"libs"+ds+"armeabi", rootPath+ds+"build"+ds+self.output+ds+"project-eclipse"+ds+"obj"+ds+"local"+ds+"armeabi");
+					self.mycopytree(vendor_android+ds+"angelscript"+ds+"libs"+ds+"x86", rootPath+ds+"build"+ds+self.output+ds+"project-eclipse"+ds+"obj"+ds+"local"+ds+"x86");
 
 			#
 			# custom libraries e.g. fmod, spine...
@@ -6053,57 +6259,70 @@ build:
 					gamelibraryname = gamelibrary['name'];
 
 					print("copying in " + gamelibraryname + " library");
-					shutil.copy(self.game_dir+ds+gamelibrary['armeabi-v7a'], rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"libs"+ds+"armeabi-v7a");
-					shutil.copy(self.game_dir+ds+gamelibrary['armeabi-v7a'], rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"obj"+ds+"local"+ds+"armeabi-v7a");
+					shutil.copy(self.game_dir+ds+gamelibrary['armeabi-v7a'], project_nlib_dir+ds+"armeabi-v7a");
 					if (not self.debug and "armeabi" in gamelibrary):
-						shutil.copy(self.game_dir+ds+gamelibrary['armeabi'], rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"libs"+ds+"armeabi");
-						shutil.copy(self.game_dir+ds+gamelibrary['armeabi'], rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"obj"+ds+"local"+ds+"armeabi");
+						shutil.copy(self.game_dir+ds+gamelibrary['armeabi'], project_nlib_dir+ds+"armeabi");
 
 					if (not self.debug and "x86" in gamelibrary):
-						shutil.copy(self.game_dir+ds+gamelibrary['x86'], rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"libs"+ds+"x86");
-						shutil.copy(self.game_dir+ds+gamelibrary['x86'], rootPath+ds+"build"+ds+self.output+ds+"project"+ds+"obj"+ds+"local"+ds+"x86");
+						shutil.copy(self.game_dir+ds+gamelibrary['x86'], project_nlib_dir+ds+"x86");
+
+
+					if (android_projectType == 'eclipse'):
+						shutil.copy(self.game_dir+ds+gamelibrary['armeabi-v7a'], rootPath+ds+"build"+ds+self.output+ds+"project-eclipse"+ds+"obj"+ds+"local"+ds+"armeabi-v7a");
+						if (not self.debug and "armeabi" in gamelibrary):
+							shutil.copy(self.game_dir+ds+gamelibrary['armeabi'], rootPath+ds+"build"+ds+self.output+ds+"project-eclipse"+ds+"obj"+ds+"local"+ds+"armeabi");
+						if (not self.debug and "x86" in gamelibrary):
+							shutil.copy(self.game_dir+ds+gamelibrary['x86'], rootPath+ds+"build"+ds+self.output+ds+"project-eclipse"+ds+"obj"+ds+"local"+ds+"x86");
 
 
 			#
 			# ark2d
 			#
-			#subprocess.call(["cp -r " +self.ark2d_dir + "/build/android/libs/armeabi-v7a/ " + rootPath+"/build/android/project/libs/armeabi-v7a"], shell=True); #libark2d
-			#subprocess.call(["cp -r " +self.ark2d_dir + "/build/android/libs/armeabi-v7a/ " + rootPath+"/build/android/project/obj/local/armeabi-v7a"], shell=True);
 			print("copying in ark2d libraries");
-			self.mycopytree(self.ark2d_dir+self.ds+"build"+self.ds+"android"+self.ds+"libs"+self.ds+"armeabi-v7a", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project"+self.ds+"libs"+self.ds+"armeabi-v7a");
-			self.mycopytree(self.ark2d_dir+self.ds+"build"+self.ds+"android"+self.ds+"libs"+self.ds+"armeabi-v7a", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project"+self.ds+"obj"+self.ds+"local"+self.ds+"armeabi-v7a");
+			ark2d_built_libs = self.ark2d_dir+self.ds+"build"+self.ds+"android"+self.ds+"libs";
+			self.mycopytree(ark2d_built_libs+self.ds+"armeabi-v7a", project_nlib_dir+self.ds+"armeabi-v7a");
 			if (not self.debug):
-				#subprocess.call(["cp -r " +self.ark2d_dir + "/build/android/libs/armeabi/ " + rootPath+"/build/android/project/libs/armeabi"], shell=True); #libark2d
-				#subprocess.call(["cp -r " +self.ark2d_dir + "/build/android/libs/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi"], shell=True);
-				self.mycopytree(self.ark2d_dir+self.ds+"build"+self.ds+"android"+self.ds+"libs"+self.ds+"armeabi", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project"+self.ds+"libs"+self.ds+"armeabi");
-				self.mycopytree(self.ark2d_dir+self.ds+"build"+self.ds+"android"+self.ds+"libs"+self.ds+"armeabi", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project"+self.ds+"obj"+self.ds+"local"+self.ds+"armeabi");
-				self.mycopytree(self.ark2d_dir+self.ds+"build"+self.ds+"android"+self.ds+"libs"+self.ds+"x86", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project"+self.ds+"libs"+self.ds+"x86");
-				self.mycopytree(self.ark2d_dir+self.ds+"build"+self.ds+"android"+self.ds+"libs"+self.ds+"x86", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project"+self.ds+"obj"+self.ds+"local"+self.ds+"x86");
+				self.mycopytree(ark2d_built_libs+self.ds+"armeabi", project_nlib_dir+self.ds+"armeabi");
+				self.mycopytree(ark2d_built_libs+self.ds+"x86", project_nlib_dir+self.ds+"x86");
 
+
+			if (android_projectType == 'eclipse'):
+				self.mycopytree(ark2d_built_libs+self.ds+"armeabi-v7a", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project-eclipse"+self.ds+"obj"+self.ds+"local"+self.ds+"armeabi-v7a");
+				if (not self.debug):
+					self.mycopytree(ark2d_built_libs+self.ds+"armeabi", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project-eclipse"+self.ds+"obj"+self.ds+"local"+self.ds+"armeabi");
+					self.mycopytree(ark2d_built_libs+self.ds+"x86", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project-eclipse"+self.ds+"obj"+self.ds+"local"+self.ds+"x86");
 
 
 			#
 			# ark2d (local)
 			#
-			#subprocess.call(["cp -r " +rootPath + "/build/android/local/armeabi-v7a/ " + rootPath+"/build/android/project/libs/armeabi-v7a"], shell=True); #libgamename
-			#subprocess.call(["cp -r " +rootPath + "/build/android/local/armeabi-v7a/ " + rootPath+"/build/android/project/obj/local/armeabi-v7a"], shell=True);
 			print("copying in ark2d libraries (local)");
-			self.mycopytree(rootPath+self.ds+"build"+self.ds+self.output+self.ds+"local"+self.ds+"armeabi-v7a", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project"+self.ds+"libs"+self.ds+"armeabi-v7a");
-			self.mycopytree(rootPath+self.ds+"build"+self.ds+self.output+self.ds+"local"+self.ds+"armeabi-v7a", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project"+self.ds+"obj"+self.ds+"local"+self.ds+"armeabi-v7a");
+			self.mycopytree(rootPath+self.ds+"build"+self.ds+self.output+self.ds+"local"+self.ds+"armeabi-v7a", project_nlib_dir+self.ds+"armeabi-v7a");
 			if (not self.debug):
-				#	subprocess.call(["cp -r " +rootPath + "/build/android/local/armeabi/ " + rootPath+"/build/android/project/libs/armeabi"], shell=True); #libgamename
-				#	subprocess.call(["cp -r " +rootPath + "/build/android/local/armeabi/ " + rootPath+"/build/android/project/obj/local/armeabi"], shell=True);
-				self.mycopytree(rootPath+self.ds+"build"+self.ds+self.output+self.ds+"local"+self.ds+"armeabi", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project"+self.ds+"libs"+self.ds+"armeabi");
-				self.mycopytree(rootPath+self.ds+"build"+self.ds+self.output+self.ds+"local"+self.ds+"armeabi", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project"+self.ds+"obj"+self.ds+"local"+self.ds+"armeabi");
-				self.mycopytree(rootPath+self.ds+"build"+self.ds+self.output+self.ds+"local"+self.ds+"x86", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project"+self.ds+"libs"+self.ds+"x86");
-				self.mycopytree(rootPath+self.ds+"build"+self.ds+self.output+self.ds+"local"+self.ds+"x86", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project"+self.ds+"obj"+self.ds+"local"+self.ds+"x86");
+				self.mycopytree(rootPath+self.ds+"build"+self.ds+self.output+self.ds+"local"+self.ds+"armeabi", project_nlib_dir+self.ds+"armeabi");
+				self.mycopytree(rootPath+self.ds+"build"+self.ds+self.output+self.ds+"local"+self.ds+"x86", project_nlib_dir+self.ds+"x86");
+
+			if (android_projectType == 'eclipse'):
+				self.mycopytree(rootPath+self.ds+"build"+self.ds+self.output+self.ds+"local"+self.ds+"armeabi-v7a", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project-eclipse"+self.ds+"obj"+self.ds+"local"+self.ds+"armeabi-v7a");
+				if (not self.debug):
+					self.mycopytree(rootPath+self.ds+"build"+self.ds+self.output+self.ds+"local"+self.ds+"armeabi", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project-eclipse"+self.ds+"obj"+self.ds+"local"+self.ds+"armeabi");
+					self.mycopytree(rootPath+self.ds+"build"+self.ds+self.output+self.ds+"local"+self.ds+"x86", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project-eclipse"+self.ds+"obj"+self.ds+"local"+self.ds+"x86");
 
 			#
 			# copying ark2d resources in to assets folder.
 			#
-			#subprocess.call(["cp -r " +self.ark2d_dir + "/data/ " + rootPath+"/build/android/project/assets/ark2d"], shell=True);
+			#subprocess.call(["cp -r " +self.ark2d_dir + "/data/ " + rootPath+"/build/android/project-eclipse/assets/ark2d"], shell=True);
 			print("copying in ark2d resources");
-			self.mycopytree(self.ark2d_dir + self.ds + "data", rootPath + self.ds + "build"+self.ds+ self.output + self.ds + "project" + self.ds + "assets" + self.ds + "ark2d");
+			self.mycopytree(self.ark2d_dir + self.ds + "data", project_assets_dir + self.ds + "ark2d");
+
+			#
+			# remove obj files
+			#
+			if (android_projectType == 'intellij'):
+				self.rmdir_recursive(project_nlib_dir + self.ds + "armeabi-v7a" + self.ds + "objs");
+				if (not self.debug):
+					self.rmdir_recursive(project_nlib_dir + self.ds + "armeabi" + self.ds + "objs");
+					self.rmdir_recursive(project_nlib_dir + self.ds + "x86" + self.ds + "objs");
 
 			#print("removing temp libs dir?");
 			try:
@@ -6229,7 +6448,7 @@ build:
 			if (self.firetv == True):
 				android_make_file += "-DARK2D_AMAZON ";
 
-			android_make_file += "-DDISABLE_IMPORTGL -fno-exceptions -fno-rtti -fexceptions -Wno-psabi ";
+			android_make_file += "-DDISABLE_IMPORTGL -fno-exceptions -fexceptions -Wno-psabi  "; #-fno-rtti
 			if (self.debug):
 				android_make_file += " -DARK2D_DEBUG -DDEBUG -DNDK_DEBUG -O0 ";
 			else:
@@ -6255,6 +6474,7 @@ build:
 			#make application.mk
 			print("Creating Application.mk");
 			application_make_file = "";
+			application_make_file += "NDK_TOOLCHAIN_VERSION := 4.8" + nl;
 			application_make_file += "APP_PROJECT_PATH := " + ndkprojectpath + nl;
 			application_make_file += "APP_BUILD_SCRIPT := " + appbuildscript + nl;
 			application_make_file += "NDK_APP_OUT=" + appbuilddir + nl;
@@ -6271,7 +6491,11 @@ build:
 				application_make_file += "x86 ";
 				application_make_file += nl; #x86" + nl;
 
-			application_make_file += "APP_STL := stlport_static" + nl;
+			application_make_file += "APP_CPPFLAGS += -std=c++11 -frtti " + nl;
+			application_make_file += "APP_STL := gnustl_shared" + nl;
+			#application_make_file += "APP_STL := c++_shared" + nl;
+			application_make_file += "LOCAL_C_INCLUDES += " + self.android_ndkdir + "/sources/cxx-stl/gnu-libstdc++/4.8/include" + nl;
+
 			f = open(appbuildscript3, "w");
 			f.write(application_make_file);
 			f.close();
@@ -6393,9 +6617,11 @@ if __name__ == "__main__":
 	type = "library";
 	target = "default";
 	dir = sys.path[0];
+	use_dir = False;
 	clean = False;
 	debug = False;
 	onlyspritesheets = False;
+	onlygeneratestrings = False;
 	onlyassets = False;
 	newconfig = False;
 
@@ -6417,6 +6643,7 @@ if __name__ == "__main__":
 			target = parts[1];
 		elif parts[0] == "dir":
 			dir = parts[1];
+			use_dir = True;
 		elif parts[0] == "debug":
 			if (parts[1]=="true"):
 				debug = True;
@@ -6430,6 +6657,11 @@ if __name__ == "__main__":
 				onlyspritesheets = True;
 			else:
 				onlyspritesheets = False;
+		elif parts[0] == "strings":
+			if (parts[1]=="true"):
+				onlygeneratestrings = True;
+			else:
+				onlygeneratestrings = False;
 
 		elif parts[0] == "assets":
 			if (parts[1]=="true"):
@@ -6449,9 +6681,11 @@ if __name__ == "__main__":
 	print("type: " + type);
 	print("target: " + target);
 	print("dir: " + dir);
+	print("use_dir: " + str(use_dir));
 	print("debug: " + str(debug));
 	print("clean: " + str(clean));
 	print("newconfig: " + str(newconfig));
+	print("onlyspritesheets: " + str(onlyspritesheets));
 
 	if (sys.platform == "win32"):
 		arkPlatform = "windows";
@@ -6466,7 +6700,9 @@ if __name__ == "__main__":
 	# have to read json and override some values for back-compatibility.
 	if (newconfig and type == "game"):
 		try:
-			dir = os.getcwd();
+			if (use_dir == False):
+				dir = os.getcwd();
+
 			ark2d_dir = os.path.dirname(os.path.realpath(__file__));
 			print("---");
 			print("current file:" + ark2d_dir);
@@ -6519,6 +6755,7 @@ if __name__ == "__main__":
 			a.game_preproduction_dir = a.game_dir + a.ds + game_config['game']['folders']['preproduction'];
 			a.game_clear_color = game_config['game']['clearcolor'];
 			a.game_orientation = game_config['game']['orientation'];
+			a.game_version = game_config['game']['version'] or "1.0.0";
 			a.developer_name = game_config['developer']['name'];
 			a.developer_name_safe = game_config['developer']['name_safe'];
 
@@ -6529,7 +6766,17 @@ if __name__ == "__main__":
 			a.config = game_config;
 			a.ark_config = ark_config
 			a.game_config = game_config;
+			a.target_config_file = target;
 			a.target_config = target_config;
+
+			if (onlyspritesheets):
+				a.generateSpriteSheets();
+				exit(0);
+
+			if (onlygeneratestrings):
+				a.generateStrings();
+				exit(0);
+
 
 			if (clean == True or target_config['clean'] == True):
 				a.clean();
@@ -6647,9 +6894,7 @@ if __name__ == "__main__":
 
 			a.gamePostInit();
 
-			if (onlyspritesheets):
-				a.generateSpriteSheets();
-				exit(0);
+
 
 			if (onlyassets):
 				a.processAssets();
@@ -6666,9 +6911,11 @@ if __name__ == "__main__":
 			print("configs/" + target + " is invalid or does not exist.");
 			print(exc);
 			exit(1);
+		except SystemExit as exc:
+			pass;
 		except:
 			print("configs/" + target + " is invalid or does not exist.");
-			#print(e);
+			print( sys.exc_info()[0] );
 			exit(1);
 
 		exit(0);
@@ -6828,6 +7075,7 @@ if __name__ == "__main__":
 
 			if (onlyspritesheets):
 				a.generateSpriteSheets();
+				print('done');
 				exit(0);
 
 			if (onlyassets):

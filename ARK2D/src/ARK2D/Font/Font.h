@@ -41,6 +41,9 @@ class FTFont;
 				ARK::Font::BMFont* asBMFont();
 				ARK::Font::FTFont* asFTFont();
 				virtual ~Font();
+
+			protected:
+				virtual uint32_t getLetterColor( int position );
 		};
 //	}
 //}

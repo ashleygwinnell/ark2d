@@ -1,0 +1,29 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 16
+    buildToolsVersion '21.1.2'
+
+    defaultConfig {
+        applicationId "%PACKAGE_DOT_NOTATION%"
+        minSdkVersion 16
+        targetSdkVersion 16
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    compile "com.android.support:appcompat-v7:20.0.+"
+    compile 'com.android.support:support-v4:24.0.0'
+    compile 'com.google.android.gms:play-services-base:9.0.2'
+    compile 'com.google.android.gms:play-services-games:9.0.2'
+    compile 'com.google.android.gms:play-services-analytics:9.0.2'
+    compile 'com.google.android.gms:play-services-plus:9.0.2'
+    compile project(':market_licensing')
+}

@@ -12,11 +12,12 @@
 #include "../Namespaces.h"
 #include <string>
 #include <vector>
+#include "../Util/Vector4.h"
 #include "../Geometry/Vector3.h"
 #include "../Geometry/Transform.h"
 #include "../Controls/KeyListener.h"
 
-namespace ARK { 
+namespace ARK {
 	namespace Graphics {
 		class Image;
 	}
@@ -47,7 +48,7 @@ namespace ARK {
 				Transform transform;
 				bool visible;
 				unsigned int type;
-				
+
                 SceneNode();
                 SceneNode(string name);
                 SceneNode(string name, unsigned int type);
@@ -79,7 +80,7 @@ namespace ARK {
 
 				vector<SceneNode*> getPathToRoot();
 				void getPathToRoot(vector<SceneNode* >* path);
-		
+
 				virtual void update();
 
 				virtual void render();
@@ -116,16 +117,16 @@ namespace ARK {
 
 
 		class ARK2D_API SceneGroup : public SceneNode {
-				
+
 		};
-		
+
 
 		class ARK2D_API Scene : public KeyListener {
 			public:
 				SceneNode* root;
 				bool batching;
 				bool bPrintRendererStack;
-			public: 
+			public:
 				Scene();
 				void setRoot(SceneNode* node);
 				SceneNode* getRoot();

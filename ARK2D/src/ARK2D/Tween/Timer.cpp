@@ -9,13 +9,13 @@
 #include "../Core/GameContainer.h"
 #include "Timer.h"
 
-namespace ARK { 
+namespace ARK {
 	namespace Tween {
- 
-		Timer::Timer(float duration): 
-			m_timer(0.0f), 
+
+		Timer::Timer(float duration):
+			m_timer(0.0f),
 			m_duration(duration) {
- 
+
 		}
 		void Timer::limit() {
 			limit(1);
@@ -36,6 +36,9 @@ namespace ARK {
 		}
 		float Timer::getDuration() {
 			return m_duration;
+		}
+		float Timer::percentage() {
+			return m_timer / m_duration;
 		}
 		bool Timer::update() {
 			return update(1.0f);

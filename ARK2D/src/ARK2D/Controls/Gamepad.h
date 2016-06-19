@@ -17,7 +17,7 @@
 	#include <limits.h>
 	#include <mach/mach.h>
 	#include <mach/mach_time.h>
-#endif 
+#endif
 
 #include "../Includes.h"
 #include "../Namespaces.h"
@@ -26,13 +26,13 @@
 
 
 #ifdef ARK2D_XBOXONE
-	//using namespace Windows::Xbox::Input; 
+	//using namespace Windows::Xbox::Input;
     using namespace Windows::Foundation;
 #endif
 
-// Linux help/examples: 
-// http://scaryreasoner.wordpress.com/2008/02/22/programming-joysticks-with-linux/ 
-// http://ludobloom.com/svn/StemLibProjects/gamepad/tags/1.3.0/source/gamepad/ 
+// Linux help/examples:
+// http://scaryreasoner.wordpress.com/2008/02/22/programming-joysticks-with-linux/
+// http://ludobloom.com/svn/StemLibProjects/gamepad/tags/1.3.0/source/gamepad/
 namespace ARK {
 	namespace Controls {
 
@@ -59,7 +59,7 @@ namespace ARK {
 				float value;
 				#ifdef ARK2D_MACINTOSH
 					IOHIDElementCookie cookie;
-					CFIndex logicalMin;  
+					CFIndex logicalMin;
 					CFIndex logicalMax;
 					bool hasNullState;
 					bool isHatSwitch;
@@ -68,22 +68,22 @@ namespace ARK {
 				#elif defined(ARK2D_WINDOWS)
 					unsigned int axisId;
 					unsigned int rangeMin;
-					unsigned int rangeMax;	
+					unsigned int rangeMax;
 				#elif defined(ARK2D_ANDROID)
 					unsigned int axisId;
 				#elif defined(ARK2D_UBUNTU_LINUX)
 					// ...
-				#endif				
+				#endif
 
 		};
 
 		class GamepadListener {
 			public:
-				virtual void gamepadConnected(Gamepad* gamepad) = 0;
-				virtual void gamepadDisconnected(Gamepad* gamepad) = 0;
-				virtual void buttonPressed(Gamepad* gamepad, unsigned int button) = 0;
-				virtual void buttonReleased(Gamepad* gamepad, unsigned int button) = 0;
-				virtual void axisMoved(Gamepad* gamepad, unsigned int axis, float value) = 0;
+				virtual void gamepadConnected(ARK::Controls::Gamepad* gamepad) = 0;
+				virtual void gamepadDisconnected(ARK::Controls::Gamepad* gamepad) = 0;
+				virtual void buttonPressed(ARK::Controls::Gamepad* gamepad, unsigned int button) = 0;
+				virtual void buttonReleased(ARK::Controls::Gamepad* gamepad, unsigned int button) = 0;
+				virtual void axisMoved(ARK::Controls::Gamepad* gamepad, unsigned int axis, float value) = 0;
 		};
 
 
@@ -94,7 +94,7 @@ namespace ARK {
 			public:
 				string name;
 				unsigned int vendorId;
-				unsigned int productId;  
+				unsigned int productId;
 				std::map<unsigned int, signed int> buttons; // Gamepad::BUTTON_A -> SomeController::BUTTON_A.
 				std::map<unsigned int, signed int> axes;
 				std::map<signed int, unsigned int> buttonsInverse; // SomeController::BUTTON_A -> Gamepad::BUTTON_A.
@@ -102,7 +102,7 @@ namespace ARK {
 				bool shared_triggers_axis;
 				bool xinput;
 				void toInverse();
-				void toRegular(); 
+				void toRegular();
 				string toString();
 
 		};
@@ -123,10 +123,10 @@ namespace ARK {
 				static const unsigned int BUTTON_X = 2;
 				static const unsigned int BUTTON_Y = 3;
 				static const unsigned int BUTTON_LBUMPER = 4;
-				static const unsigned int BUTTON_RBUMPER = 5; 
+				static const unsigned int BUTTON_RBUMPER = 5;
 				static const unsigned int BUTTON_BACK = 6;
 				static const unsigned int BUTTON_START = 7;
-				static const unsigned int BUTTON_L3 = 8; 
+				static const unsigned int BUTTON_L3 = 8;
 				static const unsigned int BUTTON_R3 = 9;
 				static const unsigned int BUTTON_ACTIVATE = 10;
 				static const unsigned int BUTTON_LTRIGGER = 11;
@@ -157,7 +157,7 @@ namespace ARK {
 				float m_previousRTriggerValue;
 				bool m_sharedTriggerAxis; // true if Left and Right triggers share the same input axis.
 				bool virtualpad; // true if is a fake gamepad from the debug screen.
-				 
+
 				Gamepad();
 				void update();
 
@@ -173,7 +173,7 @@ namespace ARK {
 				bool hasButton(unsigned int key);
 
 				void moveAxis(unsigned int axis, float val);
-				
+
 
 				void clearButtonPressedRecord();
 
@@ -181,7 +181,7 @@ namespace ARK {
 				GamepadMapping* getMapping();
 				virtual ~Gamepad();
 
- 
+
 
 				//static double currentTime();
 
@@ -198,7 +198,7 @@ namespace ARK {
 
 
 				#if defined(ARK2D_WINDOWS)
-					
+
 					JOYINFOEX lastState;
 					int povXAxisIndex;
 					int povYAxisIndex;
@@ -206,12 +206,12 @@ namespace ARK {
 					XINPUT_STATE lastStateXInput;
 
 				#elif defined(ARK2D_ANDROID)
-					
+
 					unsigned int deviceId;
 
 				#elif defined(ARK2D_UBUNTU_LINUX)
 
-					//unsigned int deviceID;					
+					//unsigned int deviceID;
 					pthread_t thread;
 					int fd;
 					char * path;
@@ -220,15 +220,15 @@ namespace ARK {
 					struct input_absinfo axisInfo[ABS_CNT];
 					char* description;
 
-				#elif defined(ARK2D_XBOXONE) 
+				#elif defined(ARK2D_XBOXONE)
 
 					Windows::Xbox::Input::IGamepad^ m_currentGamepad;
         			Windows::Xbox::Input::IGamepadReading^ m_currentGamepadReading;
 
 				#endif
 
-				
- 
+
+
 
 
 				int dpadPosition;
@@ -241,30 +241,30 @@ namespace ARK {
 
 				inline string getName() { return name; }
 				inline unsigned int getId() { return id; }
- 
+
 
 				#ifdef ARK2D_WINDOWS
 					DWORD win32_dwButtons;
 					static const char* getGamepadDescription(unsigned int id, JOYINFOEX info, JOYCAPS caps);
 				#else
 					static const char* getGamepadDescription(unsigned int id);
-				#endif 
+				#endif
 
-				bool isAxis(unsigned int axisId); 
+				bool isAxis(unsigned int axisId);
 				float getAxisValue(unsigned int axisId);
 
 				static unsigned int convertButtonToId(Gamepad* gamepad, unsigned int button, bool printInfo = true);
 				//static unsigned int convertIdToButton(Gamepad* gamepad, unsigned int id);
-				static unsigned int convertAxisToId(Gamepad* gamepad, unsigned int axis); 
+				static unsigned int convertAxisToId(Gamepad* gamepad, unsigned int axis);
 
 				static unsigned int convertSystemButtonToARKButton(Gamepad* gamepad, unsigned int button);
 				static unsigned int convertSystemAxisToARKAxis(Gamepad* gamepad, unsigned int axis);
- 
+
 				#ifdef ARK2D_MACINTOSH
 					IOHIDDeviceRef deviceRef;
 					static string getGamepadDescription(IOHIDDeviceRef device);
 					unsigned int convertCookieToButton(unsigned int cookie);
-				#endif 
+				#endif
 
 				static unsigned int s_nextGamepadId;
 				static unsigned int getNextGamepadId();

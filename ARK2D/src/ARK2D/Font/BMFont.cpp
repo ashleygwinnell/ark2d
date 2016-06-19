@@ -24,6 +24,22 @@
 namespace ARK {
 	namespace Font {
 
+		uint32_t BMFont__drawString_getLetterColor( BMFont* font, int position ) {
+			Renderer* r = ARK2D::getRenderer();
+			unsigned char color_r = r->getDrawColor().getRedc();
+			unsigned char color_g = r->getDrawColor().getGreenc();
+			unsigned char color_b = r->getDrawColor().getBluec();
+			unsigned char color_a = (unsigned char) ((font->getImage()->getAlpha() * r->getDrawColor().getAlphaf()) * 255);
+
+			if (font->getImage()->getColor() != NULL) {
+				color_r = (unsigned char) (font->getImage()->getColor()->getRedc() * r->getDrawColor().getRedf());
+				color_g = (unsigned char) (font->getImage()->getColor()->getGreenc() * r->getDrawColor().getGreenf());
+				color_b = (unsigned char) (font->getImage()->getColor()->getBluec() * r->getDrawColor().getBluef());
+				color_a = (unsigned char) ((font->getImage()->getColor()->getAlphaf() * font->getImage()->getAlpha() * r->getDrawColor().getAlphaf()) * 255);
+			}
+			return Color::pack( color_r, color_g, color_b, color_a );
+		}
+
 		BMFont::BMFont():
 			#ifdef ARK2D_WINDOWS_VS
 				ARK::Font::Font(),
@@ -37,7 +53,8 @@ namespace ARK {
 			m_Charset(),
 			m_Image(NULL),
 			m_letterImages(),
-			m_kerning(0)
+			m_kerning(0),
+			m_getLetterColorFunction( (void*)BMFont__drawString_getLetterColor )
 			{
 
 		}
@@ -55,7 +72,8 @@ namespace ARK {
 			m_Charset(),
 			m_Image(NULL),
 			m_letterImages(),
-			m_kerning(0)
+			m_kerning(0),
+			m_getLetterColorFunction( (void*)BMFont__drawString_getLetterColor )
 		{
 			ARK2D::getLog()->i("Loading BMFont from raw data.");
 			m_data = (char*) GameContainerPlatform::getARK2DResource(fntResource, ARK2D_RESOURCE_TYPE_FNT);
@@ -80,7 +98,8 @@ namespace ARK {
 			m_Charset(),
 			m_Image(NULL),
 			m_letterImages(),
-			m_kerning(0)
+			m_kerning(0),
+			m_getLetterColorFunction( (void*)BMFont__drawString_getLetterColor )
 		{
 			ARK2D::getLog()->i("Loading BMFont from raw data.");
 			m_data = (char*) data;
@@ -105,7 +124,8 @@ namespace ARK {
 			m_Charset(),
 			m_Image(NULL),
 			m_letterImages(),
-			m_kerning(0)
+			m_kerning(0),
+			m_getLetterColorFunction( (void*)BMFont__drawString_getLetterColor )
 		{
 			ARK2D::getLog()->i("Loading BMFont: ");
 			ARK2D::getLog()->i(f);
@@ -131,7 +151,8 @@ namespace ARK {
 			m_Charset(),
 			m_Image(NULL),
 			m_letterImages(),
-			m_kerning(0)
+			m_kerning(0),
+			m_getLetterColorFunction( (void*)BMFont__drawString_getLetterColor )
 		{
 			ARK2D::getLog()->i("Loading BMFont: ");
 			ARK2D::getLog()->i(f);
@@ -318,7 +339,20 @@ namespace ARK {
 			return true;
 		}
 
-
+		uint32_t BMFont::getLetterColor( int position )
+		{
+			// uint32_t blah(BMFont* f, int pos) {}
+			uint32_t (*pt)(BMFont*, int) = (uint32_t(*)(BMFont*, int)) m_getLetterColorFunction;
+			return pt( this, position );
+		}
+		void BMFont::setLetterColorFunction( void* func )
+		{
+			m_getLetterColorFunction = func;
+		}
+		void BMFont::resetLetterColorFunction()
+		{
+			m_getLetterColorFunction = (void*) BMFont__drawString_getLetterColor;
+		}
 
 
 		void BMFont::drawString(const string str, float x, float y, signed int alignX, signed int alignY, float rotation, float scale) {
@@ -363,62 +397,6 @@ namespace ARK {
 				#endif
 
 
-				Renderer* r = ARK2D::getRenderer();
-				unsigned char color_r = r->getDrawColor().getRedc();
-				unsigned char color_g = r->getDrawColor().getGreenc();
-				unsigned char color_b = r->getDrawColor().getBluec();
-				unsigned char color_a = (unsigned char) ((m_Image->getAlpha() * r->getDrawColor().getAlphaf()) * 255);
-
-				if (m_Image->getColor() != NULL) {
-					color_r = (unsigned char) (m_Image->getColor()->getRedc() * r->getDrawColor().getRedf());
-					color_g = (unsigned char) (m_Image->getColor()->getGreenc() * r->getDrawColor().getGreenf());
-					color_b = (unsigned char) (m_Image->getColor()->getBluec() * r->getDrawColor().getBluef());
-					color_a = (unsigned char) ((m_Image->getColor()->getAlphaf() * m_Image->getAlpha() * r->getDrawColor().getAlphaf()) * 255);
-				}
-
-				/*if (Renderer::isBatching()) {
-					for( unsigned int i = 0; i < Str.length(); ++i )
-					{
-						int charid = (int) Str[i];
-						CharX = m_Charset.Chars[charid].x;
-						CharY = m_Charset.Chars[charid].y;
-						Width = m_Charset.Chars[charid].Width;
-						WidthOriginal = m_Charset.Chars[charid].WidthOriginal;
-						Height = m_Charset.Chars[charid].Height;
-						HeightOriginal = m_Charset.Chars[charid].HeightOriginal;
-						OffsetX = m_Charset.Chars[charid].XOffset;
-						OffsetY = m_Charset.Chars[charid].YOffset;
-						XAdvance = m_Charset.Chars[charid].XAdvance;
-
-						float drawx2 = drawx+OffsetX + (i*m_kerning);
-						float drawy2 = drawy+OffsetY;
-
-						float charXPC = ((CharX / float(m_Image->getWidth())) * m_Image->getTextureW()) + m_Image->getTextureX();
-						float charYPC = ((CharY / float(m_Image->getHeight())) * m_Image->getTextureH()) + m_Image->getTextureY();
-						float widthPC = ((WidthOriginal / float(m_Image->getWidth())) * m_Image->getTextureW());
-						float heightPC = ((HeightOriginal / float(m_Image->getHeight())) * m_Image->getTextureH());
-
-						r->getBatch()->addTexturedQuad(
-							m_Image->getTexture()->getId(),
-							drawx2, drawy2,
-							drawx2 + Width, drawy2,
-							drawx2, drawy2 + Height,
-							drawx2 + Width, drawy2 + Height,
-
-							charXPC, charYPC,
-							charXPC + widthPC, charYPC,
-							charXPC, charYPC + heightPC,
-							charXPC + widthPC, charYPC + heightPC,
-
-							color_r, color_g, color_b, color_a,
-							color_r, color_g, color_b, color_a,
-							color_r, color_g, color_b, color_a,
-							color_r, color_g, color_b, color_a
-						);
-
-					}
-					return;
-				}*/
 
 				//signed int i = 0;
 				//std::wstring::const_iterator pos = Str.begin();
@@ -450,6 +428,11 @@ namespace ARK {
 						continue;
 					}
 
+					uint32_t color = getLetterColor( i );
+					unsigned char color_r = Color::unpackRed( color );
+					unsigned char color_g = Color::unpackGreen( color );
+					unsigned char color_b = Color::unpackBlue( color );
+					unsigned char color_a = Color::unpackAlpha( color );
 
 					//int charid = (int) *pos;
 					//unsigned int charid = utf8string::u8_nextchar(u8Str, &i);
@@ -593,6 +576,7 @@ namespace ARK {
 				//for( signed int i = 0; i < (signed int) Str.length(); ++i )
 				//{
 				//}
+				Renderer* r = ARK2D::getRenderer();
 				r->texturedTriangles(m_Image->getTexture()->getId(), rawVertices, rawNormals, rawTextureCoords, rawColors, Str.length()*2, false);
 
 				//#ifdef ARK2D_WINDOWS_VS

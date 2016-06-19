@@ -111,6 +111,7 @@ namespace ARK {
 				map<int, Image*> m_letterImages;
 
 				int m_kerning;
+				void* m_getLetterColorFunction;
 
 			public:
 				BMFont();
@@ -127,6 +128,9 @@ namespace ARK {
 				float getCharXOffset(unsigned char ch);
 				unsigned int getLineHeight() const ;
 				Image* getImage() const;
+				virtual uint32_t getLetterColor( int position );
+				virtual void setLetterColorFunction( void* func );
+				virtual void resetLetterColorFunction( );
 
 				void setKerning(int k);
 

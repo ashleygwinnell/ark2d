@@ -68,7 +68,7 @@ namespace ARK {
 				virtual void preRender();
 				virtual void postRender();
 				virtual void render();
-				
+
 
 				GameContainer* getContainer();
 
@@ -85,12 +85,13 @@ namespace ARK {
 				virtual bool keyReleased(unsigned int key);
 				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
+				// Gamepad listener
 				virtual void gamepadConnected(ARK::Controls::Gamepad* gamepad);
 				virtual void gamepadDisconnected(ARK::Controls::Gamepad* gamepad);
 				virtual void buttonPressed(ARK::Controls::Gamepad* gamepad, unsigned int button);
 				virtual void buttonReleased(ARK::Controls::Gamepad* gamepad, unsigned int button);
 				virtual void axisMoved(ARK::Controls::Gamepad* gamepad, unsigned int axis, float value);
-				
+
 				virtual void orientationChanged(int orientation);
 
 				virtual ~StateBasedGame();
