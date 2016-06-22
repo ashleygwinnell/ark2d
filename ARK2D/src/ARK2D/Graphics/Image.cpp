@@ -709,7 +709,8 @@ namespace ARK {
 					RendererStats::s_glCalls++;
 					int e = glGetError();
 					if (e != GL_NO_ERROR) {
-						ARK2D::getLog()->e("Definitely a GL error. :( ");
+						ARK2D::getLog()->e("-----------!!!-----------");
+						ARK2D::getLog()->e("A GL error. :( ");
 						ARK2D::getLog()->e("Renderer state:" );
 						ARK2D::getLog()->e(ARK2D::getRenderer()->toString());
 						TextureStore::getInstance()->print();

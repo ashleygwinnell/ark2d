@@ -17,7 +17,7 @@ namespace ARK {
 
 		BasicGeometryShader::BasicGeometryShader():
 			ARK::Graphics::Shader() {
-
+				setName("BasicGeometryShader");
 		}
 		void BasicGeometryShader::load() {
 			ARK2D::getLog()->v("Geometry Shader Checking for errors before load...");
@@ -203,7 +203,7 @@ namespace ARK {
 
 		BasicTextureShader::BasicTextureShader():
 			ARK::Graphics::Shader() {
-
+				setName("BasicTextureShader");
 		}
 		void BasicTextureShader::load()
 		{
@@ -368,6 +368,16 @@ namespace ARK {
 			ark_VertexNormalIn = getAttributeVariable("ark_VertexNormalIn");
 			ark_VertexTexCoordIn = getAttributeVariable("ark_VertexTexCoordIn");
 			ark_VertexColorIn = getAttributeVariable("ark_VertexColorIn");
+
+			ARK2D::getLog()->e( StringUtil::append( "ark_ModelMatrix ", 		ark_ModelMatrix ) );
+			ARK2D::getLog()->e( StringUtil::append( "ark_ViewMatrix ", 			ark_ViewMatrix ) );
+			ARK2D::getLog()->e( StringUtil::append( "ark_ProjectionMatrix ", 	ark_ProjectionMatrix ) );
+			ARK2D::getLog()->e( StringUtil::append( "ark_NormalMatrix ", 		ark_NormalMatrix ) );
+			ARK2D::getLog()->e( StringUtil::append( "ark_TextureId ", 			ark_TextureId ) );
+			ARK2D::getLog()->e( StringUtil::append( "ark_VertexPositionIn ", 	ark_VertexPositionIn ) );
+			ARK2D::getLog()->e( StringUtil::append( "ark_VertexNormalIn ", 		ark_VertexNormalIn ) );
+			ARK2D::getLog()->e( StringUtil::append( "ark_VertexTexCoordIn ", 	ark_VertexTexCoordIn ) );
+			ARK2D::getLog()->e( StringUtil::append( "ark_VertexColorIn ", 		ark_VertexColorIn ) );
 
 			showAnyGlErrorAndExitMacro();
 

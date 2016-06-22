@@ -14,29 +14,29 @@
 
 namespace ARK {
 	namespace Graphics {
-		
+
 		ShaderStore* ShaderStore::s_instance = NULL;
-		ShaderStore* ShaderStore::getInstance() { 
+		ShaderStore* ShaderStore::getInstance() {
 			if (s_instance == NULL) {
 				s_instance = new ShaderStore();
 			}
 			return s_instance;
 		}
 
-		ShaderStore::ShaderStore(): 
+		ShaderStore::ShaderStore():
 			m_map()
 			{
- 
+
 		}
 		void ShaderStore::addShader(unsigned int ref, Shader* shader) {
-			m_map[ref] = shader; 
+			m_map[ref] = shader;
 		}
 		void ShaderStore::removeShader(unsigned int s) {
 			map<unsigned int, Shader*>::iterator it;
 			it = m_map.find(s);
-			if (it != m_map.end()) { 
+			if (it != m_map.end()) {
 				m_map.erase(it);
-			}			
+			}
 		}
 		Shader* ShaderStore::getShader(unsigned int ref) {
 			return m_map[ref];
@@ -44,20 +44,25 @@ namespace ARK {
 		bool ShaderStore::hasShader(unsigned int ref) {
 			return (m_map.find(ref) != m_map.end());
 		}
-	
+
 		void ShaderStore::print() {
 			ARK2D::getLog()->v("Printing Shader Store");
 
 			map<unsigned int, Shader*>::iterator it;
-			for (it = m_map.begin(); it != m_map.end(); it++) 
+			for (it = m_map.begin(); it != m_map.end(); it++)
 			{
+				Shader* sha = it->second;
+				if (sha == NULL) {
+					ARK2D::getLog()->v("NULL shader pointer in the map...");
+					continue;
+				}
 				std::string s = it->second->getName();
 				s += std::string(" is shader id: ");
 				s += Cast::toString<unsigned int>(it->second->getId());
 				ARK2D::getLog()->v(s);
 			}
 		}
-		
+
 		ShaderStore::~ShaderStore() {
 
 		}

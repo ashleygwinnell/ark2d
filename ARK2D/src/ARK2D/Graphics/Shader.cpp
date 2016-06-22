@@ -19,6 +19,7 @@ namespace ARK {
 	namespace Graphics {
 
 		ShaderInternals::ShaderInternals():
+			m_name(""),
 			m_programId(0),
 			m_vertexShaders(),
 			m_fragmentShaders(),
@@ -799,7 +800,7 @@ namespace ARK {
 
 	                Renderer::s_vboQuadNormals->bind();
 	                Renderer::s_vboQuadNormals->setData(&rawNormals[0]);
-	                glVertexAttribPointer(ark_VertexNormalIn, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	                if (ark_VertexNormalIn >= 0) { glVertexAttribPointer(ark_VertexNormalIn, 3, GL_FLOAT, GL_FALSE, 0, 0); }
 
 	                Renderer::s_vboQuadColors->bind();
 					Renderer::s_vboQuadColors->setData(&rawColors[0]);
