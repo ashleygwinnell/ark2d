@@ -31,7 +31,7 @@ namespace ARK {
 			public:
 				static const unsigned int SPLIT_HORIZONTAL = 0; // Two items side by side.
 				static const unsigned int SPLIT_VERTICAL = 1; // Two items one above the other.
-				
+
 			public:
 				SplitPane();
 				SplitPane(unsigned int splitType);
@@ -51,6 +51,8 @@ namespace ARK {
 				virtual bool keyPressed(unsigned int key);
 				virtual bool keyReleased(unsigned int key);
 				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
+
+				virtual void onResize();
 
 				virtual ~SplitPane();
 		};

@@ -5,21 +5,21 @@
  *      Author: Ashley
  */
 
-#include "Slider.h"   
-#include "../Tween/Easing.h"  
-#include "../Geometry/Shape.h"  
+#include "Slider.h"
+#include "../Tween/Easing.h"
+#include "../Geometry/Shape.h"
 #include "../Graphics/Image.h"
 
-namespace ARK { 
-	namespace UI { 
+namespace ARK {
+	namespace UI {
 
-		Slider::Slider(): 
+		Slider::Slider():
 			AbstractUIComponent(),
 			m_buttonLocation(0, 0),
-			
+
 			bar(NULL),
 			button(NULL),
-			
+
 			m_value(0.0f),
 			m_actualValue(0.0f),
 			lowValue(0.0f),
@@ -35,18 +35,25 @@ namespace ARK {
 		}
 
 		void Slider::setRange(float low, float high) {
-			lowValue = low; 
-			highValue = high; 
+			lowValue = low;
+			highValue = high;
 		}
 
 		void Slider::updateValue()
 		{
-			float intermediary = Easing::ease(Easing::LINEAR, m_buttonLocation.getX(), 0.0f, 1.0f, m_width);
+			float offsetX = 0;
+			float offsetY = 0;
+			if ( parent == NULL ) {
+				offsetX += transform.position.getX();
+				offsetY += transform.position.getY();
+			}
+
+			float intermediary = Easing::ease(Easing::LINEAR, m_buttonLocation.getX()+offsetX, 0.0f, 1.0f, m_width+offsetX);
 			m_value = intermediary;
 
 			if (m_snapping) {
 				signed int divisions = round(intermediary / m_snapTo);
-				m_value = divisions * m_snapTo; 
+				m_value = divisions * m_snapTo;
 			}
 
 			m_actualValue = lowValue + (m_value * highValue);
@@ -59,23 +66,31 @@ namespace ARK {
 			refreshButtonPosition();
 		}
 		void Slider::refreshButtonPosition() {
+
+			float offsetX = 0;
+			float offsetY = 0;
+			if ( parent == NULL ) {
+				offsetX += transform.position.getX();
+				offsetY += transform.position.getY();
+			}
+
             float val = m_value * getWidth();
-			m_buttonLocation.setX(val);
+			m_buttonLocation.set(offsetX + val, offsetY);
 			//m_buttonLocation.setY(getHeight()*0.5f);
 		}
 		void Slider::setBarImage(Image* img)
 		{
-			bar = img; 
+			bar = img;
 		}
-		void Slider::setButtonImage(Image* img) 
+		void Slider::setButtonImage(Image* img)
 		{
 			button = img;
 		}
-		void Slider::setBounds(float x, float y, float w, float h) 
+		void Slider::setBounds(float x, float y, float w, float h)
 		{
 			setSize(w, h);
 			setLocation(x, y);
-			
+
 			refreshButtonPosition();
 		}
 		void Slider::setLocation(float x, float y) {
@@ -86,23 +101,27 @@ namespace ARK {
 			AbstractUIComponent::setLocationByCenter(x, y);
 			refreshButtonPosition();
 		}
-		void Slider::render() 
+		void Slider::render()
 		{
 			Renderer* r = ARK2D::getRenderer();
 
+			float offsetX = 0;
+			float offsetY = 0;
+			if ( parent == NULL ) {
+				offsetX += transform.position.getX();
+				offsetY += transform.position.getY();
+			}
 
-			
 
 			if (bar != NULL) {
 				bar->setAlpha(m_alpha);
-				//bar->draw(m_bounds.getMinX(), m_bounds.getMinY(), m_bounds.getWidth(), m_bounds.getHeight());
-				bar->drawCentered(m_width*0.5f, m_height*0.5f);
+				bar->drawCentered( offsetX + (m_width*0.5f), offsetY );
 			} else {
 				r->setDrawColor(Color::white);
-				r->fillRect(0, 0, m_width, m_height);
+				r->fillRect( offsetX, offsetY, m_width, m_height );
 			}
 
-			r->drawString(m_buttonLocation.toString(), 0, 0);
+			//r->drawString(m_buttonLocation.toString(), 0, 0);
 
 			if (button != NULL) {
 				button->setAlpha(m_alpha);
@@ -121,7 +140,7 @@ namespace ARK {
 			if (key != (unsigned int) Input::MOUSE_BUTTON_LEFT) { return false; }
 
 			Input* i = ARK2D::getInput();
-			if (!m_dragging) 
+			if (!m_dragging)
 			{
 				Vector3<float> worldpos = localPositionToGlobalPosition();
 				bool collides = Shape<float>::collision_circleCircle(i->getMouseX(), i->getMouseY(), 15.0f, worldpos.x + m_buttonLocation.getX(), worldpos.y + m_buttonLocation.getY(), 15.0f);
@@ -145,14 +164,14 @@ namespace ARK {
 
 		bool Slider::mouseMoved(int x, int y, int oldx, int oldy)
 		{
-			if (m_dragging) 
+			if (m_dragging)
 			{
-				
+
 				int newx = x;
 				if (m_snapping) {
 					int snapx = (m_width) * m_snapTo;
 					signed int divisions = round(newx / snapx);
-					newx = divisions * snapx; 
+					newx = divisions * snapx;
 				}
 
 				if (newx < 0.0) { newx = (int) 0; }
@@ -166,7 +185,7 @@ namespace ARK {
             return false;
 		}
 
-		Slider::~Slider() 
+		Slider::~Slider()
 		{
 
 		}

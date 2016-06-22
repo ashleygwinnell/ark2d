@@ -25,7 +25,8 @@ namespace ARK {
 			m_alignX(-1),
 			m_alignY(-1) 
 		{
-			setSize(ARK2D::getRenderer()->getFont()->getStringWidth(text), ARK2D::getRenderer()->getFont()->getLineHeight());
+			ARK::Font::Font* fnt = ARK2D::getRenderer()->getFont();
+			setSize((fnt) ? fnt->getStringWidth(text) : 0, (fnt) ? fnt->getLineHeight() : 0);
 		}
 
 		Label::Label(string text, signed int alignX, signed int alignY):
@@ -34,15 +35,17 @@ namespace ARK {
 			m_alignX(alignX),
 			m_alignY(alignY)
 		{
-			setSize(ARK2D::getRenderer()->getFont()->getStringWidth(text), ARK2D::getRenderer()->getFont()->getLineHeight());
+			ARK::Font::Font* fnt = ARK2D::getRenderer()->getFont();
+			setSize((fnt) ? fnt->getStringWidth(text) : 0, (fnt) ? fnt->getLineHeight() : 0);
 		}
 		Label::Label(string text, signed int alignX, signed int alignY, float sc):
 			AbstractUIComponent(),
 			m_text(text),
 			m_alignX(alignX),
-			m_alignY(alignY)
+			m_alignY(alignY) 
 		{
-			setSize(ARK2D::getRenderer()->getFont()->getStringWidth(text), ARK2D::getRenderer()->getFont()->getLineHeight());
+			ARK::Font::Font* fnt = ARK2D::getRenderer()->getFont();
+			setSize((fnt) ? fnt->getStringWidth(text) : 0, (fnt) ? fnt->getLineHeight() : 0);
 			transform.scale.set(sc, sc, sc);
 		}
 

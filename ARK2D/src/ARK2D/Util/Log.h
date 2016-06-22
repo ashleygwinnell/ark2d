@@ -46,7 +46,7 @@ namespace ARK {
 		};
 
 		class ARK2D_API WatchedVariable {
-			public: 
+			public:
 				string name;
 				unsigned int type;
 				void* data;
@@ -58,7 +58,7 @@ namespace ARK {
 				static const unsigned int TYPE_STR = 3;
 				static const unsigned int TYPE_BOOL = 4;
 		};
-        
+
         class LogConsolePanel;
         class LogWatchedVariablesPanel;
         class LogRendererStatsPanel;
@@ -111,26 +111,26 @@ namespace ARK {
 				LogConsolePanel* m_consolePanel;
 
 				bool m_logToFile;
-				
+
 			public:
 				Log();
 				void init(); // call this just before game.init
 				void message(string s, unsigned int type);
-				
+
 				void e(const char* s);
 				void w(const char* s);
 				void i(const char* s);
 				void v(const char* s);
 				void g(const char* s);
 				void t(const char* s);
-				
+
 				void e(string s);
 				void w(string s);
 				void i(string s);
 				void v(string s);
 				void g(string s);
 				void t(string s);
-				
+
 				void e(String s);
 				void w(String s);
 				void i(String s);
@@ -147,7 +147,7 @@ namespace ARK {
 				void setBackgroundColor(float r, float g, float b, float a);
 
 				// only shows log statements lower than this value.
-				void setFilter(unsigned int level); 
+				void setFilter(unsigned int level);
 				unsigned int getFilter();
 
 				virtual void update();
@@ -156,6 +156,8 @@ namespace ARK {
 				virtual bool keyPressed(unsigned int key);
 				virtual bool keyReleased(unsigned int key);
 				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
+
+				virtual void onResize();
 
 				inline bool isVisible() { return visible; }
 				inline bool isEnabled() { return visible; }
@@ -170,9 +172,9 @@ namespace ARK {
 				wstring getTypeWString(unsigned int type);
 		};
 
-		void debug_addVirtualGamepad(); 
+		void debug_addVirtualGamepad();
 
-		
+
 
 		class ARK2D_API LogConsolePanel : public Panel {
 			public:
@@ -197,8 +199,8 @@ namespace ARK {
 		};
 		class ARK2D_API GPButton : public ARK::UI::Button {
 			public:
-                GPButton(string text); 
-				unsigned int gpid; 
+                GPButton(string text);
+				unsigned int gpid;
 				unsigned int gpbid;
 		};
 		class ARK2D_API GPAxisButton : public GPButton {
@@ -210,10 +212,10 @@ namespace ARK {
 				float axisValueX;
 				float axisValueY;
 				GPAxisButton(string text);
-				virtual void render(); 
-				virtual void renderBackground(); 
+				virtual void render();
+				virtual void renderBackground();
 				virtual void renderText(int x, int y);
-				virtual void renderOverlay(); 
+				virtual void renderOverlay();
 
 				virtual bool keyPressed(unsigned int key);
 				virtual bool keyReleased(unsigned int key);

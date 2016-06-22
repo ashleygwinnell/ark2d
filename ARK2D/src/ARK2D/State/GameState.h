@@ -26,17 +26,17 @@ namespace ARK {
 				GameState();
 				GameState(string name);
 
-				virtual void preEnter(GameContainer* container, StateBasedGame* game, GameState* from);
-				virtual void postLeave(GameContainer* container, StateBasedGame* game, GameState* to);
-				
-				virtual void enter(GameContainer* container, StateBasedGame* game, GameState* from);
-				virtual void leave(GameContainer* container, StateBasedGame* game, GameState* to);
+				virtual void preEnter(GameContainer* container, StateBasedGame* game, GameState* from); // preEnter is called when enterState is called.
+				virtual void leave(GameContainer* container, StateBasedGame* game, GameState* to); // leave is called when enterState is called.
+
+				virtual void enter(GameContainer* container, StateBasedGame* game, GameState* from); // enter is called after a transition is complete.
+				virtual void postLeave(GameContainer* container, StateBasedGame* game, GameState* to); // postLeave is called after a transition is complete.
 
 				virtual unsigned int id() = 0;
 				virtual void init(GameContainer* container, StateBasedGame* game) = 0;
 				virtual void update(GameContainer* container, StateBasedGame* game, GameTimer* timer) = 0;
 				virtual void render(GameContainer* container, StateBasedGame* game, Renderer* g) = 0;
-				
+
 				virtual void render();
 
 				virtual void pause(); // android events

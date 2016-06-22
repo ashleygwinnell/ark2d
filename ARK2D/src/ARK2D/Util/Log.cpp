@@ -20,7 +20,7 @@
 #include "../UI/SplitPane.h"
 #include "../UI/TitledPanel.h"
 
-namespace ARK { 
+namespace ARK {
 	namespace Util {
 
 		Log* Log::s_instance = NULL;
@@ -35,9 +35,9 @@ namespace ARK {
 		Log::Log():
 			SceneNode("log"),
 			m_messages(),
-			m_messagesPool(), 
+			m_messagesPool(),
 			m_maxMessages(256),
-			
+
 			m_watchedVariables(),
 
 			m_filter(TYPE_ALL),
@@ -51,7 +51,7 @@ namespace ARK {
 			{
 				this->visible = false;
 
-			
+
 		}
 
 		void debugLanguageChanged(ComboBox* box) {
@@ -59,6 +59,14 @@ namespace ARK {
 		    string val = box->getSelected()->getValue();
 			ARK2D::getStrings()->setLanguage( Strings::textLanguageToConstLanguage(val) );
 			//ARK2D::getStrings()->print();
+		}
+
+		void Log::onResize() {
+			GameContainer* container = ARK2D::getContainer();
+			setBounds(container->getWidth(), container->getHeight(), 0);
+
+			SceneNode* node = getChildByName("split_horizontal");
+			node->onResize();
 		}
 
 		void Log::init() {
@@ -70,13 +78,16 @@ namespace ARK {
 
  			//m_scene = new Scene();
 
+
  			GameContainer* container = ARK2D::getContainer();
+ 			setBounds(container->getWidth(), container->getHeight(), 0);
+
  			SplitPane* splitHorizontal = new SplitPane(SplitPane::SPLIT_HORIZONTAL);
  			splitHorizontal->setName("split_horizontal");
- 			splitHorizontal->setBounds(container->getWidth(), container->getHeight(), 0);
  			splitHorizontal->setSplitLocation(0.2f);
- 			
- 			
+
+
+
 
  				SplitPane* splitLeft = new SplitPane(SplitPane::SPLIT_VERTICAL);
  				splitLeft->setName("leftpanel_split_vertical");
@@ -85,7 +96,7 @@ namespace ARK {
  					TitledPanel* splitLeftTop = new TitledPanel();
  					splitLeftTop->setTitle("Debug");
  					splitLeftTop->setName("left_panel");
-	                
+
 		                ARK::UI::Label* gameSpeedLabel = new ARK::UI::Label("Game Speed:", -1, 0);
 		                gameSpeedLabel->transform.position.set(10, 20);
 		   				splitLeftTop->addChild(gameSpeedLabel);
@@ -141,7 +152,7 @@ namespace ARK {
 						splitLeftTop->addChild(languageCombobox);
 
 					TitledPanel* splitLeftBottomTitled = new TitledPanel(new LogSceneTreePanel(), "Scene Tree");
-                    
+
 
 
 
@@ -160,13 +171,13 @@ namespace ARK {
 				SplitPane* bottomSplitRight = new SplitPane(SplitPane::SPLIT_HORIZONTAL, watchedVariables, rendererStats, 0.5f);
 
 				SplitPane* bottomSplitLeft = new SplitPane(
-												SplitPane::SPLIT_HORIZONTAL, 
-												new TitledPanel(new LogConsolePanel(), "Console"), 
+												SplitPane::SPLIT_HORIZONTAL,
+												new TitledPanel(new LogConsolePanel(), "Console"),
 												bottomSplitRight,
 												0.70f
 											);
 
-				
+
 
 				rightPanel->setRightComponent(bottomSplitLeft);
 
@@ -177,21 +188,21 @@ namespace ARK {
 
 		#define  LOGLOGLOG(...)  __android_log_print(ANDROID_LOG_INFO,"ARK2D",__VA_ARGS__)
 
-		#if defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_WINDOWS_VS) 
+		#if defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_WINDOWS_VS)
 			void WINPHONELOG(const char* ch, int len) {
 
-				#if NTDDI_PHONE8 
+				#if NTDDI_PHONE8
 					LPCSTR lps = ch;
 					OutputDebugString(lps);
 					OutputDebugString("\r\n");
 				#elif NTDDI_WINBLUE
-					
+
 
 					#if defined(ARK2D_WINDOWS)
 						LPCSTR lps = ch;
 						OutputDebugString(lps);
 						OutputDebugString("\r\n");
-					#else					
+					#else
 						WCHAR str[1024];
 						MultiByteToWideChar(CP_UTF8, 0, ch, len, str, 1024);
 						str[len] = L'\0';
@@ -201,7 +212,7 @@ namespace ARK {
 					#endif
 
 
-					
+
 				#endif
 
 			}
@@ -221,17 +232,17 @@ namespace ARK {
 		void Log::message(string s, unsigned int type) {
 
 			/*#if !defined(ARK2D_DEBUG)
-				if (type == TYPE_VERBOSE) { 
+				if (type == TYPE_VERBOSE) {
 					return;
 				}
-			#endif*/ 
+			#endif*/
 
 			if (type > m_filter) {
-				return; 
+				return;
 			}
 
 			#if defined(ARK2D_ANDROID)
-				if (s.length() < 1000) { 
+				if (s.length() < 1000) {
 					LOGLOGLOG("%s: %s", getTypeString(type).c_str(), s.c_str());
 				} else {
 					LOGLOGLOG("%s: %s", getTypeString(type).c_str(), "Long string: ");
@@ -239,7 +250,7 @@ namespace ARK {
 						LOGLOGLOG("%s",  s.substr(i, 1024).c_str());
 					}
 				}
-				/*if (s.length() < 1024) { 
+				/*if (s.length() < 1024) {
 					__android_log_print(ANDROID_LOG_INFO, "ARK2D", s.c_str());
 				} else {
 					__android_log_print(ANDROID_LOG_INFO, "ARK2D", "Long string: ");
@@ -247,7 +258,7 @@ namespace ARK {
 						__android_log_print(ANDROID_LOG_INFO, "ARK2D", s.substr(i, 1024).c_str());
 					}
 				}*/
-				
+
 			#elif defined(ARK2D_FLASCC)
 				/*string newStr = StringUtil::append(getTypeString(type), s);
 				printf("Log ");
@@ -255,7 +266,7 @@ namespace ARK {
 				printf(": ");
 				printf(s.c_str());
 				printf("\n");*/
-			#elif defined(ARK2D_WINDOWS_PHONE_8) 
+			#elif defined(ARK2D_WINDOWS_PHONE_8)
 
 				if (s.length() < 1023) {
 					WINPHONELOG(s.c_str(), s.length());
@@ -267,7 +278,7 @@ namespace ARK {
 					}
 				}
 
-			#elif defined(ARK2D_WINDOWS_VS) 
+			#elif defined(ARK2D_WINDOWS_VS)
 
 				std::cout << "Log " << getTypeString(type) << ": " << s << std::endl;
 				if (s.length() < 1023) {
@@ -280,16 +291,16 @@ namespace ARK {
 					}
 				}
 
-				
-				
+
+
 			#else
 				std::cout << "Log " << getTypeString(type) << ": " << s << std::endl;
 			#endif
 
-			if (type == TYPE_THREAD) { return; }   
+			if (type == TYPE_THREAD) { return; }
 
 			if (m_messagesPool.size() == 0) {
-				for(unsigned int i = 0; i < 6; i++) { 
+				for(unsigned int i = 0; i < 6; i++) {
 					LogMessage* item = new LogMessage();
 					m_messagesPool.push_back(item);
 
@@ -302,7 +313,7 @@ namespace ARK {
 				m_messagesPool.push_back(item);
 			}
 			item->level = type;
-			if (s.length() < 1024) { 
+			if (s.length() < 1024) {
 				item->message = s;
 			} else {
 				item->message = s.substr(0, 1024);
@@ -315,7 +326,7 @@ namespace ARK {
 				log_file << "Log " << getTypeString(type) << ": " << s.c_str() << std::endl;
 			}
 
-			
+
 		}
 		void Log::e(const char* s) {
 			string str(s);
@@ -332,7 +343,7 @@ namespace ARK {
 		void Log::v(const char* s) {
 			string str(s);
 			message(str, TYPE_VERBOSE);
-		} 
+		}
 		void Log::g(const char* s) {
 			string str(s);
 			message(str, TYPE_GAME);
@@ -341,7 +352,7 @@ namespace ARK {
 			string str(s);
 			message(str, TYPE_THREAD);
 		}
-		
+
 		void Log::e(string s) {
 			message(s, TYPE_ERROR);
 		}
@@ -361,7 +372,7 @@ namespace ARK {
 			message(s, TYPE_THREAD);
 		}
 
-		
+
 		void Log::e(String s) {
 			message(s.get(), TYPE_ERROR);
 		}
@@ -377,14 +388,14 @@ namespace ARK {
 		void Log::g(String s) {
 			message(s.get(), TYPE_GAME);
 		}
-		void Log::t(String s) { 
+		void Log::t(String s) {
 			message(s.get(), TYPE_THREAD);
 		}
 
 		void Log::backtrace() {
 			#ifdef ARK2D_MACINTOSH
 				e("--- BACKTRACE ---");
-				
+
 				void* callstack[128];
                 int i, frames = ::backtrace(callstack, 128);
 				char** strs = backtrace_symbols(callstack, frames);
@@ -399,7 +410,7 @@ namespace ARK {
 		}
 
 		void Log::watchVariable(string name, unsigned int type, void* data) {
-			// check the memory location/variable is not being watched already! 
+			// check the memory location/variable is not being watched already!
 			for(unsigned int i = 0; i < m_watchedVariables.size(); i++) {
 				if (m_watchedVariables[i]->data == data) {
 					ARK2D::getLog()->w(StringUtil::append("Variable is already being watched: ", name));
@@ -420,15 +431,15 @@ namespace ARK {
 			for(unsigned int i = 0; i < m_watchedVariables.size(); ++i) {
 				WatchedVariable* wv = m_watchedVariables[i];
 				delete wv;
-				wv = NULL; 
+				wv = NULL;
 			}
 			m_watchedVariables.clear();
 		}
-		
+
 		void Log::update() {
 			SceneNode::update();
 
-			//#if defined(ARK2D_DEBUG) 
+			//#if defined(ARK2D_DEBUG)
 			//	return;
 			//#endif
 
@@ -436,13 +447,13 @@ namespace ARK {
 				Input* i = ARK2D::getInput();
 				if (i->isKeyPressed(Input::KEY_D) && i->isKeyDown(Input::KEY_SPACE) && i->isKeyDown(Input::KEY_9)) {
 					this->visible = !this->visible;
-				} 
+				}
 			#elif defined(ARK2D_WINDOWS)
 				Input* i = ARK2D::getInput();
 				if (i->isKeyPressed(Input::KEY_D) && i->isKeyDown(Input::KEY_LSHIFT) && i->isKeyDown(Input::KEY_LCONTROL)) {
 					this->visible = !this->visible;
 				}
-			#else 
+			#else
 				Input* i = ARK2D::getInput();
 				if (i->isKeyPressed(Input::KEY_D) && i->isKeyDown(Input::KEY_LSHIFT)) {
 					this->visible = !this->visible;
@@ -450,11 +461,11 @@ namespace ARK {
 			#endif
 
 			if (this->visible) {
-				ARK2D::getContainer()->setCursorVisible(true); 
+				ARK2D::getContainer()->setCursorVisible(true);
 			}
 
 			//m_scene->update();
-		}	
+		}
 		void Log::render() {
 			GameContainer* container = ARK2D::getContainer();
 			Renderer* r = ARK2D::getRenderer();
@@ -476,7 +487,7 @@ namespace ARK {
 				Game* g = ARK2D::getGame();
 				ARK::Geometry::Cube* bounds = g->getBounds();
 
-				
+
 				g->transform.position.set(pos.getX(), 0, 0);
 
 				float scaleX = std::min(1.0f, (container->getWidth() - pos.getX()) / float(container->getWidth()));
@@ -509,7 +520,7 @@ namespace ARK {
 				e("cannot display log. no default font loaded.");
 				return;
 				//defaultFont = oldFont;
-			} 
+			}
 
 			r->setDrawColor(Color::white);
 			r->setFont(defaultFont);
@@ -521,18 +532,18 @@ namespace ARK {
 			ARK2D::getTimer()->setDeltaModifier(m_gameSpeedSlider->getActualValue());
 
 			r->setDrawColor(Color::white);
-			
+
 			//m_expoCheckbox->render();
 			ARK2D::setExpoMode(m_expoCheckbox->isChecked());
 
 			// draw renderer stats
-			
+
  			// container widths and heights...
  			int cy = 120;
  			//r->drawString(StringUtil::append("FPS: ", ARK2D::getTimer()->getFPS()), container->getWidth() - 10, 10, Renderer::ALIGN_RIGHT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
-			
-			 
- 
+
+
+
 			// render log.
 			/*list<LogMessage*>::iterator it;
 			int actualHeight = 0;
@@ -552,7 +563,7 @@ namespace ARK {
 			r->setDrawColor(Color::white);
 			//r->setFont(defaultFont);
 			//m_scene->render();
-			
+
 			//r->enableMultisampling();
 
 			//r->setDrawColor(oldColor);
@@ -576,7 +587,7 @@ namespace ARK {
 			return m_logToFile;
 		}
 		void Log::setLoggingToFile(bool b) {
-			m_logToFile = b; 
+			m_logToFile = b;
 		}
 
    		wstring Log::getTypeWString(unsigned int type) {
@@ -620,7 +631,7 @@ namespace ARK {
 		}
 
 
-		GPAxisButton::GPAxisButton(string text): 
+		GPAxisButton::GPAxisButton(string text):
 			GPButton(text),
 			downX(0.0f),
 			downY(0.0f),
@@ -628,22 +639,22 @@ namespace ARK {
 			axisValueY(0.0f) {
 
 		}
-		GPButton::GPButton(string text): 
+		GPButton::GPButton(string text):
 			Button(text) {
 
 		}
 
-		void debugGamepadButtonPress(GPButton* butt) { 
+		void debugGamepadButtonPress(GPButton* butt) {
 			Gamepad* pad = ARK2D::getInput()->getGamepad(butt->gpid);
-			pad->pressButton(butt->gpbid); 
+			pad->pressButton(butt->gpbid);
 		}
 		void debugGamepadClose(GPButton* butt) {
 			bool closed = false;
 			unsigned int gamepadId = butt->gpid;
 			vector<Gamepad* >* pads = ARK2D::getInput()->getGamepads();
 			Gamepad* pad = NULL;
-			for(unsigned int i = 0; i < pads->size(); i++) { 
-				if (pads->at(i)->id == gamepadId) { 
+			for(unsigned int i = 0; i < pads->size(); i++) {
+				if (pads->at(i)->id == gamepadId) {
 					pad = pads->at(i);
 					closed = true;
 
@@ -675,7 +686,7 @@ namespace ARK {
 			pad = NULL;
 		}
 
-		
+
 
 		LogSceneTreePanel::LogSceneTreePanel():
             ScrollPanel(),
@@ -688,8 +699,8 @@ namespace ARK {
 		void LogSceneTreePanel::render() {
 			// Panel::render();
 
-			return; 
-			
+			return;
+
 			Scene* scene = ARK2D::getContainer()->scene;
             tree.setText(scene->getRoot()->toListString());
             calculateSize();
@@ -706,9 +717,9 @@ namespace ARK {
 			r->startStencil();
 			r->fillRect(0,0,bounds->getWidth(), bounds->getHeight());
 			r->stopStencil();
-            
 
-           	
+
+
            	r->disableStencil();
 
 			Panel::renderBorder();
@@ -738,7 +749,7 @@ namespace ARK {
 			r->startStencil();
 			r->fillRect(0,0,bounds->getWidth(), bounds->getHeight());
 			r->stopStencil();
-            
+
             unsigned int i = 0;
             float totalH = 0;
             list<LogMessage*>::reverse_iterator it = l->m_messages.rbegin();
@@ -769,7 +780,7 @@ namespace ARK {
 			Renderer* r = ARK2D::getRenderer();
 
 			preRenderFromPivot();
-			
+
             for(unsigned int i = 0; i < l->m_watchedVariables.size(); ++i) {
 				WatchedVariable* wv = l->m_watchedVariables[i];
 				string displayName = wv->name;
@@ -810,7 +821,7 @@ namespace ARK {
 			Renderer* r = ARK2D::getRenderer();
 
 			preRenderFromPivot();
-			
+
             float textX = 10;
             r->setDrawColor(Color::white);
 			unsigned int rendererGLCalls = RendererStats::s_previousframe_glCalls;
@@ -820,7 +831,7 @@ namespace ARK {
 			unsigned int rendererShaderSwaps = RendererStats::s_previousframe_shaderSwaps;
 			float rendererTextureMemory = (float(RendererStats::s_textureAllocatedBytes) / 1024.0f) / 1024.0f;
 			r->drawString(StringUtil::append("FPS: ", ARK2D::getTimer()->getFPS()), textX, 0, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
-			
+
 			r->drawString(StringUtil::append("Log Size: ", l->m_messagesPool.size()), textX, 10, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
 
 			r->drawString(StringUtil::append("OpenGL Calls: ", rendererGLCalls), textX, 30, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
@@ -829,7 +840,7 @@ namespace ARK {
 			r->drawString(StringUtil::append("Texture Swaps: ", rendererTextureSwaps), textX, 60, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
 			r->drawString(StringUtil::append("Shader Swaps: ", rendererShaderSwaps), textX, 70, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
 			r->drawString(StringUtil::appendf("Texture Memory (MB): ", rendererTextureMemory), textX, 80, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
-			 
+
 			Panel::renderBorder();
 
 			postRenderFromPivot();
@@ -842,7 +853,7 @@ namespace ARK {
 			preRenderFromPivot();
 
 			renderBackground();
-			renderText(0,0); 
+			renderText(0,0);
 			renderOverlay();
 
 			Renderer* r = ARK2D::getRenderer();
@@ -852,7 +863,7 @@ namespace ARK {
 		    postRenderFromPivot();
 
 			renderChildren();
-		} 
+		}
 		void GPAxisButton::renderText(int x, int y) {
 			//Renderer* r = ARK2D::getRenderer();
 			//r->setDrawColor(Color::white);
@@ -888,12 +899,12 @@ namespace ARK {
 			downX = -1.0f;
 			downY = -1.0f;
 			axisValueX = 0.0f;
-			axisValueY = 0.0f; 
+			axisValueY = 0.0f;
 
 			Gamepad* pad = ARK2D::getInput()->getGamepad(this->gpid);
 		    pad->moveAxis(axisIdX, axisValueX);
 			pad->moveAxis(axisIdY, axisValueY);
-				
+
 			bool didEvent = GPButton::keyReleased(key);
 			if (didEvent) {
 				return true;
@@ -903,7 +914,7 @@ namespace ARK {
 		bool GPAxisButton::mouseMoved(int x, int y, int oldx, int oldy) {
 			bool didEvent = GPButton::mouseMoved(x, y, oldx, oldy);
 			if (didEvent && m_state == STATE_DOWN) {
-				
+
 				Vector3<float> pos = globalPositionToLocalPosition(x, y, 0.0f);
 		        float angle = MathUtil::angle(downX, downY, pos.getX(), pos.getY());
 		        float dist = MathUtil::distance(downX, downY, pos.getX(), pos.getY());
@@ -911,8 +922,8 @@ namespace ARK {
 
 		        axisValueX = 0.0f;
 				axisValueY = 0.0f;
-		        MathUtil::moveAngle<float>(axisValueX, axisValueY, angle, dist / float(m_width*0.5f)); 
-		         
+		        MathUtil::moveAngle<float>(axisValueX, axisValueY, angle, dist / float(m_width*0.5f));
+
 		        Gamepad* pad = ARK2D::getInput()->getGamepad(this->gpid);
 		        pad->moveAxis(axisIdX, axisValueX);
 		        pad->moveAxis(axisIdY, axisValueY);
@@ -925,7 +936,7 @@ namespace ARK {
 		}
 
 		void debug_addVirtualGamepad() {
-			GameContainer* container = ARK2D::getContainer(); 
+			GameContainer* container = ARK2D::getContainer();
 			Gamepad* gamepad = new Gamepad();
 			gamepad->id = ARK2D::getInput()->countGamepads();
 			gamepad->name = StringUtil::append("Virtual Gamepad ", gamepad->id+1);
@@ -934,88 +945,88 @@ namespace ARK {
 			// DPAD
 			GamepadButton* dpad_button = new GamepadButton();
 			dpad_button->id = Gamepad::DPAD_UP;
-			dpad_button->down = false;  
+			dpad_button->down = false;
 			gamepad->buttons.push_back(dpad_button);
 
 			dpad_button = new GamepadButton();
 			dpad_button->id = Gamepad::DPAD_DOWN;
-			dpad_button->down = false;  
+			dpad_button->down = false;
 			gamepad->buttons.push_back(dpad_button);
 
 			dpad_button = new GamepadButton();
 			dpad_button->id = Gamepad::DPAD_LEFT;
-			dpad_button->down = false;  
+			dpad_button->down = false;
 			gamepad->buttons.push_back(dpad_button);
 
 			dpad_button = new GamepadButton();
 			dpad_button->id = Gamepad::DPAD_RIGHT;
-			dpad_button->down = false;  
+			dpad_button->down = false;
 			gamepad->buttons.push_back(dpad_button);
 
 			// Face Buttons
 			GamepadButton* a_button = new GamepadButton();
 			a_button->id = Gamepad::BUTTON_A;
-			a_button->down = false;  
+			a_button->down = false;
 			gamepad->buttons.push_back(a_button);
 
 			GamepadButton* b_button = new GamepadButton();
 			b_button->id = Gamepad::BUTTON_B;
-			b_button->down = false;  
+			b_button->down = false;
 			gamepad->buttons.push_back(b_button);
 
 			GamepadButton* x_button = new GamepadButton();
 			x_button->id = Gamepad::BUTTON_X;
-			x_button->down = false;  
+			x_button->down = false;
 			gamepad->buttons.push_back(x_button);
 
 			GamepadButton* y_button = new GamepadButton();
 			y_button->id = Gamepad::BUTTON_Y;
-			y_button->down = false;  
+			y_button->down = false;
 			gamepad->buttons.push_back(y_button);
 
 			GamepadButton* lb_button = new GamepadButton();
 			lb_button->id = Gamepad::BUTTON_LBUMPER;
-			lb_button->down = false;  
+			lb_button->down = false;
 			gamepad->buttons.push_back(lb_button);
 
 			GamepadButton* rb_button = new GamepadButton();
 			rb_button->id = Gamepad::BUTTON_RBUMPER;
-			rb_button->down = false;  
+			rb_button->down = false;
 			gamepad->buttons.push_back(rb_button);
 
 			GamepadButton* back_button = new GamepadButton();
 			back_button->id = Gamepad::BUTTON_BACK;
-			back_button->down = false;  
+			back_button->down = false;
 			gamepad->buttons.push_back(back_button);
 
 			GamepadButton* start_button = new GamepadButton();
 			start_button->id = Gamepad::BUTTON_START;
-			start_button->down = false;  
+			start_button->down = false;
 			gamepad->buttons.push_back(start_button);
 
 			GamepadButton* l3_button = new GamepadButton();
 			l3_button->id = Gamepad::BUTTON_L3;
-			l3_button->down = false;  
+			l3_button->down = false;
 			gamepad->buttons.push_back(l3_button);
 
 			GamepadButton* r3_button = new GamepadButton();
 			r3_button->id = Gamepad::BUTTON_R3;
-			r3_button->down = false;  
+			r3_button->down = false;
 			gamepad->buttons.push_back(r3_button);
 
 			GamepadButton* activate_button = new GamepadButton();
 			activate_button->id = Gamepad::BUTTON_R3;
-			activate_button->down = false;  
+			activate_button->down = false;
 			gamepad->buttons.push_back(activate_button);
 
 			GamepadButton* lt_button = new GamepadButton();
 			lt_button->id = Gamepad::BUTTON_LTRIGGER;
-			lt_button->down = false;  
+			lt_button->down = false;
 			gamepad->buttons.push_back(lt_button);
 
 			GamepadButton* rt_button = new GamepadButton();
 			rt_button->id = Gamepad::BUTTON_RTRIGGER;
-			rt_button->down = false;  
+			rt_button->down = false;
 			gamepad->buttons.push_back(rt_button);
 
 			// Axes
@@ -1023,14 +1034,14 @@ namespace ARK {
 			xAxis->id = Gamepad::ANALOG_STICK_1_X;
 			gamepad->axes.push_back(xAxis);
 
-			GamepadAxis* yAxis = new GamepadAxis(); 
+			GamepadAxis* yAxis = new GamepadAxis();
 			yAxis->id = Gamepad::ANALOG_STICK_1_Y;
 			gamepad->axes.push_back(yAxis);
-			 
+
 			GamepadAxis* rAxis = new GamepadAxis();
 			rAxis->id = Gamepad::ANALOG_STICK_2_X;
 			gamepad->axes.push_back(rAxis);
-			
+
 			GamepadAxis* uAxis = new GamepadAxis();
 			uAxis->id = Gamepad::ANALOG_STICK_2_Y;
 			gamepad->axes.push_back(uAxis);
@@ -1044,7 +1055,7 @@ namespace ARK {
 			vAxis->id = Gamepad::TRIGGER_2;
 			gamepad->axes.push_back(vAxis);
 
-			gamepad->numAxes = gamepad->axes.size(); 
+			gamepad->numAxes = gamepad->axes.size();
 
 			ARK2D::getLog()->i(gamepad->toString());
 			container->getGamepads()->push_back(gamepad);
@@ -1061,9 +1072,9 @@ namespace ARK {
 			float panelY = 120 + (floor(double(gamepad->id)/3)*240);
 
             SceneNode* root = ARK2D::getLog();//->getScene()->getRoot();
-            	
+
 				Panel* p = new Panel();
-				
+
 					// BACK, START
 					GPButton* backButton = new GPButton("back");
 					backButton->gpid = gamepad->id;
@@ -1212,12 +1223,12 @@ namespace ARK {
 					closeButton->gpid = gamepad->id;
 					closeButton->setEvent((void*) &debugGamepadClose);
 					closeButton->setEventObj((void*) closeButton);
-					closeButton->setSize(40, 40); 
+					closeButton->setSize(40, 40);
 					//closeButton->position.set(0.0f, -20.0f);
 					closeButton->transform.scale.set(0.5f, 0.5f);
 					closeButton->pivot.set(1.0, 0.0);
 					p->addChild(closeButton);
-			 
+
 				TitledPanel* pw = new TitledPanel(p, gamepad->name);
 				pw->pivot.set(0.5, 0.5, 0.0);
                 pw->setName(gamepad->name);

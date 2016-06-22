@@ -16,7 +16,7 @@
 #include "../Geometry/Transform.h"
 #include "../Controls/KeyListener.h"
 
-namespace ARK { 
+namespace ARK {
 	namespace Graphics {
 		class Image;
 	}
@@ -47,7 +47,7 @@ namespace ARK {
 				Transform transform;
 				bool visible;
 				unsigned int type;
-				
+
                 SceneNode();
                 SceneNode(string name);
                 SceneNode(string name, unsigned int type);
@@ -79,7 +79,7 @@ namespace ARK {
 
 				vector<SceneNode*> getPathToRoot();
 				void getPathToRoot(vector<SceneNode* >* path);
-		
+
 				virtual void update();
 
 				virtual void render();
@@ -103,6 +103,8 @@ namespace ARK {
 				virtual void onRemoved(SceneNode* removingFrom); // called on the child when it is removed.
 				virtual void onChildRemoved(SceneNode* removingChild); // called on the parent when it is removed.
 
+				virtual void onResize();
+
 				Image* asImage();
 				virtual ~SceneNode();
 
@@ -116,16 +118,16 @@ namespace ARK {
 
 
 		class ARK2D_API SceneGroup : public SceneNode {
-				
+
 		};
-		
+
 
 		class ARK2D_API Scene : public KeyListener {
 			public:
 				SceneNode* root;
 				bool batching;
 				bool bPrintRendererStack;
-			public: 
+			public:
 				Scene();
 				void setRoot(SceneNode* node);
 				SceneNode* getRoot();
@@ -144,6 +146,8 @@ namespace ARK {
 				virtual bool keyPressed(unsigned int key);
 				virtual bool keyReleased(unsigned int key);
 				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
+
+				virtual void onResize();
 		};
 
 		class ARK2D_API LetterboxNode : public SceneNode {

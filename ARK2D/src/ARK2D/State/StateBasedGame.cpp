@@ -5,7 +5,7 @@
  *      Author: Ashley
  */
 
-#include <vector> 
+#include <vector>
 #include "StateBasedGame.h"
 #include "GameState.h"
 #include "LoadingState.h"
@@ -21,9 +21,9 @@ namespace ARK {
 			m_states(),
 			m_from_state(NULL),
 			m_current_state(NULL),
-			m_next_state(NULL), 
+			m_next_state(NULL),
 			m_container(NULL),
-			m_loading_state(NULL), 
+			m_loading_state(NULL),
 			m_enterTransition(NULL),
 			m_leaveTransition(NULL),
 			m_initialised(false),
@@ -41,7 +41,7 @@ namespace ARK {
 			m_states.push_back(state);
 			m_from_state = state;
 			//if (m_current_state != NULL && m_current_state == m_loading_state) {
-				
+
 			//}
 			if (m_current_state == NULL) {
 				m_current_state = state;
@@ -83,7 +83,7 @@ namespace ARK {
 		}
 		void StateBasedGame::enterState(GameState* state, ARK::State::Transition::Transition* leave, ARK::State::Transition::Transition* enter) {
 
-			
+
 			m_from_state = m_current_state;
 			//m_current_state = state;
 			m_next_state = state;
@@ -178,6 +178,9 @@ namespace ARK {
 					if (m_autoDeleteTransitions) { delete m_leaveTransition; }
 					m_leaveTransition = NULL;
 
+					m_from_state->visible = false;
+					m_next_state->visible = true;
+
 					m_next_state->preEnter(container, this, m_from_state);
 					if (m_enterTransition != NULL) {
 						m_current_state = m_next_state;
@@ -230,17 +233,17 @@ namespace ARK {
 			preRenderTransitions();
 
 			//container->scene->render();
-			
+
 			// Render Current State.
-			if (m_current_state != NULL) {
+			//if (m_current_state != NULL) {
 				//ARK2D::getLog()->v("StateBasedGame::render - render current state");
-                m_current_state->render(ARK2D::getContainer(), this, ARK2D::getRenderer());
-			}
+                //m_current_state->render(ARK2D::getContainer(), this, ARK2D::getRenderer());
+			//}
 
 			// set visiblity of states.
 			// for state in states
 			// 	visible = (currentstate)?true:false;
-			// end for 
+			// end for
 
 			// render all states
 			renderChildren();
@@ -249,22 +252,22 @@ namespace ARK {
 			}
 
 			postRenderTransitions();
- 
+
 			//postRender(container, g);
 		}
 
 
 		void StateBasedGame::preRender(GameContainer* container, Renderer* r) {
-			preRender(); 
+			preRender();
 		}
 		void StateBasedGame::postRender(GameContainer* container, Renderer* r) {
 			postRender();
 		}
 		void StateBasedGame::render(GameContainer* container, Renderer* g) {
-			
+
 		}
 		void StateBasedGame::preRenderTransitions() {
-			// Render post-enter transition 
+			// Render post-enter transition
 			GameContainer* container = ARK2D::getContainer();
 			Renderer* r = ARK2D::getRenderer();
 			if (m_leaveTransition != NULL) {
@@ -274,7 +277,7 @@ namespace ARK {
 			}
 		}
 		void StateBasedGame::postRenderTransitions() {
-			// Render post-enter transition 
+			// Render post-enter transition
 			GameContainer* container = ARK2D::getContainer();
 			Renderer* r = ARK2D::getRenderer();
 			if (m_leaveTransition != NULL) {
@@ -295,12 +298,12 @@ namespace ARK {
 			return m_container;
 		}
 
-		void StateBasedGame::resize(GameContainer* container, int width, int height) 
+		void StateBasedGame::resize(GameContainer* container, int width, int height)
 		{
 			Game::resize(container, width, height);
 		}
 
-		void StateBasedGame::pause() 
+		void StateBasedGame::pause()
 		{
 			Game::pause();
 		}
@@ -313,24 +316,24 @@ namespace ARK {
 		bool StateBasedGame::keyPressed(unsigned int key) {
             if (Game::keyPressed(key)) return true;
             if (m_loading_state != NULL && m_loading_state->isLoading()) { return false; }
-			
-			if (m_current_state == NULL) { return false; } 
+
+			if (m_current_state == NULL) { return false; }
 			return m_current_state->keyPressed(key);
 		}
 		bool StateBasedGame::keyReleased(unsigned int key) {
             if (Game::keyReleased(key)) return true;
 			if (m_loading_state != NULL && m_loading_state->isLoading()) { return false; }
 
-			if (m_current_state == NULL) { return false; } 
+			if (m_current_state == NULL) { return false; }
 			return m_current_state->keyReleased(key);
 		}
 		bool StateBasedGame::mouseMoved(int x, int y, int oldx, int oldy) {
             if (Game::mouseMoved(x, y, oldx, oldy)) return true;
 			if (m_loading_state != NULL && m_loading_state->isLoading()) { return false; }
 
-			if (m_current_state == NULL) { return false; } 
+			if (m_current_state == NULL) { return false; }
 			return m_current_state->mouseMoved(x, y, oldx, oldy);
-		} 
+		}
 
 		void StateBasedGame::gamepadConnected(ARK::Controls::Gamepad* gamepad) {
 			Game::gamepadConnected(gamepad);
@@ -376,12 +379,12 @@ namespace ARK {
 			}
 		}
 
-		StateBasedGame::~StateBasedGame() { 
+		StateBasedGame::~StateBasedGame() {
 			for(unsigned int i = 0; i < m_states.size(); i++) {
-				//try { 
+				//try {
 					GameState* state = m_states.at(i);
-					if (state != NULL) { 
-						delete state; 
+					if (state != NULL) {
+						delete state;
 					}
 				//} catch(...) {
 				//	ARK2D::getLog()->e(StringUtil::append("Could not delete GameState at index: ", i));

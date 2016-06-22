@@ -23,7 +23,7 @@ namespace ARK {
 
 		}
 		SceneNode::SceneNode(string nodeName):
-			parent(NULL), 
+			parent(NULL),
 			name(nodeName),
 			children(),
 			pivot(0, 0, 0),
@@ -34,7 +34,7 @@ namespace ARK {
 
 		}
 		SceneNode::SceneNode(string nodeName, unsigned int nodeType):
-			parent(NULL), 
+			parent(NULL),
 			name(nodeName),
 			children(),
 			pivot(0, 0, 0),
@@ -50,7 +50,7 @@ namespace ARK {
 		string SceneNode::getName() {
 			return name;
 		}
-		void SceneNode::addChild(SceneNode* node) { 
+		void SceneNode::addChild(SceneNode* node) {
 			children.push_back(node);
 			node->parent = this;
 			node->onAdded(this);
@@ -59,8 +59,8 @@ namespace ARK {
 		void SceneNode::removeChild(SceneNode* node) {
 			for(unsigned int i = 0; i < children.size(); ++i) {
 				if (children[i] == node) {
-					
-					// sure we want to deallocate memory? 
+
+					// sure we want to deallocate memory?
 					this->onChildRemoved(node);
 					node->onRemoved(this);
 
@@ -119,11 +119,11 @@ namespace ARK {
             transform.rotation = Quaternion<float>::angleAxis((float)degrees, 0,0,1);
 			return this;
 		}
-		double SceneNode::getRotation() { 
+		double SceneNode::getRotation() {
             return transform.rotation.angle();
 		}
 
-		
+
 
 		vector<SceneNode*> SceneNode::getPathToRoot() {
 			vector<SceneNode*> path;
@@ -155,7 +155,7 @@ namespace ARK {
 				MathUtil::rotatePointAroundPoint<float>(&gx, &gy, 0.0f, 0.0f, path[i]->transform.rotation.angle() * -1.0f);
 
 				currentScale *= path[i]->transform.scale;
-				if (path[i] == this) { 
+				if (path[i] == this) {
 					gx /= currentScale.getX();
 					gy /= currentScale.getY();
 					gz /= currentScale.getZ();
@@ -178,7 +178,7 @@ namespace ARK {
 			Matrix44<float>* mat = r->getMatrix()->at(r->getMatrix()->height()-1);
 			Vector3<float> thisGlobalPosition = localPositionToGlobalPositionInternal();
 			float invDet = 1.0f / (mat->col[0][0] * mat->col[1][1] - mat->col[0][1] * mat->col[1][0]);
-			
+
 			float dx = gx - thisGlobalPosition.getX();
 			float dy = gy - thisGlobalPosition.getY();
 
@@ -214,7 +214,7 @@ namespace ARK {
 
 
 		Vector3<float> SceneNode::localPositionToGlobalPosition() {
-			// This method has to climb the scene graph to calculate the position. 
+			// This method has to climb the scene graph to calculate the position.
 			// Likely slower than getWorldPosition() but can be used regardless of the current transformation matrix.
 			/*Vector3<float> pos(position.getX(), position.getY(), position.getZ());
 			if (parent != NULL) {
@@ -233,29 +233,29 @@ namespace ARK {
 
 				MathUtil::rotatePointAroundPoint<float>(&pos.m_x, &pos.m_y, 0.0f, 0.0f, parent->rotation * 1.0f);
 
-				// TODO: 
+				// TODO:
 				// Positions are not calculated properly when rotation is set.
-				// How do I sort this out?! 
+				// How do I sort this out?!
 
 				pos += parent->localPositionToGlobalPosition();
-			} 
+			}
 			return pos;*/
 
-			
+
 			// The vector we will return.
 			Vector3<float> pos(0, 0, 0);
 
-			// Get path from root to this node. 
+			// Get path from root to this node.
 			vector<SceneNode* > path = getPathToRoot();
 			std::reverse(path.begin(), path.end());
 
 			float currentRotation = 0.0f;
 			Vector3<float> currentScale(1.0f,1.0f,1.0f);
 			Vector3<float> lastPos(0,0,0);
-			
+
 			// Do the same things we do in preRender.
 			for(signed int i = 0; i < path.size(); i++) {
-				
+
 				if (path[i]->parent == NULL) { continue; }
 
 				//ARK::Geometry::Cube* bounds = path[i]->getBounds();
@@ -270,12 +270,12 @@ namespace ARK {
 
 				pos += localisedPosition;
 
-				
+
 			}
 			return pos;
-			
 
-				
+
+
 		}
 		Vector3<float> SceneNode::localScaleToGlobalScale() {
 			Vector3<float> sc(transform.scale.getX(), transform.scale.getY(), transform.scale.getZ());
@@ -308,21 +308,21 @@ namespace ARK {
 
 			MathUtil::rotatePointAroundPoint<float>(&x, &y, 0.0f, 0.0f, globalrot * -1.0f);
 
-			return Shape<float>::collision_rectangleRectangle( 
-				tw * pivot.getX() * -1.0f, 
-				th * pivot.getY() * -1.0f, 
-				tw, 
-				th, 
+			return Shape<float>::collision_rectangleRectangle(
+				tw * pivot.getX() * -1.0f,
+				th * pivot.getY() * -1.0f,
+				tw,
+				th,
 				x, y, 1, 1);
 			*/
 
 			ARK::Geometry::Cube* bounds = getBounds();
 			Vector3<float> localPosition = globalPositionToLocalPosition(x,y,0,true);
-			return Shape<float>::collision_rectangleRectangle( 
-				0, 
-				0, 
-				bounds->getWidth(), 
-				bounds->getHeight(), 
+			return Shape<float>::collision_rectangleRectangle(
+				0,
+				0,
+				bounds->getWidth(),
+				bounds->getHeight(),
 				localPosition.getX(), localPosition.getY(), 1, 1);
 		}
 
@@ -343,7 +343,7 @@ namespace ARK {
 			Renderer* r = ARK2D::getRenderer();
 			r->popMatrix();
 		}
-		
+
 		void SceneNode::preRender() {
 			if (!visible) { return; }
 			Renderer* r = ARK2D::getRenderer();
@@ -385,7 +385,7 @@ namespace ARK {
 
 		}
 		void SceneNode::onChildAdded(SceneNode* newChild) {
-			
+
 		}
 		void SceneNode::onRemoved(SceneNode* removingFrom) {
 
@@ -394,15 +394,21 @@ namespace ARK {
 
 		}
 
-		bool SceneNode::keyPressed(unsigned int key) { 
+		void SceneNode::onResize() {
+			for(signed int i = 0; i < children.size(); i++) {
+				children[i]->onResize();
+			}
+		}
+
+		bool SceneNode::keyPressed(unsigned int key) {
 			for(signed int i = children.size() - 1; i >= 0; --i) {
-				if (children[i]->keyPressed(key)) { 
-					return true; 
+				if (children[i]->keyPressed(key)) {
+					return true;
 				}
 			}
 			return false;
 		}
-		bool SceneNode::keyReleased(unsigned int key) { 
+		bool SceneNode::keyReleased(unsigned int key) {
 			for(signed int i = children.size() - 1; i >= 0; --i) {
 				if (children[i]->keyReleased(key)) {
 					return true;
@@ -410,14 +416,14 @@ namespace ARK {
 			}
 			return false;
 		}
-		bool SceneNode::mouseMoved(int x, int y, int oldx, int oldy) { 
+		bool SceneNode::mouseMoved(int x, int y, int oldx, int oldy) {
 			for(signed int i = children.size() - 1; i >= 0 ; --i) {
 				if (children[i]->mouseMoved(x, y, oldx, oldy)) {
 					return true;
-				} 
+				}
 			}
 			return false;
-		} 
+		}
 		Image* SceneNode::asImage() {
 			return dynamic_cast<Image*>(this);
 		}
@@ -428,7 +434,7 @@ namespace ARK {
 			return s_dummyCube;
 		}
 		SceneNode::~SceneNode() {
-			
+
 		}
 		void SceneNode::setVisible(bool b) {
 			visible = b;
@@ -436,7 +442,7 @@ namespace ARK {
 		void SceneNode::setVisibleStatic(SceneNode* obj, bool b) {
 			obj->setVisible(b);
 		}
-		
+
 		string SceneNode::toListString() {
 			return toListString(0);
 		}
@@ -454,7 +460,7 @@ namespace ARK {
         	}
         	return s;
         }
-		
+
 
 
 
@@ -487,12 +493,12 @@ namespace ARK {
 			return root->find(n);
 		}
 		void Scene::update() {
-			if (root != NULL) { 
+			if (root != NULL) {
 				root->update();
 			}
 		}
 		void Scene::render() {
-			if (root != NULL) { 
+			if (root != NULL) {
 				Renderer* r = ARK2D::getRenderer();
 				r->setDrawColor(Color::white);
 				if (batching) {
@@ -520,7 +526,7 @@ namespace ARK {
 		void Scene::printRendererStack() {
 			bPrintRendererStack = true;
 		}
-		bool Scene::keyPressed(unsigned int key) { 
+		bool Scene::keyPressed(unsigned int key) {
 			return root->keyPressed(key);
 		}
 		bool Scene::keyReleased(unsigned int key) {
@@ -529,15 +535,18 @@ namespace ARK {
 		bool Scene::mouseMoved(int x, int y, int oldx, int oldy) {
 			return root->mouseMoved(x, y, oldx, oldy);
 		}
+		void Scene::onResize() {
+			root->onResize();
+		}
 
-		LetterboxNode::LetterboxNode(): 
+		LetterboxNode::LetterboxNode():
 			SceneNode("letterbox") {
 
 		}
 		void LetterboxNode::render() {
 			ARK2D::getRenderer()->drawScissorBoxes();
 		}
-		
+
 
 
 	}
