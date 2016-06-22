@@ -16,7 +16,7 @@ namespace ARK {
 	namespace Tween {
 
 		class ARK2D_API Timer {
-			public: 
+			public:
 				float m_timer;
 				float m_duration;
 
@@ -28,6 +28,7 @@ namespace ARK {
 				float getTime();
 				void setDuration(float duration);
 				float getDuration();
+				float percentage();
 				bool update();
 				bool update(float modifier);
 				void loop();

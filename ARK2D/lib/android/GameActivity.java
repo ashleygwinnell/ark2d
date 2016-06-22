@@ -36,13 +36,20 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.opengles.GL10;
 
+%INAPPBILLING_BLOCKSTART%
+import org.ashleygwinnell.nines.iab_util.IabHelper;
+import org.ashleygwinnell.nines.iab_util.IabResult;
+import org.ashleygwinnell.nines.iab_util.Inventory;
+import org.ashleygwinnell.nines.iab_util.Purchase;
+%INAPPBILLING_BLOCKEND%
+
 import org.json.JSONException;
-import org.json.JSONObject; 
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 %ANDROIDSDK16_LINECOMMENT% import android.app.NativeActivity;
-import android.content.Context; 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -53,9 +60,9 @@ import android.graphics.PixelFormat;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.opengl.GLSurfaceView; 
+import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
-import android.os.Bundle; 
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Looper;
 import android.os.Vibrator;
@@ -65,7 +72,7 @@ import android.util.Log;
 %ANDROIDSDK16_LINECOMMENT% import android.view.InputDevice.MotionRange;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-%ANDROIDSDK16_LINECOMMENT% import android.view.InputEvent; 
+%ANDROIDSDK16_LINECOMMENT% import android.view.InputEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -73,6 +80,8 @@ import android.webkit.MimeTypeMap;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
+
+import com.google.android.gms.games.Games;
 
 %OUYA_BLOCKSTART%
 
@@ -106,7 +115,7 @@ import com.amazon.ags.constants.LeaderboardFilter;
 %FIRETV_BLOCKEND%
 
 
-public class %GAME_CLASS_NAME%Activity extends BaseGameActivity 
+public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 
 %FIRETV_BLOCKSTART%
 	implements InputDeviceListener
@@ -134,26 +143,33 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	public static final int CALLBACK_GAMECIRCLE_SUBMITHIGHSCORE_FAIL = 64;
 	public static final int CALLBACK_GAMECIRCLE_UNLOCKACHIEVEMENT_SUCCESS = 65;
 	public static final int CALLBACK_GAMECIRCLE_UNLOCKACHIEVEMENT_FAIL = 66;
-				
-				
-    
+
+	%INAPPBILLING_BLOCKSTART%
+
+		public IabHelper mHelper;
+		public IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener;
+		public IabHelper.QueryInventoryFinishedListener mReceivedInventoryListener;
+		public IabHelper.OnConsumeFinishedListener mConsumeFinishedListener;
+
+	%INAPPBILLING_BLOCKEND%
+
 	public static %GAME_CLASS_NAME%Activity s_activity;
     /** Called when the activity is first created. */
-    @Override 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
-    	
-		super.onCreate(savedInstanceState); 
+
+		super.onCreate(savedInstanceState);
         s_activity = this;
-         
+
         String gameOrientation = "%GAME_ORIENTATION%";
         if (gameOrientation.equals("landscape")) {
         	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         } else if (gameOrientation.equals("portrait")) {
         	setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         } else {
-        	
+
         }
-        
+
         mGLView = new %GAME_CLASS_NAME%View(this);
         setContentView(mGLView);
 
@@ -170,27 +186,87 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 
     	ouya_init();
     	%OUYA_BLOCKEND%
-    } 
+
+    	%INAPPBILLING_BLOCKSTART%
+	    	String base64EncodedPublicKey = "%INAPPBILLING_PUBLICKEY%";
+
+			mHelper = new IabHelper(this, base64EncodedPublicKey);
+
+			mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+				public void onIabSetupFinished(IabResult result) {
+				   if (!result.isSuccess()) {
+					   Log.d("game", "In-app Billing setup failed: " + result);
+				   } else {
+					   Log.d("game", "In-app Billing is set up OK");
+				   }
+				}
+			});
+
+			mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+				public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+					if (result.isFailure()) { // Handle error
+						return;
+					} else if (purchase.getSku().equals("ITEM_SKU")) {
+						iab_consumeItem(); //buyButton.setEnabled(false);
+					}
+				}
+			};
+			mHelper.launchPurchaseFlow(this, "ITEM_SKU", 10001, mPurchaseFinishedListener, "mypurchasetoken");
+
+			mReceivedInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+				public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+					if (result.isFailure()) {
+						// Handle failure
+					} else {
+						mHelper.consumeAsync(inventory.getPurchase("ITEM_SKU"), mConsumeFinishedListener);
+					}
+				}
+			};
+			mConsumeFinishedListener = new IabHelper.OnConsumeFinishedListener() {
+				public void onConsumeFinished(Purchase purchase, IabResult result) {
+					if (result.isSuccess()) { //clickButton.setEnabled(true);
+
+					} else {
+						// handle error
+					}
+				}
+			};
+
+
+    	%INAPPBILLING_BLOCKEND%
+    }
+
+    %INAPPBILLING_BLOCKSTART%
+    	@Override
+		public void onDestroy() {
+			super.onDestroy();
+			if (mHelper != null) mHelper.dispose();
+			mHelper = null;
+		}
+    	public void iab_consumeItem() {
+			mHelper.queryInventoryAsync(mReceivedInventoryListener);
+		}
+	%INAPPBILLING_BLOCKEND%
 
     %OUYA_BLOCKSTART%
-	    @Override 
+	    @Override
 	    protected void onDestroy() {
 	    	OuyaInputMapper.shutdown(this);
 	    	OuyaFacade.getInstance().shutdown();
 	    	super.onDestroy();
 	    }
     %OUYA_BLOCKEND%
-    
+
     // --------------------------------
     //
     // GOOGLE PLAY GAME SERVICES
-    // 
+    //
     // --------------------------------
     %GAME_SERVICES_BLOCKSTART%
 
     	public static void googleplaygameservices_signIn() {
     		%GAME_CLASS_NAME%Activity.createLooper();
-	        s_activity.beginUserInitiatedSignIn(); 
+	        s_activity.beginUserInitiatedSignIn();
 	    }
 	    public static void googleplaygameservices_signOut() {
 	        s_activity.signOut();
@@ -198,61 +274,61 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	    public static boolean googleplaygameservices_isSignedIn() {
 	        return s_activity.isSignedIn();
 	    }
-	    public static boolean googleplaygameservices_isSigningIn() {
-	        return (s_activity.mHelper.mState == GameHelper.STATE_CONNECTING); //ARK2DGooglePlayServices.isConnecting();
-	    }
+	    //public static boolean googleplaygameservices_isSigningIn() {
+	    //    return (s_activity.mHelper.mState == GameHelper.STATE_CONNECTING); //ARK2DGooglePlayServices.isConnecting();
+	    //}
 
-	    public static void googleplaygameservices_viewAchievements() 
-	    { 
+	    public static void googleplaygameservices_viewAchievements()
+	    {
 	        if (googleplaygameservices_isSignedIn()) {
-	            s_activity.startActivityForResult(s_activity.getGamesClient().getAchievementsIntent(), 1000); // REQUEST_ACHIEVEMENTS
+	            s_activity.startActivityForResult( Games.Achievements.getAchievementsIntent( s_activity.getApiClient() ), 1000); // REQUEST_ACHIEVEMENTS
 	        } else {
 	            googleplaygameservices_signIn();
 	        }
 	    }
-	    public static void googleplaygameservices_unlockAchievement(String id) 
+	    public static void googleplaygameservices_unlockAchievement(String id)
 	    {
 	        if (googleplaygameservices_isSignedIn()) {
-	            s_activity.getGamesClient().unlockAchievement(id);
+	            Games.Achievements.unlock(s_activity.getApiClient(), id);
 	        }
 	    }
-	    public static void googleplaygameservices_viewScores(String id) 
-	    { 
+	    public static void googleplaygameservices_viewScores(String id)
+	    {
 	        if (googleplaygameservices_isSignedIn()) {
-	            if (id.length() == 0) { 
-	                s_activity.startActivityForResult(s_activity.getGamesClient().getAllLeaderboardsIntent(), 1002); //REQUEST_LEADERBOARD);
+	            if (id.length() == 0) {
+	                s_activity.startActivityForResult( Games.Leaderboards.getAllLeaderboardsIntent(s_activity.getApiClient()), 1002); //REQUEST_LEADERBOARD);
 	            } else {
-	                s_activity.startActivityForResult(s_activity.getGamesClient().getLeaderboardIntent(id), 1001); //REQUEST_LEADERBOARD);
+	                s_activity.startActivityForResult( Games.Leaderboards.getLeaderboardIntent( s_activity.getApiClient(),  id), 1001); //REQUEST_LEADERBOARD);
 	            }
 	        } else {
 	            googleplaygameservices_signIn();
 	        }
-	    } 
-	    public static void googleplaygameservices_submitScore(String id, int score) 
-	    { 
+	    }
+	    public static void googleplaygameservices_submitScore(String id, int score)
+	    {
 	        if (googleplaygameservices_isSignedIn()) {
-	            s_activity.getGamesClient().submitScore(id, score);
+	            Games.Leaderboards.submitScore(s_activity.getApiClient(), id, score);
 	        }
 	    }
 
 	    @Override
 	    public void onSignInSucceeded() {
 	        Log.i("playservices", "sign-in succeeded");
-	        if (mHelper.mUserInitiatedSignIn) { 
+	        //if (mHelper.mUserInitiatedSignIn) {
 	            %GAME_CLASS_NAME%Renderer.nativeCallbackById(%GAME_CLASS_NAME%Activity.CALLBACK_ANDROID_SIGNIN_SUCCESSFUL);
-	        }
-	    } 
-	    
-	    @Override 
+	        //}
+	    }
+
+	    @Override
 	    public void onSignInFailed() {
 	        Log.i("playservices", "sign-in failed");
 	        %GAME_CLASS_NAME%Renderer.nativeCallbackById(%GAME_CLASS_NAME%Activity.CALLBACK_ANDROID_SIGNIN_UNSUCCESSFUL);
-	    } 
+	    }
 
 	%GAME_SERVICES_BLOCKEND%
 
 	public static void createLooper() {
-		try { 
+		try {
 			Looper.prepare();
 		} catch(RuntimeException e) {
 			// ...
@@ -263,7 +339,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	// --------------------------------
 	%FIRETV_BLOCKSTART%
 		// ---------
-		// DOCS: 
+		// DOCS:
 		// https://developer.amazon.com/appsandservices/apis/engage/gamecircle/docs/initialize-android
 		// ---------
 		AmazonGamesClient agsClient;
@@ -284,10 +360,10 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 				%GAME_CLASS_NAME%Renderer.nativeCallbackById(%GAME_CLASS_NAME%Activity.CALLBACK_GAMECIRCLE_INIT_SUCCESS);
 			}
 		};
-		
+
 		//list of features your game uses (in this example, achievements and leaderboards)
 		EnumSet<AmazonGamesFeature> myGameFeatures = EnumSet.of(
-			AmazonGamesFeature.Achievements, 
+			AmazonGamesFeature.Achievements,
 			AmazonGamesFeature.Leaderboards
 		);
 
@@ -296,13 +372,13 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 			AmazonGamesClient.initialize(s_activity, s_activity.callback, s_activity.myGameFeatures);
 		}
 
-		
+
 		// achievements
 		public static void firetv_viewAchievements() {
 			Log.d("game", "firetv_viewAchievements");
 			createLooper();
 			if (!agsConnected) { firetv_connect(); }
-			if (!isNetworkAvailable()) { 
+			if (!isNetworkAvailable()) {
 				String s = "No Internet Connection. Achievements not available. ";
 				openErrorDialog(s);
 				Log.d("game", s);
@@ -322,7 +398,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 			AchievementsClient acClient = s_activity.agsClient.getAchievementsClient();
 			AGResponseHandle<UpdateProgressResponse> handle = acClient.updateProgress(achievementId, 100.0f);
 			handle.setCallback(new AGResponseCallback<UpdateProgressResponse>() {
-				
+
 				@Override
 				public void onComplete(UpdateProgressResponse result) {
 					if (result.isError()) {
@@ -343,7 +419,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 			Log.d("game", "firetv_viewScores");
 			createLooper();
 			if (!agsConnected) { firetv_connect(); }
-			if (!isNetworkAvailable()) { 
+			if (!isNetworkAvailable()) {
 				String s = "No Internet Connection. Highscores not available. ";
 				openErrorDialog(s);
 				Log.d("game", s);
@@ -357,7 +433,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 			Log.d("game", "firetv_viewScores");
 			createLooper();
 			if (!agsConnected) { firetv_connect(); }
-			if (!isNetworkAvailable()) { 
+			if (!isNetworkAvailable()) {
 				String s = "No Internet Connection. Highscores not available. ";
 				openErrorDialog(s);
 				Log.d("game", s);
@@ -374,12 +450,12 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 			Log.d("game", "firetv_submitScore: " + id + ", " + score);
 			createLooper();
 			if (!agsConnected) { firetv_connect(); }
-			
+
 
 			// Replace YOUR_LEADERBOARD_ID with an actual leaderboard ID from your game.
 			final LeaderboardsClient lbClient = s_activity.agsClient.getLeaderboardsClient();
 			AGResponseHandle<SubmitScoreResponse> handle = lbClient.submitScore(id, (long) score);
-		
+
 			// Optional callback to receive notification of success/failure.
 			handle.setCallback(new AGResponseCallback<SubmitScoreResponse>() {
 
@@ -392,14 +468,14 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 						Log.d("game", "firetv_submitScore result: " + id2 + ", score: " + score2 + ". FAIL.");
 						%GAME_CLASS_NAME%Renderer.nativeCallbackById(%GAME_CLASS_NAME%Activity.CALLBACK_GAMECIRCLE_SUBMITHIGHSCORE_FAIL);
 					} else {
-						
+
 						// Continue game flow.
 						// Map<LeaderboardFilter, Integer> map = result.getNewRank();
 						// int newRank = map.get(LeaderboardFilter.GLOBAL_ALL_TIME).intValue();
-						
+
 						// Log.d("game", "firetv_submitScore result: " + id2 + ", score: " + score2 + ". rank: " + newRank + " . SUCCESS.");
 						// %GAME_CLASS_NAME%Renderer.nativeCallbackByIdIntParam(%GAME_CLASS_NAME%Activity.CALLBACK_GAMECIRCLE_SUBMITHIGHSCORE_SUCCESS, newRank);
-						
+
 
 						lbClient.getLocalPlayerScore(id2, LeaderboardFilter.GLOBAL_ALL_TIME, null).setCallback(new AGResponseCallback<GetPlayerScoreResponse>() {
 							@Override
@@ -423,7 +499,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 				}
 			});
 
-			if (!isNetworkAvailable()) { 
+			if (!isNetworkAvailable()) {
 				String s = "No Internet Connection. Highscores not available. ";
 				Log.d("game", s);
 				openErrorDialog(s);
@@ -435,7 +511,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	%FIRETV_BLOCKEND%
 
 	%!FIRETV_BLOCKSTART%
-		public static void firetv_viewAchievements() { Log.d("game", "firetv_viewAchievements called in non-Amazon build."); } 
+		public static void firetv_viewAchievements() { Log.d("game", "firetv_viewAchievements called in non-Amazon build."); }
 		public static void firetv_viewScores() { Log.d("game", "firetv_viewScores called in non-Amazon build."); }
 		public static void firetv_unlockAchievement(String achievementId) { Log.d("game", "firetv_unlockAchievement called in non-Amazon build."); }
 	%!FIRETV_BLOCKEND%
@@ -446,43 +522,43 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
     	//super.onBackPressed();
     	%GAME_CLASS_NAME%Renderer.nativeBackPressed();
     }
-    
+
     @Override
     protected void onPause() {
     	Log.i("game", "Activity Pause");
-    	super.onPause(); 
+    	super.onPause();
     	mGLView.onPause();
 
     	%FIRETV_BLOCKSTART%
 			if (agsClient != null) {
 				agsClient.release();
-			} 
+			}
 		%FIRETV_BLOCKEND%
-    }  
-    
+    }
+
     @Override
     protected void onStart() {
     	Log.i("game", "Activity Resume");
-    	super.onStart();    
-    	//mGLView.onStart();  
+    	super.onStart();
+    	//mGLView.onStart();
     }
-    
-    @Override   
+
+    @Override
     protected void onResume() {
     	Log.i("game", "Activity Resume");
-    	super.onResume();    
-    	mGLView.onResume();  
+    	super.onResume();
+    	mGLView.onResume();
 
     	%FIRETV_BLOCKSTART%
 			firetv_connect();
 		%FIRETV_BLOCKEND%
-    } 
+    }
 
    	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 	    //Log.i("game", "Key Down: " + keyCode);
 
-		%ANDROIDSDK16_BLOCKSTART% 
+		%ANDROIDSDK16_BLOCKSTART%
 		    int deviceId = %GAME_CLASS_NAME%View.getInputDeviceState(event);
 		    if (deviceId != -1) {
 				//final int keyCode = event.getKeyCode();
@@ -494,7 +570,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 					return true;
 				}
 		    }
-		%ANDROIDSDK16_BLOCKEND% 
+		%ANDROIDSDK16_BLOCKEND%
 
 	    /*switch (keyCode) {
 	    	case KeyEvent.KEYCODE_BACK:
@@ -508,11 +584,11 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
  		//Log.i("game", "Key Up: " + keyCode);
 
-		%ANDROIDSDK16_BLOCKSTART% 
+		%ANDROIDSDK16_BLOCKSTART%
 	 		int deviceId = %GAME_CLASS_NAME%View.getInputDeviceState(event);
 		    if (deviceId != -1) {
 				//final int keyCode = event.getKeyCode();
-				if (%GAME_CLASS_NAME%View.isGameKey(keyCode)) {  
+				if (%GAME_CLASS_NAME%View.isGameKey(keyCode)) {
 					if (event.getRepeatCount() == 0) {
 						//final String symbolicName = KeyEvent.keyCodeToString(keyCode);
 						%GAME_CLASS_NAME%Renderer.nativeGamepadKeyUp(deviceId, keyCode);
@@ -520,7 +596,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 					return true;
 				}
 		    }
-	    %ANDROIDSDK16_BLOCKEND% 
+	    %ANDROIDSDK16_BLOCKEND%
 
  		%GAME_CLASS_NAME%Renderer.nativeKeyUp(keyCode, new String(Character.toString((char)event.getUnicodeChar())));
  		return false;
@@ -531,7 +607,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 		public boolean dispatchGenericMotionEvent(MotionEvent event) {
 			// Check that the event came from a joystick since a generic motion event could be almost anything.
 			if ((event.getSource() & InputDevice.SOURCE_CLASS_JOYSTICK) != 0
-				&& event.getAction() == MotionEvent.ACTION_MOVE) 
+				&& event.getAction() == MotionEvent.ACTION_MOVE)
 			{
 				// Update device state for visualization and logging.
 				int deviceId = %GAME_CLASS_NAME%View.getInputDeviceState(event);
@@ -557,7 +633,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 								value = (value - 0.5f)*2;
 							}
 						%FIRETV_BLOCKEND%
-						
+
 	%ANDROIDSDK16_BLOCKSTART%
 
 						%GAME_CLASS_NAME%Renderer.nativeGamepadAxisChanged(deviceId, axis, value);
@@ -565,7 +641,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 				}
 			}
 			return true; // super.dispatchGenericMotionEvent(event);
-		} 
+		}
 	%ANDROIDSDK16_BLOCKEND%
 
 	public static int dips(int i) {
@@ -576,37 +652,37 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	}
 
 	public static String s_inputDialogText = new String("");
-	public static void openInputDialog(int jniCallbackId, String title, String defaultText) { 
+	public static void openInputDialog(int jniCallbackId, String title, String defaultText) {
 		final int f_jniCallbackId = jniCallbackId;
 		final String f_defaultText = defaultText;
 
 		final AlertDialog.Builder alert2 = new AlertDialog.Builder(s_activity);
 		final EditText input = new EditText(s_activity);
-		
+
 		alert2.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				s_inputDialogText = f_defaultText;
 				dialog.cancel();
-			}  
+			}
         });
         alert2.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
         	public void onClick(DialogInterface dialog, int whichButton) {
         		String value = input.getText().toString().trim();
-        		
+
         		System.out.println("OK pressed" + value);
         		s_inputDialogText = value;
         		%GAME_CLASS_NAME%Renderer.nativeCallbackById(f_jniCallbackId);
-        	} 
+        	}
         });
-		        
+
 		final AlertDialog alert = alert2.create();
 		final FrameLayout fl = new FrameLayout(s_activity);
 		fl.setPadding(dips(10), 0, dips(10), 0);
-		
+
 		input.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 			@Override
 			public void onFocusChange(View v, boolean hasFocus) {
-				if (hasFocus) { 
+				if (hasFocus) {
 					alert.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
 					input.setSelection(input.getText().length());
 				}
@@ -615,11 +691,11 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 		input.setText(defaultText);
         input.setSingleLine(true);
         alert.setTitle(title);
-        
+
         fl.addView(input);
         alert.setView(fl);
-        
-        alert.show(); 
+
+        alert.show();
 	}
 	public static String getInputDialogText() {
 		return s_inputDialogText;
@@ -655,47 +731,47 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 			}
 			stream.close();
 			return response;
-		} catch (IOException e) { 
+		} catch (IOException e) {
 			Log.i("game", "IO Exception: " + e.getMessage());
 			Log.i("game", "Have you added \"INTERNET\" to {'android':{'permissions':[]}} to the ARK2D configuration?");
-			
+
 			s_activity.runOnUiThread(new Runnable() {
 				public void run() {
 					//Toast.makeText(s_activity, "No Internet Connection", Toast.LENGTH_SHORT).show();
 				}
 			});
 		}
-		return response; 
+		return response;
 	}
- 
-	public static boolean isNetworkAvailable() 
+
+	public static boolean isNetworkAvailable()
 	{
 	    boolean haveConnectedWifi = false;
 		boolean haveConnectedMobile = false;
 		boolean haveConnectedEthernet = false;
-		
+
 		ConnectivityManager cm = (ConnectivityManager) s_activity.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo[] netInfo = cm.getAllNetworkInfo();
 		for (NetworkInfo ni : netInfo) {
-			if (ni.getTypeName().equalsIgnoreCase("WIFI")) { 
+			if (ni.getTypeName().equalsIgnoreCase("WIFI")) {
 				if (ni.isConnected()) {
 					haveConnectedWifi = true;
 				}
 			}
-			if (ni.getTypeName().equalsIgnoreCase("MOBILE")) { 
-				if (ni.isConnected()) { 
+			if (ni.getTypeName().equalsIgnoreCase("MOBILE")) {
+				if (ni.isConnected()) {
 					haveConnectedMobile = true;
 				}
 			}
-			if (ni.getTypeName().equalsIgnoreCase("ETHERNET")) { 
-				if (ni.isConnected()) { 
+			if (ni.getTypeName().equalsIgnoreCase("ETHERNET")) {
+				if (ni.isConnected()) {
 					haveConnectedEthernet = true;
 				}
 			}
 		}
 		return (haveConnectedWifi || haveConnectedMobile || haveConnectedEthernet);
 	}
-	
+
 	public static void openBrowserToUrl(String url)
 	{
 		if (!url.startsWith("http://") && !url.startsWith("https://")) {
@@ -713,9 +789,9 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 		    s_activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + packageName)));
 		}
 	}
-	public static void openErrorDialog(String text) 
+	public static void openErrorDialog(String text)
 	{
-		if (s_activity != null) { 
+		if (s_activity != null) {
 			final String text2 = text;
 			s_activity.runOnUiThread(new Runnable() {
 
@@ -727,17 +803,17 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 
 					// Setting Dialog Message
 					alertDialog.setMessage(text2);
-			 
+
 					// Setting Icon to Dialog
 					//alertDialog.setIcon(R.drawable.tick);
-			 
+
 					// Setting OK Button
 					alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int which) { 
+						public void onClick(DialogInterface dialog, int which) {
 
 						}
 					});
-			 
+
 			        // Showing Alert Message
 			        alertDialog.show();
 			    }
@@ -745,20 +821,20 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	    }
 	}
 
-	public static void openGalleryToImageUrl(String url) 
+	public static void openGalleryToImageUrl(String url)
 	{
-		try { 
-			
-			if (!new File(url).exists()) { 
+		try {
+
+			if (!new File(url).exists()) {
 				System.err.println("File (" + url + ") does not exist");
 				return;
 			}
-			
+
 			if (url.startsWith("/")) {
 				url = url.substring(1, url.length());
 			}
 			//s_activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("content://" + url)));
-			
+
 			Uri uri =  Uri.fromFile(new File(url));
 			Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
 			String mime = "*/*";
@@ -769,7 +845,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 			    		MimeTypeMap.getFileExtensionFromUrl(uri.toString()));
 			intent.setDataAndType(uri,mime);
 			s_activity.startActivity(intent);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -778,22 +854,22 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 
 
     // THREAD?!
-    public static void thread_start(final int callback_id, final int thread_id) 
+    public static void thread_start(final int callback_id, final int thread_id)
     {
         Log.i("game", "Java: Thread Start Called");
         new Thread(new Runnable() {
             public void run() {
                 Log.i("game", "Java: Thread Started");
                 %GAME_CLASS_NAME%Renderer.nativeCallbackByIdIntParam(callback_id, thread_id);
-                 Log.i("game", "Java: Thread Finished"); 
+                 Log.i("game", "Java: Thread Finished");
             }
         }).start();
     }
 
-   
+
 
     // ----------------
-    // OUYA  
+    // OUYA
     // ----------------
     %OUYA_BLOCKSTART%
 
@@ -812,7 +888,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 
 		public static void ouya_init() {
 			Log.w("game", "ouya_init");
-			
+
 		    // Create a PublicKey object from the key data downloaded from the developer portal.
 	        try {
 	            // Read in the key.der file (downloaded from the developer portal)
@@ -820,7 +896,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	            byte[] applicationKey = new byte[inputStream.available()];
 	            inputStream.read(applicationKey);
 	            inputStream.close();
-	            
+
 	            // Create a public key
 	            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(applicationKey);
 	            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
@@ -839,9 +915,9 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 					Log.w("game", "requestGamerInfo failure...");
 					Log.w("game", "errorCode: " + errorCode);
 					Log.w("game", "errorMessage: " + errorMessage);
-				}		    	
+				}
 		    };
-	        
+
 	        s_receiptsListener = new CancelIgnoringOuyaResponseListener<String>() {
 	            @Override
 	            public void onSuccess(String receiptResponse) {
@@ -853,14 +929,14 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	                } catch (Exception e) {
 	                    throw new RuntimeException(e);
 	                }
-	                
+
 	                for (Receipt r : receipts) {
 	                    Log.d("Receipt", "You have purchased: " + r.getIdentifier() + " for " + r.getFormattedPrice());
 	                    if (r.getIdentifier().equals("%OUYA_ENTITLEMENT_ID%")) {
 	                    	ouyaPurchasedEntitlement = true;
 	                    }
 	                }
-	                
+
 	                if (ouyaPurchasedEntitlement) {
 	                	%GAME_CLASS_NAME%Renderer.nativeCallbackById(CALLBACK_OUYA_LICENSING_ALLOW);
 	                }
@@ -889,7 +965,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	                    }
 	                    if(storedProduct == null) {
 	                        onFailure(
-	                            OuyaErrorCodes.THROW_DURING_ON_SUCCESS, 
+	                            OuyaErrorCodes.THROW_DURING_ON_SUCCESS,
 	                            "No purchase outstanding for the given purchase request",
 	                            Bundle.EMPTY);
 	                        return;
@@ -917,7 +993,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	                    Log.d("Product", p.getName() + " costs " + p.getFormattedPrice() + ". " + p.getIdentifier() + ". " + p.getDeveloperName());
 	                    s_productsByName.put(p.getIdentifier(), p);
 	                }
-	            } 
+	            }
 
 	            @Override
 	            public void onFailure(int errorCode, String errorMessage, Bundle errorBundle) {
@@ -929,81 +1005,81 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	        OuyaFacade.getInstance().requestReceipts(s_receiptsListener);
 	        OuyaFacade.getInstance().requestProductList(PRODUCT_ID_LIST, s_productListListener);
 
-			
+
 		}
 
 
-			
-	   
+
+
 
 	    public static boolean ouya_isOuya() {
-	    	//if (android.os.Build.MANUFACTURER.toLowerCase().contains("ouya") || 
-	    	//	android.os.Build.MODEL.toLowerCase().contains("ouya") || 
+	    	//if (android.os.Build.MANUFACTURER.toLowerCase().contains("ouya") ||
+	    	//	android.os.Build.MODEL.toLowerCase().contains("ouya") ||
 	    	//	android.os.Build.PRODUCT.toLowerCase().contains("ouya")) {
 	    	//	return true;
 	    	//}
-	    	//return false; 
+	    	//return false;
 	    	return OuyaFacade.getInstance().isRunningOnOUYASupportedHardware();
-	    } 
+	    }
 	    public static String ouya_getUsername() {
 	    	Log.w("game", "ouya_getUsername: " + ouyaUsername);
 	    	return ouyaUsername;
 	    }
 
-	    public static void ouya_requestPurchaseByString(String productId) 
+	    public static void ouya_requestPurchaseByString(String productId)
 	    {
 			Log.d("game", "ouya_requestPurchaseByString: " + productId);
 			ouya_requestPurchase(s_productsByName.get(productId));
-	    } 
+	    }
 
-	    public static void ouya_requestPurchase(Product product) 
+	    public static void ouya_requestPurchase(Product product)
 	    {
-	    	
+
 			try {
 				SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-			
-	
+
+
 		        // This is an ID that allows you to associate a successful purchase with
 		        // it's original request. The server does nothing with this string except
 		        // pass it back to you, so it only needs to be unique within this instance
 		        // of your app to allow you to pair responses with requests.
 		        String uniqueId = Long.toHexString(sr.nextLong());
-	
+
 		        JSONObject purchaseRequest = new JSONObject();
 		        purchaseRequest.put("uuid", uniqueId);
 		        purchaseRequest.put("identifier", product.getIdentifier());
 		        // This value is only needed for testing, not setting it results in a live purchase
-		        purchaseRequest.put("testing", "true"); 
+		        purchaseRequest.put("testing", "true");
 		        String purchaseRequestJson = purchaseRequest.toString();
-	
+
 		        byte[] keyBytes = new byte[16];
 		        sr.nextBytes(keyBytes);
 		        SecretKey key = new SecretKeySpec(keyBytes, "AES");
-	
+
 		        byte[] ivBytes = new byte[16];
 		        sr.nextBytes(ivBytes);
 		        IvParameterSpec iv = new IvParameterSpec(ivBytes);
-	
+
 		        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding", "BC");
 		        cipher.init(Cipher.ENCRYPT_MODE, key, iv);
 		        byte[] payload = cipher.doFinal(purchaseRequestJson.getBytes("UTF-8"));
-	
+
 		        cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding", "BC");
 		        cipher.init(Cipher.ENCRYPT_MODE, ouyaPK);
 		        byte[] encryptedKey = cipher.doFinal(keyBytes);
-	
+
 		        Purchasable purchasable = new Purchasable(
 		        	product.getIdentifier(),
 		        	Base64.encodeToString(encryptedKey, Base64.NO_WRAP),
 		        	Base64.encodeToString(ivBytes, Base64.NO_WRAP),
-		        	Base64.encodeToString(payload, Base64.NO_WRAP) 
+		        	Base64.encodeToString(payload, Base64.NO_WRAP)
 		        );
-	
+
 		        synchronized (s_outstandingPurchaseRequests) {
 		            s_outstandingPurchaseRequests.put(uniqueId, product);
 		        }
 		        OuyaFacade.getInstance().requestPurchase(purchasable, s_purchaseListener);
-		        
+
 			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();
 			} catch (InvalidKeyException e) {
@@ -1024,14 +1100,14 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 				e.printStackTrace();
 			}
 	    }
- 
+
     %OUYA_BLOCKEND%
     // ----------------
 
     %!OUYA_BLOCKSTART%
-    	public static boolean ouya_isOuya() { 
-		    	return false; 
-	    } 
+    	public static boolean ouya_isOuya() {
+		    	return false;
+	    }
 	    public static String ouya_getUsername() {
 	    	Log.w("game", "ouya_getUsername called on a non-ouya platform.");
 	    	return "Username";
@@ -1039,14 +1115,14 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
     %!OUYA_BLOCKEND%
 
     public static boolean firetv_isAmazonFireTV() {
-    	if (android.os.Build.MANUFACTURER.equals("Amazon") && 
+    	if (android.os.Build.MANUFACTURER.equals("Amazon") &&
     		android.os.Build.MODEL.startsWith("AFT")) {
     		return true;
     	}
     	return false;
-    } 
-   
-    // VIBRATOR  
+    }
+
+    // VIBRATOR
     public static boolean util_vibrator_hasVibrator() {
         Vibrator v = (Vibrator) s_activity.getSystemService(Context.VIBRATOR_SERVICE);
         if (v == null) { return false; }
@@ -1056,7 +1132,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
     public static void util_vibrator_vibrate(int millis) {
         Vibrator v = (Vibrator) s_activity.getSystemService(Context.VIBRATOR_SERVICE);
         if (v == null) { return; }
-        
+
         //if (v.hasVibrator()) {
         v.vibrate((long) millis);
         //}
@@ -1064,7 +1140,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
     public static void util_vibrator_cancel() {
         Vibrator v = (Vibrator) s_activity.getSystemService(Context.VIBRATOR_SERVICE);
         if (v == null) { return; }
-        
+
         //if (v.hasVibrator()) {
         v.cancel();
         //}
@@ -1073,7 +1149,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 
 
     private %GAME_CLASS_NAME%View mGLView;
-    
+
     static {
     	try {
     		//System.load("data/data/org.%COMPANY_NAME%.%GAME_SHORT_NAME%/lib/libark2d.so");
@@ -1086,9 +1162,9 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
     	} catch(UnsatisfiedLinkError e) {
     		throw new RuntimeException("Could not load native libraries");
     	}
-    } 
+    }
 
-    
+
 	%ANDROIDSDK16_LINECOMMENT% @Override
 	public void onInputDeviceAdded(int deviceId) {
 		Log.i("game", "Input Device added: " + deviceId);
@@ -1106,13 +1182,13 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	public void onInputDeviceRemoved(int deviceId) {
 		Log.i("game", "Input Device removed: " + deviceId);
 		%GAME_CLASS_NAME%Renderer.nativeGamepadRemove(deviceId);
-	} 
-    
-    
-    
+	}
+
+
+
 }
- 
-class %GAME_CLASS_NAME%View extends GLSurfaceView {  
+
+class %GAME_CLASS_NAME%View extends GLSurfaceView {
 	private static class ContextFactory implements GLSurfaceView.EGLContextFactory {
 	    private static int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
 	    public EGLContext createContext(EGL10 egl, EGLDisplay display, EGLConfig eglConfig) {
@@ -1135,7 +1211,7 @@ class %GAME_CLASS_NAME%View extends GLSurfaceView {
 	        Log.e("game", String.format("%s: EGL error: 0x%x", prompt, error));
 	    }
 	}
-	
+
 	private static class ConfigChooser implements GLSurfaceView.EGLConfigChooser {
 
         public ConfigChooser(int r, int g, int b, int a, int depth, int stencil) {
@@ -1331,15 +1407,15 @@ class %GAME_CLASS_NAME%View extends GLSurfaceView {
 
 	public %GAME_CLASS_NAME%View(Context context) {
 		super(context);
-		
+
 		this.getHolder().setFormat(PixelFormat.TRANSLUCENT);
 		setEGLContextFactory(new ContextFactory());
 		setEGLConfigChooser(new ConfigChooser(8, 8, 8, 8, 0, 0));
-		
+
 		mRenderer = new %GAME_CLASS_NAME%Renderer(context);
-        setRenderer(mRenderer); 
+        setRenderer(mRenderer);
 	}
-	
+
 	@Override
 	public void onPause() {
 		Log.i("game", "View Pause");
@@ -1358,36 +1434,36 @@ class %GAME_CLASS_NAME%View extends GLSurfaceView {
 		super.onResume();
 		%GAME_CLASS_NAME%Renderer.nativeResume();
 	}
-	
-	
-	
+
+
+
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		Log.i("game", "View Touch Event");
 		if (event.getAction() == MotionEvent.ACTION_DOWN) {
 			//int pointerIndex = event.getPointerId(0);
-			int thisx = (int) event.getX(); //pointerIndex); 
-			int thisy = (int) event.getY(); //pointerIndex); 
-			
+			int thisx = (int) event.getX(); //pointerIndex);
+			int thisy = (int) event.getY(); //pointerIndex);
+
 			//Log.e("jni", "touch-down: " + thisx + "," + thisy);
 			%GAME_CLASS_NAME%Renderer.nativeTouchMove(thisx, thisy);
 			%GAME_CLASS_NAME%Renderer.nativeTouchDown(thisx, thisy);
 		} else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-			int thisx = (int) event.getX(); //pointerIndex); 
+			int thisx = (int) event.getX(); //pointerIndex);
 			int thisy = (int) event.getY(); //pointerIndex);
 			//Log.e("jni", "touch-move: " + thisx + "," + thisy);
 			%GAME_CLASS_NAME%Renderer.nativeTouchMove(thisx, thisy);
 		} else if (event.getAction() == MotionEvent.ACTION_UP) {
-			int thisx = (int) event.getX(); //pointerIndex); 
+			int thisx = (int) event.getX(); //pointerIndex);
 			int thisy = (int) event.getY(); //pointerIndex);
 			//Log.e("jni", "touch-up: " + thisx + "," + thisy);
 			%GAME_CLASS_NAME%Renderer.nativeTouchUp(thisx, thisy);
 		}
-		return true; 
-		//return super.onTouchEvent(event); 
+		return true;
+		//return super.onTouchEvent(event);
 	}
 
-	%ANDROIDSDK16_BLOCKSTART% 
+	%ANDROIDSDK16_BLOCKSTART%
 		// The Left Joystick
 		// If you do not consume motion events from the left joystick, the system will send your app dpad KeyEvents.
 		// If you don't want your app to get these key events, return true from onGenericMotionEvent. Otherwise, you can differentiate these dpad events using the source field as such:
@@ -1399,40 +1475,40 @@ class %GAME_CLASS_NAME%View extends GLSurfaceView {
 					// process the joystick movement...
 					return true;
 				}
-			} 
+			}
 			return true; // false;
 		}
-	%ANDROIDSDK16_BLOCKEND% 
+	%ANDROIDSDK16_BLOCKEND%
 
-	
+
 
 	// ------
 	// init gamepads
-	public static void initGamepads() 
+	public static void initGamepads()
 	{
 		Log.i("game", "Initialising Gamepads (Java)");
 		Log.i("game", android.os.Build.MANUFACTURER + " : " + android.os.Build.MODEL + " : " + android.os.Build.PRODUCT);
- 
- 		%ANDROIDSDK16_BLOCKSTART% 
+
+ 		%ANDROIDSDK16_BLOCKSTART%
 			int[] deviceIds = InputDevice.getDeviceIds();
-			for(int i = 0; i < deviceIds.length; i++) 
+			for(int i = 0; i < deviceIds.length; i++)
 			{
 				int deviceId = deviceIds[i];
 				addGamepad(deviceId);
 			}
-		%ANDROIDSDK16_BLOCKEND% 
+		%ANDROIDSDK16_BLOCKEND%
 		%!ANDROIDSDK16_LINECOMMENT% Log.e("game", "Gamepads not available on Android 2.3.");
 	}
 
 	public static void addGamepad(int deviceId) {
-		%ANDROIDSDK16_BLOCKSTART% 
+		%ANDROIDSDK16_BLOCKSTART%
 		InputDevice device = InputDevice.getDevice(deviceId);
 
 		if ((device.getSources() & InputDevice.SOURCE_GAMEPAD) != 0 &&
-			(device.getSources() & InputDevice.SOURCE_JOYSTICK) != 0) { 
+			(device.getSources() & InputDevice.SOURCE_JOYSTICK) != 0) {
 
-			if (!%GAME_CLASS_NAME%Renderer.nativeGamepadExists(deviceId)) 
-			{ 
+			if (!%GAME_CLASS_NAME%Renderer.nativeGamepadExists(deviceId))
+			{
 				%GAME_CLASS_NAME%Renderer.nativeGamepadAdd(deviceId, device.getName());
 
 				// do axises.
@@ -1449,23 +1525,23 @@ class %GAME_CLASS_NAME%View extends GLSurfaceView {
 				// do buttons (ouya controller)
 				// ...done natively
 				//%GAME_CLASS_NAME%Renderer.nativeGamepadAddButton(deviceId, 0);
-	        } 
+	        }
 	    }
-	    %ANDROIDSDK16_BLOCKEND% 
+	    %ANDROIDSDK16_BLOCKEND%
 	}
 
 	// ------
 	// TODO:
 	// http://grepcode.com/file/repository.grepcode.com/java/ext/com.google.android/android-apps/4.0.3_r1/com/example/android/apis/view/GameControllerInput.java
 	// ------
-	%ANDROIDSDK16_BLOCKSTART% 
+	%ANDROIDSDK16_BLOCKSTART%
 	public static int getInputDeviceState(InputEvent event) {
 		return event.getDeviceId();
 	}
-	%ANDROIDSDK16_BLOCKEND% 
+	%ANDROIDSDK16_BLOCKEND%
 
 
-	
+
 	// Check whether this is a key we care about.
 	// In a real game, we would probably let the user configure which keys to use
 	// instead of hardcoding the keys like this.
@@ -1500,12 +1576,12 @@ class %GAME_CLASS_NAME%View extends GLSurfaceView {
 				%!ANDROIDSDK16_LINECOMMENT% return false;
 		}
 	}
-	 
+
 	%GAME_CLASS_NAME%Renderer mRenderer;
-	 
-	
+
+
 }
- 
+
 class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
 	public static boolean s_initted = false;
 
@@ -1513,7 +1589,7 @@ class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
 	public %GAME_CLASS_NAME%Renderer(Context context) {
 		this.context = context;
 	}
-	
+
 	public static void createDir(String path) {
 		Log.i("game", "making path; " + path);
 		File extf = new File(path);
@@ -1523,10 +1599,10 @@ class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
 	        }
 	    }
 	}
-	
-	@Override  
+
+	@Override
 	public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-	//	nativeInit();   
+	//	nativeInit();
 		if (s_initted) {
 			Log.i("game", "Surface Already Created");
 		} else {
@@ -1536,12 +1612,12 @@ class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
 			//	// Ouya init.
 			//	%GAME_CLASS_NAME%Activity.ouya_init();
 			//%OUYA_BLOCKEND%
-			
-			String apkFilePath = null; 
+
+			String apkFilePath = null;
 			ApplicationInfo appInfo = null;
-			String externalDataPath = null; 
-			PackageManager packMgmr = context.getPackageManager();  
-			try {  
+			String externalDataPath = null;
+			PackageManager packMgmr = context.getPackageManager();
+			try {
 	            appInfo = packMgmr.getApplicationInfo("%PACKAGE_DOT_NOTATION%", 0);
 	            externalDataPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android/data/%PACKAGE_DOT_NOTATION%/files/"; // does not include trailing slash.
 	        } catch (NameNotFoundException e) {
@@ -1551,16 +1627,16 @@ class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
 			apkFilePath = appInfo.sourceDir;
 			Log.i("game", "APK File Path:" + apkFilePath);
 			Log.i("game", "Save File Path:" + externalDataPath);
-		
+
 			createDir(externalDataPath);
-			createDir(externalDataPath+"assets/"); 
+			createDir(externalDataPath+"assets/");
 
 			// TODO: create other resource directories for project.
 
 			%FIRETV_BLOCKSTART%
 				%GAME_CLASS_NAME%Activity.firetv_connect();
-			%FIRETV_BLOCKEND% 
-			
+			%FIRETV_BLOCKEND%
+
 			nativeInit(apkFilePath, externalDataPath);
 
 			s_initted = true;
@@ -1572,30 +1648,30 @@ class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
 		/*int w = width;//480;
 		int h = height;//320;
 		gl.glViewport(0, 0, w, h);
-		
-		gl.glMatrixMode(GL10.GL_PROJECTION); 
-		gl.glLoadIdentity(); 
+
+		gl.glMatrixMode(GL10.GL_PROJECTION);
+		gl.glLoadIdentity();
 
 		//gl.glOrthox(0, w, h, 0,  -1, 1);//(0, 1,  1, 0, -1, 1);
 		GLU.gluOrtho2D(gl, 0.0f, w, h, 0.0f);
-  
+
 		gl.glMatrixMode(GL10.GL_MODELVIEW);
 		gl.glLoadIdentity();
 		*/
 		nativeResize(width, height);
-	} 
+	}
 	@Override
 	public void onDrawFrame(GL10 gl) {
 		//Log.i("game", "Render");
 		nativeRender();
-	}  
-	  
-	public static native void nativeInit(String apkPath, String externalDataPath); 
+	}
+
+	public static native void nativeInit(String apkPath, String externalDataPath);
 	public static native void nativeResize(int width, int height);
 	public static native void nativeRender();
 	public static native void nativeDone();
-	
-	public static native void nativeTouchDown(int x, int y); 
+
+	public static native void nativeTouchDown(int x, int y);
 	public static native void nativeTouchMove(int x, int y);
 	public static native void nativeTouchUp(int x, int y);
 
@@ -1607,17 +1683,17 @@ class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
 	public static native void nativeResume();
 	public static native void nativeBackPressed();
 
-	public static native void nativeCallbackById(int id); 
-	public static native void nativeCallbackByIdIntParam(int id, int param); 
-	
+	public static native void nativeCallbackById(int id);
+	public static native void nativeCallbackByIdIntParam(int id, int param);
+
 	public static native void nativeGamepadAdd(int id, String name);
 	public static native boolean nativeGamepadExists(int id);
-	
+
 	public static native void nativeGamepadAddAxis(int id, int index, int axis);
 	public static native int nativeGamepadAxisAtIndex(int id, int index);
 	public static native void nativeGamepadAxisChanged(int id, int axis, float value);
 	public static native int nativeGamepadNumAxes(int id);
-	
+
 	public static native void nativeGamepadKeyDown(int id, int buttonindex);
 	public static native void nativeGamepadKeyUp(int id, int buttonindex);
 

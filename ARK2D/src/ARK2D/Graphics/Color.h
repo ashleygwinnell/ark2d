@@ -28,7 +28,7 @@ namespace ARK {
 				Color();
 				Color(const Color& color);
 				Color(const std::string hexString);
-				Color(int red, int green, int blue); 
+				Color(int red, int green, int blue);
 				Color(unsigned int r, unsigned int g, unsigned int b, unsigned int a);
 				Color(float r, float g, float b, float a);
 				void setRed(unsigned int r);
@@ -39,6 +39,7 @@ namespace ARK {
 				void setGreen(float g);
 				void setBlue(float b);
 				void setAlpha(float a);
+				void set(uint32_t c);
 				void set(float r, float g, float b, float a);
 				void set(const std::string hexString);
 				unsigned int getRed() const;
@@ -51,6 +52,7 @@ namespace ARK {
 				inline unsigned char getGreenc() const { return m_g; }
 				inline unsigned char getBluec() const { return m_b; }
 				inline unsigned char getAlphac() const { return m_a; }
+				uint32_t asInt() const;
 				float getRedf() const;
 				float getGreenf() const;
 				float getBluef() const;
@@ -58,7 +60,7 @@ namespace ARK {
 				string getHex() const;
 				void bind() const;
 				Color* copy();
-				const Color ccopy(); 
+				const Color ccopy();
 
 
 				bool operator==(Color c);
@@ -88,6 +90,16 @@ namespace ARK {
 				unsigned int m_g;
 				unsigned int m_b;
 				unsigned int m_a;
+
+			public:
+				static uint32_t pack(Color c);
+				static uint32_t pack(Color* c);
+                static uint32_t pack(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+				static unsigned char unpackRed(uint32_t c);
+				static unsigned char unpackGreen(uint32_t c);
+				static unsigned char unpackBlue(uint32_t c);
+				static unsigned char unpackAlpha(uint32_t c);
+
 		};
 	}
 }

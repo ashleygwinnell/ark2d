@@ -11,8 +11,8 @@
 
 #include "../../Util/FileUtil.h"
 
-namespace ARK { 
-	namespace Graphics { 
+namespace ARK {
+	namespace Graphics {
 
 
 		BasicGeometryShader::BasicGeometryShader():
@@ -20,14 +20,16 @@ namespace ARK {
 
 		}
 		void BasicGeometryShader::load() {
+			ARK2D::getLog()->v("Geometry Shader Checking for errors before load...");
+			showAnyGlErrorAndExitMacro();
 
 			// Regular geometry shader
-			ARK2D::getLog()->v("Geometry Shader: Init"); 
-			
-			#if defined(ARK2D_RENDERER_DIRECTX) 
-				
+			ARK2D::getLog()->v("Geometry Shader: Init");
+
+			#if defined(ARK2D_RENDERER_DIRECTX)
+
 				#ifdef ARK2D_WINDOWS_PHONE_8
-				
+
 					file_get_contents_binary_result geometryVertexShaderStruct = FileUtil::file_get_contents_binary("ark2d/shaders/basic-geometry/geometry-dx11-vertex.cso");
 					file_get_contents_binary_result geometryFragmentShaderStruct = FileUtil::file_get_contents_binary("ark2d/shaders/basic-geometry/geometry-dx11-pixel.cso");
 
@@ -40,7 +42,7 @@ namespace ARK {
 					unsigned int geometryVertexShaderLen = geometryVertexShaderStruct.len;
 					unsigned int geometryFragmentShaderLen = geometryFragmentShaderStruct.len;
 
-				#else 
+				#else
 					// Compiled .cso files
 					GameContainerARK2DResource geometryVertexShaderStruct = GameContainerPlatform::getARK2DResourceWithLength(ARK2D_DX11_GEOM_VS, ARK2D_RESOURCE_TYPE_SHADER);
 					GameContainerARK2DResource geometryFragmentShaderStruct = GameContainerPlatform::getARK2DResourceWithLength(ARK2D_DX11_GEOM_PS, ARK2D_RESOURCE_TYPE_SHADER);
@@ -53,11 +55,11 @@ namespace ARK {
 				#endif
 
 				addVertexShaderFromData((void*) geometryVertexShader, geometryVertexShaderLen);
-				addFragmentShaderFromData((void*) geometryFragmentShader, geometryFragmentShaderLen); 
-				
+				addFragmentShaderFromData((void*) geometryFragmentShader, geometryFragmentShaderLen);
+
 				//ARK2D::getLog()->v(StringUtil::append("Vertex Resource Size (4): ", geometryVertexShaderLen));
 				//ARK2D::getLog()->v(StringUtil::append("Fragment Resource Size (4): ", geometryFragmentShaderLen));
-				
+
 			#elif defined(ARK2D_RENDERER_OPENGL)
 				#if defined(ARK2D_OPENGL_ES_2_0)
 
@@ -92,15 +94,15 @@ namespace ARK {
 
 						file_get_contents_text_result geometryVertexShaderStruct = FileUtil::file_get_contents_text("ark2d/shaders/basic-geometry/geometry-glsles100.vertex");
 						file_get_contents_text_result geometryFragmentShaderStruct = FileUtil::file_get_contents_text("ark2d/shaders/basic-geometry/geometry-glsles100.fragment");
-						
+
 						const char* geometryVertexShader = (const char*) geometryVertexShaderStruct.data;
 						const char* geometryFragmentShader = (const char*) geometryFragmentShaderStruct.data;
-							
+
 						unsigned int geometryVertexShaderLen = geometryVertexShaderStruct.len; //strlen(geometryVertexShader);
 						unsigned int geometryFragmentShaderLen = geometryFragmentShaderStruct.len; //strlen(geometryFragmentShader);
- 
+
 						addVertexShaderFromData((void*) geometryVertexShader, geometryVertexShaderLen);
-						addFragmentShaderFromData((void*) geometryFragmentShader, geometryFragmentShaderLen); 
+						addFragmentShaderFromData((void*) geometryFragmentShader, geometryFragmentShaderLen);
 
 					#endif
 
@@ -111,17 +113,17 @@ namespace ARK {
 
 					const char* geometryVertexShader = (const char*) geometryVertexShaderStruct.data;
 					const char* geometryFragmentShader = (const char*) geometryFragmentShaderStruct.data;
-						
-					unsigned int geometryVertexShaderLen = geometryVertexShaderStruct.len; 
-					unsigned int geometryFragmentShaderLen = geometryFragmentShaderStruct.len; 
+
+					unsigned int geometryVertexShaderLen = geometryVertexShaderStruct.len;
+					unsigned int geometryFragmentShaderLen = geometryFragmentShaderStruct.len;
 
 					bool glsl150_vertex_error = false;
 					bool glsl150_fragment_error = false;
-					
+
 					addVertexShaderFromData((void*) geometryVertexShader, geometryVertexShaderLen);
 					glsl150_vertex_error = hasError();
 
-					addFragmentShaderFromData((void*) geometryFragmentShader, geometryFragmentShaderLen); 
+					addFragmentShaderFromData((void*) geometryFragmentShader, geometryFragmentShaderLen);
 					glsl150_fragment_error = hasError();
 
 					if (glsl150_vertex_error || glsl150_fragment_error) {
@@ -131,12 +133,12 @@ namespace ARK {
 
 						const char* geometryVertexShader2 = (const char*) geometryVertexShaderStruct2.data;
 						const char* geometryFragmentShader2 = (const char*) geometryFragmentShaderStruct2.data;
-							
-						unsigned int geometryVertexShaderLen2 = geometryVertexShaderStruct2.len; 
-						unsigned int geometryFragmentShaderLen2 = geometryFragmentShaderStruct2.len; 
+
+						unsigned int geometryVertexShaderLen2 = geometryVertexShaderStruct2.len;
+						unsigned int geometryFragmentShaderLen2 = geometryFragmentShaderStruct2.len;
 
 						addVertexShaderFromData((void*) geometryVertexShader2, geometryVertexShaderLen2);
-						addFragmentShaderFromData((void*) geometryFragmentShader2, geometryFragmentShaderLen2); 
+						addFragmentShaderFromData((void*) geometryFragmentShader2, geometryFragmentShaderLen2);
 
 						delete geometryVertexShaderStruct2.data;
 						delete geometryFragmentShaderStruct2.data;
@@ -144,33 +146,35 @@ namespace ARK {
 				#endif
 			#endif
 
-			
+
 			#ifdef ARK2D_RENDERER_DIRECTX
 				s->setName("geometry-dx11");
 			#endif
 
 			ShaderStore::getInstance()->addShader(m_programId, this);
-			
+
 			ARK2D::getLog()->v("Basic Geometry Shader: Bind Locations");
-			bindAttributeLocation(0, "ark_VertexPositionIn");
-			bindAttributeLocation(1, "ark_VertexNormalIn");
-			bindAttributeLocation(2, "ark_VertexColorIn");
+			//bindAttributeLocation(0, "ark_VertexPositionIn");
+			//bindAttributeLocation(1, "ark_VertexNormalIn");
+			//bindAttributeLocation(2, "ark_VertexColorIn");
 			bindFragmentDataLocation(0, "ark_FragColor");
 
-			link(); 
+			link();
 			linkDX();
 
 			RendererState::start(RendererState::SHADER, getId());
-			 
+
 			ark_ModelMatrix = getUniformVariable("ark_ModelMatrix");
 			ark_ViewMatrix = getUniformVariable("ark_ViewMatrix");
 			ark_ProjectionMatrix = getUniformVariable("ark_ProjectionMatrix");
 			ark_NormalMatrix = getUniformVariable("ark_NormalMatrix");
 
-			ark_VertexPositionIn = 0; 
-            ark_VertexNormalIn = 1; 
-            ark_VertexColorIn = 2; 
-		 
+			ark_VertexPositionIn = getAttributeVariable("ark_VertexPositionIn");
+            ark_VertexNormalIn = getAttributeVariable("ark_VertexNormalIn");
+            ark_VertexColorIn = getAttributeVariable("ark_VertexColorIn");
+
+
+
 			RendererState::start(RendererState::NONE);
 
 			// Free String* memory.
@@ -182,13 +186,13 @@ namespace ARK {
 		void BasicGeometryShader::bind() {
 			Shader::bind();
 			#if defined(ARK2D_OPENGL_ES_2_0)
-				glEnableVertexAttribArray(ark_VertexPositionIn);
-				glEnableVertexAttribArray(ark_VertexNormalIn);
-				glEnableVertexAttribArray(ark_VertexColorIn);
+				enableVertexAttribArray(ark_VertexPositionIn);
+				enableVertexAttribArray(ark_VertexNormalIn);
+				enableVertexAttribArray(ark_VertexColorIn);
 				RendererStats::s_glCalls += 2;
 			#endif
 		}
-		
+
 		BasicGeometryShader::~BasicGeometryShader() {
 
 		}
@@ -201,28 +205,31 @@ namespace ARK {
 			ARK::Graphics::Shader() {
 
 		}
-		void BasicTextureShader::load() 
+		void BasicTextureShader::load()
 		{
+			ARK2D::getLog()->v("Texture Shader Checking for errors before load...");
+			showAnyGlErrorAndExitMacro();
+
 			ARK2D::getLog()->v("Texture Shader Init");
-			
+
 			#if defined(ARK2D_RENDERER_DIRECTX)
 
 				// TODO: replace with texture shader...
 				#ifdef ARK2D_WINDOWS_PHONE_8
-					
+
 					file_get_contents_binary_result textureVertexShaderStruct = FileUtil::file_get_contents_binary("ark2d/shaders/basic-texture/texture-dx11-vertex.cso");
 					file_get_contents_binary_result textureFragmentShaderStruct = FileUtil::file_get_contents_binary("ark2d/shaders/basic-texture/texture-dx11-pixel.cso");
 
 					//String* textureVertexShaderStruct = Resource::get("ark2d/shaders/geometry-dx11-vertex.cso")->asString();
 					//String* textureFragmentShaderStruct = Resource::get("ark2d/shaders/geometry-dx11-pixel.cso")->asString();
-					 
+
 					const char* textureVertexShader = (const char*)textureVertexShaderStruct.data;
 					const char* textureFragmentShader = (const char*)textureFragmentShaderStruct.data;
 
 					unsigned int textureVertexShaderLen = textureVertexShaderStruct.len;
 					unsigned int textureFragmentShaderLen = textureFragmentShaderStruct.len;
 
-				#else 
+				#else
 					// TODO switch out values here.
 					GameContainerARK2DResource textureVertexShaderStruct = GameContainerPlatform::getARK2DResourceWithLength(ARK2D_DX11_GEOM_VS, ARK2D_RESOURCE_TYPE_SHADER);
 					GameContainerARK2DResource textureFragmentShaderStruct = GameContainerPlatform::getARK2DResourceWithLength(ARK2D_DX11_GEOM_PS, ARK2D_RESOURCE_TYPE_SHADER);
@@ -273,7 +280,7 @@ namespace ARK {
 
 						const char* textureVertexShader = (const char*) textureVertexShaderStruct.data;
 						const char* textureFragmentShader = (const char*) textureFragmentShaderStruct.data;
-							
+
 						unsigned int textureVertexShaderLen = textureVertexShaderStruct.len; //strlen(textureVertexShader);
 						unsigned int textureFragmentShaderLen = textureFragmentShaderStruct.len; //strlen(textureFragmentShader);
 
@@ -282,16 +289,16 @@ namespace ARK {
 
 					#endif
 
-					
 
-				#elif defined(ARK2D_OPENGL_3_2)  
+
+				#elif defined(ARK2D_OPENGL_3_2)
 					ARK2D::getLog()->v("Trying GLSL version 150.");
 					file_get_contents_text_result textureVertexShaderStruct = FileUtil::file_get_contents_text("ark2d/shaders/basic-texture/texture-glsl150-vertex.txt");
 					file_get_contents_text_result textureFragmentShaderStruct = FileUtil::file_get_contents_text("ark2d/shaders/basic-texture/texture-glsl150-fragment.txt");
- 
+
 					const char* textureVertexShader = (const char*) textureVertexShaderStruct.data;
 					const char* textureFragmentShader = (const char*) textureFragmentShaderStruct.data;
-						
+
 					unsigned int textureVertexShaderLen = textureVertexShaderStruct.len; //strlen(textureVertexShader);
 					unsigned int textureFragmentShaderLen = textureFragmentShaderStruct.len; //strlen(textureFragmentShader);
 
@@ -308,10 +315,10 @@ namespace ARK {
 						ARK2D::getLog()->w("GLSL version 150 had a problem. Trying GLSL version 130.");
 						file_get_contents_text_result textureVertexShaderStruct2 = FileUtil::file_get_contents_text("ark2d/shaders/basic-texture/texture-glsl130-vertex.txt");
 						file_get_contents_text_result textureFragmentShaderStruct2 = FileUtil::file_get_contents_text("ark2d/shaders/basic-texture/texture-glsl130-fragment.txt");
-	 
+
 						const char* textureVertexShader2 = (const char*) textureVertexShaderStruct2.data;
 						const char* textureFragmentShader2 = (const char*) textureFragmentShaderStruct2.data;
-							
+
 						unsigned int textureVertexShaderLen2 = textureVertexShaderStruct2.len; //strlen(textureVertexShader);
 						unsigned int textureFragmentShaderLen2 = textureFragmentShaderStruct2.len; //strlen(textureFragmentShader);
 
@@ -324,19 +331,19 @@ namespace ARK {
 
 				#endif
 			#endif
-			
+
 			showAnyGlErrorAndExitMacro();
 
 			ShaderStore::getInstance()->addShader(m_programId, this);
-			
+
 			ARK2D::getLog()->v("Texture Shader: Bind Locations");
-			bindAttributeLocation(0, "ark_TextureId");
-			bindAttributeLocation(1, "ark_VertexPositionIn");
-			bindAttributeLocation(2, "ark_VertexNormalIn");
-			bindAttributeLocation(3, "ark_VertexTexCoordIn");
-			bindAttributeLocation(4, "ark_VertexColorIn");
+			//bindAttributeLocation(0, "ark_TextureId");
+			//bindAttributeLocation(1, "ark_VertexPositionIn");
+			//bindAttributeLocation(2, "ark_VertexNormalIn");
+			//bindAttributeLocation(3, "ark_VertexTexCoordIn");
+			//bindAttributeLocation(4, "ark_VertexColorIn");
 			bindFragmentDataLocation(0, "ark_FragColor");
-			
+
 			#ifdef ARK2D_RENDERER_DIRECTX
 				s->setName("texture-dx11");
 			#endif
@@ -344,20 +351,29 @@ namespace ARK {
 			link();
 			linkDX();
 
+			showAnyGlErrorAndExitMacro();
+
 			RendererState::start(RendererState::SHADER, getId());
+
+			showAnyGlErrorAndExitMacro();
 
 			ark_ModelMatrix = getUniformVariable("ark_ModelMatrix");
 			ark_ViewMatrix = getUniformVariable("ark_ViewMatrix");
 			ark_ProjectionMatrix = getUniformVariable("ark_ProjectionMatrix");
 			ark_NormalMatrix = getUniformVariable("ark_NormalMatrix");
-			
+
 			ark_TextureId = getUniformVariable("ark_TextureId");
-			ark_VertexPositionIn = 1;
-			ark_VertexNormalIn = 2;
-			ark_VertexTexCoordIn = 3; 
-			ark_VertexColorIn = 4; 
+
+			ark_VertexPositionIn = getAttributeVariable("ark_VertexPositionIn");
+			ark_VertexNormalIn = getAttributeVariable("ark_VertexNormalIn");
+			ark_VertexTexCoordIn = getAttributeVariable("ark_VertexTexCoordIn");
+			ark_VertexColorIn = getAttributeVariable("ark_VertexColorIn");
+
+			showAnyGlErrorAndExitMacro();
 
 			RendererState::start(RendererState::NONE);
+
+			showAnyGlErrorAndExitMacro();
 
 			// Free String* memory.
 			#ifndef ARK2D_ANDROID
@@ -368,14 +384,14 @@ namespace ARK {
 		void BasicTextureShader::bind() {
 			Shader::bind();
 			#if defined(ARK2D_OPENGL_ES_2_0)
-				glEnableVertexAttribArray(ark_VertexPositionIn);
-				glEnableVertexAttribArray(ark_VertexNormalIn);
-				glEnableVertexAttribArray(ark_VertexTexCoordIn);
-				glEnableVertexAttribArray(ark_VertexColorIn);
+				enableVertexAttribArray(ark_VertexPositionIn);
+				enableVertexAttribArray(ark_VertexNormalIn);
+				enableVertexAttribArray(ark_VertexTexCoordIn);
+				enableVertexAttribArray(ark_VertexColorIn);
 				RendererStats::s_glCalls += 3;
 			#endif
 		}
-		
+
 		BasicTextureShader::~BasicTextureShader() {
 
 		}

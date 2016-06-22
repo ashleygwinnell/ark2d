@@ -16,7 +16,7 @@
 
 namespace ARK {
 	namespace Graphics {
- 
+
 		/*!
 		 * \brief OpenGL Shader support.
 		 *
@@ -25,7 +25,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 * @author unascribed http://www.swiftless.com/tutorials/glsl/1_setup.html
-		 * 
+		 *
 		 * REFERENCE:
 		 * http://www.lighthouse3d.com/tutorials/glsl-tutorial/uniform-variables/
 		 *
@@ -37,7 +37,7 @@ namespace ARK {
 		 *
 		 * RADIAL BLUR:
 		 * http://stackoverflow.com/questions/4579020/how-do-i-use-a-glsl-shader-to-apply-a-radial-blur-to-an-entire-scene
-		 * 
+		 *
 		 * OTHER USEFUL?!
 		 * http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-14-render-to-texture/
 		 * http://www.lighthouse3d.com
@@ -61,23 +61,23 @@ namespace ARK {
 				string getErrorString() { return m_errorString; }
 
 				// getting/setting uniform shader vars -- these don't (can't) change inbetween begin/end calls within the shader.
-				int getUniformVariable(string var); 
-				void setUniformVariableF(int var, float value); 
-				void setUniformVariableF(int var, int count, float* values); 
-				void setUniformVariableI(int var, int value); 
-				void setUniformVariableI(int var, int count, int* values); 
+				int getUniformVariable(string var);
+				void setUniformVariableF(int var, float value);
+				void setUniformVariableF(int var, int count, float* values);
+				void setUniformVariableI(int var, int value);
+				void setUniformVariableI(int var, int count, int* values);
 
-				void setUniformVariable2I(int var, int v1, int v2);  
-				void setUniformVariable2F(int var, float v1, float v2); 
-				void setUniformVariable3F(int var, float v1, float v2, float v3); 
+				void setUniformVariable2I(int var, int v1, int v2);
+				void setUniformVariable2F(int var, float v1, float v2);
+				void setUniformVariable3F(int var, float v1, float v2, float v3);
 				void setUniformVariable4FV(int var, int count, float* data);
-				void setUniformVariableMat4f(int var, float* mat); 
+				void setUniformVariableMat4f(int var, float* mat);
 
 				// getting/setting attrib shader vars -- these are per-vertex variables. they cannot be changed in vertex shader.
-				int getAttributeVariable(string var); 
-				int getAttributeVariableVertexArray(string var);  
+				int getAttributeVariable(string var);
+				int getAttributeVariableVertexArray(string var);
 				void enableVertexAttribArray(int var);
-				void setAttributeVariableF(int var, float value); 
+				void setAttributeVariableF(int var, float value);
 				void setAttributeVariableVertexPointerFloat(int var, int sz, bool normalise, float* data);
 				void setAttributeVariableVertexPointerFloatStride(int var, int sz, bool normalise, float* data, unsigned int stride);
 				void setAttributeVariableVertexPointerStride(int var, int sz, bool normalise, unsigned int stride, void* data);
@@ -117,7 +117,7 @@ namespace ARK {
 				string m_errorString;
 
 				#if defined(ARK2D_RENDERER_DIRECTX)
-					public: 
+					public:
 						ID3D11VertexShader* m_d3d_vertexShader;
 						ID3D11PixelShader* m_d3d_pixelShader;
 						ID3D11InputLayout* m_d3d_inputLayout;
@@ -137,21 +137,21 @@ namespace ARK {
 
 		class ARK2D_API Shader : public ShaderInternals {
 			public:
-				
+
 				// Uniforms
-				unsigned int ark_ModelMatrix;
-				unsigned int ark_ViewMatrix;
-				unsigned int ark_ProjectionMatrix;
-				unsigned int ark_NormalMatrix;
+				signed int ark_ModelMatrix;
+				signed int ark_ViewMatrix;
+				signed int ark_ProjectionMatrix;
+				signed int ark_NormalMatrix;
 
 				// Textures? Uhhhhhh....
-				unsigned int ark_TextureId;
+				signed int ark_TextureId;
 
 				// Attributes/varyings (per-vertex properties)
-				unsigned int ark_VertexPositionIn;
-				unsigned int ark_VertexNormalIn;
-				unsigned int ark_VertexTexCoordIn;
-				unsigned int ark_VertexColorIn;
+				signed int ark_VertexPositionIn;
+				signed int ark_VertexNormalIn;
+				signed int ark_VertexTexCoordIn;
+				signed int ark_VertexColorIn;
 
 				// Length of data being used.
 				signed int length;

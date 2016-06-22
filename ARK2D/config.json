@@ -9,12 +9,15 @@
 			"ndk_dir": "C:\\Users\\Ashley\\.android\\android-ndk-r9"
 		}
 	},
-	"osx": { 
+	"osx": {
 		"python_executable": "/usr/local/bin/python3.1",
 		"ark2d_dir": "/Users/ashleygwinnell/Projects/ark2d/ARK2D",
         "android": {
-        	"sdk_dir": "/Users/ashleygwinnell/Documents/adt-bundle-mac-x86_64-20130717/sdk/",
-			"ndk_dir": "/Users/ashleygwinnell/.android/android-ndk-r9"
+        	"sdk_dir_old": "/Users/ashleygwinnell/Documents/adt-bundle-mac-x86_64-20130717/sdk/",
+			"ndk_dir_old": "/Users/ashleygwinnell/.android/android-ndk-r9",
+
+			"sdk_dir": "/Users/ashleygwinnell/Library/Android/sdk",
+   			"ndk_dir": "/Users/ashleygwinnell/Projects/android-ndk-r10e"
 		},
 		"gyp_executable": "/Users/ashleygwinnell/Projects/ark2d/ARK2D/lib/gyp-read-only/gyp"
 	},
@@ -37,38 +40,38 @@
 	},
 	"mkdirs": {
 		"windows": [
-		
+
 		],
-		"osx": [ 
-		
+		"osx": [
+
 		],
 		"android": [
-		
+
 		],
 		"all": [
-		
+
 		]
 	},
 	"dynamic_libraries": {
 		"windows": [
-			"lib\\windows\\kernel32.dll", 
-			"lib\\windows\\glew32.dll", 
-			"lib\\windows\\OpenAL32.dll", 
-			"lib\\windows\\alut.dll", 
+			"lib\\windows\\kernel32.dll",
+			"lib\\windows\\glew32.dll",
+			"lib\\windows\\OpenAL32.dll",
+			"lib\\windows\\alut.dll",
 			"lib\\windows\\winmm.dll",
 			"lib\\windows\\freetype6.dll",
 			"lib\\windows\\libcurl.dll"
 		],
 		"osx": [
-			
-			
+
+
 		]
 	},
 	"static_libraries": {
 		"windows": [
-			"glu32", 
-			"winmm", 
-			"opengl32", 
+			"glu32",
+			"winmm",
+			"opengl32",
 			"mingw32",
 			"freetype"
 		],
@@ -101,15 +104,15 @@
 			"src/ARK2D/Core/String.cpp",
 			"src/ARK2D/Core/Platform/GameContainerWindows.cpp",
 			"src/ARK2D/Core/Camera.cpp",
-			
+
 			"src/ARK2D/Font/Font.cpp",
 			"src/ARK2D/Font/FTFont.cpp",
-			"src/ARK2D/Font/BMFont.cpp", 
+			"src/ARK2D/Font/BMFont.cpp",
 			"src/ARK2D/GJ/GameJolt.cpp",
 			"src/ARK2D/GJ/PropertyItem.cpp",
 			"src/ARK2D/GJ/DataStore.cpp",
 			"src/ARK2D/GJ/Highscore.cpp",
-			"src/ARK2D/GJ/MD5.cpp", 
+			"src/ARK2D/GJ/MD5.cpp",
 			"src/ARK2D/GJ/Trophy.cpp",
 			"src/ARK2D/GJ/User.cpp",
 			"src/ARK2D/GJ/Next/Overlay.cpp",
@@ -151,7 +154,7 @@
 			"src/ARK2D/Geometry/Transform.cpp",
 
 			"src/ARK2D/Math/Random.cpp",
-			
+
 			"src/ARK2D/Net/Address.cpp",
 			"src/ARK2D/Net/Connection.cpp",
 			"src/ARK2D/Net/Discovery.cpp",
@@ -174,7 +177,7 @@
 			"src/ARK2D/Particles/ParticleIO.cpp",
 			"src/ARK2D/Particles/ParticlePool.cpp",
 			"src/ARK2D/Particles/ParticleSystem.cpp",
-			
+
 			"src/ARK2D/SceneGraph/Scene.cpp",
 
 			"src/ARK2D/State/GameState.cpp",
@@ -191,8 +194,8 @@
 			"src/ARK2D/State/Transition/SlideRectanglesAcrossTransition.cpp",
 			"src/ARK2D/State/Transition/Transition.cpp",
 			"src/ARK2D/State/Transition/TranslateOutInTransition.cpp",
-			
-			"src/ARK2D/Tests/CollisionTest.cpp", 
+
+			"src/ARK2D/Tests/CollisionTest.cpp",
 			"src/ARK2D/Tests/GamepadsTest.cpp",
 			"src/ARK2D/Tests/TransitionTest.cpp",
 			"src/ARK2D/Tests/ParticlesTest.cpp",
@@ -227,12 +230,12 @@
 			"src/ARK2D/UI/ComboBox.cpp",
 			"src/ARK2D/UI/ComboBoxItem.cpp",
 			"src/ARK2D/UI/SplitPane.cpp",
-			"src/ARK2D/UI/ErrorDialog.cpp", 
+			"src/ARK2D/UI/ErrorDialog.cpp",
 			"src/ARK2D/UI/Notification.cpp",
 			"src/ARK2D/UI/NotificationSystem.cpp",
-			"src/ARK2D/UI/SimpleTextField.cpp", 
-			"src/ARK2D/UI/Slider.cpp", 
-			"src/ARK2D/UI/TitledPanel.cpp", 
+			"src/ARK2D/UI/SimpleTextField.cpp",
+			"src/ARK2D/UI/Slider.cpp",
+			"src/ARK2D/UI/TitledPanel.cpp",
 
 			"src/ARK2D/Util/AnalyticsUtil.cpp",
 			"src/ARK2D/Util/AngelScriptUtil.cpp",
@@ -241,7 +244,7 @@
 			"src/ARK2D/Util/CameraShake.cpp",
 			"src/ARK2D/Util/FileUtil.cpp",
 			"src/ARK2D/Util/DisplayUtil.cpp",
-			
+
 			"src/ARK2D/Util/GameCenterUtil.cpp",
 			"src/ARK2D/Util/ICloudUtil.cpp",
 			"src/ARK2D/Util/GooglePlayGameServicesUtil.cpp",
@@ -250,7 +253,7 @@
 			"src/ARK2D/Util/LocalHighscores.cpp",
 			"src/ARK2D/Util/Log.cpp",
 			"src/ARK2D/Util/MathUtil.cpp",
-			"src/ARK2D/Util/Matrix44.cpp", 
+			"src/ARK2D/Util/Matrix44.cpp",
 			"src/ARK2D/Util/RSSL.cpp",
 			"src/ARK2D/Util/SAT.cpp",
 			"src/ARK2D/Util/SocialUtil.cpp",
@@ -264,7 +267,7 @@
 			"src/ARK2D/Util/VerticalMenuItem.cpp",
 			"src/ARK2D/Util/Vibrator.cpp",
 			"src/ARK2D/Util/Wobble.cpp",
-			
+
 			"src/ARK2D/Util/Containers/Pool.cpp",
 			"src/ARK2D/Util/Containers/Vector.cpp",
 
@@ -272,7 +275,7 @@
 			"src/ARK2D/vendor/angelscript/add_on/scriptstdstring/scriptstdstring_utils.cpp",
 			"src/ARK2D/vendor/angelscript/add_on/scriptarray/scriptarray.cpp",
 			"src/ARK2D/vendor/angelscript/add_on/scriptbuilder/scriptbuilder.cpp",
-			
+
 			"src/ARK2D/vendor/mersennetwister/mt.cpp",
 
 			"src/ARK2D/vendor/FileInterface.cpp",
@@ -417,7 +420,7 @@
 		"android": [
 			"src/ARK2D/Core/Platform/GameContainerAndroid.cpp"
 		],
-		"ios": [ 
+		"ios": [
 			"src/ARK2D/Core/Platform/GameContainerIPhoneCloudDocument.mm",
 			"src/ARK2D/Core/Platform/GameContainerIPhoneAppDelegate.mm",
 			"src/ARK2D/Core/Platform/GameContainerIPhoneGLView.mm",

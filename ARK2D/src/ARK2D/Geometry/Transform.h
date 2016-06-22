@@ -8,12 +8,13 @@
 #ifndef ARK_MATH_TRANSFORM_H_
 #define ARK_MATH_TRANSFORM_H_
 
+#include "../Util/Vector4.h"
 #include "Vector3.h"
 #include "Quaternion.h"
-#include "../Util/Vector4.h"
+
 
 #include <vector>
-using namespace std; 
+using namespace std;
 
 namespace ARK {
 	namespace Util {
@@ -23,7 +24,7 @@ namespace ARK {
 				Vector3<float> position;
 				Vector3<float> scale;
 				Quaternion<float> rotation;
-				
+
 				Transform();
 				// void translate(float x, float y, float z); // use += on position
                 // void scale(float x, float y, float z); // use *= on scale

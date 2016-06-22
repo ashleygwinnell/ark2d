@@ -26,11 +26,11 @@ namespace ARK {
 				Image* m_image;
 				void* m_event;
 				void* m_eventObj;
-			
+
 			public:
 				Button();
 				Button(string text);
-				
+
 				void setEvent(void* e);
 				void setEventObj(void* o);
 				void* getEvent();
@@ -43,7 +43,7 @@ namespace ARK {
 
 				void setText(string s);
 				const String& getText();
-				
+
 				virtual void render();
 				virtual void renderBackground();
 				virtual void renderText(int x, int y);

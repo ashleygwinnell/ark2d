@@ -23,7 +23,7 @@ namespace ARK {
 			m_event(NULL),
 			m_eventObj(NULL)
 		{
-			
+
 		}
 		Button::Button(string text):
 			AbstractUIComponent(),
@@ -95,7 +95,21 @@ namespace ARK {
 		void Button::doEvent() {
 			if (m_event != NULL) {
 				if (m_eventObj == NULL) {
-					
+
+					//auto var = [] () {};
+					//auto pt1 = static_cast<decltype(&var)>(m_event);
+					//if (pt1) {
+					//	pt1();
+					//	return;
+					//}
+					//auto fp1 = &m_event;
+					//if (fp1) {
+					//	(*(*fp1))();
+					//}
+
+
+
+
 					void (*pt)() = (void(*)()) m_event;
 					//typedef void fnct();
 					//fnct* pt = (fnct*) m_event;
@@ -118,7 +132,7 @@ namespace ARK {
 		const String& Button::getText() {
 			return m_text;
 		}
-		
+
 		void Button::render() {
 			if (!visible) { return; }
 
@@ -154,13 +168,13 @@ namespace ARK {
 			g->setDrawColor(Color::black_50a);
 			g->fillRect(0, 0, m_width, m_height);
 		}
-		void Button::renderText(int x, int y) { 
+		void Button::renderText(int x, int y) {
 			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white);
 			g->drawString(m_text.get(), x, y, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER);
 		}
 		void Button::renderImage(int x, int y) {
-			m_image->draw(x, y); 
+			m_image->draw(x, y);
 		}
 		void Button::renderOverlay() {
 			Renderer* g = ARK2D::getRenderer();

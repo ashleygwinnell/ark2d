@@ -8,8 +8,8 @@
 #ifndef INCLUDES_H_
 #define INCLUDES_H_
 
- 	#if defined(__AVM2__) 
- 
+ 	#if defined(__AVM2__)
+
  		#ifndef ARK2D_FLASCC
 			#define ARK2D_FLASCC
 		#endif
@@ -21,8 +21,8 @@
  		#include <Flash++.h>
  		//using namespace AS3;
 
- 		
- 		
+
+
  		#include <string>
 		#include <vector>
 		#include <list>
@@ -31,18 +31,18 @@
 		#include <sstream>
 		#include <iostream>
 		#include <fstream>
-		#include <sys/time.h> 
+		#include <sys/time.h>
 		#include <time.h>
 		#include <stdint.h>
 		#include <stdio.h>
 		#include <stdlib.h>
 		#include <sys/stat.h>
 		#include <sys/types.h>
-		#include <math.h> 
+		#include <math.h>
 		#include <algorithm>
  		#include <unistd.h>
 
- 		#include "Common/OpenGL.h" 		
+ 		#include "Common/OpenGL.h"
 
  		using namespace std;
 
@@ -58,12 +58,12 @@
 		//#define EXCEPTIONS_AVAILABLE
 		#define JSON_SAFE
 		//#define ALLOW_MEMORY_GROWTH
- 		
+
  		#include "Common/Audio.h"
  		#include "Common/OpenGL.h"
 
 		#include <vector>
-		#include <list> 
+		#include <list>
 		#include <map>
 		#include <set>
 		#include <limits>
@@ -78,7 +78,7 @@
 		#include <sys/ioctl.h>
 		#include <sys/stat.h>
 		#include <pthread.h>
-		#include <unistd.h> 
+		#include <unistd.h>
 
 		//typedef signed long int64_t;
 		#define typeof __typeof__
@@ -100,7 +100,7 @@
 		#include <sstream>
 		#include <iostream>
 		#include <fstream>
-		#include <jni.h> 
+		#include <jni.h>
 		#include <sys/time.h>
 		#include <time.h>
 		#include <android/log.h>
@@ -110,10 +110,10 @@
 		#include <zip.h>
 		#include <sys/stat.h>
 		#include <sys/types.h>
-		#include <math.h> 
+		#include <math.h>
 		#include <algorithm>
 		#include <unistd.h>
- 
+
  		#include "Common/Audio.h"
  		#include "Common/OpenGL.h"
  		#include "Common/DLL.h"
@@ -131,13 +131,13 @@
 		#define EXCEPTIONS_AVAILABLE
 		#define JSON_SAFE
 
- 		#include <stdio.h> 
+ 		#include <stdio.h>
 		#include <stdlib.h>
 		#include <unistd.h>
 		#include <sys/types.h>
  		#include <sys/time.h>
 
-		#include <iostream> 
+		#include <iostream>
  		#include <sstream>
  		#include <fstream>
  		#include <string>
@@ -151,7 +151,7 @@
 
  		using namespace std;
 
- 		
+
 
 		#include <AVFoundation/AVFoundation.h>
 
@@ -182,7 +182,7 @@
 //		#include <EGL/egl.h>
 
 
-        //typedef unsigned int ALuint; 
+        //typedef unsigned int ALuint;
         //typedef unsigned int ALenum;
         //typedef float ALfloat;
 
@@ -199,7 +199,7 @@
 		#include <xdk.h>
 		#include <winsock2.h>
 
- 		
+
 		#include <windows.h>
 		#include <wrl.h>
 
@@ -213,9 +213,9 @@
 		#include <time.h>
 
 
-		#include <cstdlib> 
-		#include <fstream> 
-		 
+		#include <cstdlib>
+		#include <fstream>
+
 		#include <math.h>
 		#include <cmath>
 		#include <iostream>
@@ -223,10 +223,10 @@
 		#include "Common/OpenGL.h"
 		#include "Common/Audio.h"
 
-		#ifdef min 
+		#ifdef min
 			#undef min
-		#endif 
-		 
+		#endif
+
 		#ifdef max
 			#undef max
 		#endif
@@ -237,11 +237,11 @@
 			#else
 				#define Assert(b)
 			#endif //DEBUG || _DEBUG
-		#endif 
+		#endif
 
 		#ifndef ARK2D_WINDOWS_DLL // abc.dll source code will define this macro before including this header
 			#define ANGELSCRIPT_DLL_LIBRARY_IMPORT
-		#endif 
+		#endif
 
  		#include "vendor/angelscript/angelscript.h"
  		#include "vendor/angelscript/add_on/scriptstdstring/scriptstdstring.h"
@@ -258,7 +258,7 @@
 
 		#ifdef __cplusplus_winrt
 			#include <agile.h>
-			#include <collection.h> 
+			#include <collection.h>
 		#endif
 
  	#elif defined(ARK2D_WINDOWS_PHONE_8)
@@ -267,7 +267,7 @@
 		#define EXCEPTIONS_AVAILABLE
 		#define ARK2D_WINDOWS_VS
 
-		
+
 
 		//#define ARK2D_MISSING_C99_FUNCTIONS true
 
@@ -284,17 +284,17 @@
 		#include <time.h>
 
 
-		#include <cstdlib> 
-		#include <fstream> 
-		 
+		#include <cstdlib>
+		#include <fstream>
+
 		#include <math.h>
 		#include <cmath>
 		#include <iostream>
 
-		#ifdef min 
+		#ifdef min
 			#undef min
-		#endif 
-		 
+		#endif
+
 		#ifdef max
 			#undef max
 		#endif
@@ -312,33 +312,33 @@
 		#include <wrl/client.h>
 
 		using namespace std;
-		
+
 		//#include <d2d1.h>
 		//#include <d2d1effects_1.h>
 		//#include <dwrite.h>
-		
+
 		#include "Common/OpenGL.h"
 
-		
+
 		#include <memory>
 		#include <ppl.h>
 		#include <ppltasks.h>
 
-		
 
- 		// audio 
+
+ 		// audio
 		#include "Common/Audio.h"
 
 		// netcode
 		//#include "Net/Includes.h"
- 
+
 		#ifndef Assert
 			#if defined( ARK2D_DEBUG )
 				#define Assert(b) do {if (!(b)) {OutputDebugStringA("Assert: " #b "\n");}} while(0)
 			#else
 				#define Assert(b)
 			#endif //DEBUG || _DEBUG
-		#endif 
+		#endif
 
 
 		// vendor
@@ -351,7 +351,7 @@
 		//using namespace Windows::ApplicationModel;
 		//using namespace Windows::ApplicationModel::Core;
 		//using namespace Windows::ApplicationModel::Activation;
-		//using namespace Windows::UI::Core; 
+		//using namespace Windows::UI::Core;
 		//using namespace Windows::System;
 		//using namespace Windows::Foundation;
 		//using namespace Windows::Graphics::Display;
@@ -365,7 +365,7 @@
 
 		#ifdef __cplusplus_winrt
 			#include <agile.h>
-			#include <collection.h> 
+			#include <collection.h>
 		#endif
 		//#using <Platform.winmd>
 
@@ -374,7 +374,7 @@
 
 		#include "vendor/spine/includes/spine/spine.h"
 
-		
+
 	#elif defined(_WIN32)
 
 		#ifndef ARK2D_WINDOWS
@@ -382,8 +382,8 @@
 		#endif
 		#define STL_AVAILABLE
 		#define EXCEPTIONS_AVAILABLE
-		
-		//#define _WINSOCKAPI_ 
+
+		//#define _WINSOCKAPI_
 		#include <winsock2.h>
 		#include <windows.h>
 		#include <mmsystem.h>
@@ -393,9 +393,9 @@
 
  		//#include <winsock.h>
 		//#include <winsock2.h>
-		
+
 		#include <vector>
-		#include <list> 
+		#include <list>
 		#include <map>
 		#include <set>
 
@@ -406,7 +406,7 @@
 		// multimedia system (midi)
 		#include <mmsystem.h>
 
-		
+
 
 		#ifdef __GNUC__
 			#include <sys/time.h>
@@ -415,11 +415,11 @@
  			#define ARK2D_WINDOWS_VS
  			#include <time.h>
 
- 		
- 			#ifdef min 
+
+ 			#ifdef min
  				#undef min
- 			#endif 
-			
+ 			#endif
+
 			#ifdef max
  				#undef max
  			#endif
@@ -429,7 +429,7 @@
 
  			#ifndef ARK2D_WINDOWS_DLL // abc.dll source code will define this macro before including this header
 				#define ANGELSCRIPT_DLL_LIBRARY_IMPORT
-			#endif 
+			#endif
 
 			#if defined(ARK2D_WINDOWS_VS)
 				#ifndef Assert
@@ -440,21 +440,21 @@
 					#endif //DEBUG || _DEBUG
 				#endif
 			#endif
-		 
+
 	 		//#define JSON_DLL
 
 		#endif
 
- 		#include <cstdlib> 
+ 		#include <cstdlib>
 		#include <cstring>
-		#include <fstream> 
-		 
+		#include <fstream>
+
 		#include <math.h>
 		#include <cmath>
 		#include <iostream>
 
-		
-		
+
+
 
 		#pragma comment(lib, "advapi32.lib")
 		#pragma comment(lib, "user32.lib")
@@ -467,7 +467,7 @@
 
 		#include "Common/OpenGL.h"
 
-		
+
 
 
 	 	//#define GLEW_BUILD
@@ -475,32 +475,32 @@
 	 	// GLEW_STATIC
 	 	// #define GLEW_MX
 	 	//#undef GLEW_MX
-		 
+
 		//#include <GL/GLew.h>
 		//#include "vendor/glew-vs.c"
 	 	//#include <GLFW/glfw3.h>
 
-	 	//#include <GL/GL.h> 
-		//#include <GL/glu.h> 
- 
+	 	//#include <GL/GL.h>
+		//#include <GL/glu.h>
+
 		#include "Common/Audio.h"
 
-	
-		
+
+
 		#include "vendor/angelscript/angelscript.h"
  		#include "vendor/angelscript/add_on/scriptstdstring/scriptstdstring.h"
  		#include "vendor/angelscript/add_on/scriptarray/scriptarray.h"
  		#include "vendor/angelscript/add_on/scriptbuilder/scriptbuilder.h"
-		
+
 
  		#include "vendor/libcurl-windows/curl.h"
 
  		using namespace std;
 
 
- 
 
-	
+
+
 
 	#elif (defined(ARK2D_MACINTOSH)) // defined(__MACH__) || defined(__APPLE__)
 
@@ -521,7 +521,7 @@
 		#include <unistd.h>
 		#include <list>
 		#include <map>
- 		#include <set> 
+ 		#include <set>
 		#include <fstream>
 		#include <iostream>
 		#include <cstdio>
@@ -540,7 +540,7 @@
 
  		#include "vendor/libcurl/curl.h"
  		#include "vendor/spine/includes/spine/spine.h"
- 		
+
  		#include "vendor/angelscript/angelscript.h"
  		#include "vendor/angelscript/add_on/scriptstdstring/scriptstdstring.h"
  		#include "vendor/angelscript/add_on/scriptarray/scriptarray.h"
@@ -555,13 +555,13 @@
 		#include "Common/Audio.h"
 		#include "Common/OpenGL.h"
 
-		#if defined(ARK2D_SDL2) 
+		#if defined(ARK2D_SDL2)
  			#include <SDL2/SDL.h>
  			#include <SDL2/SDL_opengl.h>
 		#endif
 
 		#include <vector>
-		#include <list> 
+		#include <list>
 		#include <map>
 		#include <set>
 		#include <limits>
@@ -576,12 +576,12 @@
 		#include <sys/ioctl.h>
 		#include <sys/stat.h>
 		#include <pthread.h>
-		#include <unistd.h> 
+		#include <unistd.h>
 
 		#include <dirent.h>
 		#include <errno.h>
 		#include <fcntl.h>
-		
+
 		#include "vendor/libcurl/curl.h"
 
 		#include "vendor/angelscript/angelscript.h"
@@ -596,17 +596,17 @@
 	#include <stdint.h>
 
 	#define showAnyGlErrorAndExitMacro() Image::showAnyGlErrorAndExit(__FILE__, __LINE__)
-	
+
 	#if defined (ARK2D_WINDOWS_PHONE_8)
 	//	typedef jmp_buf* (*png_set_longjmp_fnPtr)(png_structp png_ptr, png_longjmp_ptr longjmp_fn, size_t jmp_buf_size);
 	//	png_set_longjmp_fnPtr mypng_set_longjmp_fnPtr = 0;
-		#include "vendor/lpng1251-wp8/png.h" 
+		#include "vendor/lpng1251-wp8/png.h"
 	#else
 		#include "vendor/lpng151/png.h"
 	#endif
 
-	#include "vendor/rapidxml/rapidxml.hpp"	
-	using namespace rapidxml; 
+	#include "vendor/rapidxml/rapidxml.hpp"
+	using namespace rapidxml;
 
 	#include "vendor/libJSON/JSON_Defs.h"
 	#include "vendor/libJSON/JSONNode.h"
@@ -618,7 +618,7 @@
 	#include "vendor/libJSON/Debug.h"
 
 	//#ifndef STDSTRDEF
-	//	typedef std::string stdstring; 
+	//	typedef std::string stdstring;
 	//	#define STDSTRDEF
 	//#endif
 

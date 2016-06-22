@@ -15,7 +15,7 @@
 #ifdef ARK2D_WINDOWS
 	#include <windows.h>
 	#include <mmsystem.h>
-	#include <winbase.h> 
+	#include <winbase.h>
 #endif
 
 namespace ARK {
@@ -29,7 +29,7 @@ namespace ARK {
 			m_TimeDelta( 0.0f ),
 			m_FrameRate( 0 ),
 			m_FrameSecondsElapsed( 0.0f ),
-			m_deltaModifier(1.0f) 
+			m_deltaModifier(1.0f)
 		{
 			/*#ifdef ARK2D_WINDOWS_PHONE_8
 				if (!QueryPerformanceFrequency(&m_wp8_frequency)) {
@@ -40,7 +40,7 @@ namespace ARK {
 		}
 
 
-		GameTimer::~GameTimer() { 
+		GameTimer::~GameTimer() {
 
 		}
 
@@ -55,7 +55,7 @@ namespace ARK {
 
 				UInt64 counter = 0;
 				Microseconds((UnsignedWide*)&counter);
-				return (counter - start) / 1000000.0f; 
+				return (counter - start) / 1000000.0f;
 			#endif
 		*/
 
@@ -67,18 +67,18 @@ namespace ARK {
 		}
 
 		unsigned long GameTimer::unixTimestamp() const {
-			#if defined(__GNUC__) && !defined(ARK2D_UBUNTU_LINUX)
+			#if defined(__GNUC__) && !defined(ARK2D_UBUNTU_LINUX) && !defined(ARK2D_ANDROID)
 				return (unsigned long) std::time(NULL);
 			#else
 				return (unsigned long) time(NULL);
 			#endif
 		}
- 
+
 		long GameTimer::millis() {
 			#if defined(ARK2D_IPHONE)
-				timeval now; 
-				gettimeofday(&now, NULL); 
-				return (now.tv_sec + now.tv_usec); 
+				timeval now;
+				gettimeofday(&now, NULL);
+				return (now.tv_sec + now.tv_usec);
 			#elif defined(ARK2D_ANDROID)
 				//return clock();
 				struct timespec res;
@@ -86,11 +86,11 @@ namespace ARK {
     			return (res.tv_sec * 1000000000 + res.tv_nsec) / 1000;
 			#elif defined(ARK2D_UBUNTU_LINUX)
 				//return clock();
- 
-				//struct timeval now; 
-				//gettimeofday(&now, NULL); 
+
+				//struct timeval now;
+				//gettimeofday(&now, NULL);
 				//return (now.tv_sec + now.tv_usec);
- 
+
 				//struct timespec res;
     			//clock_gettime(CLOCK_REALTIME, &res);
     			//return 1000.0 * res.tv_sec + (double) res.tv_nsec / 1e6;
@@ -99,7 +99,7 @@ namespace ARK {
     			struct timespec res;
     			clock_gettime(CLOCK_REALTIME, &res); //  CLOCK_REALTIME / CLOCK_PROCESS_CPUTIME_ID
     			return (res.tv_sec * 1000000000 + res.tv_nsec) / 1000;
- 
+
 			#elif defined(ARK2D_FLASCC)
 				return clock();
 			#elif defined(ARK2D_EMSCRIPTEN_JS)
@@ -114,15 +114,15 @@ namespace ARK {
 				}
 				m_wp8_currentTime.
 				return m_wp8_currentTime.QuadPart;*/
-				
+
 				return clock();
 			#elif defined(ARK2D_MACINTOSH)
-				timeval now; 
+				timeval now;
 				gettimeofday(&now, NULL);
 				return (now.tv_sec + now.tv_usec);
 
 
-			#endif 
+			#endif
 			return 0;
 		}
 		float GameTimer::millisf() {
@@ -130,12 +130,12 @@ namespace ARK {
 			// TODO: platform-dependent code...
 			return 0.0f; // millis() / static_cast<float>(CLOCKS_PER_SEC);
 		}
- 
+
 		void GameTimer::sleep(int millis) {
 			#if defined(ARK2D_WINDOWS)
 				Sleep(millis);
 			#elif defined(ARK2D_MACINTOSH)
-				usleep(millis * 1000); 
+				usleep(millis * 1000);
 			#elif defined(ARK2D_FLASCC)
 				usleep(millis * 1000);
 			#elif defined(ARK2D_UBUNTU_LINUX)
@@ -163,11 +163,11 @@ namespace ARK {
 			}
 		}
 
-		float GameTimer::getLastFrameTime() { 
-			return m_LastTicks / static_cast<float>(CLOCKS_PER_SEC); 
+		float GameTimer::getLastFrameTime() {
+			return m_LastTicks / static_cast<float>(CLOCKS_PER_SEC);
 		}
-		float GameTimer::getCurrentFrameTime() {  
-			return m_CurrentTicks / static_cast<float>(CLOCKS_PER_SEC); 
+		float GameTimer::getCurrentFrameTime() {
+			return m_CurrentTicks / static_cast<float>(CLOCKS_PER_SEC);
 		}
 
 		/*!
@@ -180,7 +180,7 @@ namespace ARK {
 			//#endif
 
 			// Get the number of ticks passed since program launch.
-			
+
 
 			// Calculate elapsed time in seconds (usually ends up being a fraction of a second).
 			#ifdef ARK2D_WINDOWS_PHONE_8
@@ -192,7 +192,7 @@ namespace ARK {
 			#else
 				m_CurrentTicks = millis(); //clock();
 				float secondsElapsed = (m_CurrentTicks - m_LastTicks) / static_cast<float>(CLOCKS_PER_SEC);
-			#endif 
+			#endif
 
 			m_LastTicks = m_CurrentTicks;
 
@@ -226,7 +226,7 @@ namespace ARK {
 			}
 
 			//if ( m_FrameTimes.size() > 0 )
-				
+
 
 			if (m_TimeDelta < 0.0f) {
 				m_TimeDelta = 0.0f;

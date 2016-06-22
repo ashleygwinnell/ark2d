@@ -201,6 +201,8 @@ namespace ARK {
 
 		void switchRendererState(unsigned int current, unsigned int to) {
 
+			showAnyGlErrorAndExitMacro();
+
 			if (current == (unsigned int) RendererState::TEXTURE) {
 				RendererState::s_textureId = 0;
 				RendererStats::s_textureSwaps++;
