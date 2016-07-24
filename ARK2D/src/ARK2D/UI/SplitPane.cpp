@@ -84,25 +84,25 @@ namespace ARK {
             	? m_secondComponent->getBounds()
             	: SceneNode::s_dummyCube;
 			if (m_splitType == SPLIT_HORIZONTAL) {
-				if (m_firstComponent != NULL) { 
+				if (m_firstComponent != NULL) {
 					m_firstComponent->transform.position.set(0.0f, 0.0f, 0.0f);
    					m_firstComponent->transform.scale.set(1.0f, 1.0f, 1.0f);
                 	m_firstComponent->setBounds((bounds->getWidth()*m_splitLocation), bounds->getHeight(), 0.0f);
                 }
-                if (m_secondComponent != NULL) { 
+                if (m_secondComponent != NULL) {
 					m_secondComponent->transform.position.set(bounds->getWidth()*m_splitLocation, 0.0f, 0.0f);
                 	m_secondComponent->transform.scale.set(1.0f, 1.0f, 1.0f);
                 	m_secondComponent->setBounds(bounds->getWidth()*(1.0f-m_splitLocation), bounds->getHeight(), 0.0f);
                 }
 			} else if (m_splitType == SPLIT_VERTICAL)
             {
-				if (m_firstComponent != NULL) { 
+				if (m_firstComponent != NULL) {
 					m_firstComponent->transform.position.set(0.0f, 0.0f, 0.0f);
                 	m_firstComponent->transform.scale.set(1.0f, 1.0f, 1.0f);
 					m_firstComponent->setBounds(bounds->getWidth(), bounds->getHeight()*m_splitLocation, 0.0f);
 				}
 
-				if (m_secondComponent != NULL) { 
+				if (m_secondComponent != NULL) {
 					m_secondComponent->transform.position.set(0.0f, bounds->getHeight()*m_splitLocation, 0.0f);
                 	m_secondComponent->transform.scale.set(1.0f, 1.0f, 1.0f);
 					m_secondComponent->setBounds(bounds->getWidth(), bounds->getHeight()*(1.0f-m_splitLocation), 0.0f);
@@ -154,7 +154,7 @@ namespace ARK {
 			} else {
 				m_state = STATE_OFF;
 			}
-			
+
 			bool consumed = false;
 			for(unsigned int i = 0; i < children.size(); i++) {
                 if (children.at(i)->mouseMoved(x, y, oldx, oldy)) { consumed = true; }
@@ -164,9 +164,19 @@ namespace ARK {
 			return m_state == STATE_OVER;
 		}
 
+		void SplitPane::onResize() {
+
+			SceneNode* p = m_parent;
+			if (p != NULL) {
+				setBounds(p->getBounds()->getWidth(), p->getBounds()->getHeight(), p->getBounds()->getDepth());
+			}
+
+			SceneNode::onResize();
+		}
+
 		SplitPane::~SplitPane() {
 
 		}
-	
+
 	}
 }

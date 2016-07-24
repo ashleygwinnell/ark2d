@@ -21,21 +21,21 @@
 
 
 
-namespace ARK { 
+namespace ARK {
 	namespace Graphics {
 
-		
 
 
-		class ARK2D_API RendererStats 
+
+		class ARK2D_API RendererStats
 		{
-			public: 
+			public:
 				static unsigned int s_glCalls;
 				//static unsigned int s_glDrawCalls;
 				static unsigned int s_lines;
 				static unsigned int s_tris;
-				static unsigned int s_textureSwaps;	
-				static unsigned int s_shaderSwaps;	
+				static unsigned int s_textureSwaps;
+				static unsigned int s_shaderSwaps;
 				static unsigned int s_textureAllocatedBytes;
 
 				static unsigned int s_previousframe_glCalls;
@@ -76,17 +76,17 @@ namespace ARK {
 				//static void startMultitexture(int textureId0, int textureId1);
 
                 static void internalBindTexture(int textureId);
-				
+
 		};
 
-		
+
 
 		class ARK2D_API VBO {
 			public:
 				unsigned int m_id;
 				unsigned int m_msize;
 				#ifdef ARK2D_RENDERER_DIRECTX
-					ID3D11Buffer* m_buffer; 
+					ID3D11Buffer* m_buffer;
 					D3D11_BUFFER_DESC m_bufferDesc;
 					D3D11_SUBRESOURCE_DATA m_bufferData;
 					HRESULT m_result;
@@ -95,7 +95,7 @@ namespace ARK {
 
 				VBO();
 				unsigned int getId();
-				void init(); 
+				void init();
 				virtual void setSize(unsigned int szbytes);
 				virtual void setData(void* data, unsigned int size);
 				virtual void bind();
@@ -133,14 +133,14 @@ namespace ARK {
 				VAO();
 				signed int getId();
 				void init();
-				bool bind(); 
+				bool bind();
 		};
 
-		
+
 
 		/*!
 		* \brief Batched rendering, automatically.
-		* 
+		*
 		* @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		*/
 		//class ARK2D_API RendererBatchItem_StencilStart {
@@ -167,7 +167,7 @@ namespace ARK {
 				static const unsigned int TYPE_STENCIL_ENABLE = 2;
 				static const unsigned int TYPE_STENCIL_START = 3;
 				static const unsigned int TYPE_STENCIL_INVERSE = 4;
-				static const unsigned int TYPE_STENCIL_STOP = 5; 
+				static const unsigned int TYPE_STENCIL_STOP = 5;
 				static const unsigned int TYPE_STENCIL_DISABLE = 6;
 				static const unsigned int TYPE_MATRIX_MODE = 7;
 				static const unsigned int TYPE_MATRIX_IDENTITY = 8;
@@ -180,14 +180,17 @@ namespace ARK {
 				static const unsigned int TYPE_MULTISAMPLING_DISABLE = 15;
 				static const unsigned int TYPE_BACKFACECULLING_ENABLE = 16;
 				static const unsigned int TYPE_BACKFACECULLING_DISABLE = 17;
-				static const unsigned int TYPE_FBO_BIND2D = 18;
-				static const unsigned int TYPE_FBO_UNBIND2D = 19;
-				static const unsigned int TYPE_FBO_BIND = 20;
-				static const unsigned int TYPE_FBO_UNBIND = 21;
-				static const unsigned int TYPE_VIEWPORT = 22;
-				static const unsigned int TYPE_ORTHO2D = 23;
-				static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 24;
-				static const unsigned int TYPE_CUSTOM_FUNCTION = 25;
+				static const unsigned int TYPE_SCISSORTEST_ENABLE = 18;
+				static const unsigned int TYPE_SCISSORTEST_DISABLE = 19;
+				static const unsigned int TYPE_SCISSOR = 20;
+				static const unsigned int TYPE_FBO_BIND2D = 21;
+				static const unsigned int TYPE_FBO_UNBIND2D = 22;
+				static const unsigned int TYPE_FBO_BIND = 23;
+				static const unsigned int TYPE_FBO_UNBIND = 24;
+				static const unsigned int TYPE_VIEWPORT = 25;
+				static const unsigned int TYPE_ORTHO2D = 26;
+				static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 27;
+				static const unsigned int TYPE_CUSTOM_FUNCTION = 28;
                 static map<unsigned int, string>* s_types;
 
 			public:
@@ -213,14 +216,14 @@ namespace ARK {
 			private:
 				void renderDX();
 		};
-		
+
 		class ARK2D_API RendererBatch {
 			public:
 				vector<RendererBatchItem> items;
 				bool enabled;
 
 				// We don't need to do matrix multiplication if we don't change the matrices.
-				unsigned int startedAtMatrixIndex; 
+				unsigned int startedAtMatrixIndex;
 
 			public:
 				RendererBatch();
@@ -252,10 +255,10 @@ namespace ARK {
 					unsigned char c2r, unsigned char c2g, unsigned char c2b, unsigned char c2a,
 					unsigned char c3r, unsigned char c3g, unsigned char c3b, unsigned char c3a,
 					unsigned char c4r, unsigned char c4g, unsigned char c4b, unsigned char c4a);
-				
+
 				void addTexturedTri(unsigned int texId, float* verts, float* normals, float* texcoords, unsigned char* colors);
 				void addTexturedTri(
-					unsigned int texId, 
+					unsigned int texId,
 					float x1, float y1, float z1,
 					float x2, float y2, float z2,
 					float x3, float y3, float z3,
@@ -269,7 +272,7 @@ namespace ARK {
 
 				void addTexturedQuad(unsigned int texId, float* verts, float* normals, float* texcoords, unsigned char* colors);
 				void addTexturedQuad(
-					unsigned int texId, 
+					unsigned int texId,
 					float x1, float y1, float z1,
 					float x2, float y2, float z2,
 					float x3, float y3, float z3,
@@ -285,7 +288,7 @@ namespace ARK {
 					unsigned char c4r, unsigned char c4g, unsigned char c4b, unsigned char c4a);
 
 				string toString();
-				void render(); 
+				void render();
 				~RendererBatch();
 		};
 
@@ -302,7 +305,7 @@ namespace ARK {
 		{
 			public:
 
-			// GL bits. :| 
+			// GL bits. :|
 			#if ( defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH) || defined(ARK2D_UBUNTU_LINUX) || defined(ARK2D_EMSCRIPTEN_JS) || (defined(ARK2D_WINDOWS) && defined(ARK2D_RENDERER_OPENGL)))
 
 				#define GL_FRAMEBUFFER_ARK GL_FRAMEBUFFER
@@ -310,26 +313,26 @@ namespace ARK {
 				#define GL_FRAMEBUFFER_COMPLETE_ARK GL_FRAMEBUFFER_COMPLETE
 
 				#define glGenFramebuffersARK glGenFramebuffers
-				#define glBindFramebufferARK glBindFramebuffer 
+				#define glBindFramebufferARK glBindFramebuffer
 				#define glFramebufferTexture2DARK glFramebufferTexture2D
 				#define glCheckFramebufferStatusARK glCheckFramebufferStatus
 
-			
+
 				#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE) || defined(ARK2D_EMSCRIPTEN_JS))
 					typedef void (GL_APIENTRYP PFNGLGENVERTEXARRAYSOESPROC) (GLsizei n, GLuint *arrays);
 					typedef void (GL_APIENTRYP PFNGLBINDVERTEXARRAYOESPROC) (GLuint n);
-					
+
 					PFNGLGENVERTEXARRAYSOESPROC glGenVertexArraysOES;
 					PFNGLBINDVERTEXARRAYOESPROC glBindVertexArrayOES;
 
-					
+
 					//void glGenVertexArrays(GLsizei n, GLuint* arrays);
 					//void glBindVertexArray(GLuint n);
 
 					// vaos
 					#define glGenVertexArraysARK ARK2D::getRenderer()->glGenVertexArraysOES
 					#define glBindVertexArrayARK ARK2D::getRenderer()->glBindVertexArrayOES
-				
+
 				#elif defined(ARK2D_UBUNTU_LINUX)
 
 					#define glGenVertexArraysARK gl3wGenVertexArrays
@@ -368,7 +371,7 @@ namespace ARK {
 
 			friend class ARK::Core::GameContainer;
 			friend class ARK::Core::GameContainerPlatform;
-			
+
 			private:
 				static const int DEFAULT_SEGMENTS = 50;
 
@@ -405,13 +408,13 @@ namespace ARK {
 				static Renderer_DX_ModelViewProjectionMatrixBuffer* s_d3d_matrixBufferData;
 			#endif
 
- 	
+
  			// Shader bits.
 			public:
 				static Shader* s_shaderCurrent;
 				static Shader* getShader();
-				
-				
+
+
 				static Shader* s_shaderBasicGeometry;
 				static Shader* s_shaderBasicTexture;
 				static Shader* s_shaderBasicGeometryDefault;
@@ -453,10 +456,10 @@ namespace ARK {
 				static const signed int ALIGN_RIGHT = 1;
 				static const signed int ALIGN_BOTTOM = 1;
 
-				
 
 
-			
+
+
 
 				Renderer();
 				void preinit();
@@ -464,9 +467,9 @@ namespace ARK {
 
 				// this call needs freeing afterwards.
 				void* readPixels(int x, int y, int w, int h);
-				void flush();  
-				void finish(); 
- 
+				void flush();
+				void finish();
+
 				void setFont(ARK::Font::Font* f);
 				void setDefaultFont(ARK::Font::Font* f);
 				ARK::Font::Font* getFont() const ;
@@ -520,10 +523,10 @@ namespace ARK {
 				void disableStencil() const;
 
 				void enableMultisampling() const;
-				void disableMultisampling() const; 
+				void disableMultisampling() const;
 
 				void enableBackfaceCulling() const;
-				void disableBackfaceCulling() const; 
+				void disableBackfaceCulling() const;
 
 				void pushMatrix(bool setasroot = false) const;
 				void popMatrix() const;
@@ -543,7 +546,7 @@ namespace ARK {
 				void drawRect(float x, float y, int width, int height) const;
 				void drawRect(float x, float y, float z, int width, int height) const;
 				void drawRects(float rects[], int colors[] = NULL) const;
-				
+
 				void fillRect(float x, float y, int width, int height) const;
 				void fillRect(float x, float y, float z, int width, int height) const;
 				void fillRoundedRect(float x, float y, int width, int height, int radius) const;

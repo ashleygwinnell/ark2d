@@ -5,12 +5,12 @@
  *      Author: Ashley
  */
 #include "Game.h"
-#include "GameContainer.h" 
+#include "GameContainer.h"
 #include "../ARK2D.h"
 #include "../Tween/Timeline.h"
 
 #ifdef ARK2D_ANDROID
-#include "Platform/GameContainerAndroid.h" 
+#include "Platform/GameContainerAndroid.h"
 #endif
 
 namespace ARK {
@@ -19,13 +19,13 @@ namespace ARK {
 		Game::Game(string title):
 			SceneNode("game"),
 			m_container(NULL),
-			m_title(title), 
+			m_title(title),
 			m_timeline(NULL),
 			scene(NULL),
 			bounds(0,0,0)
 		{
 			m_timeline = new Timeline();
-			
+
 		}
 
 		string Game::getTitle() {
@@ -51,14 +51,19 @@ namespace ARK {
 			m_timeline->update(timer->getDelta());
 		}
 
-		void Game::preRender(GameContainer* container, Renderer* r) { 
+		void Game::preRender(GameContainer* container, Renderer* r) {
 			preRender();
 		}
-		
-		void Game::postRender(GameContainer* container, Renderer* r) { 
+
+		void Game::postRender(GameContainer* container, Renderer* r) {
 			postRender();
 		}
-		
+
+		void Game::onResize() {
+			GameContainer* c = ARK2D::getContainer();
+			resize(c, c->getDynamicWidth(), c->getDynamicHeight());
+		}
+
 		void Game::update() {
 			update(ARK2D::getContainer(), ARK2D::getTimer());
 		}
@@ -73,22 +78,23 @@ namespace ARK {
 		void Game::preRender() {
 			if (!visible) { return; }
 			SceneNode::preRender();
-		} 
+		}
 		void Game::postRender() {
 			if (!visible) { return; }
 			SceneNode::postRender();
 		}
-		
+
 		void Game::resize(GameContainer* container, int width, int height) {
-			
+			// renderBounds();
+			//ARK2D::getLog()->resize
 		}
 
-		void Game::pause() 
+		void Game::pause()
 		{
 
 		}
 
-		void Game::resume() 
+		void Game::resume()
 		{
 
 		}
@@ -106,7 +112,7 @@ namespace ARK {
 			return false;
 		}
 
-		// gamepad listener 
+		// gamepad listener
 		void Game::gamepadConnected(ARK::Controls::Gamepad* gamepad) { }
 		void Game::gamepadDisconnected(ARK::Controls::Gamepad* gamepad) { }
 		void Game::buttonPressed(ARK::Controls::Gamepad* gamepad, unsigned int button) { }

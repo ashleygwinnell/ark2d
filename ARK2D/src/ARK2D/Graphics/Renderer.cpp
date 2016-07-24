@@ -405,6 +405,9 @@ namespace ARK {
  				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_MULTISAMPLING_DISABLE, "TYPE_MULTISAMPLING_DISABLE" ));
  				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_BACKFACECULLING_ENABLE, "TYPE_BACKFACECULLING_ENABLE" ));
  				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_BACKFACECULLING_DISABLE, "TYPE_BACKFACECULLING_DISABLE" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_SCISSORTEST_ENABLE, "TYPE_SCISSORTEST_ENABLE" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_SCISSORTEST_DISABLE, "TYPE_SCISSORTEST_DISABLE" ));
+ 				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_SCISSOR, "TYPE_SCISSOR" ));
  				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_FBO_BIND2D, "TYPE_FBO_BIND2D" ));
  				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_FBO_UNBIND2D, "TYPE_FBO_UNBIND2D" ));
  				s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_FBO_BIND, "TYPE_FBO_BIND" ));
@@ -637,6 +640,12 @@ namespace ARK {
 					r->enableBackfaceCulling();
 				} else if (m_type == TYPE_BACKFACECULLING_DISABLE) {
 					r->disableBackfaceCulling();
+				} else if (m_type == TYPE_SCISSORTEST_ENABLE) {
+					r->setScissorTestEnabled(true);
+				} else if (m_type == TYPE_SCISSORTEST_DISABLE) {
+					r->setScissorTestEnabled(false);
+				} else if (m_type == TYPE_SCISSOR) {
+					r->scissor(m_float1, m_float2, m_float3, m_float4);
 				} else if (m_type == TYPE_FBO_BIND) {
 					FBO* fbo = (FBO*) m_objectPointer;
 					fbo->bind();
@@ -2212,6 +2221,13 @@ namespace ARK {
 
 		// SCISSORING
 		void Renderer::setScissorTestEnabled(bool b) const {
+			if (Renderer::isBatching()) {
+				RendererBatchItem stateChange;
+				stateChange.m_type = (b) ? RendererBatchItem::TYPE_SCISSORTEST_ENABLE : RendererBatchItem::TYPE_SCISSORTEST_DISABLE;
+				s_batch->items.push_back(stateChange);
+				return;
+			}
+
 			#ifdef ARK2D_RENDERER_OPENGL
 				if (b) {
 					glEnable(GL_SCISSOR_TEST);
@@ -2237,6 +2253,17 @@ namespace ARK {
 			RendererStats::s_glCalls++;
 		}
 		void Renderer::scissor(int x, int y, int w, int h) const {
+			if (Renderer::isBatching()) {
+				RendererBatchItem stateChange;
+				stateChange.m_type = RendererBatchItem::TYPE_SCISSOR;
+				stateChange.m_float1 = x;
+				stateChange.m_float2 = y;
+				stateChange.m_float3 = w;
+				stateChange.m_float4 = h;
+				s_batch->items.push_back(stateChange);
+				return;
+			}
+
 			#ifdef ARK2D_RENDERER_OPENGL
 				//glScissor(x, y - (signed int) ARK2D::getContainer()->getHeight(), w, h * -1);
 				//glScissor(x, ARK2D::getContainer()->getHeight() - (y + h), w, h);

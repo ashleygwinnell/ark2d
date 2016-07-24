@@ -13,7 +13,7 @@
 namespace ARK {
 	namespace State {
 
-		GameState::GameState(): 
+		GameState::GameState():
 			SceneNode("GameState",TYPE_NODE)
 		{
 			visible = false;
@@ -37,13 +37,14 @@ namespace ARK {
 			ARK2D::getLog()->v("GameState::leave");
 		}
 
-		void GameState::pause() { 
+		void GameState::pause() {
 			ARK2D::getLog()->v("GameState::pause");
 		}
-		void GameState::resume() { 
+		void GameState::resume() {
 			ARK2D::getLog()->v("GameState::resume");
 		}
 
+		// SceneNode render, not the real one.
 		void GameState::render() {
 			if (!visible) { return; }
             StateBasedGame* sbg = dynamic_cast<StateBasedGame*>(ARK2D::getGame());

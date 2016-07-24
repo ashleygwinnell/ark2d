@@ -45,6 +45,7 @@ namespace ARK {
 				virtual void render();
 				virtual void preRender();
 				virtual void postRender();
+				virtual void onResize();
 
 				virtual void resize(GameContainer* container, int width, int height);
 				virtual ARK::Geometry::Cube* getBounds();
@@ -68,8 +69,6 @@ namespace ARK {
 
 				// Orientation Listener
 				virtual void orientationChanged(int orientation);
-
-
 
 				virtual ~Game();
 

@@ -104,6 +104,8 @@ namespace ARK {
 				virtual void onRemoved(SceneNode* removingFrom); // called on the child when it is removed.
 				virtual void onChildRemoved(SceneNode* removingChild); // called on the parent when it is removed.
 
+				virtual void onResize();
+
 				Image* asImage();
 				virtual ~SceneNode();
 
@@ -145,6 +147,8 @@ namespace ARK {
 				virtual bool keyPressed(unsigned int key);
 				virtual bool keyReleased(unsigned int key);
 				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
+
+				virtual void onResize();
 		};
 
 		class ARK2D_API LetterboxNode : public SceneNode {
