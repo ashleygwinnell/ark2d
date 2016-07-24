@@ -122,6 +122,7 @@ namespace ARK {
 				virtual void drawString(const string& Str, float drawx, float drawy);
 				virtual void drawString(const string& Str, float drawx, float drawy, float drawz);
 				void drawString(const std::string str, float x, float y, signed int alignX, signed int alignY, float rotation=0.0f, float scale=1.0f);
+				void drawStringFitBox(const std::string str, float x, float y, float w, float h, signed int alignX, signed int alignY, float rotation=0.0f, float defaultScale=1.0f, float minScale=1.0f, float maxScale=1.0f);
 				unsigned int getStringWidth(const string& Str) const;
 				unsigned int getStringHeight(const string& Str) const;
 				float getCharXAdvance(unsigned char ch);

@@ -360,6 +360,47 @@ namespace ARK {
 			r->setFont(this);
 			r->drawString(str, x, y, alignX, alignY, rotation, scale);
 		}
+		void BMFont::drawStringFitBox(const std::string str, float x, float y, float w, float h, signed int alignX, signed int alignY, float rotation, float defaultScale, float minScale, float maxScale) {
+			Renderer* r = ARK2D::getRenderer();
+			r->setFont( this );
+
+			float thisScale = defaultScale;
+			float thisWidth = getStringWidth(str);
+			if ( thisWidth * thisScale > w ) {
+				float fittingScale = w / thisWidth * thisScale;
+				if ( fittingScale < minScale ) {
+					thisScale = minScale;
+				}
+				else if ( fittingScale > maxScale ) {
+					thisScale = maxScale;
+				}
+				else {
+					thisScale = fittingScale;
+				}
+			}
+			else if ( thisWidth * defaultScale < w ) {
+				float fittingScale = w / thisWidth * thisScale;
+				if ( fittingScale > maxScale ) {
+					thisScale = maxScale;
+				}
+				else if ( fittingScale < minScale ) {
+					thisScale = minScale;
+				}
+				else {
+					thisScale = fittingScale;
+				}
+			}
+
+			if ( alignX == Renderer::ALIGN_CENTER ) {
+				x = x + (w*0.5f);
+			}
+			else if ( alignX == Renderer::ALIGN_RIGHT ) {
+				x = x + w;
+			}
+
+
+			r->drawString( str, x, y, alignX, alignY, rotation, thisScale );
+		}
 
         void BMFont::drawString(const string& Str, float drawx, float drawy) {
             drawString(Str, drawx, drawy, 0);

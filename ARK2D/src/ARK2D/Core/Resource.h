@@ -9,7 +9,7 @@
 #define RESOURCE_H_
 
 
- 
+
 #include "../Windres.h"
 #include "../Namespaces.h"
 #include "../Includes.h"
@@ -24,7 +24,7 @@ namespace ARK {
 	namespace Core {
 
 
- 
+
 		class ARK2D_API RawDataReturns {
 			friend class ARK::Tiled::TiledMap;
 			friend class ARK::Tiled::TiledMapParser_TinyXml;
@@ -37,7 +37,7 @@ namespace ARK {
 				~RawDataReturns();
 		};
 
-		/*! 
+		/*!
 		 * \brief Load assets in to game. Images, Sounds, TiledMaps, LocalHighscores, Text files, Fonts, etc.
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
@@ -52,15 +52,15 @@ namespace ARK {
 				static Resource* get(string ref);
 				static bool exists(string ref);
 				static string latestName();
-				static void setLatestName(string s); 
+				static void setLatestName(string s);
 				static void copy(string ref, string ref2);
 #if defined(ARK2D_ANDROID) || defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_WINDOWS)
 				public:
 			#else
 				protected:
 			#endif
-			
-				static Resource* get(string ref, bool appendPath); 
+
+				static Resource* get(string ref, bool appendPath);
 				static bool exists(string ref, bool appendPath);
 				static RawDataReturns* getRawData(string ref); // remember to free() this data.
 				static unsigned int getResourceTypeByExtension(string extension);
@@ -77,7 +77,7 @@ namespace ARK {
 				#endif
 
 
-				Resource(); 
+				Resource();
 				Image* asImage();
 				Sound* asSound();
 				ARK::Font::Font* asFont();
