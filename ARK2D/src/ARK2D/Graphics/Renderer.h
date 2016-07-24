@@ -583,8 +583,9 @@ namespace ARK {
 				void drawCircle(float x, float y, int radius, int points);
 				void drawCircle(float x, float y, float z, int radius, int points);
 
-				void fillCircle(float x, float y, int radius, int points) const;
-				void fillCircle(float x, float y, float z, int radius, int points) const;
+				void fillCircle(float x, float y, float radius) const;
+                void fillCircle(float x, float y, float radius, int points) const;
+				void fillCircle(float x, float y, float z, float radius, int points) const;
 
 				void fillEllipse(float x, float y, float rx, float ry) const;
 				void fillEllipse(float x, float y, float z, float rx, float ry) const;

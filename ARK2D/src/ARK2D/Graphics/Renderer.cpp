@@ -4561,10 +4561,13 @@ namespace ARK {
 			showAnyGlErrorAndExitMacro();
 		}
 
-        void Renderer::fillCircle(float x, float y, int radius, int points) const {
+        void Renderer::fillCircle(float x, float y, float radius) const {
+            fillCircle(x, y, 0, radius, DEFAULT_SEGMENTS);
+        }
+        void Renderer::fillCircle(float x, float y, float radius, int points) const {
             fillCircle(x, y, 0, radius, points);
         }
-		void Renderer::fillCircle(float x, float y, float z, int radius, int points) const {
+		void Renderer::fillCircle(float x, float y, float z, float radius, int points) const {
 
 			if (isBatching()) {
 
