@@ -398,6 +398,13 @@ namespace ARK {
 				x = x + w;
 			}
 
+			if ( alignY == Renderer::ALIGN_CENTER ) {
+				y = y + (h*0.5f);
+			}
+			else if ( alignY == Renderer::ALIGN_BOTTOM ) {
+				y = y + h;
+			}
+
 
 			r->drawString( str, x, y, alignX, alignY, rotation, thisScale );
 		}
