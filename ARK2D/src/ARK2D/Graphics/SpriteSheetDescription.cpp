@@ -11,6 +11,7 @@
 #include "../Includes.h"
 #include "../UI/ErrorDialog.h" 
 #include "../Util/Log.h" 
+#include "../Common/Libraries/libjson.h"
 
 namespace ARK {
 	namespace Graphics {

@@ -722,14 +722,14 @@ namespace ARK {
 
 		}
 
-		inline void multiplymatrixtest(float& x, float& y, float& z, Matrix44<float>* m) {
+		inline void multiplymatrixtest(float& x, float& y, float& z, Matrix44* m) {
 			/*Vector4<float> p(x, y, z, 1);
             p *= *m;
 			x = p[0] / p[3];
 			y = p[1] / p[3];
 			z = p[2] / p[3];*/
 			float w = 1.0f;
-			Vector4<float>::multMatrix44(x, y, z, w, *m);
+			Vector4::multMatrix44(x, y, z, w, *m);
 		}
 
 		RendererBatch::RendererBatch():
@@ -1258,7 +1258,7 @@ namespace ARK {
 		MatrixStack* Renderer::s_matrixProjection = NULL;
 		MatrixStack* Renderer::s_matrixView = NULL;
 		MatrixStack* Renderer::s_matrixModel = NULL;
-		Matrix33<float>* Renderer::s_matrixNormal = NULL;
+		Matrix33* Renderer::s_matrixNormal = NULL;
 		MatrixStack* Renderer::s_matrix = NULL;
 		#if defined(ARK2D_RENDERER_DIRECTX)
 			ID3D11Buffer* Renderer::s_d3d_matrixBuffer = NULL;
@@ -1276,8 +1276,8 @@ namespace ARK {
 			ARK2D::getLog()->e(StringUtil::append("Trying to retrieve invalid matrix", type));
 			return NULL;
 		}
-		void Renderer::multiplyMatrix(Matrix44<float>* by) {
-			Matrix44<float>& subject = s_matrix->m_stack[s_matrix->m_stackIndex];
+		void Renderer::multiplyMatrix(Matrix44* by) {
+			Matrix44& subject = s_matrix->m_stack[s_matrix->m_stackIndex];
 			subject *= *by;
 		}
 		void Renderer::matrixMode(unsigned int mode) {
@@ -1317,7 +1317,7 @@ namespace ARK {
 			}
 			showAnyGlErrorAndExitMacro();
 		}
-		Matrix33<float>* Renderer::getNormalMatrix() {
+		Matrix33* Renderer::getNormalMatrix() {
 			s_matrixNormal->set(*s_matrixModel->current());
 			s_matrixNormal->inverse();
 			s_matrixNormal->transpose();
@@ -1383,14 +1383,14 @@ namespace ARK {
 			showAnyGlErrorAndExitMacro();
 		}
 
-		void Renderer::loadMatrix(Matrix44<float>* m) const {
+		void Renderer::loadMatrix(Matrix44* m) const {
 			#ifndef NO_FIXED_FUNCTION_PIPELINE
 				glLoadMatrixf((const GLfloat*) m->pointer());//->m_x->m_x);
 				showAnyGlErrorAndExitMacro();
 				RendererStats::s_glCalls++;
 			#endif
 		}
-		void Renderer::loadMatrix(const Matrix44<float>& m) const {
+		void Renderer::loadMatrix(const Matrix44& m) const {
 			#ifndef NO_FIXED_FUNCTION_PIPELINE
 				glLoadMatrixf((const GLfloat*) m.pointer());//&m[0][0]);
 				showAnyGlErrorAndExitMacro();
@@ -1713,7 +1713,7 @@ namespace ARK {
 			s_matrixProjection = &Camera::current->projection; // new MatrixStack(MatrixStack::TYPE_PROJECTION);
 			s_matrixModel = &Camera::current->model; // new MatrixStack(MatrixStack::TYPE_MODEL);
 			s_matrixView = &Camera::current->view; // new MatrixStack(MatrixStack::TYPE_VIEW);
-			s_matrixNormal = new Matrix33<float>();
+			s_matrixNormal = new Matrix33();
 			s_matrix = s_matrixModel;
 		}
 		void Renderer::init() {

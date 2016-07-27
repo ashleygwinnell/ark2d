@@ -5,6 +5,7 @@
 #include "../Geometry/Quaternion.h"
 #include "../Graphics/Image.h"
 #include "../Util/Log.h"
+#include "../Util/Vector4.h"
 
 namespace ARK {
 	namespace SceneGraph {
@@ -207,7 +208,7 @@ namespace ARK {
 			float z = transform.position.getZ();
 			float w = 1.0f;
 			if (r->getMatrix()->height() >= 1) {
-				Vector4<float>::multMatrix44(x, y, z, w, *r->getMatrix()->at(r->getMatrix()->height()-2));
+				Vector4::multMatrix44(x, y, z, w, *r->getMatrix()->at(r->getMatrix()->height()-2));
 			}
 			return Vector3<float>(x, y, z);
 		}

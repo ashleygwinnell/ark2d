@@ -12,7 +12,7 @@
 #include "../Namespaces.h"
 #include <string>
 #include <vector>
-#include "../Util/Vector4.h"
+
 #include "../Geometry/Vector3.h"
 #include "../Geometry/Transform.h"
 #include "../Controls/KeyListener.h"

@@ -10,7 +10,7 @@
 
 #include "../ARK2D.h"
 #ifndef ARK2D_ANDROID
-	#include <vector> 
+	#include <vector>
 	#include <string>
 	#include <fstream>
 	#include <iostream>
@@ -19,13 +19,13 @@
 	#include <algorithm>
 #endif
 
-#include "../UI/ErrorDialog.h"
-#include "../Core/ToString.h"
+
 #include "../Namespaces.h"
-#include "../Includes.h"
+//#include "../Includes.h"
 #include "../Graphics/SpriteSheetDescription.h"
 #include "Cast.h"
 
+#include <string>
 using namespace std;
 
 namespace ARK {
@@ -44,7 +44,7 @@ namespace ARK {
 				static string prepend(string str, int i);
 				static string append(string str, int i);
 				static string appendf(string str, float i);
-				static string append(string str, string str2); 
+				static string append(string str, string str2);
 				static string pathToFile(string file);
 
 				static const string base64_chars;
@@ -94,22 +94,22 @@ namespace ARK {
 				static wstring stringToWstring(const string& str);
 				static string wstringToString(const wstring& str);
 
-				template <class T> 
+				template <class T>
 				static string getDenomination(T value) {
-					int inserted = 0; 
+					int inserted = 0;
 		    		string ret = Cast::toString<T>(value);
-		    		for(unsigned int i = 0; i < ret.length(); ++i) { 
+		    		for(unsigned int i = 0; i < ret.length(); ++i) {
 		    			if (i > 0 && (i+1) % 3 == inserted && (i+1) < ret.length()) {
 		    				ret.insert(ret.length() - (i+1), ",");
 		    				inserted++;
 		    				if (inserted > 3) { inserted = 0; }
-		    				i++;  
+		    				i++;
 		    			}
-		    		} 
-		    		return ret; 
+		    		}
+		    		return ret;
 				}
 
-			public: 
+			public:
 				static string internalOSAppends(string strFilename);
 		};
 	}

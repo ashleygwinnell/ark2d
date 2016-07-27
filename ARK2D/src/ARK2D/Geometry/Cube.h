@@ -8,11 +8,12 @@
 #ifndef ARK_GEOMETRY_CUBE_H_
 #define ARK_GEOMETRY_CUBE_H_
 
+#include "../Namespaces.h"
 #include "Shape.h"
-#include "../Includes.h"
-#include "../Graphics/Renderer.h"
-  
-namespace ARK { 
+#include "../Common/DLL.h"
+//#include "../Graphics/Renderer.h"
+
+namespace ARK {
 	namespace Geometry {
 
 		/*!
@@ -20,7 +21,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-        
+
 		template <class T>
 		class CubeTemplate : public Shape<T> {
 			protected:
@@ -33,11 +34,11 @@ namespace ARK {
 
 			public:
 				CubeTemplate():
-					Shape<T>(), 
-					m_x(0), 
-					m_y(0), 
+					Shape<T>(),
+					m_x(0),
+					m_y(0),
 					m_z(0),
-					m_width(1), 
+					m_width(1),
 					m_height(1),
 					m_depth(1) {
 
@@ -50,22 +51,22 @@ namespace ARK {
                     m_width(w),
                     m_height(h),
                     m_depth(d) {
-                    
+
                 }
 				CubeTemplate(T x, T y, T z, T width, T height, T depth):
-					Shape<T>(), 
-					m_x(x), 
-					m_y(y), 
-					m_z(z), 
-					m_width(width), 
+					Shape<T>(),
+					m_x(x),
+					m_y(y),
+					m_z(z),
+					m_width(width),
 					m_height(height),
 					m_depth(depth) {
 
 				}
 				virtual void set(T x, T y, T z, T width, T height, T depth) {
 					m_x = x;
-					m_y = y; 
-					m_z = z; 
+					m_y = y;
+					m_z = z;
 					m_width = width;
 					m_height = height;
 					m_depth = depth;
@@ -138,47 +139,8 @@ namespace ARK {
 					m_y = y - (m_height/2);
 					m_z = z - (m_depth/2);
 				}
-				virtual void setLocationByAlignment(T x, T y, signed int alignX, signed int alignY) {
-					
-					if (alignX == Renderer::ALIGN_CENTER) { 
-						x -= m_width / 2.0f;
-					} else if (alignX == Renderer::ALIGN_RIGHT || alignX == Renderer::ALIGN_END) {
-						x -= m_width;
-					} 
-
-					if (alignY == Renderer::ALIGN_CENTER) { 
-						y -= m_height / 2.0f;
-					} else if (alignY == Renderer::ALIGN_END || alignY == Renderer::ALIGN_BOTTOM) {
-						y -= m_height;
-					} 
-					
-					m_x = x;
-					m_y = y;
-				}
-				virtual void setLocationByAlignment(T x, T y, T z, signed int alignX, signed int alignY, signed alignZ) {
-					
-					if (alignX == Renderer::ALIGN_CENTER) { 
-						x -= m_width / 2.0f;
-					} else if (alignX == Renderer::ALIGN_RIGHT || alignX == Renderer::ALIGN_END) {
-						x -= m_width;
-					} 
-
-					if (alignY == Renderer::ALIGN_CENTER) { 
-						y -= m_height / 2.0f;
-					} else if (alignY == Renderer::ALIGN_END || alignY == Renderer::ALIGN_BOTTOM) {
-						y -= m_height;
-					} 
-
-					if (alignZ == Renderer::ALIGN_CENTER) { 
-						z -= m_depth / 2.0f;
-					} else if (alignZ == Renderer::ALIGN_END || alignZ == Renderer::ALIGN_BOTTOM) {
-						z -= m_depth;
-					} 
-					
-					m_x = x;
-					m_y = y;
-					m_z = z;
-				}
+                //virtual void setLocationByAlignment(T x, T y, signed int alignX, signed int alignY);
+                //virtual void setLocationByAlignment(T x, T y, T z, signed int alignX, signed int alignY, signed alignZ);
 				virtual void setXByCenter(T x) {
 					m_x = x - (m_width/2);
 				}
@@ -190,7 +152,7 @@ namespace ARK {
 				}
 
 				virtual void adjustX(T x) {
-					m_x += x; 
+					m_x += x;
 				}
 				virtual void adjustY(T y) {
 					m_y += y;
@@ -206,7 +168,7 @@ namespace ARK {
 					m_height = (int) h;
 				}
 				virtual void setDepth(T h) {
-					m_depth = (int) h; 
+					m_depth = (int) h;
 				}
 				virtual void setSize(T w, T h) {
 					m_width = (int) w;
@@ -227,7 +189,7 @@ namespace ARK {
 				virtual bool collides(T x, T y, T z) {
 					return (x >= m_x && x <= getMaxX() && y >= m_y && y <= getMaxY() && z >= m_z && z <= getMaxZ());
 				}
-				
+
 				virtual bool collides(Shape<T>* s) {
 					return false;
 				}
@@ -265,7 +227,7 @@ namespace ARK {
 
 
 		class Cube : public CubeTemplate<float> {
-			public: 
+			public:
 				Cube():
 					CubeTemplate() {
 
@@ -278,6 +240,9 @@ namespace ARK {
 					CubeTemplate(x, y, z, w, h, d) {
 
 				}
+				virtual void setLocationByAlignment(float x, float y, signed int alignX, signed int alignY);
+				virtual void setLocationByAlignment(float x, float y, float z, signed int alignX, signed int alignY, signed alignZ);
+
 				virtual ARK2D_API bool collides(Shape<float>* s);
 				virtual ~Cube() {
 

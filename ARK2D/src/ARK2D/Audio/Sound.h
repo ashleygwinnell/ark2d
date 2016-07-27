@@ -14,7 +14,7 @@
 // http://www.devmaster.net/articles/openal-tutorials/lesson4.php
 //
 
-#include "../Includes.h"
+//#include "../Includes.h"
 
 #include "../UI/ErrorDialog.h"
 #include "SoundStore.h"
@@ -23,12 +23,15 @@
 #include "../Includes.h"
 #include "../Core/Resource.h"
 
-#include "../Namespaces.h" 
+#include "../Namespaces.h"
 
 #if defined(ARK2D_FLASCC)
 	#include <AS3/AS3++.h>
  	//using namespace AS3::ui;
 #endif
+
+#include <string>
+using std::string;
 
 #if defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE)
 
@@ -155,7 +158,7 @@ namespace ARK {
 
 				// Orientation of the Listener. (first 3 elements are "at", second 3 are "up"):; Also note that these should be units of '1'.
 				static float ListenerOri[6]; // = { 0.0, 0.0, -1.0,  0.0, 1.0, 0.0 };
-			
+
 			protected:
 				// Volume, no need to store internally to be honest, but keep it simples, yarp!
 				float m_volume;
@@ -182,7 +185,7 @@ namespace ARK {
 				void deinit();
 
 				static string getALErrorStringStatic(unsigned int err);
-				
+
 				static unsigned short wav_readByte16(const unsigned char buffer[2]);
 				static unsigned int wav_readByte32(const unsigned char buffer[4]);
 
@@ -194,7 +197,7 @@ namespace ARK {
 					static void initialiseXAudio();
 					static string getXAudio2Error(HRESULT hr);
 
-					static void xa_startEngine(); 
+					static void xa_startEngine();
 					static void xa_stopEngine();
 
 					IXAudio2SourceVoice* m_xaSource;

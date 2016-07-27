@@ -9,10 +9,11 @@
 #define GAMECONTAINER_H_
 
 
+#include "../Namespaces.h"
 #include "../ARK2D.h"
 //#include "../Includes.h"
 #include "../Common/OpenGL.h"
-#include "../Namespaces.h"
+
 
 #include "Game.h"
 #include "../Controls/Gamepad.h"
@@ -34,6 +35,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <string>
+using namespace std;
 
 //template <class T>
 //class GigaRectangle;
@@ -61,7 +63,7 @@
 	#include "Platform/GameContainerXboxOne.h"
 #endif
 
-using namespace std;
+
 
 namespace ARK {
 	namespace Core {

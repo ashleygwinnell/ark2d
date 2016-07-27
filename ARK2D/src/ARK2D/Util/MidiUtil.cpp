@@ -14,7 +14,7 @@
 #include "../ARK2D.h"
 #include "StringUtil.h"
 #include "Log.h"
-#include "../Core/GameContainer.h"
+//#include "../Core/GameContainer.h"
 
 #include "../Core/String.h"
  

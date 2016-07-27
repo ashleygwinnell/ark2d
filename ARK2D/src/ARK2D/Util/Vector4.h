@@ -11,18 +11,21 @@
 #include <math.h>
 #include <cmath>
 #include <stdlib.h>
-#include "../UI/ErrorDialog.h"
+//#include "../UI/ErrorDialog.h"
+
 
 namespace ARK {
 	namespace Util {
 
-		/*!
+        class Matrix44;
+
+        /*!
 		 * \brief Useful for holding four integers e.g. for UI rectangle padding.
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		template <class T=float>
-		class Vector4 {
+		template <class T>
+		class Vector4Template {
 			public:
 				//T row[4];
 				/*T* m_x;
@@ -35,25 +38,25 @@ namespace ARK {
 				T z;
 				T w;
 
- 
+
 			public:
-				Vector4() {
+				Vector4Template() {
 
 				}
-				Vector4(const Vector4<T>& r):
+				Vector4Template(const Vector4Template<T>& r):
 					x(r.x),
 					y(r.y),
 					z(r.z),
 					w(r.w) {
 
 				}
-				Vector4(T coords[]) {
+				Vector4Template(T coords[]) {
 					x = coords[0];
 					y = coords[1];
 					z = coords[2];
 					w = coords[3];
 				}
-				Vector4(T lx, T ly, T lz, T lw) {
+				Vector4Template(T lx, T ly, T lz, T lw) {
 					x = lx;
 					y = ly;
 					z = lz;
@@ -70,10 +73,10 @@ namespace ARK {
 				void setZ(T lz) { z = lz; }
 				void setW(T lw) { w = lw; }
 
-				Vector4* add(Vector4 v) {
+				Vector4Template* add(Vector4Template v) {
 					return add(v.getX(), v.getY(), v.getZ(), v.getW());
 				}
-				Vector4* add(T lx, T ly, T lz, T lw) {
+				Vector4Template* add(T lx, T ly, T lz, T lw) {
 					x += lx;
 					y += ly;
 					z += lz;
@@ -81,7 +84,7 @@ namespace ARK {
 					return this;
 				}
 
-				void set(Vector4 v) {
+				void set(Vector4Template v) {
 					set(v.getX(), v.getY(), v.getZ(), v.getW());
 				}
 				void set(T lx, T ly, T lz, T lw) {
@@ -91,10 +94,10 @@ namespace ARK {
 					w = lw;
 				}
 
-				Vector4* subtract(Vector4 v) {
+				Vector4Template* subtract(Vector4Template v) {
 					return subtract(v.getX(), v.getY(), v.getZ(), v.getW());
 				}
-				Vector4* subtract(T lx, T ly, T lz, T lw) {
+				Vector4Template* subtract(T lx, T ly, T lz, T lw) {
 					x -= lx;
 					y -= ly;
 					z -= lz;
@@ -103,20 +106,20 @@ namespace ARK {
 				}
 
 				// Multiply
-				Vector4* multiply(Vector4<T>& v) {
+				Vector4Template* multiply(Vector4Template<T>& v) {
 					return multiply(v.getX(), v.getY(), v.getZ(), v.getW());
 				}
-				Vector4* multiply(Vector4<T>* v) {
+				Vector4Template* multiply(Vector4Template<T>* v) {
 					return multiply(v->getX(), v->getY(), v->getZ(), v->getW());
 				}
-				Vector4* multiply(T lx, T ly, T lz, T lw) {
+				Vector4Template* multiply(T lx, T ly, T lz, T lw) {
 					x *= lx;
 					y *= ly;
 					z *= lz;
 					w *= lw;
 					return this;
 				}
-				
+
 				void toValue(T v) {
 					x = v;
 					y = v;
@@ -130,8 +133,8 @@ namespace ARK {
 					toValue(1);
 				}
 
-				Vector4<T> copy() {
-					return Vector4<T>(x, y, z, w);
+				Vector4Template<T> copy() {
+					return Vector4Template<T>(x, y, z, w);
 				}
 
 				T& operator[](unsigned int i) {
@@ -148,48 +151,50 @@ namespace ARK {
 					//return *p;
 				}
 
-				Vector4<T> operator+=(const Vector4<T>& other) { 
-					add(other[0], other[1], other[2], other[3]);  
-					return *this; 
+				Vector4Template<T> operator+=(const Vector4Template<T>& other) {
+					add(other[0], other[1], other[2], other[3]);
+					return *this;
 				}
-				Vector4<T> operator*=(const Vector4<T>& other) { 
-					multiply(other[0], other[1], other[2], other[3]);  
-					return *this; 
+				Vector4Template<T> operator*=(const Vector4Template<T>& other) {
+					multiply(other[0], other[1], other[2], other[3]);
+					return *this;
 				}
-				Vector4<T> operator*=(float other) { 
-					multiply(other, other, other, other);  
-					return *this; 
+				Vector4Template<T> operator*=(float other) {
+					multiply(other, other, other, other);
+					return *this;
 				}
-				Vector4<T> operator*(float other) { 
-					multiply(other, other, other, other);  
-					return *this; 
-				}
-				Vector4<T> operator*(const Matrix44<T>& m) {
-                    Vector4<T> ret(*this);
-                    ret *= m;
-                    return ret;
-				}
-				Vector4<T> operator*=(const Matrix44<T>& m) {
-                    Vector4<T>::multMatrix44(x, y, z, w, m);
-				    return *this;
+				Vector4Template<T> operator*(float other) {
+					multiply(other, other, other, other);
+					return *this;
 				}
 
-				static void multMatrix44(float& x, float& y, float& z, float& w, const Matrix44<T>& m) {
-					T newX = x*m[0][0] + y*m[1][0] + z*m[2][0] + w*m[3][0];
-                    T newY = x*m[0][1] + y*m[1][1] + z*m[2][1] + w*m[3][1];
-                    T newZ = x*m[0][2] + y*m[1][2] + z*m[2][2] + w*m[3][2];
-                    T newW = x*m[0][3] + y*m[1][3] + z*m[2][3] + w*m[3][3];
-                    x = newX;
-                    y = newY;
-                    z = newZ;
-                    w = newW;
-				}
-				
-				~Vector4() {
+
+
+
+				~Vector4Template() {
 
 				}
 
 		};
+
+        class Vector4 : public Vector4Template<float> {
+            public:
+            	Vector4(float lx, float ly, float lz, float lw):
+            		Vector4Template(lx, ly, lz, lw) {
+
+				}
+
+				Vector4(Vector4Template<float>& v):
+            		Vector4Template(v.x, v.y, v.z, v.w) {
+
+				}
+
+
+                Vector4 operator*(const Matrix44& m);
+                Vector4 operator*=(const Matrix44& m);
+
+                static void multMatrix44(float& x, float& y, float& z, float& w, const Matrix44& m);
+        };
 
 
 	}

@@ -11,7 +11,7 @@
 #include <math.h>
 #include <cmath>
 #include <stdlib.h>
-#include "../ARK2D.h"
+//#include "../ARK2D.h"
 #include <string>
 #include "../Core/String.h"
 //#include "../Util/Log.h"
@@ -85,7 +85,7 @@ namespace ARK {
 				//	return MathUtil::anglef(0, 0, m_x, m_y);
 				//}
 
-				// Add 
+				// Add
 				Vector2* add(Vector2<T>* v) {
 					return add(v->getX(), v->getY());
 				}
@@ -201,7 +201,7 @@ namespace ARK {
 					return this;
 				}
 
-				// Restrict 
+				// Restrict
 				void restrictMax(Vector2<T>* max) {
 					restrictMax(max->getX(), max->getY());
 				}
@@ -211,7 +211,7 @@ namespace ARK {
 					}
 					if (m_y > y) {
 						m_y = y;
-					} 
+					}
 
 					if (m_x < x * -1) {
 						m_x = x * -1;
@@ -256,34 +256,34 @@ namespace ARK {
 					m_y /= len;
 				}
 
-				Vector2<T> operator*(const Vector2<T>& other) const { 
-					Vector2<T> ret(m_x, m_y); 
+				Vector2<T> operator*(const Vector2<T>& other) const {
+					Vector2<T> ret(m_x, m_y);
 					ret *= other;
 					return ret;
 				}
-				Vector2<T> operator*(float other) { 
+				Vector2<T> operator*(float other) {
 					Vector2<T> ret(m_x, m_y);
-					ret *= other; 
-					return ret; 
+					ret *= other;
+					return ret;
 				}
-				Vector2<T> operator*=(const Vector2<T>& other) { 
+				Vector2<T> operator*=(const Vector2<T>& other) {
 					m_x *= other.m_x;
 					m_y *= other.m_y;
-					return *this; 
+					return *this;
 				}
-				Vector2<T> operator*=(float other) { 
+				Vector2<T> operator*=(float other) {
 					m_x *= other;
 					m_y *= other;
-					return *this; 
+					return *this;
 				}
 
-				Vector2<T> operator+=(const Vector2<T>& other) { 
-					add(other.m_x, other.m_y); 
-					return *this; 
+				Vector2<T> operator+=(const Vector2<T>& other) {
+					add(other.m_x, other.m_y);
+					return *this;
 				}
-				Vector2<T> operator+=(float other) { 
-					add(other, other); 
-					return *this; 
+				Vector2<T> operator+=(float other) {
+					add(other, other);
+					return *this;
 				}
 
 

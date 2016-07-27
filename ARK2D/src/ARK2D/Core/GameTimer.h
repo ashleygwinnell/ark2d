@@ -8,8 +8,14 @@
 #ifndef GAMETIMER_H_
 #define GAMETIMER_H_
 
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 #include "../ARK2D.h"
-#include "../Includes.h"
+
+#include <sys/time.h>
+
+#include <list>
+using std::list;
 
 namespace ARK {
 	namespace Core {
@@ -57,7 +63,7 @@ namespace ARK {
 				//	LARGE_INTEGER m_wp8_frequency;
 				//	LARGE_INTEGER m_wp8_currentTime;
 				//#endif
-				
+
 		};
 	}
 }

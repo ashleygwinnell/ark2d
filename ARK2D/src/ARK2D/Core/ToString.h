@@ -8,7 +8,10 @@
 #ifndef ARK_CORE_TOSTRING_H_
 #define ARK_CORE_TOSTRING_H_
 
-#include "../Includes.h"
+#include <string>
+using std::string;
+
+#include "../Common/DLL.h"
 
 namespace ARK {
 	namespace Core {

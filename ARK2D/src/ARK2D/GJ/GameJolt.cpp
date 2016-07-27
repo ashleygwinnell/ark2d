@@ -6,6 +6,7 @@
 #include "../Util/URLRequest.h"
 #include "../Util/Log.h"
 #include "../vendor/tinyxml/tinyxml.h"
+#include "../Common/Libraries/libjson.h"
 
 namespace ARK {
 	namespace GJ { 

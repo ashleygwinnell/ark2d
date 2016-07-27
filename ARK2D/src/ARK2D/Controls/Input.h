@@ -7,15 +7,19 @@
 
 #ifndef INPUT_H_
 #define INPUT_H_
- 
+
 #include "../Namespaces.h"
-#include "../Includes.h"
- 
+#include "../Common/DLL.h"
+
+#include <string>
+#include <set>
+#include <map>
+#include <vector>
 using namespace std;
 
 #ifdef ARK2D_UBUNTU_LINUX
 	#include <linux/input.h>
-	
+
 	#undef KEY_ENTER
 	#undef KEY_TAB
 	#undef KEY_BACKSPACE
@@ -111,7 +115,7 @@ namespace ARK {
 
 		};
 
-		/*! 
+		/*!
 		 * \brief The main class for getting Input from the user.
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
@@ -129,7 +133,7 @@ namespace ARK {
 
 					static const int MOUSE_BUTTON_LEFT = 0x01;
 					static const int MOUSE_BUTTON_RIGHT = 0x02;
-					static const int MOUSE_BUTTON_MIDDLE = 0x04; 
+					static const int MOUSE_BUTTON_MIDDLE = 0x04;
 					static const int KEY_ENTER = 0x0D;
 					static const int KEY_TAB = 0x09;
 					static const int KEY_BACKSPACE = 0x08;
@@ -462,7 +466,7 @@ namespace ARK {
 					signed int getTouchByInternalData(void* d);
 				#elif defined(ARK2D_WINDOWS)
 					signed int getTouchByInternalData(unsigned int d);
-				#endif 
+				#endif
 
 
 		};

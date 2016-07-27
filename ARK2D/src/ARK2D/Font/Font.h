@@ -11,10 +11,15 @@
 #include <string>
 using namespace std;
 
-class BMFont;
-class FTFont;
+#include "../Namespaces.h"
+/*namespace ARK {
+	namespace Font {
+		class BMFont;
+		class FTFont;
+	}
+}*/
 
-#include "../Includes.h"
+#include "../Common/DLL.h"
 #include "../Core/Resource.h"
 
 //namespace ARK {

@@ -10,6 +10,10 @@
 
 #include "../ARK2D.h"
 
+#include <string>
+#include <map>
+using namespace std;
+
 namespace ARK {
 	namespace Util {
 

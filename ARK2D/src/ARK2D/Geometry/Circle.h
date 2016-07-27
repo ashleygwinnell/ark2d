@@ -115,7 +115,7 @@ namespace ARK {
 					return false;
 				}
 				virtual bool collides(Shape<T>* s) {
-					if (s == NULL) { ErrorDialog::createAndShow("A Shape was NULL"); }
+                    if (s == NULL) { ARK2D::getLog()->e("A Shape was NULL"); return false; }
 
 					Circle<T>* circle = NULL;
 					circle = dynamic_cast<Circle<T>* >(s);

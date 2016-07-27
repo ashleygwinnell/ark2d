@@ -8,11 +8,12 @@
 #ifndef RESOURCE_H_
 #define RESOURCE_H_
 
-
+#include <string>
+using std::string;
 
 #include "../Windres.h"
 #include "../Namespaces.h"
-#include "../Includes.h"
+#include "../Common/DLL.h"
 
 
 

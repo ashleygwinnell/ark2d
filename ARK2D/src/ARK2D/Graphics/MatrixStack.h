@@ -12,7 +12,7 @@ namespace ARK {
 			public:
 				unsigned int m_type;
 
-				vector<Matrix44<float> > m_stack;
+				vector<Matrix44> m_stack;
 				unsigned int m_stackIndex;
 				unsigned int m_root; // the lowest stack index after ark2d does its bits. e.g. letterboxing. 
 									 // we reset to this instead of the identity matrix when starting new renderbatches.
@@ -26,7 +26,7 @@ namespace ARK {
 	 
 				MatrixStack(); 
 				MatrixStack(unsigned int type); 
-				MatrixStack(unsigned int type, Matrix44<float> basecopy); 
+				MatrixStack(unsigned int type, Matrix44 basecopy);
 				void translate(float x, float y, float z = 0.0f); 			// glTranslatef(x,y,0);
 				void rotate(float angle, float x, float y, float z = 0.0f); // glRotatef(angle, 0, 0, 1);
 				void scale(float x, float y, float z = 0.0f); 				// glScalef(x, y, 0.0f);
@@ -40,9 +40,9 @@ namespace ARK {
 				#ifdef ARK2D_RENDERER_DIRECTX
 					DirectX::XMMATRIX d3dpointer();  
 				#endif
-				const Matrix44<float>* current() const;
-				Matrix44<float>* current();
-				Matrix44<float>* at(unsigned int index);
+				const Matrix44* current() const;
+				Matrix44* current();
+				Matrix44* at(unsigned int index);
 				void pushMatrix(bool setroot = false);
 				void popMatrix();
 				void toStringDialog();

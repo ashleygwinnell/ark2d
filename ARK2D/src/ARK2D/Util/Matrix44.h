@@ -9,9 +9,10 @@
 #define MATRIX44_H_
 
 #include "Vector4.h"
+#include "../Namespaces.h"
 #include "../Geometry/Vector3.h"
 #include "MathUtil.h"
-#include "../UI/ErrorDialog.h"
+//#include "../UI/ErrorDialog.h"
 
  #include "../vendor/glm/glm.hpp"
 #include "../vendor/glm/gtx/transform.hpp"
@@ -23,155 +24,6 @@
 namespace ARK {
 	namespace Util {
 
-		// Matrix 33
-		template <class T=float>
-		class Matrix33 {
-			public:
-				Vector3<T> col[3];
-				Vector3<T>* x;
-				Vector3<T>* y;
-				Vector3<T>* z;
-			public:
-				Matrix33(): col() {
-					x = &col[0];
-					y = &col[1];
-					z = &col[2];
-					identity();
-				}
-				Matrix33(float vals[9]): col() {
-					col[0][0] = vals[0];
-					col[0][1] = vals[1];
-					col[0][2] = vals[2];
-					col[1][0] = vals[3];
-					col[1][1] = vals[4];
-					col[1][2] = vals[5];
-					col[2][0] = vals[6];
-					col[2][1] = vals[7];
-					col[2][2] = vals[8];
-					x = &col[0];
-					y = &col[1];
-					z = &col[2];
-				}
-				Matrix33(Matrix44<T>& mat44): col() {
-					set(mat44);
-				}
-				void set(Matrix44<T>& mat44) {
-					col[0][0] = mat44[0][0];
-					col[0][1] = mat44[0][1];
-					col[0][2] = mat44[0][2];
-					col[1][0] = mat44[1][0];
-					col[1][1] = mat44[1][1];
-					col[1][2] = mat44[1][2];
-					col[2][0] = mat44[2][0];
-					col[2][1] = mat44[2][1];
-					col[2][2] = mat44[2][2];
-					x = &col[0];
-					y = &col[1];
-					z = &col[2];
-				}
-				void identity() {
-					col[0][0] = 1.0f;
-					col[0][1] = 0.0f;
-					col[0][2] = 0.0f;
-
-					col[1][0] = 0.0f;
-					col[1][1] = 1.0f;
-					col[1][2] = 0.0f;
-
-					col[2][0] = 0.0f;
-					col[2][1] = 0.0f;
-					col[2][2] = 1.0f;
-				}
-
-				float determinant() {
-					return MathUtil::determinant((void*) x, 3);
-				}
-
-
-				void transpose()
-				{
-					/*int n = 3;
-					int i, j;
-					float temp;
-
-					for (i = 0; i < n; i++) {
-						for (j = 0; j < n; j++) {
-							temp = col[i][j];
-							col[i][j] = col[j][i];
-							col[j][i] = temp;
-						}
-					}*/
-
-					glm::mat3 mat;
-					mat[0][0] = col[0][0];
-					mat[0][1] = col[0][1];
-					mat[0][2] = col[0][2];
-					mat[1][0] = col[1][0];
-					mat[1][1] = col[1][1];
-					mat[1][2] = col[1][2];
-					mat[2][0] = col[2][0];
-					mat[2][1] = col[2][1];
-					mat[2][2] = col[2][2];
-
-					mat = glm::transpose(mat);
-
-					col[0][0] = mat[0][0];
-					col[0][1] = mat[0][1];
-					col[0][2] = mat[0][2];
-					col[1][0] = mat[1][0];
-					col[1][1] = mat[1][1];
-					col[1][2] = mat[1][2];
-					col[2][0] = mat[2][0];
-					col[2][1] = mat[2][1];
-					col[2][2] = mat[2][2];
-				}
-
-				void inverse() {
-					/*float d = determinant();
-					for (int i = 0; i < 3; ++i)
-					{
-						for (int j = 0; j < 3; ++j)
-						{
-							col[i][j] /= d;
-						}
-					}*/
-					glm::mat3 mat;
-					mat[0][0] = col[0][0];
-					mat[0][1] = col[0][1];
-					mat[0][2] = col[0][2];
-					mat[1][0] = col[1][0];
-					mat[1][1] = col[1][1];
-					mat[1][2] = col[1][2];
-					mat[2][0] = col[2][0];
-					mat[2][1] = col[2][1];
-					mat[2][2] = col[2][2];
-
-					mat = glm::inverse(mat);
-
-					col[0][0] = mat[0][0];
-					col[0][1] = mat[0][1];
-					col[0][2] = mat[0][2];
-					col[1][0] = mat[1][0];
-					col[1][1] = mat[1][1];
-					col[1][2] = mat[1][2];
-					col[2][0] = mat[2][0];
-					col[2][1] = mat[2][1];
-					col[2][2] = mat[2][2];
-				}
-				T* pointer() {
-					return &col[0][0];
-				}
-				const T* pointer() const {
-					return &col[0][0];
-				}
-
-				Vector3<T>& operator[](unsigned int i) {
-					return col[i];
-				}
-				const Vector3<T>& operator[](unsigned int i) const {
-					return col[i];
-				}
-		};
 
 		/*!
 		 * \brief Matrix manipulation for graphics rendering.
@@ -180,18 +32,18 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		template <class T=float>
-		class Matrix44 {
+		template <class T>
+		class Matrix44Template {
 			public:
-				Vector4<T> col[4];
+				Vector4Template<T> col[4];
 
-				Vector4<T>* m_x;
-				Vector4<T>* m_y;
-				Vector4<T>* m_z;
-				Vector4<T>* m_w;
+				Vector4Template<T>* m_x;
+				Vector4Template<T>* m_y;
+				Vector4Template<T>* m_z;
+				Vector4Template<T>* m_w;
 
 			public:
-				Matrix44(): col() {
+				Matrix44Template(): col() {
 					m_x = &col[0];
 					m_y = &col[1];
 					m_z = &col[2];
@@ -199,7 +51,7 @@ namespace ARK {
 
 					identity();
 				}
-				Matrix44(float vals[16]): col() {
+				Matrix44Template(float vals[16]): col() {
 					m_x = &col[0];
 					m_y = &col[1];
 					m_z = &col[2];
@@ -222,10 +74,10 @@ namespace ARK {
 					col[3][2] = vals[14];
 					col[3][3] = vals[15];
 				}
-				const Vector4<T>& getX() { return *m_x; }
-				const Vector4<T>& getY() { return *m_y; }
-				const Vector4<T>& getZ() { return *m_z; }
-				const Vector4<T>& getW() { return *m_w; }
+				const Vector4Template<T>& getX() { return *m_x; }
+				const Vector4Template<T>& getY() { return *m_y; }
+				const Vector4Template<T>& getZ() { return *m_z; }
+				const Vector4Template<T>& getW() { return *m_w; }
 
 				void toValue(T v) {
 					m_x->toValue(v);
@@ -239,29 +91,7 @@ namespace ARK {
 				void toOne() {
 					toValue(1);
 				}
-				Matrix44<T> copy() {
-					Matrix44<T> cpy;
-					cpy.col[0][0] = col[0][0];
-					cpy.col[0][1] = col[0][1];
-					cpy.col[0][2] = col[0][2];
-					cpy.col[0][3] = col[0][3];
 
-					cpy.col[1][0] = col[1][0];
-					cpy.col[1][1] = col[1][1];
-					cpy.col[1][2] = col[1][2];
-					cpy.col[1][3] = col[1][3];
-
-					cpy.col[2][0] = col[2][0];
-					cpy.col[2][1] = col[2][1];
-					cpy.col[2][2] = col[2][2];
-					cpy.col[2][3] = col[2][3];
-
-					cpy.col[3][0] = col[3][0];
-					cpy.col[3][1] = col[3][1];
-					cpy.col[3][2] = col[3][2];
-					cpy.col[3][3] = col[3][3];
-					return cpy;
-				}
 
 				void identity() {
 					col[0][0] = 1.0f;
@@ -446,96 +276,12 @@ namespace ARK {
 				}
 
 
-				void translate(float x, float y, float z)
-				{
-					*this *= createTranslateMatrix(x, y, z);
-				}
-
-				static Matrix44<T> createTranslateMatrix(float x, float y, float z) {
-					// http://en.wikipedia.org/wiki/Translation_(geometry)
-					Matrix44<float> translateMatrix;
-					//translateMatrix.identity(); // this is done in constructor
-					translateMatrix[3][0] = x;
-					translateMatrix[3][1] = y;
-					translateMatrix[3][2] = z;
-					return translateMatrix;
-				}
-
-				void scale(float x, float y, float z)
-				{
-					*this *= createScaleMatrix(x, y, z);
-				}
-
-				static Matrix44<T> createScaleMatrix(float x, float y, float z) {
-					// http://en.wikipedia.org/wiki/Scaling_(geometry)
-					Matrix44<float> scaleMatrix;
-					//scaleMatrix.identity(); // this is done in constructor
-					scaleMatrix[0][0] = x;
-					scaleMatrix[1][1] = y;
-					scaleMatrix[2][2] = z;
-					scaleMatrix[3][3] = 1;
-					return scaleMatrix;
-				}
-
-				void rotate(float angle, float x, float y, float z) {
-					// http://www.gruzzlymug.com/projects/viseng/doc/d9/d7b/matrix44_8cpp-source.html
-					// normalise vector
-					float len = (float) sqrt(x*x + y*y + z*z);
-					if (len > 0.0f) {
-						len = 1.0f / len;
-					} else {
-						len = 0.0f;
-					}
-					x *= len;
-					y *= len;
-					z *= len;
-
-					// create rotation matrix
-					Matrix44<float> rotMatrix = createRotationMatrix(angle, x, y, z);
 
 
-					// do rotation
-					*this *= rotMatrix;
-				}
 
-				static Matrix44<T> createRotationMatrix(float angleDegrees, float x, float y, float z) {
-					float angle = MathUtil::toRadians(angleDegrees);
-					Matrix44<float> rotMatrix;
 
-					float sinA, cosA;
-					float invCosA;
-					float xSq, ySq, zSq;
 
-					sinA = (float) sin(angle);
-					cosA = (float) cos(angle);
-					invCosA = 1.0f - cosA;
 
-					xSq = x * x;
-					ySq = y * y;
-					zSq = z * z;
-
-					rotMatrix[0][0] = (invCosA * xSq) + (cosA);
-					rotMatrix[1][0] = (invCosA * x * y) - (sinA * z );
-					rotMatrix[2][0] = (invCosA * x * z) + (sinA * y );
-					rotMatrix[3][0] = 0.0f;
-
-					rotMatrix[0][1] = (invCosA * x * y) + (sinA * z);
-					rotMatrix[1][1] = (invCosA * ySq) + (cosA);
-					rotMatrix[2][1] = (invCosA * y * z) - (sinA * x);
-					rotMatrix[3][1] = 0.0f;
-
-					rotMatrix[0][2] = (invCosA * x * z) - (sinA * y);
-					rotMatrix[1][2] = (invCosA * y * z) + (sinA * x);
-					rotMatrix[2][2] = (invCosA * zSq) + (cosA);
-					rotMatrix[3][2] = 0.0f;
-
-					rotMatrix[0][3] = 0.0f;
-					rotMatrix[1][3] = 0.0f;
-					rotMatrix[2][3] = 0.0f;
-					rotMatrix[3][3] = 1.0f;
-
-					return rotMatrix;
-				}
 
                 void inverse() {
                     glm::mat4 mat;
@@ -560,112 +306,8 @@ namespace ARK {
                     set(mat);
                 }
 
-				Vector4<T>& operator[](unsigned int i) {
-					//assert (i<4);
-					//if (i >= 4) { ErrorDialog::createAndShow("Invalid matrix44[] index."); exit(0); }
-					return col[i];
-				}
-				const Vector4<T>& operator[](unsigned int i) const {
-					//assert (i<4);
-					//if (i >= 4) { ErrorDialog::createAndShow("Invalid matrix44[] index."); exit(0); }
-					return col[i];
-				}
-                Vector4<T> operator*(const Vector4<T>& other) const {
-                    Vector4<T> ret(other);
-                    ret *= *this;
-                    return ret;
-                }
-				Matrix44<T> operator*(const Matrix44<T>& m) const {
 
-					glm::mat4 lhs;
-					lhs[0][0] = col[0][0];
-					lhs[0][1] = col[0][1];
-					lhs[0][2] = col[0][2];
-					lhs[0][3] = col[0][3];
-					lhs[1][0] = col[1][0];
-					lhs[1][1] = col[1][1];
-					lhs[1][2] = col[1][2];
-					lhs[1][3] = col[1][3];
-					lhs[2][0] = col[2][0];
-					lhs[2][1] = col[2][1];
-					lhs[2][2] = col[2][2];
-					lhs[2][3] = col[2][3];
-					lhs[3][0] = col[3][0];
-					lhs[3][1] = col[3][1];
-					lhs[3][2] = col[3][2];
-					lhs[3][3] = col[3][3];
-					glm::mat4 rhs;
-					rhs[0][0] = m[0][0];
-					rhs[0][1] = m[0][1];
-					rhs[0][2] = m[0][2];
-					rhs[0][3] = m[0][3];
-					rhs[1][0] = m[1][0];
-					rhs[1][1] = m[1][1];
-					rhs[1][2] = m[1][2];
-					rhs[1][3] = m[1][3];
-					rhs[2][0] = m[2][0];
-					rhs[2][1] = m[2][1];
-					rhs[2][2] = m[2][2];
-					rhs[2][3] = m[2][3];
-					rhs[3][0] = m[3][0];
-					rhs[3][1] = m[3][1];
-					rhs[3][2] = m[3][2];
-					rhs[3][3] = m[3][3];
-					glm::mat4 rs = lhs * rhs;
-					Matrix44<T> ret;
-					ret.set(rs);
-					return ret;
 
-					Matrix44<T> t;
-					/*for (unsigned int r = 0; r < 4; r++)
-					{
-						for (unsigned int c = 0; c < 4; c++)
-						{
-							t[c][r] = (col[0][r] * m[c][0]) + (col[1][r] * m[c][1]) + (col[2][r] * m[c][2]) + (col[3][r] * m[c][3]);
-						}
-					}*/
-
-					// r = 0, c = 0;
-
-					// assume right column is 0,0,0,1.
-					// e.g. http://www.willmcgugan.com/gameobjects/docs/gameobjects.matrix44-pysrc.html#Matrix44.__imul__
-
-					t[0][0] = (col[0][0] * m[0][0]) + (col[1][0] * m[0][1]) + (col[2][0] * m[0][2]) + (col[3][0] * m[0][3]);
-					t[1][0] = (col[0][0] * m[1][0]) + (col[1][0] * m[1][1]) + (col[2][0] * m[1][2]) + (col[3][0] * m[1][3]);
-					t[2][0] = (col[0][0] * m[2][0]) + (col[1][0] * m[2][1]) + (col[2][0] * m[2][2]) + (col[3][0] * m[2][3]);
-					t[3][0] = (col[0][0] * m[3][0]) + (col[1][0] * m[3][1]) + (col[2][0] * m[3][2]) + (col[3][0] * m[3][3]);
-					//t[3][0] = 0;
-
-					t[0][1] = (col[0][1] * m[0][0]) + (col[1][1] * m[0][1]) + (col[2][1] * m[0][2]) + (col[3][1] * m[0][3]);
-					t[1][1] = (col[0][1] * m[1][0]) + (col[1][1] * m[1][1]) + (col[2][1] * m[1][2]) + (col[3][1] * m[1][3]);
-					t[2][1] = (col[0][1] * m[2][0]) + (col[1][1] * m[2][1]) + (col[2][1] * m[2][2]) + (col[3][1] * m[2][3]);
-					t[3][1] = (col[0][1] * m[3][0]) + (col[1][1] * m[3][1]) + (col[2][1] * m[3][2]) + (col[3][1] * m[3][3]);
-					//t[3][1] = 0;
-
-					t[0][2] = (col[0][2] * m[0][0]) + (col[1][2] * m[0][1]) + (col[2][2] * m[0][2]) + (col[3][2] * m[0][3]);
-					t[1][2] = (col[0][2] * m[1][0]) + (col[1][2] * m[1][1]) + (col[2][2] * m[1][2]) + (col[3][2] * m[1][3]);
-					t[2][2] = (col[0][2] * m[2][0]) + (col[1][2] * m[2][1]) + (col[2][2] * m[2][2]) + (col[3][2] * m[2][3]);
-					t[3][2] = (col[0][2] * m[3][0]) + (col[1][2] * m[3][1]) + (col[2][2] * m[3][2]) + (col[3][2] * m[3][3]);
-					//t[3][2] = 0;
-
-					//t[0][3] = (col[0][3] * m[0][0]) + (col[1][3] * m[0][1]) + (col[2][3] * m[0][2]) + (col[3][3] * m[0][3]);
-					//t[1][3] = (col[0][3] * m[1][0]) + (col[1][3] * m[1][1]) + (col[2][3] * m[1][2]) + (col[3][3] * m[1][3]);
-					//t[2][3] = (col[0][3] * m[2][0]) + (col[1][3] * m[2][1]) + (col[2][3] * m[2][2]) + (col[3][3] * m[2][3]);
-					//t[3][3] = (col[0][3] * m[3][0]) + (col[1][3] * m[3][1]) + (col[2][3] * m[3][2]) + (col[3][3] * m[3][3]);
-					t[0][3] = 0;
-					t[1][3] = 0;
-					t[2][3] = 0;
-					t[3][3] = 1;
-					//t[3][3] = 1;
-
-					//t[c][r] = (col[0][r] * m[c][0]) + (col[1][r] * m[c][1]) + (col[2][r] * m[c][2]) + (col[3][r] * m[c][3]);
-
-					return t;
-				}
-				Matrix44<T>& operator*=(const Matrix44<T>& m) {
-					*this = *this * m;
-					return *this;
-				}
 				string toString() {
 					string s = "{";
 					s += Cast::toString<float>(col[0][0]); s += string(",");
@@ -691,28 +333,8 @@ namespace ARK {
 					return s;
 				}
 
-				void set(const Matrix44<T>& m) {
-					col[0][0] = m[0][0];
-					col[0][1] = m[0][1];
-					col[0][2] = m[0][2];
-					col[0][3] = m[0][3];
 
-					col[1][0] = m[1][0];
-					col[1][1] = m[1][1];
-					col[1][2] = m[1][2];
-					col[1][3] = m[1][3];
-
-					col[2][0] = m[2][0];
-					col[2][1] = m[2][1];
-					col[2][2] = m[2][2];
-					col[2][3] = m[2][3];
-
-					col[3][0] = m[3][0];
-					col[3][1] = m[3][1];
-					col[3][2] = m[3][2];
-					col[3][3] = m[3][3];
-				}
-				void set(const glm::mat4& m) {
+				virtual void set(const glm::mat4& m) {
 					col[0][0] = m[0][0];
 					col[0][1] = m[0][1];
 					col[0][2] = m[0][2];
@@ -743,9 +365,39 @@ namespace ARK {
 
 
 
-				virtual ~Matrix44() {
+				virtual ~Matrix44Template() {
 
 				}
+		};
+
+
+		class Matrix44 : public Matrix44Template<float> {
+			public:
+				Matrix44();
+				Matrix44(float vals[16]);
+				virtual ~Matrix44();
+
+                void scale(float x, float y, float z);
+				void translate(float x, float y, float z);
+				void rotate(float angle, float x, float y, float z);
+
+                static Matrix44 createTranslateMatrix(float x, float y, float z);
+                static Matrix44 createScaleMatrix(float x, float y, float z);
+				static Matrix44 createRotationMatrix(float angleDegrees, float x, float y, float z);
+
+				virtual void set(const glm::mat4& m);
+				void set(const Matrix44& m);
+				Matrix44 copy();
+
+				Matrix44 operator*(const Matrix44& m) const;
+				Matrix44& operator*=(const Matrix44& m);
+				Vector4 operator*(const Vector4& other) const;
+
+				Vector4Template<float>& operator[](unsigned int i);
+				const Vector4Template<float>& operator[](unsigned int i) const;
+
+
+
 		};
 	}
 }

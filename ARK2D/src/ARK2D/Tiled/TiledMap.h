@@ -10,6 +10,8 @@
 
 #include "../Includes.h"
 
+#include "../Common/Libraries/rapidxml.h"
+#include "../Common/Libraries/libjson.h"
 #include "../vendor/tinyxml/tinyxml.h"
 #include "../Core/ToString.h"
 #include "../Core/Resource.h"

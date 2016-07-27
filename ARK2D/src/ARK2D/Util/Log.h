@@ -14,7 +14,7 @@
 //	#include <list>
 //#endif
 
-struct Graphics;
+//struct Graphics;
 #include "../Namespaces.h"
 #include "../Core/String.h"
 #include "../UI/Button.h"
@@ -22,12 +22,8 @@ struct Graphics;
 #include "../UI/ScrollPanel.h"
 #include "../UI/Label.h"
 
+#include <list>
 
-namespace ARK {
-	namespace Core {
-		class String;
-	}
-}
 
 using namespace std;
 

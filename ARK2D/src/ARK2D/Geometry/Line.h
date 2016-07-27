@@ -14,6 +14,7 @@
 #include "Shape.h"
 #include "../Graphics/Renderer.h"
 #include "../Util/Log.h"
+//#include "../UI/ErrorDialog.h"
 
 namespace ARK {
 	namespace Geometry {
@@ -233,7 +234,10 @@ namespace ARK {
 					return false;
 				}
 				virtual bool collides(Shape<T>* s) {
-					if (s == NULL) { ErrorDialog::createAndShow("A Shape was NULL"); }
+					if (s == NULL) {
+                        ARK2D::getLog()->e("A Shape was NULL");
+                        return false;
+                    }
 
 					Line<T>* line = NULL;
 					line = dynamic_cast<Line<T>* >(s);

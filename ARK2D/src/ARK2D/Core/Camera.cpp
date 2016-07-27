@@ -1,6 +1,13 @@
 
 #include "Camera.h"
 
+#include "../vendor/glm/glm.hpp"
+#include "../vendor/glm/gtx/transform.hpp"
+#include "../vendor/glm/gtc/quaternion.hpp"
+#include "../vendor/glm/gtx/quaternion.hpp"
+#include "../vendor/glm/gtc/matrix_transform.hpp"
+#include "../vendor/glm/gtc/type_ptr.hpp"
+
 #include "../ARK2D.h"
 #include "../Core/GameContainer.h"
 #include "../Graphics/Renderer.h"
@@ -27,7 +34,7 @@ namespace ARK {
 			fieldOfView(45.0f),
 			nearClip(0.001f),
 			farClip(1000.0f),
-				
+
 			camera_heading(0),
 			camera_pitch(0),
 
@@ -50,7 +57,7 @@ namespace ARK {
 			rotation_quaternion = Quaternion<float>();
 			// camera_position_delta = glm::vec3(0, 0, 0);
 			// camera_scale = .5f;
-			
+
 			viewportOrtho3dScale = 1.5f;
 			viewportAutosize = true;
 
@@ -62,14 +69,14 @@ namespace ARK {
 			lookAt.z = 0.0f;
 
 			camera_heading = glm::pi<float>();
-		
+
 			nearClip = 0.001f;
 			farClip = 1000.0f;
 
 			if (current == NULL) {
 				current = this;
 			}
-			
+
 
 		}
 		Camera::~Camera() {
@@ -82,7 +89,7 @@ namespace ARK {
 
 		void Camera::update() {
 			SceneNode::update();
-			
+
 			if (viewportAutosize) {
 				setViewport(0, 0, ARK2D::getContainer()->getDynamicWidth(), ARK2D::getContainer()->getDynamicHeight() );
 			}
@@ -91,12 +98,12 @@ namespace ARK {
             direction.normalise();
 
 			// need to set the matrix state. this is only important because lighting doesn't work if this isn't done
-		    
-		    if (type == TYPE_ORTHO) { 
+
+		    if (type == TYPE_ORTHO) {
 		    	//our projection matrix will be an orthogonal one in this case
 				//if the values are not floating point, this command does not work properly
 				//need to multiply by aspect!!! (otherise will not scale properly)
-				
+
 				//projection = glm::ortho((scaleMaybe*-1) * float(viewportAspectRatio), scaleMaybe * float(viewportAspectRatio), scaleMaybe*-1, scaleMaybe, nearClip, farClip);
                 projection.identity();
                 projection.ortho2d((viewportOrtho3dScale*-1) * float(viewportAspectRatio), viewportOrtho3dScale * float(viewportAspectRatio), viewportOrtho3dScale*-1, viewportOrtho3dScale, nearClip, farClip);
@@ -114,7 +121,7 @@ namespace ARK {
                 lookAt = transform.position + direction;
 
 		    } else if (type == TYPE_ORTHO_2D) {
-				
+
 				//projection = glm::ortho(float(viewportX), float(viewportWidth), float(viewportHeight), float(viewportY), float(nearClip), float(farClip));
                 projection.identity();
                 projection.ortho2d(float(viewportX), float(viewportWidth), float(viewportHeight), float(viewportY), float(nearClip), float(farClip));
@@ -134,7 +141,7 @@ namespace ARK {
 				//add the two quaternions
 				Quaternion<float> temp = pitch_quat.cross(heading_quat);
                 temp.normalise();
-				
+
                 // http://www.opengl-tutorial.org/beginners-tutorials/tutorial-6-keyboard-and-mouse/
 				float verticalAngle = camera_pitch;
 				float horizontalAngle = camera_heading;
@@ -148,20 +155,20 @@ namespace ARK {
                 lookAt = transform.position + direction;
 
 
-				
+
 			}
 
-			
-			
+
+
 
 
 
 			// compute the MVP
-			
-			if (type == TYPE_ORTHO_2D) { 
-                
+
+			if (type == TYPE_ORTHO_2D) {
+
                 //view.lookAt(transform.position.x, transform.position.y, transform.position.z, lookAt.x, lookAt.y, lookAt.z, up.x, up.y, up.z);
-		
+
 				//view = glm::translate(view, glm::vec3(container->getTranslateX(), container->getTranslateY(), 0.0f) );
 				//view = glm::scale(view, glm::vec3(container->getScaleX(), container->getScaleY(), 0.0f) );
 				GameContainer* container = ARK2D::getContainer();
@@ -170,11 +177,11 @@ namespace ARK {
                 view.translate(container->getTranslateX(), container->getTranslateY(), 0.0f);
                 // todo: rotate
                 view.scale(container->getScaleX(), container->getScaleY(), 1.0f);
-                
+
                 model.identity(); // = glm::mat4(1.0f);
 
 			} else if (type == TYPE_PERSPECTIVE || type == TYPE_ORTHO) {
-				
+
 				/*float scaleX = 1.0f / float(viewportWidth);
 				float scaleY = 1.0f / float(viewportHeight);
 				if (scaleX > scaleY) {
@@ -242,7 +249,7 @@ namespace ARK {
 
 			r->matrixMode(MatrixStack::TYPE_VIEW);
 			MatrixStack* viewStack = r->getMatrix(MatrixStack::TYPE_VIEW);
-				mymat = viewStack->current(); 
+				mymat = viewStack->current();
 				mymat->col[0][0] = view[0][0];
 				mymat->col[0][1] = view[0][1];
 				mymat->col[0][2] = view[0][2];
@@ -262,23 +269,23 @@ namespace ARK {
 
 			//GameContainer* c = ARK2D::getContainer();
 			//viewStack->current()->translate(c->getTranslateX(), c->getTranslateY(), 0.0f);
-			
+
 			r->matrixMode(MatrixStack::TYPE_MODEL);
 			r->loadIdentity();
 
 			if (type == TYPE_PERSPECTIVE) {
 				glEnable(GL_DEPTH_TEST);
 				glDepthFunc(GL_LEQUAL);
-									
+
 				glEnable(GL_CULL_FACE); // glDisable(GL_CULL_FACE);
-				glCullFace(GL_BACK); 
+				glCullFace(GL_BACK);
 				glFrontFace(GL_CCW);
 			}
 
 			SceneNode::render();
 		}
 
-		
+
 
 		// Setting Functions
 		void Camera::setType(unsigned int ty) {
@@ -292,7 +299,7 @@ namespace ARK {
 		}
 		void Camera::setPosition(Vector3<float> pos) {
 			position.x = pos.getX();
-			position.y = pos.getY(); 
+			position.y = pos.getY();
 			position.z = pos.getZ();
 		}
 		void Camera::movePosition(float x, float y, float z) {
@@ -304,7 +311,7 @@ namespace ARK {
 
 		void Camera::setLookAt(Vector3<float> pos) {
 			lookAt.x = pos.getX();
-			lookAt.y = pos.getY(); 
+			lookAt.y = pos.getY();
 			lookAt.z = pos.getZ();
 		}
 
@@ -319,7 +326,7 @@ namespace ARK {
 			viewportHeight = height;
 			//need to use doubles division here, it will not work otherwise and it is possible to get a zero aspect ratio with integer rounding
 			viewportAspectRatio = double(width) / double(height);
-			
+
 		}
 		void Camera::setClipping(float near_clip_distance, float far_clip_distance) {
 			nearClip = near_clip_distance;
@@ -353,7 +360,7 @@ namespace ARK {
 		void Camera::setPitch(float degrees) {
 			camera_pitch = degrees;
 			clampPitch();
-		}	
+		}
 		void Camera::changePitch(float degrees) {
 			// Check bounds with the max pitch rate so that we aren't moving too fast
 			camera_pitch += degrees;
@@ -440,7 +447,7 @@ namespace ARK {
 				s += "\"farClip\":"; s += Cast::toString<float>(farClip); s += ","; s += nl;
 				s += "\"camera_heading\":"; s += Cast::toString<float>(camera_heading); s += ","; s += nl;
 				s += "\"camera_pitch\":"; s += Cast::toString<float>(camera_pitch); s += ","; s += nl;
-				
+
 			s += "}"; s += nl;
 			return s;
 		}
@@ -459,20 +466,20 @@ namespace ARK {
 		}*/
 
 		Vector3<float> Camera::worldToScreenPoint(const Vector3<float>& p) {
-			
+
 			// http://webglfactory.blogspot.co.uk/2011/05/how-to-convert-world-to-screen.html
-			Vector4<float> point3d = Vector4<float>(p.getX(), p.getY(), p.getZ(), 0);
+			Vector4 point3d = Vector4(p.getX(), p.getY(), p.getZ(), 0);
 			if (type == TYPE_ORTHO_2D) {
 				point3d.x -= viewportWidth * 0.5f;
 				point3d.y -= viewportHeight * 0.5f;
 			}
-			Matrix44<float> viewProjectionMatrix = projection.m_stack[projection.m_stackIndex] * view.m_stack[view.m_stackIndex];
+			Matrix44 viewProjectionMatrix = projection.m_stack[projection.m_stackIndex] * view.m_stack[view.m_stackIndex];
 			//Matrix44<float> viewProjectionMatrix = *projection.current() * *view.current();
-			
+
 			// transform world to clipping coordinates
 			point3d = viewProjectionMatrix * point3d;
 
-			// we calculate -point3D.getY() because the screen Y axis is oriented top->down 
+			// we calculate -point3D.getY() because the screen Y axis is oriented top->down
 			float newX = round( (( point3d.x + 1 ) / 2.0) * viewportWidth );
 			float newY = round( (( 1 - point3d.y ) / 2.0) * viewportHeight );
 
@@ -483,7 +490,7 @@ namespace ARK {
 
 			double x = p.x;
 			double y = p.y;
-			//if (type == TYPE_ORTHO || type == TYPE_PERSPECTIVE) { 
+			//if (type == TYPE_ORTHO || type == TYPE_PERSPECTIVE) {
 				x = 2.0 * p.getX() / viewportWidth - 1;
 				y = -2.0 * p.getY() / viewportHeight + 1;
 			//} else if (type == TYPE_ORTHO_2D) {
@@ -491,10 +498,10 @@ namespace ARK {
 			//	y = -p.getY() / viewportHeight;
 			//}
 			//Matrix44<float> viewProjection = *projection.current() * *view.current();
-			Matrix44<float> viewProjection = projection.m_stack[projection.m_stackIndex] * view.m_stack[view.m_stackIndex];
+			Matrix44 viewProjection = projection.m_stack[projection.m_stackIndex] * view.m_stack[view.m_stackIndex];
             viewProjection.inverse();
 
-            Vector4<float> point4d(x, y, 0, 0);
+            Vector4 point4d(x, y, 0, 0);
             point4d = viewProjection * point4d;
 			Vector3<float> ret(point4d.x, point4d.y, 0.0f);
 			if (type == TYPE_ORTHO_2D) {
@@ -520,15 +527,15 @@ namespace ARK {
 
 
 		// CAMERA MOVEMENT
-		CameraMovement::CameraMovement(): 
-			camera(NULL), 
+		CameraMovement::CameraMovement():
+			camera(NULL),
 			moveSpeed(4.0f),
 			rotateSpeed(2.5f)
 			{
 
 		}
-		CameraMovement::CameraMovement(Camera* c): 
-			camera(c), 
+		CameraMovement::CameraMovement(Camera* c):
+			camera(c),
 			moveSpeed(4.0f),
 			rotateSpeed(2.5f)
 			{
@@ -537,27 +544,27 @@ namespace ARK {
 		void CameraMovement::update() {
 			GameTimer* timer = ARK2D::getTimer();
             Input* in = ARK2D::getInput();
-			
+
 			// movement on wasd
 			float d = moveSpeed * timer->getDelta();
 		 	if (in->isKeyDown(Input::KEY_W)) {
 				camera->transform.position += camera->direction * d;
-		    } 
+		    }
 			if (in->isKeyDown(Input::KEY_S)) {
 				camera->transform.position -= camera->direction * d;
-			} 
+			}
 			if (in->isKeyDown(Input::KEY_A)) {
 				Vector3<float> right = camera->direction.cross(camera->up).normalise();
 				camera->transform.position -= right * d;
 				camera->lookAt -= right * d;
-			} 
+			}
 			if (in->isKeyDown(Input::KEY_D)) {
 				Vector3<float> right = camera->direction.cross(camera->up).normalise();
 				camera->transform.position += right * d;
 				camera->lookAt += right * d;
 			}
-			
-			
+
+
 			// up down
 			if (in->isKeyDown(Input::KEY_SPACE)) {
 				camera->transform.position += camera->up * d;
@@ -574,7 +581,7 @@ namespace ARK {
 				camera->setHeading(camera->camera_heading + r);
 			} else if (in->isKeyDown(Input::KEY_RIGHT)) {
 				camera->setHeading(camera->camera_heading - r);
-			} 
+			}
 			if (in->isKeyDown(Input::KEY_UP)) {
 				camera->setPitch(camera->camera_pitch + r);
 			} else if (in->isKeyDown(Input::KEY_DOWN)) {
@@ -583,9 +590,9 @@ namespace ARK {
 
 			// zoom
 			if (in->isKeyDown(Input::KEY_SHIFT) && in->isKeyDown(Input::KEY_EQUALS)) {
-				camera->fieldOfView -= 1.0f * timer->getDelta(); 
+				camera->fieldOfView -= 1.0f * timer->getDelta();
 			} else if (in->isKeyDown(Input::KEY_SHIFT) && in->isKeyDown(Input::KEY_HYPHEN)) {
-				camera->fieldOfView += 1.0f * timer->getDelta(); 
+				camera->fieldOfView += 1.0f * timer->getDelta();
 			}
 		}
 
@@ -597,7 +604,7 @@ namespace ARK {
 
 		}
 		void DummyCamera::render() {
-			
+
 		}
 
 	}

@@ -8,7 +8,7 @@
 #ifndef ARK_CORE_STRING_H_
 #define ARK_CORE_STRING_H_
 
-#include "../Includes.h"
+//#include "../Includes.h"
 #include "Resource.h"
 #include "../Util/StringUtil.h"
 #include "../Util/Cast.h"
@@ -94,7 +94,7 @@ namespace ARK {
 					if (from < 0) { return; }
 					m_string.erase(from, length);
 				}
-				void clear() { 
+				void clear() {
 					m_string.erase(0, m_string.length());
 				}
 				void operator--() {

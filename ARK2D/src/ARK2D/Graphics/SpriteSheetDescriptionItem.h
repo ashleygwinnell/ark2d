@@ -8,7 +8,7 @@
 #ifndef SPRITESHEETDESCRIPTIONITEM_H_
 #define SPRITESHEETDESCRIPTIONITEM_H_
 
-#include "../Includes.h"
+#include "../Common/DLL.h"
 
 namespace ARK {
 	namespace Graphics {

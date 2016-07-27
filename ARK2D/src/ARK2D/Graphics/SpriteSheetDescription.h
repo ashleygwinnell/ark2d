@@ -16,11 +16,14 @@
 #include <string>
 #include <cstring>
 #include <map>*/
-#include "../Includes.h"
+//#include "../Includes.h"
 
 #include "../Core/Resource.h"
 #include "SpriteSheetDescriptionItem.h"
 
+
+#include <string>
+#include <map>
 using namespace std;
 
 namespace ARK {

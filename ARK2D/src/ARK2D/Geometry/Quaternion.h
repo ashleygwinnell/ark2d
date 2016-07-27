@@ -119,14 +119,14 @@ class Quaternion {
 			return ret;
 		}
 
-		Matrix44<float> toMatrix() {
+		Matrix44 toMatrix() {
             float vals[16] = {
                 1.0f - 2.0f*y*y - 2.0f*z*z, 2.0f*x*y - 2.0f*z*w, 		2.0f*x*z + 2.0f*y*w, 		0.0f,
                 2.0f*x*y + 2.0f*z*w, 		1.0f - 2.0f*x*x - 2.0f*z*z, 2.0f*y*z - 2.0f*x*w, 		0.0f,
                 2.0f*x*z - 2.0f*y*w, 		2.0f*y*z + 2.0f*x*w, 		1.0f - 2.0f*x*x - 2.0f*y*y, 0.0f,
                 0.0f, 0.0f, 0.0f, 1.0f
             };
-            return Matrix44<float>(vals);
+            return Matrix44(vals);
 		}
 
 		Quaternion<T> cross(const Quaternion<T>& other) {

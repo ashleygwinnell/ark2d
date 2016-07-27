@@ -23,6 +23,7 @@ namespace ARK {
 	namespace Controls {
 		class Input;
 		class Gamepad;
+        class GamepadListener;
 	}
 	//! Core framework classes for Windowing, Default Objects, Events, Resources.
 	namespace Core {
@@ -48,10 +49,10 @@ namespace ARK {
 	}
 	//! Contains classes for Geometry including collision detection and resolution.
 	namespace Geometry {
-        
+
         template <class T=int>
         class CubeTemplate;
-        
+
         class Cube;
 
 		template <class T=int>
@@ -61,15 +62,15 @@ namespace ARK {
 		class RectangleTemplate;
 
 		class Rectangle;
-		
+
 		template <class T=int>
 		class Circle;
-		
+
 		template <class T=int>
 		class Line;
 
-		
-		
+
+
 
 	}
 	//! Classes for Game Jolt APIs.
@@ -95,9 +96,9 @@ namespace ARK {
 
 		class Texture;
 		class TextureStore;
-		
+
 		class Skybox;
-        
+
         class MatrixStack;
 
 		//! Classes for loading different images types in to pixel buffers.
@@ -146,12 +147,12 @@ namespace ARK {
 		class PathIO;
 		class SubPath;
 	}
-	//! Pathfinding, woo! 
+	//! Pathfinding, woo!
 	namespace Pathfinding {
 		class AStar;
 		class AStarNode;
 	}
-	
+
 	//! Classes for Scenegraphs
 	namespace SceneGraph {
 		class Scene;
@@ -164,7 +165,7 @@ namespace ARK {
 	namespace Spine {
 		class Skeleton;
 	}
-	
+
 	//! Classes for the finite state machine and game state. (e.g. Transitions, Loading)
 	namespace State {
 		class StateBasedGame;
@@ -242,13 +243,22 @@ namespace ARK {
 		class Wobble;
 		//class Transform;
 
-		template <class T>
-		class Matrix44;
+		template <class T=float>
+		class Matrix44Template;
+
+        class Matrix44;
+
+        template <class T=float>
+		class Matrix33Template;
+
+        class Matrix33;
 
 		template <class T>
 		class Range;
 
-		template <class T>
+		template <class T=float>
+		class Vector4Template;
+
 		class Vector4;
 
 		//! Contains Container classes such as Vector and Pool.
@@ -266,7 +276,7 @@ using namespace ARK;
 using namespace ARK::Audio;
 using namespace ARK::Controls;
 using namespace ARK::Core;
-//using namespace ARK::Font;
+using namespace ARK::Font;
 using namespace ARK::Geometry;
 using namespace ARK::GJ;
 using namespace ARK::Graphics;

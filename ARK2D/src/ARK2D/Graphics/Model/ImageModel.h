@@ -31,7 +31,7 @@ namespace ARK {
 					string filename;
 					vector<Vector3<float> > vertices;
 					vector<Vector3<float> > normals;
-					vector<Vector4<unsigned char> > colors;
+					vector<Vector4Template<unsigned char> > colors;
 					vector<ImageModelTriangle*> indices;
 
 					ARK::Geometry::Cube bounds;

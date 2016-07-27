@@ -466,23 +466,6 @@
 		//#pragma comment(lib, "msvcr120.lib")
 
 		#include "Common/OpenGL.h"
-
-
-
-
-	 	//#define GLEW_BUILD
-	 	//#define GLEW_STATIC
-	 	// GLEW_STATIC
-	 	// #define GLEW_MX
-	 	//#undef GLEW_MX
-
-		//#include <GL/GLew.h>
-		//#include "vendor/glew-vs.c"
-	 	//#include <GLFW/glfw3.h>
-
-	 	//#include <GL/GL.h>
-		//#include <GL/glu.h>
-
 		#include "Common/Audio.h"
 
 
@@ -547,6 +530,8 @@
  		#include "vendor/angelscript/add_on/scriptbuilder/scriptbuilder.h"
  		//#include "vendor/spine/SpineSkeleton.h"
 
+ 		using namespace std;
+
  	#elif defined(__linux__)
 		//#define ARK2D_UBUNTU_LINUX
 		#define STL_AVAILABLE
@@ -597,39 +582,10 @@
 
 	#define showAnyGlErrorAndExitMacro() Image::showAnyGlErrorAndExit(__FILE__, __LINE__)
 
-	#if defined (ARK2D_WINDOWS_PHONE_8)
-	//	typedef jmp_buf* (*png_set_longjmp_fnPtr)(png_structp png_ptr, png_longjmp_ptr longjmp_fn, size_t jmp_buf_size);
-	//	png_set_longjmp_fnPtr mypng_set_longjmp_fnPtr = 0;
-		#include "vendor/lpng1251-wp8/png.h"
-	#else
-		#include "vendor/lpng151/png.h"
-	#endif
-
-	#include "vendor/rapidxml/rapidxml.hpp"
-	using namespace rapidxml;
-
-	#include "vendor/libJSON/JSON_Defs.h"
-	#include "vendor/libJSON/JSONNode.h"
-	#include "vendor/libJSON/JSONChildren.h"
-	#include "vendor/libJSON/JSON_Worker.h"
-	#include "vendor/libJSON/JSON_Strings.h"
-	#include "vendor/libJSON/JSON_StringConv.h"
-	#include "vendor/libJSON/jsonmain.h"
-	#include "vendor/libJSON/Debug.h"
-
-	//#ifndef STDSTRDEF
-	//	typedef std::string stdstring;
-	//	#define STDSTRDEF
-	//#endif
-
-	/*
-
-
-	using std::vector;
-	using std::map;
-	using std::set;
-
-	*/
+ 	// TODO: Only include these where they are necessary.
+	//#include "Common/Libraries/libpng.h"
+	// #include "Common/Libraries/libjson.h"
+	// #include "Common/Libraries/rapidxml.h"
 
 
 #endif /* INCLUDES_H_ */

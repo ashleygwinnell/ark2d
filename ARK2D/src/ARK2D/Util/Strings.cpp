@@ -6,11 +6,12 @@
  */
 
 #include "Strings.h"
-#include "../Includes.h"
+//#include "../Includes.h"
 #include "../Core/Resource.h"
 #include "../Core/String.h"
 #include "StringUtil.h"
 #include "Log.h"
+#include "../Common/Libraries/rapidxml.h"
 #include "../vendor/rapidxml/ark_rapidxml_util.hpp"
 
 namespace ARK {

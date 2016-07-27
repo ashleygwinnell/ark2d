@@ -6,21 +6,22 @@
  */
 
 #include "StringUtil.h"
-#include "../Core/ToString.h"
-#include "../Core/String.h" 
+//#include "../Core/ToString.h"
+#include "../Core/String.h"
 #include "../Core/GameContainer.h"
-#include "../Util/Log.h" 
+#include "../Util/Log.h"
+//#include "../UI/ErrorDialog.h"
 
 namespace ARK {
 	namespace Util {
 
-	
+
 
 		int digitsInNumber(int number);
 		int digitsInNumber(int number) {
-			// todo: this, properly. 
-			if (number >= 1000000) { 
-				return 7; 
+			// todo: this, properly.
+			if (number >= 1000000) {
+				return 7;
 			} else if (number >= 100000) {
 				return 6;
 			} else if (number >= 10000) {
@@ -35,13 +36,13 @@ namespace ARK {
 			return 1;
 		}
 		std::string StringUtil::zeropad(int number, int digits) {
-			// how many digits in this number. 
+			// how many digits in this number.
 			int numdigits = digitsInNumber(number);
 
 			// diff between that and digits.
-			int diff = digits - numdigits; 
+			int diff = digits - numdigits;
 
-			// padd if appropriate. 
+			// padd if appropriate.
 			string s = Cast::toString<int>(number);
 			while (diff > 0) {
 				s = "0" + s;
@@ -55,9 +56,9 @@ namespace ARK {
 		string StringUtil::getMinuteSecondsFormatFromSeconds(float totaltime) {
 			int minutes = floor(totaltime/60.0f);
 			int seconds = int(totaltime) % 60;
-			
+
 			string scoreStr = "";
-			scoreStr += Cast::toString<int>(minutes); 
+			scoreStr += Cast::toString<int>(minutes);
 			scoreStr += string(":");
 			scoreStr += StringUtil::zeropad(seconds, 2);
 			return scoreStr;
@@ -66,9 +67,9 @@ namespace ARK {
 		string StringUtil::getMinuteSecondsLongFormatFromSeconds(float totaltime) {
 			int minutes = floor(totaltime/60.0f);
 			int seconds = int(totaltime) % 60;
-			
+
 			string scoreStr = "";
-			scoreStr += Cast::toString<int>(minutes);  
+			scoreStr += Cast::toString<int>(minutes);
 			scoreStr += string(" minutes ");
 			scoreStr += StringUtil::zeropad(seconds, 2);
 			scoreStr += string(" seconds");
@@ -180,7 +181,7 @@ namespace ARK {
 					lines.push_back(line);
 					lastLineUpToWord = i;
 					accumulatedWidth = 0;
-				} 
+				}
 			}
 			return lines;
 		}
@@ -318,7 +319,7 @@ namespace ARK {
 
 				for (j = 0; (j < i - 1); j++) ret += char_array_3[j];
 			}
-  
+
 			return ret;
 		}
 
@@ -329,7 +330,7 @@ namespace ARK {
 			//#endif
 
 			strFileName = internalOSAppends(strFileName);
-			
+
 			ARK2D::getLog()->i(StringUtil::append("Does file exist: ", strFileName));
 			FILE* file = NULL;
 			#if defined( ARK2D_WINDOWS_PHONE_8 )
@@ -344,7 +345,7 @@ namespace ARK {
 				fclose(file);
 				return true;
 			}
-			ARK2D::getLog()->v("Nope"); 
+			ARK2D::getLog()->v("Nope");
 			//fclose(file);
 			return false;
 		}
@@ -365,7 +366,7 @@ namespace ARK {
 		string StringUtil::file_get_contents(const char* fileName) {
 			if (fileName != NULL) {
 				string strFileName(fileName);
-				
+
 				// Prepend shit for each OS.
 				strFileName = internalOSAppends(strFileName);
 
@@ -393,7 +394,7 @@ namespace ARK {
 					if (file == NULL) {
 						string str = "Could not open file ["; str += strFileName; str += "] as it does not exist.";
 						ARK2D::getLog()->e(str);
-						return string(""); 
+						return string("");
 					}
 
 					//ARK2D::getLog()->e("pre seeking");
@@ -407,7 +408,7 @@ namespace ARK {
 					//! @todo: memory management: memory leak. yay.
 					// *************************
 
-					//ARK2D::getLog()->e("pre count/malloc"); 
+					//ARK2D::getLog()->e("pre count/malloc");
 					if (count > 0) {
 						text = (char*)malloc(sizeof(char) * (count + 1));
 						count = fread(text, sizeof(char), count, file);
@@ -489,11 +490,11 @@ namespace ARK {
 		            escaped.append("%");
 		            escaped.append( StringUtil::char2hex(c[i]) );//converts char 255 to string "ff"
 		        }
-		    } 
+		    }
 		    return escaped;
 		}
 
-		string StringUtil::char2hex( char dec ) 
+		string StringUtil::char2hex( char dec )
 		{
 		    char dig1 = (dec&0xF0)>>4;
 		    char dig2 = (dec&0x0F);
@@ -507,7 +508,7 @@ namespace ARK {
 		    r.append( &dig2, 1);
 		    return r;
 		}
-		
+
 
 
 		void StringUtil::trimLeft(string& str, const char* chars2remove) {
@@ -558,13 +559,13 @@ namespace ARK {
 		}
 
 		std::wstring StringUtil::stringToWstring(const string& s) {
-			
+
 			std::wstring ws(s.size(), L' '); // Overestimate number of code points.
 			ws.resize(mbstowcs(&ws[0], s.c_str(), s.size()));
 			return ws;
 		}
 		std::string StringUtil::wstringToString(const wstring& s) {
-			
+
 			std::string ws(s.size(), ' '); // Overestimate number of code points.
 			ws.resize(wcstombs(&ws[0], s.c_str(), s.size()));
 			return ws;
@@ -578,20 +579,20 @@ namespace ARK {
 		string StringUtil::getOrdinal(int i) {
 			vector<string> ends;
 			ends.push_back("th");
-			ends.push_back("st"); 
+			ends.push_back("st");
 			ends.push_back("nd");
 			ends.push_back("rd");
 			ends.push_back("th");
 			ends.push_back("th");
-			ends.push_back("th"); 
 			ends.push_back("th");
-			ends.push_back("th"); 
+			ends.push_back("th");
+			ends.push_back("th");
 			ends.push_back("th");
 
 			if ((i % 100) >= 11 && (i % 100) <= 13) {
    				return "th";
 			} else {
-   				return ends.at(i % 10); 
+   				return ends.at(i % 10);
 			}
 			return "th";
 		}
@@ -620,30 +621,30 @@ namespace ARK {
 			allowedChars.push_back('T'); allowedChars.push_back('t');
 			allowedChars.push_back('U'); allowedChars.push_back('u');
 			allowedChars.push_back('V'); allowedChars.push_back('v');
-			allowedChars.push_back('W'); allowedChars.push_back('w'); 
+			allowedChars.push_back('W'); allowedChars.push_back('w');
 			allowedChars.push_back('X'); allowedChars.push_back('x');
 			allowedChars.push_back('Y'); allowedChars.push_back('y');
 			allowedChars.push_back('Z'); allowedChars.push_back('z');
-			allowedChars.push_back('0'); 
-			allowedChars.push_back('1'); 
-			allowedChars.push_back('2'); 
-			allowedChars.push_back('3'); 
-			allowedChars.push_back('4'); 
-			allowedChars.push_back('5'); 
-			allowedChars.push_back('6'); 
-			allowedChars.push_back('7'); 
-			allowedChars.push_back('8'); 
-			allowedChars.push_back('9');  
-			allowedChars.push_back(' ');  
+			allowedChars.push_back('0');
+			allowedChars.push_back('1');
+			allowedChars.push_back('2');
+			allowedChars.push_back('3');
+			allowedChars.push_back('4');
+			allowedChars.push_back('5');
+			allowedChars.push_back('6');
+			allowedChars.push_back('7');
+			allowedChars.push_back('8');
+			allowedChars.push_back('9');
+			allowedChars.push_back(' ');
 			return restrictToCharset(str, allowedChars);
 		}
 		string StringUtil::restrictToCharset(string str, vector<char> allowedChars) {
 			string cleanStr("");
 			for (unsigned int i = 0; i < str.length(); i++) {
 				if(std::find(allowedChars.begin(), allowedChars.end(), str[i]) != allowedChars.end()) {
-					cleanStr += str[i]; 
-				}  
-			} 
+					cleanStr += str[i];
+				}
+			}
 			return cleanStr;
 		}
 

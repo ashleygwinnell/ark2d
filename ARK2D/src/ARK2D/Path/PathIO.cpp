@@ -6,6 +6,7 @@
  */
 
 #include "PathIO.h"
+#include "../Common/Libraries/libjson.h"
 
 namespace ARK {
 	namespace Path {

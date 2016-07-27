@@ -9,16 +9,18 @@
 #define GRAPHICS_H_
 
 #include <string>
+using std::string;
+
+#include "../Namespaces.h"
 #include "../Font/BMFont.h"
 #include "Color.h"
 #include "MatrixStack.h"
 #include "../Util/StringUtil.h"
 #include "../Util/Matrix44.h"
+#include "../Util/Matrix33.h"
 #include "../Font/Font.h"
 
-#include "../Includes.h"
-#include "../Namespaces.h"
-
+//#include "../Core/GameContainer.h"
 
 
 namespace ARK {
@@ -369,8 +371,10 @@ namespace ARK {
 
 			#endif
 
-			friend class ARK::Core::GameContainer;
-			friend class ARK::Core::GameContainerPlatform;
+            friend class ARK::Core::GameContainer;
+            friend class ARK::Core::GameContainerPlatform;
+			//friend class GameContainer;
+			//friend class GameContainerPlatform;
 
 			private:
 				static const int DEFAULT_SEGMENTS = 50;
@@ -394,13 +398,13 @@ namespace ARK {
 				static MatrixStack* s_matrixProjection;
 				static MatrixStack* s_matrixView;
 				static MatrixStack* s_matrixModel;
-				static Matrix33<float>* s_matrixNormal;
+				static Matrix33* s_matrixNormal;
 			public:
 				static MatrixStack* getMatrix();
 				static MatrixStack* getMatrix(unsigned int type);
-				static void multiplyMatrix(Matrix44<float>* by);
+				static void multiplyMatrix(Matrix44* by);
 				static void matrixMode(unsigned int mode);
-				static Matrix33<float>* getNormalMatrix();
+				static Matrix33* getNormalMatrix();
 
 			#if defined (ARK2D_RENDERER_DIRECTX)
 				static ID3D11Buffer* s_d3d_matrixBuffer;
@@ -614,8 +618,8 @@ namespace ARK {
 				void setBlendMode(unsigned int blendMode);
 				unsigned int getBlendMode();
 
-				void loadMatrix(Matrix44<float>* m) const;
-				void loadMatrix(const Matrix44<float>& m) const;
+				void loadMatrix(Matrix44* m) const;
+				void loadMatrix(const Matrix44& m) const;
 				void resetMatrix() const;
 
 				// internals... :|

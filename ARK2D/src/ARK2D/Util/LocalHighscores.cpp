@@ -9,6 +9,7 @@
 
 #include "../ARK2D.h"
 #include "../Core/GameContainer.h"
+#include "../Common/Libraries/libjson.h"
 
 namespace ARK {
 	namespace Util {

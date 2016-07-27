@@ -8,6 +8,7 @@
 #ifndef SHAPE_H_
 #define SHAPE_H_
 
+#include "../Namespaces.h"
 #include "../ARK2D.h"
 //#include "../Core/GameContainer.h"
 //#include "../Graphics/Renderer.h"

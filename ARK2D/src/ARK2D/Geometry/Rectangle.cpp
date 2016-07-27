@@ -18,7 +18,7 @@ namespace ARK {
 
         bool Rectangle::collides(Shape<float>* s){
 			 
-			if (s == NULL) { ErrorDialog::createAndShow("A Shape was NULL"); }
+            if (s == NULL) { ARK2D::getLog()->e("A Shape was NULL"); return false; }
 
 			// rectangle
 			RectangleTemplate<float>* rect = NULL;

@@ -14,7 +14,7 @@
 #include "../Game.h"
 #include "../GameContainer.h"
 
-using namespace ARK::Core;
+//using namespace ARK::Core;
 
  
 

@@ -1,6 +1,7 @@
 
 #include "MatrixStack.h"
 #include "../Util/Log.h"
+#include "../UI/ErrorDialog.h"
 
 namespace ARK { 
 	namespace Graphics {
@@ -12,7 +13,7 @@ namespace ARK {
 			m_root(0),
 			m_dirty(true)
 		{
-			Matrix44<float> defaultMatrix;
+			Matrix44 defaultMatrix;
 			defaultMatrix.identity();
 			m_stack.push_back(defaultMatrix);
 		}
@@ -23,17 +24,17 @@ namespace ARK {
 			m_root(0),
 			m_dirty(true)
 		{
-			Matrix44<float> defaultMatrix;
+			Matrix44 defaultMatrix;
 			defaultMatrix.identity();
 			m_stack.push_back(defaultMatrix);
 		}
-		MatrixStack::MatrixStack(unsigned int type, Matrix44<float> basecopy):
+		MatrixStack::MatrixStack(unsigned int type, Matrix44 basecopy):
 			m_type(type),
 			m_stack(),  
 			m_stackIndex(0),
 			m_root(0),
 			m_dirty(true) {
-			Matrix44<float> defaultMatrix = basecopy.copy();
+			Matrix44 defaultMatrix = basecopy.copy();
 			m_stack.push_back(defaultMatrix);
 		}
 		void MatrixStack::translate(float x, float y, float z) {
@@ -72,7 +73,7 @@ namespace ARK {
 			m_dirty = true;
 		}
 		float* MatrixStack::data(float* mx) {
-			const Matrix44<float>& thismx = m_stack.at(m_stackIndex); 
+			const Matrix44& thismx = m_stack.at(m_stackIndex);
 			mx[0] = thismx[0][0];
 			mx[1] = thismx[0][1];
 			mx[2] = thismx[0][2];
@@ -108,13 +109,13 @@ namespace ARK {
 			return m_root;
 		}
 
-		const Matrix44<float>* MatrixStack::current() const {
+		const Matrix44* MatrixStack::current() const {
 			return &m_stack[m_stackIndex];
         }
-        Matrix44<float>* MatrixStack::current() {
+        Matrix44* MatrixStack::current() {
             return &m_stack[m_stackIndex];
         }
-		Matrix44<float>* MatrixStack::at(unsigned int index) {
+		Matrix44* MatrixStack::at(unsigned int index) {
 			return &m_stack[index];
 		}
 
@@ -227,7 +228,7 @@ namespace ARK {
 			if (setRoot) { m_root = m_stackIndex; }
 
 			if (m_stackIndex >= m_stack.size()) {
-				Matrix44<float> copy = m_stack.at(m_stackIndex-1).copy();
+				Matrix44 copy = m_stack.at(m_stackIndex-1).copy();
 				m_stack.push_back(copy);
 			} else { 
 				m_stack.at(m_stackIndex).set(m_stack.at(m_stackIndex-1));

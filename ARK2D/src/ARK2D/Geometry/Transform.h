@@ -8,10 +8,8 @@
 #ifndef ARK_MATH_TRANSFORM_H_
 #define ARK_MATH_TRANSFORM_H_
 
-#include "../Util/Vector4.h"
 #include "Vector3.h"
 #include "Quaternion.h"
-
 
 #include <vector>
 using namespace std;
@@ -28,7 +26,7 @@ namespace ARK {
 				Transform();
 				// void translate(float x, float y, float z); // use += on position
                 // void scale(float x, float y, float z); // use *= on scale
-				Matrix44<float> toMatrix();
+				Matrix44 toMatrix();
 				virtual ~Transform();
 		};
 

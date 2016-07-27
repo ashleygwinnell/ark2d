@@ -8,8 +8,12 @@
 #ifndef ARK2D_H_
 #define ARK2D_H_
 
-#include "Includes.h"
+#include "Common/DLL.h"
 #include "Namespaces.h"
+
+#include <vector>
+#include <string>
+using namespace std;
 
 /*!
  * \brief Main static way of accessing global variables such as container, game, input and log.
@@ -20,9 +24,9 @@
 class ARK2D_API ARK2D {
 	friend class ARK::Core::GameContainer;
 
-	public: 
+	public:
 		static void main(int args, char** argv);
-		
+
 		static GameContainer* getContainer();
 		static Game* getGame();
 		static Renderer* getRenderer();
@@ -38,7 +42,7 @@ class ARK2D_API ARK2D {
 
 		static bool isDebug();
 		static void setDebug(bool b);
-		
+
 		static bool isExpoMode();
 		static void setExpoMode(bool b);
 

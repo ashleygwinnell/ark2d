@@ -6,6 +6,7 @@
  */
 
 #include "Transform.h"
+#include "../Util/Vector4.h"
 #include "../Util/Matrix44.h"
 
 namespace ARK {
@@ -26,8 +27,8 @@ namespace ARK {
 		//	scale.multiply(x, y, z);
 		//}
 
-		Matrix44<float> Transform::toMatrix() {
-			Matrix44<float> m;
+		Matrix44 Transform::toMatrix() {
+			Matrix44 m;
 			m.translate(position.getX(), position.getY(), position.getZ());
     		m *= rotation.toMatrix();
     		m.scale(scale.getX(), scale.getY(), scale.getZ());
@@ -38,6 +39,6 @@ namespace ARK {
 
 		}
 
-		
+
 	}
 }

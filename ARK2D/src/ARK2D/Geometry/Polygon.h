@@ -184,7 +184,7 @@ namespace ARK {
 					return false;
 				}
 				virtual bool collides(Shape<T>* s) {
-					if (s == NULL) { ErrorDialog::createAndShow("A Shape was NULL"); }
+                    if (s == NULL) { ARK2D::getLog()->e("A Shape was NULL"); return false;}
 
 					Polygon<T>* polygon = NULL;
 					polygon = dynamic_cast<Polygon<T>* >(s);

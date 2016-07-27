@@ -28,7 +28,7 @@ namespace ARK {
 					vector<Vector3<float> > vertices;
 					vector<Vector2<float> > uvs;
 					vector<Vector3<float> > normals;
-					vector<Vector4<unsigned char> > colors;
+					vector<Vector4Template<unsigned char> > colors;
 					
 				public:
 					ObjModel(string fn);  

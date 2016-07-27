@@ -10,6 +10,7 @@
 
 #include "../../ARK2D.h"
 #include "../../Includes.h"
+#include "../../Common/Libraries/libpng.h"
 
 namespace ARK {
 	namespace Graphics {
@@ -33,7 +34,7 @@ namespace ARK {
 					bool isRGB();
 					bool isRGBA();
 					static void saveFile(std::string filename, char* data, int w, int h);
-					~PNGImage(); 
+					~PNGImage();
 				private:
 					std::string m_filename;
 					//FILE *fp; // file handle.

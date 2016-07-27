@@ -7,10 +7,10 @@
 #ifndef ARK_CORE_GAME_H_
 #define ARK_CORE_GAME_H_
 
-
-#include "../Includes.h"
+//#include "../Includes.h"
 #include "../Namespaces.h"
 
+#include "../Common/DLL.h"
 #include "../Controls/KeyListener.h"
 #include "../Controls/Gamepad.h"
 #include "../SceneGraph/Scene.h"
