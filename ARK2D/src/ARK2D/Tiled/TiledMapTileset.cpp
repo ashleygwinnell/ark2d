@@ -1,6 +1,8 @@
 
 #include "TiledMapTile.h"
 #include "TiledMapTileset.h"
+#include "../Graphics/Color.h"
+#include "../Graphics/Image.h"
 
 namespace ARK {
 	namespace Tiled {

@@ -8,8 +8,11 @@
 #ifndef ARK_NET_ADDRESS_H_
 #define ARK_NET_ADDRESS_H_
 
-#include "../Includes.h"
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include <string>
+using std::string;
 
 namespace ARK {
 	namespace Net {
@@ -38,7 +41,7 @@ namespace ARK {
 				unsigned short getPort() const;
 				void setBroadcast();
 				void setPort(unsigned short port);
-			
+
 				bool operator == ( const Address & other ) const;
 				bool operator != ( const Address & other ) const;
 				bool operator < ( const Address & other ) const;

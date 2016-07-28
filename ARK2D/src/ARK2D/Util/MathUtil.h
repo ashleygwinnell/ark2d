@@ -9,11 +9,15 @@
 #define MATHUTIL_H_
 
 //#include "../ARK2D.h"
+#include "../Namespaces.h"
 #include "../Common/DLL.h"
 
 #include "../Geometry/Vector2.h"
 #include "../Geometry/Vector3.h"
 #include "Cast.h"
+
+#include <vector>
+using std::vector;
 
 #ifndef MY_PI
 	#define MY_PI 3.14159265

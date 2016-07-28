@@ -11,10 +11,12 @@
 #include "../Util/Log.h"
 
 #include "../Core/GameContainer.h"
+#include "../Graphics/TextureStore.h"
+#include "../Graphics/ShaderStore.h"
 
 namespace ARK {
 	namespace UI {
-		void ErrorDialog::createAndShow(string message) { 
+		void ErrorDialog::createAndShow(string message) {
 			#if defined(ARK2D_WINDOWS_PHONE_8)
 
 				using namespace Windows::UI::Popups;
@@ -33,19 +35,19 @@ namespace ARK {
 				delete wideContents;
 
 			#elif defined(ARK2D_EMSCRIPTEN_JS)
-				ARK2D::getLog()->e(message); 
+				ARK2D::getLog()->e(message);
 
 			#elif defined(ARK2D_ANDROID)
-				ARK2D::getLog()->e(message); 
+				ARK2D::getLog()->e(message);
 				if (ARK2D::getContainer()->getPlatformSpecific()->getPluggable()->ouya_isOuya()) {
 					ARK2D::getContainer()->getPlatformSpecific()->getPluggable()->openErrorDialog(message);
-				} 
+				}
 			#elif defined(ARK2D_WINDOWS)
 				MessageBox(NULL, message.c_str(), NULL, MB_OK | MB_ICONEXCLAMATION);
-				ARK2D::getLog()->e(message); 
+				ARK2D::getLog()->e(message);
 			#elif defined(ARK2D_UBUNTU_LINUX)
-				ARK2D::getLog()->e(message); 
-				
+				ARK2D::getLog()->e(message);
+
 				#if defined(ARK2D_SDL2)
 					SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error: ", message.c_str(), NULL);
 				#else
@@ -55,15 +57,15 @@ namespace ARK {
 					int ret = system(note.c_str());
 				#endif
 			#elif defined(ARK2D_IPHONE)
-				
+
 				NSString* nsmessage = [NSString stringWithCString:message.c_str() encoding:[NSString defaultCStringEncoding]];
 				UIAlertView* alert = [[[UIAlertView alloc] initWithTitle: @"Error:" message: nsmessage delegate: NULL cancelButtonTitle: @"OK" otherButtonTitles: NULL] autorelease];
     			[alert show];
 
-			
+
 			#elif defined(ARK2D_MACINTOSH)
 
-    			ARK2D::getLog()->e(message); 
+    			ARK2D::getLog()->e(message);
 
     			const char* messageCStr = message.c_str();
     			unsigned int messageLen = message.length();
@@ -82,7 +84,7 @@ namespace ARK {
 					&result
 				);
 
-				if (header_ref != NULL) {  CFRelease( header_ref ); } 
+				if (header_ref != NULL) {  CFRelease( header_ref ); }
 				if (message_ref != NULL) {  CFRelease( message_ref ); }
 
 				// kCFUserNotificationDefaultResponse // default button pressed
@@ -121,5 +123,83 @@ namespace ARK {
 
 			#endif
 		}
+
+		void ErrorDialog::showAnyGlErrorAndExit() {
+			showAnyGlErrorAndExit( __FILE__, __LINE__ );
+		}
+		void ErrorDialog::showAnyGlErrorAndExit(const char* fname, int line) {
+			//#ifdef ARK2D_DEBUG
+			if (ARK2D::getLog()->getFilter() == ARK::Util::Log::TYPE_ALL)
+			{
+				#if defined(ARK2D_RENDERER_DIRECTX)
+					/*string s = "dx: ";
+					s += fname;
+					s += " - ";
+					s += Cast::toString<int>(line);
+					s += ".";
+					ARK2D::getLog()->v(s);*/
+					return;
+				#elif defined(ARK2D_RENDERER_OPENGL)
+					RendererStats::s_glCalls++;
+					int e = glGetError();
+					if (e != GL_NO_ERROR) {
+						ARK2D::getLog()->e("-----------!!!-----------");
+						ARK2D::getLog()->e("A GL error. :( ");
+						ARK2D::getLog()->e("Renderer state:" );
+						ARK2D::getLog()->e(ARK2D::getRenderer()->toString());
+						TextureStore::getInstance()->print();
+            			ShaderStore::getInstance()->print();
+
+						RendererStats::s_glCalls++;
+						string s = getGlErrorString(e);
+						s += " : ";
+						s += fname;
+						s += Cast::toString<int>(line);
+						s += ".";
+						ErrorDialog::createAndShow(s);
+						exit(0);
+					}
+				#endif
+			}
+			//#endif
+		}
+
+		string ErrorDialog::getGlErrorString(int error) {
+			#if defined(ARK2D_RENDERER_OPENGL)
+				switch(error) {
+					case GL_INVALID_ENUM:
+						return "GL_INVALID_ENUM";
+						break;
+					case GL_INVALID_VALUE:
+						return "GL_INVALID_VALUE";
+						break;
+					#if !defined(ARK2D_ANDROID)
+						case GL_INVALID_FRAMEBUFFER_OPERATION:
+							return "GL_INVALID_FRAMEBUFFER_OPERATION";
+							break;
+					#endif
+					case GL_INVALID_OPERATION:
+						return "GL_INVALID_OPERATION";
+						break;
+					case GL_OUT_OF_MEMORY:
+						return "GL_OUT_OF_MEMORY";
+						break;
+
+					/*case GL_STACK_OVERFLOW:
+						return "GL_STACK_OVERFLOW";
+						break;
+					case GL_STACK_UNDERFLOW:
+						return "GL_STACK_UNDERFLOW";
+						break;
+					case GL_TABLE_TOO_LARGE:
+						return "GL_TABLE_TOO_LARGE";
+						break;*/
+				}
+				return "GL_UNKNOWN_ERROR";
+			#else
+				return "DIRECTX_ERROR_NOT_IMPLEMENTED";
+			#endif
+		}
+
 	}
 }

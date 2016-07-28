@@ -8,13 +8,19 @@
 #ifndef ARK_NET_DISCOVERY_H_
 #define ARK_NET_DISCOVERY_H_
 
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
 #include "Includes.h"
 #include "Socket.h"
 #include "Address.h"
 
+#include <vector>
+using std::vector;
+
 namespace ARK {
 	namespace Net {
-		
+
 		struct DiscoveryAddress {
 			string name;
 			Address ipv4address;
@@ -22,7 +28,7 @@ namespace ARK {
 		};
 
 		/*!
-		 * \brief Discover servers running on the local area network. 
+		 * \brief Discover servers running on the local area network.
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
@@ -36,7 +42,7 @@ namespace ARK {
 				static const unsigned char EVENT_RESPONSE = 200;
 
 			protected:
-			
+
 				unsigned int m_protocolId;
 				unsigned int m_port;
 				unsigned int m_mode;
@@ -52,43 +58,43 @@ namespace ARK {
 				bool m_running;
 
 			public:
-				
+
 				Discovery();
 				Discovery( unsigned int protocolId );
 
 				bool isRunning();
-				
+
 				unsigned int getMode() const;
 
 				bool start( int port );
 				void stop();
-				
+
 				void search();
 				void listen();
-				
+
 				bool call();
 				bool respond(Address& a);
 				int receive(unsigned char data[], int size);
-				
+
 				void update( float deltaTime );
 
 				vector<DiscoveryAddress>* getServers();
-				
+
 				virtual ~Discovery();
-				
+
 			protected:
-				
+
 				//virtual void onStart()		{ }
 				//virtual void onStop()		{ }
 				//virtual void onConnect()    { }
 				//virtual void onDisconnect() { }
-					
+
 			private:
-				
+
 				//void clearData();
-			
-				
-	
+
+
+
 		};
 	}
 }

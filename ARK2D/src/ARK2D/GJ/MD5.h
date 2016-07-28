@@ -33,7 +33,10 @@ documentation and/or software.
 #ifndef ARK_GJ_MD5_H
 #define ARK_GJ_MD5_H
 
-#include "../Includes.h"
+//#include "../Includes.h"
+#include "../Common/DLL.h"
+#include <string>
+#include <ostream>
 
 namespace ARK {
   namespace GJ { 

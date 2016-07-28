@@ -8,9 +8,8 @@
 #ifndef TRANSITION_H_
 #define TRANSITION_H_
 
-#include "../../Includes.h"
 #include "../../Namespaces.h"
-
+#include "../../Common/DLL.h"
 
 namespace ARK {
 	namespace State {

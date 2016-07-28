@@ -8,10 +8,13 @@
 #ifndef SUBPATH_H_
 #define SUBPATH_H_
 
-
-
-#include "../Includes.h"
+//#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 #include "../Geometry/Vector2.h"
+
+#include <string>
+#include <vector>
 using namespace std;
 
 namespace ARK {

@@ -8,7 +8,8 @@
 #ifndef ARK_UTIL_WOBBLE_H_
 #define ARK_UTIL_WOBBLE_H_
 
-#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 #include "../Geometry/Vector2.h"
 
 namespace ARK {

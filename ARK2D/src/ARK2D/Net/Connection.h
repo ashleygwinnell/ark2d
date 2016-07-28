@@ -8,13 +8,19 @@
 #ifndef ARK_NET_CONNECTION_H_
 #define ARK_NET_CONNECTION_H_
 
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
 #include "Includes.h"
 #include "Socket.h"
 #include "Address.h"
 
+#include <vector>
+using std::vector;
+
 namespace ARK {
 	namespace Net {
-		
+
 		//class ARK2D_API Address;
 
 		/*!
@@ -29,7 +35,7 @@ namespace ARK {
 				static const unsigned int MODE_CLIENT 	= 1;
 				static const unsigned int MODE_SERVER 	= 2;
 				//enum Mode {
-				//	None,	
+				//	None,
 				//	Client,
 				//	Server
 				//};
@@ -49,31 +55,31 @@ namespace ARK {
 				// };
 
 			protected:
-			
-				
+
+
 
 				unsigned int m_protocolId;
 				float m_timeout;
-				
+
 				bool m_running;
 				unsigned int m_mode; // Mode enum
 				//unsigned int m_state; // State enum
 				Socket m_socket;
 				//float m_timeoutAccumulator;
 				//ARK::Net::Address m_address;
-			
+
 				vector<ARK::Net::Address> m_addresses; // for servers, this is a list of clients. for clients this is the server address.
 				vector<float> m_timeoutAccumulators;
 				vector<unsigned int> m_states;
 
 			public:
-				
+
 				Connection();
 				Connection( unsigned int protocolId, float timeout );
-				
+
 				bool start( int port );
 				void stop();
-				
+
 				void connect( const Address & address );
 				void listen();
 				bool isRunning() const;
@@ -81,7 +87,7 @@ namespace ARK {
 				bool isConnected() const;
 				bool isListening() const;
 				bool connectFailed() const;
-				
+
 				//Mode getMode() const;
 				unsigned int getMode() const;
 
@@ -90,32 +96,32 @@ namespace ARK {
 				signed int getAddressIndex(Address& sender);
 				vector<ARK::Net::Address>* getAddresses();
 				unsigned int countAddresses();
-				
+
 				virtual void update( float deltaTime );
-				
+
 				//virtual bool sendPacket(const unsigned char data[], int size);
 				virtual bool sendPacket(unsigned int addressIndex, const unsigned char data[], int size);
 				virtual bool sendPacketAll(const unsigned char data[], int size);
 				virtual int receivePacket(Address& sender, unsigned char data[], int size);
-				
+
 				int getHeaderSize() const;
 
 				virtual ~Connection();
-				
+
 			protected:
-				
+
 				virtual void onStart()		{ }
 				virtual void onStop()		{ }
 				virtual void onConnect(unsigned int num);
 				virtual void onDisconnect(unsigned int num);
 				virtual void onDisconnectAll();
-			
+
 			private:
-				
+
 				void clearData();
-			
-				
-	
+
+
+
 		};
 	}
 }

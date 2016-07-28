@@ -8,9 +8,6 @@
 #ifndef COMBOBOX_H_
 #define COMBOBOX_H_
 
-#include <vector>
-using namespace std;
-
 #include "../ARK2D.h"
 #include "AbstractUIComponent.h"
 #include <vector>
@@ -37,7 +34,7 @@ namespace ARK {
 				void* m_itemChangedEvent;
 				int m_originalHeight;
 
-				
+
 
 			public:
 				ComboBox();
@@ -54,7 +51,7 @@ namespace ARK {
 				void renderArrow();
 				void renderText(int x, int y);
 				void renderOverlay();
-            
+
                 bool keyPressed(unsigned int key);
                 bool keyReleased(unsigned int key);
                 bool mouseMoved(int x, int y, int oldx, int oldy);

@@ -8,8 +8,9 @@
 #ifndef ANIMATION_H_
 #define ANIMATION_H_
 
-#include "../Includes.h"
+//#include "../Includes.h"
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
 //#include "Image.h"
 //#include "../Core/GameTimer.h"
 #include "../Util/Containers/Vector.h"
@@ -31,7 +32,7 @@ namespace ARK {
 				void addFrame(Image* image);
 				Image* getCurrentFrame();
 				inline unsigned int getCurrentFrameIndex() { return m_currentFrameIndex; }
-				inline void setCurrentFrameIndex(unsigned int i) { m_currentFrameIndex = i; } 
+				inline void setCurrentFrameIndex(unsigned int i) { m_currentFrameIndex = i; }
 				Image* getNextFrame(unsigned int i = 1);
 				Image* getFrame(unsigned int i);
 
@@ -44,7 +45,7 @@ namespace ARK {
 				void setTime(float f);
 				float getTime();
 
-				void setFrameTime(unsigned int ft); 
+				void setFrameTime(unsigned int ft);
 				void setFrameTime(float ft);
 				float getFrameTime();
 				float getDuration() { return getFrameTime(); }

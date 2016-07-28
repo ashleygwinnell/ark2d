@@ -8,7 +8,8 @@
 #ifndef TILEDMAP_H_
 #define TILEDMAP_H_
 
-#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 
 #include "../Common/Libraries/rapidxml.h"
 #include "../Common/Libraries/libjson.h"
@@ -21,7 +22,7 @@
 #include "TiledMapTileset.h"
 #include "TiledMapProperty.h"
 #include "TiledMapLayer.h"
-#include "TiledMapObjectGroup.h" 
+#include "TiledMapObjectGroup.h"
 #include "TiledMapObject.h"
 
 namespace ARK {
@@ -42,7 +43,7 @@ namespace ARK {
 			public:
 				TiledMapParser_TinyXml(TiledMap* map, string file);
 				virtual void parse();
-				void parseTileset(unsigned int& firstgid, string& src, TiXmlDocument* tileset_d);	
+				void parseTileset(unsigned int& firstgid, string& src, TiXmlDocument* tileset_d);
 		};
 		class ARK2D_API TiledMapParser_RapidXml : public TiledMapParser {
 			public:
@@ -62,7 +63,7 @@ namespace ARK {
 				virtual void parse();
 		};
 
-		
+
 		/*!
 		 * \brief Class for managing tiled maps.
 		 *
@@ -114,8 +115,8 @@ namespace ARK {
 				void draw();
 				void draw(signed int x, signed int y);
 				virtual ~TiledMap();
-			
-			protected: 
+
+			protected:
 				TiledMapParser* m_parser;
 				string m_file;
 				void* m_data;
@@ -131,11 +132,11 @@ namespace ARK {
 				unsigned int m_widthInPixels;
 				unsigned int m_heightInPixels;
 
-				
+
 		};
 
-		
-	
+
+
 	}
 }
 

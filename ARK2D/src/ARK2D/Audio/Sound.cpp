@@ -5,11 +5,14 @@
  */
 
 #include "Sound.h"
-#include "../Core/Resource.h" 
+#include "SoundStore.h"
+
+#include "../Core/Resource.h"
 #include "../Core/String.h"
 #include "../Util/StringUtil.h"
+#include "../UI/ErrorDialog.h"
 
-#include "../Util/Log.h" 
+#include "../Util/Log.h"
 #include "../vendor/FileInterface.h"
 
 //#include "../Includes.h"
@@ -23,15 +26,15 @@
 	 AS3::ui::var m_flascc_soundEventHandler(void* arg, AS3::ui::var as3Args) {
 		/*flash::events::Event event = (flash::events::Event) as3Args[0];
 		String type = event->type;
-		
+
 		// convert to std::string
-		std::string typeStr = AS3::sz2stringAndFree(internal::utf8_toString(type));	
+		std::string typeStr = AS3::sz2stringAndFree(internal::utf8_toString(type));
 
 		printf("Event [%s]\n", typeStr.c_str());*/
 
-		Sound* s = (Sound*) arg;  	
+		Sound* s = (Sound*) arg;
 		s->__flasccInternal_setPlaying(false);
-		
+
 		return AS3::ui::internal::_undefined;
 	}
 #endif
@@ -40,18 +43,18 @@
 	IXAudio2* ARK::Audio::Sound::s_engine = NULL;
 	IXAudio2MasteringVoice* ARK::Audio::Sound::s_master = NULL;
 
-	Xaudio2VoiceCallback::Xaudio2VoiceCallback(): 
+	Xaudio2VoiceCallback::Xaudio2VoiceCallback():
     	//hBufferEndEvent( CreateEvent( NULL, FALSE, FALSE, NULL ) ),
     	m_ark2dSoundPointer(NULL) {
 
     }
-    Xaudio2VoiceCallback::~Xaudio2VoiceCallback() { 
-    	//CloseHandle( hBufferEndEvent ); 
+    Xaudio2VoiceCallback::~Xaudio2VoiceCallback() {
+    	//CloseHandle( hBufferEndEvent );
     }
 
     //Called when the voice has just finished playing a contiguous audio stream.
-    void Xaudio2VoiceCallback::OnStreamEnd() { 
-    	//SetEvent( hBufferEndEvent ); 
+    void Xaudio2VoiceCallback::OnStreamEnd() {
+    	//SetEvent( hBufferEndEvent );
     	m_ark2dSoundPointer->m_xaIsPlaying = false;
     	//ARK2D::getLog()->e("Stream End");
     }
@@ -59,17 +62,17 @@
     //Unused methods are stubs
     void Xaudio2VoiceCallback::OnVoiceProcessingPassEnd() { }
     void Xaudio2VoiceCallback::OnVoiceProcessingPassStart(UINT32 SamplesRequired) {    }
-    void Xaudio2VoiceCallback::OnBufferEnd(void * pBufferContext) { 
+    void Xaudio2VoiceCallback::OnBufferEnd(void * pBufferContext) {
     	//ARK2D::getLog()->e("Buffer End");
     }
-    void Xaudio2VoiceCallback::OnBufferStart(void * pBufferContext) { 
+    void Xaudio2VoiceCallback::OnBufferStart(void * pBufferContext) {
     	//ARK2D::getLog()->e("Buffer Start");
     }
     void Xaudio2VoiceCallback::OnLoopEnd(void * pBufferContext) {    }
     void Xaudio2VoiceCallback::OnVoiceError(void * pBufferContext, HRESULT Error) { }
 
 #endif
-	 
+
 
 namespace ARK {
 	namespace Audio {
@@ -81,8 +84,8 @@ namespace ARK {
 		//void Sound::setDefaultGroupId(unsigned int id) {
 		//	DEFAULT_GROUP_ID = id;
 		//}
-	
-		#if defined(ARK2D_WINDOWS_PHONE_8)			
+
+		#if defined(ARK2D_WINDOWS_PHONE_8)
 			void Sound::initialiseXAudio() {
 				if (s_engine == NULL) {
 					ARK2D::getLog()->i("Initialising COM...");
@@ -97,7 +100,7 @@ namespace ARK {
 
 					HRESULT hr = XAudio2Create(&s_engine, 0, XAUDIO2_DEFAULT_PROCESSOR);
 					if (FAILED(hr)) {
-						ARK2D::getLog()->i("Could not initialise XAudio2."); 
+						ARK2D::getLog()->i("Could not initialise XAudio2.");
 						return;
 					}
 
@@ -114,15 +117,15 @@ namespace ARK {
 						return;
 					}
 
-					
-					
+
+
 				}
 			}
 
 			string Sound::getXAudio2Error(HRESULT hr) {
 				if (hr == XAUDIO2_E_INVALID_CALL) {
 					return "XAUDIO2_E_INVALID_CALL";
-				} 
+				}
 				else if (hr == XAUDIO2_E_XMA_DECODER_ERROR) {
 					return "XAUDIO2_E_XMA_DECODER_ERROR";
 				}
@@ -164,7 +167,7 @@ namespace ARK {
 				m_flascc_transform(AS3::ui::internal::_null),
 				m_flascc_isSoundPlaying(false),
 				m_flascc_pausePosition(0)
-			#elif defined(ARK2D_WINDOWS_PHONE_8)	
+			#elif defined(ARK2D_WINDOWS_PHONE_8)
 				,
 				m_xaSource(NULL),
 				m_xaWF(),
@@ -176,8 +179,8 @@ namespace ARK {
 			//Buffer(AL_NONE),
 			//Source(AL_NONE)
 		{
-			
-			
+
+
 			ARK2D::getLog()->v(StringUtil::append("Loading Sound: ", filename));
 
 			this->setSourcePosition(0.0, 0.0, 0.0);
@@ -201,7 +204,7 @@ namespace ARK {
 			m_preloadedData(data),
 			m_preloadedDataLength(dataLength),
 			Buffer(0),
-			Source(0) 
+			Source(0)
 
 			#if defined(ARK2D_FLASCC)
 				,
@@ -210,7 +213,7 @@ namespace ARK {
 				m_flascc_transform(AS3::ui::internal::_null),
 				m_flascc_isSoundPlaying(false),
 				m_flascc_pausePosition(0)
-			#elif defined(ARK2D_WINDOWS_PHONE_8)	
+			#elif defined(ARK2D_WINDOWS_PHONE_8)
 				,
 				m_xaSource(NULL),
 				m_xaWF(),
@@ -219,7 +222,7 @@ namespace ARK {
 			#endif
 
 			{
-			ARK2D::getLog()->v(StringUtil::append("Loading Sound from memory: ", filename)); 
+			ARK2D::getLog()->v(StringUtil::append("Loading Sound from memory: ", filename));
 			this->setSourcePosition(0.0, 0.0, 0.0);
 			this->setSourceVelocity(0.0, 0.0, 0.0);
 
@@ -258,20 +261,20 @@ namespace ARK {
 		/*AS3::ui::var soundEventHandler(void *arg, AS3::ui::var as3Args){
 		    AS3::ui::flash::events::Event event = (AS3::ui::flash::events::Event) as3Args[0];
 		    AS3::ui::String type = event->type;
-		    
+
 		    // convert to std::string
 		    std::string typeStr = AS3::sz2stringAndFree(AS3::ui::internal::utf8_toString(type));
 
 		    printf("Event [%s]\n", typeStr.c_str());
-		    
-		    return AS3::ui::internal::_undefined; 
+
+		    return AS3::ui::internal::_undefined;
 		}*/
 
 		// returns true on success.
 		bool Sound::load(bool loop) {
 
 			#if defined(ARK2D_FLASCC)
-				
+
 
 				//string ext = StringUtil::getExtension(m_FileName);
 				//if (ext != "mp3") {
@@ -279,11 +282,11 @@ namespace ARK {
 				//	return false;
 				//}
 
-				
-				//ARK2D::getLog()->v("Trying things 1"); 
+
+				//ARK2D::getLog()->v("Trying things 1");
 			 	//AS3::ui::String filename = AS3::ui::internal::new_String(m_FileName.c_str());
 
-				try { 
+				try {
 
 				 	//ARK2D::getLog()->v("Trying things 2");
 					m_flascc_sound = AS3::ui::flash::media::Sound::_new(AS3::ui::internal::_null, AS3::ui::internal::_null);
@@ -294,9 +297,9 @@ namespace ARK {
 					//ARK2D::getLog()->v("Trying things 4");
 					//string d = StringUtil::file_get_contents(m_FileName.c_str());
 					//ARK2D::getLog()->v(StringUtil::append("data len: ", m_preloadedDataLength));
-					
 
-				
+
+
 
 					//ARK2D::getLog()->v("another new str");
 					//AS3::ui::String newdata = AS3::ui::internal::new_String((const char*) m_preloadedData);
@@ -307,7 +310,7 @@ namespace ARK {
 					//flash::utils::ByteArray ram = internal::get_ram();
 					//arr->writeBytes(, 0, m_preloadedDataLength, (const char*) m_preloadedData);
 
-					// flash::utils::ByteArray arr = flash::utils::ByteArray::_new(); 
+					// flash::utils::ByteArray arr = flash::utils::ByteArray::_new();
 					// inline_as3(
 					// 	"CModule.readBytes(%0, %1, %2);\n"
      //    				: : "r"(m_preloadedData), "r"(m_preloadedDataLength), "r"(&arr)
@@ -317,17 +320,17 @@ namespace ARK {
 					AS3::ui::flash::utils::ByteArray ram = AS3::ui::internal::get_ram();
 
 					//ARK2D::getLog()->v("new bytearr");
-					AS3::ui::flash::utils::ByteArray arr = AS3::ui::flash::utils::ByteArray::_new(); 
+					AS3::ui::flash::utils::ByteArray arr = AS3::ui::flash::utils::ByteArray::_new();
 
 					//ARK2D::getLog()->v("filling bytearr");
 					//arr->writeBytes(ram, 0, m_preloadedDataLength, m_preloadedData);
 					arr->writeBytes(ram, (unsigned int) m_preloadedData, m_preloadedDataLength);
 //					ram->readBytes(arr, (unsigned int) m_preloadedData, m_preloadedDataLength);
- 
-					//arr->writeUTFBytes((const char*) m_preloadedData); 
-					//arr->writeUTF((const char*) m_preloadedData);  
-					//arr->writeByte((int) m_preloadedData)  
-  
+
+					//arr->writeUTFBytes((const char*) m_preloadedData);
+					//arr->writeUTF((const char*) m_preloadedData);
+					//arr->writeByte((int) m_preloadedData)
+
 					arr->position = 0;
 					int byteArrayLength = arr->length;
 					//ARK2D::getLog()->v(StringUtil::append("data len 3: ", byteArrayLength));
@@ -356,14 +359,14 @@ namespace ARK {
 					ARK2D::getLog()->e("Exception but no idea which one. could not create Sound. :(");
 					return false;
 				}
-					// Do it in AS3. 
+					// Do it in AS3.
 					// Problems with Workers not being able to populate Main Thread data.
 					/*
 						ARK2D::getLog()->v(StringUtil::append("Calling AS3 Console.loadSound(): ", m_FileName));
 						const char* str = m_FileName.c_str();
 						inline_as3(
 							"import com.adobe.flascc.Console;\n"\
-							"Console.s_console.loadSound(CModule.readString(%0, %1));\n" 
+							"Console.s_console.loadSound(CModule.readString(%0, %1));\n"
 							: : "r"(str), "r"(m_FileName.length())
 						);
 						ARK2D::getLog()->v("Done");
@@ -382,14 +385,14 @@ namespace ARK {
 				                                   AS3::ui::Function::_new(soundEventHandler, NULL));
 				    soundFactory->addEventListener(AS3::ui::flash::events::ProgressEvent::PROGRESS,
 				                                   AS3::ui::Function::_new(soundEventHandler, NULL));
-				    
+
 				    soundFactory->load(request);
-				    
-				    song = soundFactory->play();*/ 
+
+				    song = soundFactory->play();*/
 
 				    ARK2D::getLog()->v("success! :D");
 					return true;
-				
+
 			#elif defined(ARK2D_XAUDIO2)
  				//ARK2D::getLog()->w("Sound::load Not implemented");
 
@@ -409,7 +412,7 @@ namespace ARK {
 				}
 
 				// http://msdn.microsoft.com/en-gb/library/windows/desktop/dd390970(v=vs.85).aspx
-				
+
 				return b;
 			#else
 
@@ -525,7 +528,7 @@ namespace ARK {
 					str += ss;
 					str += getALErrorString(s);
 					//ErrorDialog::createAndShow(str);
-					ARK2D::getLog()->e(str); 
+					ARK2D::getLog()->e(str);
 					deinit();
 					//exit(0);
 				}
@@ -666,7 +669,7 @@ namespace ARK {
 				#endif
 
 
-				
+
 
 				//bool b = ov_fopen(const_cast<char*>(m_FileName.c_str()), &oggFile);
 				//if (b == false) {
@@ -675,7 +678,7 @@ namespace ARK {
 				//	ErrorDialog::createAndShow(errStr);
 				//	return false;
 				//}
-					 
+
 			//	std::cout << "4" << std::endl;
 				// Get some info about the OGG and store it in oggInfo.
 				ARK2D::getLog()->v("Getting OGG Info");
@@ -739,7 +742,7 @@ namespace ARK {
 
 				//oggFile. = loop;
 				// The frequency of the sampling rate
-				
+
 				//frequency = (ALsizei) oggInfo->rate;
 				frequency = oggInfo->rate;
 
@@ -813,7 +816,7 @@ namespace ARK {
 					unsigned int uchannels = (unsigned int) oggInfo->channels;
 					unsigned int ufreq = (unsigned int) frequency;
 
-					
+
 
 					ARK2D::getLog()->i("WP8 bits...");
 					ARK2D::getLog()->i(StringUtil::append("bps: ", ubps));
@@ -826,8 +829,8 @@ namespace ARK {
 					m_xaWF.nChannels =  uchannels;
 					m_xaWF.nSamplesPerSec = ufreq;
 					m_xaWF.nBlockAlign = ubyps * uchannels;
-					m_xaWF.nAvgBytesPerSec = ufreq * ubyps * uchannels; 
-					m_xaWF.wBitsPerSample = ubps;  
+					m_xaWF.nAvgBytesPerSec = ufreq * ubyps * uchannels;
+					m_xaWF.wBitsPerSample = ubps;
 					m_xaWF.cbSize = sizeof(m_xaWF); // 0;// data.size();
 
 					ARK2D::getLog()->v("Creating source voice callback...");
@@ -861,7 +864,7 @@ namespace ARK {
 					//	return false;
 					//}
 				#else
-				
+
 					// Load the wav into the buffer
 					alGetError();
 					//alBufferData(Buffer, format, &bufferData[0],  static_cast <ALsizei>( bufferData.size() ), frequency);
@@ -886,7 +889,7 @@ namespace ARK {
 
 				//return true;
 				return true;
-			#endif 
+			#endif
 		}
 		void Sound::clearErrors() {
 			#if defined(ARK2D_XAUDIO2)
@@ -930,7 +933,7 @@ namespace ARK {
 				if (loadwaverr != AL_NO_ERROR) {
 					ErrorDialog::createAndShow("Error loading wav file from disk.");
 					return false;//alutGetErrorString(loadwaverr);
-				} 
+				}
 
 				// Load the wav into the buffer
 				alBufferData(Buffer, format, data, size, freq);
@@ -950,7 +953,7 @@ namespace ARK {
 
 				return true;
 
-			#elif (defined(ARK2D_ANDROID) || defined(ARK2D_MACINTOSH) || defined(ARK2D_IPHONE) || defined(ARK2D_XAUDIO2) || defined(ARK2D_UBUNTU_LINUX)) 
+			#elif (defined(ARK2D_ANDROID) || defined(ARK2D_MACINTOSH) || defined(ARK2D_IPHONE) || defined(ARK2D_XAUDIO2) || defined(ARK2D_UBUNTU_LINUX))
 
 				// References
 				// -  http://ccrma.stanford.edu/courses/422/projects/WaveFormat/
@@ -971,7 +974,7 @@ namespace ARK {
 				char* array = NULL;
 
 				clearErrors();
-				
+
 
 				#if defined (ARK2D_ANDROID)
 
@@ -990,22 +993,22 @@ namespace ARK {
 					FILE* f = fopen(m_FileName.c_str(), "rb");
 					if (f == NULL) {
 						string errStr = "Could not load wav file. It does not exist. 1. "; errStr += m_FileName;
-						//ErrorDialog::createAndShow(errStr); 
-						ARK2D::getLog()->e(errStr);  
-						return false; 
+						//ErrorDialog::createAndShow(errStr);
+						ARK2D::getLog()->e(errStr);
+						return false;
 					}
 
 					fseek(f, 0, SEEK_END);
 					int count = ftell(f);
 					thisDataLen = count;
 					rewind(f);
- 
-					if (count > 0) { 
+
+					if (count > 0) {
 						thisData = (char*) malloc(sizeof(char) * (count));
 						count = fread(thisData, sizeof(char), count, f);
 					}
 					fclose(f);*/
-					
+
 //					fi = fi_fopen(m_FileName.c_str(), "rb", thisData, thisDataLen);
 					ARK2D::getLog()->v(m_FileName.c_str());
 					fi = fi_fopen(m_FileName.c_str(), "rb");
@@ -1015,10 +1018,10 @@ namespace ARK {
 				//if (f == NULL) {
 				if (fi == NULL) {
 					string errStr = "Could not load wav file. It does not exist. 2. "; errStr += m_FileName;
-					//ErrorDialog::createAndShow(errStr); 
-					ARK2D::getLog()->e(errStr); 
+					//ErrorDialog::createAndShow(errStr);
+					ARK2D::getLog()->e(errStr);
 					return false;
-				} 
+				}
 
 				// buffers
 				char magic[5];
@@ -1030,13 +1033,13 @@ namespace ARK {
 				//if (fread(magic, 4,1,f) != 1) {
 				if (fi_fread(magic, 4,1,fi) != 1) {
 					string errStr = "Could not read wav file: "; errStr += m_FileName;
-					ErrorDialog::createAndShow(errStr); 
+					ErrorDialog::createAndShow(errStr);
 					return false;
 				}
 				ARK2D::getLog()->v(StringUtil::append("compare RIFF: ", string(magic)));
 				if (string(magic) != "RIFF") {
 					string errStr = "Could not read wav file. This is not a wav file (no RIFF magic): "; errStr += m_FileName;
-					ErrorDialog::createAndShow(errStr); 
+					ErrorDialog::createAndShow(errStr);
 					return false;
 				}
 
@@ -1045,25 +1048,25 @@ namespace ARK {
 				//fi_fseek(fi, 4, SEEK_CUR);
 				if (fi_fread(buffer32, 4, 1, fi) != 1) {
 					string errStr = "Could not load wav file, filesize: "; errStr += m_FileName;
-					ErrorDialog::createAndShow(errStr); 
+					ErrorDialog::createAndShow(errStr);
 					return false;
 				}
-				unsigned int wavefilesize = wav_readByte32(buffer32); 
-				//ARK2D::getLog()->i(StringUtil::append("wavefilesize: ", wavefilesize)); 
+				unsigned int wavefilesize = wav_readByte32(buffer32);
+				//ARK2D::getLog()->i(StringUtil::append("wavefilesize: ", wavefilesize));
 
 				// check file format
 				//if (fread(magic, 4,1,f) != 1) {
 				if (fi_fread(magic, 4, 1, fi) != 1) {
 					string errStr = "Could not load wav file: "; errStr += m_FileName;
-					ErrorDialog::createAndShow(errStr); 
+					ErrorDialog::createAndShow(errStr);
 					return false;
 				}
 				ARK2D::getLog()->v(StringUtil::append("compare WAVE: ", string(magic)));
 				if (string(magic) != "WAVE") {
 					string errStr = "Could not read wav file. This is not a wav file (no WAVE format - 4byte chunk was '";
-					errStr += string(magic); 
+					errStr += string(magic);
 					errStr += "' ): "; errStr += m_FileName;
-					ErrorDialog::createAndShow(errStr); 
+					ErrorDialog::createAndShow(errStr);
 					return false;
 				}
 
@@ -1121,17 +1124,17 @@ namespace ARK {
 				unsigned long frequency = wav_readByte32(buffer32);
 
 				// skip 6 bytes (Byte rate (4), Block align (2))
-				//fseek(f,6,SEEK_CUR); 
+				//fseek(f,6,SEEK_CUR);
 				//fi_fseek(fi,6,SEEK_CUR);
 				char skipdata[6];
 				fi_fread(skipdata, 6, 1, fi);
 
 				// read bits per sample.
 				//if (fread(buffer16, 2, 1, f) != 1) {
-				if (fi_fread(buffer16, 2, 1, fi) != 1) { 
+				if (fi_fread(buffer16, 2, 1, fi) != 1) {
 					string errStr = "Could not load wav file. Could not read bits per sample. \r\n"; errStr += m_FileName;
 					ErrorDialog::createAndShow(errStr); return false;
-				} 
+				}
 				unsigned short bps = wav_readByte16(buffer16);
 
 				#if defined(ARK2D_XAUDIO2)
@@ -1144,30 +1147,30 @@ namespace ARK {
 					}
 				#endif
 
-				
+
 
 
 				// check 'data' sub chunk (2)
-				//if (fread(magic, 4, 1, f) != 1) {  
+				//if (fread(magic, 4, 1, f) != 1) {
 				if (fi_fread(magic, 4, 1, fi) != 1) {
 					string errStr = "Could not load wav file. Could not read 'data' subchunk 2. \r\n"; errStr += m_FileName;
 					ErrorDialog::createAndShow(errStr); return false;
 				}
 
-				// check for BEXT markers  
+				// check for BEXT markers
 				ARK2D::getLog()->v(StringUtil::append("compare bext: ", string(magic)));
 				if (string(magic) == "bext") {
 					string errStr = "Could not read wav file. There are bext markers which WE CAN'T PARSE. :( "; errStr += m_FileName;
-					ErrorDialog::createAndShow(errStr); 
-					return false; 
-				} 
+					ErrorDialog::createAndShow(errStr);
+					return false;
+				}
 
 				// JUNK
 				// http://tech.ebu.ch/docs/tech/tech3306-2009.pdf
-				
+
 				ARK2D::getLog()->v(StringUtil::append("compare junk: ", string(magic)));
-				if (string(magic) == "junk") { 
-					//fi_fread(magic, 4, 1, fi); 
+				if (string(magic) == "junk") {
+					//fi_fread(magic, 4, 1, fi);
 					fi_fread(buffer32, 4, 1, fi);
 					unsigned long junklen = wav_readByte32(buffer32);
 					//char junkdata[junklen];
@@ -1178,9 +1181,9 @@ namespace ARK {
 					ARK2D::getLog()->e("There was JUNK in the TRUNK. (junk in the wav file...)");
 					//ErrorDialog::createAndShow(errStr); return false;
 				}
- 
+
 				ARK2D::getLog()->v(StringUtil::append("compare data: ", string(magic)));
-				if (string(magic) != "data") { 
+				if (string(magic) != "data") {
 					ARK2D::getLog()->e(string(magic));
 					string errStr = "Could not read wav file. This is not a wav file (no data subchunk): "; errStr += m_FileName;
 					ErrorDialog::createAndShow(errStr); return false;
@@ -1193,7 +1196,7 @@ namespace ARK {
 					ErrorDialog::createAndShow(errStr); return false;
 				}
 				unsigned long subChunk2Size = wav_readByte32(buffer32);
- 
+
 				// the frequency of the sampling rate.
 				freq = frequency;
 				ARK2D::getLog()->v(StringUtil::append("compare frequency: ", string(magic)));
@@ -1203,7 +1206,7 @@ namespace ARK {
 					ErrorDialog::createAndShow(errStr); return false;
 				}
 
-				// read raw data. 
+				// read raw data.
 				ARK2D::getLog()->v("read raw data...");
 				array = new char[BUFFER_SIZE];
 				while (data.size() != subChunk2Size) {
@@ -1242,7 +1245,7 @@ namespace ARK {
 					unsigned int uchannels = (unsigned int) channels;
 					unsigned int ufreq = (unsigned int) frequency;
 
-					
+
 
 					ARK2D::getLog()->v("WP8 bits...");
 					ARK2D::getLog()->v(StringUtil::append("bps: ", ubps));
@@ -1256,8 +1259,8 @@ namespace ARK {
 					m_xaWF.nChannels =  uchannels;
 					m_xaWF.nSamplesPerSec = ufreq;
 					m_xaWF.nBlockAlign = ubyps * uchannels;
-					m_xaWF.nAvgBytesPerSec = ufreq * ubyps * uchannels; 
-					m_xaWF.wBitsPerSample = bps;  
+					m_xaWF.nAvgBytesPerSec = ufreq * ubyps * uchannels;
+					m_xaWF.wBitsPerSample = bps;
 					m_xaWF.cbSize = 0;// data.size();
 
 					ARK2D::getLog()->v(StringUtil::append("datasize: ", data.size()));
@@ -1273,12 +1276,12 @@ namespace ARK {
 						return false;
 					}
 					//m_xaSource->Start();
-					
+
 					ARK2D::getLog()->v("XAUDIO2_BUFFER struct");
 					unsigned int sz = data.size();
 					m_xaBuffer.Flags = XAUDIO2_END_OF_STREAM;
 					m_xaBuffer.AudioBytes = sz;
-					m_xaBuffer.pAudioData = new BYTE[sz]; 
+					m_xaBuffer.pAudioData = new BYTE[sz];
 					memcpy((void*)m_xaBuffer.pAudioData, (void*)&data[0], sz);
 					m_xaBuffer.PlayBegin = m_xaPlayhead;
 					m_xaBuffer.PlayLength  = 0;
@@ -1297,11 +1300,11 @@ namespace ARK {
 
 					//std::cout << "format: " << format << ". 16bitmono is " << AL_FORMAT_MONO16 << std::endl;
 					//std::cout << "datasize: " << data.size() << std::endl;
-					//std::cout << "frequency: " << frequency << std::endl; 
+					//std::cout << "frequency: " << frequency << std::endl;
 
 
 
-					// Load the wav into the buffer 
+					// Load the wav into the buffer
 					ALenum derpError = alGetError();
 					if (derpError != AL_NO_ERROR) {
 						ErrorDialog::createAndShow("pre buffer data error.");
@@ -1322,11 +1325,11 @@ namespace ARK {
 
 				// do we free the buffer manually now or does std::vector do it?
 				// http://stackoverflow.com/questions/2035975/how-do-you-completely-remove-and-release-memory-of-an-openal-sound-file
-				// free(data); 
+				// free(data);
 				data.clear();
 
 				return true;
- 
+
 			#endif
 			return false;
 		}
@@ -1335,28 +1338,28 @@ namespace ARK {
 		// alDopplerFactor(1.0f); // 1.2 is 20% pitch shift up.
 		// alDopplerVelocity( 343.0f ); // m/s this may need to be scaled at some point
 
-		#if defined(ARK2D_FLASCC) 
+		#if defined(ARK2D_FLASCC)
 			void Sound::__flasccInternal_setPlaying(bool b) {
 				m_flascc_isSoundPlaying = b;
 			}
 		#endif
 
-			
+
 		void Sound::setOffset(float seconds) {
-			#if defined(ARK2D_FLASCC) 
+			#if defined(ARK2D_FLASCC)
 
-			#elif defined(ARK2D_XAUDIO2) 
+			#elif defined(ARK2D_XAUDIO2)
 
-			#else 
+			#else
 				alSourcef(Source, AL_SEC_OFFSET, seconds);
 			#endif
 		}
 		float Sound::getOffset() {
-			#if defined(ARK2D_FLASCC) 
+			#if defined(ARK2D_FLASCC)
 
 			#elif defined(ARK2D_XAUDIO2)
 				return 0.0f;
-			#else 
+			#else
 				float seconds;
 				alGetSourcef(Source, AL_SEC_OFFSET, &seconds);
 				return seconds;
@@ -1365,16 +1368,16 @@ namespace ARK {
 
 		void Sound::play() {
 			//ARK2D::getLog()->v(StringUtil::append("sound played: ", m_FileName));
-			#if defined(ARK2D_FLASCC) 
+			#if defined(ARK2D_FLASCC)
 				/*const char* str = m_FileName.c_str();
 				inline_as3(
 					"import com.adobe.flascc.Console;\n"\
-					"Console.s_console.playSound(CModule.readString(%0, %1));\n" 
+					"Console.s_console.playSound(CModule.readString(%0, %1));\n"
 					: : "r"(str), "r"(strlen(str))
 				);*/
 				//m_flascc_channel = m_flascc_sound->play(0.0);
-				if(!m_flascc_isSoundPlaying) 
-				{ 
+				if(!m_flascc_isSoundPlaying)
+				{
 					m_flascc_channel = m_flascc_sound->play(m_flascc_pausePosition);
 					//m_flascc_channel->addEventListener(AS3::ui::flash::events::Event::SOUND_COMPLETE, AS3::ui::Function::_new(m_flascc_soundEventHandler, (void*) this));
 					m_flascc_channel->addEventListener(AS3::ui::flash::events::Event::SOUND_COMPLETE, AS3::ui::Function::_new(m_flascc_soundEventHandler, (void*) this));
@@ -1382,7 +1385,7 @@ namespace ARK {
 
 					m_flascc_isSoundPlaying = true;
 				}
-				else 
+				else
 				{
 					stop();
 					m_flascc_pausePosition = 0;
@@ -1393,7 +1396,7 @@ namespace ARK {
 				if (isPlaying()) {
 					stop();
 				}
-				
+
 				m_xaBuffer.PlayBegin = m_xaPlayhead;
 				HRESULT hr2 = m_xaSource->SubmitSourceBuffer(&m_xaBuffer);
 				if (FAILED(hr2)) {
@@ -1403,14 +1406,14 @@ namespace ARK {
 
 				m_xaSource->Start(0);
 				m_xaIsPlaying = true;
-				
-			#else 
+
+			#else
 				alSourcePlay(Source);
 			#endif
 		}
 		bool Sound::isPlaying() {
-			#if defined(ARK2D_FLASCC) 
-				
+			#if defined(ARK2D_FLASCC)
+
 
 				// Use AS3 to negate a 32bit int!
 			   /* int someint = 123;
@@ -1424,7 +1427,7 @@ namespace ARK {
 			    const char* str = m_FileName.c_str();
 				inline_as3(
 					"import com.adobe.flascc.Console;\n"\
-					"%0 = Console.s_console.isPlayingSound(CModule.readString(%1, %2));\n" 
+					"%0 = Console.s_console.isPlayingSound(CModule.readString(%1, %2));\n"
 					: "=r"(playing) : "r"(str), "r"(strlen(str))
 				);
 				return (playing == 1);*/
@@ -1433,22 +1436,22 @@ namespace ARK {
 				if (m_xaSource == NULL) { return false; }
 
 				//XAUDIO2_VOICE_STATE state;
-				//m_xaSource->GetState(&state); 
+				//m_xaSource->GetState(&state);
 				//m_xaIsPlaying = (state.BuffersQueued > 0) != 0;
 				//return m_xaIsPlaying;
 				return m_xaIsPlaying;
-			#else 
+			#else
 				ALint state;
 				alGetSourcei(Source, AL_SOURCE_STATE, &state);
 				return (state == AL_PLAYING);
 			#endif
 		}
 		void Sound::stop() {
-			#if defined(ARK2D_FLASCC) 
+			#if defined(ARK2D_FLASCC)
 				/*const char* str = m_FileName.c_str();
 				inline_as3(
 					"import com.adobe.flascc.Console;\n"\
-					"Console.stopSound(CModule.readString(%0, %1));\n" 
+					"Console.stopSound(CModule.readString(%0, %1));\n"
 					: : "r"(str), "r"(strlen(str))
 				);*/
 				if (m_flascc_isSoundPlaying)
@@ -1462,30 +1465,30 @@ namespace ARK {
 				m_xaSource->FlushSourceBuffers();
 				m_xaIsPlaying = false;
 				m_xaPlayhead = 0;
-			#else 
+			#else
 				alSourceStop(Source);
 			#endif
 		}
 		void Sound::pause() {
-			#if defined(ARK2D_FLASCC) 
+			#if defined(ARK2D_FLASCC)
 				/*const char* str = m_FileName.c_str();
 				inline_as3(
 					"import com.adobe.flascc.Console;\n"\
-					"Console.pauseSound(CModule.readString(%0, %1));\n" 
+					"Console.pauseSound(CModule.readString(%0, %1));\n"
 					: : "r"(str), "r"(strlen(str))
 				);*/
 				if (m_flascc_isSoundPlaying)
 				{
 					m_flascc_isSoundPlaying = false;
-					m_flascc_pausePosition = m_flascc_channel->position; 
-      				m_flascc_channel->stop(); 
+					m_flascc_pausePosition = m_flascc_channel->position;
+      				m_flascc_channel->stop();
       			}
       		#elif defined(ARK2D_XAUDIO2)
       			//ARK2D::getLog()->w("Sound::pause Not implemented");
       			if (m_xaSource == NULL) { return; }
-				
+
 				XAUDIO2_VOICE_STATE state;
-				m_xaSource->GetState(&state); 
+				m_xaSource->GetState(&state);
 
 				m_xaPlayhead = state.SamplesPlayed;
       			//stop();
@@ -1495,9 +1498,9 @@ namespace ARK {
 				m_xaSource->Stop(0); // XAUDIO2_PLAY_TAILS
 				m_xaSource->FlushSourceBuffers();
 				m_xaIsPlaying = false;
-				
 
-			#else 
+
+			#else
 				alSourcePause(Source);
 			#endif
 		}
@@ -1506,13 +1509,13 @@ namespace ARK {
 		}
 		void Sound::setVolume(float volume) {
 			m_volume = volume;
-			#if defined(ARK2D_FLASCC) 
+			#if defined(ARK2D_FLASCC)
 				/*const char* str = m_FileName.c_str();
 				inline_as3(
 					"import com.adobe.flascc.Console;\n"\
-					"Console.setSoundVolume(CModule.readString(%0, %1), %2);\n" 
+					"Console.setSoundVolume(CModule.readString(%0, %1), %2);\n"
 					: : "r"(str), "r"(strlen(str)), "r"(volume)
-				);*/ 
+				);*/
 				//if (m_flascc_channel != AS3::ui::internal::_null) { // set in ::load
 					//if (m_flascc_channel->soundTransform != AS3::ui::internal::_null) {
           				m_flascc_transform->volume = volume;
@@ -1522,7 +1525,7 @@ namespace ARK {
           	#elif defined(ARK2D_XAUDIO2)
 				if (m_xaSource == NULL) { return; }
 				m_xaSource->SetVolume(m_volume);
-			#else 
+			#else
 				alSourcef(Source, AL_GAIN, volume);
 			#endif
 		}
@@ -1533,22 +1536,22 @@ namespace ARK {
 		void Sound::setPitch(float pitch) {
 			m_pitch = pitch;
 
-			#if defined(ARK2D_FLASCC) 
+			#if defined(ARK2D_FLASCC)
 
 			#elif defined(ARK2D_XAUDIO2)
 				ARK2D::getLog()->w("Sound::setPitch Not implemented");
-			#else 
+			#else
 				alSourcef(Source, AL_PITCH, pitch);
 			#endif
 		}
 
 		void Sound::setPanning(float pan) {
 			SourcePos[0] = pan;
-			#if defined(ARK2D_FLASCC) 
+			#if defined(ARK2D_FLASCC)
 
 			#elif defined(ARK2D_XAUDIO2)
 				ARK2D::getLog()->w("Sound::setPanning Not implemented");
-			#else 
+			#else
 				alSourcefv(Source, AL_POSITION, SourcePos);
 			#endif
 			//std::cerr << "OpenAL is broken -- seek alternative." << std::endl;
@@ -1565,11 +1568,11 @@ namespace ARK {
 			return getALErrorStringStatic(err);
 		}
 		string Sound::getALErrorStringStatic(unsigned int err) {
-			#if defined(ARK2D_FLASCC) 
+			#if defined(ARK2D_FLASCC)
 				return string("UNKNOWN_ERROR");
 			#elif defined(ARK2D_XAUDIO2)
 				return string("UNKNOWN_ERROR");
-			#else 
+			#else
 				switch(err)
 				{
 					case AL_NO_ERROR:
@@ -1595,12 +1598,12 @@ namespace ARK {
 			#endif
 		}
 		string Sound::getOggErrorString(int code) {
-			#if defined(ARK2D_FLASCC) 
+			#if defined(ARK2D_FLASCC)
 				return "";
 			#elif defined(ARK2D_XAUDIO2)
 				ARK2D::getLog()->w("Sound::getOggErrorString Not implemented");
 				return "";
-			#else 
+			#else
 				switch(code) {
 					case OV_EREAD:
 						return string("Read from media.");
@@ -1634,24 +1637,24 @@ namespace ARK {
 		}
 
 		void Sound::deinit() {
-			#if defined(ARK2D_FLASCC) 
+			#if defined(ARK2D_FLASCC)
 
-			#elif defined(ARK2D_XAUDIO2) 
+			#elif defined(ARK2D_XAUDIO2)
 				ARK2D::getLog()->w("Sound::deinit not implemented");
-			#else 
+			#else
 				ARK2D::getLog()->v("Deinitialising Sound: OpenAL bits. ");
 
-				if (Source == 0 || Buffer == 0) { 
+				if (Source == 0 || Buffer == 0) {
 					ARK2D::getLog()->v("Sound OpenAL Source/Buffer was not valid.");
-					return; 
-				}  
+					return;
+				}
 
 				// make sure source and buffer ids are valid before trying to delete.
 				if (alIsSource(Source)) {
 					alSourceStop(Source);
 					alDeleteSources(1, &Source);
 				}
-				if (alIsBuffer(Buffer)) { 
+				if (alIsBuffer(Buffer)) {
 					alDeleteBuffers(1, &Buffer);
 				}
 			#endif
@@ -1660,7 +1663,7 @@ namespace ARK {
 		Sound::~Sound() {
 			ARK2D::getLog()->v(StringUtil::append("Deleting Sound: OpenAL bits. ", m_FileName));
 
-			deinit(); 
+			deinit();
 
 			// remove from sound store.
 			SoundStore* ss = SoundStore::getInstance();

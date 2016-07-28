@@ -8,6 +8,7 @@
 #include "GameContainer.h"
 #include "../ARK2D.h"
 #include "../Tween/Timeline.h"
+#include "../Controls/Gamepad.h"
 
 #ifdef ARK2D_ANDROID
 #include "Platform/GameContainerAndroid.h"

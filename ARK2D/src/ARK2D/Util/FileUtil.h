@@ -9,11 +9,12 @@
 #ifndef FILEUTIL_H_
 #define FILEUTIL_H_
 
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "../Includes.h"
-
 using namespace std;
 
 namespace ARK {
@@ -26,31 +27,31 @@ namespace ARK {
 		 * @see Resource
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		
+
 		struct file_get_contents_binary_result {
 			const char* data;
 			unsigned int len;
-		}; 
+		};
 		struct file_get_contents_text_result {
 			const char* data;
 			unsigned int len;
-		}; 
+		};
 
 		class ARK2D_API FileUtil {
-			private: 
+			private:
 			public:
 				static string getResourcePath();
 				static string prependPlatform(string filename);
 				static bool file_put_contents(string filename, string contents);
 				static bool file_put_contents(string filename, string contents, bool doPrependPlatform);
 				static bool file_put_contents(string filename, const char* data, unsigned int len);
-				
 
-				
+
+
 				static file_get_contents_binary_result file_get_contents_utf8binary(string filename);
 				static file_get_contents_binary_result file_get_contents_binary(string filename);
 				static file_get_contents_text_result file_get_contents_text(string filename);
-				
+
 
 				static string getCurrentDirectory();
 				static string getSeparator();

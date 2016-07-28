@@ -14,11 +14,13 @@
 #include <string>
 using namespace std;
 
+#define showAnyGlErrorAndExitMacro() ErrorDialog::showAnyGlErrorAndExit(__FILE__, __LINE__)
+
 namespace ARK {
 	namespace UI {
 
 		/*!
-		 * \brief An error dialog. 
+		 * \brief An error dialog.
 		 *
 		 * @todo Create a singular dialogs class which does all the dialogs of all the types.
 		 * @todo Deprecate this. See previous TODO.
@@ -28,6 +30,10 @@ namespace ARK {
 		class ARK2D_API ErrorDialog {
 			public:
 				static void createAndShow(string message);
+
+				static string getGlErrorString(int error);
+				static void showAnyGlErrorAndExit();
+				static void showAnyGlErrorAndExit(const char* fname, int line);
 		};
 	}
 }

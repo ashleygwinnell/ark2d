@@ -12,8 +12,10 @@
 #include <string>
 #include "GameState.h"
 
-#include "../Includes.h"
+#import <QTKit/QTKit.h>
+
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
 #include "../Util/Containers/Vector.h"
 
 using namespace std;
@@ -38,7 +40,7 @@ namespace ARK {
 	namespace State {
 
 		/*!
-		 * \brief This game state plays video... 
+		 * \brief This game state plays video...
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
@@ -47,12 +49,12 @@ namespace ARK {
 
 				string m_source;
 				bool m_loaded;
-				
+
 				#ifdef ARK2D_MACINTOSH
 
 					QTMovie* m_movie;
 					QTMovieView* m_movieView;
-					
+
 
 				#endif
 
@@ -80,7 +82,7 @@ namespace ARK {
 				virtual void play();
 				//virtual void pause();
 				virtual void stop();
-				
+
 				virtual float getCurrentTime();
 				virtual void setCurrentTime(float pos);
 

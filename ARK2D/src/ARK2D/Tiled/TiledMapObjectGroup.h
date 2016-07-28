@@ -1,10 +1,13 @@
 #ifndef TILED_MAP_OBJECTGROUP_H_
 #define TILED_MAP_OBJECTGROUP_H_
 
-#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 
-#include "TiledMapObject.h"
+//#include "TiledMapObject.h"
 
+#include <vector>
+#include <string>
 using namespace std;
 
 namespace ARK {
@@ -42,8 +45,8 @@ namespace ARK {
 				bool m_visible;
 				float m_opacity;
 				vector<TiledMapObject*> m_objects;
-				
-				
+
+
 
 		};
 	}

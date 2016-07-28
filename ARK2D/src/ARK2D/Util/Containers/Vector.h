@@ -22,6 +22,7 @@
  #include "../../Core/GameContainer.h"
 #include "../Util.h"
 
+#define STL_AVAILABLE
 using namespace std;
 
 namespace ARK {
@@ -292,7 +293,11 @@ namespace ARK {
 							return (void*) &lst;
 						#endif
 					}
-					vector<T>& getDataVec() { return vec; }
+                    #ifdef STL_AVAILABLE
+					vector<T>& getDataVec() {
+                        return vec;
+                    }
+                    #endif
 					void setData(void* data) {
 						#if !defined(STL_AVAILABLE)
 						#else

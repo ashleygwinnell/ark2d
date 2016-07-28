@@ -6,22 +6,29 @@
  */
 
 #include "Packer.h"
+#include <stdio.h>
+#include <iostream>
+#include <fstream>
+
+#include "../vendor/ogg130/ogg.h"
+#include "../vendor/vorbis132/vorbisfile.h"
+#include "../vendor/zlib123/zlib.h"
 
 #ifndef ARK2D_WINDOWS_PHONE_8
 
 	string getExtension(string s);
-	string getExtension(string s) { 
-		unsigned int pos = s.find_last_of('.') + 1;  
+	string getExtension(string s) {
+		unsigned int pos = s.find_last_of('.') + 1;
 		return s.substr(pos);
 	}
-	 
+
 	bool is_big_endian();
 	bool is_big_endian() {
 		static unsigned long x(1);
 		static bool result(reinterpret_cast<unsigned char*>(&x)[0] == 0);
 		return result;
 	}
-	 
+
 	const string base64_chars =
 						 "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 						 "abcdefghijklmnopqrstuvwxyz"
@@ -73,7 +80,7 @@
 	    if (fileName != NULL) {
 
 	    	std::cout << "Opening file: " << fileName << std::endl;
-	    	std::fstream f(fileName, std::ios::in); 
+	    	std::fstream f(fileName, std::ios::in);
 	    	if (!f.is_open()) {
 	    		//std::cout << "File does not exist." << std::endl;
 	    		string str = "Could not open file ["; str += fileName; str += "] as it does not exist.";
@@ -91,7 +98,7 @@
 				#else
 					file = fopen(fileName, "rt");
 				#endif
-				
+
 	    		if (file == NULL) {
 	    			string str = "Could not open file ["; str += fileName; str += "] as it does not exist.";
 	    			std::cout << str << std::endl;
@@ -241,7 +248,7 @@
 
 			string file = inFiles.at(i);
 
-			ifstream thefile (file.c_str());
+            std::ifstream thefile (file.c_str());
 			if (!thefile.is_open()) {
 				std::cout << "Could not open file: " << file << std::endl;
 			} else {

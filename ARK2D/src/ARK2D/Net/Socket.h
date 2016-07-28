@@ -8,6 +8,8 @@
 #ifndef ARK_NET_SOCKET_H_
 #define ARK_NET_SOCKET_H_
 
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 #include "Includes.h"
 
 namespace ARK {
@@ -26,7 +28,7 @@ namespace ARK {
 				signed int m_socket;
 			public:
 				Socket();
-				
+
 				bool open(unsigned short port);
 				void close();
 
@@ -34,7 +36,7 @@ namespace ARK {
 
 				bool send(const Address & destination, const void * data, int size);
 				int receive(Address & sender, void * data, int size);
-		
+
 				~Socket();
 
 			public:

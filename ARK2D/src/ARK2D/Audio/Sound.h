@@ -8,30 +8,21 @@
 #ifndef SOUND_H_
 #define SOUND_H_
 
-
-
 //
 // http://www.devmaster.net/articles/openal-tutorials/lesson4.php
 //
 
-//#include "../Includes.h"
-
-#include "../UI/ErrorDialog.h"
-#include "SoundStore.h"
-
-#include "../ARK2D.h"
-#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 #include "../Core/Resource.h"
 
-#include "../Namespaces.h"
+#include <string>
+using std::string;
 
 #if defined(ARK2D_FLASCC)
 	#include <AS3/AS3++.h>
  	//using namespace AS3::ui;
 #endif
-
-#include <string>
-using std::string;
 
 #if defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE)
 

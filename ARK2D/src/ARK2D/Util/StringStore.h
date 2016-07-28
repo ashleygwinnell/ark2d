@@ -7,16 +7,16 @@
 
 #ifndef STRINGSTORE_H_
 #define STRINGSTORE_H_
- 
-/*#include <map>
-#include <string>
-#include <iostream>
-#include <stdlib.h>
 
-using namespace std;*/
-
-#include "../Includes.h"
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include <map>
+#include <string>
+// #include <iostream>
+// #include <stdlib.h>
+
+using namespace std;
 
 namespace ARK {
 	namespace Util {

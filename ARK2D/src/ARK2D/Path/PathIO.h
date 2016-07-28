@@ -8,11 +8,8 @@
 #ifndef PATHIO_H_
 #define PATHIO_H_
 
-#include "PathGroup.h"
-#include "../UI/ErrorDialog.h"
-#include "../Util/StringUtil.h"
-#include "../Tween/Easing.h"
-#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 
 #include <string>
 using namespace std;

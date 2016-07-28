@@ -6,6 +6,7 @@
  */
  
 #include "AStar.h"   
+#include "../Geometry/Line.h"
 
 namespace ARK {
 	namespace Pathfinding {

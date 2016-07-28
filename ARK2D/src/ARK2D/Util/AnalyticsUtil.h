@@ -9,11 +9,14 @@
 #ifndef ANALYTICS_UTIL_H_
 #define ANALYTICS_UTIL_H_
 
-#include "../Includes.h"
+#include "../Common/DLL.h"
+
+#include <string>
+using std::string;
 
 namespace ARK {
 	namespace Util {
-		 
+
 		class ARK2D_API AnalyticsUtil {
 			public:
 				static void ga_init(string trackingId);
@@ -22,7 +25,7 @@ namespace ARK {
 				static void ga_sendEvent(string category, string action, string label, long opt_value);
 				static void ga_sendTiming(string category, long loadTime, string name, string label);
 		};
-		
+
 	}
 }
 

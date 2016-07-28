@@ -9,11 +9,17 @@
 #ifndef GOOGLEPLAYGAMESERVICES_UTIL_H_
 #define GOOGLEPLAYGAMESERVICES_UTIL_H_
 
-#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include <string>
+#include <vector>
+using std::string;
+using std::vector;
 
 namespace ARK {
 	namespace Util {
-		 
+
 		class ARK2D_API GooglePlayGameServicesUtil {
 			private:
 				static vector<string> s_waitingAchievements;
@@ -32,11 +38,11 @@ namespace ARK {
 
 				//static bool isConnected();
 				//static bool isConnecting();
-				
+
 				static void addWaitingAchievement(string id);
 				static void submitWaitingAchievements();
 		};
-		
+
 	}
 }
 

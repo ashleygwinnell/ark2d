@@ -17,11 +17,6 @@
 #include "../Geometry/Transform.h"
 #include "../Controls/KeyListener.h"
 
-namespace ARK {
-	namespace Graphics {
-		class Image;
-	}
-}
 using std::string;
 using std::vector;
 

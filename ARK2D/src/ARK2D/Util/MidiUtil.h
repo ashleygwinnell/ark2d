@@ -9,25 +9,17 @@
 #ifndef MIDIUTIL_H_
 #define MIDIUTIL_H_
 
-#include <iostream>
-#include <fstream>
-#include <string>
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
 #include "../Includes.h"
-
-using namespace std;
-
-#if defined(ARK2D_MACINTOSH) 
-	#import <CoreAudio/CoreAudio.h>
-	#import <CoreAudioKit/CoreAudioKit.h>
-	#import <CoreMIDI/CoreMIDI.h>
-#endif
 
 namespace ARK {
 	namespace Util {
-	
+
 		class ARK2D_API MidiUtil {
 			public:
-				
+
 				void printDevices();
 
 		};

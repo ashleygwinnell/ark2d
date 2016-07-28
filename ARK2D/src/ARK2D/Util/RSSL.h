@@ -8,8 +8,12 @@
 #ifndef RSSL_H_
 #define RSSL_H_
 
-#include "../Includes.h"
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include <string>
+#include <vector>
+using namespace std;
 
 namespace ARK {
 	namespace Util {
@@ -25,7 +29,7 @@ namespace ARK {
 
 		class ARK2D_API RSSLArgument {
 			public:
-				string name; 
+				string name;
 				unsigned int type;
 
 				string valStr;

@@ -2,8 +2,8 @@
 #ifndef SAT_H_
 #define SAT_H_
 
-#include "../Common/DLL.h"
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
 
 #include <string>
 #include <vector>

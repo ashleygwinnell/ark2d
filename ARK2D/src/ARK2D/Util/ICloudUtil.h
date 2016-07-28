@@ -7,8 +7,14 @@
 
 #ifndef ICLOUD_UTIL_H_
 #define ICLOUD_UTIL_H_
- 
-#include "../Includes.h"
+
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include <string>
+#include <vector>
+using std::string;
+using std::vector;
 
 #if defined(ARK2D_IPHONE)
 	#include "../Core/Platform/GameContainerIPhone.h"
@@ -26,7 +32,7 @@ namespace ARK {
 				bool createifnotexists;
 				void* onchangefunction;
 		};
-		 
+
 		class ARK2D_API ICloudUtil {
 			private:
 				static vector<ICloudFile>* s_iCloudFiles;
@@ -49,7 +55,7 @@ namespace ARK {
 				static signed int s_remainingFiles;
 
 		};
-		
+
 	}
 }
 

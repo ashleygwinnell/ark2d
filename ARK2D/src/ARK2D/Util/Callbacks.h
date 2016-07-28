@@ -8,15 +8,20 @@
 #ifndef CALLBACKS_H_
 #define CALLBACKS_H_
 
-#include "../Includes.h"
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include <string>
+#include <vector>
+using std::string;
+using std::vector;
 
 namespace ARK {
 	namespace Util {
 
 		class ARK2D_API Callback {
 			public:
-				unsigned int m_id; 
+				unsigned int m_id;
 				void* m_functionPointer;
 				string m_functionArgs;
 				static string ARGS_NONE;
@@ -27,10 +32,10 @@ namespace ARK {
 				inline void setFunctionPointer(void* pointer) { m_functionPointer = pointer; }
 				inline void setFunctionArgs(string args) { m_functionArgs = args; }
 				void invoke();
-				void invoke(unsigned int param); 
-				void invoke(string strparam); 
-		}; 
- 
+				void invoke(unsigned int param);
+				void invoke(string strparam);
+		};
+
 		class ARK2D_API Callbacks {
 			public:
 				static const unsigned int CALLBACK_ANDROID_LICENSING_ALLOW = 1;
@@ -60,7 +65,7 @@ namespace ARK {
 
 				static const unsigned int CALLBACK_GAMEJOLT_OVERLAY_EDITNAME = 80;
 				static const unsigned int CALLBACK_GAMEJOLT_OVERLAY_EDITTOKEN = 81;
-				
+
 			public:
 				static vector<ARK::Util::Callback> s_callbacks;
 				static void add(Callback c);

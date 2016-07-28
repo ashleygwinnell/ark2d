@@ -13,7 +13,8 @@
 #include <stdlib.h>
 //#include "../ARK2D.h"
 #include <string>
-#include "../Core/String.h"
+#include "../Util/Cast.h"
+//#include "../Core/String.h"
 //#include "../Util/Log.h"
 //#include "../Util/MathUtil.h"
 
@@ -288,14 +289,14 @@ namespace ARK {
 
 
 				string toString() {
-					ARK::Core::String s;
+					string s;
 					s += "{";
 					s += "\"x\":";
-					s += m_x;
+					s += ARK::Util::Cast::toString<T>(m_x);
 					s += ", \"y\":";
-					s += m_y;
+					s += ARK::Util::Cast::toString<T>(m_y);
 					s += "}";
-					return s.get();
+					return s;
 				}
 
 				~Vector2() {

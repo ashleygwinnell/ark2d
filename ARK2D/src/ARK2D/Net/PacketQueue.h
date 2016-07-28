@@ -8,7 +8,11 @@
 #ifndef ARK_NET_PACKETQUEUE_H_
 #define ARK_NET_PACKETQUEUE_H_
 
-#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include <list>
+using std::list;
 
 namespace ARK {
 	namespace Net {
@@ -23,8 +27,8 @@ namespace ARK {
 	};
 
 	inline bool sequence_more_recent( unsigned int s1, unsigned int s2, unsigned int max_sequence );
-	
-	
+
+
 
 		/*!
 		 * \brief Packet queue to store information about sent and received packets sorted in sequence order.
@@ -34,11 +38,11 @@ namespace ARK {
 		 */
 		class ARK2D_API PacketQueue : public std::list<PacketData> {
 			public:
-		
+
 				bool exists( unsigned int sequence );
-				
+
 				void insert_sorted( const PacketData & p, unsigned int max_sequence );
-				
+
 				void verify_sorted( unsigned int max_sequence );
 		};
 	}

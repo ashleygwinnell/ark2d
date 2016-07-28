@@ -8,7 +8,8 @@
 #ifndef ARK_NET_FLOWCONTROL_H_
 #define ARK_NET_FLOWCONTROL_H_
 
-#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 
 namespace ARK {
 	namespace Net {
@@ -27,12 +28,12 @@ namespace ARK {
 				float penalty_reduction_accumulator;
 
 			public:
-				
+
 				FlowControl();
 				void reset();
 				void update(float deltaTime, float rtt);
 				float getSendRate();
-				
+
 		};
 	}
 }

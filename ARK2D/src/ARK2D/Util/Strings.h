@@ -8,7 +8,8 @@
 #ifndef ARK_UTIL_STRINGS_H_
 #define ARK_UTIL_STRINGS_H_
 
-#include "../ARK2D.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 
 #include <string>
 #include <map>
@@ -52,7 +53,7 @@ namespace ARK {
 				unsigned int m_languageFallback;
 				bool m_languageFallbackEnabled;
 
-				
+
 				void setLanguage(unsigned int lang);
 				void setLanguageFallbackEnabled(bool on, unsigned int fallback);
 				void add(string file);

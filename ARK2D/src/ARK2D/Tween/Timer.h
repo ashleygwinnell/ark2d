@@ -8,9 +8,11 @@
 #ifndef ARK_TIMER_H_
 #define ARK_TIMER_H_
 
-
-#include "../Includes.h"
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include <string>
+using std::string;
 
 namespace ARK {
 	namespace Tween {

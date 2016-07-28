@@ -15,7 +15,6 @@ using std::string;
 #include "../Font/BMFont.h"
 #include "Color.h"
 #include "MatrixStack.h"
-#include "../Util/StringUtil.h"
 #include "../Util/Matrix44.h"
 #include "../Util/Matrix33.h"
 #include "../Font/Font.h"

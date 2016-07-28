@@ -6,6 +6,7 @@
  */
 
 #include "StringStore.h"
+#include <iostream>
 
 namespace ARK {
 	namespace Util { 

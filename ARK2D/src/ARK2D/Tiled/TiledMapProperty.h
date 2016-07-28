@@ -1,11 +1,12 @@
 #ifndef TILEDMAP_PROPERTY_H_
 #define TILEDMAP_PROPERTY_H_
 
-#include "../Includes.h"
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
 
 #include "../Core/ToString.h"
 
+#include <string>
 using namespace std;
 
 namespace ARK {

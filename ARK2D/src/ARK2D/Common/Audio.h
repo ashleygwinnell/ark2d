@@ -12,7 +12,7 @@
 		#include <AL/alc.h>
 	#elif defined(ARK2D_ANDROID)
 		#include <AL/AL.h>
-		#include <AL/ALc.h> 
+		#include <AL/ALc.h>
 		#include <AL/ALext.h>
 	#elif defined(ARK2D_IPHONE)
 		#include <OpenAL/al.h>
@@ -42,7 +42,7 @@
 	#endif
 
 	#include "../vendor/ogg130/ogg.h"
-	#include "../vendor/vorbis132/vorbisfile.h"	
+	#include "../vendor/vorbis132/vorbisfile.h"
 
 #endif // COMMON_AUDIO_INCLUDES_H_
 

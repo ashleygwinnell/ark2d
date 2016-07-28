@@ -8,16 +8,14 @@
 #ifndef PATHGROUP_H_
 #define PATHGROUP_H_
 
-#include "../ARK2D.h"
-#include "../Graphics/Renderer.h"
-#include "../Util/MathUtil.h"
-#include "../Core/GameTimer.h"
-#include "../Geometry/Vector2.h"
-#include <vector>
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 
 #include "Path.h"
- #include "../Core/Resource.h"
+#include "../Geometry/Vector2.h"
+#include "../Core/Resource.h"
 
+#include <vector>
 using namespace std;
 
 namespace ARK {

@@ -6,7 +6,7 @@
 
 #include "TargaImage.h"
 
-#include "../../Includes.h"
+//#include "../../Includes.h"
 
 //using std::ifstream;
 //using std::string;

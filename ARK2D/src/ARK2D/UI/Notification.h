@@ -8,8 +8,11 @@
 #ifndef ARK_UI_NOTIFICATION_H_
 #define ARK_UI_NOTIFICATION_H_
 
-#include "../Includes.h"
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include <string>
+using namespace std;
 
 namespace ARK {
 	namespace UI {

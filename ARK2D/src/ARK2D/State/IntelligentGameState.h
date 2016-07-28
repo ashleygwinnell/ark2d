@@ -12,8 +12,9 @@
 #include <string>
 #include "GameState.h"
 
-#include "../Includes.h"
+//#include "../Includes.h"
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
 #include "../Util/Containers/Vector.h"
 
 using namespace std;

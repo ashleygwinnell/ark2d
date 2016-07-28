@@ -1,7 +1,7 @@
 #ifndef libJSON_NODE_H
 #define libJSON_NODE_H
 
-#include "../../Includes.h"
+#include "../../Common/DLL.h"
 
 #include <string>
 

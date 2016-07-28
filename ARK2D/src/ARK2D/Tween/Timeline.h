@@ -18,8 +18,13 @@
 #include <vector>
 #include <map>
 #include <math.h>
-#include "../Core/GameTimer.h"
+//#include "../Core/GameTimer.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 #include "Easing.h"
+#include "../Util/MathUtil.h"
+#include "../Geometry/Vector2.h"
+#include "../Geometry/Vector3.h"
 
 namespace ARK {
 	namespace Tween {

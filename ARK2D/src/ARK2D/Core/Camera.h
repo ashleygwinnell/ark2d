@@ -1,9 +1,4 @@
-#include "../vendor/glm/glm.hpp"
-#include "../vendor/glm/gtx/transform.hpp"
-#include "../vendor/glm/gtc/quaternion.hpp"
-#include "../vendor/glm/gtx/quaternion.hpp"
-#include "../vendor/glm/gtc/matrix_transform.hpp"
-#include "../vendor/glm/gtc/type_ptr.hpp"
+
 
 #include "../Geometry/Vector3.h"
 #include "../Graphics/Color.h"
@@ -53,10 +48,10 @@ namespace ARK {
 
 				Vector3<float> lookAt;
 				Vector3<float> direction;
-				
+
 				Vector3<float> up;
 				Quaternion<float> rotation_quaternion;
-				
+
 				MatrixStack projection;
 				MatrixStack view;
 				MatrixStack model;
@@ -64,7 +59,7 @@ namespace ARK {
 
 			public:
 				Camera();
-				
+
 				// Given a specific moving direction, the camera will be moved in the appropriate direction
 				// For a spherical camera this will be around the look_at point
 				// For a free camera a delta will be computed for the direction of movement.
@@ -86,7 +81,7 @@ namespace ARK {
 				// Changes the camera mode, only three valid modes, Ortho, Free, and Spherical
 				void setType(unsigned int ty);
 				unsigned int getType();
-				
+
 				// Set the position of the camera
 				/*void setPosition(glm::vec3 pos);
 				void setPosition(Vector3<float> pos);
@@ -98,20 +93,20 @@ namespace ARK {
 
 				// Changes the Field of View (FOV) for the camera
 				void setFOV(float fov);
-				
+
 				// Change the viewport location and size
 				void setViewport(int loc_x, int loc_y, int width, int height);
-				
+
 				// Change the clipping distance for the camera
 				void setClipping(float near_clip_distance, float far_clip_distance);
 
-				// todo 
+				// todo
 				void setDistance(float cam_dist);
-				
+
 
 				Vector3<float> worldToScreenPoint(const Vector3<float>& p);
 				Vector3<float> screenToWorldPoint(const Vector3<float>& p);
-				
+
 				//This function updates the camera
 				//Depending on the current camera mode, the projection and viewport matricies are computed
 				//Then the position and location of the camera is updated
@@ -119,7 +114,7 @@ namespace ARK {
 
 				virtual void render();
 				virtual void rendererUpdate();
-				
+
 				void reset();
 				string toString();
 
@@ -142,7 +137,7 @@ namespace ARK {
 		};
 
 		class ARK2D_API DummyCamera : public Camera {
-			public:	
+			public:
 				DummyCamera();
 				virtual void update();
 				virtual void render();

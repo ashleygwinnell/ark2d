@@ -9,8 +9,11 @@
 #ifndef COLOR_H_
 #define COLOR_H_
 
-#include "../ARK2D.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 
+#include <string>
+using std::string;
 
 namespace ARK {
 	namespace Graphics {

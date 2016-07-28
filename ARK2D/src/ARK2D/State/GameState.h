@@ -8,10 +8,11 @@
 #ifndef GAMESTATE_H_
 #define GAMESTATE_H_
 
-#include "../Includes.h"
 #include "../Namespaces.h"
-#include "../Controls/KeyListener.h"
-#include "../UI/AbstractUIComponent.h"
+#include "../Common/DLL.h"
+#include "../SceneGraph/Scene.h"
+//#include "../Controls/KeyListener.h"
+//#include "../UI/AbstractUIComponent.h"
 
 namespace ARK {
 	namespace State {

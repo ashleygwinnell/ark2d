@@ -8,11 +8,11 @@
 #ifndef ARK_UTIL_ANGELSCRIPTUTIL_H_
 #define ARK_UTIL_ANGELSCRIPTUTIL_H_
 
-#include "../vendor/angelscript/angelscript.h"
-#include "../vendor/angelscript/add_on/scriptstdstring/scriptstdstring.h"
 
-#include "../Includes.h"
+
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
+#include "../Common/Libraries/angelscript.h"
 
 #include "../UI/ErrorDialog.h"
 
@@ -23,9 +23,9 @@ namespace ARK {
 			public:
 		        static asIScriptEngine* s_engine;
 				static asIScriptEngine* getEngine();
-				static asIScriptEngine* restart(); 
+				static asIScriptEngine* restart();
 				static void compileAndRunOnce(string moduleName, string sourceFile, string functionDecl);
-				
+
 
 				// Format the details of the script exception into a human readable text
 				static std::string getExceptionInfo(asIScriptContext* ctx, bool showStack = false);
@@ -34,8 +34,8 @@ namespace ARK {
 				static void assertInternal(string file, signed int line, signed int r);
 				static void functionCheckInternal(string file, signed int line, asIScriptFunction* func, string decl);
 				static void exceptionCheckInternal(string file, signed int line, asIScriptContext* ctx, asIScriptFunction* func, signed int r);
-				
-				
+
+
 		};
 
 	}

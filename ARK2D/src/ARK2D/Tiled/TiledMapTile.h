@@ -8,9 +8,11 @@
 #ifndef TILEDMAPTILE_H_
 #define TILEDMAPTILE_H_
 
-#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 
-#include "../Graphics/Image.h"
+//#include "../Graphics/Image.h"
+#include <vector>
 using namespace std;
 
 namespace ARK {
@@ -25,7 +27,7 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
 		class ARK2D_API TiledMapTile {
-			public: 
+			public:
 				TiledMapTile();
 				Image* getImage() const;
 				TiledMapProperty* getPropertyByName(string name) const;

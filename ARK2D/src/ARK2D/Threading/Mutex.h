@@ -10,7 +10,8 @@
 
 //#include <iostream>
 //#include <stdlib.h>
-#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 
 #if defined(ARK2D_WINDOWS)
 	#include <windows.h>

@@ -6,6 +6,7 @@
  */
 
 #include "HSVShader.h"
+#include "../../Includes.h"
 #include "../Image.h"
 #include "../ShaderStore.h"
 

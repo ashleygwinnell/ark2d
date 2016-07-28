@@ -11,6 +11,7 @@
 //#include "../Includes.h"
 #include "../Namespaces.h"
 #include "AbstractUIComponent.h"
+#include "../Core/String.h"
 
 namespace ARK {
 	namespace UI {

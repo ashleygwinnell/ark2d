@@ -970,7 +970,7 @@
 					m_platformSpecific.makeContextCurrent(window, context);
 					m_platformSpecific.m_context = context;
 					
-					Image::showAnyGlErrorAndExit();
+					showAnyGlErrorAndExitMacro();
 
 					// maybe it should be on.. i don't know...
 					//glEnable(GL_MULTISAMPLE);
@@ -980,7 +980,7 @@
 					//glEnable(GL_TEXTURE_2D);
 					glViewport(0, 0, m_width, m_height);
 
-					Image::showAnyGlErrorAndExit();
+					showAnyGlErrorAndExitMacro();
 					
 					ARK2D::getLog()->v("clearing and blending");
 					glClear( GL_COLOR_BUFFER_BIT );
@@ -988,7 +988,7 @@
 					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 					//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-					Image::showAnyGlErrorAndExit();
+					showAnyGlErrorAndExitMacro();
 		 
 					// enable 2d!
 					enable2D();

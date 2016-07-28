@@ -8,7 +8,9 @@
 #ifndef PATH_H_
 #define PATH_H_
 
-#include "../Tween/Easing.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+#include "../Geometry/Vector2.h"
 
 #include <vector>
 using namespace std;

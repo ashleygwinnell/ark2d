@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-#include "../../Includes.h"
+//#include "../../Includes.h"
 #include "../../UI/ErrorDialog.h"
 #include "../../Util/StringUtil.h"
 
@@ -23,23 +23,23 @@
 
 using namespace std;
 
-namespace ARK { 
+namespace ARK {
 	namespace Graphics {
 		namespace ImageIO {
 
 			#if defined(ARK2D_WINDOWS_PHONE_8)
 				//#if (PNG_LIBPNG_VER < 10400 || PNG_LIBPNG_VER >= 10500)
-	     		//	#define IF_JMPBUF if (setjmp(png_jmpbuf(png_ptr))) 
+	     		//	#define IF_JMPBUF if (setjmp(png_jmpbuf(png_ptr)))
 				//#else
 				    // Warning is unavoidable if #define PNG_DEPSTRUCT is not present
-	   				//#define IF_JMPBUF(PTR) if (setjmp((PTR)->jmpbuf)) 
+	   				//#define IF_JMPBUF(PTR) if (setjmp((PTR)->jmpbuf))
 
 					// no error checking?!
-					#define IF_JMPBUF(PTR) if (false) 
+					#define IF_JMPBUF(PTR) if (false)
 				//#endif
-	   		#else 
+	   		#else
 				//#define IF_JMPBUF(PTR) if (setjmp((PTR)->jmpbuf))
-				#define IF_JMPBUF(PTR) if (setjmp(png_jmpbuf(png_ptr))) 
+				#define IF_JMPBUF(PTR) if (setjmp(png_jmpbuf(png_ptr)))
 			#endif
 
 			PNGImage::PNGImage(const string filename): m_filename(filename) {
@@ -94,8 +94,8 @@ namespace ARK {
 			// 7: could not create row_pointers;
 			int PNGImage::load(void* data) {
 
-				
-				
+
+
 
 				char header[8];
 
@@ -115,7 +115,7 @@ namespace ARK {
 				if (!png_ptr) {
 					string s = string("void* data: png_create_read_struct failed");
 					ErrorDialog::createAndShow(s);
-					return 1; 
+					return 1;
 				}
 
 
@@ -131,13 +131,13 @@ namespace ARK {
 					return 1;
 				}
 
-			
+
 
 				IF_JMPBUF(png_ptr) {
 					ErrorDialog::createAndShow("[read_png_file] Error during init_io or reading png.");
 					return 1;
 				}
-				
+
 
 				//FILE* fp = fmemopen(data, sizeof(md), "r");
 
@@ -409,7 +409,7 @@ namespace ARK {
 				{
 					#if defined(ARK2D_ANDROID)
 						filename = ARK2D::getContainer()->m_platformSpecific.m_externalDataStr + filename;
-					#elif defined(ARK2D_IPHONE) 
+					#elif defined(ARK2D_IPHONE)
 						// append Documents folder first.
 						NSArray* searchPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 						NSString* documentsPath = [searchPaths objectAtIndex:0];
@@ -417,7 +417,7 @@ namespace ARK {
 
 						filename = respath + string("/") + filename;
 					#else
-						if (filename.substr(1,1).compare(":") == 0 || filename.substr(0,1).compare("/") == 0) { 
+						if (filename.substr(1,1).compare(":") == 0 || filename.substr(0,1).compare("/") == 0) {
 
 						} else {
 							filename = ARK2D::getContainer()->getResourcePath() + filename;

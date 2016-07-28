@@ -12,7 +12,10 @@
 #include <map>
 using namespace std;
 
-#include "../Includes.h"
+//#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
 
 namespace ARK {
 	namespace Graphics {
@@ -29,7 +32,7 @@ namespace ARK {
 				static void addSheet(SpriteSheetDescription* desc, Image* sheet);
 				static void removeSheet(SpriteSheetDescription* desc, Image* sheet);
 				static Image* getImage(string name);
-				
+
 		};
 	}
 }

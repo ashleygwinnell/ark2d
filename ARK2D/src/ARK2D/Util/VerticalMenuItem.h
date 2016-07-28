@@ -8,8 +8,11 @@
 #ifndef VERTICALMENUITEM_H_
 #define VERTICALMENUITEM_H_
 
-#include "../Includes.h"
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include <string>
+using std::string;
 
 /*!
  * @deprecated

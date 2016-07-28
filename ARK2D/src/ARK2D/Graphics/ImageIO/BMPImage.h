@@ -9,7 +9,9 @@
 #define BMPIMAGE_H_
 
 #include "../../ARK2D.h"
-#include "../../Includes.h"
+#include "../../Common/DLL.h"
+#include "../../Namespaces.h"
+//#include "../../Includes.h"
 
 #if defined(ARK2D_WINDOWS)
 	#include <windows.h>

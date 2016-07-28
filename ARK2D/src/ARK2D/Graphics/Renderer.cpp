@@ -22,6 +22,7 @@
 #include "../Geometry/Cube.h"
 
 #include "../Util/Cast.h"
+#include "../Util/StringUtil.h"
 
 #include "Texture.h"
 #include "TextureStore.h"

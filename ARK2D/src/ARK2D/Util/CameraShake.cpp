@@ -7,6 +7,7 @@
 
 #include "CameraShake.h"
 #include "../Core/Game.h"
+#include "../Core/GameTimer.h"
 #include "../Tween/Timeline.h"
 #include "../Graphics/Renderer.h"
 

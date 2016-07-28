@@ -11,9 +11,10 @@
 #include "../Namespaces.h"
 
 #include "../Common/DLL.h"
-#include "../Controls/KeyListener.h"
-#include "../Controls/Gamepad.h"
+//#include "../Controls/KeyListener.h"
 #include "../SceneGraph/Scene.h"
+#include "../Controls/GamepadListener.h"
+
 #include "../Geometry/Cube.h"
 
 namespace ARK {

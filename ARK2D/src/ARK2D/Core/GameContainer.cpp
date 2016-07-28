@@ -33,6 +33,7 @@
 
 #include "../Util/Callbacks.h"
 #include "../Util/Strings.h"
+#include "../Graphics/ImageIO/PNGImage.h"
 
 namespace ARK {
 	namespace Core { 
@@ -693,7 +694,7 @@ namespace ARK {
 			void* data = (void*) malloc(datalen); 
 			ARK2D::getRenderer()->readPixels(data, 0, 0, m_width, m_height);
 			 
-			PNGImage::saveFile(filename, (char*) data, m_width, m_height);
+            ARK::Graphics::ImageIO::PNGImage::saveFile(filename, (char*) data, m_width, m_height);
 
 			free(data);
 		}

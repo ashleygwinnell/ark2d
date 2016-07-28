@@ -9,7 +9,7 @@
 #define PARTICLE_H_
 
 #include "../Namespaces.h"
-#include "../Includes.h"
+#include "../Common/DLL.h"
 
 namespace ARK {
 	namespace Particles {

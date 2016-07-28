@@ -1,14 +1,16 @@
 #ifndef ARK_GRAPHICS_FBO_H_
 #define ARK_GRAPHICS_FBO_H_
 
-#include "../Includes.h"
+//#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 #include "../Graphics/Color.h"
 
 
-namespace ARK { 
+namespace ARK {
 	namespace Graphics {
 		class FBOStore;
-		
+
 		class ARK2D_API FBO {
 			friend class FBOStore;
 			private:
@@ -31,14 +33,14 @@ namespace ARK {
 				static bool m_supportedVAOs;
 				static bool m_supportedChecked;
 
-				bool m_dummy; 
+				bool m_dummy;
 				bool m_clearScreenOnBind;
 
 			public:
 				Color clearColor;
 
 			public:
-				FBO();	
+				FBO();
 				FBO(bool dummy);
 				FBO(unsigned int w, unsigned int h);
 
@@ -46,9 +48,9 @@ namespace ARK {
 
 				unsigned int getId();
 
-				void bind(); 
-				void bind(unsigned int vw, unsigned int vh); 
-				void unbind(); 
+				void bind();
+				void bind(unsigned int vw, unsigned int vh);
+				void unbind();
 
 				void bind_2d();
 				void bind_2d(unsigned int w, unsigned int h);
@@ -57,9 +59,9 @@ namespace ARK {
 				inline void setClearScreenOnBind(bool b) { m_clearScreenOnBind = b; }
 
 				unsigned int getGLID() { return fbo; }
-				
+
 				void resize(int width, int height);
-				
+
 				unsigned int getTextureId();
 				unsigned int getWidth() { return window_width; }
 				unsigned int getHeight() { return window_height; }

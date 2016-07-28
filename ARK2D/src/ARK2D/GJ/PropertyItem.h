@@ -8,8 +8,13 @@
 #ifndef ARK_GJ_PROPERTY_ITEM_H_
 #define ARK_GJ_PROPERTY_ITEM_H_
 
-#include "../Includes.h"
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include <string>
+#include <map>
+using std::string;
+using std::map;
 
 namespace ARK {
 	namespace GJ {

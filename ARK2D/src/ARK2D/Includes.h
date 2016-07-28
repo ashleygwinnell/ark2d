@@ -118,10 +118,6 @@
  		#include "Common/OpenGL.h"
  		#include "Common/DLL.h"
 
- 		#include "vendor/angelscript/angelscript.h"
- 		#include "vendor/angelscript/add_on/scriptstdstring/scriptstdstring.h"
- 		#include "vendor/angelscript/add_on/scriptarray/scriptarray.h"
- 		#include "vendor/angelscript/add_on/scriptbuilder/scriptbuilder.h"
 
 	 	using namespace std;
 
@@ -170,10 +166,7 @@
 
  		#include "Common/DLL.h"
 
- 		#include "vendor/angelscript/angelscript.h"
- 		#include "vendor/angelscript/add_on/scriptstdstring/scriptstdstring.h"
- 		#include "vendor/angelscript/add_on/scriptarray/scriptarray.h"
- 		#include "vendor/angelscript/add_on/scriptbuilder/scriptbuilder.h"
+
 
 		#if (TARGET_IPHONE_SIMULATOR)
  			#define ARK2D_IPHONE_SIMULATOR
@@ -239,14 +232,9 @@
 			#endif //DEBUG || _DEBUG
 		#endif
 
-		#ifndef ARK2D_WINDOWS_DLL // abc.dll source code will define this macro before including this header
-			#define ANGELSCRIPT_DLL_LIBRARY_IMPORT
-		#endif
 
- 		#include "vendor/angelscript/angelscript.h"
- 		#include "vendor/angelscript/add_on/scriptstdstring/scriptstdstring.h"
- 		#include "vendor/angelscript/add_on/scriptarray/scriptarray.h"
- 		#include "vendor/angelscript/add_on/scriptbuilder/scriptbuilder.h"
+
+
 
  		typedef unsigned char GLubyte;
 		typedef unsigned int GLsizei;
@@ -427,11 +415,7 @@
  			#define snprintf _snprintf
 
 
- 			#ifndef ARK2D_WINDOWS_DLL // abc.dll source code will define this macro before including this header
-				#define ANGELSCRIPT_DLL_LIBRARY_IMPORT
-			#endif
-
-			#if defined(ARK2D_WINDOWS_VS)
+ 			#if defined(ARK2D_WINDOWS_VS)
 				#ifndef Assert
 					#if defined( ARK2D_DEBUG )
 						#define Assert(b) do {if (!(b)) {OutputDebugStringA("Assert: " #b "\n");}} while(0)
@@ -467,14 +451,6 @@
 
 		#include "Common/OpenGL.h"
 		#include "Common/Audio.h"
-
-
-
-		#include "vendor/angelscript/angelscript.h"
- 		#include "vendor/angelscript/add_on/scriptstdstring/scriptstdstring.h"
- 		#include "vendor/angelscript/add_on/scriptarray/scriptarray.h"
- 		#include "vendor/angelscript/add_on/scriptbuilder/scriptbuilder.h"
-
 
  		#include "vendor/libcurl-windows/curl.h"
 
@@ -517,18 +493,11 @@
 
 		#include <stdarg.h>
 
-		#import <QTKit/QTKit.h>
-
 		#include <execinfo.h>
 
- 		#include "vendor/libcurl/curl.h"
  		#include "vendor/spine/includes/spine/spine.h"
 
- 		#include "vendor/angelscript/angelscript.h"
- 		#include "vendor/angelscript/add_on/scriptstdstring/scriptstdstring.h"
- 		#include "vendor/angelscript/add_on/scriptarray/scriptarray.h"
- 		#include "vendor/angelscript/add_on/scriptbuilder/scriptbuilder.h"
- 		//#include "vendor/spine/SpineSkeleton.h"
+		//#include "vendor/spine/SpineSkeleton.h"
 
  		using namespace std;
 
@@ -567,12 +536,6 @@
 		#include <errno.h>
 		#include <fcntl.h>
 
-		#include "vendor/libcurl/curl.h"
-
-		#include "vendor/angelscript/angelscript.h"
- 		#include "vendor/angelscript/add_on/scriptstdstring/scriptstdstring.h"
- 		#include "vendor/angelscript/add_on/scriptarray/scriptarray.h"
- 		#include "vendor/angelscript/add_on/scriptbuilder/scriptbuilder.h"
 
  		using namespace std;
 
@@ -580,7 +543,7 @@
 
 	#include <stdint.h>
 
-	#define showAnyGlErrorAndExitMacro() Image::showAnyGlErrorAndExit(__FILE__, __LINE__)
+
 
  	// TODO: Only include these where they are necessary.
 	//#include "Common/Libraries/libpng.h"

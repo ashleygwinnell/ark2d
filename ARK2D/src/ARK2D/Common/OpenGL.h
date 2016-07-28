@@ -52,7 +52,7 @@
 		#define NO_FIXED_FUNCTION_PIPELINE true
 
 		#include <d3d11.h>
-		#include <DirectXMath.h> 
+		#include <DirectXMath.h>
 	#elif defined(ARK2D_XBOXONE)
 		#define ARK2D_RENDERER_DIRECTX
 
@@ -61,7 +61,7 @@
 		#define NO_FIXED_FUNCTION_PIPELINE true
 
 		#include <d3d11_x.h>
-		#include <DirectXMath.h> 
+		#include <DirectXMath.h>
 	#elif defined(_WIN32) || defined(ARK2D_WINDOWS)
 		#define ARK2D_OPENGL_3_2
 		#define ARK2D_RENDERER_OPENGL
@@ -71,7 +71,7 @@
 		//#define ARK2D_RENDERER_DIRECTX
 
 		#if defined(ARK2D_RENDERER_OPENGL) && defined(ARK2D_OPENGL_3_2)
-			
+
 			#pragma comment(lib, "opengl32.lib")
 			#include <GL/gl3w.h>
 
@@ -88,13 +88,13 @@
 			#include <d2d1.h>
 			#include <d2d1_1.h>
 			#include <d2d1effects_1.h>
-			
+
 			#include <dwrite.h>
 			#include <dwrite_1.h>
 			#include <wincodec.h>
 			#include <DirectXColors.h>
 			#include <DirectXMath.h>
-			
+
 			typedef unsigned char GLubyte;
 			typedef unsigned int GLsizei;
 
@@ -133,7 +133,7 @@
 
 		typedef struct {
 			float vertex[2];
-			unsigned char color[4]; 
+			unsigned char color[4];
 		} Renderer_InterleavingGeometryVertexData;
 
 		typedef struct {
@@ -156,14 +156,14 @@
 		typedef struct {
 			DirectX::XMFLOAT4 vertex;
 			DirectX::XMFLOAT4 normal;
-			DirectX::XMFLOAT4 color; 
+			DirectX::XMFLOAT4 color;
 		} Renderer_DX_InterleavingGeometryVertexData;
 
 		typedef struct {
 			DirectX::XMFLOAT4 vertex;
 			DirectX::XMFLOAT4 normal;
 			DirectX::XMFLOAT2 texcoord;
-			DirectX::XMFLOAT4 color; 
+			DirectX::XMFLOAT4 color;
 		} Renderer_DX_InterleavingTextureVertexData;
 
 		typedef struct {
@@ -171,7 +171,7 @@
 			DirectX::XMFLOAT4X4 view;
 			DirectX::XMFLOAT4X4 projection;
 			DirectX::XMFLOAT3X3 normal;
-		} Renderer_DX_ModelViewProjectionMatrixBuffer; 
+		} Renderer_DX_ModelViewProjectionMatrixBuffer;
 
 		#ifndef ARK2D_RENDERER_DIRECTX_BITS
 			#define ARK2D_RENDERER_DIRECTX_BITS
@@ -196,8 +196,8 @@
 		            std::cerr << "DX THROW IF FAILED LOG..." << __FILE__ << " : " << __LINE__ << std::endl;
 		            // Set a breakpoint on this line to catch Win32 API errors.
 		            //throw Platform::Exception::CreateException(hr);
-		        } 
-		    }  
+		        }
+		    }
 		    inline std::string DX_GetError(HRESULT hr)
 		    {
 		        if (hr == D3D11_ERROR_FILE_NOT_FOUND) {
@@ -228,7 +228,7 @@
 		        	return "DX Error: S_FALSE.";
 		        }
 		        return "DX Error: NO ERROR?";
-		    }  
+		    }
 
 		   /* inline std::string DX_GetMatrixstring(XMMATRIX pm3) {
 		  		string dxvalues = "{";
@@ -253,9 +253,9 @@
 				dxvalues += Cast::toString<float>(XMVectorGetW(pm3.r[3]));
 				dxvalues += string("}");
 				return dxvalues;
-			}*/ 
+			}*/
 
-			
+
 
 			#ifndef HINST_THISCOMPONENT
 				EXTERN_C IMAGE_DOS_HEADER __ImageBase;
@@ -266,7 +266,7 @@
 
 	#endif
 
-	
+
 
 #endif
 

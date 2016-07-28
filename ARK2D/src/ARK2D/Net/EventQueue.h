@@ -8,16 +8,20 @@
 #ifndef ARK_NET_EVENTQUEUE_H_
 #define ARK_NET_EVENTQUEUE_H_
 
-#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 
-namespace ARK { 
-	namespace Net { 
+#include <list>
+using std::list;
+
+namespace ARK {
+	namespace Net {
 		#define MAX_PACKET_SIZE 256
-		class ARK2D_API EventQueue { 
+		class ARK2D_API EventQueue {
 			public:
-				std::list<const char*> m_queueData;
-				std::list<unsigned int> m_queueSz;
-				std::list<unsigned int> m_queueType;
+				list<const char*> m_queueData;
+				list<unsigned int> m_queueSz;
+				list<unsigned int> m_queueType;
 				unsigned int m_total;
 
 				EventQueue();

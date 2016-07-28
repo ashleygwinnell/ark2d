@@ -8,9 +8,10 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 
-#include "TiledMapProperty.h"
+//#include "TiledMapProperty.h"
 
 using namespace std;
 
@@ -36,7 +37,7 @@ namespace ARK {
 				unsigned int getWidth() const;
 				void setHeight(unsigned int height);
 				unsigned int getHeight() const;
-				
+
 				void setVisible(bool v);
 				bool isVisible() const;
 

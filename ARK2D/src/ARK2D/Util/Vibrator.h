@@ -9,18 +9,19 @@
 #ifndef ARK_UTIL_VIBRATOR_H_
 #define ARK_UTIL_VIBRATOR_H_
 
-#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 
 namespace ARK {
 	namespace Util {
-		 
+
 		class ARK2D_API Vibrator {
 			public:
 				static bool hasVibrator();
 				static void vibrate(float seconds);
 				static void cancel();
 		};
-		 
+
 	}
 }
 

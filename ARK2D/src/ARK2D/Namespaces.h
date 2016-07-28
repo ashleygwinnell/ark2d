@@ -69,6 +69,8 @@ namespace ARK {
 		template <class T=int>
 		class Line;
 
+		class AdvancedPolygon;
+
 
 
 
@@ -192,6 +194,12 @@ namespace ARK {
 	//! Contains classes for reading and rendering TilED maps.
 	namespace Tiled {
 		class TiledMap;
+        class TiledMapObject;
+        class TiledMapProperty;
+        class TiledMapLayer;
+        class TiledMapObjectGroup;
+        class TiledMapTile;
+        class TiledMapTileset;
 		class TiledMapParser;
 		class TiledMapParser_TinyXml;
 		class TiledMapParser_RapidXml;
@@ -241,7 +249,7 @@ namespace ARK {
 		class Callback;
 		class DisplayUtil;
 		class Wobble;
-		//class Transform;
+		class Transform;
 
 		template <class T=float>
 		class Matrix44Template;

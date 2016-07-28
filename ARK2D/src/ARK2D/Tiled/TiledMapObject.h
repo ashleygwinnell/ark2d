@@ -1,13 +1,14 @@
 #ifndef TILED_MAP_OBJECT_H_
 #define TILED_MAP_OBJECT_H_
 
-#include "../Includes.h"
-#include "TiledMapProperty.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+//#include "TiledMapProperty.h"
 #include "../Geometry/Vector2.h"
 
+#include <vector>
 using namespace std;
-
-
 
 namespace ARK {
 	namespace Tiled {
@@ -24,7 +25,7 @@ namespace ARK {
 				TiledMapObject();
 
 				void setName(string s);
-				string& getName(); 
+				string& getName();
 
 				void setType(string s);
 				string& getType();
@@ -47,7 +48,7 @@ namespace ARK {
 				TiledMapProperty* getPropertyByName(string name) const;
 				void addProperty(string key, string value);
 
-				Vector2<signed int>* getPolylinePoint(unsigned int index); 
+				Vector2<signed int>* getPolylinePoint(unsigned int index);
 				unsigned int getPolylineSize();
 				void addPolylinePoint(signed int x, signed int y);
 

@@ -8,7 +8,12 @@
 #ifndef SOUNDSTORE_H_
 #define SOUNDSTORE_H_
 
-#include "../Includes.h"
+#include "../Common/DLL.h"
+#include "../Namespaces.h"
+
+#include <string>
+#include <map>
+using namespace std;
 
 namespace ARK {
 	namespace Audio {
@@ -20,7 +25,7 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
 		class ARK2D_API SoundStore {
-			private: 
+			private:
 				static SoundStore* s_soundStore;
 
 			public:
@@ -30,8 +35,8 @@ namespace ARK {
 				SoundStore();
 				void setCurrentGroupId(unsigned int groupId);
 				void addSound(string s, Sound* sound);
-				void removeSound(string s); 
-				Sound* getSound(string s); 
+				void removeSound(string s);
+				Sound* getSound(string s);
 				map<string, Sound*> getMap();
 				void setVolumeByGroupId(unsigned int groupId, float volume);
 				void setPanningByGroupId(unsigned int groupId, float panning);

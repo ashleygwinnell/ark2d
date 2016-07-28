@@ -8,11 +8,17 @@
 #include "PathGroup.h"
 #include "SubPath.h"
 
+#include "../ARK2D.h"
+#include "../Graphics/Renderer.h"
+#include "../Util/MathUtil.h"
+#include "../Core/GameTimer.h"
+#include "../Tween/Easing.h"
+
 namespace ARK {
 	namespace Path {
 
 		PathGroup::PathGroup():
-			ARK::Core::Resource(), 
+			ARK::Core::Resource(),
 			paths(), currentLocation(), centerLocation(), calcVector(), current(0), timer(0.0f),
 			relative(false),
 			m_isFlippedH(false),
@@ -336,7 +342,7 @@ namespace ARK {
 		void PathGroup::renderPoint(float x, float y, bool linkPoint) {
 			Renderer* g = ARK2D::getRenderer();
 			g->setDrawColor(Color::white);
-			if (linkPoint) {  
+			if (linkPoint) {
 				g->fillCircle(int(x), int(y), 10, 10);
 			} else {
 				g->fillCircle(int(x), int(y), 5, 10);

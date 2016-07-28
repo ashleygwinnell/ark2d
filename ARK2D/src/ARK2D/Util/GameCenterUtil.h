@@ -8,7 +8,8 @@
 #ifndef GAMECENTER_UTIL_H_
 #define GAMECENTER_UTIL_H_
 
-#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 
 #if defined(ARK2D_IPHONE)
 	#include "../Core/Platform/GameContainerIPhone.h"
@@ -16,17 +17,22 @@
 	class GameCenterManager;
 #endif
 
+#include <vector>
+#include <string>
+using std::string;
+using std::vector;
+
 namespace ARK {
 	namespace Util {
-		 
+
 		class ARK2D_API GameCenterUtil {
 			private:
 				static vector<string> s_waitingAchievements;
-				
+
 
 			public:
 				static bool isAvailable();
-				
+
 				static void signIn();
 				//static void signOut();
 				static bool isSignedIn();
@@ -47,7 +53,7 @@ namespace ARK {
 				static GameCenterManager* getManager();
 
 		};
-		
+
 	}
 }
 

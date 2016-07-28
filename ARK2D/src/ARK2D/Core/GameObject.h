@@ -8,8 +8,9 @@
 #ifndef ARKGAMEOBJECT_H_
 #define ARKGAMEOBJECT_H_
 
-#include "../Includes.h"
+//#include "../Includes.h"
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
 #include <string>
 using namespace std;
 

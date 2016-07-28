@@ -7,9 +7,6 @@
 
 #include "MidiUtil.h"
 
-#include "../Includes.h"
-#include "../Namespaces.h"
-
 #include <stdio.h>
 #include "../ARK2D.h"
 #include "StringUtil.h"
@@ -17,30 +14,41 @@
 //#include "../Core/GameContainer.h"
 
 #include "../Core/String.h"
- 
+
+
+#include <iostream>
+#include <fstream>
+#include <string>
+ using namespace std;
+
+#if defined(ARK2D_MACINTOSH)
+	#import <CoreAudio/CoreAudio.h>
+	#import <CoreAudioKit/CoreAudioKit.h>
+	#import <CoreMIDI/CoreMIDI.h>
+#endif
 
 
 namespace ARK {
 	namespace Util {
- 
+
 		void MidiUtil::printDevices() {
-			#if defined(ARK2D_MACINTOSH) 
+			#if defined(ARK2D_MACINTOSH)
 
 				ItemCount numOfDevices = MIDIGetNumberOfDevices();
-			    
+
 				for (int i = 0; i < numOfDevices; i++) {
 					MIDIDeviceRef midiDevice = MIDIGetDevice(i);
 					NSDictionary* midiProperties;
-			        
+
 					CFDictionaryRef midiPropertiesCF = (__bridge CFDictionaryRef )midiProperties;
 					MIDIObjectGetProperties(midiDevice, (CFPropertyListRef* )&midiPropertiesCF, YES);
-					
+
 					midiProperties = CFBridgingRelease(midiPropertiesCF);
 					NSLog(@"Midi properties: %d \n %@", i, midiProperties);
 				}
-			#else 
+			#else
 				ARK2D::getLog()->w("MidiUtil::printDevices not available on this platform.");
-			#endif 
+			#endif
 		}
 
 	}

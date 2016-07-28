@@ -9,6 +9,7 @@
 #include "../Core/String.h"
 #include "StringUtil.h"
 #include "Cast.h"
+#include "ErrorDialog.h"
 
 namespace ARK {
 	namespace Util {

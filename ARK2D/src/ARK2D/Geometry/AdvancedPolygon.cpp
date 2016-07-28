@@ -6,6 +6,7 @@
  */
 
 #include "AdvancedPolygon.h"
+#include "Line.h"
 #include "../Controls/Input.h"
 
 void AdvancedPolygon::updateLines() {

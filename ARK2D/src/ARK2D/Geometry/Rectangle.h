@@ -9,12 +9,13 @@
 #define ARKRECTANGLE_H_
 
 #include "Shape.h"
-#include "Line.h"
 #include "Vector2.h"
 //#include "Polygon.h"
 #include "../Graphics/Renderer.h"
+#include "../Util/Cast.h"
 
-
+#include <string>
+using std::string;
 
 namespace ARK {
 	namespace Geometry {
@@ -163,18 +164,18 @@ namespace ARK {
 				}
 
 				string toString() {
-					ARK::Core::String s;
+					string s;
 					s += "{";
 					s += "\"x\":";
-					s += m_x;
+                    s += Cast::toString<T>(m_x);
 					s += ", \"y\":";
-					s += m_y;
+					s += Cast::toString<T>(m_y);
 					s += ", \"w\":";
-					s += m_width;
+					s += Cast::toString<T>(m_width);
 					s += ", \"h\":";
-					s += m_height;
+					s += Cast::toString<T>(m_height);
 					s += "}";
-					return s.get();
+                    return s;
 				}
 
 				virtual ~RectangleTemplate() {

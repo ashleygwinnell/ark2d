@@ -9,6 +9,8 @@
 #include "StateBasedGame.h"
 
 #include "../Namespaces.h"
+//#include "../Controls/KeyListener.h"
+//#include "../UI/AbstractUIComponent.h"
 
 namespace ARK {
 	namespace State {

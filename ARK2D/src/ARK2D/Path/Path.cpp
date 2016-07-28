@@ -8,6 +8,7 @@
 #include "Path.h"
 #include "SubPath.h"
 #include "PathGroup.h"
+#include "../Tween/Easing.h"
 
 namespace ARK {
 	namespace Path {

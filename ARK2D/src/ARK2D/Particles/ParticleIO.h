@@ -8,11 +8,14 @@
 #ifndef PARTICLEIO_H_
 #define PARTICLEIO_H_
 
-#include "../Includes.h"
 #include "../Namespaces.h"
+ #include "../Common/DLL.h"
 #include "../Util/Range.h"
 
 #include "../vendor/tinyxml/tinyxml.h"
+
+#include <string>
+using std::string;
 
 namespace ARK {
 	namespace Particles {

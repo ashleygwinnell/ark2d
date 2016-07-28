@@ -19,9 +19,6 @@ using namespace std;
 
 #include "../Core/Resource.h"
 #include "Color.h"
-#include "ImageIO/TargaImage.h"
-#include "ImageIO/BMPImage.h"
-#include "ImageIO/PNGImage.h"
 #include "../SceneGraph/Scene.h"
 
 #include "../Geometry/Cube.h"
@@ -44,10 +41,10 @@ namespace ARK {
 				float m_Height;
 				ARK::Geometry::Cube m_bounds;
 
-				// The dimensions of the sprite (usually in a spritesheet). 
+				// The dimensions of the sprite (usually in a spritesheet).
 				// We need this so we can change the dimensions by a scale value.
-				float m_originalWidth; 
-				float m_originalHeight; 
+				float m_originalWidth;
+				float m_originalHeight;
 
 				Texture* m_texture;
 				unsigned int texture_temp;
@@ -90,8 +87,8 @@ namespace ARK {
 				Color* m_color;
 
 
-				
-				
+
+
 
 				//#if defined(ARK2D_OPENGL_ES_2_0)
 				//	bool m_dirty;
@@ -145,7 +142,7 @@ namespace ARK {
 				inline float getTextureY_bl() { return texture_offset_y_bl; };
 				inline float getTextureX_br() { return texture_offset_x_br; };
 				inline float getTextureY_br() { return texture_offset_y_br; };
-				
+
 				// This is the texture width that never changes!
 				inline float getSourceWidth() const { return texture_source_w; }
 				inline float getSourceHeight() const { return texture_source_h; }
@@ -157,7 +154,7 @@ namespace ARK {
 				Image* setCenterOfRotation(int x, int y);
 				inline int getCenterOfRotationX() { return (int) m_CenterX; }
 				inline int getCenterOfRotationY() { return (int) m_CenterY; }
-				
+
 				virtual SceneNode* rotate(double angle); // return self
 				virtual SceneNode* setRotation(double angle);
 
@@ -166,7 +163,7 @@ namespace ARK {
 
 				Image* flip(bool flipx, bool flipy); // return self.
 				Image* setFlipped(bool flipx, bool flipy);
-				
+
 				Image* getSubImage(const SpriteSheetDescription* desc, const char* item);
 				Image* getSubImage(const SpriteSheetDescriptionItem& desc);
 				Image* getSubImage(int x, int y, int width, int height) const;
@@ -180,7 +177,7 @@ namespace ARK {
 
                 virtual	void setBounds(float w, float h, float z);
                 virtual	ARK::Geometry::Cube* getBounds();
-            
+
 				//void bind() const;
 				//void unbind() const;
 				void draw();
@@ -202,14 +199,11 @@ namespace ARK {
 				//void copyAreaToImage(const Image& image, unsigned int dest_x, unsigned int dest_y,
 				//						unsigned int x, unsigned int y, unsigned int width, unsigned int height);
 
-				static string getGlErrorString(int error);
-				static void showAnyGlErrorAndExit();
-				static void showAnyGlErrorAndExit(const char* fname, int line);
 
 				// http://stackoverflow.com/questions/2008842/creating-and-loading-pngs-in-rgba4444-rgba5551-for-opengl
-				// src 	IN 	pointer to source buffer, 
+				// src 	IN 	pointer to source buffer,
 				// cb 	IN 	size of source buffer, in bytes
-				static void* util_rgba8888_to_rgba4444( void* src, int cb); 
+				static void* util_rgba8888_to_rgba4444( void* src, int cb);
 
 				private:
 					unsigned int createDXTexture(int w, int h, void* data);

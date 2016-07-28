@@ -6,8 +6,9 @@
 #ifndef ARK_PATHFINDING_ASTAR_H_
 #define ARK_PATHFINDING_ASTAR_H_
 
-#include "../Includes.h"
+//#include "../Includes.h"
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
 #include "../Util/Containers/Vector.h"
 #include "../Geometry/AdvancedPolygon.h"
 
@@ -19,7 +20,7 @@
  * @author Ashley Gwinnell - ported to ARK2D C++ framework
  */
 
-namespace ARK { 
+namespace ARK {
 	namespace Pathfinding {
 
 		class AStar;
@@ -33,24 +34,24 @@ namespace ARK {
 		// A heuristic that uses the tile that is closest to the target as the next best tile.
 		class ARK2D_API ClosestHeuristic : public AStarHeuristic {
 			public:
-				virtual float getCost(AStar* map, float x, float y, float tx, float ty) 
+				virtual float getCost(AStar* map, float x, float y, float tx, float ty)
 				{
 					float dx = tx - x;
 					float dy = ty - y;
-		                
+
 					return float( sqrt((dx*dx)+(dy*dy)) );
 				}
 		};
 
-		// A heuristic that uses the tile that is closest to the target as the next best tile. 
+		// A heuristic that uses the tile that is closest to the target as the next best tile.
 		// In this case the sqrt is removed and the distance squared is used instead.
 		class ARK2D_API ClosestSquaredHeuristic : public AStarHeuristic {
 			public:
-				virtual float getCost(AStar* map, float x, float y, float tx, float ty) 
+				virtual float getCost(AStar* map, float x, float y, float tx, float ty)
 				{
 					float dx = tx - x;
 					float dy = ty - y;
-		                
+
 					return ((dx*dx) + (dy*dy));
 				}
 		};
@@ -59,11 +60,11 @@ namespace ARK {
 		class ARK2D_API ManhattanHeuristic : public AStarHeuristic {
 			public:
 				int m_minimumCost;
-				ManhattanHeuristic(int minimumCost): 
-					m_minimumCost(minimumCost) { 
+				ManhattanHeuristic(int minimumCost):
+					m_minimumCost(minimumCost) {
 
 				}
-				virtual float getCost(AStar* map, float x, float y, float tx, float ty) 
+				virtual float getCost(AStar* map, float x, float y, float tx, float ty)
 				{
 					return m_minimumCost * (abs(float(x)-float(tx)) + abs(float(y)-float(ty)));
 				}
@@ -71,16 +72,16 @@ namespace ARK {
 
 		class ARK2D_API DiagonalShortcutHeuristic : public AStarHeuristic {
 			public:
-				virtual float getCost(AStar* map, float x, float y, float tx, float ty) 
+				virtual float getCost(AStar* map, float x, float y, float tx, float ty)
 				{
 					float xDistance = abs(float(x)-float(tx));
 					float yDistance = abs(float(y)-float(ty));
-					if (xDistance > yDistance) { 
+					if (xDistance > yDistance) {
 						return 14*yDistance + 10*(xDistance-yDistance);
-					} 
+					}
 					return 14*xDistance + 10*(yDistance-xDistance);
 				}
-		}; 
+		};
 
 		class ARK2D_API AStarDataMap {
 			public:
@@ -91,7 +92,7 @@ namespace ARK {
 		class ARK2D_API DefaultAStarDataMap : public AStarDataMap {
 			public:
 				virtual bool isBlocked(AStar* map, float x, float y);
-		}; 
+		};
 
 		/* Coefficients for Matrix M */
 		#define M11	 0.0
@@ -100,7 +101,7 @@ namespace ARK {
 		#define M14	 0.0
 		#define M21	-0.5
 		#define M22	 0.0
-		#define M23	 0.5 
+		#define M23	 0.5
 		#define M24	 0.0
 		#define M31	 1.0
 		#define M32	-2.5
@@ -111,13 +112,13 @@ namespace ARK {
 		#define M43	-1.5
 		#define M44	 0.5
 
-		static float catmullRomSpline(float t, float v0, float v1, float v2, float v3) 
+		static float catmullRomSpline(float t, float v0, float v1, float v2, float v3)
 		{
 			double c1,c2,c3,c4;
 			c1 =  	      M12*v1;
 			c2 = M21*v0          + M23*v2;
 			c3 = M31*v0 + M32*v1 + M33*v2 + M34*v3;
-			c4 = M41*v0 + M42*v1 + M43*v2 + M44*v3; 
+			c4 = M41*v0 + M42*v1 + M43*v2 + M44*v3;
 
 			return(((c4*t + c3)*t +c2)*t + c1);
 		}
@@ -129,11 +130,11 @@ namespace ARK {
 				float m_y;
 				unsigned int m_cost;
 				unsigned int m_depth;
-				AStarNode* m_parent; 
+				AStarNode* m_parent;
 				float m_heuristic;
 				bool m_open;
 				bool m_closed;
-				bool m_blocked; // can this block be moved in to? 
+				bool m_blocked; // can this block be moved in to?
 				vector<AStarNode*> m_neighbours;
 
 				AStarNode(float x, float y):
@@ -146,7 +147,7 @@ namespace ARK {
 					m_open(false),
 					m_closed(false),
 					m_blocked(false),
-					m_neighbours() { 
+					m_neighbours() {
 
 				}
 				void set(float x, float y) {
@@ -190,13 +191,13 @@ namespace ARK {
 		class ARK2D_API PriorityAStarNodeList {
 			public:
 				Vector<AStarNode*> m_data;
-		 
+
 			public:
 				PriorityAStarNodeList(): m_data() {
 					m_data.setUsingList(true);
 				}
 
-				AStarNode* first() { 
+				AStarNode* first() {
 					return m_data.get(0);
 				}
 
@@ -237,9 +238,9 @@ namespace ARK {
 				Vector<AStarNode*> m_nodes;
 				unsigned int m_width;
 				unsigned int m_height;
-		 
+
 				AStarNode* m_current;
-				unsigned int m_sourceX; 
+				unsigned int m_sourceX;
 				unsigned int m_sourceY;
 
 				unsigned int m_distance;
@@ -254,14 +255,14 @@ namespace ARK {
 				bool m_gridBased;
 				bool m_gridAllowDiagonal;
 
-			public: 
+			public:
 
 				AStar();
 				AStar(AdvancedPolygon* poly);
 				AStar(unsigned int width, unsigned int height);
 				AStar(unsigned int width, unsigned int height, float x, float y, float eachSize);
 
-				void init(); 
+				void init();
 				void setHeuristic(AStarHeuristic* h);
 				void setDataMap(AStarDataMap* map);
 				void processNeighbours();
@@ -276,7 +277,7 @@ namespace ARK {
 
 				void randomiseAdjacent();
 				void removeAdjacent();
-				
+
 				void addNode(AStarNode* node); // to add temporary nodes for POV-graph pathfinding
 				void removeNode(AStarNode* node);
 
@@ -302,7 +303,7 @@ namespace ARK {
 		        bool isValidLocation(float sourceX, float sourceY, float x, float y);
 		        float getMovementCost(float sourceX,float sourceY, float x, float y);
 				float getHeuristicCost(float x, float y, float tx, float ty);
-		 
+
 		 		// visibility graph calculations
 				void clearNeighboursFromNodesThatConnectTo(AStarNode* node);
 				void calculateNeighboursForNode(AStarNode* start, AdvancedPolygon* polygon);
@@ -317,11 +318,11 @@ namespace ARK {
 					}
 
 					unsigned int thisIndex = 1;
-					float thisTime = t;   
+					float thisTime = t;
 
 					// find which two points we're between
 					float eachTime = 1.0f / float(catmullPoints.size()-3);
-					for(float i = 0; i < catmullPoints.size()-3; i += 1.0f) 
+					for(float i = 0; i < catmullPoints.size()-3; i += 1.0f)
 					{
 						if (thisTime >= i*eachTime && thisTime <= (i+1)*eachTime) {
 							//thisTime = (i*eachTime) / ((i+1)*eachTime);
@@ -337,30 +338,30 @@ namespace ARK {
 							//thisTime -= runningDistance;
 							thisIndex = int(i) + 1;
 							break;
-						} 
+						}
 						//runningDistance += thisDistance;
 						//runningDistanceWhole = thisDistanceWhole;
 					}
 
 					float x = catmullRomSpline(
-						thisTime, 
+						thisTime,
 						catmullPoints.get(thisIndex-1).getX(),
-						catmullPoints.get(thisIndex).getX(), 
+						catmullPoints.get(thisIndex).getX(),
 						catmullPoints.get(thisIndex+1).getX(),
 						catmullPoints.get(thisIndex+2).getX()
-					);  
+					);
 					float y = catmullRomSpline(
-						thisTime, 
+						thisTime,
 						catmullPoints.get(thisIndex-1).getY(),
-						catmullPoints.get(thisIndex).getY(), 
+						catmullPoints.get(thisIndex).getY(),
 						catmullPoints.get(thisIndex+1).getY(),
 						catmullPoints.get(thisIndex+2).getY()
-					);  
+					);
 
 					return Vector2<float>(x, y);
 
 				}
-				
+
 				virtual ~AStar();
 		};
 
@@ -371,7 +372,7 @@ namespace ARK {
 				static void removeAdjacent(AStar* a, Vector<Vector2<int> >& items);
 		};
 
-	} 
+	}
 }
 
 #endif /* ARK_PATHFINDING_ASTAR_H_ */

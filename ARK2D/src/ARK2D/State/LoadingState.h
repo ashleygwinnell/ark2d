@@ -8,8 +8,8 @@
 #ifndef LOADINGSTATE_H_
 #define LOADINGSTATE_H_
 
-#include "../Includes.h"
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
 #include "GameState.h"
 
 namespace ARK {

@@ -9,6 +9,7 @@
 #define PARTICLEEMITTER_H_
 
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
 
 namespace ARK {
 	namespace Particles {
@@ -40,7 +41,7 @@ namespace ARK {
 			virtual bool isOriented() = 0;
 			virtual bool usePoints() = 0;
 			virtual void resetState() = 0;
-            
+
             virtual ~ParticleEmitter() {};
 		};
 	}

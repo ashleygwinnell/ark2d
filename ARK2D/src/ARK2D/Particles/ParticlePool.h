@@ -8,7 +8,11 @@
 #ifndef PARTICLEPOOL_H_
 #define PARTICLEPOOL_H_
 
-#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include <vector>
+using std::vector;
 
 namespace ARK {
 	namespace Particles {

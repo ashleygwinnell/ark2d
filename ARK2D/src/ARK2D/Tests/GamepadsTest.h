@@ -8,7 +8,14 @@
 #ifndef GamepadsTestState_H__
 #define GamepadsTestState_H__
 
-#include "../../ARK.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include "../State/GameState.h"
+#include "../State/StateBasedGame.h"
+
+#include <vector>
+using std::vector;
 
 namespace ARK {
 	namespace Tests {
@@ -44,7 +51,7 @@ namespace ARK {
 				static const unsigned int STATE_END = 20;
 
 				float m_axisChangedCooldown;
-				
+
 			public:
 				GamepadConfigureGameState(unsigned int stateId);
 				void enter(GameContainer* container, StateBasedGame* game, GameState* from);

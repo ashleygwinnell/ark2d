@@ -22,7 +22,13 @@
 #include <cstring>
 #include <stdio.h>
 using namespace std;*/
-#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include <vector>
+#include <string>
+using std::vector;
+using std::string;
 
 #ifndef ARK2D_WINDOWS_PHONE_8
 

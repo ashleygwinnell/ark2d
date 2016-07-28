@@ -8,7 +8,15 @@
 #ifndef COLLISIONTESTSTATE_H__
 #define COLLISIONTESTSTATE_H__
 
-#include "../../ARK.h"
+//#include "../../ARK.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include "../State/GameState.h"
+#include "../State/StateBasedGame.h"
+
+#include <vector>
+using std::vector;
 
 namespace ARK {
 	namespace Tests {

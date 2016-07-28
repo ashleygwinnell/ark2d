@@ -7,6 +7,8 @@
 
 #include "Easing.h"
 
+#include "../Util/MathUtil.h"
+
 namespace ARK {
 	namespace Tween {
 
@@ -207,50 +209,50 @@ namespace ARK {
 				case Easing::CIRCLE_IN_OUT:
 					if ((t/=duration/2) < 1) return -change/2 * ((float)sqrt(1 - t*t) - 1) + start;
 					return change/2 * ((float)sqrt(1 - (t-=2)*t) + 1) + start;
-				
+
 				case Easing::ELASTIC_IN: {
 					if (t==0) return start;
 					if ((t/=duration)==1) return start+change;
-					
+
 					double amplitude = 1.0;
 					double period = duration * 0.3; //if (!p) p=duration*.3;
 					double s = 0;
-					if (amplitude < abs(change)) { 
-						amplitude = change; 
-						s = period / 4; 
-					} else { 
-						s = period / (2 * MathUtil::PIE) * asin(change/amplitude); 
+					if (amplitude < abs(change)) {
+						amplitude = change;
+						s = period / 4;
+					} else {
+						s = period / (2 * MathUtil::PIE) * asin(change/amplitude);
 					}
 					return -(amplitude * pow(2, 10 * (t-=1)) * sin( (t*duration-s)*(2* MathUtil::PIE)/period )) + start;
 				}
 				case Easing::ELASTIC_OUT: {
 					if (t==0) return start;
 					if ((t/=duration)==1) return start+change;
-					
+
 					double amplitude = 1.0;
 					double period = duration * 0.3; //if (!p) p=duration*.3;
 					double s = 0;
-					if (amplitude < abs(change)) { 
-						amplitude = change; 
-						s = period/4; 
-					} else { 
-						s = period/(2 * MathUtil::PIE) * asin (change/amplitude); 
+					if (amplitude < abs(change)) {
+						amplitude = change;
+						s = period/4;
+					} else {
+						s = period/(2 * MathUtil::PIE) * asin (change/amplitude);
 					}
 					return amplitude * pow(2,-10*t) * sin( (t*duration-s)*(2 * MathUtil::PIE)/period ) + change + start;
 				}
 				case Easing::ELASTIC_IN_OUT: {
 					if (t==0) return start;
 					if ((t/=duration/2)==2) return start+change;
-					//if (!p) p=d*(.3*1.5); 
+					//if (!p) p=d*(.3*1.5);
 					double amplitude = 1.0;
 					double period = duration*(0.3*1.5);
 					double s = 0;
 
-					if (amplitude < abs(change)) { 
-						amplitude=change; 
-						s = period/4; 
-					} else { 
-						s = period/(2 * MathUtil::PIE) * asin (change/amplitude); 
+					if (amplitude < abs(change)) {
+						amplitude=change;
+						s = period/4;
+					} else {
+						s = period/(2 * MathUtil::PIE) * asin (change/amplitude);
 					}
 
 					if (t < 1) {
@@ -286,7 +288,7 @@ namespace ARK {
 					float tc = ts * t;
 					return start + change * (5*tc*ts + -15*ts*ts + 19*tc + -14*ts + 6*t);
                 }
-				
+
 				case Easing::NONE:
 					return start;
 				default:

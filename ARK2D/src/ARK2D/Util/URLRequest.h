@@ -14,8 +14,9 @@
 #include <stdlib.h>
 #include <string>
 
-#include "../Includes.h"
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
+#include "../Common/Libraries/libcurl.h"
 
 #include "../UI/ErrorDialog.h"
 #include "../Threading/Thread.h"
@@ -28,7 +29,7 @@
 	using namespace Windows::Web::Http;
 #endif
 
-using namespace std; 
+using namespace std;
 
 namespace ARK {
 	namespace Util {
@@ -55,8 +56,8 @@ namespace ARK {
 				bool m_threaded;
 
 				int m_timeout;
-			
-			public: 
+
+			public:
 				URLRequest();
 				void setUrl(string url);
 				void addPostArg(string key, string value);

@@ -5,9 +5,11 @@
  *      Author: Ashley
  */
 
+#include "../../Includes.h"
 #include "DirectionalLightingShader.h"
 #include "../ShaderStore.h"
 #include "../Image.h"
+
 
 namespace ARK { 
 	namespace Graphics { 

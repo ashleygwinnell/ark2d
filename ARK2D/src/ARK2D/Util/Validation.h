@@ -8,8 +8,12 @@
 #ifndef VALIDATION_H_
 #define VALIDATION_H_
 
-#include "../Includes.h"
-#include "../Namespaces.h" 
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include <string>
+#include <vector>
+using namespace std;
 
 namespace ARK {
 	namespace Util {

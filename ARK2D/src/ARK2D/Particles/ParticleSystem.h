@@ -8,9 +8,13 @@
 #ifndef PARTICLESYSTEM_H_
 #define PARTICLESYSTEM_H_
 
-
-#include "../Includes.h"
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include <map>
+#include <vector>
+using std::map;
+using std::vector;
 
 namespace ARK {
 	namespace Particles {

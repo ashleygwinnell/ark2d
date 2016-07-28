@@ -9,7 +9,9 @@
 #ifndef TEXTURE_H_
 #define TEXTURE_H_
 
-#include "../Includes.h"
+//#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 #include "Image.h"
 
 namespace ARK {
@@ -26,7 +28,7 @@ namespace ARK {
 					ID3D11SamplerState* m_dxSampler;
 					ID3D11ShaderResourceView* m_dxResourceView;
 				#endif
-			 
+
 			public:
 				Texture();
 				Texture(unsigned int texid, Image* resource);

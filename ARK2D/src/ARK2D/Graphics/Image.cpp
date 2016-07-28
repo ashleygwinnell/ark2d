@@ -690,84 +690,11 @@ namespace ARK {
 			}
 			return 0;
 		}
-		void Image::showAnyGlErrorAndExit() {
-			showAnyGlErrorAndExit( __FILE__, __LINE__ );
-		}
-		void Image::showAnyGlErrorAndExit(const char* fname, int line) {
-			//#ifdef ARK2D_DEBUG
-			if (ARK2D::getLog()->getFilter() == ARK::Util::Log::TYPE_ALL)
-			{
-				#if defined(ARK2D_RENDERER_DIRECTX)
-					/*string s = "dx: ";
-					s += fname;
-					s += " - ";
-					s += Cast::toString<int>(line);
-					s += ".";
-					ARK2D::getLog()->v(s);*/
-					return;
-				#elif defined(ARK2D_RENDERER_OPENGL)
-					RendererStats::s_glCalls++;
-					int e = glGetError();
-					if (e != GL_NO_ERROR) {
-						ARK2D::getLog()->e("-----------!!!-----------");
-						ARK2D::getLog()->e("A GL error. :( ");
-						ARK2D::getLog()->e("Renderer state:" );
-						ARK2D::getLog()->e(ARK2D::getRenderer()->toString());
-						TextureStore::getInstance()->print();
-            			ShaderStore::getInstance()->print();
-
-						RendererStats::s_glCalls++;
-						string s = getGlErrorString(e);
-						s += " : ";
-						s += fname;
-						s += Cast::toString<int>(line);
-						s += ".";
-						ErrorDialog::createAndShow(s);
-						exit(0);
-					}
-				#endif
-			}
-			//#endif
-		}
 
 
 
-		string Image::getGlErrorString(int error) {
-			#if defined(ARK2D_RENDERER_OPENGL)
-				switch(error) {
-					case GL_INVALID_ENUM:
-						return "GL_INVALID_ENUM";
-						break;
-					case GL_INVALID_VALUE:
-						return "GL_INVALID_VALUE";
-						break;
-					#if !defined(ARK2D_ANDROID)
-						case GL_INVALID_FRAMEBUFFER_OPERATION:
-							return "GL_INVALID_FRAMEBUFFER_OPERATION";
-							break;
-					#endif
-					case GL_INVALID_OPERATION:
-						return "GL_INVALID_OPERATION";
-						break;
-					case GL_OUT_OF_MEMORY:
-						return "GL_OUT_OF_MEMORY";
-						break;
 
-					/*case GL_STACK_OVERFLOW:
-						return "GL_STACK_OVERFLOW";
-						break;
-					case GL_STACK_UNDERFLOW:
-						return "GL_STACK_UNDERFLOW";
-						break;
-					case GL_TABLE_TOO_LARGE:
-						return "GL_TABLE_TOO_LARGE";
-						break;*/
-				}
-				return "GL_UNKNOWN_ERROR";
-			#else
-				return "DIRECTX_ERROR_NOT_IMPLEMENTED";
-			#endif
-		}
+
 
 		unsigned int Image::createDXTexture(int w, int h, void* data)
 		{

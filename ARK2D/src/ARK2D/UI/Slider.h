@@ -8,8 +8,8 @@
 #ifndef ARK_UI_SLIDER_H_
 #define ARK_UI_SLIDER_H_
 
-#include "../Includes.h"
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
 #include "AbstractUIComponent.h"
 
 #include "../ARK2D.h"
@@ -21,8 +21,8 @@
 
 namespace ARK {
 	namespace UI {
-		
-		class ARK2D_API Slider : public AbstractUIComponent { 
+
+		class ARK2D_API Slider : public AbstractUIComponent {
 			public:
 
 				Vector2<float> m_buttonLocation;

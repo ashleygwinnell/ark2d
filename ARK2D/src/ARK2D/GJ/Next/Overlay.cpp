@@ -8,6 +8,9 @@
 #include "Overlay.h"
 #include "../../../ARK.h"
 
+//#include "../../Namespaces.h"
+#include "../../Graphics/ImageIO/PNGImage.h"
+
 namespace ARK {
 	namespace GJ {
 		namespace Next {
@@ -987,7 +990,7 @@ namespace ARK {
 				ARK2D::getLog()->e(result);
 
 
-				PNGImage* png = new PNGImage("");
+                ARK::Graphics::ImageIO::PNGImage* png = new ARK::Graphics::ImageIO::PNGImage("");
 				int ok = png->load((void*) result.c_str());
 				if (ok != 0) {
 					ARK2D::getLog()->e("failed");

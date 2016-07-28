@@ -8,7 +8,8 @@
 #ifndef EASING_H_
 #define EASING_H_
 
-#include "../Util/MathUtil.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 
 #include <math.h>
 #include <string>
@@ -29,8 +30,8 @@ namespace ARK {
 		 * @see file://C:\xampp\htdocs\C++\ARK2D\Docs\Easing.png
 		 *
 		 * (Generate your own)
-		 * @see http://www.timotheegroleau.com/Flash/experiments/easing_function_generator.htm 
-		 * 
+		 * @see http://www.timotheegroleau.com/Flash/experiments/easing_function_generator.htm
+		 *
 		 */
 		class ARK2D_API Easing {
 			public:

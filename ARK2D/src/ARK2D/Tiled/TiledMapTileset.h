@@ -1,15 +1,17 @@
 #ifndef TILED_MAP_TILESET_H_
 #define TILED_MAP_TILESET_H_
 
-#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 
 #include <stdexcept>
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../Graphics/Image.h"
+//#include "../Graphics/Image.h"
 
 #include "TiledMapTile.h"
+#include "../Graphics/Color.h"
 
 using namespace std;
 
@@ -62,6 +64,7 @@ namespace ARK {
 				Image* getImage() const;
 
 				~TiledMapTileset();
+            
 			public:
 				string m_name;
 				Image* m_image;

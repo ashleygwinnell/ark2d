@@ -1,6 +1,6 @@
 
 #include "TiledMapObject.h"
-
+#include "TiledMapProperty.h"
 
 namespace ARK {
 	namespace Tiled {

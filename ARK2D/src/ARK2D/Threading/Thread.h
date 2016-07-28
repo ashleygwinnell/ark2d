@@ -8,8 +8,10 @@
 #ifndef ARKTHREAD_H_
 #define ARKTHREAD_H_
 
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
 #include "../Core/Event.h"
-#include "../Includes.h"
 #include "../Util/Containers/Vector.h"
 
 #if (defined (ARK2D_WINDOWS) || defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE))
@@ -18,14 +20,12 @@
 	#include <pthread.h>
 #endif
 
-
-
 namespace ARK {
 	namespace Threading {
 
 
 
-		
+
 		/*!
 		 * \brief Yay, multiple threading.
 		 *
@@ -44,7 +44,7 @@ namespace ARK {
 				void terminate();
 				int getPriority();
 				void setPriority(int i);
-				
+
 				inline void setAutoDetaching(bool b) { m_autoDetaching = b; } // needed for JNI thing.
 				inline bool isAutoDetaching() { return m_autoDetaching; }
 
@@ -64,7 +64,7 @@ namespace ARK {
 				public:
 					HDC m_deviceContext;
 					HGLRC m_renderingContext;
-			
+
 			#elif defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE)
 
 				void* m_functionPointer;
@@ -84,7 +84,7 @@ namespace ARK {
 				bool m_autoDetaching;
 				bool m_detached;
 
-			#if defined(ARK2D_ANDROID) 
+			#if defined(ARK2D_ANDROID)
 				unsigned int m_internalId;
 
 				static bool s_initted;

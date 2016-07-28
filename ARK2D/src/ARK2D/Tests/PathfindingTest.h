@@ -8,7 +8,15 @@
 #ifndef ARK_TESTS_PATHFINDINGTESTSTATE_H__
 #define ARK_TESTS_PATHFINDINGTESTSTATE_H__
 
-#include "../../ARK.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include "../State/GameState.h"
+#include "../State/StateBasedGame.h"
+#include "../Geometry/AdvancedPolygon.h"
+
+#include <vector>
+using std::vector;
 
 namespace ARK {
 	namespace Tests {
@@ -18,13 +26,13 @@ namespace ARK {
 
 				AStar* pathfindingGrid;
 				Vector2<float>* pathfindingGridSource;
-				Vector2<float>* pathfindingGridTarget; 
-				
+				Vector2<float>* pathfindingGridTarget;
+
 				AStar* pathfindingGraph;
 				AdvancedPolygon pathfindingGraphPolygon;
 				AStarNode* pathfindingGraphSource;
 				AStarNode* pathfindingGraphTarget;
-				
+
 				unsigned int m_type;
 				static const unsigned int TYPE_GRID = 0;
 				static const unsigned int TYPE_VISIBILITYGRAPH = 1;
@@ -35,7 +43,7 @@ namespace ARK {
 
 				void initGraph();
 				void calculateNeighboursForNode(AStarNode* start);
-				
+
 				void refresh();
 
 				unsigned int id();

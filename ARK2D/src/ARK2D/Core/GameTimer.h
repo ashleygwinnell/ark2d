@@ -10,7 +10,6 @@
 
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
-#include "../ARK2D.h"
 
 #include <sys/time.h>
 

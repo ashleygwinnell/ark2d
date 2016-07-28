@@ -8,7 +8,9 @@
 #ifndef LOCALHIGHSCORES_H_
 #define LOCALHIGHSCORES_H_
 
-#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
 #include "FileUtil.h"
 #include "Cast.h"
 #include "StringUtil.h"

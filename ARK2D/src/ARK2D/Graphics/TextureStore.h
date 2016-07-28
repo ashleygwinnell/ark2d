@@ -8,7 +8,11 @@
 #ifndef TEXTURESTORE_H_
 #define TEXTURESTORE_H_
 
-#include "../Includes.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include <map>
+using std::map;
 
 namespace ARK {
 	namespace Graphics {
@@ -19,7 +23,7 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
 		class ARK2D_API TextureStore {
-			private: 
+			private:
 				static TextureStore* s_textureStore;
 
 			public:
@@ -29,8 +33,8 @@ namespace ARK {
 				TextureStore();
 
 				void addTexture(string ref, Texture* texture);
-				void removeTexture(string ref); 
-				Texture* getTexture(string ref); 
+				void removeTexture(string ref);
+				Texture* getTexture(string ref);
 				Texture* getTexture(unsigned int id);
 				bool hasTexture(string ref);
 				bool hasTexture(unsigned int ref);
@@ -45,7 +49,7 @@ namespace ARK {
 				map<unsigned int, Texture*> m_mapById;
 		};
 
-		
+
 
 		/*!
 		 * \brief Used to reload FBOs automatically on Android.
@@ -53,7 +57,7 @@ namespace ARK {
 		 */
 		class FBO;
 		class FBOStore {
-			private: 
+			private:
 				static FBOStore* s_fboStore;
 
 			public:
@@ -63,8 +67,8 @@ namespace ARK {
 				FBOStore();
 
 				void addFBO(unsigned int ref, FBO* texture);
-				void removeFBO(unsigned int ref); 
-				FBO* getFBO(unsigned int ref); 
+				void removeFBO(unsigned int ref);
+				FBO* getFBO(unsigned int ref);
 				bool hasFBO(unsigned int ref);
 
 				void reloadFBOs();

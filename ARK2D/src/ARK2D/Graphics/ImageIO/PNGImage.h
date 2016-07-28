@@ -9,7 +9,9 @@
 #define PNGIMAGE_H_
 
 #include "../../ARK2D.h"
-#include "../../Includes.h"
+//#include "../../Includes.h"
+#include "../../Common/DLL.h"
+#include "../../Namespaces.h"
 #include "../../Common/Libraries/libpng.h"
 
 namespace ARK {

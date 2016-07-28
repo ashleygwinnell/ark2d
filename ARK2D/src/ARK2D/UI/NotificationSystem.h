@@ -6,11 +6,11 @@
  */
 
 #ifndef ARK_CORE_NOTIFICATIONSYS_H_
-#define ARK_CORE_NOTIFICATIONSYS_H_ 
+#define ARK_CORE_NOTIFICATIONSYS_H_
 
 #include "../ARK2D.h"
 #include "../Namespaces.h"
-#include "../Includes.h"
+#include "../Common/DLL.h"
 #include "../Util/Containers/Vector.h"
 
 
@@ -19,7 +19,7 @@ namespace ARK {
 		class Notification;
 
 		class ARK2D_API NotificationSystem {
-			
+
 			private:
 				static NotificationSystem* s_notificationSystem;
 				static NotificationSystem* getInstance();
