@@ -9,23 +9,13 @@
 #define STRINGUTIL_H_
 
 #include "../ARK2D.h"
-#ifndef ARK2D_ANDROID
-	#include <vector>
-	#include <string>
-	#include <fstream>
-	#include <iostream>
-	#include <sstream>
-	#include <stdio.h>
-	#include <algorithm>
-#endif
-
 
 #include "../Namespaces.h"
-//#include "../Includes.h"
 #include "../Graphics/SpriteSheetDescription.h"
 #include "Cast.h"
 
 #include <string>
+#include <vector>
 using namespace std;
 
 namespace ARK {

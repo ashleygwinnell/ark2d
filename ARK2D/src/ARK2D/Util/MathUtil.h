@@ -16,6 +16,8 @@
 #include "../Geometry/Vector3.h"
 #include "Cast.h"
 
+#include <limits>
+#include <cmath>
 #include <vector>
 using std::vector;
 
@@ -33,7 +35,7 @@ using std::vector;
 
 class MersenneTwister;
 
-namespace ARK { 
+namespace ARK {
 	namespace Util {
 
 		/*!
@@ -47,7 +49,7 @@ namespace ARK {
 
 				static void seedRandom();
 				static int randBetween(int lower, int upper);
-				static float randBetweenf(float lower, float upper); 
+				static float randBetweenf(float lower, float upper);
 
 				static double distance(float x1, float y1, float x2, float y2);
 				static double distanceSquared(float x1, float y1, float x2, float y2);
@@ -73,14 +75,14 @@ namespace ARK {
 				static float rotateAngleToTarget(float angleStart, float angleTarget, float degrees);
 				static float rotateAngleToTarget(float angleStart, float angleTarget, float degrees, bool restrictOvershoot);
 				static float rotateAngleToTarget2(float angleStart, float angleTarget, float degrees);
-			
-				
+
+
 
 				/*
 					**  Usage:
 					**      bias(b,t)
 					**
-					**  Arguments: 
+					**  Arguments:
 					**      b       bais, real
 					**      t       value, real
 					**
@@ -111,7 +113,7 @@ namespace ARK {
 					return number % 2 == 0;
 				}
 
-				template <class T> 
+				template <class T>
 				static Vector2<T>* minY(vector< Vector2<T>* > vecs) {
 					Vector2<T>* minObj = NULL;
 					T min = std::numeric_limits<T>::max();
@@ -124,7 +126,7 @@ namespace ARK {
 					return minObj;
 				}
 
-				template <class T> 
+				template <class T>
 				static Vector2<T>* maxY(vector< Vector2<T>* > vecs) {
 					Vector2<T>* maxObj = NULL;
 					T max = std::numeric_limits<T>::min();
@@ -157,12 +159,12 @@ namespace ARK {
 					rotateVectorAroundAxis(&vec->m_x, &vec->m_y, &vec->m_z, axis->m_x, axis->m_y, axis->m_z, degreeAngle);
 				}
 				static void rotateVectorAroundAxis(float* vecx, float* vecy, float* vecz, float axisx, float axisy, float axisz, float degreeAngle) {
-					
+
 					// Main algorithm
 					double radianAngle = degreeAngle * MY_PI/180.0;
 					double cosAngle = cos(radianAngle);
 					double sinAngle = sin(radianAngle);
-					
+
 					float crossX = axisy * *vecz - axisz * *vecy;
 					float crossY = axisz * *vecx - axisx * *vecz;
 					float crossZ = axisx * *vecy - axisy * *vecx;
@@ -170,8 +172,8 @@ namespace ARK {
 					*vecx = *vecx * cosAngle;
 					*vecy = *vecy * cosAngle;
 					*vecz = *vecz * cosAngle;
-					
-					*vecx = *vecx + (sinAngle * crossX); 
+
+					*vecx = *vecx + (sinAngle * crossX);
 					*vecy = *vecy + (sinAngle * crossY);
 					*vecz = *vecz + (sinAngle * crossZ);
 
@@ -212,7 +214,7 @@ namespace ARK {
 
 					(*pointToRotateX) -= centerOfRotationX;
 					(*pointToRotateY) -= centerOfRotationY;
-					
+
 					T newx = ((*pointToRotateX) * cos(newAngle)) - ((*pointToRotateY) * sin(newAngle));
 					T newy = ((*pointToRotateX) * sin(newAngle)) + ((*pointToRotateY) * cos(newAngle));
 
@@ -229,19 +231,19 @@ namespace ARK {
 
 					*(points+2) -= centerOfRotationX;
 					*(points+3) -= centerOfRotationY;
-					
+
 					*(points+4) -= centerOfRotationX;
 					*(points+5) -= centerOfRotationY;
-					
+
 					*(points+6) -= centerOfRotationX;
 					*(points+7) -= centerOfRotationY;
-					
+
 					*(points+8) -= centerOfRotationX;
 					*(points+9) -= centerOfRotationY;
-					
+
 					*(points+10) -= centerOfRotationX;
 					*(points+11) -= centerOfRotationY;
-					
+
 					T tlX = centerOfRotationX + ((*points) * cos(newAngle)) - (*(points+1) * sin(newAngle));
 					T tlY = centerOfRotationY + ((*points) * sin(newAngle)) + (*(points+1) * cos(newAngle));
 
@@ -250,7 +252,7 @@ namespace ARK {
 
 					T blX = centerOfRotationX + (*(points+4) * cos(newAngle)) - (*(points+5) * sin(newAngle));
 					T blY = centerOfRotationY + (*(points+4) * sin(newAngle)) + (*(points+5) * cos(newAngle));
-					
+
 					T brX = centerOfRotationX + (*(points+10) * cos(newAngle)) - (*(points+11) * sin(newAngle));
 					T brY = centerOfRotationY + (*(points+10) * sin(newAngle)) + (*(points+11) * cos(newAngle));
 
@@ -262,13 +264,13 @@ namespace ARK {
 
 					*(points+4) = blX;
 					*(points+5) = blY;
-					
+
 					*(points+6) = blX;
 					*(points+7) = blY;
-					
+
 					*(points+8) = trX;
 					*(points+9) = trY;
-					
+
 					*(points+10) = brX;
 					*(points+11) = brY;
 				}
@@ -284,23 +286,23 @@ namespace ARK {
 					*(points+3) -= centerOfRotationX;
 					*(points+4) -= centerOfRotationY;
 					//*(points+5)
-					
+
 					*(points+6) -= centerOfRotationX;
 					*(points+7) -= centerOfRotationY;
 					//*(points+8)
-					
+
 					*(points+9) -= centerOfRotationX;
 					*(points+10) -= centerOfRotationY;
 					//*(points+11)
-					
+
 					*(points+12) -= centerOfRotationX;
 					*(points+13) -= centerOfRotationY;
 					//*(points+14)
-					
+
 					*(points+15) -= centerOfRotationX;
 					*(points+16) -= centerOfRotationY;
 					//*(points+17)
-					
+
 					T tlX = centerOfRotationX + ((*points) * cos(newAngle)) - (*(points+1) * sin(newAngle));
 					T tlY = centerOfRotationY + ((*points) * sin(newAngle)) + (*(points+1) * cos(newAngle));
 
@@ -309,7 +311,7 @@ namespace ARK {
 
 					T blX = centerOfRotationX + (*(points+6) * cos(newAngle)) - (*(points+7) * sin(newAngle));
 					T blY = centerOfRotationY + (*(points+6) * sin(newAngle)) + (*(points+7) * cos(newAngle));
-					
+
 					T brX = centerOfRotationX + (*(points+15) * cos(newAngle)) - (*(points+16) * sin(newAngle));
 					T brY = centerOfRotationY + (*(points+15) * sin(newAngle)) + (*(points+16) * cos(newAngle));
 
@@ -321,13 +323,13 @@ namespace ARK {
 
 					*(points+6) = blX;
 					*(points+7) = blY;
-					
+
 					*(points+9) = blX;
 					*(points+10) = blY;
-					
+
 					*(points+12) = trX;
 					*(points+13) = trY;
-					
+
 					*(points+15) = brX;
 					*(points+16) = brY;
 				}
@@ -349,10 +351,10 @@ namespace ARK {
 					//vector->x += distance * double(cos(angleRadians));
 					//vector->y +=
 				}
-				template <class T> 
+				template <class T>
 				static void moveAngle(T& x, T& y, double angleDegrees, float distance) {
 					double angleRadians = toRadians(angleDegrees);
-					x = T(x + (distance * double(cos(angleRadians)))); 
+					x = T(x + (distance * double(cos(angleRadians))));
 					y = T(y + (distance * double(sin(angleRadians))));
 				}
 
@@ -363,7 +365,7 @@ namespace ARK {
 						moveAngle<float>(x, y, angleDegrees, distance);
 					}
 
-				template <class T> 
+				template <class T>
 				static void moveAngleEllipse(T& x, T& y, double angleDegrees, float distanceX, float distanceY) {
 					double angleRadians = toRadians(angleDegrees);
 					x = T(x + (distanceX * double(cos(angleRadians))));
@@ -400,7 +402,7 @@ namespace ARK {
 					vx = rx;
 					vy = ry;
 
-					// todo for users of this function: 
+					// todo for users of this function:
 					// move the object out of the circle range or else it will collide again?
 				}
 
@@ -431,13 +433,13 @@ namespace ARK {
 
 				static Vector3<float> calculateFaceNormal(Vector3<float>* a, Vector3<float>* b, Vector3<float>* c) {
 					bool clockwise = isVertexOrderClockwise(a, b, c);
-					                
-					// sort out normals  
+
+					// sort out normals
 				   	if (clockwise) {
 				       	Vector3<float>* temp = c;
 				       	c = b;
 				       	b = c;
-				    } 
+				    }
 					Vector3<float> normal = Vector3<float>::cross(*b - *a, *c - *a).normalise();
 					//	if (!clockwise && normal.x == 0 && normal.y == 0 && normal.z == -1) {
 					//		normal.z *= -1;
@@ -445,8 +447,8 @@ namespace ARK {
 					return normal;
 				}
 				static bool isVertexOrderClockwise(Vector3<float>* a, Vector3<float>* b, Vector3<float>* c) {
-					return ((b->x - a->x) * (c->y - a->y) - (c->x - a->x) * (b->y - a->y) < 0) ? true:false; 
-				} 
+					return ((b->x - a->x) * (c->y - a->y) - (c->x - a->x) * (b->y - a->y) < 0) ? true:false;
+				}
 
 				static bool isVertexInsidePolygon(vector<Vector2<float> >* polygon, Vector2<float>* position, bool toleranceOnOutside = true)
 				{
@@ -584,7 +586,7 @@ namespace ARK {
 									if (i != 0 && j != c)
 									{
 										b[m][n] = a[i][j];
-										if (n < (k-2)) { 
+										if (n < (k-2)) {
 											n++;
 										} else {
 											n = 0;
@@ -643,7 +645,7 @@ namespace ARK {
 						}
 						return catmullRom(values[(i - 1 + m) % m], values[i], values[(i + 1) % m], values[(i + 2) % m], f - i);
 					}
-					
+
 					if (k < 0) {
 						return values[0] - (catmullRom(values[0], values[0], values[1], values[1], -f) - values[0]);
 					}
@@ -655,7 +657,7 @@ namespace ARK {
 					return catmullRom(values[i ? i - 1 : 0], values[i], values[m < i + 1 ? m : i + 1], values[m < i + 2 ? m : i + 2], f - i);
 				}
 
-				static float catmullRom(float p0, float p1, float p2, float p3, float t) 
+				static float catmullRom(float p0, float p1, float p2, float p3, float t)
 				{
 					float v0 = (p2 - p0) * 0.5;
 					float v1 = (p3 - p1) * 0.5;
@@ -679,12 +681,12 @@ namespace ARK {
         			return factorial(n) / factorial(i) / factorial(n - i);
     			}
     			static float linear(float p0, float p1, float t) {
-        			return (p1 - p0) * t + p0;	
+        			return (p1 - p0) * t + p0;
     			}
 
     			template <class T>
     			static T absangle(T angle) {
-    				if (angle < 0.0f) { 
+    				if (angle < 0.0f) {
 						angle = fmod(720000.0 - (angle * -1.0), 360.0);
 					} else if (angle > 360.0f) {
 						angle = fmod(angle, 360.0);
@@ -704,7 +706,7 @@ namespace ARK {
 				        return i;
 				}
 				#define B(x) MathUtil::S_to_binary_(#x)
-				
+
 
 		};
 

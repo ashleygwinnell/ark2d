@@ -11,6 +11,7 @@
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
 
+#include <cstdlib>
 #include <list>
 using std::list;
 

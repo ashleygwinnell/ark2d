@@ -102,8 +102,8 @@ namespace ARK {
 				//#endif
 
 			public:
-				GLuint load();
-				GLuint load(const Color& mask);
+				unsigned int load();
+				unsigned int load(const Color& mask);
 				TargaImage* loadTGA();
 				BMPImage* loadBMP();
 				PNGImage* loadPNG();

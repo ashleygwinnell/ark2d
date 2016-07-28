@@ -100,10 +100,9 @@
 		#include <sstream>
 		#include <iostream>
 		#include <fstream>
-		#include <jni.h>
 		#include <sys/time.h>
 		#include <time.h>
-		#include <android/log.h>
+
 		#include <stdint.h>
 		#include <stdio.h>
 		#include <stdlib.h>
@@ -117,6 +116,7 @@
  		#include "Common/Audio.h"
  		#include "Common/OpenGL.h"
  		#include "Common/DLL.h"
+ 		#include "Common/Platform.h"
 
 
 	 	using namespace std;

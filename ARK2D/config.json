@@ -254,6 +254,7 @@
 			"src/ARK2D/Util/Log.cpp",
 			"src/ARK2D/Util/MathUtil.cpp",
 			"src/ARK2D/Util/Matrix44.cpp",
+			"src/ARK2D/Util/Matrix33.cpp",
 			"src/ARK2D/Util/RSSL.cpp",
 			"src/ARK2D/Util/SAT.cpp",
 			"src/ARK2D/Util/SocialUtil.cpp",

@@ -8,20 +8,6 @@
 #ifndef PACKER_H_
 #define PACKER_H_
 
-#include <stdint.h>
-#include "../vendor/ogg130/ogg.h"
-#include "../vendor/vorbis132/vorbisfile.h"
-
-#include "../vendor/zlib123/zlib.h"
-
-/*#include <vector>
-#include <fstream>
-#include <iostream>
-#include <string>
-#include <cstdlib>
-#include <cstring>
-#include <stdio.h>
-using namespace std;*/
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
 

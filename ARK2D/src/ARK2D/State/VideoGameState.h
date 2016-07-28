@@ -12,7 +12,7 @@
 #include <string>
 #include "GameState.h"
 
-#import <QTKit/QTKit.h>
+
 
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
@@ -22,6 +22,7 @@ using namespace std;
 
 
 #ifdef ARK2D_MACINTOSH
+#import <QTKit/QTKit.h>
 
 @interface QTMovieView (TFOverrideDrag)
 

@@ -33,7 +33,7 @@ namespace ARK {
 
 		unsigned int Image::s_dxNextTextureId = 0;
 
-		GLuint Image::load(const Color& mask) {
+		unsigned int Image::load(const Color& mask) {
 
 			unsigned int thisDataType = 0;
 			if (m_data != NULL) {
@@ -349,7 +349,7 @@ namespace ARK {
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Renderer::getInterpolationGL());
 					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Renderer::getInterpolationGL());
 
-					GLuint uiSize = 8 * ((int(m_Width) + 3) >> 2) * ((int(m_Height) + 3) >> 2);
+					unsigned int uiSize = 8 * ((int(m_Width) + 3) >> 2) * ((int(m_Height) + 3) >> 2);
 					glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_ETC1_RGB8_OES, m_Width, m_Height, 0, uiSize, pcData);
 					//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tempTextureWidth, tempTextureHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, newdata);
 
@@ -749,7 +749,7 @@ namespace ARK {
 			return retval;
 		}
 
-		GLuint Image::load() {
+		unsigned int Image::load() {
 			return load(ARK2D::getRenderer()->getMaskColor());
 		}
 

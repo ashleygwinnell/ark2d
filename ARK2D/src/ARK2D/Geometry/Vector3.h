@@ -12,6 +12,7 @@
 //#include "../Util/Log.h"
 //#include "../Core/String.h"
 #include "../Util/Cast.h"
+#include <cmath>
 #include <string>
 using std::string;
 

@@ -19,6 +19,7 @@ using std::string;
 #include "../Util/Matrix33.h"
 #include "../Font/Font.h"
 
+#include "../Common/OpenGL.h"
 //#include "../Core/GameContainer.h"
 
 

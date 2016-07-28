@@ -11,8 +11,10 @@
 #include "../ARK2D.h"
 #include "Log.h"
 
+#include <algorithm>
+
 namespace ARK {
-	namespace Util {  
+	namespace Util {
 
 		bool Validation::isAlphanumeric(string s)
 		{
@@ -39,27 +41,27 @@ namespace ARK {
 			allowedChars.push_back('T'); allowedChars.push_back('t');
 			allowedChars.push_back('U'); allowedChars.push_back('u');
 			allowedChars.push_back('V'); allowedChars.push_back('v');
-			allowedChars.push_back('W'); allowedChars.push_back('w'); 
+			allowedChars.push_back('W'); allowedChars.push_back('w');
 			allowedChars.push_back('X'); allowedChars.push_back('x');
 			allowedChars.push_back('Y'); allowedChars.push_back('y');
 			allowedChars.push_back('Z'); allowedChars.push_back('z');
-			allowedChars.push_back('0'); 
-			allowedChars.push_back('1'); 
-			allowedChars.push_back('2'); 
-			allowedChars.push_back('3'); 
-			allowedChars.push_back('4'); 
-			allowedChars.push_back('5'); 
-			allowedChars.push_back('6'); 
-			allowedChars.push_back('7'); 
-			allowedChars.push_back('8'); 
-			allowedChars.push_back('9');  
-			//allowedChars.push_back(' ');  
+			allowedChars.push_back('0');
+			allowedChars.push_back('1');
+			allowedChars.push_back('2');
+			allowedChars.push_back('3');
+			allowedChars.push_back('4');
+			allowedChars.push_back('5');
+			allowedChars.push_back('6');
+			allowedChars.push_back('7');
+			allowedChars.push_back('8');
+			allowedChars.push_back('9');
+			//allowedChars.push_back(' ');
 			return isCharset(allowedChars, s);
 		}
 
 		bool Validation::isAlphanumericSpaces(string s)
 		{
-			vector<char> allowedChars; 
+			vector<char> allowedChars;
 			allowedChars.push_back('A'); allowedChars.push_back('a');
 			allowedChars.push_back('B'); allowedChars.push_back('b');
 			allowedChars.push_back('C'); allowedChars.push_back('c');
@@ -82,21 +84,21 @@ namespace ARK {
 			allowedChars.push_back('T'); allowedChars.push_back('t');
 			allowedChars.push_back('U'); allowedChars.push_back('u');
 			allowedChars.push_back('V'); allowedChars.push_back('v');
-			allowedChars.push_back('W'); allowedChars.push_back('w'); 
+			allowedChars.push_back('W'); allowedChars.push_back('w');
 			allowedChars.push_back('X'); allowedChars.push_back('x');
 			allowedChars.push_back('Y'); allowedChars.push_back('y');
 			allowedChars.push_back('Z'); allowedChars.push_back('z');
-			allowedChars.push_back('0'); 
-			allowedChars.push_back('1'); 
-			allowedChars.push_back('2'); 
-			allowedChars.push_back('3'); 
-			allowedChars.push_back('4'); 
-			allowedChars.push_back('5'); 
-			allowedChars.push_back('6'); 
-			allowedChars.push_back('7'); 
-			allowedChars.push_back('8'); 
-			allowedChars.push_back('9');  
-			allowedChars.push_back(' ');  
+			allowedChars.push_back('0');
+			allowedChars.push_back('1');
+			allowedChars.push_back('2');
+			allowedChars.push_back('3');
+			allowedChars.push_back('4');
+			allowedChars.push_back('5');
+			allowedChars.push_back('6');
+			allowedChars.push_back('7');
+			allowedChars.push_back('8');
+			allowedChars.push_back('9');
+			allowedChars.push_back(' ');
 			return isCharset(allowedChars, s);
 		}
 
@@ -106,7 +108,7 @@ namespace ARK {
 				if (std::find(chars.begin(), chars.end(), s[i]) == chars.end()) {
 					return false;
 				}
-			} 
+			}
 			return true;
 		}
 

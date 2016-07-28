@@ -7,6 +7,8 @@
 #include "../Util/Log.h"
 #include "../Util/Vector4.h"
 
+#include <algorithm>
+
 namespace ARK {
 	namespace SceneGraph {
 

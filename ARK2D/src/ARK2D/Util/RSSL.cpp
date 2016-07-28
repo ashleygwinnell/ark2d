@@ -9,7 +9,9 @@
 #include "../Core/String.h"
 #include "StringUtil.h"
 #include "Cast.h"
-#include "ErrorDialog.h"
+#include "../UI/ErrorDialog.h"
+
+#include <cstdlib>
 
 namespace ARK {
 	namespace Util {
@@ -25,7 +27,7 @@ namespace ARK {
 			throw new RSSLException(StringUtil::append("Error parsing RSSL: ", s));
 		#else
 			ErrorDialog::createAndShow(StringUtil::append("Error parsing RSSL: ", s));
-			exit(0);
+			exit(1);
 		#endif
 		}
 

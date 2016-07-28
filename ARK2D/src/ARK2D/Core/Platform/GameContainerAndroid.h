@@ -9,7 +9,7 @@
 #define GAMECONTAINERANDROID_H_
 
 #include "../../ARK2D.h"
-
+#include "../../Common/Platform.h"
 
 namespace ARK {
 	namespace Core {
@@ -23,9 +23,9 @@ namespace ARK {
 				virtual string urlRequest(JNIEnv* env, string url);
 				virtual string urlRequestThreaded(string url);
 				virtual bool isNetworkAvailable();
-				
+
 				virtual void openBrowserToUrl(string url);
-				virtual void openGalleryToImageUrl(string url); 
+				virtual void openGalleryToImageUrl(string url);
 				virtual void openGooglePlayStore(string packagename);
 				virtual void openErrorDialog(string message);
 				virtual void openSoftwareKeyboard();
@@ -33,7 +33,7 @@ namespace ARK {
 				virtual void openInputDialog(unsigned int jniCallbackId, string title, string defaultStr);
 				virtual string getInputDialogText();
 
-				virtual bool vibrator_hasVibrator(); 
+				virtual bool vibrator_hasVibrator();
 				virtual void vibrator_vibrate(int millis);
     			virtual void vibrator_cancel();
 
@@ -98,12 +98,12 @@ namespace ARK {
 				virtual ~GameContainerPlatform();
 
 				inline AndroidPluggable* getPluggable() { return m_pluggable; }
-				inline bool isRetina() { return false; } 
+				inline bool isRetina() { return false; }
 
 				static void* getARK2DResource(int resourceId, int resourceType);
 		};
 
-		
+
 
 	}
 }

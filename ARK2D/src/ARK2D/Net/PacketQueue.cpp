@@ -6,14 +6,15 @@
  */
 
 #include "PacketQueue.h"
+#include <cassert>
 
 namespace ARK {
-	namespace Net { 
-		
+	namespace Net {
+
 		bool sequence_more_recent( unsigned int s1, unsigned int s2, unsigned int max_sequence )
 		{
 			return (( s1 > s2 ) && ( s1 - s2 <= max_sequence/2 )) || (( s2 > s1 ) && ( s2 - s1 > max_sequence/2 ));
-		}		
+		}
 
 		bool PacketQueue::exists( unsigned int sequence )
 		{
@@ -22,7 +23,7 @@ namespace ARK {
 					return true;
 			return false;
 		}
-		
+
 		void PacketQueue::insert_sorted( const PacketData & p, unsigned int max_sequence )
 		{
 			if ( empty() )
@@ -53,7 +54,7 @@ namespace ARK {
 				}
 			}
 		}
-		
+
 		void PacketQueue::verify_sorted( unsigned int max_sequence )
 		{
 			PacketQueue::iterator prev = end();

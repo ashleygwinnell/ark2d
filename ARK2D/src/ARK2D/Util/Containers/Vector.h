@@ -10,7 +10,7 @@
 
 #include "../../ARK2D.h"
 #include "../../Namespaces.h"
-#if (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS) || defined(ARK2D_UBUNTU_LINUX))
+#if (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS) || defined(ARK2D_UBUNTU_LINUX) || defined(ARK2D_ANDROID))
 	#include <vector>
 	#include <list>
 	#include <iterator>
@@ -53,7 +53,7 @@ namespace ARK {
 						unsigned int m_typeSize; // in bytes
 						unsigned int m_sizeOccupied;
 						unsigned int m_sizeTotal;
-					#endif 
+					#endif
 					signed int m_size;
 
 					bool usingList;
@@ -83,15 +83,15 @@ namespace ARK {
 					}
 					inline bool isUsingList() { return usingList; }
 
-					/* 
+					/*
 					void sort( void* sortFunction  ) {
 						#if !defined(STL_AVAILABLE)
 							ARK2D::getLog()->w("Not implemented without STL.");
 							return;
-						#else 
+						#else
 							bool (*funcptr)(T,T) = (bool (*)(T,T)) sortFunction;
 
-							if (!usingList) { 
+							if (!usingList) {
 								std::sort (vec.begin(), vec.end(), funcptr);
 							} else {
 								std::sort (lst.begin(), lst.end(), funcptr);
@@ -102,14 +102,14 @@ namespace ARK {
 					bool contains(T val) {
 						#if !defined(STL_AVAILABLE)
 							return false;
-						#else 
+						#else
 							if (!usingList) {
 								typename vector<T>::iterator it = vec.begin();
 								while (it != vec.end()) {
 									T obj = (*it);
 									if (obj == val) {
 										return true;
-									} 
+									}
 									++it;
 								}
 								return false;
@@ -123,7 +123,7 @@ namespace ARK {
 								}
 								++it;
 							}
-							return false; 
+							return false;
 						#endif
 					}
 					void add(T o) {
@@ -150,11 +150,11 @@ namespace ARK {
 						if (!isIndexInBounds(index)) {
 							add(o);
 							return;
-						} 
+						}
 
 						#if !defined(STL_AVAILABLE)
 							ARK2D::getLog()->e("Vector<?>::add(unsigned int, ?) is not implemented without STL.");
-						#else 
+						#else
 							m_size++;
 							if (!usingList) {
 								vec.insert(vec.begin() + index, o);
@@ -187,7 +187,7 @@ namespace ARK {
 						return get(0);
 					}
 					T last() {
-						return get(size() - 1); 
+						return get(size() - 1);
 					}
 					T get(unsigned int i) const {
 						return (*this)[i];
@@ -262,7 +262,7 @@ namespace ARK {
 					void shuffle() {
 						//random_shuffle(vec.begin(). vec.end());
 						#if !defined(STL_AVAILABLE)
-							return NULL; 
+							return NULL;
 						#else
 							if (!usingList) {
 								std::random_shuffle(vec.begin(), vec.end());
@@ -274,7 +274,7 @@ namespace ARK {
 					void reverse() {
 						//std::reverse(vec.begin(), vec.end());
 						#if !defined(STL_AVAILABLE)
-							return NULL; 
+							return NULL;
 						#else
 							if (!usingList) {
 								std::reverse(vec.begin(), vec.end());
@@ -364,7 +364,7 @@ namespace ARK {
 						#if !defined(STL_AVAILABLE)
 						#else
 							if (!usingList) {
-								
+
 								typename vector<T>::iterator it = vec.begin();
 								while (it != vec.end()) {
 									T obj = (*it);
@@ -379,7 +379,7 @@ namespace ARK {
 								return;
 							}
 
-							
+
 							typename list<T>::iterator it = lst.begin();
 							while (it != lst.end()) {
 								T obj = (*it);
@@ -465,12 +465,12 @@ namespace ARK {
 								//if (obj == NULL) { continue; }
 								obj->update(container, timer);
 								++it;
-							} 
+							}
 						#endif
 					}
 					void updateSelection(void* selectionFunction) {
 						#if !defined(STL_AVAILABLE)
-							
+
 						#else
 							GameContainer* container = ARK2D::getContainer();
 							GameTimer* timer = container->getTimer();
@@ -522,8 +522,8 @@ namespace ARK {
 						#endif
 					}
 					// function definition example
-					// bool hasNoWave(LMTEnemy* enemy) { 
-					// 		return (enemy->getWave() == NULL); 
+					// bool hasNoWave(LMTEnemy* enemy) {
+					// 		return (enemy->getWave() == NULL);
 					// }
 					void renderSelection(void* selectionFunction) {
 						#if !defined(STL_AVAILABLE)
@@ -581,7 +581,7 @@ namespace ARK {
 								while (it != lst.end()) {
 									T obj = (*it);
 									s += obj->toString();
-									ARK2D::getLog()->i(s); 
+									ARK2D::getLog()->i(s);
 									if (ii != size() - 1) {
 										s += ",";
 									}
@@ -615,12 +615,12 @@ namespace ARK {
 						#endif
 					}
 					~Vector() {
-						
+
 						/*if (!usingList) {
 							for(unsigned int i = 0; i < vec.size(); i++) {
-								
+
 								//if (is_pointer<T>(vec.at(i))) {
-								//	delete vec.at(i);	
+								//	delete vec.at(i);
 								//}
 
 								if (is_pointer<T>(vec.at(i))) {
@@ -646,8 +646,8 @@ namespace ARK {
 								++it;
 							}
 							lst.clear();
-						}*/					
-							 
+						}*/
+
 					}
 				private:
 					bool isIndexInBounds(unsigned int i) {
@@ -766,7 +766,7 @@ namespace ARK {
 
 					}
 
-					
+
 			};
 		}
 	}

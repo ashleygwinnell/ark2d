@@ -12,6 +12,13 @@
 #include "../Util/Log.h"
 //#include "../UI/ErrorDialog.h"
 
+#include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <cstdio>
+#include <algorithm>
+
 namespace ARK {
 	namespace Util {
 

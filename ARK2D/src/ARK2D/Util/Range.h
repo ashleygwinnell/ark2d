@@ -8,6 +8,8 @@
 #ifndef RANGE_H_
 #define RANGE_H_
 
+#include <cmath>
+#include <cstdlib>
 #include <math.h>
 
 namespace ARK {

@@ -12,6 +12,7 @@
 #include "../Common/DLL.h"
 
 //#include "../Graphics/Image.h"
+#include <string>
 #include <vector>
 using namespace std;
 
