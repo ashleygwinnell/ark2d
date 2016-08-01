@@ -383,6 +383,7 @@ namespace ARK {
 		RendererBatchItem::RendererBatchItem():
 			geomtris(),
 			textris(),
+			mats(),
 			m_type(TYPE_GEOMETRY_TRIS),
 			m_textureId(0)
  		{
@@ -423,6 +424,7 @@ namespace ARK {
 		void RendererBatchItem::clear() {
 			geomtris.clear();
 			textris.clear();
+			mats.clear();
 			m_type = TYPE_GEOMETRY_TRIS;
 			m_textureId = 0;
 		}
@@ -633,6 +635,8 @@ namespace ARK {
 					r->rotate(m_float1, m_float2, m_float3, m_float4);
 				} else if (m_type == TYPE_MATRIX_SCALE) {
 					r->scale(m_float1, m_float2, m_float3);
+				} else if (m_type == TYPE_MATRIX_MULTIPLY) {
+					r->multiplyMatrix( mats[0] );
 				} else if (m_type == TYPE_MULTISAMPLING_ENABLE) {
 					r->enableMultisampling();
 				} else if (m_type == TYPE_MULTISAMPLING_DISABLE) {
@@ -1338,6 +1342,24 @@ namespace ARK {
 			s_matrix->pushMatrix(setasroot);
 			#ifndef NO_FIXED_FUNCTION_PIPELINE
 				glPushMatrix();
+				RendererStats::s_glCalls++;
+				//glLoadMatrixf((float*)s_matrix->pointer());
+			#endif
+
+			showAnyGlErrorAndExitMacro();
+		}
+		void Renderer::multiplyMatrix(Matrix44 mat) {
+			 if (Renderer::isBatching()) {
+			 	RendererBatchItem stateChange;
+			 	stateChange.m_type = RendererBatchItem::TYPE_MATRIX_MULTIPLY;
+			 	stateChange.mats.push_back(mat);
+			 	s_batch->items.push_back(stateChange);
+			 	return;
+			}
+
+			*s_matrix->current() *= mat;
+			#ifndef NO_FIXED_FUNCTION_PIPELINE
+				glMultMatrix();
 				RendererStats::s_glCalls++;
 				//glLoadMatrixf((float*)s_matrix->pointer());
 			#endif
@@ -5086,7 +5108,9 @@ namespace ARK {
 
 				// right edge
 				setDrawColor(m_ScissorBoxColors[3].getRed(), m_ScissorBoxColors[3].getGreen(), m_ScissorBoxColors[3].getBlue(), m_ScissorBoxColors[3].getAlpha());
-				fillRect((width * container->getScaleX()) , 0,
+				//fillRect((width * container->getScaleX()), 0,
+				//			(int) container->getTranslateX()+3, dynamicHeight);// * container->getScaleY());
+				fillRect(width, 0,
 							(int) container->getTranslateX()+3, dynamicHeight);// * container->getScaleY());
 
 				// top edge

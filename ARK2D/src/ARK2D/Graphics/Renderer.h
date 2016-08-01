@@ -178,26 +178,28 @@ namespace ARK {
 				static const unsigned int TYPE_MATRIX_TRANSLATE = 11;
 				static const unsigned int TYPE_MATRIX_ROTATE = 12;
 				static const unsigned int TYPE_MATRIX_SCALE = 13;
-				static const unsigned int TYPE_MULTISAMPLING_ENABLE = 14;
-				static const unsigned int TYPE_MULTISAMPLING_DISABLE = 15;
-				static const unsigned int TYPE_BACKFACECULLING_ENABLE = 16;
-				static const unsigned int TYPE_BACKFACECULLING_DISABLE = 17;
-				static const unsigned int TYPE_SCISSORTEST_ENABLE = 18;
-				static const unsigned int TYPE_SCISSORTEST_DISABLE = 19;
-				static const unsigned int TYPE_SCISSOR = 20;
-				static const unsigned int TYPE_FBO_BIND2D = 21;
-				static const unsigned int TYPE_FBO_UNBIND2D = 22;
-				static const unsigned int TYPE_FBO_BIND = 23;
-				static const unsigned int TYPE_FBO_UNBIND = 24;
-				static const unsigned int TYPE_VIEWPORT = 25;
-				static const unsigned int TYPE_ORTHO2D = 26;
-				static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 27;
-				static const unsigned int TYPE_CUSTOM_FUNCTION = 28;
+				static const unsigned int TYPE_MATRIX_MULTIPLY = 14;
+				static const unsigned int TYPE_MULTISAMPLING_ENABLE = 15;
+				static const unsigned int TYPE_MULTISAMPLING_DISABLE = 16;
+				static const unsigned int TYPE_BACKFACECULLING_ENABLE = 17;
+				static const unsigned int TYPE_BACKFACECULLING_DISABLE = 18;
+				static const unsigned int TYPE_SCISSORTEST_ENABLE = 19;
+				static const unsigned int TYPE_SCISSORTEST_DISABLE = 20;
+				static const unsigned int TYPE_SCISSOR = 21;
+				static const unsigned int TYPE_FBO_BIND2D = 22;
+				static const unsigned int TYPE_FBO_UNBIND2D = 23;
+				static const unsigned int TYPE_FBO_BIND = 24;
+				static const unsigned int TYPE_FBO_UNBIND = 25;
+				static const unsigned int TYPE_VIEWPORT = 26;
+				static const unsigned int TYPE_ORTHO2D = 27;
+				static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 28;
+				static const unsigned int TYPE_CUSTOM_FUNCTION = 29;
                 static map<unsigned int, string>* s_types;
 
 			public:
 				vector<RendererBatchItem_GeomTri> geomtris;
 				vector<RendererBatchItem_TexTri> textris;
+				vector<Matrix44> mats;
 				unsigned int m_type;
 				unsigned int m_textureId;
 				unsigned int m_shaderId;
@@ -534,6 +536,7 @@ namespace ARK {
 
 				void pushMatrix(bool setasroot = false) const;
 				void popMatrix() const;
+				void multiplyMatrix(Matrix44 mat);
 				void loadIdentity() const;
 
 				void fillArc(float cx, float cy, int width, int height, float startAngle, float endAngle) const;

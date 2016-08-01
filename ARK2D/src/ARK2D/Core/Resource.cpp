@@ -17,10 +17,10 @@
 #include "../Font/FTFont.h"
 #include "../Font/BMFont.h"
 #include "../Font/Font.h"
-#include "../Path/PathGroup.h"    
+#include "../Path/PathGroup.h"
 #include "../Path/PathIO.h"
-#include "../Util/LocalHighscores.h"  
-#include "../Util/KeyPairFile.h"  
+#include "../Util/LocalHighscores.h"
+#include "../Util/KeyPairFile.h"
 #include "../Tiled/TiledMap.h"
 #include "GameContainer.h"
 #include "../Util/StringUtil.h"
@@ -29,21 +29,21 @@
 
 //#include "../vendor/spine/includes/spine/spine.h"
 #include "../vendor/spine/SpineSkeleton.h"
- 
+
 namespace ARK {
 	namespace Core {
 
 
-		RawDataReturns::RawDataReturns(): data(NULL), size(0) 
+		RawDataReturns::RawDataReturns(): data(NULL), size(0)
 		{
- 
+
 		}
-		RawDataReturns::~RawDataReturns() 
+		RawDataReturns::~RawDataReturns()
 		{
 			ARK2D::getLog()->v("Deleting RawDataReturns");
-			if (data != NULL) { 
+			if (data != NULL) {
 				free(data);
-			} 
+			}
 			ARK2D::getLog()->v("Deleted RawDataReturns");
 		}
 
@@ -64,7 +64,7 @@ namespace ARK {
 
 		Resource* Resource::get(string ref) {
 			return get(ref, true);
-		} 
+		}
 
 		Resource* Resource::get(string ref, bool appendPath) {
 			setLatestName(ref);
@@ -85,7 +85,7 @@ namespace ARK {
 			{
 				//string pngref = ref.substr(0, ref.find_last_of(".")) + ".png";
 				string pngref = oldref.substr(0, oldref.find_last_of(".")) + ".png";
-				#if defined(ARK2D_ANDROID) 
+				#if defined(ARK2D_ANDROID)
 					RawDataReturns* rt = getRawData(ref);
 
 					Image* imgData = get(pngref)->asImage();
@@ -96,13 +96,13 @@ namespace ARK {
 					resource = new ARK::Font::BMFont(ref, pngref);
 				#endif
 			}
-			/*else if (extension == "ttf") 
+			/*else if (extension == "ttf")
 			{
 				#if defined(ARK2D_ANDROID)
 					RawDataReturns* rt = getRawData(ref);
 
 					resource = new ARK::Font::FTFont(rt->data);
- 
+
 					delete rt;
 				#else
 					resource = new ARK::Font::FTFont(ref);
@@ -115,9 +115,9 @@ namespace ARK {
 					string genericName = ref.substr(0, ref.find_last_of("."));
 					string atlasFile = genericName + string(".atlas");
 					string skeletonFile = genericName + string(".json");
-			
+
 					RawDataReturns* rt = getRawData(atlasFile);
-					RawDataReturns* rt2 = getRawData(skeletonFile); 
+					RawDataReturns* rt2 = getRawData(skeletonFile);
 
 
 
@@ -126,12 +126,12 @@ namespace ARK {
 
 					char* newtextbuffer2 = (char*) realloc(rt2->data, rt2->size+1);
 					newtextbuffer2[rt2->size] = '\0';*/
- 
+
 					//skeleton = new ARK::Spine::Skeleton(newtextbuffer, rt->size, newtextbuffer2, rt2->size);
-					ARK2D::getLog()->i("New Skeleton object"); 
+					ARK2D::getLog()->i("New Skeleton object");
 					skeleton = new ARK::Spine::Skeleton(rt->data, rt->size, rt2->data, rt2->size);
 					skeleton->m_fname = ref;
-					skeleton->load(); 
+					skeleton->load();
 
 					//ARK2D::getLog()->e("Spine is currently not supported on Android...");
 					//exit(0);
@@ -140,7 +140,7 @@ namespace ARK {
 					skeleton = new ARK::Spine::Skeleton(ref);
 					skeleton->load();
 				#endif
-				resource = skeleton; 
+				resource = skeleton;
 			}
 			else if (extension == "tmx")
 			{
@@ -160,7 +160,7 @@ namespace ARK {
 				resource = map;
 			}
 			else if (extension == "kpf")
-			{  
+			{
 				KeyPairFile* keypairfile = NULL;
 				#if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 					RawDataReturns* rt = getRawData(ref);
@@ -169,20 +169,20 @@ namespace ARK {
 					newtextbuffer[rt->size] = '\0';
 
 					keypairfile = new KeyPairFile(ref, newtextbuffer);
- 
+
 					ARK2D::getLog()->v("Freeing raw resource data... ");
 
 					rt->data = newtextbuffer;
-					delete rt; 
-					//free(newtextbuffer); 					
+					delete rt;
+					//free(newtextbuffer);
 				#else
 					keypairfile = new KeyPairFile(oldref);
 				#endif
 				resource = keypairfile;
-				
+
 			}
 			else if (extension == "localhighscores")
-			{  
+			{
 				LocalHighscores* scores = NULL;
 				#if defined(ARK2D_ANDROID)
 					RawDataReturns* rt = getRawData(ref);
@@ -196,12 +196,12 @@ namespace ARK {
 
 					//scores = new LocalHighscores(ref, rt->data);
 					scores = new LocalHighscores(ref, newtextbuffer);
- 
+
 					ARK2D::getLog()->v("Freeing raw resource data... ");
 
 					rt->data = newtextbuffer;
-					delete rt; 
-					//free(newtextbuffer); 					
+					delete rt;
+					//free(newtextbuffer);
 				#else
 					scores = new LocalHighscores(oldref);
 				#endif
@@ -219,13 +219,13 @@ namespace ARK {
 
 					char* newtextbuffer = (char*) realloc(rt->data, rt->size+1);
 					newtextbuffer[rt->size] = '\0';
-					
-					desc = new SpriteSheetDescription(ref, newtextbuffer); 
+
+					desc = new SpriteSheetDescription(ref, newtextbuffer);
 
 					ARK2D::getLog()->v("Freeing raw resource data... ");
 					rt->data = newtextbuffer;
-					delete rt; 
-					//free(newtextbuffer); 
+					delete rt;
+					//free(newtextbuffer);
 				#else
 					desc = new SpriteSheetDescription(oldref);
 				#endif
@@ -236,29 +236,29 @@ namespace ARK {
 				#if defined(ARK2D_ANDROID)
 					ARK2D::getLog()->v("Creating raw resource data... ");
 					RawDataReturns* rt = getRawData(ref);
-					void* fileData = rt->data; 
+					void* fileData = rt->data;
 
 					ARK2D::getLog()->v("Creating resource type from data... ");
 					resource = new Image(fileData, rt->size, getResourceTypeByExtension(extension), ref);
 					//resource->asImage()->filename = ref;
 
 					ARK2D::getLog()->v("Freeing raw resource data... ");
-					delete rt; 
+					delete rt;
 				#else
 					resource = new Image(ref);
 				#endif
-			} 
+			}
 			else if (extension == "wav" || extension == "ogg" || extension == "mp3")
 			{ // Sound
 				#if (defined(ARK2D_ANDROID) || defined(ARK2D_FLASCC))
 					RawDataReturns* rt = getRawData(ref);
 					resource = new Sound(ref, rt->data, rt->size);
-					delete rt; 
+					delete rt;
 				#else
 					resource = new Sound(ref);
 				#endif
 			}
-			else if (extension == "path")  
+			else if (extension == "path")
 			{
 				#if defined(ARK2D_ANDROID)
 					ErrorDialog::createAndShow("Path implementation not on Android.");
@@ -266,8 +266,8 @@ namespace ARK {
 					resource = PathIO::createFromFile(oldref);
 				#else
 					resource = PathIO::createFromFile(ref);
-				#endif 
-			} 
+				#endif
+			}
 			else
 			{ // Assume plain text.
 				String* arkstr = new String();
@@ -275,7 +275,7 @@ namespace ARK {
 					RawDataReturns* rt = getRawData(ref);
 
 					//ARK2D::getLog()->v("pre contents: ");
-					//ARK2D::getLog()->v((char*) rt->data); 
+					//ARK2D::getLog()->v((char*) rt->data);
 
 					/*ARK2D::getLog()->v(StringUtil::append("raw string return size: ", rt->size));
 					char* newtextbuffer = (char*) malloc(rt->size + 1);
@@ -284,37 +284,37 @@ namespace ARK {
 					char* newtextbufferEnd = newtextbuffer + rt->size;
 					newtextbufferEnd = '\0';*/
 /*
-					if (rt->size >= 1024) { 
+					if (rt->size >= 1024) {
 						unsigned int count = 0;
 						while(count < rt->size) {
-							memcpy(newtextbuffer, rt->data + count, 1024);	
+							memcpy(newtextbuffer, rt->data + count, 1024);
 							count += 1024;
 						}
 					} else {
-						memcpy(newtextbuffer, rt->data, rt->size);	
+						memcpy(newtextbuffer, rt->data, rt->size);
 					}
 
-					
+
 					newtextbuffer[rt->size] = '\0';*/
 
 					/*char* newtextbuffer = (char*) malloc(rt->size+1);
 					if (newtextbuffer == NULL) {
-						printf("Out of memory\n");  
-   						exit(-1);  
+						printf("Out of memory\n");
+   						exit(-1);
 					}*/
 
 
 
    					/*char* newtextbuffer = (char*) realloc(rt->data, rt->size+1);
 					if (newtextbuffer == NULL) {
-						printf("Out of memory\n");  
-   						exit(-1);  
+						printf("Out of memory\n");
+   						exit(-1);
 					}*/
-					
-					/*if (rt->size + 1 > 1024) { 
+
+					/*if (rt->size + 1 > 1024) {
 						signed int c = 0;
 						signed int remaining = rt->size;
-						do { 
+						do {
 							signed int count = (remaining >= 1024)?1024:remaining;
 							memcpy(newtextbuffer + c, ((char*)rt->data) + c, count);
 							remaining -= count;
@@ -323,10 +323,10 @@ namespace ARK {
 					} else {*/
 					//	memcpy(newtextbuffer, rt->data, rt->size);
 					//}
-					
+
 					//char* newtextbufferEnd = newtextbuffer + rt->size;
 					//(*newtextbufferEnd) = '\0';
-					
+
 					//(*newtextbufferEnd) = '\0';
 					//newtextbuffer[rt->size] = '\0';
 					//strcpy(newtextbufferEnd, "\0");
@@ -334,7 +334,7 @@ namespace ARK {
 					char* newtextbuffer = (char*) realloc(rt->data, rt->size+1);
 					newtextbuffer[rt->size] = '\0';
 
-					
+
 					//ARK2D::getLog()->v("contents: ");
 					//ARK2D::getLog()->v(newtextbuffer);
 
@@ -342,7 +342,7 @@ namespace ARK {
 					//arkstr->append("\0");
 
 					//ARK2D::getLog()->v(StringUtil::append("len: ", arkstr->length()));
-					
+
 					/*string s((const char*) rt->data);
 					arkstr->append(s);*/
 					//ARK2D::getLog()->v(arkstr->get());
@@ -378,29 +378,29 @@ namespace ARK {
 				inline_as3(
 					"import flash.system.System;\n"
 					"System.pauseForGCIfCollectionImminent(0.25);\n"
-					: : 
+					: :
 				);
 			#endif
- 
+
 			return resource;
 		}
- 
-		void Resource::copy(string ref, string ref2) {  
+
+		void Resource::copy(string ref, string ref2) {
 			bool appendPath = true;
 
 			string oldref = ref;
 			if (ref.substr(1,1).compare(":") == 0 || ref.substr(0,1).compare("/") == 0) { appendPath = false; }
-			
+
 			if (appendPath) {
 				#if defined(ARK2D_ANDROID)
 					GameContainer* container = ARK2D::getContainer();
 					ref = container->getResourcePath() + ref;
-				#else 
+				#else
 					ref = StringUtil::internalOSAppends(ref);
 				#endif
-			} 
+			}
 
-			//#if defined(ARK2D_ANDROID) 
+			//#if defined(ARK2D_ANDROID)
 				RawDataReturns* data = getRawData(ref);
 				FileUtil::file_put_contents(ref2, (const char*) data->data, data->size);
 				delete data;
@@ -412,14 +412,14 @@ namespace ARK {
 		}
 		bool Resource::exists(string ref, bool appendPath) {
 
-			string oldref = string(ref); 
+			string oldref = string(ref);
 			if (ref.substr(1,1).compare(":") == 0 || ref.substr(0,1).compare("/") == 0) { appendPath = false; }
 			if (appendPath) {
-				
-				#if defined(ARK2D_ANDROID) 
+
+				#if defined(ARK2D_ANDROID)
 					GameContainer* container = ARK2D::getContainer();
 					ref = container->getResourcePath() + ref;
-				#else 
+				#else
 					ref = StringUtil::internalOSAppends(ref);
 				#endif
 			}
@@ -439,7 +439,7 @@ namespace ARK {
 				bool localExists = StringUtil::file_exists(localRef.c_str());
 				if (localExists) {
 					return true;
-				}  
+				}
 
 				return StringUtil::file_exists(ref.c_str());
 
@@ -450,21 +450,21 @@ namespace ARK {
 				bool localExists = StringUtil::file_exists(flasccLocalFile.c_str());
 				if (localExists) {
 					return true;
-				} 
+				}
 
 				return StringUtil::file_exists(oldref.c_str());
 
 			#elif defined(ARK2D_ANDROID)
 				if (apkZip == NULL) {
 					init();
-				} 
+				}
 
 				string anotherref = string(oldref); //StringUtil::internalOSAppends(oldref);
 				bool rawFileExists = StringUtil::file_exists(anotherref.c_str());
-				if (rawFileExists) { 
-					return true; 
+				if (rawFileExists) {
+					return true;
 				}
-				
+
 				//Just for debug, print APK contents
 				int numFiles = zip_get_num_files(apkZip);
 				for (int i=0; i<numFiles; i++)
@@ -479,14 +479,14 @@ namespace ARK {
 						ARK2D::getLog()->e(thisErr.get());
 						return false;
 					}
-					if (string(name) == ref) { 
+					if (string(name) == ref) {
 						return true;
 					}
 				}
 
 				return false;
-				
-				
+
+
 			#else
 				return StringUtil::file_exists(oldref.c_str());
 			#endif
@@ -538,40 +538,46 @@ namespace ARK {
 				bool useoldref = (ref.substr(0,7).compare("assets/") == 0);
 				string oldref = ref.substr(7, string::npos);
 				bool rawFileExists = StringUtil::file_exists(oldref.c_str());
-				if (rawFileExists) { 
-					
+				if (rawFileExists) {
+
 					string contents = StringUtil::file_get_contents(oldref.c_str());
-					
+
 					char* newData = (char*) malloc((int) contents.size()+1);
 					strcpy(newData, contents.c_str());
 
 					//newData[(int) contents.size()] = '\0';
 
-					RawDataReturns* rt = new RawDataReturns(); 
-					rt->data = (void*) newData; 
+					RawDataReturns* rt = new RawDataReturns();
+					rt->data = (void*) newData;
 					rt->size = (int) contents.length();
 					return rt;
-					
+
 
 					/*file_get_contents_binary_result r = FileUtil::file_get_contents_binary(oldref);
- 
+
 					ARK2D::getLog()->v("getting raw data: android platform");
-					ARK2D::getLog()->v(StringUtil::append("len: ", r.len)); 
+					ARK2D::getLog()->v(StringUtil::append("len: ", r.len));
 
 					RawDataReturns* rt = new RawDataReturns();
 					rt->data = (void*) r.data;
-					rt->size = (int) r.len; 
+					rt->size = (int) r.len;
 					return rt; */
- 
 
-					
+
+
 				}
 
 				zip_file* file;
 				file = zip_fopen(apkZip, ref.c_str(), 0); // ref = filename
 				if (!file) {
-					ARK2D::getLog()->e(StringUtil::append("Could not open file in zip: ", ref));
-					return NULL;
+					ARK2D::getLog()->e(StringUtil::append("Could not open file in zip (return empty file): ", ref));
+					//return NULL;
+
+					RawDataReturns* rt = new RawDataReturns();
+					rt->data = NULL;
+					rt->size = (int) 0;
+					return rt;
+
 				}
 				struct zip_stat fileStats;
 				zip_stat(apkZip, ref.c_str(), 0, &fileStats); // ZIP_FL_NOCASE | ZIP_FL_NODIR
@@ -593,7 +599,7 @@ namespace ARK {
 				for(signed int i = 0; i < (int) fileStats.size; i += fileUncompressedBufferSize) {
 					char fileUncompressedBuffer[fileUncompressedBufferSize];
 					signed int done = zip_fread(file, &fileUncompressedBuffer, fileUncompressedBufferSize);
-					
+
 					if (done == -1) { break; }
 					memcpy(fileUncompressed + i, &fileUncompressedBuffer[0], done);
 				}
@@ -601,7 +607,7 @@ namespace ARK {
 
 				RawDataReturns* rt = new RawDataReturns();
 				rt->data = (void*) fileUncompressed;
-				rt->size = (int) fileStats.size; 
+				rt->size = (int) fileStats.size;
 				return rt;
 
 			#elif defined(ARK2D_IPHONE)
@@ -609,7 +615,7 @@ namespace ARK {
 				// check Documents first.
 				int findit = ref.find(".app/data/");
 				bool useoldref = (findit != string::npos);
-				if (useoldref) { 
+				if (useoldref) {
 					string oldref = ref.substr(findit+10, string::npos);
 
 					NSArray* searchPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -619,33 +625,33 @@ namespace ARK {
 					ARK2D::getLog()->v(StringUtil::append("Does (Local) Resource Exist: ", localRef));
 
 					bool localExists = StringUtil::file_exists(localRef.c_str());
-					if (localExists) { 
+					if (localExists) {
 						file_get_contents_binary_result r = FileUtil::file_get_contents_binary(localRef);
 
 						RawDataReturns* rt = new RawDataReturns();
 						rt->data = (void*) r.data;
-						rt->size = (int) r.len; 
-						return rt; 
-					}  
+						rt->size = (int) r.len;
+						return rt;
+					}
 				}
 
 				file_get_contents_binary_result r = FileUtil::file_get_contents_binary(ref);
 
 				RawDataReturns* rt = new RawDataReturns();
 				rt->data = (void*) r.data;
-				rt->size = (int) r.len; 
-				return rt; 
+				rt->size = (int) r.len;
+				return rt;
 
 			#else
 				file_get_contents_binary_result r = FileUtil::file_get_contents_binary(ref);
 
 				//ARK2D::getLog()->v("getting raw data: misc platform");
-				//ARK2D::getLog()->v(StringUtil::append("len: ", r.len)); 
+				//ARK2D::getLog()->v(StringUtil::append("len: ", r.len));
 
 				RawDataReturns* rt = new RawDataReturns();
 				rt->data = (void*) r.data;
-				rt->size = (int) r.len; 
-				return rt; 
+				rt->size = (int) r.len;
+				return rt;
 
 			#endif
 			return NULL;
