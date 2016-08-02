@@ -69,6 +69,7 @@ namespace ARK {
 
 				static double ease(unsigned int easing, double time, double start, double change, double duration);
 				static double easebetween(unsigned int easing, double time, double start, double end, double duration);
+				static double easebetweenback(unsigned int easingThere, unsigned int easingBack, double time, double start, double mid, double duration);
 
 		};
 	}

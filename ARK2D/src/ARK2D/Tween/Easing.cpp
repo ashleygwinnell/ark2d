@@ -132,6 +132,12 @@ namespace ARK {
 		double Easing::easebetween(unsigned int easing, double t, double start, double end, double duration) {
 			return ease(easing, t, start, end - start, duration);
 		}
+		double Easing::easebetweenback(unsigned int easingThere, unsigned int easingBack, double t, double start, double mid, double duration) {
+			if ( t <= duration * 0.5 ) {
+				return easebetween(easingThere, t, start, mid, duration * 0.5);
+			}
+			return easebetween(easingBack, t - (duration * 0.5), mid, start, duration * 0.5);
+		}
 
 		double Easing::ease(unsigned int easing, double t, double start, double change, double duration)
 		{
