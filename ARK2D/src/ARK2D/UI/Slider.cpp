@@ -125,12 +125,12 @@ namespace ARK {
 
 			if (button != NULL) {
 				button->setAlpha(m_alpha);
-				button->drawCentered(m_buttonLocation.getX(), m_buttonLocation.getY());
+				button->drawCentered(offsetX + m_buttonLocation.getX(), offsetY + m_buttonLocation.getY());
 			} else {
 				r->setDrawColor(Color::white_50a);
-				r->fillCircle(m_buttonLocation.getX(), m_buttonLocation.getY(), 10, 20);
+				r->fillCircle(offsetX + m_buttonLocation.getX(), offsetY + m_buttonLocation.getY(), 10, 20);
 				r->setLineWidth(2);
-				r->drawCircle(m_buttonLocation.getX(), m_buttonLocation.getY(), 10, 20);
+				r->drawCircle(offsetX + m_buttonLocation.getX(), offsetY + m_buttonLocation.getY(), 10, 20);
 				r->setLineWidth(1);
 			}
 		 }
@@ -143,7 +143,13 @@ namespace ARK {
 			if (!m_dragging)
 			{
 				Vector3<float> worldpos = localPositionToGlobalPosition();
-				bool collides = Shape<float>::collision_circleCircle(i->getMouseX(), i->getMouseY(), 15.0f, worldpos.x + m_buttonLocation.getX(), worldpos.y + m_buttonLocation.getY(), 15.0f);
+				float mx = i->getMouseX();
+				if ( parent == NULL ) {
+					mx -= transform.position.getX();
+				}
+
+
+				bool collides = Shape<float>::collision_circleCircle(mx, i->getMouseY(), 15.0f, worldpos.x + m_buttonLocation.getX(), worldpos.y + m_buttonLocation.getY(), 15.0f);
 				if (collides) {
 					m_dragging = true;
 					updateValue();
@@ -172,6 +178,9 @@ namespace ARK {
 					int snapx = (m_width) * m_snapTo;
 					signed int divisions = round(newx / snapx);
 					newx = divisions * snapx;
+				}
+				if (parent == NULL) {
+					newx -= transform.position.x;
 				}
 
 				if (newx < 0.0) { newx = (int) 0; }
