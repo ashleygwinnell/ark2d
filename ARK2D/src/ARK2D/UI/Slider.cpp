@@ -43,12 +43,13 @@ namespace ARK {
 		{
 			float offsetX = 0;
 			float offsetY = 0;
-			if ( parent == NULL ) {
-				offsetX += transform.position.getX();
-				offsetY += transform.position.getY();
-			}
+			//if ( parent == NULL ) {
+			//	offsetX += transform.position.getX();
+			//	offsetY += transform.position.getY();
+			//}
 
-			float intermediary = Easing::ease(Easing::LINEAR, m_buttonLocation.getX()+offsetX, 0.0f, 1.0f, m_width+offsetX);
+
+			float intermediary = Easing::ease(Easing::LINEAR, m_buttonLocation.getX(), 0.0f, 1.0f, m_width);
 			m_value = intermediary;
 
 			if (m_snapping) {
@@ -69,10 +70,10 @@ namespace ARK {
 
 			float offsetX = 0;
 			float offsetY = 0;
-			if ( parent == NULL ) {
-				offsetX += transform.position.getX();
-				offsetY += transform.position.getY();
-			}
+			//if ( parent == NULL ) {
+			//	offsetX += transform.position.getX();
+			//	offsetY += transform.position.getY();
+			//}
 
             float val = m_value * getWidth();
 			m_buttonLocation.set(offsetX + val, offsetY);
@@ -144,14 +145,17 @@ namespace ARK {
 			{
 				Vector3<float> worldpos = localPositionToGlobalPosition();
 				float mx = i->getMouseX();
+				float my = i->getMouseY();
 				if ( parent == NULL ) {
 					mx -= transform.position.getX();
+					my -= transform.position.getY();
 				}
 
 
-				bool collides = Shape<float>::collision_circleCircle(mx, i->getMouseY(), 15.0f, worldpos.x + m_buttonLocation.getX(), worldpos.y + m_buttonLocation.getY(), 15.0f);
+				bool collides = Shape<float>::collision_circleCircle(mx, my, 15.0f, worldpos.x + m_buttonLocation.getX(), worldpos.y + m_buttonLocation.getY(), 15.0f);
 				if (collides) {
 					m_dragging = true;
+					mouseMoved(i->getMouseX(), i->getMouseY(), i->getMouseX(), i->getMouseY());
 					updateValue();
                     return true;
 				}
@@ -163,8 +167,13 @@ namespace ARK {
 		{
 			if (key != (unsigned int) Input::MOUSE_BUTTON_LEFT) { return false; }
 
+			if (m_dragging) {
+				Input* i = ARK2D::getInput();
+				mouseMoved(i->getMouseX(), i->getMouseY(), i->getMouseX(), i->getMouseY());
+			}
+
 			m_dragging = false;
-			updateValue();
+
             return false;
 		}
 
@@ -174,6 +183,7 @@ namespace ARK {
 			{
 
 				int newx = x;
+				int newy = y;
 				if (m_snapping) {
 					int snapx = (m_width) * m_snapTo;
 					signed int divisions = round(newx / snapx);
@@ -181,14 +191,16 @@ namespace ARK {
 				}
 				if (parent == NULL) {
 					newx -= transform.position.x;
+					newy -= transform.position.y;
 				}
 
 				if (newx < 0.0) { newx = (int) 0; }
 				else if (newx > m_width) { newx = (int) m_width; }
 
-				m_buttonLocation.setX(newx);
+				//m_buttonLocation.setX(newx);
+				setButtonPosition( float(newx) / float(m_width) );
 
-				updateValue();
+				//updateValue();
                 return true;
 			}
             return false;
