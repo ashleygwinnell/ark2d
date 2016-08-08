@@ -4933,6 +4933,9 @@ namespace ARK {
 			//glColor4b(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
 			//glColor4f(c.getRed()/255.f, c.getGreen()/255.f, c.getBlue()/255.f, c.getAlpha()/255.f);
 		}
+		void Renderer::setDrawColor(const Color& rgb, float alpha) {
+			setDrawColorf(rgb.getRedf(), rgb.getGreenf(), rgb.getBluef(), rgb.getAlphaf() * alpha);
+		}
 		void Renderer::setDrawColor(Color* c) {
 			setDrawColor(c->getRed(), c->getGreen(), c->getBlue(), c->getAlpha());
 		}
