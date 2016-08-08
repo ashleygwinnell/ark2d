@@ -54,7 +54,9 @@ namespace ARK {
 			m_Image(NULL),
 			m_letterImages(),
 			m_kerning(0),
-			m_getLetterColorFunction( (void*)BMFont__drawString_getLetterColor )
+			m_getLetterColorFunction( (void*)BMFont__drawString_getLetterColor ),
+			m_fontSize(0),
+			m_fontName("")
 			{
 
 		}
@@ -73,7 +75,9 @@ namespace ARK {
 			m_Image(NULL),
 			m_letterImages(),
 			m_kerning(0),
-			m_getLetterColorFunction( (void*)BMFont__drawString_getLetterColor )
+			m_getLetterColorFunction( (void*)BMFont__drawString_getLetterColor ),
+			m_fontSize(0),
+			m_fontName("")
 		{
 			ARK2D::getLog()->i("Loading BMFont from raw data.");
 			m_data = (char*) GameContainerPlatform::getARK2DResource(fntResource, ARK2D_RESOURCE_TYPE_FNT);
@@ -99,7 +103,9 @@ namespace ARK {
 			m_Image(NULL),
 			m_letterImages(),
 			m_kerning(0),
-			m_getLetterColorFunction( (void*)BMFont__drawString_getLetterColor )
+			m_getLetterColorFunction( (void*)BMFont__drawString_getLetterColor ),
+			m_fontSize(0),
+			m_fontName("")
 		{
 			ARK2D::getLog()->i("Loading BMFont from raw data.");
 			m_data = (char*) data;
@@ -125,7 +131,9 @@ namespace ARK {
 			m_Image(NULL),
 			m_letterImages(),
 			m_kerning(0),
-			m_getLetterColorFunction( (void*)BMFont__drawString_getLetterColor )
+			m_getLetterColorFunction( (void*)BMFont__drawString_getLetterColor ),
+			m_fontSize(0),
+			m_fontName("")
 		{
 			ARK2D::getLog()->i("Loading BMFont: ");
 			ARK2D::getLog()->i(f);
@@ -152,7 +160,9 @@ namespace ARK {
 			m_Image(NULL),
 			m_letterImages(),
 			m_kerning(0),
-			m_getLetterColorFunction( (void*)BMFont__drawString_getLetterColor )
+			m_getLetterColorFunction( (void*)BMFont__drawString_getLetterColor ),
+			m_fontSize(0),
+			m_fontName("")
 		{
 			ARK2D::getLog()->i("Loading BMFont: ");
 			ARK2D::getLog()->i(f);
@@ -244,7 +254,26 @@ namespace ARK {
 
 					//read the line's type
 					LineStream >> Read;
-					if( Read == "common" )
+					if ( Read == "info" ) {
+						// This holds font info
+						while( !LineStream.eof() )
+						{
+							stringstream Converter;
+							LineStream >> Read;
+							i = Read.find( '=' );
+							Key = Read.substr( 0, i );
+							Value = Read.substr( i + 1 );
+
+							Converter <<  Value;
+							if ( Key == "size" ) {
+								Converter >> m_fontSize;
+							}
+							else if ( Key == "face" ) {
+								Converter >> m_fontName;
+							}
+						}
+					}
+					else if ( Read == "common" )
 					{
 						//this holds common data
 						while( !LineStream.eof() )
