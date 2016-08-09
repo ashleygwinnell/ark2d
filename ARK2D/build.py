@@ -1206,6 +1206,7 @@ class ARK2DBuildSystem:
 
 			vcxproj_contents = self.str_replace(vcxproj_contents, [("%COMPILE_HEADER_FILES%", vcxproj_headerfiles)]);
 			vcxproj_contents = self.str_replace(vcxproj_contents, [("%COMPILE_SOURCE_FILES%", vcxproj_sourcefiles)]);
+			vcxproj_contents = self.str_replace(vcxproj_contents, [("%ARK2D_DIR%", self.ark2d_dir)]);
 
 			# write sln file
 			print("Write sln file...");
