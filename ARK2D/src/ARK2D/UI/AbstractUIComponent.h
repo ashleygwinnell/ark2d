@@ -32,8 +32,8 @@ namespace ARK {
 				//float m_y;
 				unsigned int m_width;
 				unsigned int m_height;
-				Vector4Template<int> m_padding; // left, top, right, bottom.
-				Vector4Template<int> m_margin; // left, top, right, bottom.
+				Vector4 m_padding; // left, top, right, bottom.
+				Vector4 m_margin; // left, top, right, bottom.
 				bool m_clipping;
 				//bool m_visible;
 				bool m_enabled;

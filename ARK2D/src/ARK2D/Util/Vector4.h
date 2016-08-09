@@ -24,177 +24,69 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		template <class T>
-		class Vector4Template {
+		class Vector4 {
 			public:
-				//T row[4];
-				/*T* m_x;
-				T* m_y;
-				T* m_z;
-				T* m_w;*/
-
-				T x;
-				T y;
-				T z;
-				T w;
-
+				float x;
+				float y;
+				float z;
+				float w;
 
 			public:
-				Vector4Template() {
+                Vector4();
+				Vector4(const Vector4& r);
+				Vector4(float coords[]);
+				Vector4(float lx, float ly, float lz, float lw);
 
-				}
-				Vector4Template(const Vector4Template<T>& r):
-					x(r.x),
-					y(r.y),
-					z(r.z),
-					w(r.w) {
+				float getX();
+				float getY();
+				float getZ();
+				float getW();
 
-				}
-				Vector4Template(T coords[]) {
-					x = coords[0];
-					y = coords[1];
-					z = coords[2];
-					w = coords[3];
-				}
-				Vector4Template(T lx, T ly, T lz, T lw) {
-					x = lx;
-					y = ly;
-					z = lz;
-					w = lw;
-				}
+				void setX(float lx);
+				void setY(float ly);
+				void setZ(float lz);
+				void setW(float lw);
 
-				T getX() { return x; }
-				T getY() { return y; }
-				T getZ() { return z; }
-				T getW() { return w; }
+				Vector4* add(Vector4 v);
+				Vector4* add(float lx, float ly, float lz, float lw);
 
-				void setX(T lx) { x = lx; }
-				void setY(T ly) { y = ly; }
-				void setZ(T lz) { z = lz; }
-				void setW(T lw) { w = lw; }
+				void set(Vector4 v);
+				void set(float lx, float ly, float lz, float lw);
 
-				Vector4Template* add(Vector4Template v) {
-					return add(v.getX(), v.getY(), v.getZ(), v.getW());
-				}
-				Vector4Template* add(T lx, T ly, T lz, T lw) {
-					x += lx;
-					y += ly;
-					z += lz;
-					w += lw;
-					return this;
-				}
-
-				void set(Vector4Template v) {
-					set(v.getX(), v.getY(), v.getZ(), v.getW());
-				}
-				void set(T lx, T ly, T lz, T lw) {
-					x = lx;
-					y = ly;
-					z = lz;
-					w = lw;
-				}
-
-				Vector4Template* subtract(Vector4Template v) {
-					return subtract(v.getX(), v.getY(), v.getZ(), v.getW());
-				}
-				Vector4Template* subtract(T lx, T ly, T lz, T lw) {
-					x -= lx;
-					y -= ly;
-					z -= lz;
-					w -= lw;
-					return this;
-				}
+				Vector4* subtract(Vector4 v);
+				Vector4* subtract(float lx, float ly, float lz, float lw);
 
 				// Multiply
-				Vector4Template* multiply(Vector4Template<T>& v) {
-					return multiply(v.getX(), v.getY(), v.getZ(), v.getW());
-				}
-				Vector4Template* multiply(Vector4Template<T>* v) {
-					return multiply(v->getX(), v->getY(), v->getZ(), v->getW());
-				}
-				Vector4Template* multiply(T lx, T ly, T lz, T lw) {
-					x *= lx;
-					y *= ly;
-					z *= lz;
-					w *= lw;
-					return this;
-				}
+				Vector4* multiply(Vector4& v);
+				Vector4* multiply(Vector4* v);
+				Vector4* multiply(float lx, float ly, float lz, float lw);
 
-				void toValue(T v) {
-					x = v;
-					y = v;
-					z = v;
-					w = v;
-				}
-				void toZero() {
-					toValue(0);
-				}
-				void toOne() {
-					toValue(1);
-				}
+				void toValue(float v);
+				void toZero();
+				void toOne();
 
-				Vector4Template<T> copy() {
-					return Vector4Template<T>(x, y, z, w);
-				}
+				Vector4 copy();
 
-				T& operator[](unsigned int i) {
-                    return *(&x + i);
-                    //T* p = &x;
-					//p += i;
-					//return *p;
-				}
+				float& operator[](unsigned int i);
 
-				const T& operator[](unsigned int i) const {
-					return *(&x + i);
-					//const T* p = &x;
-					//p += i;
-					//return *p;
-				}
+				const float& operator[](unsigned int i) const;
 
-				Vector4Template<T> operator+=(const Vector4Template<T>& other) {
-					add(other[0], other[1], other[2], other[3]);
-					return *this;
-				}
-				Vector4Template<T> operator*=(const Vector4Template<T>& other) {
-					multiply(other[0], other[1], other[2], other[3]);
-					return *this;
-				}
-				Vector4Template<T> operator*=(float other) {
-					multiply(other, other, other, other);
-					return *this;
-				}
-				Vector4Template<T> operator*(float other) {
-					multiply(other, other, other, other);
-					return *this;
-				}
+				Vector4 operator+=(const Vector4& other);
+				Vector4 operator*=(const Vector4& other);
+				Vector4 operator*=(float other);
+				Vector4 operator*(float other);
 
-
-
-
-				~Vector4Template() {
-
-				}
-
-		};
-
-        class Vector4 : public Vector4Template<float> {
-            public:
-            	Vector4(float lx, float ly, float lz, float lw):
-            		Vector4Template(lx, ly, lz, lw) {
-
-				}
-
-				Vector4(Vector4Template<float>& v):
-            		Vector4Template(v.x, v.y, v.z, v.w) {
-
-				}
-
-
-                Vector4 operator*(const Matrix44& m);
+				Vector4 operator*(const Matrix44& m);
                 Vector4 operator*=(const Matrix44& m);
 
                 static void multMatrix44(float& x, float& y, float& z, float& w, const Matrix44& m);
-        };
+
+
+				~Vector4();
+
+		};
+
+
 
 
 	}
