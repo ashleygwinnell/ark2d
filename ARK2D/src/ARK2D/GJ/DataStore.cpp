@@ -1,7 +1,10 @@
 
 #include "DataStore.h"
-#include "../Includes.h"
+//#include "../Includes.h"
 #include "../Util/Cast.h"
+
+#include <string>
+using std::string;
 
 namespace ARK {
 	namespace GJ {

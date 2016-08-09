@@ -11,12 +11,17 @@
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
 
+
 #include <string>
 #include <set>
 #include <map>
 #include <vector>
 using namespace std;
 
+#if defined (ARK2D_WINDOWS)
+	#include <winsock2.h>
+	#include <windows.h>
+#endif
 #ifdef ARK2D_UBUNTU_LINUX
 	#include <linux/input.h>
 

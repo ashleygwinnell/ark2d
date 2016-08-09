@@ -9,7 +9,7 @@
 #ifndef GAMECONTAINERWINDOWS_H_
 #define GAMECONTAINERWINDOWS_H_
 
-#include "../../Includes.h"
+//#include "../../Includes.h"
 #include "../../ARK2D.h"
 
 	#ifdef ARK2D_WINDOWS
@@ -24,7 +24,7 @@
 		
 
 			#include "../../Windres.h"
-			#include "../../Includes.h"
+			//#include "../../Includes.h"
 			#include "../../Graphics/Image.h"
 
  			#include <Winsock2.h>
@@ -36,7 +36,12 @@
 			#include <oleauto.h>
 			//#include <wmsstd.h>
 
-
+ 			#pragma comment(lib, "advapi32.lib")
+			#pragma comment(lib, "user32.lib")
+			#pragma comment(lib, "gdi32.lib")
+			#pragma comment(lib, "shell32.lib")
+			#pragma comment(lib, "kernel32.lib")
+			#pragma comment(lib, "Winhttp.lib")
 
 
 	 			// https://github.com/GameTechDev/Windows-Desktop-Sensors/blob/master/WindowsSensors.cpp

@@ -6,7 +6,13 @@
  */
 
 #include "UITest.h"
-#include "../../ARK.h"
+//#include "../../ARK.h"
+#include "../Core/GameContainer.h"
+#include "../UI/TextField.h"
+#include "../UI/ComboBox.h"
+#include "../UI/ComboBoxItem.h"
+#include "../UI/CheckBox.h"
+
 
 namespace ARK {
 	namespace Tests {

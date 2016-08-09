@@ -38,6 +38,8 @@
 		      x = NULL;         \
 		   }
 		#endif
+
+		#define NOMINMAX
 	#endif
 	
 

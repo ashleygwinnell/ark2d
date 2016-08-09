@@ -12,10 +12,11 @@
 #include <string>
 using namespace std;
 
-#ifdef __WIN32
-
+#if defined (ARK2D_WINDOWS)
+	#include <windows.h>
+	#include "../vendor/FileInterface.h"
 #elif defined(ARK2D_MACINTOSH)
-#import <Cocoa/Cocoa.h>
+	#import <Cocoa/Cocoa.h>
 #endif
 
 namespace ARK {

@@ -14,6 +14,7 @@
 #include "../Common/DLL.h"
 
 #if defined(ARK2D_WINDOWS)
+ 	#include <winsock2.h>
 	#include <windows.h>
 #elif defined(ARK2D_MACINTOSH) || defined(ARK2D_UBUNTU_LINUX)
  	#include <pthread.h>

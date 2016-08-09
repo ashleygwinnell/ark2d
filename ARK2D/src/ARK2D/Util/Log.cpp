@@ -20,6 +20,8 @@
 #include "../UI/SplitPane.h"
 #include "../UI/TitledPanel.h"
 
+#include <algorithm>
+
 namespace ARK {
 	namespace Util {
 

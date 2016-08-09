@@ -100,7 +100,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\src\ARK2D\vendor\angelscript;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;ARK2D_DEBUG;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;ARK2D_DEBUG;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>true</MinimalRebuild>
@@ -118,14 +118,14 @@
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;ARK2D_DEBUG;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;ARK2D_DEBUG;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup> 
   <!-- Development Config -->
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\src\ARK2D\vendor\angelscript;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization> 
       <!-- <Optimization>Full</Optimization> -->
@@ -144,7 +144,7 @@
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
  
@@ -152,7 +152,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\src\ARK2D\vendor\angelscript;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>None</DebugInformationFormat>
       <Optimization>Disabled</Optimization> <!-- <Optimization>Full</Optimization> -->
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -169,7 +169,7 @@
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
 

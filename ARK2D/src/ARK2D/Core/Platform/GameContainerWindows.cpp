@@ -3265,7 +3265,7 @@
 					this->enable2D();
 					ARK2D::getLog()->i("done.");
 
-					Image::showAnyGlErrorAndExit();
+					ErrorDialog::showAnyGlErrorAndExit();
 				#endif
 
 				// Load default Font - relies on Image so must be done after OpenGL is initted.
@@ -3282,7 +3282,7 @@
 					m_graphics.m_Font = NULL;
 				}
 
-				Image::showAnyGlErrorAndExit();
+				ErrorDialog::showAnyGlErrorAndExit();
 
 				// Enable OpenAL
 				ARK2D::getLog()->i("Initialising OpenAL... ");
@@ -3328,7 +3328,7 @@
 				ARK2D::getLog()->i(m_game.getTitle());
 				ARK2D::getLog()->i("...");
 
-				Image::showAnyGlErrorAndExit();
+				ErrorDialog::showAnyGlErrorAndExit();
 
 				//LONGLONG cur_time;        // current timer value, moved from inside the loop
 				//double delta;         // time elapsed since last frame, moved from inside the loop
@@ -3449,7 +3449,7 @@
 					for (unsigned int i = 0; i < m_gamepads.size(); i++) {
 						m_gamepads.at(i)->clearButtonPressedRecord();
 					}
-					Image::showAnyGlErrorAndExit();
+					ErrorDialog::showAnyGlErrorAndExit();
 
 
 					//this->m_game->update(this, myAverageDelta); // fix at 60 fps. bug.
@@ -3500,7 +3500,7 @@
 					//if (m_showingFPS) { renderFPS(); }
 
 
-					Image::showAnyGlErrorAndExit();
+						ErrorDialog::showAnyGlErrorAndExit();
 					//myLastRenderTime = this->time();
 
 					//m_graphics.flush();

@@ -14,6 +14,7 @@
 //#include "../../Includes.h"
 
 #if defined(ARK2D_WINDOWS)
+ 	#include <winsock2.h>
 	#include <windows.h>
 
 	typedef BITMAPFILEHEADER ARK2D_BITMAPFILEHEADER;

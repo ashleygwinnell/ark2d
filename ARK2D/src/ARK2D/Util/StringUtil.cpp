@@ -17,7 +17,6 @@
 #include <iostream>
 #include <sstream>
 #include <cstdio>
-#include <algorithm>
 
 namespace ARK {
 	namespace Util {

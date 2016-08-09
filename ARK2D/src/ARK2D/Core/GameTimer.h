@@ -11,7 +11,11 @@
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
 
+#ifdef ARK2D_WINDOWS
+#include <time.h>
+#else
 #include <sys/time.h>
+#endif
 
 #include <list>
 using std::list;

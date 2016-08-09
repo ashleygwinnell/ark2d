@@ -11,6 +11,7 @@
 #if defined(ARK2D_WINDOWS)
 	#include <windows.h>
 	#include <regstr.h>
+	#include <mmsystem.h>
 	#include <Xinput.h>
 #elif defined(ARK2D_MACINTOSH)
 	#include <IOKit/hid/IOHIDLib.h>

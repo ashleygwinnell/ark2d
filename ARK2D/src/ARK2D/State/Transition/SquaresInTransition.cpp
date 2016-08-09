@@ -11,6 +11,7 @@
 #include "../GameState.h"
 #include "../StateBasedGame.h"
 #include "../../Tween/Easing.h"
+#include <algorithm>
 
 namespace ARK {
 	namespace State {

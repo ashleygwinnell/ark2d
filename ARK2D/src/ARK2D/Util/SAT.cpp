@@ -3,6 +3,7 @@
 #include "MathUtil.h"
 #include "../Core/String.h"
 #include "../Geometry/Polygon.h"
+#include <algorithm>
 
 SATIntersectionReturns::SATIntersectionReturns(bool b): 
 	intersects(b),
@@ -394,10 +395,10 @@ SATIntersectionReturns SAT::intersection(const SATVector& one, const SATVector& 
 	float y = ( pre * (y3 - y4) - (y1 - y2) * post ) / d;
  
 	// Check if the x and y coordinates are within both lines
-	if ( x < min(x1, x2) || x > max(x1, x2) ||
-		x < min(x3, x4) || x > max(x3, x4) ) return SATIntersectionReturns(false);
-	if ( y < min(y1, y2) || y > max(y1, y2) ||
-		y < min(y3, y4) || y > max(y3, y4) ) return SATIntersectionReturns(false);
+	if ( x < std::min(x1, x2) || x > std::max(x1, x2) ||
+		x < std::min(x3, x4) || x > std::max(x3, x4) ) return SATIntersectionReturns(false);
+	if ( y < std::min(y1, y2) || y > std::max(y1, y2) ||
+		y < std::min(y3, y4) || y > std::max(y3, y4) ) return SATIntersectionReturns(false);
  
 	// Return the point of intersection
 	//Vector2f ret = new Vector2f();

@@ -18,6 +18,7 @@ namespace ARK {
 		}
 		Vector4 Vector4::operator*=(const Matrix44& m) {
 		    Vector4::multMatrix44(x, y, z, w, m);
+			return *this;
 		}
 
 

@@ -1,4 +1,5 @@
 #if defined(ARK2D_WINDOWS) || defined (ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE)
+	#include <winsock2.h>
 	#include <windows.h>
 #endif
 
