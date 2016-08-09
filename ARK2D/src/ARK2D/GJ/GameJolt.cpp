@@ -1,15 +1,21 @@
 
 #include "GameJolt.h"
-#include "../Includes.h"
+//#include "../Includes.h"
 #include "../Util/Cast.h"
 #include "../Util/StringUtil.h"
 #include "../Util/URLRequest.h"
 #include "../Util/Log.h"
+
+#define JSON_SAFE
+void Error(const char* e) {}
+
 #include "../vendor/tinyxml/tinyxml.h"
 #include "../Common/Libraries/libjson.h"
 
 namespace ARK {
 	namespace GJ { 
+
+		//#ifndef ARK2D_WINDOWS
 
 		GameJolt::GameJolt(unsigned int gameId, string privateKey): 
 			m_gameId(gameId), 
@@ -459,11 +465,11 @@ namespace ARK {
 				TiXmlDocument doc;
 				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
 
-				if (doc.Error()) {
+				//if (doc.Error()) {
 					m_errorMessage = doc.ErrorDesc();
 					logError(m_errorMessage);
 					return highscores;
-				}
+				//}
  
 				TiXmlNode* responseNode = doc.FirstChild("response");
 				TiXmlElement* responseElement = responseNode->ToElement();
@@ -609,11 +615,11 @@ namespace ARK {
 				TiXmlDocument doc;
 				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
 
-				if (doc.Error()) {
+				//if (doc.Error()) {
 					m_errorMessage = doc.ErrorDesc();
 					logError(m_errorMessage);
 					return 0;
-				}  
+				//}  
  
 				TiXmlNode* responseNode = doc.FirstChild("response");
 				TiXmlElement* responseElement = responseNode->ToElement();
@@ -697,11 +703,11 @@ namespace ARK {
 				TiXmlDocument doc;
 				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
 
-				if (doc.Error()) {
+				//if (doc.Error()) {
 					m_errorMessage = doc.ErrorDesc();
 					logError(m_errorMessage);
 					return false;
-				}
+				//}
  
 				TiXmlNode* responseNode = doc.FirstChild("response");
 				TiXmlElement* responseElement = responseNode->ToElement();
@@ -798,11 +804,11 @@ namespace ARK {
 				TiXmlDocument doc;
 				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
 
-				if (doc.Error()) {
+				//if (doc.Error()) {
 					m_errorMessage = doc.ErrorDesc();
 					logError(m_errorMessage);
 					return false;
-				}
+				//}
  
 				TiXmlNode* responseNode = doc.FirstChild("response");
 				TiXmlElement* responseElement = responseNode->ToElement();
@@ -873,11 +879,11 @@ namespace ARK {
 				TiXmlDocument doc;
 				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
 
-				if (doc.Error()) {
+				//if (doc.Error()) {
 					m_errorMessage = doc.ErrorDesc();
 					logError(m_errorMessage);
 					return NULL;
-				}
+				//}
  
 				TiXmlNode* responseNode = doc.FirstChild("response");
 				TiXmlElement* responseElement = responseNode->ToElement();
@@ -1005,7 +1011,9 @@ namespace ARK {
 		vector<Trophy*> GameJolt::getTrophies(unsigned int achieved) { vector<Trophy*> ts; return ts; }
 		Trophy* GameJolt::getTrophy(int trophyId) { return NULL; }
 
-		GameJolt::~GameJolt() {}
+		GameJolt::~GameJolt() {
+
+		}
 
 
 		// protected things
@@ -1142,5 +1150,6 @@ namespace ARK {
 			return m_isBatching;
 		}
 
+		//#endif
 	}
 }
