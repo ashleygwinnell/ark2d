@@ -4,3 +4,5 @@
 ARK2D/build/
 Examples*
 .vscode/
+Tools/FMODAPI/api/studio/examples
+Tools/FMODAPI/api/lowlevel/examples
