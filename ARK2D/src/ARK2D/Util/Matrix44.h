@@ -10,6 +10,7 @@
 
 #include "Vector4.h"
 #include "../Namespaces.h"
+#include "../Common/DLL.h"
 #include "../Geometry/Vector3.h"
 #include "MathUtil.h"
 //#include "../UI/ErrorDialog.h"
@@ -32,7 +33,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class Matrix44 {
+		class ARK2D_API Matrix44 {
 			public:
 				Vector4 col[4];
 
