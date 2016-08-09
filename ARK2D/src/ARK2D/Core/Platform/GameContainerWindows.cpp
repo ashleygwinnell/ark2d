@@ -9,9 +9,10 @@
 #include "../GameContainer.h"
 #include "../Camera.h"
 #include "../../ARK2D.h"
+#include "../../Common/Audio.h"
 
 #include "../../Namespaces.h"
-#include "../../Includes.h"
+//#include "../../Includes.h"
 
 #include "../../Geometry/Shape.h"
 #include "../../Geometry/Circle.h"
@@ -1534,13 +1535,13 @@
 							bool duplicate = false;
 							for (unsigned int j = 0; j < numPadsSupported && j < 10; j++)
 							{
-								#ifdef EXCEPTIONS_AVAILABLE
+//								#ifdef EXCEPTIONS_AVAILABLE
 									try {
 										if (m_gamepads.at(j)->id == 0) { }
 									} catch (...) {
 										continue;
 									}
-								#endif
+//								#endif
 
 								//cout << "Duplicate gamepad with id " << i << endl;
 								//cout << "id " << m_gamepads[j].id << endl;

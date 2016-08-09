@@ -6,7 +6,9 @@
  */
 
 #include "PathfindingTest.h"
-#include "../../ARK.h"
+#include "../Pathfinding/AStar.h"
+#include "../Geometry/Vector2.h"
+#include "../Geometry/Polygon.h"
 
 namespace ARK {
 	namespace Tests {

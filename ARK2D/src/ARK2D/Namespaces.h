@@ -103,6 +103,8 @@ namespace ARK {
 
         class MatrixStack;
 
+        class HSVShader;
+
 		//! Classes for loading different images types in to pixel buffers.
 		namespace ImageIO {
 			class BMPImage;
@@ -126,8 +128,10 @@ namespace ARK {
 	namespace Net {
 		class Address;
 		class Connection;
+		class Discovery;
 		class FlowControl;
 		class PacketQueue;
+		class EventQueue;
 		class ReliabilitySystem;
 		class ReliableConnection;
 		class Socket;

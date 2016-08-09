@@ -6,6 +6,7 @@
  */
 
 #include "TextField.h"
+#include "../Util/Log.h"
 #include <algorithm>
 
 namespace ARK {

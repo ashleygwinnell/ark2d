@@ -8,7 +8,7 @@
 #ifndef ARK_GJ_GAMEJOLT_H_
 #define ARK_GJ_GAMEJOLT_H_
 
-#include "../Includes.h"
+//#include "../Includes.h"
 #include "../Namespaces.h"
 
 #include "DataStore.h"
@@ -16,6 +16,9 @@
 #include "Trophy.h"
 #include "User.h"
 #include "MD5.h"
+#include <string>
+#include <vector>
+using namespace std; 
 
 namespace ARK {
 	namespace GJ {

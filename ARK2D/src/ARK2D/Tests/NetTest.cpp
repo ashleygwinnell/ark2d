@@ -1,6 +1,8 @@
 
 #include "NetTest.h"
-#include "../../ARK.h"
+
+#include "../Controls/Input.h"
+
 
 namespace ARK {
 	namespace Tests {

@@ -75,7 +75,7 @@
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>%ARK2D_DIR%\src;%ARK2D_DIR%\src\ARK2D;%ARK2D_DIR%\src\ARK2D\vendor\windows;%ARK2D_DIR%\src\ARK2D\vendor\spine\includes;%ARK2D_DIR%\lib\windows\includes;%ADDITIONAL_INCLUDE_DIRECTORIES%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>%ADDITIONAL_PREPROCESSOR_DEFINITIONS%ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;_WIN32;ARK2D_DEBUG;_DEBUG;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%ADDITIONAL_PREPROCESSOR_DEFINITIONS%ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;_WIN32;ARK2D_DEBUG;ARK2D_PATH=%ARK2D_DIR%;_DEBUG;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
     </ResourceCompile>
@@ -128,7 +128,7 @@
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>%ARK2D_DIR%\src;%ARK2D_DIR%\src\ARK2D;%ARK2D_DIR%\src\ARK2D\vendor\windows;%ARK2D_DIR%\src\ARK2D\vendor\spine\includes;%ARK2D_DIR%\lib\windows\includes;%ADDITIONAL_INCLUDE_DIRECTORIES%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>%ADDITIONAL_PREPROCESSOR_DEFINITIONS%ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%ADDITIONAL_PREPROCESSOR_DEFINITIONS%ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;ARK2D_PATH=%ARK2D_DIR%;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>None</DebugInformationFormat>
       <Optimization>Full</Optimization>
     </ResourceCompile>
@@ -157,7 +157,7 @@
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>%ARK2D_DIR%\src;%ARK2D_DIR%\src\ARK2D;%ARK2D_DIR%\src\ARK2D\vendor\windows;%ARK2D_DIR%\src\ARK2D\vendor\spine\includes;%ARK2D_DIR%\lib\windows\includes;%ADDITIONAL_INCLUDE_DIRECTORIES%%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>%ADDITIONAL_PREPROCESSOR_DEFINITIONS%ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>%ADDITIONAL_PREPROCESSOR_DEFINITIONS%ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;ARK2D_PATH=%ARK2D_DIR%;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>None</DebugInformationFormat>
       <Optimization>Full</Optimization>
     </ResourceCompile>

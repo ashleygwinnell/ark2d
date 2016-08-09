@@ -1,5 +1,5 @@
-#if defined(_WIN32) || defined(_XBOX_ONE)
-	#ifndef ARK2D_WINDOWS_DLL // abc.dll source code will define this macro before including this header
+#if defined(_WIN32) || defined(_XBOX_ONE) || defined(ARK2D_WINDOWS)
+	#ifndef ANGELSCRIPT_DLL_LIBRARY_IMPORT // abc.dll source code will define this macro before including this header
 		#define ANGELSCRIPT_DLL_LIBRARY_IMPORT
 	#endif
 #endif

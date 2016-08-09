@@ -118,7 +118,7 @@
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;ARK2D_DEBUG;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;ARK2D_DEBUG;ARK2D_PATH=%ARK2D_DIR%;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup> 
   <!-- Development Config -->
@@ -144,7 +144,7 @@
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;ARK2D_PATH=%ARK2D_DIR%;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
  
@@ -169,7 +169,7 @@
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;_WIN32;ARK2D_PATH=%ARK2D_DIR%;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
 

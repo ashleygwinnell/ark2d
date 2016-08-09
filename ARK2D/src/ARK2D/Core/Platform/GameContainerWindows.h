@@ -32,6 +32,8 @@
 			#include <string>
 			#include <vector>
 
+ 			#include "../../Common/OpenGL.h"
+
 			 #include <wbemidl.h>
 			#include <oleauto.h>
 			//#include <wmsstd.h>

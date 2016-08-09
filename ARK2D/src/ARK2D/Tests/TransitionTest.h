@@ -8,7 +8,12 @@
 #ifndef TRANSITIONTEST_H_
 #define TRANSITIONTEST_H_
 
-#include "../../ARK.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include "../State/GameState.h"
+#include "../State/StateBasedGame.h"
+#include "../Util/Containers/Vector.h"
 
 namespace ARK {
 	namespace Tests {

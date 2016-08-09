@@ -6,7 +6,10 @@
  */
 
 #include "ParticlesTest.h"
-#include "../../ARK.h"
+
+#include "../Particles/ParticleSystem.h"
+#include "../Particles/Particle.h"
+#include "../Particles/ConfigurableEmitter.h"
 
 namespace ARK {
 	namespace Tests {
