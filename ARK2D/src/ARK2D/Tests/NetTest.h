@@ -8,7 +8,21 @@
 #ifndef ARK_TESTS_NETTEST_H_
 #define ARK_TESTS_NETTEST_H_
 
-#include "../../ARK.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include "../State/GameState.h"
+#include "../State/StateBasedGame.h"
+
+#include "../Net/Address.h"
+#include "../Net/Connection.h"
+#include "../Net/Discovery.h"
+#include "../Net/EventQueue.h"
+#include "../Net/FlowControl.h"
+#include "../Net/PacketQueue.h"
+#include "../Net/ReliableConnection.h"
+#include "../Net/ReliabilitySystem.h"
+#include "../Net/Socket.h"
 
 namespace ARK {
 	namespace Tests {
@@ -49,7 +63,7 @@ namespace ARK {
 		};
 		class ARK2D_API NetTestDiscoveryState : public GameState {
 			public:
-				Discovery m_discoveryConnection;	
+				ARK::Net::Discovery m_discoveryConnection;	
 				signed int m_selectedIndex;
 			public:
 				NetTestDiscoveryState();
@@ -68,10 +82,10 @@ namespace ARK {
 		class ARK2D_API NetTestState : public GameState {
 			public:
 				Mode m_mode;
-				Address m_address;
-				ReliableConnection m_connection;
-				Discovery m_discoveryConnection;
-				FlowControl m_flowControl;
+				ARK::Net::Address m_address;
+				ARK::Net::ReliableConnection m_connection;
+				ARK::Net::Discovery m_discoveryConnection;
+				ARK::Net::FlowControl m_flowControl;
 
 				bool m_connected;
 				float m_sendAccumulator;
@@ -79,7 +93,7 @@ namespace ARK {
 
 				bool m_showAcks;
 
-				EventQueue m_events;
+				ARK::Net::EventQueue m_events;
 				signed int m_number;
 
 			public:

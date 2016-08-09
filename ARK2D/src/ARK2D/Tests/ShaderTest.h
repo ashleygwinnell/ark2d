@@ -8,7 +8,16 @@
 #ifndef ARK_TESTS_SHADERTEST_H_
 #define ARK_TESTS_SHADERTEST_H_
 
-#include "../../ARK.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include "../State/GameState.h"
+#include "../State/StateBasedGame.h"
+
+#include "../Util/Containers/Vector.h"
+
+#include <string>
+using namespace std;
 
 namespace ARK {
 	namespace Tests {

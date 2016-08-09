@@ -7,7 +7,8 @@
 #include "../../Threading/Mutex.h"
 #include "../../Util/URLRequest.h"
 #include "../MD5.h"
-#include <string.h>
+#include <string>
+using std::string;
 
 namespace ARK {
 	namespace GJ {

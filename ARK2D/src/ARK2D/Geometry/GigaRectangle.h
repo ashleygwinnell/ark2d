@@ -10,7 +10,7 @@
 
 //#ifndef ARK2D_UBUNTU_LINUX
 
- 	#include "../Includes.h"
+ 	//#include "../Includes.h"
 	#include "../Namespaces.h"
 	#include "../ARK2D.h"
 	#include "Vector2.h"

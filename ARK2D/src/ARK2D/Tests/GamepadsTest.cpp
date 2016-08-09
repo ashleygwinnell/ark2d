@@ -6,7 +6,11 @@
  */
 
 #include "GamepadsTest.h"
-#include "../../ARK.h"
+
+#include "../Controls/Gamepad.h"
+#include "../Util/Log.h"
+#include "../UI/CheckBox.h"
+#include "../UI/Button.h"
 
 namespace ARK {
 	namespace Tests {

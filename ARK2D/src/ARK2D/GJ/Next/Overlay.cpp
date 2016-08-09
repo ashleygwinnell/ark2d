@@ -6,7 +6,7 @@
  */
 
 #include "Overlay.h"
-#include "../../../ARK.h"
+//#include "../../../ARK.h"
 
 //#include "../../Namespaces.h"
 #include "../../Graphics/ImageIO/PNGImage.h"

@@ -6,7 +6,10 @@
  */
 
 #include "CollisionTest.h"
-#include "../../ARK.h"
+#include "../Geometry/Circle.h"
+#include "../Geometry/Rectangle.h"
+#include "../Geometry/Line.h"
+#include "../Geometry/Polygon.h"
 
 namespace ARK {
 	namespace Tests {

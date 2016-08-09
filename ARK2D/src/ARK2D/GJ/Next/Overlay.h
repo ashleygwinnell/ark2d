@@ -8,8 +8,19 @@
 #ifndef ARK_GAMEJOLT_NEXT_OVERLAY_H_
 #define ARK_GAMEJOLT_NEXT_OVERLAY_H_
 
-#include "../../../ARK.h"
+//#include "../../../ARK.h"
 #include "API.h"
+#include "../../UI/TextField.h"
+#include "../../UI/Button.h"
+#include "../../State/GameState.h"
+#include "../../State/StateBasedGame.h"
+#include "../../Tween/Easing.h"
+#include "../../Tween/Timer.h"
+#include "../../Util/DisplayUtil.h"
+#include "../../UI/Dialog.h"
+#include "../../Util/Callbacks.h"
+#include "../../Util/FileUtil.h"
+#include "../../Util/KeyPairFile.h"
 
 namespace ARK {
 	namespace GJ {

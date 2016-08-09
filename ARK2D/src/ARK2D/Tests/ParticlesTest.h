@@ -8,7 +8,11 @@
 #ifndef PARTICLESTEST_H_
 #define PARTICLESTEST_H_
 
-#include "../../ARK.h"
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
+
+#include "../State/GameState.h"
+#include "../State/StateBasedGame.h"
 
 namespace ARK {
 	namespace Tests {

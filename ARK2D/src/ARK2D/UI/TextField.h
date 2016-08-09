@@ -14,7 +14,7 @@
 #include "../Controls/Input.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Color.h"
-#include "../Geometry/GigaRectangle.h"
+//#include "../Geometry/GigaRectangle.h"
 
 /**
  * Unlike HTML, padding does not (currently) affect height.

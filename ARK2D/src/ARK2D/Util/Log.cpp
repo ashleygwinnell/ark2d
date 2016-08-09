@@ -21,6 +21,8 @@
 #include "../UI/TitledPanel.h"
 
 #include <algorithm>
+#include <ostream>
+#include <fstream>
 
 namespace ARK {
 	namespace Util {

@@ -6,8 +6,9 @@
  */
 
 #include "ShaderTest.h"
-#include "../../ARK.h"
-
+#include "../Graphics/Shaders/HSVShader.h"
+#include "../UI/Slider.h"
+ 
 namespace ARK {
 	namespace Tests {
 
