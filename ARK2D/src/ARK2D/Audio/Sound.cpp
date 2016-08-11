@@ -1161,8 +1161,21 @@ namespace ARK {
 				ARK2D::getLog()->v(StringUtil::append("compare bext: ", string(magic)));
 				if (string(magic) == "bext") {
 					string errStr = "Could not read wav file. There are bext markers which WE CAN'T PARSE. :( "; errStr += m_FileName;
-					ErrorDialog::createAndShow(errStr);
-					return false;
+					ARK2D::getLog()->e(errStr);
+					//ErrorDialog::createAndShow(errStr);
+
+					fi_fread(buffer32, 4, 1, fi);
+					unsigned long bextsz = wav_readByte32(buffer32);
+					ARK2D::getLog()->e(StringUtil::append("bext sz: ", bextsz));
+					//ErrorDialog::createAndShow( StringUtil::append("bext sz: ", bextsz)) ;
+
+
+					char* bextdata = (char*) alloca(bextsz);
+					fi_fread(bextdata, bextsz, 1, fi);
+					fi_fread(magic, 4, 1, fi);
+
+
+					//return false;
 				}
 
 				// JUNK
