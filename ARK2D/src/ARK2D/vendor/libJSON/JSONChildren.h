@@ -8,7 +8,9 @@
 #include "Debug.h"  //for libJSON_ASSERT macro
 
 #ifdef DEBUG
-//	extern ErrorCallback Error;  //tell the user program that something went wrong
+    #ifndef  ARK2D_WINDOWS
+    	extern ErrorCallback Error;  //tell the user program that something went wrong
+    #endif
 #endif
 
 /*

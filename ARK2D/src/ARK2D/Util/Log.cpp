@@ -24,6 +24,10 @@
 #include <ostream>
 #include <fstream>
 
+#ifdef ARK2D_MACINTOSH
+    #include <execinfo.h>
+#endif
+
 namespace ARK {
 	namespace Util {
 

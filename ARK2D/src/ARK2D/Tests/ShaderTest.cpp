@@ -6,9 +6,10 @@
  */
 
 #include "ShaderTest.h"
+#include "../Graphics/Image.h"
 #include "../Graphics/Shaders/HSVShader.h"
 #include "../UI/Slider.h"
- 
+
 namespace ARK {
 	namespace Tests {
 
@@ -25,7 +26,7 @@ namespace ARK {
 			shader = new HSVShader();
 			shader->load();
 
-			
+
 
 			m_sliderHue = new ARK::UI::Slider();
 			m_sliderHue->setSize(200, 3);
@@ -55,7 +56,7 @@ namespace ARK {
 		}
 		void HSVShaderTestGameState::render(GameContainer* container, StateBasedGame* game, Renderer* r) {
 			r->drawString("HSV Shader Test", 20, 20, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
-	
+
 			m_sliderHue->updateValue();
 			m_sliderSaturation->updateValue();
 			m_sliderValue->updateValue();
@@ -167,7 +168,7 @@ namespace ARK {
 		void ShaderTest::initStates(GameContainer* container) {
 
 			addState( new HSVShaderTestGameState(0, "HSV Shader") );
-			
+
 			//addState(new ShaderTestGameState(0, "State One"));
 			//addState(new ShaderTestGameState(1, "State Two"));
 			//addState(new ShaderTestGameState(2, "State Three"));

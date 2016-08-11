@@ -10,6 +10,7 @@
 
 //#include "../../../ARK.h"
 #include "API.h"
+#include "../../Namespaces.h"
 #include "../../UI/TextField.h"
 #include "../../UI/Button.h"
 #include "../../State/GameState.h"
@@ -33,7 +34,7 @@ namespace ARK {
 					float caretTimer;
 					GJTextField();
 					void update();
-					virtual void renderBackground(); 
+					virtual void renderBackground();
 					virtual void renderText(int x, int y);
 					virtual void renderOverlay();
 					virtual void renderCaret(int x1, int y1, int x2, int y2);
@@ -51,7 +52,7 @@ namespace ARK {
 			};
 
 			class ARK2D_API GJScrollablePanel {
-				public:	  
+				public:
 					int m_x;
 					int m_y;
 					int m_width;
@@ -63,7 +64,7 @@ namespace ARK {
 					float m_scrollYSpeed;
 					float m_scrollYDecelerate;
 
-					bool m_dragging; 
+					bool m_dragging;
 					float m_draggingStartY;
 					Vector2<float> m_draggingStart;
 					Vector2<float> m_draggingEnd;
@@ -73,9 +74,9 @@ namespace ARK {
 					int m_innerHeight;
 					int m_actualInnerHeight;
 
-					GJScrollablePanel(); 
+					GJScrollablePanel();
 					void init(int x, int y, int w, int h);
-					void setHeight(float innerHeight, float outerHeight); 
+					void setHeight(float innerHeight, float outerHeight);
 					float getOffsetY() { return m_scrollY * -1.0f; }
 					float getScrollY() { return getOffsetY(); }
 					void update();
@@ -205,7 +206,7 @@ namespace ARK {
 					vector<GJButton*> buttons;
 
 					void refreshUI();
-					
+
 					GJLeaderboardsState();
 					void enter(GameContainer* container, StateBasedGame* game, GameState* from);
 					void leave(GameContainer* container, StateBasedGame* game, GameState* to);
@@ -237,7 +238,7 @@ namespace ARK {
 					ARK::GJ::Next::gjHighscoresResult* scores;
 					unsigned long timestamp;
 
-					
+
 					GJLeaderboardState();
 					void setTableId(unsigned int id);
 					void enter(GameContainer* container, StateBasedGame* game, GameState* from);
@@ -261,7 +262,7 @@ namespace ARK {
 				public:
 					GJButton* back;
 					GJScrollablePanel* scrollablePanel;
-					
+
 					GJStatsState();
 					void enter(GameContainer* container, StateBasedGame* game, GameState* from);
 					void leave(GameContainer* container, StateBasedGame* game, GameState* to);
@@ -314,7 +315,7 @@ namespace ARK {
 					static const unsigned int STATE_LEADERBOARDS = 3;
 					static const unsigned int STATE_LEADERBOARD = 4;
 					static const unsigned int STATE_STATS = 5;
-					
+
 				public:
 					GameJolt(int gameId, string gameKey);
 					void open();
@@ -347,7 +348,7 @@ namespace ARK {
 					virtual void render(GameContainer* container, Renderer* g);
 					virtual void preRender(GameContainer* container, Renderer* r);
 					virtual void postRender(GameContainer* container, Renderer* r);
-					
+
 
 					virtual ~GameJolt();
 			};

@@ -9,19 +9,20 @@
 //#include "../../../ARK.h"
 
 //#include "../../Namespaces.h"
+#include "../../Graphics/Image.h"
 #include "../../Graphics/ImageIO/PNGImage.h"
 
 namespace ARK {
 	namespace GJ {
 		namespace Next {
 
-			
+
 
 			void __internalGameJoltOverlayListener(ARK::GJ::Next::API* api, gjCallbackType type, void* data)
 			{
 				ARK2D::getLog()->v("--OVERLAY LISTENER--");
 				switch(type) {
-					case GJ_USERS_AUTH_RESULT: 
+					case GJ_USERS_AUTH_RESULT:
 					{
 						GJLoginState* ls = (GJLoginState*) ARK::GJ::Next::GameJolt::getInstance()->getState(ARK::GJ::Next::GameJolt::STATE_LOGIN);
 
@@ -31,7 +32,7 @@ namespace ARK {
 							return;
 						}
 						ls->onLoginSuccess();
-						
+
 						/*Overlay* o = Overlay::getInstance();
 						if (o != NULL) {
 
@@ -41,7 +42,7 @@ namespace ARK {
 					case GJ_HIGHSCORES_RESULT:
 					{
 						GJLeaderboardState* as = (GJLeaderboardState*) ARK::GJ::Next::GameJolt::getInstance()->getState(ARK::GJ::Next::GameJolt::STATE_LEADERBOARD);
-						
+
 						gjHighscoresResult* result = (gjHighscoresResult*) data;
 						unsigned int timestamp = ARK2D::getTimer()->unixTimestamp();
 						if (timestamp > as->timestamp + 30) { // refresh every 30 seconds
@@ -54,7 +55,7 @@ namespace ARK {
 					case GJ_ACHIEVEMENTS_RESULT:
 					{
 						GJAchievementsState* as = (GJAchievementsState*) ARK::GJ::Next::GameJolt::getInstance()->getState(ARK::GJ::Next::GameJolt::STATE_ACHIEVEMENTS);
-						
+
 						gjAchievementsResult* result = (gjAchievementsResult*) data;
 						unsigned int timestamp = ARK2D::getTimer()->unixTimestamp();
 						if (timestamp > as->timestamp + 30) { // refresh every 30 seconds
@@ -73,7 +74,7 @@ namespace ARK {
 					case GJ_HIGHSCORE_TABLES_RESULT:
 					{
 						GJLeaderboardsState* as = (GJLeaderboardsState*) ARK::GJ::Next::GameJolt::getInstance()->getState(ARK::GJ::Next::GameJolt::STATE_LEADERBOARDS);
-						
+
 						gjHighscoreTablesResult* result = (gjHighscoreTablesResult*) data;
 						unsigned int timestamp = ARK2D::getTimer()->unixTimestamp();
 						if (timestamp > as->timestamp + 30) { // refresh every 30 seconds
@@ -103,7 +104,7 @@ namespace ARK {
 					for(unsigned int j = 0; j < chars.length(); ++j) {
 						if (str[i] == chars[j]) {
 							str.replace(i, 1,  &replace[j], 1);
-						}	
+						}
 					}
 				}
 				return str;
@@ -141,7 +142,7 @@ namespace ARK {
 			void GJTextField::renderCaret(int x1, int y1, int x2, int y2) {
 			 	x1 += 10;
 				x2 += 10;
-				if (caretTimer < 0.5f) { 
+				if (caretTimer < 0.5f) {
 			 		TextField::renderCaret(x1, y1, x2, y2);
 			 	}
 			}
@@ -163,9 +164,9 @@ namespace ARK {
 			}
 
 
-			GJButton::GJButton(): 
-				ARK::UI::Button() 
-			{ 
+			GJButton::GJButton():
+				ARK::UI::Button()
+			{
 
 			}
 			void GJButton::renderText(int x, int y) {
@@ -203,7 +204,7 @@ namespace ARK {
 				m_x(0),
 				m_y(0),
 				m_width(0),
-				m_height(0),   
+				m_height(0),
 				m_originalX(0),
 				m_originalY(0),
 				m_scrollY(0),
@@ -221,7 +222,7 @@ namespace ARK {
 				m_innerHeight(0),
 				m_actualInnerHeight(0)
 			{
-				
+
 			}
 			void GJScrollablePanel::init(int x, int y, int w, int h) {
 				m_x = x;
@@ -252,12 +253,12 @@ namespace ARK {
 				m_actualInnerHeight = innerHeight;
 			}
 
-			void GJScrollablePanel::update() { 
-				
+			void GJScrollablePanel::update() {
+
 				GameTimer* timer = ARK2D::getContainer()->getTimer();
 
 
-			 
+
 				// target page x;
 				float targetY = 0;
 				if (!m_dragging) {
@@ -282,45 +283,45 @@ namespace ARK {
 						//m_scrollY = m_scrollYReleased;
 					}
 
-					if (m_scrollYReleased < 0) { 
+					if (m_scrollYReleased < 0) {
 						m_scrollY = targetY;
-						
 
-						if (m_releaseTimer.getTime() > 0.0f) 
+
+						if (m_releaseTimer.getTime() > 0.0f)
 						{
 							m_scrollY = Easing::ease(Easing::QUADRATIC_OUT, m_releaseTimer.getTime(), m_scrollYReleased, targetY - m_scrollYReleased, m_releaseTimer.getDuration());
 
 							if (m_releaseTimer.update()) {
 								m_releaseTimer.reset();
 								m_scrollYSpeed = 0.0f;
-								//m_page = m_pageTarget;				
+								//m_page = m_pageTarget;
 							}
-						} 
+						}
 					} else if (m_scrollYReleased > m_innerHeight) {
 						targetY = m_innerHeight;
 						m_scrollY = targetY;
 
 
-						if (m_releaseTimer.getTime() > 0.0f) 
+						if (m_releaseTimer.getTime() > 0.0f)
 						{
 							m_scrollY = Easing::ease(Easing::QUADRATIC_OUT, m_releaseTimer.getTime(), m_scrollYReleased, targetY - m_scrollYReleased, m_releaseTimer.getDuration());
 
 							if (m_releaseTimer.update()) {
 								m_releaseTimer.reset();
 								m_scrollYSpeed = 0.0f;
-								//m_page = m_pageTarget;				
+								//m_page = m_pageTarget;
 							}
-						} 
+						}
 					} else {
 						m_scrollY = m_scrollYReleased;
 					}
 
 
-				
-				} 
 
-				
-			 	else {  
+				}
+
+
+			 	else {
 				//if (m_dragging) {
 					m_scrollY = m_scrollYReleased;
 					m_dragTimer += timer->getDelta();
@@ -334,17 +335,17 @@ namespace ARK {
 
 			}
 			/*void GJScrollablePanel::render() {
-				
+
 				GameContainer* container = dg->getContainer();
 				Renderer* r = ARK2D::getRenderer();
 				int tx = ARK2D::getContainer()->getTranslateX();
 				int ty = ARK2D::getContainer()->getTranslateY();
 				float sc = ARK2D::getContainer()->getScale();
-			  
-				r->pushMatrix();  
+
+				r->pushMatrix();
 				r->setScissorTestEnabled(true);
 				r->scissor(tx + (m_x * sc), ty + (m_y * sc), m_width * sc, m_height * sc);
-				
+
 				int curY = m_y - m_scrollY;
 
 				//r->fillGradientRect(m_x, m_y, m_width, 20, const_cast<Color*>(dg->backdrop->getTextColor()), const_cast<Color*>(&Color::black_0a));
@@ -375,52 +376,52 @@ namespace ARK {
 				for(unsigned int i = 0; i < m_buttons.size(); ++i) {
 					if (i > 0 && i % m_columns == 0) { curY += BUTTON_SPACING; }
 					m_buttons.get(i)->render();
-					//curY += BUTTON_SPACING; 
+					//curY += BUTTON_SPACING;
 					//if (i % 2 == 1) { curY += BUTTON_SPACING; }
-			 
-				} 
 
-				
+				}
+
+
 
 				r->getBatch()->render();
 				r->getBatch()->setEnabled(false);
 				curY += BUTTON_SPACING;
 
 			 curY += GROUP_SPACING;
-				curY += GROUP_SPACING; 
+				curY += GROUP_SPACING;
 
 				if (m_buttons.size() == 16) {
-				//	curY += BUTTON_SPACING; 
+				//	curY += BUTTON_SPACING;
 				}
 
 				curY += END_SPACING;
-			  
+
 			  	int overlayImageY2 = curY - 4;
 				if (m_scrollY > m_innerHeight) {
 					overlayImageY2 += (m_scrollY - m_innerHeight);
-				} 
+				}
 
 				//if (m_itemType == StoreItem::TYPE_WEAPON) {
 				//	overlayImageY2 = curY - 4;
 				//}
 				dg->stateShop->m_overlayImage->drawCenteredFlipped(m_x + (m_width/2), overlayImageY2, false, true);
 				dg->stateShop->m_overlayImage->setAlpha(1.0f);
-				
+
 
 			  	r->scissor(0,0,container->getDynamicWidth(), container->getDynamicHeight());
 				r->setScissorTestEnabled(false);
-				r->popMatrix(); 
+				r->popMatrix();
 				//r->drawRect(m_x, m_y, m_width, m_height);
-				 
+
 				r->setDrawColor(Color::white);
 				dg->stateShop->m_lineImage->setColor(NULL);
 				dg->stateShop->m_lineImage->setAlpha(1.0f * m_alphaModifier);
 				//dg->stateShop->m_lineImage->drawCentered(m_x + (m_width/2), m_y);
 				//dg->stateShop->m_lineImage->drawCentered(m_x + (m_width/2), m_y + m_height);
-				
-			 
+
+
 			 	r->getBatch()->setEnabled(true);
-				
+
 				Image* img = dg->stateShop->m_lineImage;
 				r->setDrawColorf(1.0f, 1.0f, 1.0f, m_alphaModifier);
 				r->texturedLineOverlay(img, 1.0f, m_x, m_y-1, m_x+m_width, m_y-1, 0, 0, img->getWidth(), 0);
@@ -439,10 +440,10 @@ namespace ARK {
 			}*/
 			bool GJScrollablePanel::keyPressed(unsigned int key) {
 				if (!Shape<int>::collision_rectangleRectangle(m_x, m_y, m_width, m_height, ARK2D::getInput()->getMouseX(), ARK2D::getInput()->getMouseY(), 1, 1)) { return false; }
-				
+
 				Input* in = ARK2D::getInput();
 				if (key == (signed int) Input::MOUSE_BUTTON_LEFT) {
-					if (!m_dragging) { 
+					if (!m_dragging) {
 						m_dragging = true;
 						m_draggingStartY = in->getMouseY();
 						m_draggingStart.set(in->getMouseX(), in->getMouseY() + m_scrollY );
@@ -454,9 +455,9 @@ namespace ARK {
 
 				// for(unsigned int i = 0; i < m_customisationButtons.size(); i++) {
 				// 	m_customisationButtons.get(i)->keyPressed(key);
-				// } 
+				// }
 
-				if (m_actualInnerHeight < m_height) { 
+				if (m_actualInnerHeight < m_height) {
 					m_dragging = false;
 					m_scrollYReleased = -100;
 					//m_draggingStartY = 0;
@@ -467,30 +468,30 @@ namespace ARK {
 			}
 			bool GJScrollablePanel::keyReleased(unsigned int key) {
 				//if (!Shape<int>::collision_rectangleRectangle(m_x, m_y, m_width, m_height, ARK2D::getInput()->getMouseX(), ARK2D::getInput()->getMouseY(), 1, 1)) { return; }
-				
 
-				
+
+
 				//DefaultGame* dg = DefaultGame::getInstance();
 				bool wasDragging = m_dragging;// && dg->stateShop->m_dragType != ShopState2::DRAG_CALCULATING;
 
-				Input* in = ARK2D::getInput();   
+				Input* in = ARK2D::getInput();
 				if (key == (signed int) Input::MOUSE_BUTTON_LEFT) {
 					if (m_dragging) {
 						m_dragging = false;
 						m_draggingEnd.set(in->getMouseX(), in->getMouseY());
 
 						m_releaseTimer.reset();
-						m_releaseTimer.update(); 
-			 
+						m_releaseTimer.update();
+
 						if (m_dragTimer != 0) {
 							m_scrollYSpeed = (m_draggingStartY - m_draggingEnd.getY()) / m_dragTimer;
 						}
-						
+
 						/*if (m_scrollYSpeed > 200) {
 							m_scrollYSpeed = 200;
 						}
 						if (m_scrollYSpeed < -200) {
-							m_scrollYSpeed = -200; 
+							m_scrollYSpeed = -200;
 						}*/
 
 						//if (m_draggingStart.getY() > m_draggingEnd.getY()) {
@@ -499,23 +500,23 @@ namespace ARK {
 			//
 			//			}
 			 		 	return true;
-			 
+
 					}
-				}	
-			 
+				}
+
 
 			 	if (m_actualInnerHeight < m_height) {
 					String thisStr("inner height: ");
 					thisStr += m_actualInnerHeight;
-					thisStr += " height: "; 
+					thisStr += " height: ";
 					thisStr += m_height;
 					//ErrorDialog::createAndShow(thisStr.get());
 
-					/*m_releaseTimer.setTime(m_releaseTimer.getDuration()); 
+					/*m_releaseTimer.setTime(m_releaseTimer.getDuration());
 					m_scrollY = 0;
 					m_scrollYReleased = m_height - m_actualInnerHeight;
 					m_scrollYSpeed = 0;
-					m_draggingEnd.set(0, 0); 
+					m_draggingEnd.set(0, 0);
 					m_draggingStart.set(0, 0);
 			*/
 					m_dragging = false;
@@ -524,40 +525,40 @@ namespace ARK {
 					//m_draggingStartY = m_height - m_actualInnerHeight;
 					//m_scrollY = m_height - m_actualInnerHeight;
 					//m_scrollYReleased = m_height - m_actualInnerHeight;
-				} 
-				
+				}
+
 				//bool dragWasSuperSmall = m_dragging && (MathUtil::distance(m_draggingStart.getX(), m_draggingStart.getY() + m_scrollY, m_draggingEnd.getX(), m_draggingEnd.getY())  < 5.0f * ARK2D::getContainer()->getScale());
 				//if (!m_dragging || dragWasSuperSmall) {
 				if (!wasDragging) {
-			//		for (unsigned int i = 0; i < m_buttons.size(); i++) { 
-			//			m_buttons.get(i)->keyReleased(key); 
-			//		} 
+			//		for (unsigned int i = 0; i < m_buttons.size(); i++) {
+			//			m_buttons.get(i)->keyReleased(key);
+			//		}
 				}
-			 
 
-				
 
-				// for(unsigned int i = 0; i < m_customisationButtons.size(); i++) { 
+
+
+				// for(unsigned int i = 0; i < m_customisationButtons.size(); i++) {
 				// 	m_customisationButtons.get(i)->keyReleased(key);
-				// } 
+				// }
 				return false;
 			}
 			bool GJScrollablePanel::mouseMoved(int x, int y, int oldx, int oldy) {
 			//	for(unsigned int i = 0; i < m_buttons.size(); i++) {
 			//		m_buttons.get(i)->mouseMoved(x, y, oldx, oldy);
-			//	} 
+			//	}
 
 
-			 
+
 
 				if (m_dragging) {
 					m_scrollYReleased = (m_draggingStart.getY() - y);;//in->getMouseY() + m_scrollY;
 					//m_scrollY = (m_draggingStart.getY() - y);
-					//m_scrollY =  oldy - y; 
+					//m_scrollY =  oldy - y;
 
-					 
-						
-					
+
+
+
 
 						// limit left side
 						int SCROLL_UNDERFLOW = -30;
@@ -566,25 +567,25 @@ namespace ARK {
 						} else if (m_scrollYReleased > m_innerHeight - SCROLL_UNDERFLOW) {
 							m_scrollYReleased = m_innerHeight - SCROLL_UNDERFLOW;
 						}
-			 
-					
+
+
 
 					m_releaseTimer.reset();
 					m_releaseTimer.update();
 					return true;
 				}
-			 
+
 
 			 	if (m_actualInnerHeight < m_height) {
 					m_dragging = false;
 					m_scrollYReleased = -100;
 				}
-				
+
 				return false;
 			}
 			GJScrollablePanel::~GJScrollablePanel() {
-				
-			} 
+
+			}
 
 
 
@@ -611,16 +612,16 @@ namespace ARK {
 				ls->username->setText(result);
 			}
 			void gjLoginState_editTokenCallback() {
-				
+
 			}
 			GJLoginState::GJLoginState(): GameState() {
 				ARK::Util::Callback gamejoltNameCallback;
-				gamejoltNameCallback.setId(ARK::Util::Callbacks::CALLBACK_GAMEJOLT_OVERLAY_EDITNAME); 
+				gamejoltNameCallback.setId(ARK::Util::Callbacks::CALLBACK_GAMEJOLT_OVERLAY_EDITNAME);
 				gamejoltNameCallback.setFunctionPointer((void*) &gjLoginState_editNameCallback);
 				ARK::Util::Callbacks::add(gamejoltNameCallback);
 
 				ARK::Util::Callback gamejoltTokenCallback;
-				gamejoltTokenCallback.setId(ARK::Util::Callbacks::CALLBACK_GAMEJOLT_OVERLAY_EDITTOKEN); 
+				gamejoltTokenCallback.setId(ARK::Util::Callbacks::CALLBACK_GAMEJOLT_OVERLAY_EDITTOKEN);
 				gamejoltTokenCallback.setFunctionPointer((void*) &gjLoginState_editTokenCallback);
 				ARK::Util::Callbacks::add(gamejoltTokenCallback);
 			}
@@ -661,15 +662,15 @@ namespace ARK {
 				help = new GJButton();
 				help->setText("HELP");
 				help->setSize(80, 40);
-				
+
 				help->setEvent((void*) onHelp);
 				help->setEventObj(this);
-				
+
 				close = new GJButton();
 				close->setText("CLOSE");
 				close->setSize(90, 40);
 				close->setEvent((void*) onClose);
-				close->setEventObj(this);	
+				close->setEventObj(this);
 			}
 			void GJLoginState::onLogin(GJLoginState* ls) {
 				ARK::GJ::Next::GameJolt::getInstance()->api->authUser(ls->username->getText().getc(), ls->usertoken->getText().getc());
@@ -693,11 +694,11 @@ namespace ARK {
 				m_iconX = container->getWidth()*0.5f;
 				m_iconY = DisplayUtil::adjustY(80);
 				m_iconScale = 6.0f;
-				username->setLocation(20, DisplayUtil::adjustY2(165));	
-				usertoken->setLocation(20, DisplayUtil::adjustY2(230));	
-				login->setLocation(20, DisplayUtil::adjustY2(300));	
-				signup->setLocation(20, DisplayUtil::adjustY2(350));	
-				help->setLocation(container->getWidth() - 20 - 80, container->getHeight() - 20 - 40);	
+				username->setLocation(20, DisplayUtil::adjustY2(165));
+				usertoken->setLocation(20, DisplayUtil::adjustY2(230));
+				login->setLocation(20, DisplayUtil::adjustY2(300));
+				signup->setLocation(20, DisplayUtil::adjustY2(350));
+				help->setLocation(container->getWidth() - 20 - 80, container->getHeight() - 20 - 40);
 				close->setLocation(20, container->getHeight() - 20 - 40);
 
 				if (container->getWidth() > container->getHeight()) {
@@ -706,15 +707,15 @@ namespace ARK {
 					m_iconX = (container->getWidth()*0.499f) - (gj->icon->getWidth()*m_iconScale*0.5f) - 20;
 					m_iconY = container->getHeight()*0.5f;
 
-					username->setX( (container->getWidth()*0.499f) + 10 );	
-					usertoken->setX( (container->getWidth()*0.499f) + 10 );	
-					login->setX( (container->getWidth()*0.499f) + 10 );	
+					username->setX( (container->getWidth()*0.499f) + 10 );
+					usertoken->setX( (container->getWidth()*0.499f) + 10 );
+					login->setX( (container->getWidth()*0.499f) + 10 );
 					signup->setX( (container->getWidth()*0.499f) + 10 );
 
 					float ch = container->getHeight() * 0.5f;
-					username->setY( ch - 100 );	 
-					usertoken->setY( ch - 35 );	
-					login->setY( ch + 20);	
+					username->setY( ch - 100 );
+					usertoken->setY( ch - 35 );
+					login->setY( ch + 20);
 					signup->setY( ch + 70 );
 				}
 			}
@@ -726,7 +727,7 @@ namespace ARK {
 			}
 			void GJLoginState::onLoginSuccess() {
 
-				
+
 				ARK::GJ::Next::GameJolt* gj = ARK::GJ::Next::GameJolt::getInstance();
 				gj->m_loggedin = true;
 
@@ -797,7 +798,7 @@ namespace ARK {
 			GJLoginState::~GJLoginState() {
 
 			}
-			 
+
 
 
 
@@ -818,14 +819,14 @@ namespace ARK {
 				achievements = new GJButton();
 				achievements->setText("TROPHIES");
 				achievements->setSize(container->getWidth()-40, 40);
-				
+
 				achievements->setEvent((void*) onAchievements);
 				achievements->setEventObj(this);
 
 				leaderboards = new GJButton();
 				leaderboards->setText("LEADERBOARDS");
 				leaderboards->setSize(container->getWidth()-40, 40);
-				
+
 				leaderboards->setEvent((void*) onLeaderboards);
 				leaderboards->setEventObj(this);
 
@@ -839,31 +840,31 @@ namespace ARK {
 				close->setText("CLOSE");
 				close->setSize(80, 40);
 				close->setEvent((void*) onClose);
-				close->setEventObj(this);	
+				close->setEventObj(this);
 
 				logout = new GJButton();
 				logout->setText("LOG OUT");
 				logout->setSize(100, 40);
 				logout->setEvent((void*) onLogout);
-				logout->setEventObj(this);	
-				
-				
+				logout->setEventObj(this);
+
+
 			}
 			void GJOverviewState::onAchievements(GJOverviewState* ls) {
 				//ARK2D::getLog()->e("achievements");
 				ARK::GJ::Next::GameJolt::getInstance()->enterState(ARK::GJ::Next::GameJolt::STATE_ACHIEVEMENTS);
 			}
 			void GJOverviewState::onLeaderboards(GJOverviewState* ls) {
-				//ARK2D::getLog()->e("leaderboards");	
+				//ARK2D::getLog()->e("leaderboards");
 				ARK::GJ::Next::GameJolt::getInstance()->enterState(ARK::GJ::Next::GameJolt::STATE_LEADERBOARDS);
 			}
 			void GJOverviewState::onStats(GJOverviewState* ls) {
-				//ARK2D::getLog()->e("stats");	
+				//ARK2D::getLog()->e("stats");
 				ARK::GJ::Next::GameJolt::getInstance()->enterState(ARK::GJ::Next::GameJolt::STATE_STATS);
 			}
 			void GJOverviewState::onLogout(GJOverviewState* ls) {
-				ARK2D::getLog()->v("-- logout --");	
- 
+				ARK2D::getLog()->v("-- logout --");
+
 				ARK::GJ::Next::GameJolt* gj = ARK::GJ::Next::GameJolt::getInstance();
 				gj->m_loggedin = false;
 
@@ -883,18 +884,18 @@ namespace ARK {
 				Input* in = ARK2D::getInput();
 				if (in->isKeyPressed(Input::MOBILE_BACK) || in->isKeyPressed(Input::KEY_BACKSPACE)) { close->doEvent(); }
 
-				achievements->setLocation(20, DisplayUtil::adjustY2(250));	
-				leaderboards->setLocation(20, DisplayUtil::adjustY2(300));	
-				stats->setLocation(20, DisplayUtil::adjustY2(350));	
-				close->setLocation(20, container->getHeight() - 20 - 40);	
-				logout->setLocation(container->getWidth() - 20 - 100, container->getHeight() - 20 - 40);	
+				achievements->setLocation(20, DisplayUtil::adjustY2(250));
+				leaderboards->setLocation(20, DisplayUtil::adjustY2(300));
+				stats->setLocation(20, DisplayUtil::adjustY2(350));
+				close->setLocation(20, container->getHeight() - 20 - 40);
+				logout->setLocation(container->getWidth() - 20 - 100, container->getHeight() - 20 - 40);
 			}
 			void GJOverviewState::render(GameContainer* container, StateBasedGame* game, Renderer* r) {
 				ARK::GJ::Next::GameJolt* gj = ARK::GJ::Next::GameJolt::getInstance();
 				r->setDrawColorf(1.0f, 1.0f, 1.0f, gj->getAlpha());
 				r->drawString("YOU ARE LOGGED IN AS: ", container->getWidth()/2, DisplayUtil::adjustY(144), Renderer::ALIGN_CENTER, Renderer::ALIGN_BOTTOM, 0.0f, 0.5f);
 				r->drawString("GWINNELL", container->getWidth()/2, DisplayUtil::adjustY(150), Renderer::ALIGN_CENTER, Renderer::ALIGN_TOP);
-				
+
 				//r->drawString("ACHIEVEMENTS: ", achievements->getMinX(), achievements->getMinY() - 5, Renderer::ALIGN_LEFT, Renderer::ALIGN_BOTTOM, 0.0f, 0.5f);
 				//r->drawString("LEADERBOARDS: ", leaderboards->getMinX(), leaderboards->getMinY() - 5, Renderer::ALIGN_LEFT, Renderer::ALIGN_BOTTOM, 0.0f, 0.5f);
 				//r->drawString("STATS: ", stats->getMinX(), stats->getMinY() - 5, Renderer::ALIGN_LEFT, Renderer::ALIGN_BOTTOM, 0.0f, 0.5f);
@@ -938,7 +939,7 @@ namespace ARK {
 
 
 
-			GJAchievementsState::GJAchievementsState(): 
+			GJAchievementsState::GJAchievementsState():
 				GameState(),
 				back(NULL),
 				scrollablePanel(NULL),
@@ -973,10 +974,10 @@ namespace ARK {
 					}
 				}
 			}
-			void GJAchievementsState::fetchIconInternal(GJAchievementsState* as, string result, gjUrlRequest* req) 
+			void GJAchievementsState::fetchIconInternal(GJAchievementsState* as, string result, gjUrlRequest* req)
 			{
 				// Check for errors
-				if (req->request->hasError()) 
+				if (req->request->hasError())
 				{
 					ARK::GJ::Next::GameJolt* gamejolt = ARK::GJ::Next::GameJolt::getInstance();
 					ARK::GJ::Next::API::removeRequestStatic(&as->m_requests, req);
@@ -1012,13 +1013,13 @@ namespace ARK {
 						return trophyGold;
 					} else if (ach->difficulty == GJ_DIFFICULTY_PLATINUM) {
 						return trophyPlatinum;
-					} 
+					}
 					return trophyBronze;
 				}
 				Image* temp = achievementIcons.find(id)->second;
 				return temp;
 			}
-			ARK::GJ::Next::gjAchievement* GJAchievementsState::findAchievementById(unsigned int id) 
+			ARK::GJ::Next::gjAchievement* GJAchievementsState::findAchievementById(unsigned int id)
 			{
 				for(unsigned int i = 0; i < achievements->achievementsCount; ++i) {
 					if (achievements->achievements[i]->id == id) {
@@ -1028,7 +1029,7 @@ namespace ARK {
 				ARK2D::getLog()->e(StringUtil::append("could not findAchievementById: ", id));
 				return NULL;
 			}
-			void GJAchievementsState::enter(GameContainer* container, StateBasedGame* game, GameState* from) { 
+			void GJAchievementsState::enter(GameContainer* container, StateBasedGame* game, GameState* from) {
 				ARK::GJ::Next::GameJolt* gamejolt = ARK::GJ::Next::GameJolt::getInstance();
 				gamejolt->api->getAchievements();
 
@@ -1064,7 +1065,7 @@ namespace ARK {
 				if (in->isKeyPressed(Input::MOBILE_BACK) || in->isKeyPressed(Input::KEY_BACKSPACE)) { back->doEvent(); }
 				scrollablePanel->update();
 
-				back->setLocation(20, container->getHeight() - 20 - 40);	
+				back->setLocation(20, container->getHeight() - 20 - 40);
 			}
 			void GJAchievementsState::render(GameContainer* container, StateBasedGame* game, Renderer* r) {
 				ARK::GJ::Next::GameJolt* gj = ARK::GJ::Next::GameJolt::getInstance();
@@ -1080,17 +1081,17 @@ namespace ARK {
 
 				float y = offsetY + 100;
 				if (achievements != NULL) {
-					
+
 
 					for(unsigned int i = 0; i < achievements->achievementsCount; ++i) {
-						
+
 						//
 						Image* trophyImage = getImageForTrophy(achievements->achievements[i]->id);
 						trophyImage->setAlpha(((achievements->achievements[i]->achieved)?1.0f:0.5f));
-						trophyImage->draw(29, y + 10, 60, 60);	
+						trophyImage->draw(29, y + 10, 60, 60);
 						//if (achievements->achievements[i]->achieved) {
 						//	r->setDrawColorf(1.0f, 1.0f, 1.0f, gj->getAlpha());
-							//r->fillRect(29, y+10, 60, 60);		
+							//r->fillRect(29, y+10, 60, 60);
 							//r->drawRect(24, y+5, 70, 70);
 						//}
 
@@ -1103,14 +1104,14 @@ namespace ARK {
 						float totalHeight = 0.0f;
 						totalHeight += 26;
 						vector<string> lines = StringUtil::getLinesForWordWrap(description, 220);
-						for(unsigned int j = 0; j < lines.size(); j++) { 
+						for(unsigned int j = 0; j < lines.size(); j++) {
 							totalHeight += 13;
 						}
 						float startY = y + 43 - (totalHeight/2);
 
 						r->drawString(name, 100, startY);
 						startY += 26;
-						for(unsigned int j = 0; j < lines.size(); j++) { 
+						for(unsigned int j = 0; j < lines.size(); j++) {
 							r->drawString(lines[j], 100, startY, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f, 0.5f);
 							startY += 13;
 						}
@@ -1128,12 +1129,12 @@ namespace ARK {
 						scrollablePanel->setHeight(y + 90 - offsetY, container->getHeight());
 
 					}
-					if (achievements->achievementsCount == 0) { 
+					if (achievements->achievementsCount == 0) {
 						r->drawString("NO TROPHIES!", container->getWidth()/2, (container->getHeight() / 2), Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER);
 					}
 				} else {
 					r->drawString("LOADING...", container->getWidth()/2, (container->getHeight() / 2), Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER);
-				}	
+				}
 
 				r->setDrawColorf(1.0f, 1.0f, 1.0f, gj->getAlpha());
 				back->render();
@@ -1161,18 +1162,18 @@ namespace ARK {
 
 
 
-			GJLeaderboardsState::GJLeaderboardsState(): 
+			GJLeaderboardsState::GJLeaderboardsState():
 				GameState(),
 				back(NULL),
 				scrollablePanel(NULL),
 				tables(),
 				timestamp(0),
-				buttons() 
+				buttons()
 			{
 
 			}
 
-			void GJLeaderboardsState::enter(GameContainer* container, StateBasedGame* game, GameState* from) { 
+			void GJLeaderboardsState::enter(GameContainer* container, StateBasedGame* game, GameState* from) {
 				ARK::GJ::Next::GameJolt* gamejolt = ARK::GJ::Next::GameJolt::getInstance();
 				gamejolt->api->getHighscoreTables();
 
@@ -1225,7 +1226,7 @@ namespace ARK {
 						GJLeaderboardState* ls2 = (GJLeaderboardState*) ARK::GJ::Next::GameJolt::getInstance()->getState(ARK::GJ::Next::GameJolt::STATE_LEADERBOARD);
 						ls2->setTableId(ls->tables->tables[i]->id);
 						ARK::GJ::Next::GameJolt::getInstance()->enterState(ls2);
-						
+
 						break;
 					}
 				}
@@ -1235,12 +1236,12 @@ namespace ARK {
 				//if (in->isKeyPressed(Input::MOBILE_BACK)) { back->doEvent(); }
 				if (in->isKeyPressed(Input::MOBILE_BACK) || in->isKeyPressed(Input::KEY_BACKSPACE)) { back->doEvent(); }
 				scrollablePanel->update();
-				back->setLocation(20, container->getHeight() - 20 - 40);	
+				back->setLocation(20, container->getHeight() - 20 - 40);
 			}
 			void GJLeaderboardsState::render(GameContainer* container, StateBasedGame* game, Renderer* r) {
 				ARK::GJ::Next::GameJolt* gj = ARK::GJ::Next::GameJolt::getInstance();
 
-				
+
 				float startY = scrollablePanel->getOffsetY();
 
 				r->setDrawColorf(1.0f, 1.0f, 1.0f, gj->getAlpha());
@@ -1261,7 +1262,7 @@ namespace ARK {
 						}
 
 						r->setDrawColorf(1.0f, 1.0f, 1.0f, gj->getAlpha());
-						
+
 						string name = string(tables->tables[i]->name);
 						string description = string(tables->tables[i]->description);
 
@@ -1271,21 +1272,21 @@ namespace ARK {
 						float totalHeight = 0.0f;
 						totalHeight += 30;
 						vector<string> lines = StringUtil::getLinesForWordWrap(description, 280);
-						for(unsigned int j = 0; j < lines.size(); j++) { 
+						for(unsigned int j = 0; j < lines.size(); j++) {
 							totalHeight += 15;
 						}
 						float startY = y + 62 - (totalHeight/2);
 
 						r->drawString(name, container->getWidth()/2.0f, startY, Renderer::ALIGN_CENTER, Renderer::ALIGN_TOP);
 						startY += 30;
-						for(unsigned int j = 0; j < lines.size(); ++j) { 
+						for(unsigned int j = 0; j < lines.size(); ++j) {
 							r->drawString(lines[j], container->getWidth()/2.0f, startY, Renderer::ALIGN_CENTER, Renderer::ALIGN_TOP, 0.0f, 0.5f);
 							startY += 15;
 						}
 
 						//r->drawString(StringUtil::appendf("h: ", totalHeight), container->getWidth()/2.0f, startY + 40, Renderer::ALIGN_CENTER, Renderer::ALIGN_TOP, 0.0f, 0.5f);
-						
-						
+
+
 
 						y += 120;
 
@@ -1316,14 +1317,14 @@ namespace ARK {
 
 			}
 			gjHighscoreTable* GJLeaderboardsState::findTableById(unsigned int tableId) {
-				if (tables == NULL) { 
+				if (tables == NULL) {
 					ARK2D::getLog()->e(StringUtil::append("could not findTableById. tables not loaded?: ", tableId));
-					return NULL; 
+					return NULL;
 				}
 				for(unsigned int i = 0; i < tables->tablesCount; ++i) {
 					if (tableId == tables->tables[i]->id) {
 						return tables->tables[i];
-					}	
+					}
 				}
 				ARK2D::getLog()->e(StringUtil::append("could not findTableById: ", tableId));
 				return NULL;
@@ -1331,7 +1332,7 @@ namespace ARK {
 			bool GJLeaderboardsState::keyPressed(unsigned int key) {
 				if (back->keyPressed(key)) return true;
 				if (scrollablePanel->keyPressed(key)) return true;
-				for(unsigned int i = 0; i < buttons.size(); i++) { 
+				for(unsigned int i = 0; i < buttons.size(); i++) {
 					if (buttons[i]->keyPressed(key)) return true;
 				}
 				return false;
@@ -1339,7 +1340,7 @@ namespace ARK {
 			bool GJLeaderboardsState::keyReleased(unsigned int key) {
 				if (back->keyReleased(key)) return true;
 				if (scrollablePanel->keyReleased(key)) return true;
-				for(unsigned int i = 0; i < buttons.size(); i++) { 
+				for(unsigned int i = 0; i < buttons.size(); i++) {
 					if (buttons[i]->keyReleased(key)) return true;
 				}
 				return false;
@@ -1347,7 +1348,7 @@ namespace ARK {
 			bool GJLeaderboardsState::mouseMoved(int x, int y, int oldx, int oldy) {
 				if (back->mouseMoved(x, y, oldx, oldy)) return true;
 				if (scrollablePanel->mouseMoved(x, y, oldx, oldy)) return true;
-				for(unsigned int i = 0; i < buttons.size(); i++) { 
+				for(unsigned int i = 0; i < buttons.size(); i++) {
 					if (buttons[i]->mouseMoved(x, y, oldx, oldy)) return true;
 				}
 				return false;
@@ -1361,7 +1362,7 @@ namespace ARK {
 
 
 
-			GJLeaderboardState::GJLeaderboardState(): 
+			GJLeaderboardState::GJLeaderboardState():
 				GameState(),
 				back(NULL),
 				scrollablePanel(NULL),
@@ -1376,7 +1377,7 @@ namespace ARK {
 				tableId = id;
 			}
 
-			void GJLeaderboardState::enter(GameContainer* container, StateBasedGame* game, GameState* from) { 
+			void GJLeaderboardState::enter(GameContainer* container, StateBasedGame* game, GameState* from) {
 				ARK::GJ::Next::GameJolt* gamejolt = ARK::GJ::Next::GameJolt::getInstance();
 				gamejolt->api->getHighscores(tableId, 0, 100);
 
@@ -1414,12 +1415,12 @@ namespace ARK {
 				Input* in = ARK2D::getInput();
 				if (in->isKeyPressed(Input::MOBILE_BACK) || in->isKeyPressed(Input::KEY_BACKSPACE)) { back->doEvent(); }
 				scrollablePanel->update();
-				back->setLocation(20, container->getHeight() - 20 - 40);	
+				back->setLocation(20, container->getHeight() - 20 - 40);
 			}
 			void GJLeaderboardState::render(GameContainer* container, StateBasedGame* game, Renderer* r) {
-				
+
 				ARK::GJ::Next::GameJolt* gj = ARK::GJ::Next::GameJolt::getInstance();
-				if (scores != NULL && timestamp > 0) { 
+				if (scores != NULL && timestamp > 0) {
 
 
 					r->setDrawColorf(1.0f, 1.0f, 1.0f, gj->getAlpha());
@@ -1434,7 +1435,7 @@ namespace ARK {
 
 					float y = startY + 100;
 					for(unsigned int i = 0; i < scores->scoresCount; ++i) {
-						
+
 						string name = string( gjHighscore_getName(scores->scores[i]) );
 						while (r->getFont()->getStringWidth(name) > 120) {
 							name = name.substr(0, name.length() - 1);
@@ -1444,8 +1445,8 @@ namespace ARK {
 						r->drawString(Cast::toString<unsigned int>(scores->scores[i]->score), middle+10, y + 12, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP, 0.0f );
 						y += 30;
 
-						
-						if (i == scores->scoresCount - 1) { 
+
+						if (i == scores->scoresCount - 1) {
 							r->drawLine(20.0f, y + 12, container->getWidth() - 20.0f, y + 12);
 						}
 					}
@@ -1471,7 +1472,7 @@ namespace ARK {
 					back->render();
 				//}
 
-				
+
 			}
 			bool GJLeaderboardState::keyPressed(unsigned int key) {
 				if (back->keyPressed(key)) return true;
@@ -1497,13 +1498,13 @@ namespace ARK {
 
 
 
-			GJStatsState::GJStatsState(): 
+			GJStatsState::GJStatsState():
 				GameState(),
 				back(NULL) {
 
 			}
 
-			void GJStatsState::enter(GameContainer* container, StateBasedGame* game, GameState* from) { 
+			void GJStatsState::enter(GameContainer* container, StateBasedGame* game, GameState* from) {
 				ARK::GJ::Next::GameJolt* gamejolt = ARK::GJ::Next::GameJolt::getInstance();
 				//gamejolt->api->getHighscores(1);
 
@@ -1526,7 +1527,7 @@ namespace ARK {
 			void GJStatsState::update(GameContainer* container, StateBasedGame* game, GameTimer* timer) {
 				Input* in = ARK2D::getInput();
 				if (in->isKeyPressed(Input::MOBILE_BACK) || in->isKeyPressed(Input::KEY_BACKSPACE)) { back->doEvent(); }
-				back->setLocation(20, container->getHeight() - 20 - 40);	 
+				back->setLocation(20, container->getHeight() - 20 - 40);
 			}
 			void GJStatsState::render(GameContainer* container, StateBasedGame* game, Renderer* r) {
 				back->render();
@@ -1542,7 +1543,7 @@ namespace ARK {
 					r->drawRect(20, y+5, 50, 50);
 
 					if (achievements[i]->achieved) {
-						r->fillRect(25, y+10, 40, 40);			
+						r->fillRect(25, y+10, 40, 40);
 					}
 
 					r->drawString(achievements[i]->name, 80, y + 5);
@@ -1551,7 +1552,7 @@ namespace ARK {
 
 					r->drawLine(20.0f, y, container->getWidth() - 20.0f, y);
 				}*/
-				
+
 			}
 			bool GJStatsState::keyPressed(unsigned int key) {
 				return back->keyPressed(key);
@@ -1597,7 +1598,7 @@ namespace ARK {
 				//font = Resource::get("gamejolt-overlay/Press-Start-K.fnt")->asFont()->asBMFont();
 				font = Resource::get("ark2d/gamejolt-overlay/nokia.fnt")->asFont()->asBMFont();
 				file = Resource::get("ark2d/gamejolt-overlay/save.kpf")->asKeyPairFile();
-			
+
 				m_openTimer = 0.0f;
 				m_openDuration = 0.3f;
 				m_openState = STATE_CLOSED;
@@ -1605,7 +1606,7 @@ namespace ARK {
 
 				colorGreen = new Color("#ccff00");
 				colorBackground = new Color("#333333");
-				
+
 				GJLoginState* loginState = new GJLoginState();
 				loginState->init(container, this);
 				addState(loginState);
@@ -1648,7 +1649,7 @@ namespace ARK {
 			void GameJolt::open() {
 				//m_open = true;
 				if (m_openState == STATE_CLOSED) {
-					m_openTimer = 0.001f;	
+					m_openTimer = 0.001f;
 					m_openState = STATE_OPENING;
 				}
 			}
@@ -1684,8 +1685,8 @@ namespace ARK {
 			void GameJolt::showHighscoreTable(unsigned int id) {
 				if (m_loggedin) {
 					GJLeaderboardsState* ls = (GJLeaderboardsState*) getState(STATE_LEADERBOARD);
-					if (ls != NULL && ls->findTableById(id) != NULL) { 
-						
+					if (ls != NULL && ls->findTableById(id) != NULL) {
+
 						GJLeaderboardState* leaderboardState = (GJLeaderboardState*) getState(ARK::GJ::Next::GameJolt::STATE_LEADERBOARD);
 						leaderboardState->setTableId(id);
 						enterState(leaderboardState);
@@ -1716,7 +1717,7 @@ namespace ARK {
 				render(ARK2D::getContainer(), ARK2D::getRenderer());
 
 			}
-		
+
 
 			void GameJolt::update(GameContainer* container, GameTimer* timer) {
 				StateBasedGame::update(container, timer);
@@ -1808,7 +1809,7 @@ namespace ARK {
 			}
 			bool GameJolt::mouseMoved(int x, int y, int oldx, int oldy) {
 				if (m_openState == STATE_OPEN) {
-					return StateBasedGame::mouseMoved(x, y, oldx, oldy);	
+					return StateBasedGame::mouseMoved(x, y, oldx, oldy);
 				}
 				return false;
 			}
