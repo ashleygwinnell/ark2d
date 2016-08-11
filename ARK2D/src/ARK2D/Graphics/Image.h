@@ -151,9 +151,9 @@ namespace ARK {
 				void setDirty(bool b);
 				void clean();
 
-				Image* setCenterOfRotation(int x, int y);
-				inline int getCenterOfRotationX() { return (int) m_CenterX; }
-				inline int getCenterOfRotationY() { return (int) m_CenterY; }
+				Image* setCenterOfRotation(float x, float y);
+				inline float getCenterOfRotationX() { return (float) m_CenterX; }
+				inline float getCenterOfRotationY() { return (float) m_CenterY; }
 
 				virtual SceneNode* rotate(double angle); // return self
 				virtual SceneNode* setRotation(double angle);

@@ -1101,7 +1101,7 @@ namespace ARK {
 			double newAngle = angle + SceneNode::transform.rotation.angle();
 			return setRotation(newAngle);
 		}
-		Image* Image::setCenterOfRotation(int x, int y) {
+		Image* Image::setCenterOfRotation(float x, float y) {
 			m_CenterX = x;
 			m_CenterY = y;
 			return this;
@@ -1145,6 +1145,7 @@ namespace ARK {
 				sub->setHeight(desc.getWidth());
 				sub->m_originalWidth = sub->m_Width;
 				sub->m_originalHeight = sub->m_Height;
+				sub->setCenterOfRotation( sub->m_originalWidth * 0.5f, sub->m_originalHeight * 0.5f );
 				sub->setDirty(true);
 				sub->clean();
 				return sub;
@@ -1213,6 +1214,7 @@ namespace ARK {
 			sub->setHeight(height);
 			sub->m_originalWidth = width;
 			sub->m_originalHeight = height;
+			sub->setCenterOfRotation( width * 0.5f, height * 0.5f );
 			sub->clean();
 			return sub;
 
@@ -1272,30 +1274,7 @@ namespace ARK {
 		}
 
 		Image* Image::getScaledCopy(unsigned int x, unsigned int y) {
-
-			Image* sub = new Image();
-			sub->m_texture = m_texture;
-			sub->texture_temp = texture_temp;
-			//sub->texture_width = texture_width;
-			//sub->texture_height = texture_height;
-			//sub->texture_offset_x = texture_offset_x;
-			//sub->texture_offset_y = texture_offset_y;
-			sub->texture_offset_x_tl = texture_offset_x_tl;
-			sub->texture_offset_y_tl = texture_offset_y_tl;
-			sub->texture_offset_x_tr = texture_offset_x_tr;
-			sub->texture_offset_y_tr = texture_offset_y_tr;
-			sub->texture_offset_x_bl = texture_offset_x_bl;
-			sub->texture_offset_y_bl = texture_offset_y_bl;
-			sub->texture_offset_x_br = texture_offset_x_br;
-			sub->texture_offset_y_br = texture_offset_y_br;
-			sub->texture_source_w = texture_source_w;
-			sub->texture_source_h = texture_source_h;
-			sub->setWidth((int) m_Width * x);
-			sub->setHeight((int) m_Height * y);
-			sub->m_originalWidth = sub->m_Width;
-			sub->m_originalHeight = sub->m_Height;
-			sub->clean();
-			return sub;
+			return getScaledCopy( float(x), float(y) );
 		}
 		Image* Image::getScaledCopy(float x, float y) {
 
@@ -1316,8 +1295,8 @@ namespace ARK {
 			sub->texture_offset_y_br = texture_offset_y_br;
 			sub->texture_source_w = texture_source_w;
 			sub->texture_source_h = texture_source_h;
-			sub->setWidth((int)(m_Width * x));
-			sub->setHeight((int)(m_Height * y));
+			sub->setWidth(m_Width * x);
+			sub->setHeight(m_Height * y);
 			sub->m_originalWidth = sub->m_Width;
 			sub->m_originalHeight = sub->m_Height;
 			sub->clean();
@@ -1941,16 +1920,16 @@ namespace ARK {
 		}
 
 		void Image::drawCentered(float x, float y) {
-			this->draw(x - (this->m_Width/2), y - (this->m_Height/2));
+			this->draw(x - (this->m_Width/2.0f), y - (this->m_Height/2.0f));
 		}
 		void Image::drawCenteredFlipped(float x, float y, bool flipx, bool flipy) {
-			this->drawFlipped(x - (this->m_Width/2), y - (this->m_Height/2), flipx, flipy);
+			this->drawFlipped(x - (this->m_Width/2.0f), y - (this->m_Height/2.0f), flipx, flipy);
 		}
 
 		void Image::drawAligned(float x, float y, signed int alignX, signed int alignY, float scale)
 		{
-			unsigned int oldWidth = (unsigned int) m_Width;
-			unsigned int oldHeight = (unsigned int) m_Height;
+			float oldWidth = m_Width;
+			float oldHeight = m_Height;
 
 			m_Width = float(m_Width) * scale;
 			m_Height = float(m_Height) * scale;
