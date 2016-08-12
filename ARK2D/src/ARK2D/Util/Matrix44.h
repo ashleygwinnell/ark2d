@@ -8,6 +8,7 @@
 #ifndef MATRIX44_H_
 #define MATRIX44_H_
 
+#include "../Common/DLL.h"
 #include "Vector4.h"
 #include "../Namespaces.h"
 #include "../Geometry/Vector3.h"
@@ -32,7 +33,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class Matrix44 {
+		class ARK2D_API Matrix44 {
 			public:
 				Vector4 col[4];
 
