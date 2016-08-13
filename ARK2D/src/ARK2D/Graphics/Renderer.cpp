@@ -10,7 +10,7 @@
 #include "../Font/BMFont.h"
 #include "../Font/FTFont.h"
 
-#include "../Includes.h"
+//#include "../Includes.h"
 #include "../ARK2D.h"
 #include "../Core/GameContainer.h"
 #include "../Core/Camera.h"
@@ -2685,6 +2685,7 @@ namespace ARK {
 				float eachAngle = diffAngle / float(segs);
 				for(signed int i = 0; i < segs; i++)
 				{
+					float j = float(i);
 					float rawVertices[9];
                     float rawNormals[9];
 					unsigned char rawColors[12];
@@ -2938,14 +2939,14 @@ namespace ARK {
 				return;
 			}
 
-			fillRect(x + radius, y, width - (radius*2), height);
-			fillRect(x, y + radius, radius, height - (radius*2));
-			fillRect(x+width-radius, y + radius, radius, height - (radius*2));
+			fillRect(x + radius, y, width - (radius*2), height); // middle bit
+			fillRect(x, y + radius, radius, height - (radius*2)); // left bit
+			fillRect(x+width-radius, y + radius, radius, height - (radius*2));// right bit
 
-			fillArc(x + radius, y + radius, 2*radius, 2*radius, 90, 180, segs);
-			fillArc(x + width - radius, y + radius, 2*radius, 2*radius, 0, 90, segs);
-			fillArc(x + radius, y + height - radius, 2*radius, 2*radius, 180, 270, segs);
-			fillArc(x + width - radius, y + height - radius, 2*radius, 2*radius, 270, 360, segs);
+			fillArc(x + radius, y + radius, 2*radius, 2*radius, 180, 270, segs); // tl
+			fillArc(x + width - radius, y + radius, 2*radius, 2*radius, 270, 360, segs); // tr
+			fillArc(x + radius, y + height - radius, 2*radius, 2*radius, 90, 180, segs); // bl
+			fillArc(x + width - radius, y + height - radius, 2*radius, 2*radius, 0, 90, segs); // br
 		}
 
 

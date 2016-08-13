@@ -15,6 +15,10 @@
  *
  */
 
+#include <vector>
+#include <map>
+using namespace std;
+
 namespace ARK {
 	namespace Spine {
 
