@@ -8,6 +8,8 @@
 #ifndef VECTOR4_H_
 #define VECTOR4_H_
 
+#include "../Namespaces.h"
+#include "../Common/DLL.h"
 #include <math.h>
 #include <cmath>
 #include <stdlib.h>
@@ -24,7 +26,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class Vector4 {
+		class ARK2D_API Vector4 {
 			public:
 				float x;
 				float y;
