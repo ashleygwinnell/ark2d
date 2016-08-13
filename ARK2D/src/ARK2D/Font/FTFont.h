@@ -10,7 +10,7 @@
 
 #include "../ARK2D.h"
 
- #if !defined(ARK2D_WINDOWS_PHONE_8) && !defined(ARK2D_WINDOWS) && !defined(ARK2D_UBUNTU_LINUX) && !defined(ARK2D_EMSCRIPTEN_JS) && !defined(ARK2D_ANDROID) && !defined(ARK2D_XBOXONE)
+ #if !defined(ARK2D_WINDOWS_PHONE_8) && !defined(ARK2D_WINDOWS) && !defined(ARK2D_UBUNTU_LINUX) && !defined(ARK2D_EMSCRIPTEN_JS) && !defined(ARK2D_ANDROID) && !defined(ARK2D_XBOXONE) && !defined(ARK2D_MACINTOSH)
 
 		// FreeType Headers
 		#if (defined(ARK2D_IPHONE) || defined(ARK2D_ANDROID) || defined(ARK2D_WINDOWS) || defined(ARK2D_MACINTOSH) || defined(ARK2D_FLASCC) || defined(ARK2D_WINDOWS_PHONE_8))
@@ -97,7 +97,8 @@
 
 #else
 
-	#include "../Includes.h"
+	//#include "../Includes.h"
+    #include "../Common/DLL.h"
 	#include "Font.h"
 
 	namespace ARK {

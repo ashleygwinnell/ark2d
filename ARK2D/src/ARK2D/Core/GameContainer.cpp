@@ -8,7 +8,8 @@
 #include "GameContainer.h"
 //#include "../Geometry/GigaRectangle.h"
 #include "../ARK2D.h"  
-#include "../Includes.h"
+//#include "../Includes.h"
+#include "../Common/DLL.h"
 #include "../Graphics/Image.h"
 
 #if defined(ARK2D_FLASCC)

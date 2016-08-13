@@ -5,7 +5,7 @@
 #ifndef libJSON_main_h
 #define libJSON_main_h
 
-#include "../../Includes.h"
+#include "../../Common/DLL.h"
 
 #include "Debug.h"
 #include "JSON_Defs.h"

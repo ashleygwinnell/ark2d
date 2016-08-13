@@ -4,8 +4,8 @@
 // - renamed Event.c to EventSp.c
 
 // https://github.com/EsotericSoftware/spine-runtimes/blob/master/spine-c/README.md
-#include <spine/spine.h>
-#include <spine/extension.h>
+#include "../../vendor/spine/includes/spine/spine.h"
+#include "../../vendor/spine/includes/spine/extension.h"
  
 #include "../../Includes.h" 
 #include "../../Core/Resource.h"

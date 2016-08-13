@@ -85,6 +85,159 @@
 			"freetype"
 		]
 	},
+	"modules": {
+		"core": {
+			"sources": [
+				"src/ARK2D/Core/Game.cpp",
+				"src/ARK2D/Core/Event.cpp",
+				"src/ARK2D/Core/Exception.cpp",
+				"src/ARK2D/Core/GameObject.cpp",
+				"src/ARK2D/Core/GameContainer.cpp",
+				"src/ARK2D/Core/GameTimer.cpp",
+				"src/ARK2D/Core/Resource.cpp",
+				"src/ARK2D/Core/Sort.cpp",
+				"src/ARK2D/Core/String.cpp",
+				"src/ARK2D/Core/Platform/GameContainerWindows.cpp",
+				"src/ARK2D/Core/Camera.cpp"
+			],
+			"dependencies": [ ]
+		},
+		"gj": {
+			"sources": [
+				"src/ARK2D/GJ/GameJolt.cpp",
+				"src/ARK2D/GJ/PropertyItem.cpp",
+				"src/ARK2D/GJ/DataStore.cpp",
+				"src/ARK2D/GJ/Highscore.cpp",
+				"src/ARK2D/GJ/MD5.cpp",
+				"src/ARK2D/GJ/Trophy.cpp",
+				"src/ARK2D/GJ/User.cpp",
+				"src/ARK2D/GJ/Next/Overlay.cpp",
+				"src/ARK2D/GJ/Next/API.cpp"
+			],
+			"dependencies": [ "core" ]
+		},
+		"net": {
+			"sources": [
+				"src/ARK2D/Net/Address.cpp",
+				"src/ARK2D/Net/Connection.cpp",
+				"src/ARK2D/Net/Discovery.cpp",
+				"src/ARK2D/Net/EventQueue.cpp",
+				"src/ARK2D/Net/FlowControl.cpp",
+				"src/ARK2D/Net/PacketQueue.cpp",
+				"src/ARK2D/Net/ReliabilitySystem.cpp",
+				"src/ARK2D/Net/ReliableConnection.cpp",
+				"src/ARK2D/Net/Socket.cpp"
+			],
+			"dependencies": [ "core" ]
+		},
+		"particles": {
+			"sources": [
+				"src/ARK2D/Particles/ConfigurableEmitter.cpp",
+				"src/ARK2D/Particles/Particle.cpp",
+				"src/ARK2D/Particles/ParticleIO.cpp",
+				"src/ARK2D/Particles/ParticlePool.cpp",
+				"src/ARK2D/Particles/ParticleSystem.cpp"
+			],
+			"dependencies": [ "core" ]
+		},
+		"paths": {
+			"sources": [
+				"src/ARK2D/Path/PathGroup.cpp",
+				"src/ARK2D/Path/Path.cpp",
+				"src/ARK2D/Path/SubPath.cpp",
+				"src/ARK2D/Path/PathIO.cpp",
+				"src/ARK2D/Pathfinding/AStar.cpp"
+			],
+			"dependencies": [ "core" ]
+		},
+
+		"tests": {
+			"sources": [
+				"src/ARK2D/Tests/CollisionTest.cpp",
+				"src/ARK2D/Tests/GamepadsTest.cpp",
+				"src/ARK2D/Tests/TransitionTest.cpp",
+				"src/ARK2D/Tests/ParticlesTest.cpp",
+				"src/ARK2D/Tests/PathfindingTest.cpp",
+				"src/ARK2D/Tests/UITest.cpp",
+				"src/ARK2D/Tests/NetTest.cpp",
+				"src/ARK2D/Tests/ShaderTest.cpp"
+			],
+			"dependencies": [ "core" ]
+		},
+		"tiled": {
+			"sources": [
+				"src/ARK2D/Tiled/TiledMap.cpp",
+				"src/ARK2D/Tiled/TiledMapLayer.cpp",
+				"src/ARK2D/Tiled/TiledMapObject.cpp",
+				"src/ARK2D/Tiled/TiledMapObjectGroup.cpp",
+				"src/ARK2D/Tiled/TiledMapProperty.cpp",
+				"src/ARK2D/Tiled/TiledMapTile.cpp",
+				"src/ARK2D/Tiled/TiledMapTileset.cpp"
+			],
+			"dependencies": [ "core" ]
+		},
+		"transitions": {
+			"sources": [],
+			"dependencies": []
+		},
+		"ui": {
+			"sources": [
+				"src/ARK2D/UI/UIComponent.cpp",
+				"src/ARK2D/UI/AbstractUIComponent.cpp",
+				"src/ARK2D/UI/Panel.cpp",
+				"src/ARK2D/UI/ScrollPanel.cpp",
+				"src/ARK2D/UI/Label.cpp",
+				"src/ARK2D/UI/TextField.cpp",
+				"src/ARK2D/UI/Button.cpp",
+				"src/ARK2D/UI/CheckBox.cpp",
+				"src/ARK2D/UI/Dialog.cpp",
+				"src/ARK2D/UI/FileDialog.cpp",
+				"src/ARK2D/UI/ComboBox.cpp",
+				"src/ARK2D/UI/ComboBoxItem.cpp",
+				"src/ARK2D/UI/SplitPane.cpp",
+				"src/ARK2D/UI/ErrorDialog.cpp",
+				"src/ARK2D/UI/Notification.cpp",
+				"src/ARK2D/UI/NotificationSystem.cpp",
+				"src/ARK2D/UI/SimpleTextField.cpp",
+				"src/ARK2D/UI/Slider.cpp",
+				"src/ARK2D/UI/TitledPanel.cpp"
+			],
+			"dependencies": []
+		},
+		"spine": {
+			"sources": [
+				"src/ARK2D/vendor/spine/spine-ark2d.cpp",
+				"src/ARK2D/vendor/spine/SpineSkeleton.cpp",
+				"src/ARK2D/vendor/spine/src/AnimationSp.c",
+				"src/ARK2D/vendor/spine/src/AnimationState.c",
+				"src/ARK2D/vendor/spine/src/AnimationStateData.c",
+				"src/ARK2D/vendor/spine/src/Atlas.c",
+				"src/ARK2D/vendor/spine/src/AtlasAttachmentLoader.c",
+				"src/ARK2D/vendor/spine/src/Attachment.c",
+				"src/ARK2D/vendor/spine/src/AttachmentLoader.c",
+				"src/ARK2D/vendor/spine/src/Bone.c",
+				"src/ARK2D/vendor/spine/src/BoneData.c",
+				"src/ARK2D/vendor/spine/src/BoundingBoxAttachment.c",
+				"src/ARK2D/vendor/spine/src/EventData.c",
+				"src/ARK2D/vendor/spine/src/EventSp.c",
+				"src/ARK2D/vendor/spine/src/extension.c",
+				"src/ARK2D/vendor/spine/src/IkConstraint.c",
+				"src/ARK2D/vendor/spine/src/IkConstraintData.c",
+				"src/ARK2D/vendor/spine/src/Json.c",
+				"src/ARK2D/vendor/spine/src/MeshAttachment.c",
+				"src/ARK2D/vendor/spine/src/RegionAttachment.c",
+				"src/ARK2D/vendor/spine/src/Skeleton.c",
+				"src/ARK2D/vendor/spine/src/SkeletonBounds.c",
+				"src/ARK2D/vendor/spine/src/SkeletonData.c",
+				"src/ARK2D/vendor/spine/src/SkeletonJson.c",
+				"src/ARK2D/vendor/spine/src/Skin.c",
+				"src/ARK2D/vendor/spine/src/SkinnedMeshAttachment.c",
+				"src/ARK2D/vendor/spine/src/Slot.c",
+				"src/ARK2D/vendor/spine/src/SlotData.c"
+			],
+			"dependencies": []
+		}
+	},
 	"src_files": {
 		"all": [
 			"src/main.cpp",
@@ -185,6 +338,7 @@
 			"src/ARK2D/State/VideoGameState.cpp",
 			"src/ARK2D/State/LoadingState.cpp",
 			"src/ARK2D/State/StateBasedGame.cpp",
+			"src/ARK2D/State/Transition/Transition.cpp",
 			"src/ARK2D/State/Transition/EmptyTransition.cpp",
 			"src/ARK2D/State/Transition/FadeTransition.cpp",
 			"src/ARK2D/State/Transition/FadeToColourTransition.cpp",
@@ -192,7 +346,6 @@
 			"src/ARK2D/State/Transition/SquaresOutTransition.cpp",
 			"src/ARK2D/State/Transition/SquaresInTransition.cpp",
 			"src/ARK2D/State/Transition/SlideRectanglesAcrossTransition.cpp",
-			"src/ARK2D/State/Transition/Transition.cpp",
 			"src/ARK2D/State/Transition/TranslateOutInTransition.cpp",
 
 			"src/ARK2D/Tests/CollisionTest.cpp",
@@ -206,6 +359,7 @@
 
 			"src/ARK2D/Threading/Thread.cpp",
 			"src/ARK2D/Threading/Mutex.cpp",
+
 			"src/ARK2D/Tiled/TiledMap.cpp",
 			"src/ARK2D/Tiled/TiledMapLayer.cpp",
 			"src/ARK2D/Tiled/TiledMapObject.cpp",
@@ -213,10 +367,12 @@
 			"src/ARK2D/Tiled/TiledMapProperty.cpp",
 			"src/ARK2D/Tiled/TiledMapTile.cpp",
 			"src/ARK2D/Tiled/TiledMapTileset.cpp",
+
 			"src/ARK2D/Tools/Packer.cpp",
 			"src/ARK2D/Tween/Timeline.cpp",
 			"src/ARK2D/Tween/Easing.cpp",
 			"src/ARK2D/Tween/Timer.cpp",
+
 			"src/ARK2D/UI/UIComponent.cpp",
 			"src/ARK2D/UI/AbstractUIComponent.cpp",
 			"src/ARK2D/UI/Panel.cpp",
@@ -283,21 +439,21 @@
 			"src/ARK2D/vendor/libJSON/JSON_Worker.cpp",
 			"src/ARK2D/vendor/libJSON/jsonmain.cpp",
 			"src/ARK2D/vendor/libJSON/JSONNode.cpp",
-			"src/ARK2D/vendor/lpng151/png.c",
-			"src/ARK2D/vendor/lpng151/pngerror.c",
-			"src/ARK2D/vendor/lpng151/pngget.c",
-			"src/ARK2D/vendor/lpng151/pngmem.c",
-			"src/ARK2D/vendor/lpng151/pngpread.c",
-			"src/ARK2D/vendor/lpng151/pngread.c",
-			"src/ARK2D/vendor/lpng151/pngrio.c",
-			"src/ARK2D/vendor/lpng151/pngrtran.c",
-			"src/ARK2D/vendor/lpng151/pngrutil.c",
-			"src/ARK2D/vendor/lpng151/pngset.c",
-			"src/ARK2D/vendor/lpng151/pngtrans.c",
-			"src/ARK2D/vendor/lpng151/pngwio.c",
-			"src/ARK2D/vendor/lpng151/pngwrite.c",
-			"src/ARK2D/vendor/lpng151/pngwtran.c",
-			"src/ARK2D/vendor/lpng151/pngwutil.c",
+			"src/ARK2D/vendor/submodules/libpng15/png.c",
+			"src/ARK2D/vendor/submodules/libpng15/pngerror.c",
+			"src/ARK2D/vendor/submodules/libpng15/pngget.c",
+			"src/ARK2D/vendor/submodules/libpng15/pngmem.c",
+			"src/ARK2D/vendor/submodules/libpng15/pngpread.c",
+			"src/ARK2D/vendor/submodules/libpng15/pngread.c",
+			"src/ARK2D/vendor/submodules/libpng15/pngrio.c",
+			"src/ARK2D/vendor/submodules/libpng15/pngrtran.c",
+			"src/ARK2D/vendor/submodules/libpng15/pngrutil.c",
+			"src/ARK2D/vendor/submodules/libpng15/pngset.c",
+			"src/ARK2D/vendor/submodules/libpng15/pngtrans.c",
+			"src/ARK2D/vendor/submodules/libpng15/pngwio.c",
+			"src/ARK2D/vendor/submodules/libpng15/pngwrite.c",
+			"src/ARK2D/vendor/submodules/libpng15/pngwtran.c",
+			"src/ARK2D/vendor/submodules/libpng15/pngwutil.c",
 			"src/ARK2D/vendor/ogg130/bitwise.c",
 			"src/ARK2D/vendor/ogg130/framing.c",
 			"src/ARK2D/vendor/tinyxml/tinystr.cpp",

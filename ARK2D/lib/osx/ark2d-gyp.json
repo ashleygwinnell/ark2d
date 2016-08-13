@@ -1,0 +1,69 @@
+{
+    "defines": [],
+    "targets": [
+        {
+            "conditions": [
+                [
+                    "OS == 'mac'",
+                    {
+                        "defines": [
+                            "ARK2D_MACINTOSH",
+                            "ARK2D_DESKTOP"
+                        ],
+                        "include_dirs": [
+                            "../../src/ARK2D/vendor/angelscript",
+                            "../../src/ARK2D/vendor/spine/includes"
+                        ],
+                        "ldflags": [
+                            "-lbz2",
+                            "-lcurl",
+                            "-lz",
+                            "-L%ARK2D_DIR%/lib/osx",
+                            "-langelscript"
+                        ],
+                        "link_settings": {
+                            "libraries": [
+                                "$(SDKROOT)/System/Library/Frameworks/IOKit.framework",
+                                "$(SDKROOT)/System/Library/Frameworks/Cocoa.framework",
+                                "$(SDKROOT)/System/Library/Frameworks/Foundation.framework",
+                                "$(SDKROOT)/System/Library/Frameworks/CoreFoundation.framework",
+                                "$(SDKROOT)/System/Library/Frameworks/CoreMIDI.framework",
+                                "$(SDKROOT)/System/Library/Frameworks/QuartzCore.framework",
+                                "$(SDKROOT)/System/Library/Frameworks/OpenGL.framework",
+                                "$(SDKROOT)/System/Library/Frameworks/OpenAL.framework",
+                                "$(SDKROOT)/System/Library/Frameworks/QTKit.framework",
+                                "%ARK2D_DIR%/lib/osx/libangelscript.a"
+                            ]
+                        },
+                        "link_settings!": [
+                            "$(SDKROOT)/System/Library/Frameworks/ApplicationServices.framework"
+                        ],
+                        "mac_bundle_resources": [],
+                        "sources": [],
+                        "sources!": [],
+                        "xcode_config_file": "ark2d.xcconfig",
+                        "xcode_settings": {
+                            "ARCHS": "$(ARCHS_STANDARD)",
+                            "CLANG_CXX_LANGUAGE_STANDARD": "c++0x",
+                            "CLANG_CXX_LIBRARY": "libc++",
+                            "GCC_C_LANGUAGE_STANDARD": "c11",
+                            "GCC_OPTIMIZATION_LEVEL": "0",
+                            "GCC_PREPROCESSOR_DEFINITIONS": "ARK2D_MACINTOSH ARK2D_DESKTOP ",
+                            "MACOSX_DEPLOYMENT_TARGET": "10.7",
+                            "MAC_OS_X_VERSION_MIN_REQUIRED": "1070",
+                            "SDKROOT": "macosx"
+                        }
+                    }
+                ]
+            ],
+            "dependencies": [],
+            "include_dirs": [],
+            "sources": [
+
+            ],
+            "sources!": [],
+            "target_name": "ark2d-OSX",
+            "type": "shared_library"
+        }
+    ]
+}

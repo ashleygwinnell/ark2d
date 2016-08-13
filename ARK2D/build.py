@@ -3350,6 +3350,15 @@ build:
 		f.close();
 		return;
 
+	def getJsonFile(self, file, doReplace=False):
+		print("getting json file: " + file);
+		f = open(file, "r");
+		fcontents = f.read();
+		f.close();
+		if (doReplace):
+			fcontents = self.str_replace(fcontents, [("%ARK2D_DIR%", self.ark2d_dir)]);
+		return json.loads(fcontents);
+
 	def startXcode(self):
 		print("Building for XCode");
 
@@ -3384,21 +3393,15 @@ build:
 
 			# generate gyp file.
 			print("creating gyp file");
-			gypfilename = self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + projectname + ".gyp";
+			gyp_template_file = self.ark2d_dir + self.ds + "lib" + self.ds + "osx" + self.ds + "ark2d-gyp.json";
+			gyp_module_template_file = self.ark2d_dir + self.ds + "lib" + self.ds + "osx" + self.ds + "ark2d-gyp-module.json";
+			gyp_export_file = self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + projectname + ".gyp";
 
-			gypfile = {};
-			gypfile['defines'] = []; #'ARK2D_IPHONE'];
-
-			gypfile['targets'] = [];
-
-			gypfiletarget = {};
-			gypfiletarget['target_name'] = "ark2d-OSX";
-			gypfiletarget['type'] = "shared_library";
-			gypfiletarget['include_dirs'] = [];
-			gypfiletarget['sources'] = [];
+			gyp_template_data = self.getJsonFile( gyp_template_file, True );
+			gyp_template_data['targets'][0]['sources'] = [];
 
 			for srcfile in config['src_files']['osx']:
-				gypfiletarget['sources'].extend(["../../"+srcfile]);
+				gyp_template_data['targets'][0]['sources'].extend(["../../"+srcfile]);
 
 				#check if src file has a corresponding .h file. add that to the project...
 				findex = srcfile.rfind('.');
@@ -3406,10 +3409,10 @@ build:
 				newfh = srcfile[0:findex] + ".h";
 				newfhfull = self.game_dir + self.ds + newfh;
 				if (os.path.exists(newfhfull)):
-					gypfiletarget['sources'].extend(["../../"+newfh]);
+					gyp_template_data['targets'][0]['sources'].extend(["../../"+newfh]);
 
 			for srcfile in config['src_files']['all']:
-				gypfiletarget['sources'].extend(["../../"+srcfile]);
+				gyp_template_data['targets'][0]['sources'].extend(["../../"+srcfile]);
 
 				#check if src file has a corresponding .h file. add that to the project...
 				findex = srcfile.rfind('.');
@@ -3417,113 +3420,45 @@ build:
 				newfh = srcfile[0:findex] + ".h";
 				newfhfull = self.game_dir + self.ds + newfh;
 				if (os.path.exists(newfhfull)):
-					gypfiletarget['sources'].extend(["../../"+newfh]);
+					gyp_template_data['targets'][0]['sources'].extend(["../../"+newfh]);
 
-			gypfiletarget['sources!'] = [];
-			gypfiletarget['dependencies'] = [];
-			gypfiletarget['conditions'] = [];
-			gypfiletargetcondition = {};
-			gypfiletargetcondition['defines'] = ['ARK2D_MACINTOSH', 'ARK2D_DESKTOP']; #, 'CF_EXCLUDE_CSTD_HEADERS'];
-			gypfiletargetcondition['sources'] = [];
-			gypfiletargetcondition['sources!'] = [];
-			gypfiletargetcondition['link_settings'] = {};
-			gypfiletargetcondition['link_settings']['libraries'] = [
-
-				'$(SDKROOT)/System/Library/Frameworks/IOKit.framework',
-				'$(SDKROOT)/System/Library/Frameworks/Cocoa.framework',
-				'$(SDKROOT)/System/Library/Frameworks/Foundation.framework',
-				'$(SDKROOT)/System/Library/Frameworks/CoreFoundation.framework',
-				'$(SDKROOT)/System/Library/Frameworks/CoreMIDI.framework',
-				'$(SDKROOT)/System/Library/Frameworks/QuartzCore.framework',
-				'$(SDKROOT)/System/Library/Frameworks/OpenGL.framework',
-				'$(SDKROOT)/System/Library/Frameworks/OpenAL.framework',#,
-				'$(SDKROOT)/System/Library/Frameworks/QTKit.framework',
-				config['osx']['ark2d_dir'] + "/lib/osx/libangelscript.a"#,
-			#	config['osx']['ark2d_dir'] + "/lib/osx/freetype/libfreetype.a",
-			#	config['osx']['ark2d_dir'] + "/lib/osx/libcurl.a"
-			];
-			#'../../lib/iphone/libfreetype.a
-
+			# Debug modifiers
 			if (self.debug):
-				gypfiletargetcondition['defines'].extend(['ARK2D_DEBUG']);
+				gyp_template_data['targets'][0]['conditions'][0][1]['defines'].extend(["ARK2D_DEBUG"]);
+				gyp_template_data['targets'][0]['conditions'][0][1]['xcode_settings']['GCC_PREPROCESSOR_DEFINITIONS'] += " ARK2D_DEBUG ";
 
-			gypfiletargetcondition['ldflags'] = [
-				"-lbz2",
-				"-lcurl",
-				"-lz",
-				"-L" + self.ark2d_dir + "/lib/osx",
-				"-langelscript"
-				#"-L/usr/lib"
-			];
+			# modules
+			for index, module in enumerate( config['modules'] ):
 
-			gypfiletargetcondition['link_settings!'] = [
-				'$(SDKROOT)/System/Library/Frameworks/IOKit.framework',
-				'$(SDKROOT)/System/Library/Frameworks/Cocoa.framework',
-	        	'$(SDKROOT)/System/Library/Frameworks/Foundation.framework',
-	        	'$(SDKROOT)/System/Library/Frameworks/CoreFoundation.framework',
-	        	'$(SDKROOT)/System/Library/Frameworks/CoreMIDI.framework',
-	        	'$(SDKROOT)/System/Library/Frameworks/QuartzCore.framework',
-	        	'$(SDKROOT)/System/Library/Frameworks/OpenGL.framework',
-	        	'$(SDKROOT)/System/Library/Frameworks/ApplicationServices.framework'];
-			gypfiletargetcondition['include_dirs'] = [
-				'../../src/ARK2D/vendor/angelscript',
-				'../../src/ARK2D/vendor/iphone',
-				'../../src/ARK2D/vendor/spine/includes',
-			];
+				moduleName = module;
+				module = config['modules'][moduleName];
+				moduleTemplate = self.getJsonFile( gyp_module_template_file, False );
+				moduleTemplate['target_name'] = "ark2d_" + moduleName;
 
-			gypfiletargetcondition['xcode_settings'] = {};
-			gypfiletargetcondition['xcode_settings']['ARCHS'] = "$(ARCHS_STANDARD)";#"i386 x86_64";
-			gypfiletargetcondition['xcode_settings']['MAC_OS_X_VERSION_MIN_REQUIRED'] = '1070';
-			gypfiletargetcondition['xcode_settings']['SDKROOT'] = "macosx";
-			#gypfiletargetcondition['xcode_settings']['TARGETED_DEVICE_FAMILY'] = "1,2";
-			gypfiletargetcondition['xcode_settings']['GCC_PREPROCESSOR_DEFINITIONS'] = "ARK2D_MACINTOSH ARK2D_DESKTOP ";
-			gypfiletargetcondition['xcode_settings']['GCC_OPTIMIZATION_LEVEL'] = "0";
-			gypfiletargetcondition['xcode_settings']['MACOSX_DEPLOYMENT_TARGET'] = "10.7";
+				print(moduleName);
 
-			# force c++11!
-			gypfiletargetcondition['xcode_settings']['CLANG_CXX_LANGUAGE_STANDARD'] = "c++0x";
-			gypfiletargetcondition['xcode_settings']['CLANG_CXX_LIBRARY'] 			= "libc++";
-			gypfiletargetcondition['xcode_settings']['GCC_C_LANGUAGE_STANDARD'] 	= "c11";
+				for srcfile in module['sources']:
+					srcfile = "../../" + srcfile;
+					moduleTemplate['sources'].extend( [srcfile] );
 
-			if (self.debug):
-				gypfiletargetcondition['xcode_settings']['GCC_PREPROCESSOR_DEFINITIONS'] += " ARK2D_DEBUG ";
+				for index, dependency in enumerate( config['modules'][moduleName]['dependencies'] ):
+					dependencyName = dependency;
+					#print(dependencyName);
+					dependency = config['modules'][moduleName]['dependencies'][index];
+					newdependency = "libARK2D_" + dependencyName + ".dylib"
+					moduleTemplate['conditions'][0][1]['link_settings']['libraries'].extend( [newdependency] );
 
+				gyp_template_data['targets'].extend([moduleTemplate]);
 
-			#cflags -DNS_BLOCK_ASSERTIONS=1
-
-			#'xcode_settings': {
-	        #  'INFOPLIST_FILE' : '../experimental/iOSSampleApp/iOSSampleApp-Info.plist',
-	        #  'ARCHS' : 'armv6 armv7',
-	        #  'IPHONEOS_DEPLOYMENT_TARGET' : '4.2',
-	        #  'SDKROOT' : 'iphoneos',
-	        #  'TARGETED_DEVICE_FAMILY' : '1,2',
-	        #  'USER_HEADER_SEARCH_PATHS' : '../../gpu/include/** ../../include/**',
-	        #  'CODE_SIGN_IDENTITY' : 'iPhone Developer',
-	        #  'GCC_PREPROCESSOR_DEFINITIONS' : 'ARK2D_IPHONE',
-	        #  'GCC_OPTIMIZATION_LEVEL' : '0',
-			#},
-			#xcconfigfile = self.game_dir + self.ds + "lib/iphone/ARK2D-Base.xcconfig";
-			xcconfigfilesimple = projectname + ".xcconfig";
-			xcconfigfile = self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + xcconfigfilesimple;
-
-			gypfiletargetcondition['xcode_config_file'] = xcconfigfilesimple;
-			gypfiletargetcondition['mac_bundle_resources'] = [];
-
-			iphonecondition = [];
-			iphonecondition.extend(["OS == 'mac'"]);
-			iphonecondition.extend([gypfiletargetcondition]);
-			gypfiletarget['conditions'].extend([iphonecondition]);
-
-			gypfile['targets'].extend([gypfiletarget]);
-
-			print("saving gyp file: " + gypfilename);
-			f = open(gypfilename, "w")
-			f.write(json.dumps(gypfile, sort_keys=True, indent=4));
+			print("saving gyp file: " + gyp_export_file);
+			f = open(gyp_export_file, "w")
+			f.write(json.dumps(gyp_template_data, sort_keys=True, indent=4));
 			f.close();
 
 			#exit(0);
 			#pchfilename = self.game_dir + self.ds + "lib/iphone/" + projectname + "-Prefix.pch";
 			pchfilename = self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + projectname + "-Prefix.pch";
+			xcconfigfile = self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + projectname + ".xcconfig";
 
 			#delete xcode project?
 			try:
@@ -3535,7 +3470,7 @@ build:
 				print("could not delete xcode project");
 
 			# run gyp file.
-			os.system("python " + gyp_executable + "_main.py " + gypfilename + " --depth=../../src");
+			os.system("python " + gyp_executable + "_main.py " + gyp_export_file + " --depth=../../src");
 
 			# add precompiled headers file
 			print("generating pch file");

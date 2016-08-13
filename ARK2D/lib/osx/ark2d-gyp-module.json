@@ -1,0 +1,51 @@
+{
+    "conditions": [
+        [
+            "OS == 'mac'",
+            {
+                "defines": [
+                    "ARK2D_MACINTOSH",
+                    "ARK2D_DESKTOP"
+                ],
+                "include_dirs": [
+
+                ],
+                "ldflags": [
+
+                ],
+                "link_settings": {
+                    "libraries": [
+                        "libark2d.dylib"
+                    ]
+                },
+                "link_settings!": [
+
+                ],
+                "mac_bundle_resources": [],
+                "sources": [],
+                "sources!": [],
+                "xcode_config_file": "ark2d.xcconfig",
+                "xcode_settings": {
+                    "ARCHS": "$(ARCHS_STANDARD)",
+                    "CLANG_CXX_LANGUAGE_STANDARD": "c++0x",
+                    "CLANG_CXX_LIBRARY": "libc++",
+                    "GCC_C_LANGUAGE_STANDARD": "c11",
+                    "GCC_OPTIMIZATION_LEVEL": "s",
+                    "GCC_PREPROCESSOR_DEFINITIONS": "ARK2D_MACINTOSH ARK2D_DESKTOP ",
+                    "MACOSX_DEPLOYMENT_TARGET": "10.7",
+                    "MAC_OS_X_VERSION_MIN_REQUIRED": "1070",
+                    "SDKROOT": "macosx"
+                }
+            }
+        ]
+    ],
+    "dependencies": [],
+    "include_dirs": [],
+    "sources": [
+
+    ],
+    "sources!": [],
+    "target_name": "module_name%",
+    "type": "shared_library"
+}
+

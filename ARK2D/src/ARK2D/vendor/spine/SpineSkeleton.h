@@ -3,7 +3,8 @@
 #define ARK_SPINE_SKELETON_H_
 
 
-#include "../../Includes.h"
+//#include "../../Includes.h"
+#include "../../Common/DLL.h"
 #include "../../Core/Resource.h"
 #include "includes/spine/spine.h"
 
