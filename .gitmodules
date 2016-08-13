@@ -1,0 +1,4 @@
+[submodule "ARK2D/src/ARK2D/vendor/submodules/libpng15"]
+	path = ARK2D/src/ARK2D/vendor/submodules/libpng15
+	url = https://github.com/glennrp/libpng.git
+	branch = libpng15
