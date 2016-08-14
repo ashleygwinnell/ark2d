@@ -408,6 +408,19 @@ namespace ARK {
 
 		}
 
+		bool AndroidPluggable::googleplaybilling_isSetup() {
+			return false;
+		}
+		void AndroidPluggable::googleplaybilling_startPurchase(string id, int referenceNumber, string extraToken) {
+
+		}
+		void AndroidPluggable::googleplaybilling_consumePurchase(string id) {
+
+		}
+		void AndroidPluggable::googleplaybilling_queryPurchases() {
+
+		}
+
 		void AndroidPluggable::container_close() {
 
 		}

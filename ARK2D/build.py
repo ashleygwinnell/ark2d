@@ -4257,6 +4257,9 @@ build:
 			gypfiletargetcondition['xcode_settings']['IPHONEOS_DEPLOYMENT_TARGET'] = '6.0';
 			gypfiletargetcondition['xcode_settings']['SDKROOT'] = "iphoneos";
 			gypfiletargetcondition['xcode_settings']['TARGETED_DEVICE_FAMILY'] = "1,2";
+			gypfiletargetcondition['xcode_settings']['CLANG_CXX_LANGUAGE_STANDARD'] = "c++0x";
+			gypfiletargetcondition['xcode_settings']['CLANG_CXX_LIBRARY'] = "libc++";
+			gypfiletargetcondition['xcode_settings']['GCC_C_LANGUAGE_STANDARD'] = "c11";
 			gypfiletargetcondition['xcode_settings']['GCC_PREPROCESSOR_DEFINITIONS'] = "ARK2D_IPHONE;ARK2D_IOS";
 			gypfiletargetcondition['xcode_settings']['GCC_OPTIMIZATION_LEVEL'] = "0";
 
@@ -4439,6 +4442,7 @@ build:
 	          	'$(SDKROOT)/System/Library/Frameworks/CoreData.framework',
 	          	'$(SDKROOT)/System/Library/Frameworks/OpenGLES.framework',
 	          	'$(SDKROOT)/System/Library/Frameworks/UIKit.framework',
+	          	'$(SDKROOT)/System/Library/Frameworks/StoreKit.framework',
 	          	self.ark2d_dir + '/lib/iphone/libfreetype.a',
 	          	self.ark2d_dir + '/lib/iphone/libangelscriptd.a',
 	          	self.ark2d_dir + '/lib/iphone/libGoogleAnalyticsServices.a',
@@ -4481,6 +4485,9 @@ build:
 			gypfiletargetcondition['xcode_settings']['IPHONEOS_DEPLOYMENT_TARGET'] = '6.0';
 			gypfiletargetcondition['xcode_settings']['SDKROOT'] = "iphoneos";
 			gypfiletargetcondition['xcode_settings']['TARGETED_DEVICE_FAMILY'] = "1,2";
+			gypfiletargetcondition['xcode_settings']['CLANG_CXX_LANGUAGE_STANDARD'] = "c++0x";
+			gypfiletargetcondition['xcode_settings']['CLANG_CXX_LIBRARY'] = "libc++";
+			gypfiletargetcondition['xcode_settings']['GCC_C_LANGUAGE_STANDARD'] = "c11";
 			gypfiletargetcondition['xcode_settings']['GCC_PREPROCESSOR_DEFINITIONS'] = "ARK2D_IPHONE;ARK2D_IOS";
 			gypfiletargetcondition['xcode_settings']['GCC_OPTIMIZATION_LEVEL'] = "0";
 

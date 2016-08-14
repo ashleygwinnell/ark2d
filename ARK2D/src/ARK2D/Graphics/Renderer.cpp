@@ -541,32 +541,42 @@ namespace ARK {
 				Renderer* r = ARK2D::getRenderer();
 				if (m_type == TYPE_GEOMETRY_TRIS)
 				{
-					unsigned int tsz = geomtris.size();
-					int sz = tsz * 9;
-					if (sz == 0) { clear(); return; }
+					// We should separate these into groups of what... 1024?
+					//int groupSz = 512;
+					//int numGroups = (int) ceil( float(geomtris.size()) / float(groupSz) );
+					//int lastGroupSz = geomtris.size() % groupSz;
+					//for(unsigned int i = 0; i < numGroups; i++) {
 
-					#ifdef ARK2D_WINDOWS_VS
-						float* all_vertexData = (float*) alloca(sz * sizeof(float));
-                        float* all_normalData = (float*) alloca(sz * sizeof(float));
-                        unsigned char* all_colorData = (unsigned char*)alloca(sz * 2 * sizeof(unsigned char));
+						unsigned int tsz = geomtris.size(); //(i == geomtris.size() - 1) ? groupSz : lastGroupSz;
+						int sz = tsz * 9;
+						if (sz == 0) { clear(); return; }
 
-						Assert(all_vertexData);
-                        Assert(all_normalData);
-						Assert(all_colorData);
-					#else
-						float all_vertexData[sz];
-                        float all_normalData[sz];
-						unsigned char all_colorData[sz*2];
-					#endif
+						#ifdef ARK2D_WINDOWS_VS
+							float* all_vertexData = (float*) alloca(sz * sizeof(float));
+	                        float* all_normalData = (float*) alloca(sz * sizeof(float));
+	                        unsigned char* all_colorData = (unsigned char*)alloca(sz * 2 * sizeof(unsigned char));
+
+							Assert(all_vertexData);
+	                        Assert(all_normalData);
+							Assert(all_colorData);
+						#else
+							float all_vertexData[sz];
+	                        float all_normalData[sz];
+							unsigned char all_colorData[sz*2];
+						#endif
 
 
-					for(unsigned int i = 0; i < tsz; i++) {
-						memcpy(&all_vertexData[i*9], &geomtris[i].vertexData, sizeof(float) * 9);
-                        memcpy(&all_normalData[i*9], &geomtris[i].normalData, sizeof(float) * 9);
-						memcpy(&all_colorData[i*12], &geomtris[i].colorData, sizeof(unsigned char) * 12);
-					}
+						for(unsigned int i = 0; i < tsz; i++) {
+							memcpy(&all_vertexData[i*9], &geomtris[i].vertexData, sizeof(float) * 9);
+	                        memcpy(&all_normalData[i*9], &geomtris[i].normalData, sizeof(float) * 9);
+							memcpy(&all_colorData[i*12], &geomtris[i].colorData, sizeof(unsigned char) * 12);
+						}
 
-					r->fillTriangles(&all_vertexData[0], &all_normalData[0], &all_colorData[0], tsz, true);
+						r->fillTriangles(&all_vertexData[0], &all_normalData[0], &all_colorData[0], tsz, true);
+
+					//}
+
+
 
 					//#ifdef ARK2D_WINDOWS_VS
 					//	free(all_vertexData);
@@ -817,7 +827,8 @@ namespace ARK {
 		{
 			if (items.size() == 0 ||
 				//items.at(items.size()-1).m_type == RendererBatchItem::TYPE_TEXTURE_TRIS
-				items.at(items.size()-1).m_type != RendererBatchItem::TYPE_GEOMETRY_TRIS
+				items.at(items.size()-1).m_type != RendererBatchItem::TYPE_GEOMETRY_TRIS ||
+				items.at(items.size()-1).geomtris.size() >= maxGroupSize
 				) {
 				items.push_back(RendererBatchItem());
 			}
@@ -1004,6 +1015,7 @@ namespace ARK {
 			if (items.size() == 0 ||
 				//items.at(items.size()-1).m_type == RendererBatchItem::TYPE_GEOMETRY_TRIS ||
 				items.at(items.size()-1).m_type != RendererBatchItem::TYPE_TEXTURE_TRIS ||
+				items.at(items.size()-1).textris.size() >= maxGroupSize ||
 				((
 					items.at(items.size()-1).m_type == RendererBatchItem::TYPE_TEXTURE_TRIS) &&
 					(items.at(items.size()-1).m_textureId != texId ||

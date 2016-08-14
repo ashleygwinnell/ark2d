@@ -20,6 +20,21 @@ using std::vector;
 namespace ARK {
 	namespace Util {
 
+		class ARK2D_API GooglePlayGamesListener {
+			public:
+				virtual void onSignInSuccessful() = 0;
+				virtual void onSignInUnsuccessful() = 0;
+		};
+		class ARK2D_API GooglePlayBillingListener {
+			public:
+				virtual void onPurchaseSuccessful() = 0;
+		};
+		class ARK2D_API GooglePlayBillingUtil {
+			public:
+				static bool isSetup();
+				static void startPurchase(string id, int referenceNumber, string extraToken);
+		};
+
 		class ARK2D_API GooglePlayGameServicesUtil {
 			private:
 				static vector<string> s_waitingAchievements;

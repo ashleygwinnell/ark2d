@@ -150,6 +150,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 		public IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener;
 		public IabHelper.QueryInventoryFinishedListener mReceivedInventoryListener;
 		public IabHelper.OnConsumeFinishedListener mConsumeFinishedListener;
+		public boolean _iabIsSetup = false;
 
 	%INAPPBILLING_BLOCKEND%
 
@@ -198,6 +199,10 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 					   Log.d("game", "In-app Billing setup failed: " + result);
 				   } else {
 					   Log.d("game", "In-app Billing is set up OK");
+					   _iabIsSetup = true;
+
+					   //mHelper.launchPurchaseFlow(s_activity, "tipjar.medium", 10001, mPurchaseFinishedListener, "mypurchasetoken");
+
 				   }
 				}
 			});
@@ -206,19 +211,18 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 				public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
 					if (result.isFailure()) { // Handle error
 						return;
-					} else if (purchase.getSku().equals("ITEM_SKU")) {
-						iab_consumeItem(); //buyButton.setEnabled(false);
-					}
+					} //else if (purchase.getSku().equals("ITEM_SKU")) {
+						//iab_consumeItem(); //buyButton.setEnabled(false);
+					//}
 				}
 			};
-			mHelper.launchPurchaseFlow(this, "ITEM_SKU", 10001, mPurchaseFinishedListener, "mypurchasetoken");
 
 			mReceivedInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
 				public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
 					if (result.isFailure()) {
 						// Handle failure
 					} else {
-						mHelper.consumeAsync(inventory.getPurchase("ITEM_SKU"), mConsumeFinishedListener);
+						// mHelper.consumeAsync(inventory.getPurchase("ITEM_SKU"), mConsumeFinishedListener);
 					}
 				}
 			};
@@ -236,7 +240,22 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
     	%INAPPBILLING_BLOCKEND%
     }
 
+    @Override
+    protected void onActivityResult(int request, int response, Intent data) {
+        super.onActivityResult(request, response, data);
+
+		%INAPPBILLING_BLOCKSTART%
+		if (mHelper != null) {
+			mHelper.handleActivityResult(request, response, data);
+		}
+		%INAPPBILLING_BLOCKEND%
+
+
+    }
+
     %INAPPBILLING_BLOCKSTART%
+
+
     	@Override
 		public void onDestroy() {
 			super.onDestroy();
@@ -246,6 +265,18 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
     	public void iab_consumeItem() {
 			mHelper.queryInventoryAsync(mReceivedInventoryListener);
 		}
+
+
+		public static boolean googleplaybilling_isSetup() {
+			return s_activity._iabIsSetup;
+		}
+
+		public static void googleplaybilling_startPurchase(String item, int referenceNumber, String extraThing) {
+			s_activity.mHelper.launchPurchaseFlow(s_activity, item, referenceNumber, s_activity.mPurchaseFinishedListener, extraThing);
+		}
+
+
+
 	%INAPPBILLING_BLOCKEND%
 
     %OUYA_BLOCKSTART%

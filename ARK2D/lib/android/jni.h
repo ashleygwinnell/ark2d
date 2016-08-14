@@ -1,16 +1,16 @@
 
 #include <jni.h>
 #include "ARK.h"
-	
+
 #ifndef INCLUDED_TEST_PROJECT_H
 #define INCLUDED_TEST_PROJECT_H
-	
+
 	#include <string>
-	using namespace std; 
+	using namespace std;
 	class MyAndroidPluggable : public ARK::Core::AndroidPluggable {
 		public:
 			virtual string urlRequest(JNIEnv* env, string url);
-			virtual string urlRequestThreaded(string url); // android native threads must have be attached to the VM to use it. 
+			virtual string urlRequestThreaded(string url); // android native threads must have be attached to the VM to use it.
 			virtual bool isNetworkAvailable();
 			virtual void openBrowserToUrl(string url);
 			virtual void openGalleryToImageUrl(string url);
@@ -21,7 +21,7 @@
 			virtual void openInputDialog(unsigned int jniCallbackId, string title, string defaultStr);
 			virtual string getInputDialogText();
 
-			virtual bool vibrator_hasVibrator(); 
+			virtual bool vibrator_hasVibrator();
 			virtual void vibrator_vibrate(int millis);
     		virtual void vibrator_cancel();
 
@@ -40,7 +40,14 @@
 			virtual void googleplaygameservices_unlockAchievement(string id);
 			virtual void googleplaygameservices_viewScores(string id);
 			virtual void googleplaygameservices_submitScore(string id, int score);
-			
+
+			virtual bool googleplaybilling_isSetup();
+			virtual void googleplaybilling_startPurchase(string id, int referenceNumber, string extraToken);
+			virtual void googleplaybilling_consumePurchase(string id);
+			virtual void googleplaybilling_queryPurchases();
+
+
+
 			//virtual bool googleplaygameservices_isConnected();
 			//virtual bool googleplaygameservices_isConnecting();
 			virtual void container_close();
@@ -60,7 +67,7 @@
 	};
 
 
-	#ifdef __cplusplus 
+	#ifdef __cplusplus
 		extern "C" {
 	#endif
 		/*
@@ -70,7 +77,7 @@
 		 */
 		JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeInit
 		  (JNIEnv *, jclass, jstring, jstring);
-		
+
 		/*
 		 * Class:     org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer
 		 * Method:    nativeResize
@@ -78,7 +85,7 @@
 		 */
 		JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeResize
 		  (JNIEnv *, jclass, jint, jint);
-		
+
 		/*
 		 * Class:     org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer
 		 * Method:    nativeRender
@@ -86,7 +93,7 @@
 		 */
 		JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeRender
 		  (JNIEnv *, jclass);
-		
+
 		/*
 		 * Class:     org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer
 		 * Method:    nativePause
@@ -94,7 +101,7 @@
 		 */
 		JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativePause
 		  (JNIEnv *, jclass);
-		  
+
 		/*
 		 * Class:     org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer
 		 * Method:    nativeResume
@@ -118,7 +125,7 @@
 		 */
 		JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeCallbackById
 		  (JNIEnv *, jclass, jint);
-		  
+
 		/*
 		 * Class:     org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer
 		 * Method:    nativeCallbackByIdIntParam
@@ -135,7 +142,7 @@
 		JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeErrorDialog
 		  (JNIEnv *, jclass, jstring);
 
-		  
+
 		/*
 		 * Class:     org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer
 		 * Method:    nativeTouchDown
@@ -143,7 +150,7 @@
 		 */
 		JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeTouchDown
 		  (JNIEnv *, jclass, jint, jint);
-		  
+
 		/*
 		 * Class:     org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer
 		 * Method:    nativeTouchMove
@@ -151,7 +158,7 @@
 		 */
 		JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeTouchMove
 		  (JNIEnv *, jclass, jint, jint);
-		  
+
 		/*
 		 * Class:     org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer
 		 * Method:    nativeTouchUp
@@ -258,7 +265,7 @@
 		JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeGamepadKeyUp
 		  (JNIEnv *, jclass, jint, jint);
 
-		
+
 	#ifdef __cplusplus
 		}
 	#endif

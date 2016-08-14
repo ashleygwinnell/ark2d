@@ -22,17 +22,17 @@ static jclass s_gameClass = NULL;
 bool s_initted = false;
 
 
-void checkExceptions(JNIEnv* env, bool dolog) { 
+void checkExceptions(JNIEnv* env, bool dolog) {
 	if (dolog) { arklog->i("checking exceptions"); }
 	if (env->ExceptionCheck()) {
 		//std::cout << "exception occured" << std::endl;
 		arklog->e("exception occured");
 
 		jthrowable e = env->ExceptionOccurred();
- 
+
 		char buf[1024];
-		//strnset(buf, 0, 1024); 
-		memset(buf, 0, 1024); 
+		//strnset(buf, 0, 1024);
+		memset(buf, 0, 1024);
 
 		// have to clear the exception before JNI will work again.
 		env->ExceptionClear();
@@ -44,8 +44,8 @@ void checkExceptions(JNIEnv* env, bool dolog) {
 		jstring jErrorMsg = (jstring) env->CallObjectMethod(e, mid);
 		const char* cErrorMsg = env->GetStringUTFChars(jErrorMsg, NULL);
 
-		strcpy(buf, cErrorMsg); 
- 
+		strcpy(buf, cErrorMsg);
+
 		env->ReleaseStringUTFChars(jErrorMsg, cErrorMsg);
 
 		// you can do anything you want with error text in buf now
@@ -64,34 +64,34 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 
 	// setting some vars
 	s_env = env;
- 
+
 	// set apk name
 	const char* apkstr;
 	jboolean isCopy;
 	apkstr = env->GetStringUTFChars(apkPath, &isCopy);
 	Resource::apkZipName = string(apkstr);
- 
-	// init game stuff 
+
+	// init game stuff
 
 	game = new %GAME_CLASS_NAME%("%GAME_CLASS_NAME%");
 	container = new GameContainer(*game, %GAME_WIDTH%, %GAME_HEIGHT%, 32, true);
-	r = ARK2D::getRenderer(); 
+	r = ARK2D::getRenderer();
 	timer = container->getTimer();
 	arklog = ARK2D::getLog();
 	//arklog->setFilter(ARK::Util::Log::TYPE_ERROR);
-	arklog->i("native init (ark2d) done");  
-  
+	arklog->i("native init (ark2d) done");
+
 	// settings moar vars...
-	s_env->GetJavaVM(&container->m_platformSpecific.m_jvm); 
-	s_env->GetJavaVM(&s_jvm); 
- 
+	s_env->GetJavaVM(&container->m_platformSpecific.m_jvm);
+	s_env->GetJavaVM(&s_jvm);
+
 	// global references
 	jclass local_clazz = s_env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	if (local_clazz == NULL) {
-		arklog->e("could not find class 'org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity'."); 
-	}	
+		arklog->e("could not find class 'org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity'.");
+	}
 	s_gameClass = (jclass) env->NewGlobalRef(local_clazz);
- 
+
 	// set external data path
 	const char* externalDataStr;
 	jboolean isCopy2;
@@ -99,13 +99,13 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	container->m_platformSpecific.m_externalDataStr = string(externalDataStr);
 
 	// random init.
-	arklog->i("seed random"); 
+	arklog->i("seed random");
 	Random::init();
 
 	// populate the gamepads.
 	arklog->i("Initialising Gamepads... ");
 	s_thisInitGamepads();
-	
+
 	scene = container->scene;
 
 	// init pluggable?
@@ -127,7 +127,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	r->setFont(fnt);
 	// TODO: init default font.
 
-	
+
  	arklog->i("init openal");
 	bool b = container->m_platformSpecific.initOpenAL();
 	if (!b) {
@@ -144,20 +144,20 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	game->init(container);
 	arklog->i("game class initialised!");
 
-	s_initted = true;	
+	s_initted = true;
 }
- 
+
 
 
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeResize(JNIEnv* env, jclass  thiz, jint w, jint h) {
 	//__android_log_print(ANDROID_LOG_INFO, "%GAME_CLASS_NAME%Activity", "resize w=%d h=%d", w, h);
 	if (container != NULL) {
-		
-		// have we just come from a resume? 
+
+		// have we just come from a resume?
 		arklog->i("game class nativeResize!");
-		if (GameContainerPlatform::s_gamePaused == true) 
-		{ 
-			// do this after the context is created otherwise it won't work. 
+		if (GameContainerPlatform::s_gamePaused == true)
+		{
+			// do this after the context is created otherwise it won't work.
 			arklog->i("game class nativeResize - game was paused and now it is not.");
 			Renderer* r = ARK2D::getRenderer();
 			r->init();
@@ -166,18 +166,18 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 			//ShaderStore::getInstance()->reloadShaders();
 
 			GameContainerPlatform::s_gamePaused = false;
-		} //else { 
+		} //else {
 
 			//game->resize(container, (int) w, (int) h);
-			//container->setSize((int) w, (int) h); 
+			//container->setSize((int) w, (int) h);
 			//GameContainerPlatform::s_nativeResizing = true;
-			container->setSize((int) w, (int) h, true); 
-			//GameContainerPlatform::s_nativeResizing = false; 
+			container->setSize((int) w, (int) h, true);
+			//GameContainerPlatform::s_nativeResizing = false;
 		//}
-		
 
-		if (GameContainerPlatform::s_gamePaused == true) 
-		{ 
+
+		if (GameContainerPlatform::s_gamePaused == true)
+		{
 			GameContainerPlatform::s_gamePaused = false;
 		}
 	}
@@ -193,9 +193,9 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	// stop...
 	if (arklog != NULL) {
 		arklog->i("native pause");
-		if (!GameContainerPlatform::s_gamePaused) { 
+		if (!GameContainerPlatform::s_gamePaused) {
 			arklog->i("native pause start");
-			game->pause(); 
+			game->pause();
 			GameContainerPlatform::s_gamePaused = true;
 			arklog->i("native pause end");
 		} else {
@@ -208,9 +208,9 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	if (arklog != NULL) {
 		arklog->i("native resume");
 
-		if (GameContainerPlatform::s_gamePaused == true) { 
+		if (GameContainerPlatform::s_gamePaused == true) {
 			arklog->i("native resume start");
-			game->resume();		 	
+			game->resume();
 			arklog->i("native resume end");
 			//GameContainerPlatform::s_gamePaused = false;
 		} else {
@@ -227,17 +227,17 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	}
 }
 
-		
+
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeCallbackById(JNIEnv* env, jclass cls, jint id) {
 	if (arklog != NULL) {
-		arklog->i("native callback by id"); 
-		Callbacks::invoke((unsigned int) id); 
+		arklog->i("native callback by id");
+		Callbacks::invoke((unsigned int) id);
 	}
 }
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeCallbackByIdIntParam(JNIEnv* env, jclass cls, jint id, jint para) {
-	if (arklog != NULL) { 
-		arklog->i("native callback by id (int param) "); 
-		Callbacks::invoke((unsigned int) id, (unsigned int) para); 
+	if (arklog != NULL) {
+		arklog->i("native callback by id (int param) ");
+		Callbacks::invoke((unsigned int) id, (unsigned int) para);
 	}
 }
 
@@ -295,7 +295,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		//game->postUpdate(container, timer);
 		scene->update();
 		ARK2D::getInput()->clearKeyPressedRecord();
-		
+
 		for (unsigned int i = 0; i < gamepads->size(); i++) {
 			gamepads->at(i)->clearButtonPressedRecord();
 		}
@@ -312,10 +312,10 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		scene->render();
 		//container->postRender();
 		//if (container->isShowingFPS()) { container->renderFPS(); }
-		
 
-		//ARK2D::getRenderer()->finish();  
-		//ARK2D::getRenderer()->flush(); 
+
+		//ARK2D::getRenderer()->finish();
+		//ARK2D::getRenderer()->flush();
 		//fillRect(200,200,10,10);
 	}
 }
@@ -330,11 +330,11 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		thisx /= container->getScale();
 		thisy /= container->getScale();
 
-		
+
 		/*string logstr = "touch-down: ";
 		logstr += Cast::toString<int>((int) x);
 		logstr += ",";
-		logstr += Cast::toString<int>((int) y); 
+		logstr += Cast::toString<int>((int) y);
 		logstr += " -- ";
 		logstr += Cast::toString<int>((int) thisx);
 		logstr += ",";
@@ -353,14 +353,14 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	if(container != NULL && s_initted) {
 		float thisx = (float) x;
 		float thisy = (float) y;
-		
+
 		thisx -= container->getTranslateX();
 		thisy -= container->getTranslateY();
 
 		thisx /= container->getScale();
 		thisy /= container->getScale();
 
-		
+
 
 		/*string logstr = "touch-move: ";
 		logstr += Cast::toString<int>((int) x);
@@ -389,7 +389,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		thisx /= container->getScale();
 		thisy /= container->getScale();
 
-		
+
 
 		/*string logstr = "touch-up: ";
 		logstr += Cast::toString<int>((int) x);
@@ -508,11 +508,11 @@ static int android_key_table[] = {
 	/* 84 */ Input::ANDROID_SEARCH
 };
 
-JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeKeyDown(JNIEnv* env, jclass thiz, jint keyCode, jstring ch) { 
+JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeKeyDown(JNIEnv* env, jclass thiz, jint keyCode, jstring ch) {
 	if(container != NULL) {
 		//s_env = env;
 		ARK2D::getLog()->i("key down: ");
-		
+
 		string str = getCharacter(env, ch);
 		ARK2D::getLog()->i(str);
 
@@ -525,13 +525,13 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		ARK2D::getInput()->pressKey(android_key_table[keyCode]);
 	}
 }
-JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeKeyUp(JNIEnv* env, jclass thiz, jint keyCode, jstring ch) { 
+JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeKeyUp(JNIEnv* env, jclass thiz, jint keyCode, jstring ch) {
 	if(container != NULL) {
 		//s_env = env;
 		ARK2D::getLog()->i("key up: ");
-		
+
 		string str = getCharacter(env, ch);
-		ARK2D::getLog()->i(str); 
+		ARK2D::getLog()->i(str);
 
 		if (keyCode < 0 || keyCode > 84) {
 			ARK2D::getLog()->e("invalid key. english only supported. ");
@@ -549,11 +549,11 @@ JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAM
 		//s_env = env;
 
 
-		
 
 
-		
-		int cid = (int) id; 
+
+
+		int cid = (int) id;
 		string cname = getCharacter(env, padname);
 		GameContainerPlatform* platform = &ARK2D::getContainer()->m_platformSpecific;
 
@@ -591,7 +591,7 @@ JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAM
 			GamepadButton* dpad_button = new GamepadButton();
 			//dpad_button->id = Gamepad::convertButtonToId(gamepad, dpad_bs[i]);
 			dpad_button->id = dpad_bs[i];
-			dpad_button->down = false;   
+			dpad_button->down = false;
 			gamepad->buttons.push_back(dpad_button);
 			gamepad->numButtons++;
 		}
@@ -607,7 +607,7 @@ JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAM
 		ARK2D::getLog()->i("Remove a gamepad... ");
 
 		unsigned int numDevices = container->getGamepads()->size();
-		for (unsigned int deviceIndex = 0; deviceIndex < numDevices; deviceIndex++) 
+		for (unsigned int deviceIndex = 0; deviceIndex < numDevices; deviceIndex++)
 		{
 			Gamepad* pad = container->getGamepads()->at(deviceIndex);
 			if (pad->deviceId == id) {
@@ -634,12 +634,12 @@ JNIEXPORT bool JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAM
 		}
 		ARK2D::getLog()->i(StringUtil::append("Gamepad does not exist: ", (int) id));
 	}
-	
+
 	return false;
 }
 
 JNIEXPORT int JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeGamepadNumAxes(JNIEnv* env, jclass thiz, jint id) {
-	if(container != NULL) 
+	if(container != NULL)
 	{
 		Gamepad* thisGamepad = NULL;
 		vector<Gamepad* >* gamepads = ARK2D::getContainer()->getGamepads();
@@ -649,14 +649,14 @@ JNIEXPORT int JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME
 				break;
 			}
 		}
-		if (thisGamepad != NULL) { 
+		if (thisGamepad != NULL) {
 			return (int) thisGamepad->numAxes;
 		}
 		ARK2D::getLog()->i(StringUtil::append("Gamepad does not exist: ", (int) id));
-	} 
+	}
 	return 0;
 }
-	
+
 
 
 JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeGamepadAddAxis(JNIEnv* env, jclass thiz, jint id, jint index, jint axis) {
@@ -666,7 +666,7 @@ JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAM
 		string gamepadStr = "Add axis ";
 		gamepadStr += Cast::toString<int>((int) axis);
 		gamepadStr += " to gamepad id: ";
-		gamepadStr += Cast::toString<int>((int) id); 
+		gamepadStr += Cast::toString<int>((int) id);
 		gamepadStr += " at index: ";
 		gamepadStr += Cast::toString<int>((int) index);
 		ARK2D::getLog()->i(gamepadStr);
@@ -686,12 +686,12 @@ JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAM
 			gaxis->axisId = axis;
 			gaxis->value = 0.0f;
 			thisGamepad->axes.push_back(gaxis);
-			thisGamepad->numAxes++; 
+			thisGamepad->numAxes++;
 		}
 	}
 }
 JNIEXPORT int JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeGamepadAxisAtIndex(JNIEnv* env, jclass thiz, jint id, jint index) {
-	if (container != NULL) 
+	if (container != NULL)
 	{
 		Gamepad* thisGamepad = NULL;
 		vector<Gamepad* >* gamepads = ARK2D::getContainer()->getGamepads();
@@ -707,7 +707,7 @@ JNIEXPORT int JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME
 }
 
 JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeGamepadAxisChanged(JNIEnv* env, jclass thiz, jint id, jint axis, jfloat val) {
-	if (container != NULL) 
+	if (container != NULL)
 	{
 		Gamepad* thisGamepad = NULL;
 		vector<Gamepad* >* gamepads = ARK2D::getContainer()->getGamepads();
@@ -722,7 +722,7 @@ JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAM
 			if (thisGamepad->axes.at(i)->axisId == (unsigned int) axis) {
 
 				//ARK2D::getLog()->i(StringUtil::append("gamepad axis change 1: ", id));
-				//ARK2D::getLog()->i(StringUtil::append("gamepad axis change 2: ", axis)); 
+				//ARK2D::getLog()->i(StringUtil::append("gamepad axis change 2: ", axis));
 				//ARK2D::getLog()->i(StringUtil::appendf("gamepad axis change 3: ", val));
 
 				thisGamepad->axes.at(i)->value = (float) val;
@@ -750,7 +750,7 @@ JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAM
 
 		Gamepad* thisGamepad = NULL;
 		vector<Gamepad* >* gamepads = ARK2D::getContainer()->getGamepads();
-		for(unsigned int i = 0; i < gamepads->size(); i++) { 
+		for(unsigned int i = 0; i < gamepads->size(); i++) {
 			if (gamepads->at(i)->deviceId == (int) id) {
 				thisGamepad = gamepads->at(i);
 				break;
@@ -759,20 +759,20 @@ JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAM
 
 		if (thisGamepad != NULL) {
 
-			// convert OuyaController.DPAD_UP (19) into Gamepad::DPAD_UP (103)  
+			// convert OuyaController.DPAD_UP (19) into Gamepad::DPAD_UP (103)
 			unsigned int actualButton = Gamepad::convertButtonToId(thisGamepad,  (unsigned int) buttonid );
 			/*bool buttonExists = thisGamepad->hasButton((unsigned int) actualButton);
 			if (!buttonExists && (
-					actualButton == Gamepad::DPAD_UP || 
-					actualButton == Gamepad::DPAD_DOWN || 
+					actualButton == Gamepad::DPAD_UP ||
+					actualButton == Gamepad::DPAD_DOWN ||
 					actualButton == Gamepad::DPAD_LEFT ||
 					actualButton == Gamepad::DPAD_RIGHT
 				)) {
-				addButtonToGamepad(thisGamepad, buttonid);	
+				addButtonToGamepad(thisGamepad, buttonid);
 			}
-			ARK2D::getLog()->i(thisGamepad->toString());*/	
+			ARK2D::getLog()->i(thisGamepad->toString());*/
 
-			
+
 			thisGamepad->pressButton(actualButton);
 		}
 	}
@@ -796,8 +796,8 @@ JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAM
 
 		if (thisGamepad != NULL) {
 			//if (!thisGamepad->hasButton((unsigned int) buttonid)) {
-			//	addButtonToGamepad(thisGamepad, (unsigned int) buttonid);	
-			//} 
+			//	addButtonToGamepad(thisGamepad, (unsigned int) buttonid);
+			//}
 			unsigned int actualButton = Gamepad::convertButtonToId(thisGamepad, (unsigned int) buttonid );
 			thisGamepad->releaseButton(actualButton);
 		}
@@ -807,13 +807,13 @@ JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAM
 
 JNIEnv* s_getCurrentEnv(bool dolog) {
 	JNIEnv* env = 0;
- 
+
 	jint getEnvSuccess = s_jvm->GetEnv((void**)&env, JNI_VERSION_1_6);
 	if (getEnvSuccess == JNI_OK) {
 		if (dolog) { ARK2D::getLog()->v("jni: thread already attached."); }
 	} else if (getEnvSuccess == JNI_EDETACHED) {
 		if (dolog) { ARK2D::getLog()->v("jni: thread not attached. attaching..."); }
-		jint attachSuccess = s_jvm->AttachCurrentThread(&env, NULL);   
+		jint attachSuccess = s_jvm->AttachCurrentThread(&env, NULL);
 		if (attachSuccess == 0) {
 			if (dolog) { ARK2D::getLog()->v("jni: attached."); }
 		} else {
@@ -830,69 +830,69 @@ JNIEnv* s_getCurrentEnv() {
 
 void s_thisInitGamepads() {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);   
+	checkExceptions(env);
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%View");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "initGamepads", "()V"); // Get the method that you want to call
-	env->CallStaticVoidMethod(clazz, messageMe); // Call the method on the object	
+	env->CallStaticVoidMethod(clazz, messageMe); // Call the method on the object
 }
 
-string MyAndroidPluggable::urlRequestThreaded(string url) { 
+string MyAndroidPluggable::urlRequestThreaded(string url) {
 	ARK2D::getLog()->i("jni: starting threaded url request");
 
 	JNIEnv* env = s_getCurrentEnv();
-	string s = urlRequest(env, url);    
+	string s = urlRequest(env, url);
 
-	//s_jvm->DetachCurrentThread(); 
-	return s; 
+	//s_jvm->DetachCurrentThread();
+	return s;
 }
 
-string MyAndroidPluggable::urlRequest(JNIEnv* env, string url) { 
+string MyAndroidPluggable::urlRequest(JNIEnv* env, string url) {
 	ARK2D::getLog()->i("starting url request");
 
-	if (env == NULL) {  
-		ARK2D::getLog()->i("setting env to s_env");	
-		//env = s_env;  
+	if (env == NULL) {
+		ARK2D::getLog()->i("setting env to s_env");
+		//env = s_env;
 		env = s_getCurrentEnv();
-		checkExceptions(env, false); 
+		checkExceptions(env, false);
 	}
 
 	jstring jstr = env->NewStringUTF(url.c_str());
-	//ARK2D::getLog()->i("herp"); 
+	//ARK2D::getLog()->i("herp");
 	//jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
-	//ARK2D::getLog()->i("derp"); 
-	checkExceptions(env);  
-	//ARK2D::getLog()->i("lerp"); 
-	if(s_gameClass == NULL) { 
+	//ARK2D::getLog()->i("derp");
+	checkExceptions(env);
+	//ARK2D::getLog()->i("lerp");
+	if(s_gameClass == NULL) {
 		ARK2D::getLog()->e("global game class is null");
-		return ""; 
+		return "";
 	}
-	//ARK2D::getLog()->i("ferp"); 
+	//ARK2D::getLog()->i("ferp");
 	jmethodID messageMe = env->GetStaticMethodID(s_gameClass, "urlRequest", "(Ljava/lang/String;)Ljava/lang/String;"); // Get the method that you want to call
 	//ARK2D::getLog()->i("gerp");
     jobject result = env->CallStaticObjectMethod(s_gameClass, messageMe, jstr); // Call the method on the object
 	//ARK2D::getLog()->i("zerp");
-    const char* str = env->GetStringUTFChars((jstring) result, NULL); 
-    if (str == NULL) { 
+    const char* str = env->GetStringUTFChars((jstring) result, NULL);
+    if (str == NULL) {
     	ARK2D::getLog()->i("OUT OF MEMORY");
     	return string("");
-    } 
+    }
    /* char* copy = new char[ strlen(str) + 1];
     strncpy(tmp_filename, _filename, len);
  	tmp_filename[len] = '\0';
     returnStr += str; */
-    string returnStr(str); 
-    env->ReleaseStringUTFChars(jstr, str); 
+    string returnStr(str);
+    env->ReleaseStringUTFChars(jstr, str);
 	//ARK2D::getLog()->v(returnStr);
     //ARK2D::getLog()->v("done url request");
 
-    checkExceptions(env);  
-     
+    checkExceptions(env);
+
     return returnStr;
 }
 bool MyAndroidPluggable::isNetworkAvailable() {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "isNetworkAvailable", "()Z"); // Get the method that you want to call
@@ -900,7 +900,7 @@ bool MyAndroidPluggable::isNetworkAvailable() {
 	if (ret) {
 		return true;
 	}
-	return false;	
+	return false;
 }
 
 void MyAndroidPluggable::openBrowserToUrl(string url) {
@@ -918,9 +918,9 @@ void MyAndroidPluggable::openBrowserToUrl(string url) {
 	//ARK2D::getLog()->i("zerp");
    // const char* str = env->GetStringUTFChars((jstring) result, NULL);
     //string returnStr(str);
-    //env->ReleaseStringUTFChars(jstr);  
+    //env->ReleaseStringUTFChars(jstr);
 	//ARK2D::getLog()->i(returnStr);
-    ARK2D::getLog()->i("done opening browser to url");   
+    ARK2D::getLog()->i("done opening browser to url");
 }
 
 void MyAndroidPluggable::openGalleryToImageUrl(string url) {
@@ -928,12 +928,12 @@ void MyAndroidPluggable::openGalleryToImageUrl(string url) {
 
 	ARK2D::getLog()->i("opening gallery to image");
 
-	jstring jstr = env->NewStringUTF(url.c_str()); 
+	jstring jstr = env->NewStringUTF(url.c_str());
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "openGalleryToImageUrl", "(Ljava/lang/String;)V"); // Get the method that you want to call
 	/*jobject result =*/ env->CallStaticVoidMethod(clazz, messageMe, jstr); // Call the method on the object
-	
-	ARK2D::getLog()->i("done opening gallery to image"); 
+
+	ARK2D::getLog()->i("done opening gallery to image");
 }
 
 void MyAndroidPluggable::openGooglePlayStore(string packageName) {
@@ -945,18 +945,18 @@ void MyAndroidPluggable::openGooglePlayStore(string packageName) {
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "openGooglePlayStore", "(Ljava/lang/String;)V"); // Get the method that you want to call
 	env->CallStaticVoidMethod(clazz, messageMe, jstr); // Call the method on the object
-	ARK2D::getLog()->i("done opening google play store");  
+	ARK2D::getLog()->i("done opening google play store");
 }
 void MyAndroidPluggable::openErrorDialog(string message) {
 	JNIEnv* env = s_getCurrentEnv();
 
-	ARK2D::getLog()->i("opening error dialog"); 
+	ARK2D::getLog()->i("opening error dialog");
 
 	jstring jstr = env->NewStringUTF(message.c_str());
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "openErrorDialog", "(Ljava/lang/String;)V"); // Get the method that you want to call
 	env->CallStaticVoidMethod(clazz, messageMe, jstr); // Call the method on the object
-	ARK2D::getLog()->i("done opening error dialog");  
+	ARK2D::getLog()->i("done opening error dialog");
 }
 
 void MyAndroidPluggable::openSoftwareKeyboard() {
@@ -968,19 +968,19 @@ void MyAndroidPluggable::openSoftwareKeyboard() {
 	jmethodID messageMe = s_env->GetStaticMethodID(clazz, "openSoftwareKeyboard", "()V"); // Get the method that you want to call
 	ARK2D::getLog()->i("derp");
    	s_env->CallStaticVoidMethod(clazz, messageMe); // Call the method on the object
-    
+
     ARK2D::getLog()->i("Opened software keyboard");
 }
-void MyAndroidPluggable::closeSoftwareKeyboard() { 
+void MyAndroidPluggable::closeSoftwareKeyboard() {
 
 }
 
 void MyAndroidPluggable::openInputDialog(unsigned int jniCallbackId, string title, string defaultStr) {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env); 
+	checkExceptions(env);
 
-	ARK2D::getLog()->i("Opening input dialog"); 
-	jint jCallbackId = (jint) jniCallbackId; 
+	ARK2D::getLog()->i("Opening input dialog");
+	jint jCallbackId = (jint) jniCallbackId;
 	jstring jTitle = env->NewStringUTF(title.c_str());
 	jstring jDefaultStr = env->NewStringUTF(defaultStr.c_str());
 
@@ -990,29 +990,29 @@ void MyAndroidPluggable::openInputDialog(unsigned int jniCallbackId, string titl
 	ARK2D::getLog()->i("got method. calling method.");
     env->CallStaticVoidMethod(s_gameClass, messageMe, jCallbackId, jTitle, jDefaultStr); // Call the method on the object
 
-	ARK2D::getLog()->i("done opening input dialog");	
-	checkExceptions(env);  
-} 
-string MyAndroidPluggable::getInputDialogText() { 
+	ARK2D::getLog()->i("done opening input dialog");
+	checkExceptions(env);
+}
+string MyAndroidPluggable::getInputDialogText() {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
 	ARK2D::getLog()->i("getting input dialog text");
 	jmethodID messageMe = env->GetStaticMethodID(s_gameClass, "getInputDialogText", "()Ljava/lang/String;"); // Get the method that you want to call
-    
+
     ARK2D::getLog()->i("got method id. calling method.");
     jobject result = env->CallStaticObjectMethod(s_gameClass, messageMe);
 
     ARK2D::getLog()->i("called method. getting response");
-    const char* str = env->GetStringUTFChars((jstring) result, NULL); 
-    if (str == NULL) {  
-    	ARK2D::getLog()->i("OUT OF MEMORY"); 
+    const char* str = env->GetStringUTFChars((jstring) result, NULL);
+    if (str == NULL) {
+    	ARK2D::getLog()->i("OUT OF MEMORY");
     	return string("");
-    } 
-    checkExceptions(env);  
+    }
+    checkExceptions(env);
 
-    string returnStr(str);   
-    //env->ReleaseStringUTFChars(str); 
+    string returnStr(str);
+    //env->ReleaseStringUTFChars(str);
 	ARK2D::getLog()->i(returnStr);
     ARK2D::getLog()->i("done opening input dialog");
     return returnStr;
@@ -1020,7 +1020,7 @@ string MyAndroidPluggable::getInputDialogText() {
 
 bool MyAndroidPluggable::vibrator_hasVibrator() {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "util_vibrator_hasVibrator", "()Z"); // Get the method that you want to call
@@ -1032,9 +1032,9 @@ bool MyAndroidPluggable::vibrator_hasVibrator() {
 }
 void MyAndroidPluggable::vibrator_vibrate(int millis) {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);   
+	checkExceptions(env);
 
-	jint millis_int = (jint) millis;  
+	jint millis_int = (jint) millis;
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "util_vibrator_vibrate", "(I)V"); // Get the method that you want to call
@@ -1042,20 +1042,20 @@ void MyAndroidPluggable::vibrator_vibrate(int millis) {
 }
 void MyAndroidPluggable::vibrator_cancel() {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "util_vibrator_cancel", "()V"); // Get the method that you want to call
 	env->CallStaticVoidMethod(clazz, messageMe); // Call the method on the object
 }
- 
+
 void MyAndroidPluggable::ga_sendSocial(string network, string action, string targeturl) {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
-	jstring network_jstr = env->NewStringUTF(network.c_str()); 
-	jstring action_jstr = env->NewStringUTF(action.c_str()); 
-	jstring targeturl_jstr = env->NewStringUTF(targeturl.c_str()); 
+	jstring network_jstr = env->NewStringUTF(network.c_str());
+	jstring action_jstr = env->NewStringUTF(action.c_str());
+	jstring targeturl_jstr = env->NewStringUTF(targeturl.c_str());
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "ga_sendSocial", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V"); // Get the method that you want to call
@@ -1064,11 +1064,11 @@ void MyAndroidPluggable::ga_sendSocial(string network, string action, string tar
 }
 void MyAndroidPluggable::ga_sendEvent(string category, string action, string label, long opt_value) {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
-	jstring category_jstr = env->NewStringUTF(category.c_str()); 
-	jstring action_jstr = env->NewStringUTF(action.c_str()); 
-	jstring label_jstr = env->NewStringUTF(label.c_str()); 
+	jstring category_jstr = env->NewStringUTF(category.c_str());
+	jstring action_jstr = env->NewStringUTF(action.c_str());
+	jstring label_jstr = env->NewStringUTF(label.c_str());
 
 	jlong optValue_jlong = (jlong) opt_value;
 
@@ -1078,11 +1078,11 @@ void MyAndroidPluggable::ga_sendEvent(string category, string action, string lab
 }
 void MyAndroidPluggable::ga_sendTiming(long loadTime, string category, string name, string label) {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
-	jstring category_jstr = env->NewStringUTF(category.c_str()); 
-	jstring name_jstr = env->NewStringUTF(name.c_str()); 
-	jstring label_jstr = env->NewStringUTF(label.c_str()); 
+	jstring category_jstr = env->NewStringUTF(category.c_str());
+	jstring name_jstr = env->NewStringUTF(name.c_str());
+	jstring label_jstr = env->NewStringUTF(label.c_str());
 
 	jlong loadTime_jlong = (jlong) loadTime;
 
@@ -1094,9 +1094,9 @@ void MyAndroidPluggable::ga_sendTiming(long loadTime, string category, string na
 
 void MyAndroidPluggable::share_googleplus(string text) {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
-	jstring shareText_jstr = env->NewStringUTF(text.c_str()); 
+	jstring shareText_jstr = env->NewStringUTF(text.c_str());
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "share_googleplus", "(Ljava/lang/String;)V"); // Get the method that you want to call
@@ -1104,10 +1104,10 @@ void MyAndroidPluggable::share_googleplus(string text) {
 }
 void MyAndroidPluggable::thread_start(unsigned int thread_id) {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
-	jint jintCallbackId = (jint) Callbacks::CALLBACK_ANDROID_THREAD_START; 
-	jint jintThreadId = (jint) thread_id; 
+	jint jintCallbackId = (jint) Callbacks::CALLBACK_ANDROID_THREAD_START;
+	jint jintThreadId = (jint) thread_id;
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "thread_start", "(II)V"); // Get the method that you want to call
@@ -1116,8 +1116,8 @@ void MyAndroidPluggable::thread_start(unsigned int thread_id) {
 
 void MyAndroidPluggable::container_close() {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
- 
+	checkExceptions(env);
+
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "container_close", "()V"); // Get the method that you want to call
 	env->CallStaticVoidMethod(clazz, messageMe); // Call the method on the object
@@ -1125,113 +1125,113 @@ void MyAndroidPluggable::container_close() {
 
 bool MyAndroidPluggable::ouya_isOuya() {
 	JNIEnv* env = s_getCurrentEnv(false);
-	checkExceptions(env, false);  
+	checkExceptions(env, false);
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "ouya_isOuya", "()Z"); // Get the method that you want to call
 	jboolean ret = env->CallStaticBooleanMethod(clazz, messageMe); // Call the method on the object
 	if (ret) {
-		return true; 
-	} 
+		return true;
+	}
 	return false;
 }
 
-void MyAndroidPluggable::ouya_requestPurchase(string name) 
+void MyAndroidPluggable::ouya_requestPurchase(string name)
 {
 	JNIEnv* env = s_getCurrentEnv();
 
-	ARK2D::getLog()->i("ouya_requestPurchase start"); 
+	ARK2D::getLog()->i("ouya_requestPurchase start");
 
 	jstring jstr = env->NewStringUTF(name.c_str());
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "ouya_requestPurchaseByString", "(Ljava/lang/String;)V"); // Get the method that you want to call
 	env->CallStaticVoidMethod(clazz, messageMe, jstr); // Call the method on the object
-	
-	ARK2D::getLog()->i("ouya_requestPurchase finished");  	
+
+	ARK2D::getLog()->i("ouya_requestPurchase finished");
 }
 
 string MyAndroidPluggable::ouya_getUsername() {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
 	ARK2D::getLog()->i("getting ouya username");
 	jmethodID messageMe = env->GetStaticMethodID(s_gameClass, "ouya_getUsername", "()Ljava/lang/String;"); // Get the method that you want to call
-    
+
     ARK2D::getLog()->i("got method id. calling method.");
     jobject result = env->CallStaticObjectMethod(s_gameClass, messageMe);
 
     ARK2D::getLog()->i("called method. getting response");
-    const char* str = env->GetStringUTFChars((jstring) result, NULL); 
-    if (str == NULL) {  
-    	ARK2D::getLog()->i("OUT OF MEMORY"); 
+    const char* str = env->GetStringUTFChars((jstring) result, NULL);
+    if (str == NULL) {
+    	ARK2D::getLog()->i("OUT OF MEMORY");
     	return string("");
-    } 
-    checkExceptions(env);  
+    }
+    checkExceptions(env);
 
-    string returnStr(str);   
-    //env->ReleaseStringUTFChars(str); 
-	ARK2D::getLog()->i(returnStr); 
+    string returnStr(str);
+    //env->ReleaseStringUTFChars(str);
+	ARK2D::getLog()->i(returnStr);
     ARK2D::getLog()->i("done getting ouya username");
     return returnStr;
 }
 
 bool MyAndroidPluggable::firetv_isAmazonFireTV() {
 	JNIEnv* env = s_getCurrentEnv(false);
-	checkExceptions(env, false);  
+	checkExceptions(env, false);
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "firetv_isAmazonFireTV", "()Z"); // Get the method that you want to call
 	jboolean ret = env->CallStaticBooleanMethod(clazz, messageMe); // Call the method on the object
 	if (ret) {
-		return true; 
-	} 
+		return true;
+	}
 	return false;
 }
 
 string MyAndroidPluggable::firetv_getUsername() {
 	return "";
 }
-void MyAndroidPluggable::firetv_viewAchievements() { 
+void MyAndroidPluggable::firetv_viewAchievements() {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "firetv_viewAchievements", "()V"); // Get the method that you want to call
 	env->CallStaticVoidMethod(clazz, messageMe); // Call the method on the object
 }
-void MyAndroidPluggable::firetv_unlockAchievement(string id) { 
+void MyAndroidPluggable::firetv_unlockAchievement(string id) {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
-	jstring achievementId_jstr = env->NewStringUTF(id.c_str()); 
+	jstring achievementId_jstr = env->NewStringUTF(id.c_str());
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "firetv_unlockAchievement", "(Ljava/lang/String;)V"); // Get the method that you want to call
 	env->CallStaticVoidMethod(clazz, messageMe, achievementId_jstr); // Call the method on the object
 }
-void MyAndroidPluggable::firetv_viewScores() { 
+void MyAndroidPluggable::firetv_viewScores() {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "firetv_viewScores", "()V"); // Get the method that you want to call
 	env->CallStaticVoidMethod(clazz, messageMe); // Call the method on the object
 }
-void MyAndroidPluggable::firetv_viewScores(string id) { 
+void MyAndroidPluggable::firetv_viewScores(string id) {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
-	jstring leaderboardId_jstr = env->NewStringUTF(id.c_str()); 
+	jstring leaderboardId_jstr = env->NewStringUTF(id.c_str());
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "firetv_viewScores", "(Ljava/lang/String;)V"); // Get the method that you want to call
 	env->CallStaticVoidMethod(clazz, messageMe, leaderboardId_jstr); // Call the method on the object
 }
-void MyAndroidPluggable::firetv_submitScore(string id, int score) { 
+void MyAndroidPluggable::firetv_submitScore(string id, int score) {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
-	jstring leaderboardId_jstr = env->NewStringUTF(id.c_str()); 
+	jstring leaderboardId_jstr = env->NewStringUTF(id.c_str());
 	jint leaderboardScore_jint = (jint) score;
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
@@ -1243,7 +1243,7 @@ void MyAndroidPluggable::firetv_submitScore(string id, int score) {
 
 void MyAndroidPluggable::googleplaygameservices_signIn() {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "googleplaygameservices_signIn", "()V"); // Get the method that you want to call
@@ -1251,27 +1251,27 @@ void MyAndroidPluggable::googleplaygameservices_signIn() {
 }
 void MyAndroidPluggable::googleplaygameservices_signOut() {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "googleplaygameservices_signOut", "()V"); // Get the method that you want to call
 	env->CallStaticVoidMethod(clazz, messageMe); // Call the method on the object
-}		
+}
 bool MyAndroidPluggable::googleplaygameservices_isSignedIn() {
 	JNIEnv* env = s_getCurrentEnv(false);
-	checkExceptions(env, false);  
+	checkExceptions(env, false);
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "googleplaygameservices_isSignedIn", "()Z"); // Get the method that you want to call
 	jboolean ret = env->CallStaticBooleanMethod(clazz, messageMe); // Call the method on the object
 	if (ret) {
-		return true; 
-	} 
+		return true;
+	}
 	return false;
 }
 bool MyAndroidPluggable::googleplaygameservices_isSigningIn() {
 	JNIEnv* env = s_getCurrentEnv(false);
-	checkExceptions(env, false);  
+	checkExceptions(env, false);
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "googleplaygameservices_isSigningIn", "()Z"); // Get the method that you want to call
@@ -1283,7 +1283,7 @@ bool MyAndroidPluggable::googleplaygameservices_isSigningIn() {
 }
 void MyAndroidPluggable::googleplaygameservices_viewAchievements() {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "googleplaygameservices_viewAchievements", "()V"); // Get the method that you want to call
@@ -1291,9 +1291,9 @@ void MyAndroidPluggable::googleplaygameservices_viewAchievements() {
 }
 void MyAndroidPluggable::googleplaygameservices_unlockAchievement(string id) {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
-	jstring achievementId_jstr = env->NewStringUTF(id.c_str()); 
+	jstring achievementId_jstr = env->NewStringUTF(id.c_str());
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "googleplaygameservices_unlockAchievement", "(Ljava/lang/String;)V"); // Get the method that you want to call
@@ -1301,9 +1301,9 @@ void MyAndroidPluggable::googleplaygameservices_unlockAchievement(string id) {
 }
 void MyAndroidPluggable::googleplaygameservices_viewScores(string id) {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
-	jstring leaderboardId_jstr = env->NewStringUTF(id.c_str()); 
+	jstring leaderboardId_jstr = env->NewStringUTF(id.c_str());
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "googleplaygameservices_viewScores", "(Ljava/lang/String;)V"); // Get the method that you want to call
@@ -1311,9 +1311,9 @@ void MyAndroidPluggable::googleplaygameservices_viewScores(string id) {
 }
 void MyAndroidPluggable::googleplaygameservices_submitScore(string id, int score) {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
-	jstring leaderboardId_jstr = env->NewStringUTF(id.c_str()); 
+	jstring leaderboardId_jstr = env->NewStringUTF(id.c_str());
 	jint leaderboardScore_jint = (jint) score;
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
@@ -1323,7 +1323,7 @@ void MyAndroidPluggable::googleplaygameservices_submitScore(string id, int score
 
 /*bool MyAndroidPluggable::googleplaygameservices_isConnected() {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "googleplaygameservices_isConnected", "()Z"); // Get the method that you want to call
@@ -1335,7 +1335,7 @@ void MyAndroidPluggable::googleplaygameservices_submitScore(string id, int score
 }
 bool MyAndroidPluggable::googleplaygameservices_isConnecting() {
 	JNIEnv* env = s_getCurrentEnv();
-	checkExceptions(env);  
+	checkExceptions(env);
 
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "googleplaygameservices_isConnecting", "()Z"); // Get the method that you want to call
@@ -1345,4 +1345,42 @@ bool MyAndroidPluggable::googleplaygameservices_isConnecting() {
 	}
 	return false;
 }*/
+
+bool MyAndroidPluggable::googleplaybilling_isSetup() {
+	JNIEnv* env = s_getCurrentEnv();
+	checkExceptions(env);
+
+	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
+	jmethodID messageMe = env->GetStaticMethodID(clazz, "googleplaybilling_isSetup", "()Z"); // Get the method that you want to call
+	jboolean ret = env->CallStaticBooleanMethod(clazz, messageMe); // Call the method on the object
+	if (ret ) {
+		return true;
+	}
+	return false;
+}
+
+void MyAndroidPluggable::googleplaybilling_startPurchase(string id, int referenceNumber, string extraToken) {
+	JNIEnv* env = s_getCurrentEnv();
+	checkExceptions(env);
+
+	jstring itemId_jstr = env->NewStringUTF(id.c_str());
+	jint referenceNumber_jint = (jint) referenceNumber;
+	jstring extraT_jstr = env->NewStringUTF(extraToken.c_str());
+
+
+	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
+	jmethodID messageMe = env->GetStaticMethodID(clazz, "googleplaybilling_startPurchase", "(Ljava/lang/String;ILjava/lang/String;)V"); // Get the method that you want to call
+	env->CallStaticVoidMethod(clazz, messageMe, itemId_jstr, referenceNumber_jint, extraT_jstr); // Call the method on the object
+}
+void MyAndroidPluggable::googleplaybilling_consumePurchase(string id) {
+
+}
+void MyAndroidPluggable::googleplaybilling_queryPurchases() {
+
+}
+
+
+
+
+
 

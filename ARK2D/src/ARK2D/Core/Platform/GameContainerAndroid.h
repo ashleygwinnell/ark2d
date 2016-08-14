@@ -53,6 +53,11 @@ namespace ARK {
 				virtual void googleplaygameservices_viewScores(string id);
 				virtual void googleplaygameservices_submitScore(string id, int score);
 
+				virtual bool googleplaybilling_isSetup();
+				virtual void googleplaybilling_startPurchase(string id, int referenceNumber, string extraToken);
+				virtual void googleplaybilling_consumePurchase(string id);
+				virtual void googleplaybilling_queryPurchases();
+
 				virtual void container_close();
 				//virtual bool googleplaygameservices_isConnected();
 				//virtual bool googleplaygameservices_isConnecting();

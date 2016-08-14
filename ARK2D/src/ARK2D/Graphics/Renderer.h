@@ -228,6 +228,7 @@ namespace ARK {
 
 				// We don't need to do matrix multiplication if we don't change the matrices.
 				unsigned int startedAtMatrixIndex;
+				int maxGroupSize = 512;
 
 			public:
 				RendererBatch();

@@ -7,7 +7,12 @@
 	#include "../Namespaces.h"
 	#include "../UI/ErrorDialog.h"
 
-	using namespace std;
+#ifdef ARK2D_IPHONE
+#include <type_traits>
+#endif
+    using namespace std;
+
+
 
 
 	#if !defined(ARK2D_WINDOWS_VS) && !defined(ARK2D_EMSCRIPTEN_JS) && !defined(ARK2D_IPHONE)
@@ -18,43 +23,43 @@
 		    typedef T type;
 		};
 
-#if !(__cplusplus > 199711L)
+        #if !(__cplusplus > 199711L)
 
-		template <typename T>
-		struct remove_const<const T>
-		{
-		    typedef T type;
-		};
+            template <typename T>
+            struct remove_const<const T>
+            {
+                typedef T type;
+            };
 
-		template <typename T>
-		struct remove_volatile
-		{
-		    typedef T type;
-		};
+            template <typename T>
+            struct remove_volatile
+            {
+                typedef T type;
+            };
 
-		template <typename T>
-		struct remove_volatile<volatile T>
-		{
-		    typedef T type;
-		};
+            template <typename T>
+            struct remove_volatile<volatile T>
+            {
+                typedef T type;
+            };
 
-		template <typename T>
-		struct remove_cv : remove_const<typename remove_volatile<T>::type> {};
+            template <typename T>
+            struct remove_cv : remove_const<typename remove_volatile<T>::type> {};
 
 
-		template<typename T>
-		struct remove_pointer
-		{
-		    typedef T type;
-		};
+            template<typename T>
+            struct remove_pointer
+            {
+                typedef T type;
+            };
 
-		template<typename T>
-		struct remove_pointer<T*>
-		{
-		    typedef T type;
-		};
+            template<typename T>
+            struct remove_pointer<T*>
+            {
+                typedef T type;
+            };
 
-#endif
+        #endif
 
 		//
 		//struct this_sort_function
