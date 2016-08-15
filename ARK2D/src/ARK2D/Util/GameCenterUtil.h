@@ -66,8 +66,8 @@ namespace ARK {
 					static ARK2D_TransactionObserver* s_transactionObserver;
 					static ARK2D_ProductRequestDelegate* s_productRequestDelegate;
 					static vector<string>* s_purchasedIds;
-					static bool s_initialised;
 				#endif
+				static bool s_initialised;
 
                 static bool canMakePayments();
                 static void initialise(string commaSeparatedIds);

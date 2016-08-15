@@ -4822,126 +4822,124 @@ build:
 
 			# generate icons
 			if "icon" in self.ios_config:
-				if "master_icon" in self.ios_config['icon']:
-					if (self.ios_config['icon']['use_master_icon'] == True):
-						iconinterpolation = self.ios_config['icon']['master_icon_interpolation'];
-						icongenarr = [];
-						icongenobj = {};
-						icongenobj['from'] = self.ios_config['icon']['master_icon'];
-						icongenobj['from'] = self.str_replace(icongenobj['from'], [("%PREPRODUCTION_DIR%", self.game_preproduction_dir), ("%ARK2D_DIR%", self.ark2d_dir)]);
-						icongenobj['to'] = [
-							# iPhone Icon
-							{
-								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon.png",
-								"width" : 57,
-								"height": 57,
-								"interpolation": iconinterpolation
-							},
-							{
-								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon@2x.png",
-								"width" : 114,
-								"height": 114,
-								"interpolation": iconinterpolation
-							},
-							# iPhone Spotlight Icon
-							{
-								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-Small.png",
-								"width" : 29,
-								"height": 29,
-								"interpolation": iconinterpolation
-							},
-							{
-								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-Small@2x.png",
-								"width" : 58,
-								"height": 58,
-								"interpolation": iconinterpolation
-							},
-							# iPad Icon
-							{
-								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-72.png",
-								"width" : 72,
-								"height": 72,
-								"interpolation": iconinterpolation
-							},
-							{
-								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-72@2x.png",
-								"width" : 144,
-								"height": 144,
-								"interpolation": iconinterpolation
-							},
-							# iPad Spotlight Icon
-							{
-								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-Small-50.png",
-								"width" : 50,
-								"height": 50,
-								"interpolation": iconinterpolation
-							},
-							{
-								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-Small-50@2x.png",
-								"width" : 100,
-								"height": 100,
-								"interpolation": iconinterpolation
-							},
-							# app store icon
-							{
-								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "iTunesArtwork",
-								"width" : 512,
-								"height": 512,
-								"interpolation": iconinterpolation
-							},
-							{
-								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "iTunesArtwork@2x",
-								"width" : 1024,
-								"height": 1024,
-								"interpolation": iconinterpolation
-							},
+				if "master_icon" in self.ios_config['icon'] and "use_master_icon" in self.ios_config['icon'] and self.ios_config['icon']['use_master_icon'] == True:
 
-							# iOS 7 shit
-							{
-								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-40.png",
-								"width" : 40,
-								"height": 40,
-								"interpolation": iconinterpolation
-							},
-							{
-								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-80.png",
-								"width" : 80,
-								"height": 80,
-								"interpolation": iconinterpolation
-							},
-							{
-								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-120.png",
-								"width" : 120,
-								"height": 120,
-								"interpolation": iconinterpolation
-							},
-							{
-								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-76.png",
-								"width" : 76,
-								"height": 76,
-								"interpolation": iconinterpolation
-							},
-							{
-								"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-152.png",
-								"width" : 152,
-								"height": 152,
-								"interpolation": iconinterpolation
-							}
+					iconinterpolation = self.ios_config['icon']['master_icon_interpolation'];
+					icongenarr = [];
+					icongenobj = {};
+					icongenobj['from'] = self.ios_config['icon']['master_icon'];
+					icongenobj['from'] = self.str_replace(icongenobj['from'], [("%PREPRODUCTION_DIR%", self.game_preproduction_dir), ("%ARK2D_DIR%", self.ark2d_dir)]);
+					icongenobj['to'] = [
+						# iPhone Icon
+						{
+							"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon.png",
+							"width" : 57,
+							"height": 57,
+							"interpolation": iconinterpolation
+						},
+						{
+							"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon@2x.png",
+							"width" : 114,
+							"height": 114,
+							"interpolation": iconinterpolation
+						},
+						# iPhone Spotlight Icon
+						{
+							"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-Small.png",
+							"width" : 29,
+							"height": 29,
+							"interpolation": iconinterpolation
+						},
+						{
+							"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-Small@2x.png",
+							"width" : 58,
+							"height": 58,
+							"interpolation": iconinterpolation
+						},
+						# iPad Icon
+						{
+							"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-72.png",
+							"width" : 72,
+							"height": 72,
+							"interpolation": iconinterpolation
+						},
+						{
+							"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-72@2x.png",
+							"width" : 144,
+							"height": 144,
+							"interpolation": iconinterpolation
+						},
+						# iPad Spotlight Icon
+						{
+							"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-Small-50.png",
+							"width" : 50,
+							"height": 50,
+							"interpolation": iconinterpolation
+						},
+						{
+							"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-Small-50@2x.png",
+							"width" : 100,
+							"height": 100,
+							"interpolation": iconinterpolation
+						},
+						# app store icon
+						{
+							"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "iTunesArtwork",
+							"width" : 512,
+							"height": 512,
+							"interpolation": iconinterpolation
+						},
+						{
+							"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "iTunesArtwork@2x",
+							"width" : 1024,
+							"height": 1024,
+							"interpolation": iconinterpolation
+						},
 
-
-						];
-						icongenarr.extend([icongenobj]);
-						#icongenstr = json.dumps(icongenarr, sort_keys=True, indent=0, new);
+						# iOS 7 shit
+						{
+							"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-40.png",
+							"width" : 40,
+							"height": 40,
+							"interpolation": iconinterpolation
+						},
+						{
+							"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-80.png",
+							"width" : 80,
+							"height": 80,
+							"interpolation": iconinterpolation
+						},
+						{
+							"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-120.png",
+							"width" : 120,
+							"height": 120,
+							"interpolation": iconinterpolation
+						},
+						{
+							"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-76.png",
+							"width" : 76,
+							"height": 76,
+							"interpolation": iconinterpolation
+						},
+						{
+							"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-152.png",
+							"width" : 152,
+							"height": 152,
+							"interpolation": iconinterpolation
+						}
 
 
-						icongenstr = str(json.dumps(icongenarr, separators=(',',':'))).replace("\"", "\\\"");
-						icongenLINE = "java -jar -Xmx512m " + self.ark2d_dir + "/../Tools/ARK2D\ Image\ Resizer/build/jar/ImageResizer.jar \"" + icongenstr + "\"";
-						print(icongenLINE);
-						subprocess.call([icongenLINE], shell=True);
+					];
+					icongenarr.extend([icongenobj]);
+					#icongenstr = json.dumps(icongenarr, sort_keys=True, indent=0, new);
 
 
-						#os.system();
-						pass;
+					icongenstr = str(json.dumps(icongenarr, separators=(',',':'))).replace("\"", "\\\"");
+					icongenLINE = "java -jar -Xmx512m " + self.ark2d_dir + "/../Tools/ARK2D\ Image\ Resizer/build/jar/ImageResizer.jar \"" + icongenstr + "\"";
+					print(icongenLINE);
+					subprocess.call([icongenLINE], shell=True);
+
+
 					#else:
 					pass;
 						#	if (config['osx']['android']['icon'] != ''):

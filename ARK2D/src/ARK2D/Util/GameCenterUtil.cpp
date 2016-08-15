@@ -18,13 +18,13 @@
 #endif
 
 GameCenterBillingListener* GameCenterBillingListener::s_instance = new GameCenterBillingListener();
+bool GameCenterBillingUtil::s_initialised = false;
 
 #if defined(ARK2D_IPHONE)
  	SKProductsRequest* GameCenterBillingUtil::s_productRequest = NULL;
  	ARK2D_TransactionObserver* GameCenterBillingUtil::s_transactionObserver = NULL;
  	ARK2D_ProductRequestDelegate* GameCenterBillingUtil::s_productRequestDelegate = NULL;
  	vector<string>* GameCenterBillingUtil::s_purchasedIds = NULL;
- 	bool GameCenterBillingUtil::s_initialised = false;
 
 	@implementation ARK2D_ProductRequestDelegate
 
@@ -233,8 +233,9 @@ namespace ARK {
 			return false;
 		}
 
-		void GameCenterBillingUtil::persistValue(string key, string val) {
-			#ifdef ARK2D_IPHONE
+		#ifdef ARK2D_IPHONE
+			void GameCenterBillingUtil::persistValue(string key, string val) {
+
 				ARK2D::getLog()->v(StringUtil::append("GameCenterBillingUtil::persistValue() ", key));
 
 				#if USE_ICLOUD_STORAGE
@@ -247,9 +248,9 @@ namespace ARK {
 				[storage setObject:@15 forKey:@"highest_unlocked_level"];
 
 				[storage synchronize];
-			#endif
-		}
-		#ifdef ARK2D_IPHONE
+
+			}
+
 			void GameCenterBillingUtil::persistReceipt(SKPaymentTransaction* transaction) {
 				ARK2D::getLog()->v("GameCenterBillingUtil::persistReceipt()");
 				#if USE_ICLOUD_STORAGE
