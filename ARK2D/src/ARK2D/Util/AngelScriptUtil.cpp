@@ -1,16 +1,17 @@
 
 #include "AngelScriptUtil.h"
 
-#include "../ARK2D.h"
+#include "../Core/ARK2D.h"
 #include "Log.h"
 #include "KeyPairFile.h"
 #include "../Core/GameContainer.h"
-#include "../Font/BMFont.h"
-#include "../Graphics/Image.h"
-#include "../Graphics/Renderer.h"
-#include "../Geometry/Rectangle.h"
+#include "../Core/Font/BMFont.h"
+#include "../Core/Graphics/Image.h"
+#include "../Core/Graphics/Renderer.h"
+#include "../Core/Geometry/Rectangle.h"
+#include "../Core/Pool.h"
+
 #include "../Pathfinding/AStar.h"
-#include "../Util/Containers/Pool.h"
 #include "../Audio/Sound.h"
 
 asIScriptEngine* AngelScriptUtil::s_engine = NULL;
@@ -255,12 +256,12 @@ asIScriptEngine* AngelScriptUtil::getEngine() {
 		r = s_engine->RegisterObjectType("Font", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Resource", "Font@ asFont()", asMETHOD(Resource, asFont), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectType("BMFont", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
-		r = s_engine->RegisterObjectMethod("Font", "BMFont@ asBMFont()", asMETHOD(ARK::Font::Font, asBMFont), asCALL_THISCALL); assert( r >= 0 );
-        r = s_engine->RegisterObjectMethod("BMFont", "uint getStringWidth(const string)", asMETHODPR(ARK::Font::BMFont, getStringWidth, (const string&) const, unsigned int), asCALL_THISCALL); assert( r >= 0 );
-		r = s_engine->RegisterObjectMethod("BMFont", "uint getStringHeight(const string)", asMETHODPR(ARK::Font::BMFont, getStringHeight, (const string&) const, unsigned int), asCALL_THISCALL); assert( r >= 0 );
-		r = s_engine->RegisterObjectMethod("BMFont", "uint getLineHeight()", asMETHOD(ARK::Font::BMFont, getLineHeight), asCALL_THISCALL); assert( r >= 0 );
-		r = s_engine->RegisterObjectMethod("BMFont", "void drawString(const string, float, float, int = -1, int = -1, float = 0.0f, float = 1.0f)", asMETHODPR(ARK::Font::BMFont, drawString, (const string, float, float, int, int, float, float), void), asCALL_THISCALL); assert( r >= 0 );
-		r = s_engine->RegisterObjectMethod("BMFont", "Image@ getImage()", asMETHOD(ARK::Font::BMFont, getImage), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("Font", "BMFont@ asBMFont()", asMETHOD(ARK::Core::Font::Font, asBMFont), asCALL_THISCALL); assert( r >= 0 );
+        r = s_engine->RegisterObjectMethod("BMFont", "uint getStringWidth(const string)", asMETHODPR(ARK::Core::Font::BMFont, getStringWidth, (const string&) const, unsigned int), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("BMFont", "uint getStringHeight(const string)", asMETHODPR(ARK::Core::Font::BMFont, getStringHeight, (const string&) const, unsigned int), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("BMFont", "uint getLineHeight()", asMETHOD(ARK::Core::Font::BMFont, getLineHeight), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("BMFont", "void drawString(const string, float, float, int = -1, int = -1, float = 0.0f, float = 1.0f)", asMETHODPR(ARK::Core::Font::BMFont, drawString, (const string, float, float, int, int, float, float), void), asCALL_THISCALL); assert( r >= 0 );
+		r = s_engine->RegisterObjectMethod("BMFont", "Image@ getImage()", asMETHOD(ARK::Core::Font::BMFont, getImage), asCALL_THISCALL); assert( r >= 0 );
 
 		// Sound resource
 		r = s_engine->RegisterObjectType("Sound", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
@@ -369,7 +370,7 @@ asIScriptEngine* AngelScriptUtil::getEngine() {
 		r = s_engine->RegisterObjectMethod("Renderer", "void drawLine(float x1, float y1, float x2, float y2)", asMETHODPR(Renderer, drawLine, (float, float, float, float) const, void), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Renderer", "void setDrawColor(float r, float g, float b, float a)", asMETHODPR(Renderer, setDrawColorf, (float, float, float, float), void), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Renderer", "void setDrawColor(string hex)", asMETHODPR(Renderer, setDrawColor, (string), void), asCALL_THISCALL); assert( r >= 0 );
-		r = s_engine->RegisterGlobalProperty("int ALIGN_LEFT", (void*) &ARK::Graphics::Renderer::ALIGN_LEFT); assert( r >= 0 );
+		r = s_engine->RegisterGlobalProperty("int ALIGN_LEFT", (void*) &ARK::Core::Graphics::Renderer::ALIGN_LEFT); assert( r >= 0 );
 		r = s_engine->RegisterGlobalProperty("int ALIGN_RIGHT", (void*) &Renderer::ALIGN_RIGHT); assert( r >= 0 );
 		r = s_engine->RegisterGlobalProperty("int ALIGN_CENTER", (void*) &Renderer::ALIGN_CENTER); assert( r >= 0 );
 		r = s_engine->RegisterGlobalProperty("int ALIGN_TOP", (void*) &Renderer::ALIGN_TOP); assert( r >= 0 );

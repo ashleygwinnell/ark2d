@@ -13,10 +13,10 @@
 #include "../../Namespaces.h"
 #include "../../UI/TextField.h"
 #include "../../UI/Button.h"
-#include "../../State/GameState.h"
-#include "../../State/StateBasedGame.h"
-#include "../../Tween/Easing.h"
-#include "../../Tween/Timer.h"
+#include "../../Core/State/GameState.h"
+#include "../../Core/State/StateBasedGame.h"
+#include "../../Core/Tween/Easing.h"
+#include "../../Core/Tween/Timer.h"
 #include "../../Util/DisplayUtil.h"
 #include "../../UI/Dialog.h"
 #include "../../Util/Callbacks.h"
@@ -292,7 +292,7 @@ namespace ARK {
 					Color* colorGreen;
 					Color* colorBackground;
 
-					ARK::Font::BMFont* font;
+                    ARK::Core::Font::BMFont* font;
 					KeyPairFile* file;
 
 					float m_sessionPingTimer;

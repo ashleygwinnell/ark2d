@@ -9,8 +9,8 @@
 //#include "../../../ARK.h"
 
 //#include "../../Namespaces.h"
-#include "../../Graphics/Image.h"
-#include "../../Graphics/ImageIO/PNGImage.h"
+#include "../../Core/Graphics/Image.h"
+#include "../../Core/Graphics/ImageIO/PNGImage.h"
 
 namespace ARK {
 	namespace GJ {
@@ -991,7 +991,7 @@ namespace ARK {
 				ARK2D::getLog()->e(result);
 
 
-                ARK::Graphics::ImageIO::PNGImage* png = new ARK::Graphics::ImageIO::PNGImage("");
+                ARK::Core::Graphics::ImageIO::PNGImage* png = new ARK::Core::Graphics::ImageIO::PNGImage("");
 				int ok = png->load((void*) result.c_str());
 				if (ok != 0) {
 					ARK2D::getLog()->e("failed");
@@ -1744,7 +1744,7 @@ namespace ARK {
 				}
 			}
 			void GameJolt::render(GameContainer* container, Renderer* g) {
-                ARK::Font::Font* previousFont = g->getFont();
+                ARK::Core::Font::Font* previousFont = g->getFont();
 
 				g->setFont(font);
 

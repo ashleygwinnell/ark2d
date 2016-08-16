@@ -7,10 +7,10 @@
 
 #include "GameContainer.h"
 //#include "../Geometry/GigaRectangle.h"
-#include "../ARK2D.h"  
+#include "ARK2D.h"
 //#include "../Includes.h"
 #include "../Common/DLL.h"
-#include "../Graphics/Image.h"
+#include "Graphics/Image.h"
 
 #if defined(ARK2D_FLASCC)
  	#include "Platform/GameContainerFlascc.h"
@@ -33,8 +33,8 @@
 #endif
 
 #include "../Util/Callbacks.h"
-#include "../Util/Strings.h"
-#include "../Graphics/ImageIO/PNGImage.h"
+#include "Strings.h"
+#include "Graphics/ImageIO/PNGImage.h"
 
 namespace ARK {
 	namespace Core { 
@@ -514,7 +514,7 @@ namespace ARK {
 		void GameContainer::deinitGamepads() {
 
 		}
-		vector<ARK::Controls::Gamepad*>* GameContainer::getGamepads() {
+        vector<ARK::Core::Controls::Gamepad*>* GameContainer::getGamepads() {
 			return &m_gamepads; 
 		}
 
@@ -695,7 +695,7 @@ namespace ARK {
 			void* data = (void*) malloc(datalen); 
 			ARK2D::getRenderer()->readPixels(data, 0, 0, m_width, m_height);
 			 
-            ARK::Graphics::ImageIO::PNGImage::saveFile(filename, (char*) data, m_width, m_height);
+            ARK::Core::Graphics::ImageIO::PNGImage::saveFile(filename, (char*) data, m_width, m_height);
 
 			free(data);
 		}

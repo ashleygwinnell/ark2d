@@ -8,7 +8,7 @@
 #ifndef ARK_UI_DIALOG_H_
 #define ARK_UI_DIALOG_H_
 
-#include "../ARK2D.h"
+#include "../Core/ARK2D.h"
 #include <string>
 using namespace std;
 

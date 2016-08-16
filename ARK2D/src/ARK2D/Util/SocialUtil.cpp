@@ -7,8 +7,8 @@
 
 #include "SocialUtil.h"
 
-#include "../ARK2D.h"
-#include "../Includes.h"
+//#include "../Includes.h"
+#include "../Core/ARK2D.h"
 #include "../Core/GameContainer.h"
 
 #include "FileUtil.h"

@@ -8,7 +8,7 @@
 #include "Includes.h"
 #include "Socket.h"
 #include "Address.h"
-#include "../ARK2D.h"
+#include "../Core/ARK2D.h"
 #include "../Util/Log.h"
 
 namespace ARK {

@@ -7,7 +7,7 @@
 
 #include "KeyPairFile.h"
 
-#include "../ARK2D.h"
+#include "../Core/ARK2D.h"
 #include "../Core/GameContainer.h"
 
 namespace ARK {

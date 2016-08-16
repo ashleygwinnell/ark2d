@@ -1,6 +1,6 @@
 
 #include "TiledMapProperty.h"
-#include "../Util/Cast.h"
+#include "../Core/Cast.h"
 
 namespace ARK {
 	namespace Tiled {

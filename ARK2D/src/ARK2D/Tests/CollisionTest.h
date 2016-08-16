@@ -5,15 +5,15 @@
  *      Author: ashleygwinnell
  */
 
-#ifndef COLLISIONTESTSTATE_H__
-#define COLLISIONTESTSTATE_H__
+#ifndef ARK_TESTS_COLLISIONTESTSTATE_H__
+#define ARK_TESTS_COLLISIONTESTSTATE_H__
 
 //#include "../../ARK.h"
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
 
-#include "../State/GameState.h"
-#include "../State/StateBasedGame.h"
+#include "../Core/State/GameState.h"
+#include "../Core/State/StateBasedGame.h"
 
 #include <vector>
 using std::vector;
@@ -24,16 +24,16 @@ namespace ARK {
 		class ARK2D_API CollisionTestGameState : public GameState {
 			public:
 
-				ARK::Geometry::Circle<float>* circleOne;
-				ARK::Geometry::Circle<float>* circleTwo;
-				ARK::Geometry::Rectangle* rectangleOne;
-				ARK::Geometry::Rectangle* rectangleTwo;
-				ARK::Geometry::Line<float>* lineOne;
-				ARK::Geometry::Line<float>* lineTwo;
-				ARK::Geometry::Line<float>* lineThree;
-				ARK::Geometry::Line<float>* lineFour;
-				ARK::Geometry::Polygon<float>* polygonOne;
-				ARK::Geometry::Polygon<float>* polygonTwo;
+                ARK::Core::Geometry::Circle<float>* circleOne;
+				ARK::Core::Geometry::Circle<float>* circleTwo;
+				ARK::Core::Geometry::Rectangle* rectangleOne;
+				ARK::Core::Geometry::Rectangle* rectangleTwo;
+				ARK::Core::Geometry::Line<float>* lineOne;
+				ARK::Core::Geometry::Line<float>* lineTwo;
+				ARK::Core::Geometry::Line<float>* lineThree;
+				ARK::Core::Geometry::Line<float>* lineFour;
+				ARK::Core::Geometry::Polygon<float>* polygonOne;
+				ARK::Core::Geometry::Polygon<float>* polygonTwo;
 
 				Shape<float>* current;
 				std::vector<Shape<float>*> shapes;
@@ -68,4 +68,4 @@ namespace ARK {
 
 
 
-#endif /* COLLISIONTESTSTATE_H_ */
+#endif /* ARK_TESTS_COLLISIONTESTSTATE_H_ */

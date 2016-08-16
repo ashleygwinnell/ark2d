@@ -6,7 +6,7 @@
  */
  
 #include "AStar.h"   
-#include "../Geometry/Line.h"
+#include "../Core/Geometry/Line.h"
 
 namespace ARK {
 	namespace Pathfinding {
@@ -609,7 +609,7 @@ namespace ARK {
 				bool directLineOfSight = true;
 
 				for (unsigned int k = 0; k < polygon->lines.size(); k++) {
-					ARK::Geometry::Line<float>* line = &polygon->lines[k];
+                    ARK::Core::Geometry::Line<float>* line = &polygon->lines[k];
 					bool collides = MathUtil::LineSegmentsCross(start->m_x, start->m_y, end->m_x, end->m_y, line->getStart()->getX(), line->getStart()->getY(), line->getEnd()->getX(), line->getEnd()->getY());
 					if (collides) { 
 						directLineOfSight = false; 

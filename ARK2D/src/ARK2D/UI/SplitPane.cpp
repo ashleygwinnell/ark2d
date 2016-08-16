@@ -6,7 +6,7 @@
  */
 
 #include "SplitPane.h"
-#include "../Graphics/Renderer.h"
+#include "../Core/Graphics/Renderer.h"
 
 namespace ARK {
 	namespace UI {
@@ -74,14 +74,14 @@ namespace ARK {
 		}
 
 		void SplitPane::render() {
-			ARK::Geometry::Cube* bounds = getBounds();
+            ARK::Core::Geometry::Cube* bounds = getBounds();
 			Renderer* r = ARK2D::getRenderer();
 
 			// update location/size/ui/layout of children.
-            ARK::Geometry::Cube* firstBounds = (m_firstComponent != NULL)
+            ARK::Core::Geometry::Cube* firstBounds = (m_firstComponent != NULL)
             	? m_firstComponent->getBounds()
             	: SceneNode::s_dummyCube;
-            ARK::Geometry::Cube* secondBounds = (m_secondComponent != NULL)
+            ARK::Core::Geometry::Cube* secondBounds = (m_secondComponent != NULL)
             	? m_secondComponent->getBounds()
             	: SceneNode::s_dummyCube;
 			if (m_splitType == SPLIT_HORIZONTAL) {
@@ -123,7 +123,7 @@ namespace ARK {
 			}
 			r->setLineWidth(1);
 		}
-		ARK::Geometry::Cube* SplitPane::getBounds() {
+        ARK::Core::Geometry::Cube* SplitPane::getBounds() {
 			return &m_bounds;
 		}
 		void SplitPane::setBounds(float w, float h, float d) {

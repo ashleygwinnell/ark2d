@@ -8,11 +8,10 @@
 #include "../Core/String.h"
 #include "Button.h"
 
-#include "../Controls/Input.h"
-#include "../Graphics/Renderer.h"
-#include "../Graphics/Image.h"
+#include "../Core/Controls/Input.h"
+#include "../Core/Graphics/Renderer.h"
+#include "../Core/Graphics/Image.h"
 //#include "../Util/String.h"
-
 
 namespace ARK {
 	namespace UI {

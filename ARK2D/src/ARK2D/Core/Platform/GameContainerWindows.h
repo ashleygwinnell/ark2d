@@ -10,7 +10,7 @@
 #define GAMECONTAINERWINDOWS_H_
 
 //#include "../../Includes.h"
-#include "../../ARK2D.h"
+#include "../ARK2D.h"
 
 	#ifdef ARK2D_WINDOWS
 

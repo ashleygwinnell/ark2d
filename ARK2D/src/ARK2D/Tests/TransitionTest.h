@@ -5,15 +5,15 @@
  *      Author: ashleygwinnell
  */
 
-#ifndef TRANSITIONTEST_H_
-#define TRANSITIONTEST_H_
+#ifndef ARK_TESTS_TRANSITIONTEST_H_
+#define ARK_TESTS_TRANSITIONTEST_H_
 
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
 
-#include "../State/GameState.h"
-#include "../State/StateBasedGame.h"
-#include "../Util/Containers/Vector.h"
+#include "../Core/State/GameState.h"
+#include "../Core/State/StateBasedGame.h"
+#include "../Core/Vector.h"
 
 namespace ARK {
 	namespace Tests {
@@ -36,8 +36,8 @@ namespace ARK {
 		class ARK2D_API TransitionTest : public StateBasedGame {
 			public:
 				unsigned int transitionIndex;
-				ARK::Util::Containers::Vector<ARK::State::Transition::Transition*> leaveTransitions;
-				ARK::Util::Containers::Vector<ARK::State::Transition::Transition*> entryTransitions;
+                ARK::Core::Vector<ARK::Core::State::Transition::Transition*> leaveTransitions;
+                ARK::Core::Vector<ARK::Core::State::Transition::Transition*> entryTransitions;
 
 				TransitionTest();
 				virtual void initStates(GameContainer* container);
@@ -55,4 +55,4 @@ namespace ARK {
 
 
 
-#endif /* TRANSITIONTEST_H_ */
+#endif /* ARK_TESTS_TRANSITIONTEST_H_ */

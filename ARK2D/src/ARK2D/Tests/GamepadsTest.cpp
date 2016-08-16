@@ -7,7 +7,7 @@
 
 #include "GamepadsTest.h"
 
-#include "../Controls/Gamepad.h"
+#include "../Core/Controls/Gamepad.h"
 #include "../Util/Log.h"
 #include "../UI/CheckBox.h"
 #include "../UI/Button.h"
@@ -26,16 +26,16 @@ namespace ARK {
 		}
 		void GamepadConfigureGameState::enter(GameContainer* container, StateBasedGame* game, GameState* from) { 
 
-			ARK::Controls::Gamepad* gamepad = ARK2D::getInput()->getGamepads()->at(m_gamepadIndex);
+			ARK::Core::Controls::Gamepad* gamepad = ARK2D::getInput()->getGamepads()->at(m_gamepadIndex);
 
-			for(signed int i = 0; i < ARK::Controls::Gamepad::s_gamepadMapping->size(); ++i) {
-				GamepadMapping* map = &ARK::Controls::Gamepad::s_gamepadMapping->at(i);
+			for(signed int i = 0; i < ARK::Core::Controls::Gamepad::s_gamepadMapping->size(); ++i) {
+				GamepadMapping* map = &ARK::Core::Controls::Gamepad::s_gamepadMapping->at(i);
 				if (map->vendorId == gamepad->vendorId && 
 					map->productId == gamepad->productId && 
 					map->name == gamepad->name 
 					) {
 					ARK2D::getLog()->e("Erasing configuration of controller before reconfiguring.");
-					ARK::Controls::Gamepad::s_gamepadMapping->erase(ARK::Controls::Gamepad::s_gamepadMapping->begin() + i);
+					ARK::Core::Controls::Gamepad::s_gamepadMapping->erase(ARK::Core::Controls::Gamepad::s_gamepadMapping->begin() + i);
 					break;
 				}
 			}
@@ -45,9 +45,9 @@ namespace ARK {
 			m_mapping.vendorId = gamepad->vendorId;
 			m_mapping.productId = gamepad->productId;
 
-			m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_ACTIVATE] = -1;
-			m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_LTRIGGER] = -1;
-			m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_RTRIGGER] = -1;
+			m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_ACTIVATE] = -1;
+			m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_LTRIGGER] = -1;
+			m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_RTRIGGER] = -1;
 		}
 		void GamepadConfigureGameState::leave(GameContainer* container, StateBasedGame* game, GameState* to) { }
 
@@ -75,26 +75,26 @@ namespace ARK {
 			}
 			if (in->isKeyPressed(Input::KEY_ENTER)) {
 				switch(m_state) {
-					case STATE_A: { m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_A] = -1; break; }
-					case STATE_B: {	m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_B] = -1; break; }
-					case STATE_X: { m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_X] = -1; break; }
-					case STATE_Y: { m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_Y] = -1; break; }
-					case STATE_DPAD_UP: { m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::DPAD_UP] = -1; break; }
-					case STATE_DPAD_DOWN: { m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::DPAD_DOWN] = -1; break; }
-					case STATE_DPAD_LEFT: { m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::DPAD_LEFT] = -1; break; }
-					case STATE_DPAD_RIGHT: { m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::DPAD_RIGHT] = -1; break; }
-					case STATE_LBUMPER: { m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_LBUMPER] = -1; break; }
-					case STATE_RBUMPER: { m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_RBUMPER] = -1; break; }
-					case STATE_L3: { m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_L3] = -1; break; }
-					case STATE_R3: { m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_R3] = -1; break; }
-					case STATE_LSTICK_X: { m_mapping.axes[(unsigned int) ARK::Controls:: Gamepad::ANALOG_STICK_1_X] = -1; break; }
-					case STATE_LSTICK_Y: { m_mapping.axes[(unsigned int) ARK::Controls::Gamepad::ANALOG_STICK_1_Y] = -1; break; }
-					case STATE_RSTICK_X: { m_mapping.axes[(unsigned int) ARK::Controls::Gamepad::ANALOG_STICK_2_X] = -1; break; }
-					case STATE_RSTICK_Y: { m_mapping.axes[(unsigned int) ARK::Controls::Gamepad::ANALOG_STICK_2_Y] = -1; break; }
-					case STATE_LTRIGGER: { m_mapping.axes[(unsigned int) ARK::Controls::Gamepad::TRIGGER_1] = -1; break; }
-					case STATE_RTRIGGER: { m_mapping.axes[(unsigned int) ARK::Controls::Gamepad::TRIGGER_2] = -1; break; }
-					case STATE_BACK: { m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_BACK] = -1; break; }
-					case STATE_START: { m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_START] = -1; break; }
+					case STATE_A: { m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_A] = -1; break; }
+					case STATE_B: {	m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_B] = -1; break; }
+					case STATE_X: { m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_X] = -1; break; }
+					case STATE_Y: { m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_Y] = -1; break; }
+					case STATE_DPAD_UP: { m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::DPAD_UP] = -1; break; }
+					case STATE_DPAD_DOWN: { m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::DPAD_DOWN] = -1; break; }
+					case STATE_DPAD_LEFT: { m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::DPAD_LEFT] = -1; break; }
+					case STATE_DPAD_RIGHT: { m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::DPAD_RIGHT] = -1; break; }
+					case STATE_LBUMPER: { m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_LBUMPER] = -1; break; }
+					case STATE_RBUMPER: { m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_RBUMPER] = -1; break; }
+					case STATE_L3: { m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_L3] = -1; break; }
+					case STATE_R3: { m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_R3] = -1; break; }
+					case STATE_LSTICK_X: { m_mapping.axes[(unsigned int) ARK::Core::Controls:: Gamepad::ANALOG_STICK_1_X] = -1; break; }
+					case STATE_LSTICK_Y: { m_mapping.axes[(unsigned int) ARK::Core::Controls::Gamepad::ANALOG_STICK_1_Y] = -1; break; }
+					case STATE_RSTICK_X: { m_mapping.axes[(unsigned int) ARK::Core::Controls::Gamepad::ANALOG_STICK_2_X] = -1; break; }
+					case STATE_RSTICK_Y: { m_mapping.axes[(unsigned int) ARK::Core::Controls::Gamepad::ANALOG_STICK_2_Y] = -1; break; }
+					case STATE_LTRIGGER: { m_mapping.axes[(unsigned int) ARK::Core::Controls::Gamepad::TRIGGER_1] = -1; break; }
+					case STATE_RTRIGGER: { m_mapping.axes[(unsigned int) ARK::Core::Controls::Gamepad::TRIGGER_2] = -1; break; }
+					case STATE_BACK: { m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_BACK] = -1; break; }
+					case STATE_START: { m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_START] = -1; break; }
 				}
 				m_state++;
 				stateChanged();
@@ -116,7 +116,7 @@ namespace ARK {
 				r->drawString("processing...", commandX, commandY, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 0.0, 1.0f);
 				return;
 			}
-			ARK::Controls::Gamepad* p1 = ARK2D::getInput()->getGamepadByIndex(m_gamepadIndex);
+			ARK::Core::Controls::Gamepad* p1 = ARK2D::getInput()->getGamepadByIndex(m_gamepadIndex);
 			GamepadsTestGameState::renderGamepad(p1, container->getWidth()*0.5f, container->getHeight()*0.7f);
 
 			r->drawString("Hit ENTER to skip this button/axis!", container->getWidth()-30, container->getHeight()-30, Renderer::ALIGN_RIGHT, Renderer::ALIGN_BOTTOM, 0.0, 1.0f);
@@ -235,7 +235,7 @@ namespace ARK {
 				
 				//Dialog::openInputDialog(0, "config:", m_mapping.toString());
 				ARK2D::getLog()->i("pushing...");
-				ARK::Controls::Gamepad::s_gamepadMapping->push_back(m_mapping);
+				ARK::Core::Controls::Gamepad::s_gamepadMapping->push_back(m_mapping);
 
 				// Alert this on the main thread. 
 				//ARK2D::getGame()->getTimeline()->staticEvent( (void*) this, (void*) &GamepadConfigureGameState::alertMappingString, 0.0f);
@@ -249,16 +249,16 @@ namespace ARK {
 				
 			}
 		}
-		void GamepadConfigureGameState::gamepadConnected(ARK::Controls::Gamepad* gamepad) {
+		void GamepadConfigureGameState::gamepadConnected(ARK::Core::Controls::Gamepad* gamepad) {
 			ARK2D::getLog()->i(StringUtil::append("gamepad connected: ", gamepad->getId()));
 		}
-		void GamepadConfigureGameState::gamepadDisconnected(ARK::Controls::Gamepad* gamepad) {
+		void GamepadConfigureGameState::gamepadDisconnected(ARK::Core::Controls::Gamepad* gamepad) {
 			ARK2D::getLog()->i(StringUtil::append("gamepad disconnected: ", gamepad->getId()));
 		}
-		void GamepadConfigureGameState::buttonPressed(ARK::Controls::Gamepad* gamepad, unsigned int button) {
+		void GamepadConfigureGameState::buttonPressed(ARK::Core::Controls::Gamepad* gamepad, unsigned int button) {
 			
 		}
-		void GamepadConfigureGameState::buttonReleased(ARK::Controls::Gamepad* gamepad, unsigned int button) { 
+		void GamepadConfigureGameState::buttonReleased(ARK::Core::Controls::Gamepad* gamepad, unsigned int button) {
 			bool done = false;
 
 			if (m_axisChangedCooldown > 0.0) { return; }
@@ -269,72 +269,72 @@ namespace ARK {
 
 			switch(m_state) {
 				case STATE_A: { 
-					m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_A] = button;
+					m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_A] = button;
 					done = true;
 					break;
 				}
 				case STATE_B: {
-					m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_B] = button;
+					m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_B] = button;
 					done = true;
 					break;
 				}
 				case STATE_X: {
-					m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_X] = button;
+					m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_X] = button;
 					done = true;
 					break;
 				}
 				case STATE_Y: {
-					m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_Y] = button;
+					m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_Y] = button;
 					done = true;
 					break;
 				}
 				case STATE_DPAD_UP: {
-					m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::DPAD_UP] = button;
+					m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::DPAD_UP] = button;
 					done = true;
 					break;
 				}
 				case STATE_DPAD_DOWN: {
-					m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::DPAD_DOWN] = button;
+					m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::DPAD_DOWN] = button;
 					done = true;
 					break;
 				}
 				case STATE_DPAD_LEFT: {
-					m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::DPAD_LEFT] = button;
+					m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::DPAD_LEFT] = button;
 					done = true;
 					break;
 				}
 				case STATE_DPAD_RIGHT: {
-					m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::DPAD_RIGHT] = button;
+					m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::DPAD_RIGHT] = button;
 					done = true;
 					break;
 				}
 				case STATE_LBUMPER: {
-					m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_LBUMPER] = button;
+					m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_LBUMPER] = button;
 					done = true;
 					break;
 				}
 				case STATE_RBUMPER: {
-					m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_RBUMPER] = button;
+					m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_RBUMPER] = button;
 					done = true;
 					break;
 				}
 				case STATE_L3: {
-					m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_L3] = button;
+					m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_L3] = button;
 					done = true;
 					break;
 				}
 				case STATE_R3: {
-					m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_R3] = button;
+					m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_R3] = button;
 					done = true;
 					break;
 				}
 				case STATE_BACK: {
-					m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_BACK] = button;
+					m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_BACK] = button;
 					done = true;
 					break;
 				}
 				case STATE_START: {
-					m_mapping.buttons[(unsigned int) ARK::Controls::Gamepad::BUTTON_START] = button;
+					m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_START] = button;
 					done = true;
 					break;
 				}
@@ -347,7 +347,7 @@ namespace ARK {
 			}
 
 		}
-		void GamepadConfigureGameState::axisMoved(ARK::Controls::Gamepad* gamepad, unsigned int axis, float value) { 
+		void GamepadConfigureGameState::axisMoved(ARK::Core::Controls::Gamepad* gamepad, unsigned int axis, float value) {
 			if (m_axisChangedCooldown > 0.0) { return; }
 
 			if (gamepad != ARK2D::getInput()->getGamepadByIndex(m_gamepadIndex)) { 
@@ -359,32 +359,32 @@ namespace ARK {
 			bool done = false;
 			switch(m_state) {
 				case STATE_LSTICK_X: { 
-					m_mapping.axes[(unsigned int) ARK::Controls::Gamepad::ANALOG_STICK_1_X] = axis;
+					m_mapping.axes[(unsigned int) ARK::Core::Controls::Gamepad::ANALOG_STICK_1_X] = axis;
 					done = true;
 					break;
 				}
 				case STATE_LSTICK_Y: { 
-					m_mapping.axes[(unsigned int) ARK::Controls::Gamepad::ANALOG_STICK_1_Y] = axis;
+					m_mapping.axes[(unsigned int) ARK::Core::Controls::Gamepad::ANALOG_STICK_1_Y] = axis;
 					done = true;
 					break;
 				}
 				case STATE_RSTICK_X: { 
-					m_mapping.axes[(unsigned int) ARK::Controls::Gamepad::ANALOG_STICK_2_X] = axis;
+					m_mapping.axes[(unsigned int) ARK::Core::Controls::Gamepad::ANALOG_STICK_2_X] = axis;
 					done = true;
 					break;
 				}
 				case STATE_RSTICK_Y: { 
-					m_mapping.axes[(unsigned int) ARK::Controls::Gamepad::ANALOG_STICK_2_Y] = axis;
+					m_mapping.axes[(unsigned int) ARK::Core::Controls::Gamepad::ANALOG_STICK_2_Y] = axis;
 					done = true;
 					break;
 				}
 				case STATE_LTRIGGER: { 
-					m_mapping.axes[(unsigned int) ARK::Controls::Gamepad::TRIGGER_1] = axis;
+					m_mapping.axes[(unsigned int) ARK::Core::Controls::Gamepad::TRIGGER_1] = axis;
 					done = true;
 					break;
 				}
 				case STATE_RTRIGGER: { 
-					m_mapping.axes[(unsigned int) ARK::Controls::Gamepad::TRIGGER_2] = axis;
+					m_mapping.axes[(unsigned int) ARK::Core::Controls::Gamepad::TRIGGER_2] = axis;
 					done = true;
 					break;
 				}
@@ -454,7 +454,7 @@ namespace ARK {
 			Gamepad* thispad = ARK2D::getInput()->getGamepadByIndex(test->m_gamepadIndex);
 
 			bool removed = false;
-			vector<GamepadMapping>* map = ARK::Controls::Gamepad::s_gamepadMapping;
+			vector<GamepadMapping>* map = ARK::Core::Controls::Gamepad::s_gamepadMapping;
 			for(unsigned int i = 0; i < map->size(); i++) {
 				if (map->at(i).vendorId == thispad->vendorId && 
 					map->at(i).productId == thispad->productId) {
@@ -526,16 +526,16 @@ namespace ARK {
 			}
  
 			if (i->getGamepads()->size() > 0) {
-				ARK::Controls::Gamepad* p1 = i->getGamepads()->at(0);
-				if (p1->isButtonPressed(ARK::Controls::Gamepad::DPAD_UP) || p1->isButtonPressed(ARK::Controls::Gamepad::BUTTON_ACTIVATE)) {
+				ARK::Core::Controls::Gamepad* p1 = i->getGamepads()->at(0);
+				if (p1->isButtonPressed(ARK::Core::Controls::Gamepad::DPAD_UP) || p1->isButtonPressed(ARK::Core::Controls::Gamepad::BUTTON_ACTIVATE)) {
 					//m_sound->play();
 				} 
 
-				if (p1->isButtonPressed(ARK::Controls::Gamepad::BUTTON_START)) {
+				if (p1->isButtonPressed(ARK::Core::Controls::Gamepad::BUTTON_START)) {
 					ARK2D::getLog()->i("START PRESSED");
 				}
 
-				if (p1->isButtonPressed(ARK::Controls::Gamepad::BUTTON_A)) {
+				if (p1->isButtonPressed(ARK::Core::Controls::Gamepad::BUTTON_A)) {
 
 					ARK2D::getLog()->v("Printing Axes");
 					vector<GamepadAxis* >* axes = &p1->axes;
@@ -571,7 +571,7 @@ namespace ARK {
 			
 		}
 
-		void GamepadsTestGameState::renderGamepad(ARK::Controls::Gamepad* p1, float rootX, float rootY) 
+		void GamepadsTestGameState::renderGamepad(ARK::Core::Controls::Gamepad* p1, float rootX, float rootY)
 		{
 			if (p1 == NULL) { 
 			 return; }
@@ -581,48 +581,48 @@ namespace ARK {
 			rootY -= 150;
 			Renderer* r = ARK2D::getRenderer();
 			// left stick
-			float x = p1->getAxisValue(ARK::Controls::Gamepad::ANALOG_STICK_1_X);
-			float y = p1->getAxisValue(ARK::Controls::Gamepad::ANALOG_STICK_1_Y);// axes.at(1)->value;
+			float x = p1->getAxisValue(ARK::Core::Controls::Gamepad::ANALOG_STICK_1_X);
+			float y = p1->getAxisValue(ARK::Core::Controls::Gamepad::ANALOG_STICK_1_Y);// axes.at(1)->value;
 			float cx = rootX + 300.0f;
 			float cy = rootY + 150; 
 			float rd = 60.0f;
 			r->setDrawColor(Color::white);
 			r->drawCircle(cx, cy, (int) rd, (int) rd);
-			if (p1->isButtonDown(ARK::Controls::Gamepad::BUTTON_L3)) { r->setDrawColor(Color::red); }
+			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::BUTTON_L3)) { r->setDrawColor(Color::red); }
 			r->fillRect(cx + (rd*x) - 10, cy + (rd*y) - 10, 20, 20);
 
 			// right stick
-			x = p1->getAxisValue(ARK::Controls::Gamepad::ANALOG_STICK_2_X); //p1->axes.at(2)->value;
-			y = p1->getAxisValue(ARK::Controls::Gamepad::ANALOG_STICK_2_Y); //p1->axes.at(3)->value;
+			x = p1->getAxisValue(ARK::Core::Controls::Gamepad::ANALOG_STICK_2_X); //p1->axes.at(2)->value;
+			y = p1->getAxisValue(ARK::Core::Controls::Gamepad::ANALOG_STICK_2_Y); //p1->axes.at(3)->value;
 			cx = rootX + 500.0f;
 			cy = rootY + 150; 
 			r->setDrawColor(Color::white);
 			r->drawCircle(cx, cy, (int) rd, (int)rd);
-			if (p1->isButtonDown(ARK::Controls::Gamepad::BUTTON_R3)) { r->setDrawColor(Color::red); }
+			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::BUTTON_R3)) { r->setDrawColor(Color::red); }
 			r->fillRect(cx + (rd*x) - 10, cy + (rd*y) - 10, 20, 20);
 			
 			// reset color 
 			r->setDrawColor(Color::white);
 	 
 			// left trigger  
-			float trigger1 = p1->getAxisValue(ARK::Controls::Gamepad::TRIGGER_1); //(p1->axes.at(4)->value + 1.0f)/2.0f;
+			float trigger1 = p1->getAxisValue(ARK::Core::Controls::Gamepad::TRIGGER_1); //(p1->axes.at(4)->value + 1.0f)/2.0f;
 			r->drawRect(rootX + 200, rootY, 100, 20); 
 			r->fillRect(rootX + 200, rootY, int(100 * trigger1), 20);  
 
 			// right trigger 
-			float trigger2 = p1->getAxisValue(ARK::Controls::Gamepad::TRIGGER_2);//(p1->axes.at(5)->value + 1.0f)/2.0f;
+			float trigger2 = p1->getAxisValue(ARK::Core::Controls::Gamepad::TRIGGER_2);//(p1->axes.at(5)->value + 1.0f)/2.0f;
 			r->drawRect(rootX + 500, rootY, 100, 20);
 			r->fillRect(rootX + 500, rootY, int(100 * trigger2), 20);
 
 
 			// left bumper
 			r->setDrawColor(Color::white);
-			if (p1->isButtonDown(ARK::Controls::Gamepad::BUTTON_LBUMPER)) { r->setDrawColor(Color::red); }
+			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::BUTTON_LBUMPER)) { r->setDrawColor(Color::red); }
 			r->fillRect(rootX + 200, rootY+30, 50, 20);
 
 			// right bumper
 			r->setDrawColor(Color::white);
-			if (p1->isButtonDown(ARK::Controls::Gamepad::BUTTON_RBUMPER)) { r->setDrawColor(Color::red); }
+			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::BUTTON_RBUMPER)) { r->setDrawColor(Color::red); }
 			r->fillRect(rootX + 550, rootY+30, 50, 20); 
 
 
@@ -640,57 +640,57 @@ namespace ARK {
 			
 			// dpad
 			r->setDrawColor(Color::white);
-			if (p1->isButtonDown(ARK::Controls::Gamepad::DPAD_UP)) { r->setDrawColor(Color::red); }
+			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::DPAD_UP)) { r->setDrawColor(Color::red); }
 			r->fillRect(rootX + 200 - 10, rootY+200, 20, 20); // up
 
 			r->setDrawColor(Color::white);
-			if (p1->isButtonDown(ARK::Controls::Gamepad::DPAD_LEFT)) { r->setDrawColor(Color::red); }
+			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::DPAD_LEFT)) { r->setDrawColor(Color::red); }
 			r->fillRect(rootX + 175 - 10, rootY+225, 20, 20); // left
 
 		 	r->setDrawColor(Color::white);
-			if (p1->isButtonDown(ARK::Controls::Gamepad::DPAD_RIGHT)) { r->setDrawColor(Color::red); }
+			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::DPAD_RIGHT)) { r->setDrawColor(Color::red); }
 			r->fillRect(rootX + 225 - 10, rootY+225, 20, 20); // right
 		
 			r->setDrawColor(Color::white);
-			if (p1->isButtonDown(ARK::Controls::Gamepad::DPAD_DOWN)) { r->setDrawColor(Color::red); }
+			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::DPAD_DOWN)) { r->setDrawColor(Color::red); }
 			r->fillRect(rootX + 200 - 10, rootY+250, 20, 20); // down
 
 			// middle buttons
 			r->setDrawColor(Color::white);
-			if (p1->isButtonDown(ARK::Controls::Gamepad::BUTTON_BACK)) { r->setDrawColor(Color::red); }
+			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::BUTTON_BACK)) { r->setDrawColor(Color::red); }
 			r->fillRect(rootX + 350 - 10, rootY+70, 20, 20);
 
 			r->setDrawColor(Color::white);
-			if (p1->isButtonDown(ARK::Controls::Gamepad::BUTTON_ACTIVATE)) { r->setDrawColor(Color::green); }
+			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::BUTTON_ACTIVATE)) { r->setDrawColor(Color::green); }
 			r->fillRect(rootX + 400 - 10, rootY+70, 20, 20);
 
 			r->setDrawColor(Color::white);
-			if (p1->isButtonDown(ARK::Controls::Gamepad::BUTTON_START)) { r->setDrawColor(Color::red); }
+			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::BUTTON_START)) { r->setDrawColor(Color::red); }
 			r->fillRect(rootX + 450 - 10, rootY+70, 20, 20);
 
 
 			// A button
 			r->setDrawColor(Color::white);
 			r->drawCircle(rootX + 600.0f, rootY+250.0f, 20, 20); 
-			if (p1->isButtonDown(ARK::Controls::Gamepad::BUTTON_A)) { r->setDrawColor(Color::green); }
+			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::BUTTON_A)) { r->setDrawColor(Color::green); }
 			r->drawCircle(rootX + 600.0f, rootY+250.0f, 20, 20); 
 			
 			// B button
 			r->setDrawColor(Color::white);
 			r->drawCircle(rootX + 625.0f, rootY+225.0f, 20, 20); 
-			if (p1->isButtonDown(ARK::Controls::Gamepad::BUTTON_B)) { r->setDrawColor(Color::red); }
+			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::BUTTON_B)) { r->setDrawColor(Color::red); }
 			r->drawCircle(rootX + 625.0f, rootY+225.0f, 20, 20); 
 
 			// X button
 			r->setDrawColor(Color::white);
 			r->drawCircle(rootX + 575.0f, rootY+225.0f, 20, 20); 
-			if (p1->isButtonDown(ARK::Controls::Gamepad::BUTTON_X)) { r->setDrawColor(Color::blue); }
+			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::BUTTON_X)) { r->setDrawColor(Color::blue); }
 			r->drawCircle(rootX + 575.0f, rootY+225.0f, 20, 20); 
 
 			// Y button
 			r->setDrawColor(Color::white);
 			r->drawCircle(rootX + 600.0f, rootY+200.0f, 20, 20); 
-			if (p1->isButtonDown(ARK::Controls::Gamepad::BUTTON_Y)) { r->setDrawColor(Color::yellow); }
+			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::BUTTON_Y)) { r->setDrawColor(Color::yellow); }
 			r->drawCircle(rootX + 600.0f, rootY+200.0f, 20, 20); 
 		}
 		void GamepadsTestGameState::render(GameContainer* container, StateBasedGame* game, Renderer* r) {
@@ -699,7 +699,7 @@ namespace ARK {
 
 			Input* i = ARK2D::getInput(); 
 			if (i->getGamepads()->size() > 0) {  
-				ARK::Controls::Gamepad* p1 = i->getGamepads()->at(m_gamepadIndex);
+				ARK::Core::Controls::Gamepad* p1 = i->getGamepads()->at(m_gamepadIndex);
 
 				r->setDrawColor(Color::white);  
 				r->setFont(r->getDefaultFont());
@@ -755,21 +755,21 @@ namespace ARK {
             return false;
 		}
 
-		void GamepadsTestGameState::gamepadConnected(ARK::Controls::Gamepad* gamepad) {
+		void GamepadsTestGameState::gamepadConnected(ARK::Core::Controls::Gamepad* gamepad) {
 			ARK2D::getLog()->i(StringUtil::append("gamepad connected: ", gamepad->getId()));
 		}
-		void GamepadsTestGameState::gamepadDisconnected(ARK::Controls::Gamepad* gamepad) {
+		void GamepadsTestGameState::gamepadDisconnected(ARK::Core::Controls::Gamepad* gamepad) {
 			ARK2D::getLog()->i(StringUtil::append("gamepad disconnected: ", gamepad->getId()));
 		}
-		void GamepadsTestGameState::buttonPressed(ARK::Controls::Gamepad* gamepad, unsigned int button) {
+		void GamepadsTestGameState::buttonPressed(ARK::Core::Controls::Gamepad* gamepad, unsigned int button) {
 			if (m_alertButtons->isChecked()) {
 				ErrorDialog::createAndShow(StringUtil::append("button pressed: ", button));
 			}
 		}
-		void GamepadsTestGameState::buttonReleased(ARK::Controls::Gamepad* gamepad, unsigned int button) { 
+		void GamepadsTestGameState::buttonReleased(ARK::Core::Controls::Gamepad* gamepad, unsigned int button) {
 
 		}
-		void GamepadsTestGameState::axisMoved(ARK::Controls::Gamepad* gamepad, unsigned int axis, float value) { 
+		void GamepadsTestGameState::axisMoved(ARK::Core::Controls::Gamepad* gamepad, unsigned int axis, float value) {
 			if (m_alertAxes->isChecked()) { 
 				if (value > 0.75f || value < -0.75f) {
 					ErrorDialog::createAndShow(StringUtil::append("axis moved: ", axis));

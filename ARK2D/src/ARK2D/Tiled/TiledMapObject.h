@@ -1,11 +1,11 @@
-#ifndef TILED_MAP_OBJECT_H_
-#define TILED_MAP_OBJECT_H_
+#ifndef ARK_TILED_TILEDMAPOBJECT_H_
+#define ARK_TILED_TILEDMAPOBJECT_H_
 
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
 
 //#include "TiledMapProperty.h"
-#include "../Geometry/Vector2.h"
+#include "../Core/Geometry/Vector2.h"
 
 #include <vector>
 using namespace std;

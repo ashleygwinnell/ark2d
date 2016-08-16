@@ -8,7 +8,7 @@
 #ifndef ARK_CORE_EXCEPTION_H_
 #define ARK_CORE_EXCEPTION_H_
 
-#include "../ARK2D.h"
+#include "ARK2D.h"
  
 /*!
  * @deprecated

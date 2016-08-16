@@ -8,7 +8,7 @@
 #include "GameTimer.h"
 #include <math.h>
 
-#include "../ARK2D.h"
+#include "ARK2D.h"
 //#include "../Includes.h"
 #include "../Util/Log.h"
 

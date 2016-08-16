@@ -5,14 +5,14 @@
  *      Author: Ashley
  */
 
-#ifndef LOCALHIGHSCORES_H_
-#define LOCALHIGHSCORES_H_
+#ifndef ARK_UTIL_LOCALHIGHSCORES_H_
+#define ARK_UTIL_LOCALHIGHSCORES_H_
 
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
 
 #include "FileUtil.h"
-#include "Cast.h"
+#include "../Core/Cast.h"
 #include "StringUtil.h"
 #include <vector>
 #include <string>

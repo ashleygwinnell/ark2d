@@ -1,7 +1,7 @@
 
 #include "Highscore.h"
 //#include "../../ARK.h"
-#include "../Util/Cast.h"
+#include "../Core/Cast.h"
 
 namespace ARK {
 	namespace GJ {

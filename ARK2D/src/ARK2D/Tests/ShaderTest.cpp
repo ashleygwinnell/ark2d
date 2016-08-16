@@ -6,8 +6,8 @@
  */
 
 #include "ShaderTest.h"
-#include "../Graphics/Image.h"
-#include "../Graphics/Shaders/HSVShader.h"
+#include "../Core/Graphics/Image.h"
+#include "../Core/Graphics/Shaders/HSVShader.h"
 #include "../UI/Slider.h"
 
 namespace ARK {

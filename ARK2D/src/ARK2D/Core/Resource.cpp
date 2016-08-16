@@ -5,30 +5,33 @@
  *      Author: ashleygwinnell
  */
 
-#include "../ARK2D.h"
 #include "../Namespaces.h"
+
+#include "ARK2D.h"
 #include "Resource.h"
 
-#include "../Graphics/Image.h"
-#include "../Graphics/Texture.h"
-#include "../Graphics/TextureStore.h"
-#include "../Graphics/SpriteSheetDescription.h"
+#include "Graphics/Image.h"
+#include "Graphics/Texture.h"
+#include "Graphics/TextureStore.h"
+#include "Graphics/SpriteSheetDescription.h"
+
+#include "Font/FTFont.h"
+#include "Font/BMFont.h"
+#include "Font/Font.h"
+#include "GameContainer.h"
+#include "String.h"
+
 #include "../Audio/Sound.h"
-#include "../Font/FTFont.h"
-#include "../Font/BMFont.h"
-#include "../Font/Font.h"
+#include "../Tiled/TiledMap.h"
 #include "../Path/PathGroup.h"
 #include "../Path/PathIO.h"
+#include "../Util/StringUtil.h"
 #include "../Util/LocalHighscores.h"
 #include "../Util/KeyPairFile.h"
-#include "../Tiled/TiledMap.h"
-#include "GameContainer.h"
-#include "../Util/StringUtil.h"
-#include "String.h"
 #include "../Util/FileUtil.h"
 
 //#include "../vendor/spine/includes/spine/spine.h"
-#include "../vendor/spine/SpineSkeleton.h"
+//#include "../vendor/spine/SpineSkeleton.h"
 
 namespace ARK {
 	namespace Core {
@@ -93,7 +96,7 @@ namespace ARK {
 
 					delete rt;
 				#else
-					resource = new ARK::Font::BMFont(ref, pngref);
+                    resource = new ARK::Core::Font::BMFont(ref, pngref);
 				#endif
 			}
 			/*else if (extension == "ttf")
@@ -108,7 +111,7 @@ namespace ARK {
 					resource = new ARK::Font::FTFont(ref);
 				#endif
 			}*/
-			else if (extension == "spine")
+			/*else if (extension == "spine")
 			{
 				ARK::Spine::Skeleton* skeleton = NULL;
 				#if defined(ARK2D_ANDROID)
@@ -118,14 +121,6 @@ namespace ARK {
 
 					RawDataReturns* rt = getRawData(atlasFile);
 					RawDataReturns* rt2 = getRawData(skeletonFile);
-
-
-
-					/*char* newtextbuffer = (char*) realloc(rt->data, rt->size+1);
-					newtextbuffer[rt->size] = '\0';
-
-					char* newtextbuffer2 = (char*) realloc(rt2->data, rt2->size+1);
-					newtextbuffer2[rt2->size] = '\0';*/
 
 					//skeleton = new ARK::Spine::Skeleton(newtextbuffer, rt->size, newtextbuffer2, rt2->size);
 					ARK2D::getLog()->i("New Skeleton object");
@@ -141,7 +136,7 @@ namespace ARK {
 					skeleton->load();
 				#endif
 				resource = skeleton;
-			}
+			}*/
 			else if (extension == "tmx")
 			{
 				ARK::Tiled::TiledMap* map = NULL;
@@ -691,8 +686,8 @@ namespace ARK {
 		Sound* Resource::asSound() {
 			return dynamic_cast<ARK::Audio::Sound*>(this);
 		}
-		ARK::Font::Font* Resource::asFont() {
-			return dynamic_cast<ARK::Font::Font*>(this);
+        ARK::Core::Font::Font* Resource::asFont() {
+			return dynamic_cast<ARK::Core::Font::Font*>(this);
 		}
 		LocalHighscores* Resource::asLocalHighscores() {
 			return dynamic_cast<ARK::Util::LocalHighscores*>(this);
@@ -704,14 +699,14 @@ namespace ARK {
 			return dynamic_cast<ARK::Tiled::TiledMap*>(this);
 		}
 		SpriteSheetDescription* Resource::asSpriteSheetDescription() {
-			return dynamic_cast<ARK::Graphics::SpriteSheetDescription*>(this);
+			return dynamic_cast<ARK::Core::Graphics::SpriteSheetDescription*>(this);
 		}
 		KeyPairFile* Resource::asKeyPairFile() {
 			return dynamic_cast<ARK::Util::KeyPairFile*>(this);
 		}
-		ARK::Spine::Skeleton* Resource::asSkeleton() {
-			return dynamic_cast<ARK::Spine::Skeleton*>(this);
-		}
+		//ARK::Spine::Skeleton* Resource::asSkeleton() {
+		//	return dynamic_cast<ARK::Spine::Skeleton*>(this);
+		//}
 		String* Resource::asString() {
 			return dynamic_cast<String*>(this);
 		}

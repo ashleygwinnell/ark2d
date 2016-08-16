@@ -6,7 +6,7 @@
  */
 
 #include "Connection.h"
-#include "../ARK2D.h"
+#include "../Core/ARK2D.h"
 #include "../Util/Log.h"
 
 namespace ARK {

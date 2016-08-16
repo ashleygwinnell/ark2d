@@ -5,10 +5,10 @@
  *      Author: Ashley
  */
 
-#ifndef COMBOBOX_H_
-#define COMBOBOX_H_
+#ifndef ARK_UI_COMBOBOX_H_
+#define ARK_UI_COMBOBOX_H_
 
-#include "../ARK2D.h"
+#include "../Core/ARK2D.h"
 #include "AbstractUIComponent.h"
 #include <vector>
 using namespace std;

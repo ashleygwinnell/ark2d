@@ -6,9 +6,9 @@
  */
 
 #include "Wobble.h"
-#include "../Tween/Easing.h"
 #include "../Core/GameTimer.h"
-#include "../Util/MathUtil.h"
+#include "../Core/Tween/Easing.h"
+#include "../Core/Math/MathUtil.h"
 
 namespace ARK {
 	namespace Util { 

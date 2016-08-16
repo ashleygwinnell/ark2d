@@ -7,15 +7,12 @@
 #ifndef ARK_CORE_GAME_H_
 #define ARK_CORE_GAME_H_
 
-//#include "../Includes.h"
 #include "../Namespaces.h"
-
 #include "../Common/DLL.h"
-//#include "../Controls/KeyListener.h"
-#include "../SceneGraph/Scene.h"
-#include "../Controls/GamepadListener.h"
 
-#include "../Geometry/Cube.h"
+#include "Controls/GamepadListener.h"
+#include "Geometry/Cube.h"
+#include "SceneGraph/Scene.h"
 
 namespace ARK {
 	namespace Core {
@@ -49,7 +46,7 @@ namespace ARK {
 				virtual void onResize();
 
 				virtual void resize(GameContainer* container, int width, int height);
-				virtual ARK::Geometry::Cube* getBounds();
+				virtual ARK::Core::Geometry::Cube* getBounds();
 
 				virtual void pause(); // android events
 				virtual void resume();
@@ -62,11 +59,11 @@ namespace ARK {
 				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
 				// Gamepad Listener
-				virtual void gamepadConnected(ARK::Controls::Gamepad* gamepad);
-				virtual void gamepadDisconnected(ARK::Controls::Gamepad* gamepad);
-				virtual void buttonPressed(ARK::Controls::Gamepad* gamepad, unsigned int button);
-				virtual void buttonReleased(ARK::Controls::Gamepad* gamepad, unsigned int button);
-				virtual void axisMoved(ARK::Controls::Gamepad* gamepad, unsigned int axis, float value);
+				virtual void gamepadConnected(Controls::Gamepad* gamepad);
+				virtual void gamepadDisconnected(Controls::Gamepad* gamepad);
+				virtual void buttonPressed(Controls::Gamepad* gamepad, unsigned int button);
+				virtual void buttonReleased(Controls::Gamepad* gamepad, unsigned int button);
+				virtual void axisMoved(Controls::Gamepad* gamepad, unsigned int axis, float value);
 
 				// Orientation Listener
 				virtual void orientationChanged(int orientation);
@@ -78,7 +75,7 @@ namespace ARK {
 				string m_title;
 				Timeline* m_timeline;
 				Scene* scene;
-				ARK::Geometry::Cube bounds;
+                ARK::Core::Geometry::Cube bounds;
 
 		};
 	}

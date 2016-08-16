@@ -5,15 +5,15 @@
  *      Author: Ashley
  */
 
-#ifndef TEXTFIELD_H_
-#define TEXTFIELD_H_
+#ifndef ARK_UI_TEXTFIELD_H_
+#define ARK_UI_TEXTFIELD_H_
 
 #include "AbstractUIComponent.h"
 
 #include "../Core/String.h"
-#include "../Controls/Input.h"
-#include "../Graphics/Renderer.h"
-#include "../Graphics/Color.h"
+#include "../Core/Controls/Input.h"
+#include "../Core/Graphics/Renderer.h"
+#include "../Core/Graphics/Color.h"
 //#include "../Geometry/GigaRectangle.h"
 
 /**

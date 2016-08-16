@@ -8,9 +8,9 @@
 #include "../vendor/glm/gtc/matrix_transform.hpp"
 #include "../vendor/glm/gtc/type_ptr.hpp"
 
-#include "../ARK2D.h"
-#include "../Core/GameContainer.h"
-#include "../Graphics/Renderer.h"
+#include "ARK2D.h"
+#include "GameContainer.h"
+#include "Graphics/Renderer.h"
 #include "../Util/Log.h"
 
 using namespace std;
@@ -21,7 +21,7 @@ namespace ARK {
 		Camera* Camera::current = NULL;
 
 		Camera::Camera():
-			ARK::SceneGraph::SceneNode("camera", SceneNode::TYPE_CAMERA),
+			ARK::Core::SceneGraph::SceneNode("camera", SceneNode::TYPE_CAMERA),
 			type(TYPE_ORTHO_2D),
 			viewportX(0),
 			viewportY(0),

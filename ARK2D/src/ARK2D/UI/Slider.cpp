@@ -6,9 +6,9 @@
  */
 
 #include "Slider.h"
-#include "../Tween/Easing.h"
-#include "../Geometry/Shape.h"
-#include "../Graphics/Image.h"
+#include "../Core/Tween/Easing.h"
+#include "../Core/Geometry/Shape.h"
+#include "../Core/Graphics/Image.h"
 
 namespace ARK {
 	namespace UI {

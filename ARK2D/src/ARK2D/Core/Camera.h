@@ -1,14 +1,14 @@
 
 
-#include "../Geometry/Vector3.h"
-#include "../Graphics/Color.h"
-#include "../Graphics/MatrixStack.h"
-#include "../SceneGraph/Scene.h"
-
-#include "../Namespaces.h"
-
 #ifndef ARK2D_CORE_CAMERA_H_
 #define ARK2D_CORE_CAMERA_H_
+
+#include "Geometry/Vector3.h"
+#include "Graphics/Color.h"
+#include "Graphics/MatrixStack.h"
+#include "SceneGraph/Scene.h"
+
+#include "../Namespaces.h"
 
 namespace ARK {
 	namespace Core {

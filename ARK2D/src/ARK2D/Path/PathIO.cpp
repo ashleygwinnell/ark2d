@@ -9,9 +9,9 @@
 #include "../Common/Libraries/libjson.h"
 
 #include "PathGroup.h"
-#include "../UI/ErrorDialog.h"
+#include "../Core/Controls/ErrorDialog.h"
+#include "../Core/Tween/Easing.h"
 #include "../Util/StringUtil.h"
-#include "../Tween/Easing.h"
 
 namespace ARK {
 	namespace Path {

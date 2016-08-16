@@ -8,7 +8,7 @@
 #ifndef ARK_UTIL_DISPLAYUTIL_H_
 #define ARK_UTIL_DISPLAYUTIL_H_
 
-#include "../ARK2D.h"
+#include "../Common/DLL.h"
 #include "../Namespaces.h"
 
 namespace ARK {

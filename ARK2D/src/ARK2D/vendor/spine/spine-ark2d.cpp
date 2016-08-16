@@ -7,11 +7,11 @@
 #include "../../vendor/spine/includes/spine/spine.h"
 #include "../../vendor/spine/includes/spine/extension.h"
  
-#include "../../Includes.h" 
+//#include "../../Includes.h"
 #include "../../Core/Resource.h"
-#include "../../Graphics/Image.h"
-#include "../../Graphics/Texture.h"
-#include "../../Graphics/TextureStore.h"
+#include "../../Core/Graphics/Image.h"
+#include "../../Core/Graphics/Texture.h"
+#include "../../Core/Graphics/TextureStore.h"
 #include "../../Util/Log.h"
 #include "../../vendor/spine/SpineSkeleton.h"
 

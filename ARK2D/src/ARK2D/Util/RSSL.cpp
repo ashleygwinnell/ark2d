@@ -8,8 +8,8 @@
 #include "RSSL.h"
 #include "../Core/String.h"
 #include "StringUtil.h"
-#include "Cast.h"
-#include "../UI/ErrorDialog.h"
+#include "../Core/Cast.h"
+#include "../Core/Controls/ErrorDialog.h"
 
 #include <cstdlib>
 

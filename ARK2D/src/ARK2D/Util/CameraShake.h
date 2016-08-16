@@ -5,13 +5,13 @@
  *      Author: Ashley
  */
 
-#ifndef CAMERASHAKE_H_
-#define CAMERASHAKE_H_
+#ifndef ARK_UTIL_CAMERASHAKE_H_
+#define ARK_UTIL_CAMERASHAKE_H_
 
 //#include "../Includes.h"
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
-#include "../Tween/Timeline.h"
+#include "../Core/Tween/Timeline.h"
 #include "../Util/Log.h"
 
 namespace ARK {

@@ -96,7 +96,7 @@ namespace ARK {
 			m_thread->start();
 		}
 
-		Mutex* s_startThreadedMutex = new ARK::Threading::Mutex();
+        Mutex* s_startThreadedMutex = new ARK::Core::Threading::Mutex();
 
 		void URLRequest::s_startThreaded(void* u) {
 			

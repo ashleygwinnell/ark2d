@@ -1,7 +1,7 @@
 #include "TitledPanel.h"
 
-#include "../Graphics/Renderer.h"
-#include "../Geometry/Cube.h"  
+#include "../Core/Graphics/Renderer.h"
+#include "../Core/Geometry/Cube.h"
  
 namespace ARK { 
 	namespace UI { 
@@ -40,7 +40,7 @@ namespace ARK {
 
 			preRenderFromPivot(); 
 
-			ARK::Geometry::Cube* bounds = getBounds();
+            ARK::Core::Geometry::Cube* bounds = getBounds();
 			Renderer* r = ARK2D::getRenderer();
 			r->setDrawColor(Color::black_50a);
 			r->fillRect(0, 0, bounds->getWidth(), bounds->getHeight());

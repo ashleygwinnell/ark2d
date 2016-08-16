@@ -7,7 +7,7 @@
 
 #include "LocalHighscores.h"
 
-#include "../ARK2D.h"
+#include "../Core/ARK2D.h"
 #include "../Core/GameContainer.h"
 #include "../Common/Libraries/libjson.h"
 

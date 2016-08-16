@@ -3446,7 +3446,11 @@ build:
 					dependencyName = dependency;
 					#print(dependencyName);
 					dependency = config['modules'][moduleName]['dependencies'][index];
-					newdependency = "libARK2D_" + dependencyName + ".dylib"
+					if (self.get_str_extension(dependencyName) == "framework"):
+						newdependency = dependencyName;
+					else:
+						newdependency = "libARK2D_" + dependencyName + ".dylib"
+
 					moduleTemplate['conditions'][0][1]['link_settings']['libraries'].extend( [newdependency] );
 
 				gyp_template_data['targets'].extend([moduleTemplate]);

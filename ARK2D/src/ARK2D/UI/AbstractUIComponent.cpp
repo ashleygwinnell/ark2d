@@ -6,7 +6,7 @@
  */
 
 #include "AbstractUIComponent.h"
-#include "../Geometry/Cube.h"
+#include "../Core/Geometry/Cube.h"
 #include "../Core/GameContainer.h"
 
 namespace ARK {
@@ -25,7 +25,7 @@ namespace ARK {
 			m_enabled(true),
 			m_state(0)
 			{
- 			m_bounds = new ARK::Geometry::Cube();
+                m_bounds = new ARK::Core::Geometry::Cube();
 		}
 		float AbstractUIComponent::getX() {
 			return transform.position.x;
@@ -163,7 +163,7 @@ namespace ARK {
 			m_height = h;
 		}
 
-		ARK::Geometry::Cube* AbstractUIComponent::getBounds() {
+        ARK::Core::Geometry::Cube* AbstractUIComponent::getBounds() {
 			m_bounds->setWidth(m_width);
 			m_bounds->setHeight(m_height);
 			return m_bounds;

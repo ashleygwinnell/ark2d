@@ -6,10 +6,10 @@
  */
 
 #include "CollisionTest.h"
-#include "../Geometry/Circle.h"
-#include "../Geometry/Rectangle.h"
-#include "../Geometry/Line.h"
-#include "../Geometry/Polygon.h"
+#include "../Core/Geometry/Circle.h"
+#include "../Core/Geometry/Rectangle.h"
+#include "../Core/Geometry/Line.h"
+#include "../Core/Geometry/Polygon.h"
 
 namespace ARK {
 	namespace Tests {
@@ -29,20 +29,20 @@ namespace ARK {
 		void CollisionTestGameState::init(GameContainer* container, StateBasedGame* game) {
 			circleOne = new Circle<float>(200,200,40);
 			circleTwo = new Circle<float>(100,100,30);
-			rectangleOne = new ARK::Geometry::Rectangle(50, 300, 50, 40);
-			rectangleTwo = new ARK::Geometry::Rectangle(50, 400, 100, 100);
+			rectangleOne = new ARK::Core::Geometry::Rectangle(50, 300, 50, 40);
+			rectangleTwo = new ARK::Core::Geometry::Rectangle(50, 400, 100, 100);
 			lineOne = new Line<float>(300, 500, 350, 550);
 			lineTwo = new Line<float>(300, 200, 350, 150);
 			lineThree = new Line<float>(500, 200, 500, 300);
 			lineFour = new Line<float>(500, 200, 700, 200);
 
-			polygonOne = new ARK::Geometry::Polygon<float>();
+			polygonOne = new ARK::Core::Geometry::Polygon<float>();
 			polygonOne->addPoint(0,0);
 			polygonOne->addPoint(150,150);
 			polygonOne->addPoint(0,150);
 			polygonOne->setLocationByCenter(300,300);
 
-			polygonTwo = new ARK::Geometry::Polygon<float>();
+			polygonTwo = new ARK::Core::Geometry::Polygon<float>();
 			polygonTwo->addPoint(400, 50);
 			polygonTwo->addPoint(450, 50);
 			polygonTwo->addPoint(450, 100);

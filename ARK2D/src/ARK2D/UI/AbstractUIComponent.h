@@ -15,7 +15,7 @@
 //#include "../Controls/Input.h"
 
 //#include "../Geometry/GigaRectangle.h"
-#include "../SceneGraph/Scene.h"
+#include "../Core/SceneGraph/Scene.h"
 
 namespace ARK {
 	namespace UI {
@@ -27,7 +27,7 @@ namespace ARK {
 		class ARK2D_API AbstractUIComponent : public UIComponent, public SceneNode {
 			public:
 				AbstractUIComponent* m_parent;
-				ARK::Geometry::Cube* m_bounds;
+                ARK::Core::Geometry::Cube* m_bounds;
 				//float m_x;
 				//float m_y;
 				unsigned int m_width;
@@ -101,7 +101,7 @@ namespace ARK {
 				void setState(unsigned int i);
 				unsigned int getState();
 
-				virtual ARK::Geometry::Cube* getBounds();
+                virtual ARK::Core::Geometry::Cube* getBounds();
 				virtual	void setBounds(float w, float h, float z);
 
 				virtual void render() = 0;

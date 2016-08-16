@@ -6,10 +6,11 @@
  */
 
 #include "Discovery.h"
-#include "../ARK2D.h"
+#include "../Core/ARK2D.h"
+#include "../Core/GameTimer.h"
+
 #include "../Util/Log.h"
 #include "../Util/FileUtil.h"
-#include "../Core/GameTimer.h"
 
 namespace ARK {
 	namespace Net { 

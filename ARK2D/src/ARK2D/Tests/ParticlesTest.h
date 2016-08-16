@@ -5,14 +5,14 @@
  *      Author: ashleygwinnell
  */
 
-#ifndef PARTICLESTEST_H_
-#define PARTICLESTEST_H_
+#ifndef ARK_TESTS_PARTICLESTEST_H_
+#define ARK_TESTS_PARTICLESTEST_H_
 
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
 
-#include "../State/GameState.h"
-#include "../State/StateBasedGame.h"
+#include "../Core/State/GameState.h"
+#include "../Core/State/StateBasedGame.h"
 
 namespace ARK {
 	namespace Tests {

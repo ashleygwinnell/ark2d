@@ -5,16 +5,15 @@
  *      Author: Ashley
  */
 
-#ifndef CONFIGURABLEEMITTER_H_
-#define CONFIGURABLEEMITTER_H_
+#ifndef ARK_PARTICLES_CONFIGURABLEEMITTER_H_
+#define ARK_PARTICLES_CONFIGURABLEEMITTER_H_
 
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
-#include "../Graphics/Color.h"
+#include "../Core/Graphics/Color.h"
+#include "../Core/Graphics/Image.h"
 #include "../Util/Range.h"
 #include "ParticleEmitter.h"
-#include "../Graphics/Image.h"
-
 
 #include <string>
 #include <list>

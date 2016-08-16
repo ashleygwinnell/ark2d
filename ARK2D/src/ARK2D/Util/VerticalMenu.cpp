@@ -8,7 +8,7 @@
 #include "../Core/GameContainer.h"
 #include "../Core/GameTimer.h"
 #include "../Core/Event.h"
-#include "../Graphics/Renderer.h"
+#include "../Core/Graphics/Renderer.h"
 
 #include "VerticalMenu.h"
 #include "VerticalMenuItem.h"

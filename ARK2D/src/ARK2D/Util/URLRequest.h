@@ -18,12 +18,12 @@
 #include "../Common/DLL.h"
 #include "../Common/Libraries/libcurl.h"
 
-#include "../UI/ErrorDialog.h"
-#include "../Threading/Thread.h"
-#include "../Threading/Mutex.h"
+#include "../Core/GameContainer.h"
 #include "../Core/String.h"
+#include "../Core/Controls//ErrorDialog.h"
+#include "../Core/Threading/Thread.h"
+#include "../Core/Threading/Mutex.h"
 
- #include "../Core/GameContainer.h"
 
 #ifdef ARK2D_WINDOWS_PHONE_8
 	using namespace Windows::Web::Http;
@@ -42,7 +42,7 @@ namespace ARK {
 		class ARK2D_API URLRequest {
 
 			private:
-				ARK::Threading::Thread* m_thread;
+                ARK::Core::Threading::Thread* m_thread;
 				string m_url;
 				map<string, string> m_postArgs;
 				map<string, string> m_cookies;

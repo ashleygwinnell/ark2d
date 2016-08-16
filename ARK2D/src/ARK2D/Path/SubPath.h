@@ -5,13 +5,12 @@
  *      Author: Ashley
  */
 
-#ifndef SUBPATH_H_
-#define SUBPATH_H_
+#ifndef ARK_PATH_SUBPATH_H_
+#define ARK_PATH_SUBPATH_H_
 
-//#include "../Includes.h"
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
-#include "../Geometry/Vector2.h"
+#include "../Core/Geometry/Vector2.h"
 
 #include <string>
 #include <vector>

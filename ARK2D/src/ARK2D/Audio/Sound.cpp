@@ -9,8 +9,10 @@
 
 #include "../Core/Resource.h"
 #include "../Core/String.h"
+#include "../Core/Controls/ErrorDialog.h"
+
 #include "../Util/StringUtil.h"
-#include "../UI/ErrorDialog.h"
+
 
 #include "../Util/Log.h"
 #include "../vendor/FileInterface.h"

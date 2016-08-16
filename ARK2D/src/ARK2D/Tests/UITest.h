@@ -11,8 +11,8 @@
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
 
-#include "../State/GameState.h"
-#include "../State/StateBasedGame.h"
+#include "../Core/State/GameState.h"
+#include "../Core/State/StateBasedGame.h"
 
 #include <vector>
 using std::vector;

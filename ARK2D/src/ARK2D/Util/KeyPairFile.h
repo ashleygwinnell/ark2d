@@ -5,19 +5,22 @@
  *      Author: Ashley
  */
 
-#ifndef KEYPAIRFILE_H_
-#define KEYPAIRFILE_H_
+#ifndef ARK_UTIL_KEYPAIRFILE_H_
+#define ARK_UTIL_KEYPAIRFILE_H_
 
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
 
+#include "../Core/Cast.h"
+#include "../Core/Resource.h"
+
 #include "FileUtil.h"
-#include "Cast.h"
 #include "StringUtil.h"
+
+#include <map>
 #include <vector>
 #include <string>
 #include <algorithm>
-#include "../Core/Resource.h"
 
 using namespace std;
 

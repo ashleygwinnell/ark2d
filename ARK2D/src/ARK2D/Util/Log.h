@@ -8,7 +8,7 @@
 #ifndef ARKLOG_H_
 #define ARKLOG_H_
 
-#include "../ARK2D.h"
+#include "../Core/ARK2D.h"
 //#ifndef ARK2D_ANDROID
 //	#include <string>
 //	#include <list>

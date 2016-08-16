@@ -7,7 +7,7 @@
 
 #include "Address.h"
 #include "Includes.h"
-#include "../Util/Cast.h"
+#include "../Core/Cast.h"
 
 namespace ARK {
 	namespace Net { 

@@ -6,9 +6,9 @@
  */
 #include "Game.h"
 #include "GameContainer.h"
-#include "../ARK2D.h"
-#include "../Tween/Timeline.h"
-#include "../Controls/Gamepad.h"
+#include "ARK2D.h"
+#include "Tween/Timeline.h"
+#include "Controls/Gamepad.h"
 
 #ifdef ARK2D_ANDROID
 #include "Platform/GameContainerAndroid.h"
@@ -114,17 +114,17 @@ namespace ARK {
 		}
 
 		// gamepad listener
-		void Game::gamepadConnected(ARK::Controls::Gamepad* gamepad) { }
-		void Game::gamepadDisconnected(ARK::Controls::Gamepad* gamepad) { }
-		void Game::buttonPressed(ARK::Controls::Gamepad* gamepad, unsigned int button) { }
-		void Game::buttonReleased(ARK::Controls::Gamepad* gamepad, unsigned int button) { }
-		void Game::axisMoved(ARK::Controls::Gamepad* gamepad, unsigned int axis, float value) { }
+        void Game::gamepadConnected(ARK::Core::Controls::Gamepad* gamepad) { }
+		void Game::gamepadDisconnected(ARK::Core::Controls::Gamepad* gamepad) { }
+		void Game::buttonPressed(ARK::Core::Controls::Gamepad* gamepad, unsigned int button) { }
+		void Game::buttonReleased(ARK::Core::Controls::Gamepad* gamepad, unsigned int button) { }
+		void Game::axisMoved(ARK::Core::Controls::Gamepad* gamepad, unsigned int axis, float value) { }
 
 		void Game::orientationChanged(int orientation) {
 
 		}
 
-		ARK::Geometry::Cube* Game::getBounds() {
+		ARK::Core::Geometry::Cube* Game::getBounds() {
 			return &bounds;
 		}
 

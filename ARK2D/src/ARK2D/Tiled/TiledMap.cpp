@@ -13,18 +13,19 @@
 
 #include "TiledMap.h"
 #include "TiledMapTile.h"
-#include "../UI/ErrorDialog.h"
-#include "../Util/Cast.h"
-#include "../Util/StringUtil.h"
-#include "../Graphics/Image.h"
-#include "../vendor/zlib123/zlib.h"
 
+#include "../Core/Resource.h"
+#include "../Core/ARK2D.h"
+#include "../Core/Controls/ErrorDialog.h"
+#include "../Core/Cast.h"
+#include "../Core/Graphics/Image.h"
 #include "../Core/GameContainer.h"
-#include "../Graphics/Renderer.h"
+#include "../Core/Graphics/Renderer.h"
 
 #include "../Util/Log.h"
-#include "../Core/Resource.h"
-#include "../ARK2D.h"
+#include "../Util/StringUtil.h"
+
+#include "../vendor/zlib123/zlib.h"
 
 //#include "zlib123/zutil.h"
 //#include "zlib123/deflate.h"
@@ -33,11 +34,6 @@
 
 namespace ARK {
 	namespace Tiled {
-
-		
-
-
-
 
 		TiledMap::TiledMap(const string& file, void* data):
 			ARK::Core::Resource(),

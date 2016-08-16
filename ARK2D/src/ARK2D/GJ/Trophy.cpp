@@ -1,7 +1,7 @@
 
 #include "Trophy.h"
-#include "../Includes.h"
-#include "../Util/Cast.h"
+//#include "../Includes.h"
+#include "../Core/Cast.h"
 
 namespace ARK {
 	namespace GJ {

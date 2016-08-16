@@ -8,11 +8,11 @@
 #ifndef ARK_CORE_NOTIFICATIONSYS_H_
 #define ARK_CORE_NOTIFICATIONSYS_H_
 
-#include "../ARK2D.h"
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
-#include "../Util/Containers/Vector.h"
 
+#include "../Core/ARK2D.h"
+#include "../Core/Vector.h"
 
 namespace ARK {
 	namespace UI {
@@ -25,7 +25,7 @@ namespace ARK {
 				static NotificationSystem* getInstance();
 
 			private:
-				ARK::Util::Containers::Vector<ARK::UI::Notification* > m_notifications;
+                ARK::Core::Vector<ARK::UI::Notification* > m_notifications;
 				float m_defaultDuration;
 
 			public:

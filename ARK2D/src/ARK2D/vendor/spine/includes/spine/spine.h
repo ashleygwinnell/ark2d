@@ -1,10 +1,10 @@
 /******************************************************************************
  * Spine Runtimes Software License
  * Version 2.1
- * 
+ *
  * Copyright (c) 2013, Esoteric Software
  * All rights reserved.
- * 
+ *
  * You are granted a perpetual, non-exclusive, non-sublicensable and
  * non-transferable license to install, execute and perform the Spine Runtimes
  * Software (the "Software") solely for internal use. Without the written
@@ -15,7 +15,7 @@
  * trademark, patent or other intellectual property or proprietary rights
  * notices on or in the Software, including any copy thereof. Redistributions
  * in binary or source form must include this license and terms.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY ESOTERIC SOFTWARE "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
@@ -31,27 +31,50 @@
 #ifndef SPINE_SPINE_H_
 #define SPINE_SPINE_H_
 
-#include <spine/Animation.h>
-#include <spine/AnimationState.h>
-#include <spine/AnimationStateData.h>
-#include <spine/Atlas.h>
-#include <spine/AtlasAttachmentLoader.h>
-#include <spine/Attachment.h>
-#include <spine/AttachmentLoader.h>
-#include <spine/Bone.h>
-#include <spine/BoneData.h>
-#include <spine/RegionAttachment.h>
-#include <spine/MeshAttachment.h>
-#include <spine/SkinnedMeshAttachment.h>
-#include <spine/BoundingBoxAttachment.h>
-#include <spine/Skeleton.h>
-#include <spine/SkeletonBounds.h>
-#include <spine/SkeletonData.h>
-#include <spine/SkeletonJson.h>
-#include <spine/Skin.h>
-#include <spine/Slot.h>
-#include <spine/SlotData.h>
-#include <spine/Event.h>
-#include <spine/EventData.h>
+#include "Animation.h"
+#include "AnimationState.h"
+#include "AnimationStateData.h"
+#include "Atlas.h"
+#include "AtlasAttachmentLoader.h"
+#include "Attachment.h"
+#include "AttachmentLoader.h"
+#include "Bone.h"
+#include "BoneData.h"
+#include "RegionAttachment.h"
+#include "MeshAttachment.h"
+#include "SkinnedMeshAttachment.h"
+#include "BoundingBoxAttachment.h"
+#include "Skeleton.h"
+#include "SkeletonBounds.h"
+#include "SkeletonData.h"
+#include "SkeletonJson.h"
+#include "Skin.h"
+#include "Slot.h"
+#include "SlotData.h"
+#include "Event.h"
+#include "EventData.h"
+
+// #include <spine/Animation.h>
+// #include <spine/AnimationState.h>
+// #include <spine/AnimationStateData.h>
+// #include <spine/Atlas.h>
+// #include <spine/AtlasAttachmentLoader.h>
+// #include <spine/Attachment.h>
+// #include <spine/AttachmentLoader.h>
+// #include <spine/Bone.h>
+// #include <spine/BoneData.h>
+// #include <spine/RegionAttachment.h>
+// #include <spine/MeshAttachment.h>
+// #include <spine/SkinnedMeshAttachment.h>
+// #include <spine/BoundingBoxAttachment.h>
+// #include <spine/Skeleton.h>
+// #include <spine/SkeletonBounds.h>
+// #include <spine/SkeletonData.h>
+// #include <spine/SkeletonJson.h>
+// #include <spine/Skin.h>
+// #include <spine/Slot.h>
+// #include <spine/SlotData.h>
+// #include <spine/Event.h>
+// #include <spine/EventData.h>
 
 #endif /* SPINE_SPINE_H_ */

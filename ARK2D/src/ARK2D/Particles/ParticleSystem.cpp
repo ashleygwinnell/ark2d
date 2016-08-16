@@ -5,13 +5,13 @@
  *      Author: Ashley
  */
 
-#include "../ARK2D.h"
-#include "../Includes.h"
+#include "../Core/ARK2D.h"
+//#include "../Includes.h"
 #include "../Core/GameTimer.h"
-#include "../Graphics/Renderer.h"
-#include "../Graphics/Image.h"
-#include "../Graphics/Color.h"
-#include "../Graphics/Texture.h"
+#include "../Core/Graphics/Renderer.h"
+#include "../Core/Graphics/Image.h"
+#include "../Core/Graphics/Color.h"
+#include "../Core/Graphics/Texture.h"
 #include "../Util/Log.h"
 
 #include "ParticleSystem.h"

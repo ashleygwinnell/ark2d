@@ -5,10 +5,10 @@
  *      Author: ashleygwinnell
  */
 
-#ifndef ArcadeHighscoreInput_H_
-#define ArcadeHighscoreInput_H_
+#ifndef ARK_UTIL_ArcadeHighscoreInput_H_
+#define ARK_UTIL_ArcadeHighscoreInput_H_
 
-#include "../ARK2D.h"
+#include "../Core/ARK2D.h"
 #include "../Core/String.h"
 #include "../UI/Button.h"
 #include "LocalHighscores.h"

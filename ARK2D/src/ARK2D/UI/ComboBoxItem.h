@@ -5,16 +5,16 @@
  *      Author: Ashley
  */
 
-#ifndef COMBOBOXITEM_H_
-#define COMBOBOXITEM_H_
+#ifndef ARK_UI_COMBOBOXITEM_H_
+#define ARK_UI_COMBOBOXITEM_H_
 
-#include "../ARK2D.h"
+#include "../Core/ARK2D.h"
 #include "AbstractUIComponent.h"
 
-#include "../Graphics/Renderer.h"
-#include "../Graphics/Color.h"
-#include "../Geometry/GigaRectangle.h"
-#include "../Controls/Input.h"
+#include "../Core/Graphics/Renderer.h"
+#include "../Core/Graphics/Color.h"
+#include "../Core/Geometry/GigaRectangle.h"
+#include "../Core/Controls/Input.h"
 
 namespace ARK {
 	namespace UI {

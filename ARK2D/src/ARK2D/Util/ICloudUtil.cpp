@@ -7,8 +7,8 @@
 
 #include "ICloudUtil.h"
 
-#include "../ARK2D.h"
-#include "../Includes.h"
+#include "../Core/ARK2D.h"
+//#include "../Includes.h"
 #include "../Core/GameContainer.h"
 
 #if defined(ARK2D_IPHONE)

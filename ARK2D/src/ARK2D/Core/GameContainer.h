@@ -10,21 +10,21 @@
 
 
 #include "../Namespaces.h"
-#include "../ARK2D.h"
-//#include "../Includes.h"
+#include "../Common/DLL.h"
+
+#include "ARK2D.h"
 #include "../Common/OpenGL.h"
 
-
 #include "Game.h"
-#include "../Controls/Gamepad.h"
-#include "../Controls/Input.h"
-#include "../Core/GameTimer.h"
+#include "Controls/Gamepad.h"
+#include "Controls/Input.h"
+#include "GameTimer.h"
 
 //#include "../Font/BMFont.h"
 //#include "../Graphics/Image.h"
-#include "../Graphics/Color.h"
-#include "../Graphics/Renderer.h"
-#include "../UI/ErrorDialog.h"
+#include "Graphics/Color.h"
+#include "Graphics/Renderer.h"
+#include "Controls/ErrorDialog.h"
 #include "../Util/Log.h"
 
 //#include "../Audio/Sound.h"
@@ -83,7 +83,7 @@ namespace ARK {
 		 */
 		class ARK2D_API GameContainer {
 			friend class ARK::Core::GameContainerPlatform;
-			friend class ARK::Graphics::Renderer;
+			friend class ARK::Core::Graphics::Renderer;
 			friend class Log;
 			friend class ARK::Core::Game;
 
@@ -124,7 +124,7 @@ namespace ARK {
 
 				GameTimer* getTimer();
 
-				const ARK::Geometry::RectangleTemplate<int>& getWindowRectangle() const;
+				const ARK::Core::Geometry::RectangleTemplate<int>& getWindowRectangle() const;
 				const Game& getGame() const;
 				const Input& getInput() const;
 				Renderer* getRenderer() const;
@@ -145,7 +145,7 @@ namespace ARK {
 				float getTranslateY() const;
 				void setTranslateX(float f) { m_translateX = f; }
 				void setTranslateY(float f) { m_translateY = f; }
-				vector<ARK::Controls::Gamepad*>* getGamepads();
+                vector<ARK::Core::Controls::Gamepad*>* getGamepads();
 
 				// always ends in the trailing slash.
 				string getResourcePath() const;
@@ -228,7 +228,7 @@ namespace ARK {
 				Game& m_game;
 				Input m_input;
 				Renderer m_graphics;
-				vector<ARK::Controls::Gamepad*> m_gamepads;
+				vector<ARK::Core::Controls::Gamepad*> m_gamepads;
 				map<unsigned int, unsigned int> hints;
 
 			public:

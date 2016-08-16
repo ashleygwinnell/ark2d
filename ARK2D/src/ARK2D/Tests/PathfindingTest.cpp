@@ -7,8 +7,8 @@
 
 #include "PathfindingTest.h"
 #include "../Pathfinding/AStar.h"
-#include "../Geometry/Vector2.h"
-#include "../Geometry/Polygon.h"
+#include "../Core/Geometry/Vector2.h"
+#include "../Core/Geometry/Polygon.h"
 
 namespace ARK {
 	namespace Tests {
@@ -45,7 +45,7 @@ namespace ARK {
 			// Visibility Graph based pathfinding. 
 			{
 				float f = 2.2f;
-				ARK::Geometry::Polygon<float> outer;
+                ARK::Core::Geometry::Polygon<float> outer;
 				outer.addPoint(f * 25, f * 25);
 				outer.addPoint(f * 75, f * 100);
 				outer.addPoint(f * 25, f * 180);
@@ -56,7 +56,7 @@ namespace ARK {
 				outer.addPoint(f * 150, f * 30);
 				pathfindingGraphPolygon.outers.push_back(outer);
 
-				ARK::Geometry::Polygon<float> hole;
+                ARK::Core::Geometry::Polygon<float> hole;
 				hole.addPoint(f * 125, f * 75);
 				hole.addPoint(f * 125, f * 125);
 				hole.addPoint(f * 175, f * 125);

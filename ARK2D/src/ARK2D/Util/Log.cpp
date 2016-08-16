@@ -7,16 +7,16 @@
 
 #include "Log.h"
 
-#include "../ARK2D.h"
+#include "../Core/ARK2D.h"
 #include "../Core/String.h"
 #include "../Core/GameContainer.h"
-#include "../Graphics/Renderer.h"
+#include "../Core/Graphics/Renderer.h"
+#include "../Core/Strings.h"
 #include "../UI/Slider.h"
 #include "../UI/CheckBox.h"
 #include "../UI/Label.h"
 #include "../UI/ComboBox.h"
 #include "../UI/ComboBoxItem.h"
-#include "../Util/Strings.h"
 #include "../UI/SplitPane.h"
 #include "../UI/TitledPanel.h"
 
@@ -493,7 +493,7 @@ namespace ARK {
 			if (this->visible) {
 				Vector3<float> pos = find("right_panel_split_vertical")->localPositionToGlobalPosition();
 				Game* g = ARK2D::getGame();
-				ARK::Geometry::Cube* bounds = g->getBounds();
+                ARK::Core::Geometry::Cube* bounds = g->getBounds();
 
 
 				g->transform.position.set(pos.getX(), 0, 0);
@@ -523,7 +523,7 @@ namespace ARK {
 			//r->fillRect(0, 0, 350, 200);
 			//r->fillRect(0, 0, container->getWidth(), container->getHeight());
 
-			ARK::Font::Font* defaultFont = r->getDefaultFont();
+            ARK::Core::Font::Font* defaultFont = r->getDefaultFont();
 			if (defaultFont == NULL) {
 				e("cannot display log. no default font loaded.");
 				return;
@@ -719,7 +719,7 @@ namespace ARK {
 
 			Log* l = ARK2D::getLog();
 			Renderer* r = ARK2D::getRenderer();
-			ARK::Geometry::Cube* bounds = getBounds();
+			ARK::Core::Geometry::Cube* bounds = getBounds();
 
 			r->enableStencil();
 			r->startStencil();
@@ -751,7 +751,7 @@ namespace ARK {
 
 			Log* l = ARK2D::getLog();
 			Renderer* r = ARK2D::getRenderer();
-			ARK::Geometry::Cube* bounds = getBounds();
+			ARK::Core::Geometry::Cube* bounds = getBounds();
 
 			r->enableStencil();
 			r->startStencil();

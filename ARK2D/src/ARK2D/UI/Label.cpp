@@ -6,7 +6,8 @@
  */
 
 #include "Label.h"
-#include "../Graphics/Renderer.h"
+#include "../Core/Graphics/Renderer.h"
+#include "../Util/StringUtil.h"
 
 namespace ARK {
 	namespace UI {
@@ -25,7 +26,7 @@ namespace ARK {
 			m_alignX(-1),
 			m_alignY(-1) 
 		{
-			ARK::Font::Font* fnt = ARK2D::getRenderer()->getFont();
+            ARK::Core::Font::Font* fnt = ARK2D::getRenderer()->getFont();
 			setSize((fnt) ? fnt->getStringWidth(text) : 0, (fnt) ? fnt->getLineHeight() : 0);
 		}
 
@@ -35,7 +36,7 @@ namespace ARK {
 			m_alignX(alignX),
 			m_alignY(alignY)
 		{
-			ARK::Font::Font* fnt = ARK2D::getRenderer()->getFont();
+			ARK::Core::Font::Font* fnt = ARK2D::getRenderer()->getFont();
 			setSize((fnt) ? fnt->getStringWidth(text) : 0, (fnt) ? fnt->getLineHeight() : 0);
 		}
 		Label::Label(string text, signed int alignX, signed int alignY, float sc):
@@ -44,7 +45,7 @@ namespace ARK {
 			m_alignX(alignX),
 			m_alignY(alignY) 
 		{
-			ARK::Font::Font* fnt = ARK2D::getRenderer()->getFont();
+			ARK::Core::Font::Font* fnt = ARK2D::getRenderer()->getFont();
 			setSize((fnt) ? fnt->getStringWidth(text) : 0, (fnt) ? fnt->getLineHeight() : 0);
 			transform.scale.set(sc, sc, sc);
 		}

@@ -5,14 +5,14 @@
  *      Author: Ashley
  */
 
-#ifndef PATHGROUP_H_
-#define PATHGROUP_H_
+#ifndef ARK_PATH_PATHGROUP_H_
+#define ARK_PATH_PATHGROUP_H_
 
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
 
 #include "Path.h"
-#include "../Geometry/Vector2.h"
+#include "../Core/Geometry/Vector2.h"
 #include "../Core/Resource.h"
 
 #include <vector>

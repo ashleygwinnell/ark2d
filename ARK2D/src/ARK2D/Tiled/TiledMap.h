@@ -5,8 +5,8 @@
  *      Author: Ashley
  */
 
-#ifndef TILEDMAP_H_
-#define TILEDMAP_H_
+#ifndef ARK_TILED_TILEDMAP_H_
+#define ARK_TILED_TILEDMAP_H_
 
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
@@ -16,8 +16,8 @@
 #include "../vendor/tinyxml/tinyxml.h"
 #include "../Core/ToString.h"
 #include "../Core/Resource.h"
-#include "../Graphics/Image.h"
-#include "../Graphics/Color.h"
+#include "../Core/Graphics/Image.h"
+#include "../Core/Graphics/Color.h"
 
 #include "TiledMapTileset.h"
 #include "TiledMapProperty.h"

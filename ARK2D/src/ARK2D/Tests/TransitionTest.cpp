@@ -7,10 +7,10 @@
 
 #include "TransitionTest.h"
 //#include "../../ARK.h"
-#include "../State/Transition/SlideRectanglesAcrossTransition.h"
-#include "../State/Transition/TranslateOutInTransition.h"
-#include "../State/Transition/FadeToColourTransition.h"
-#include "../State/Transition/FadeFromColourTransition.h"
+#include "../Core/State/Transition/SlideRectanglesAcrossTransition.h"
+#include "../Core/State/Transition/TranslateOutInTransition.h"
+#include "../Core/State/Transition/FadeToColourTransition.h"
+#include "../Core/State/Transition/FadeFromColourTransition.h"
 
 
 namespace ARK {

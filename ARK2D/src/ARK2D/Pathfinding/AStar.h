@@ -9,8 +9,8 @@
 //#include "../Includes.h"
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
-#include "../Util/Containers/Vector.h"
-#include "../Geometry/AdvancedPolygon.h"
+#include "../Core/Vector.h"
+#include "../Core/Geometry/AdvancedPolygon.h"
 
 /**
  * A* path finder implementation.

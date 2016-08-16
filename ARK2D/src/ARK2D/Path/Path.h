@@ -5,12 +5,12 @@
  *      Author: Ashley
  */
 
-#ifndef PATH_H_
-#define PATH_H_
+#ifndef ARK_PATH_PATH_H_
+#define ARK_PATH_PATH_H_
 
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
-#include "../Geometry/Vector2.h"
+#include "../Core/Geometry/Vector2.h"
 
 #include <vector>
 using namespace std;

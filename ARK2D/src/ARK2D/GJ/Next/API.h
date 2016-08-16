@@ -4,7 +4,7 @@
 
 #define GAMEJOLT_SHORT_NAMES
 
-#include "../../Threading/Mutex.h"
+#include "../../Core/Threading/Mutex.h"
 #include "../../Util/URLRequest.h"
 #include "../MD5.h"
 #include <string>

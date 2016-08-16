@@ -7,7 +7,7 @@
 
 #include "ComboBoxItem.h"
 #include "ComboBox.h"
-#include "../ARK2D.h"
+#include "../Core/ARK2D.h"
 #include "Button.h"
 
 namespace ARK {

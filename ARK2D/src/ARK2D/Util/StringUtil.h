@@ -8,11 +8,11 @@
 #ifndef STRINGUTIL_H_
 #define STRINGUTIL_H_
 
-#include "../ARK2D.h"
+#include "../Core/ARK2D.h"
 
 #include "../Namespaces.h"
-#include "../Graphics/SpriteSheetDescription.h"
-#include "Cast.h"
+//#include "../Graphics/SpriteSheetDescription.h"
+#include "../Core/Cast.h"
 
 #include <string>
 #include <vector>
@@ -28,7 +28,7 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
 		class ARK2D_API StringUtil {
-			friend class ARK::Graphics::SpriteSheetDescription;
+			//friend class ARK::Graphics::SpriteSheetDescription;
 			public:
 
 				static string prepend(string str, int i);

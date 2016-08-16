@@ -12,12 +12,12 @@
 #include "../Common/DLL.h"
 #include "AbstractUIComponent.h"
 
-#include "../ARK2D.h"
+#include "../Core/ARK2D.h"
 #include "../Core/String.h"
-#include "../Controls/Input.h"
-#include "../Graphics/Renderer.h"
-#include "../SceneGraph/Scene.h"
-
+#include "../Core/Controls/Input.h"
+#include "../Core/Geometry/Vector2.h"
+#include "../Core/Graphics/Renderer.h"
+#include "../Core/SceneGraph/Scene.h"
 
 namespace ARK {
 	namespace UI {

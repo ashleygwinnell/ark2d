@@ -19,14 +19,10 @@ namespace ARK {
 	namespace Audio {
 		class Sound;
 	}
-	//! Contains classes for Input e.g. Keyboard, Mouse, Gamepad and Touch.
-	namespace Controls {
-		class Input;
-		class Gamepad;
-        class GamepadListener;
-	}
+
 	//! Core framework classes for Windowing, Default Objects, Events, Resources.
 	namespace Core {
+		class Cast;
 		class Constants;
         class Camera;
         class DummyCamera;
@@ -40,41 +36,159 @@ namespace ARK {
 		class String;
 		class ToString;
 		class Resource;
+		class Strings;
+
+		//! Contains Container classes such as Vector and Pool.
+		//namespace Containers {
+			template <class T>
+			class Vector;
+
+			template <class T>
+			class Pool;
+		//}
+
+        //! Contains classes for Input e.g. Keyboard, Mouse, Gamepad and Touch.
+        namespace Controls {
+            class Input;
+            class Gamepad;
+            class GamepadListener;
+            class KeyListener;
+
+            class ErrorDialog;
+			class FileDialog;
+        }
+
+		//! Contains classes for Font reading, writing and rendering.
+		namespace Font {
+			class Font;
+			class BMFont;
+			class FTFont;
+		}
+
+		//! Contains classes for Geometry including collision detection and resolution.
+		namespace Geometry {
+
+	        template <class T=int>
+	        class CubeTemplate;
+
+	        class Cube;
+
+			template <class T=int>
+			class Shape;
+
+			template <class T=int>
+			class RectangleTemplate;
+
+			class Rectangle;
+
+			template <class T=int>
+			class Circle;
+
+			template <class T=int>
+			class Line;
+
+			class AdvancedPolygon;
+
+            template <class T=float>
+            class Vector4Template;
+
+            class Transform;
+
+            class Vector4;
+		}
+
+		//! Contains classes for Rendering and Animation.
+		namespace Graphics {
+			class Renderer;
+			class Shader;
+			class Color;
+			class Animation;
+			class SpriteSheetDescription;
+			class SpriteSheetDescriptionItem;
+			class SpriteSheetStore;
+			class Image;
+
+			class Texture;
+			class TextureStore;
+
+			class Skybox;
+
+	        class MatrixStack;
+
+	        class HSVShader;
+
+			//! Classes for loading different images types in to pixel buffers.
+			namespace ImageIO {
+				class BMPImage;
+				class PNGImage;
+				class TargaImage;
+			}
+
+			//! Classes for loading different 3d models as SceneNodes.
+			namespace Model {
+				class ImageModel;
+				class ObjModel;
+			}
+		}
+
+		//! Contains classes for Maths / Random numbers.
+		namespace Math {
+			class Random;
+
+            template <class T=float>
+            class Matrix44Template;
+
+            class Matrix44;
+
+            template <class T=float>
+            class Matrix33Template;
+
+            class Matrix33;
+
+            class MathUtil;
+		}
+
+        //! Classes for Scenegraphs
+        namespace SceneGraph {
+            class Scene;
+            class SceneNode;
+            class SceneGroup;
+            class SceneImage;
+        }
+
+		//! Classes for the finite state machine and game state. (e.g. Transitions, Loading)
+		namespace State {
+			class StateBasedGame;
+			class GameState;
+			class LoadingState;
+			class VideoGameState;
+
+			//! Classes for transitioning between game states.
+			namespace Transition {
+				class Transition;
+				class TranslateOutInTransition;
+				class SlideRectanglesAcrossTransition;
+				class FadeFromColourTransition;
+				class FadeToColourTransition;
+				class FadeTransition;
+				class EmptyTransition;
+			}
+		}
+		//! Contains classes for Multi-threading.
+		namespace Threading {
+			class Thread;
+			class Mutex;
+		}
+
+		//! Easing and time-based events.
+		namespace Tween {
+			class Easing;
+			class Timeline;
+			class Timer;
+		}
 	}
-	//! Contains classes for Font reading, writing and rendering.
-	namespace Font {
-		class Font;
-		class BMFont;
-		class FTFont;
-	}
-	//! Contains classes for Geometry including collision detection and resolution.
-	namespace Geometry {
-
-        template <class T=int>
-        class CubeTemplate;
-
-        class Cube;
-
-		template <class T=int>
-		class Shape;
-
-		template <class T=int>
-		class RectangleTemplate;
-
-		class Rectangle;
-
-		template <class T=int>
-		class Circle;
-
-		template <class T=int>
-		class Line;
-
-		class AdvancedPolygon;
 
 
-
-
-	}
 	//! Classes for Game Jolt APIs.
 	namespace GJ {
 		class PropertyItem;
@@ -83,45 +197,6 @@ namespace ARK {
 		class Trophy;
 		class User;
 		class GameJolt;
-	}
-
-	//! Contains classes for Rendering and Animation.
-	namespace Graphics {
-		class Renderer;
-		class Shader;
-		class Color;
-		class Animation;
-		class SpriteSheetDescription;
-		class SpriteSheetDescriptionItem;
-		class SpriteSheetStore;
-		class Image;
-
-		class Texture;
-		class TextureStore;
-
-		class Skybox;
-
-        class MatrixStack;
-
-        class HSVShader;
-
-		//! Classes for loading different images types in to pixel buffers.
-		namespace ImageIO {
-			class BMPImage;
-			class PNGImage;
-			class TargaImage;
-		}
-
-		//! Classes for loading different 3d models as SceneNodes.
-		namespace Model {
-			class ImageModel;
-			class ObjModel;
-		}
-	}
-
-	//! Contains classes for Maths / Random numbers.
-	namespace Math {
-		class Random;
 	}
 
 	//! Contains classes for Local/Online Networking with a custom UDP protocol.
@@ -159,42 +234,13 @@ namespace ARK {
 		class AStarNode;
 	}
 
-	//! Classes for Scenegraphs
-	namespace SceneGraph {
-		class Scene;
-		class SceneNode;
-		class SceneGroup;
-		class SceneImage;
-	}
 
 	//! Classes for skeletal animations
 	namespace Spine {
 		class Skeleton;
 	}
 
-	//! Classes for the finite state machine and game state. (e.g. Transitions, Loading)
-	namespace State {
-		class StateBasedGame;
-		class GameState;
-		class LoadingState;
-		class VideoGameState;
 
-		//! Classes for transitioning between game states.
-		namespace Transition {
-			class Transition;
-			class TranslateOutInTransition;
-			class SlideRectanglesAcrossTransition;
-			class FadeFromColourTransition;
-			class FadeToColourTransition;
-			class FadeTransition;
-			class EmptyTransition;
-		}
-	}
-	//! Contains classes for Multi-threading.
-	namespace Threading {
-		class Thread;
-		class Mutex;
-	}
 	//! Contains classes for reading and rendering TilED maps.
 	namespace Tiled {
 		class TiledMap;
@@ -209,21 +255,14 @@ namespace ARK {
 		class TiledMapParser_RapidXml;
 		class TiledMapParser_JSON;
 	}
-	//! Easing and time-based events.
-	namespace Tween {
-		class Easing;
-		class Timeline;
-		class Timer;
-	}
+
 	//! Contains classes for building and showing User Interfaces.
 	namespace UI {
-		class ErrorDialog;
 		class AbstractUIComponent;
 		class Button;
 		class CheckBox;
 		class ComboBox;
 		class ComboBoxItem;
-		class FileDialog;
 		class Label;
 		class Panel;
 		class ScrollPanel;
@@ -239,13 +278,10 @@ namespace ARK {
 		class AnalyticsUtil;
 		class GooglePlayGameServicesUtil;
 		class Log;
-   		class Strings;
-		class CameraShake;
-		class Cast;
+   		class CameraShake;
 		class FileUtil;
 		class LocalHighscores;
 		class KeyPairFile;
-		class MathUtil;
 		class RSSL;
 		class StringUtil;
 		class URLRequest;
@@ -253,61 +289,47 @@ namespace ARK {
 		class Callback;
 		class DisplayUtil;
 		class Wobble;
-		class Transform;
 
-		template <class T=float>
-		class Matrix44Template;
 
-        class Matrix44;
 
-        template <class T=float>
-		class Matrix33Template;
-
-        class Matrix33;
 
 		template <class T>
 		class Range;
 
-		template <class T=float>
-		class Vector4Template;
 
-		class Vector4;
 
-		//! Contains Container classes such as Vector and Pool.
-		namespace Containers {
-			template <class T>
-			class Vector;
 
-			template <class T>
-			class Pool;
-		}
 	}
 
 }
 using namespace ARK;
-using namespace ARK::Audio;
-using namespace ARK::Controls;
+
 using namespace ARK::Core;
-using namespace ARK::Font;
-using namespace ARK::Geometry;
+using namespace ARK::Core::Controls;
+using namespace ARK::Core::Font;
+using namespace ARK::Core::Geometry;
+using namespace ARK::Core::Graphics;
+using namespace ARK::Core::Graphics::ImageIO;
+using namespace ARK::Core::Graphics::Model;
+using namespace ARK::Core::Tween;
+using namespace ARK::Core::Threading;
+using namespace ARK::Core::Math;
+using namespace ARK::Core::SceneGraph;
+using namespace ARK::Core::State;
+using namespace ARK::Core::State::Transition;
+
+using namespace ARK::Audio;
 using namespace ARK::GJ;
-using namespace ARK::Graphics;
-using namespace ARK::Graphics::ImageIO;
-using namespace ARK::Graphics::Model;
 using namespace ARK::Tiled;
-using namespace ARK::Tween;
-using namespace ARK::Threading;
-using namespace ARK::Math;
 using namespace ARK::Net;
 using namespace ARK::Path;
 using namespace ARK::Pathfinding;
 using namespace ARK::Particles;
-using namespace ARK::SceneGraph;
+
 using namespace ARK::Spine;
-using namespace ARK::State;
-using namespace ARK::State::Transition;
+
 using namespace ARK::UI;
 using namespace ARK::Util;
-using namespace ARK::Util::Containers;
+//using namespace ARK::Util::Containers;
 
 #endif /* ARK2D_NAMESPACES_H_ */

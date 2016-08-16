@@ -1,11 +1,11 @@
 
 #include "SpineSkeleton.h"
 
-#include "../../ARK2D.h"
+#include "../../Core/ARK2D.h"
 #include "../../Util/FileUtil.h"
 #include "../../Core/GameContainer.h"
 #include "../../Core/GameTimer.h"
-#include "../../Graphics/Texture.h"
+#include "../../Core/Graphics/Texture.h"
 
 #ifndef SPINE_MESH_VERTEX_COUNT_MAX
 #define SPINE_MESH_VERTEX_COUNT_MAX 512

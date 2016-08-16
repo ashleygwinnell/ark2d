@@ -44,7 +44,7 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
 		class ARK2D_API Resource {
-			friend class ARK::Graphics::TextureStore;
+            friend class ARK::Core::Graphics::TextureStore;
 			friend class ARK::Tiled::TiledMapParser_TinyXml;
 			friend class ARK::Tiled::TiledMapParser_RapidXml;
 			friend class ARK::Tiled::TiledMapParser_JSON;
@@ -81,14 +81,14 @@ namespace ARK {
 				Resource();
 				Image* asImage();
 				Sound* asSound();
-				ARK::Font::Font* asFont();
+				ARK::Core::Font::Font* asFont();
 				LocalHighscores* asLocalHighscores();
 				TiledMap* asTiledMap();
 				ARK::Core::String* asString();
 				PathGroup* asPathGroup();
 				SpriteSheetDescription* asSpriteSheetDescription();
 				KeyPairFile* asKeyPairFile();
-				ARK::Spine::Skeleton* asSkeleton();
+				//ARK::Spine::Skeleton* asSkeleton();
 				Resource& operator=(const Resource& r);
 				virtual ~Resource();
 

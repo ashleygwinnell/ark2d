@@ -6,11 +6,11 @@
  */
 
 
-#include "../Includes.h"
-#include "../Graphics/Color.h"
-#include "../Graphics/Image.h"
-#include "../Graphics/Renderer.h"
-#include "../ARK2D.h"
+// #include "../Includes.h"
+#include "../Core/ARK2D.h"
+#include "../Core/Graphics/Color.h"
+#include "../Core/Graphics/Image.h"
+#include "../Core/Graphics/Renderer.h"
 
 #include "Particle.h"
 #include "ParticleSystem.h"

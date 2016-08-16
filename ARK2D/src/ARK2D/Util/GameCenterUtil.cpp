@@ -7,8 +7,8 @@
 
 #include "GameCenterUtil.h"
 
-#include "../ARK2D.h"
 //#include "../Includes.h"
+#include "../Core/ARK2D.h"
 #include "../Core/GameContainer.h"
 
 

@@ -8,33 +8,31 @@
 #include "GameContainerWindows.h"
 #include "../GameContainer.h"
 #include "../Camera.h"
-#include "../../ARK2D.h"
+#include "../ARK2D.h"
 #include "../../Common/Audio.h"
 
 #include "../../Namespaces.h"
 //#include "../../Includes.h"
 
-#include "../../Geometry/Shape.h"
-#include "../../Geometry/Circle.h"
-#include "../../Geometry/Line.h"
-#include "../../Geometry/Rectangle.h"
+#include "../Geometry/Shape.h"
+#include "../Geometry/Circle.h"
+#include "../Geometry/Line.h"
+#include "../Geometry/Rectangle.h"
 
 
 #if defined(ARK2D_WINDOWS)
 
-	#include "../../Math/Random.h"
+	#include "../Math/Random.h"
 
-	#include "../../Geometry/GigaRectangle.h"
+	#include "../Geometry/GigaRectangle.h"
 
 	#include "../../Windres.h"
-	#include "../../Graphics/Image.h"
+	#include "../Graphics/Image.h"
 	#include "../../Util/Log.h"
  	#include "../../Util/Callbacks.h"
 
 	#include <VersionHelpers.h>
 	#include <XInput.h>
-
-
 
 	namespace ARK {
 		namespace Core {

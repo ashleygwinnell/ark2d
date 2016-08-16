@@ -1,5 +1,5 @@
-#ifndef TILED_MAP_TILESET_H_
-#define TILED_MAP_TILESET_H_
+#ifndef ARK_TILED_TILEDMAPTILESET_H_
+#define ARK_TILED_TILEDMAPTILESET_H_
 
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
@@ -11,7 +11,7 @@
 //#include "../Graphics/Image.h"
 
 #include "TiledMapTile.h"
-#include "../Graphics/Color.h"
+#include "../Core/Graphics/Color.h"
 
 using namespace std;
 

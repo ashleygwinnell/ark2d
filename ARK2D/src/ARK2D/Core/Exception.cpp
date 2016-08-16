@@ -6,7 +6,7 @@
  */
 
 #include "Exception.h"
-#include "../UI/ErrorDialog.h"
+#include "Controls/ErrorDialog.h"
 
 namespace ARK {
 	namespace Core {

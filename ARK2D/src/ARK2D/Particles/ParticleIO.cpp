@@ -10,9 +10,9 @@
 #include "ConfigurableEmitter.h"
 #include "Particle.h"
 #include "ParticlePool.h"
-#include "../Graphics/Color.h"
-#include "../UI/ErrorDialog.h" 
-#include "../Graphics/Image.h"
+#include "../Core/Graphics/Color.h"
+#include "../Core/Controls/ErrorDialog.h"
+#include "../Core/Graphics/Image.h"
 #include "../Util/StringUtil.h"
  
 

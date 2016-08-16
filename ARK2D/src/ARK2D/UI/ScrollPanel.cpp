@@ -7,7 +7,7 @@
 
 #include "ScrollPanel.h"
 #include "../Core/String.h"
-#include "../Graphics/Renderer.h"
+#include "../Core/Graphics/Renderer.h"
 
 namespace ARK {
 	namespace UI {
@@ -85,7 +85,7 @@ namespace ARK {
 			m_calculatedHeight = 0;
 
 			for (signed int i = children.size() - 1; i >= 0; i--) {
-				ARK::Geometry::Cube* bounds = children[i]->getBounds();
+                ARK::Core::Geometry::Cube* bounds = children[i]->getBounds();
                 float maxX = children[i]->transform.position.getX() + (bounds->getWidth()*(1.0f - children[i]->pivot.getX()));
                 float maxY = children[i]->transform.position.getY() + (bounds->getHeight()*(1.0f - children[i]->pivot.getY()));
 				if (maxX > m_calculatedWidth) {
@@ -121,7 +121,7 @@ namespace ARK {
 				m_offsetY = (signed int) (m_height) - m_calculatedHeight;
 			}
 
-			ARK::Geometry::Cube* bounds = getBounds();
+            ARK::Core::Geometry::Cube* bounds = getBounds();
             Renderer* r = ARK2D::getRenderer();
 
 			int syh = (int) ((float(bounds->getHeight()-30) / float(m_calculatedHeight)) * bounds->getHeight());

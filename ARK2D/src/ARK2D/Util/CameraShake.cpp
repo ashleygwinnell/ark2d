@@ -8,8 +8,8 @@
 #include "CameraShake.h"
 #include "../Core/Game.h"
 #include "../Core/GameTimer.h"
-#include "../Tween/Timeline.h"
-#include "../Graphics/Renderer.h"
+#include "../Core/Tween/Timeline.h"
+#include "../Core/Graphics/Renderer.h"
 
 namespace ARK {
 	namespace Util {

@@ -1,7 +1,7 @@
 
 #include "NetTest.h"
 
-#include "../Controls/Input.h"
+#include "../Core/Controls/Input.h"
 
 
 namespace ARK {

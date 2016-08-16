@@ -6,9 +6,9 @@
  */
 
 #include "Panel.h"
-#include "../Controls/Input.h"
-#include "../Geometry/Cube.h"
-#include "../Graphics/Renderer.h"
+#include "../Core/Controls/Input.h"
+#include "../Core/Geometry/Cube.h"
+#include "../Core/Graphics/Renderer.h"
 
 namespace ARK {
 	namespace UI {
@@ -89,7 +89,7 @@ namespace ARK {
 					worldpost5 += ")";
 					r->drawString(worldpost5, 0, 55, -1, -1, 0.0, 0.5f);
 
-					ARK::Geometry::Cube* bounds = getBounds();
+                    ARK::Core::Geometry::Cube* bounds = getBounds();
 					r->setDrawColor(Color::white);
 					r->fillCircle(bounds->getWidth() * pivot.getX(), bounds->getHeight() * pivot.getY(),2,10);
 				}
@@ -124,7 +124,7 @@ namespace ARK {
 			m_bounds.set(0,0,0,w,h,d);
 		}
 
-		ARK::Geometry::Cube* Panel::getBounds() {
+        ARK::Core::Geometry::Cube* Panel::getBounds() {
 			m_bounds.set(0, 0, 0, m_width, m_height, 0);
 			return &m_bounds;
 		}

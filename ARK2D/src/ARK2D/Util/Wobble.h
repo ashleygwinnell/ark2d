@@ -10,7 +10,7 @@
 
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
-#include "../Geometry/Vector2.h"
+#include "../Core/Geometry/Vector2.h"
 
 namespace ARK {
 	namespace Util {

@@ -6,8 +6,8 @@
  */
 
 #include "CheckBox.h"
-#include "../Graphics/Renderer.h"
-#include "../Controls/Input.h"
+#include "../Core/Graphics/Renderer.h"
+#include "../Core/Controls/Input.h"
 
 namespace ARK {
 	namespace UI {  

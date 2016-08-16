@@ -5,14 +5,14 @@
  *      Author: ashleygwinnell
  */
 
-#ifndef GamepadsTestState_H__
-#define GamepadsTestState_H__
+#ifndef ARK_TESTS_GamepadsTestState_H__
+#define ARK_TESTS_GamepadsTestState_H__
 
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
 
-#include "../State/GameState.h"
-#include "../State/StateBasedGame.h"
+#include "../Core/State/GameState.h"
+#include "../Core/State/StateBasedGame.h"
 
 #include <vector>
 using std::vector;
@@ -69,11 +69,11 @@ namespace ARK {
 				virtual bool keyReleased(unsigned int key);
 				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
-				virtual void gamepadConnected(ARK::Controls::Gamepad* gamepad);
-				virtual void gamepadDisconnected(ARK::Controls::Gamepad* gamepad);
-				virtual void buttonPressed(ARK::Controls::Gamepad* gamepad, unsigned int button);
-				virtual void buttonReleased(ARK::Controls::Gamepad* gamepad, unsigned int button);
-				virtual void axisMoved(ARK::Controls::Gamepad* gamepad, unsigned int axis, float value);
+				virtual void gamepadConnected(ARK::Core::Controls::Gamepad* gamepad);
+				virtual void gamepadDisconnected(ARK::Core::Controls::Gamepad* gamepad);
+				virtual void buttonPressed(ARK::Core::Controls::Gamepad* gamepad, unsigned int button);
+				virtual void buttonReleased(ARK::Core::Controls::Gamepad* gamepad, unsigned int button);
+				virtual void axisMoved(ARK::Core::Controls::Gamepad* gamepad, unsigned int axis, float value);
 
 				virtual ~GamepadConfigureGameState();
 		};
@@ -96,7 +96,7 @@ namespace ARK {
 				void init(GameContainer* container, StateBasedGame* game);
 				void update(GameContainer* container, StateBasedGame* game, GameTimer* timer);
 				void render(GameContainer* container, StateBasedGame* game, Renderer* r);
-				static void renderGamepad(ARK::Controls::Gamepad* g, float rootX, float rootY);
+				static void renderGamepad(ARK::Core::Controls::Gamepad* g, float rootX, float rootY);
 
 				static void returnToStateStatic(GamepadsTestGameState* gs);
 
@@ -104,11 +104,11 @@ namespace ARK {
 				virtual bool keyReleased(unsigned int key);
 				virtual bool mouseMoved(int x, int y, int oldx, int oldy);
 
-				virtual void gamepadConnected(ARK::Controls::Gamepad* gamepad);
-				virtual void gamepadDisconnected(ARK::Controls::Gamepad* gamepad);
-				virtual void buttonPressed(ARK::Controls::Gamepad* gamepad, unsigned int button);
-				virtual void buttonReleased(ARK::Controls::Gamepad* gamepad, unsigned int button);
-				virtual void axisMoved(ARK::Controls::Gamepad* gamepad, unsigned int axis, float value);
+				virtual void gamepadConnected(ARK::Core::Controls::Gamepad* gamepad);
+				virtual void gamepadDisconnected(ARK::Core::Controls::Gamepad* gamepad);
+				virtual void buttonPressed(ARK::Core::Controls::Gamepad* gamepad, unsigned int button);
+				virtual void buttonReleased(ARK::Core::Controls::Gamepad* gamepad, unsigned int button);
+				virtual void axisMoved(ARK::Core::Controls::Gamepad* gamepad, unsigned int axis, float value);
 
 				virtual ~GamepadsTestGameState();
 		};
@@ -133,4 +133,4 @@ namespace ARK {
 
 
 
-#endif /* GamepadsTestState_H__ */
+#endif /* ARK_TESTS_GamepadsTestState_H__ */

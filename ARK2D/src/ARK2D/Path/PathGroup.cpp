@@ -8,11 +8,11 @@
 #include "PathGroup.h"
 #include "SubPath.h"
 
-#include "../ARK2D.h"
-#include "../Graphics/Renderer.h"
-#include "../Util/MathUtil.h"
+#include "../Core/ARK2D.h"
+#include "../Core/Graphics/Renderer.h"
+#include "../Core/Math/MathUtil.h"
 #include "../Core/GameTimer.h"
-#include "../Tween/Easing.h"
+#include "../Core/Tween/Easing.h"
 
 namespace ARK {
 	namespace Path {

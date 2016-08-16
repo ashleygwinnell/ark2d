@@ -11,10 +11,10 @@
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
 
-#include "../State/GameState.h"
-#include "../State/StateBasedGame.h"
+#include "../Core/State/GameState.h"
+#include "../Core/State/StateBasedGame.h"
 
-#include "../Util/Containers/Vector.h"
+#include "../Core/Vector.h"
 
 #include <string>
 using namespace std;
@@ -26,8 +26,8 @@ namespace ARK {
 			public:
 				int index;
 				string name;
-				ARK::Graphics::HSVShader* shader;
-				ARK::Graphics::Image* texture;
+                ARK::Core::Graphics::HSVShader* shader;
+                ARK::Core::Graphics::Image* texture;
 				ARK::UI::Slider* m_sliderHue;
 				ARK::UI::Slider* m_sliderSaturation;
 				ARK::UI::Slider* m_sliderValue;
@@ -66,7 +66,7 @@ namespace ARK {
 		class ARK2D_API ShaderTest : public StateBasedGame {
 			public:
 				unsigned int shaderIndex;
-				ARK::Util::Containers::Vector<ARK::Graphics::Shader*> shaders;
+                ARK::Core::Vector<ARK::Core::Graphics::Shader*> shaders;
 				
 				ShaderTest();
 				virtual void initStates(GameContainer* container);

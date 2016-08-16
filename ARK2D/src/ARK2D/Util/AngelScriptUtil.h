@@ -8,13 +8,11 @@
 #ifndef ARK_UTIL_ANGELSCRIPTUTIL_H_
 #define ARK_UTIL_ANGELSCRIPTUTIL_H_
 
-
-
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
 #include "../Common/Libraries/angelscript.h"
 
-#include "../UI/ErrorDialog.h"
+#include "../Core/Controls/ErrorDialog.h"
 
 namespace ARK {
 	namespace Util {

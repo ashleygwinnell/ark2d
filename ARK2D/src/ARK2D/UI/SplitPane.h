@@ -10,7 +10,7 @@
 
 #include "../Namespaces.h"
 #include "AbstractUIComponent.h"
-#include "../Geometry/Cube.h"
+#include "../Core/Geometry/Cube.h"
 
 namespace ARK {
 	namespace UI {
@@ -21,7 +21,7 @@ namespace ARK {
 		 */
 		class ARK2D_API SplitPane : public AbstractUIComponent {
 			public:
-				ARK::Geometry::Cube m_bounds;
+                ARK::Core::Geometry::Cube m_bounds;
 				unsigned int m_splitType;
 				float m_splitLocation;
 
@@ -46,7 +46,7 @@ namespace ARK {
 				virtual void render();
 
 				virtual	void setBounds(float w, float h, float z);
-				virtual ARK::Geometry::Cube* getBounds();
+                virtual ARK::Core::Geometry::Cube* getBounds();
 
 				virtual bool keyPressed(unsigned int key);
 				virtual bool keyReleased(unsigned int key);
