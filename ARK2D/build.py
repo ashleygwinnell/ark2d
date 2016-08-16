@@ -4126,7 +4126,7 @@ build:
 
 
 						icongenstr = str(json.dumps(icongenarr, separators=(',',':'))).replace("\"", "\\\"");
-						icongenLINE = "java -jar " + self.ark2d_dir + "/../Tools/ARK2D\ Image\ Resizer/build/jar/Resizer.jar \"" + icongenstr + "\"";
+						icongenLINE = "java -jar " + self.ark2d_dir + "/../Tools/Image\ Resizer/build/jar/Resizer.jar \"" + icongenstr + "\"";
 						print(icongenLINE);
 						subprocess.call([icongenLINE], shell=True);
 
@@ -4935,7 +4935,7 @@ build:
 
 
 					icongenstr = str(json.dumps(icongenarr, separators=(',',':'))).replace("\"", "\\\"");
-					icongenLINE = "java -jar -Xmx512m " + self.ark2d_dir + "/../Tools/ARK2D\ Image\ Resizer/build/jar/ImageResizer.jar \"" + icongenstr + "\"";
+					icongenLINE = "java -jar -Xmx512m " + self.ark2d_dir + "/../Tools/Image\ Resizer/build/jar/ImageResizer.jar \"" + icongenstr + "\"";
 					print(icongenLINE);
 					subprocess.call([icongenLINE], shell=True);
 
@@ -5064,7 +5064,7 @@ build:
 						defaultsgenarr.extend([defaultsgenobj]);
 
 						defaultsgenstr = str(json.dumps(defaultsgenarr, separators=(',',':'))).replace("\"", "\\\"");
-						defaultsgenLINE = "java -jar -Xmx512m " + self.ark2d_dir + "/../Tools/ARK2D\ Image\ Resizer/build/jar/ImageResizer.jar \"" + defaultsgenstr + "\"";
+						defaultsgenLINE = "java -jar -Xmx512m " + self.ark2d_dir + "/../Tools/Image\ Resizer/build/jar/ImageResizer.jar \"" + defaultsgenstr + "\"";
 						print(defaultsgenLINE);
 						subprocess.call([defaultsgenLINE], shell=True);
 					pass;

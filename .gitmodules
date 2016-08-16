@@ -8,3 +8,6 @@
 [submodule "Tools/Image Packer"]
 	path = Tools/Image Packer
 	url = git@github.com:ashleygwinnell/ark2d-imagepacker.git
+[submodule "Tools/Image Resizer"]
+	path = Tools/Image Resizer
+	url = git@github.com:ashleygwinnell/ark2d-imageresizer.git
