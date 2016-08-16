@@ -6,3 +6,7 @@ Examples*
 .vscode/
 Tools/FMODAPI/api/studio/examples
 Tools/FMODAPI/api/lowlevel/examples
+ARK2D/src/ARK2D/vendor/android/angelscript/obj/**
+ARK2D/src/ARK2D/vendor/android/angelscript/libs/**/*.so
+ARK2D/src/ARK2D/vendor/android/libzip/libs/**/*.so
+ARK2D/src/ARK2D/vendor/android/openal/libs/**/*.so
