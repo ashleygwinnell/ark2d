@@ -13,12 +13,12 @@
 #include "MathUtil.h"
 //#include "../UI/ErrorDialog.h"
 
-#include "../../vendor/glm/glm.hpp"
-#include "../../vendor/glm/gtx/transform.hpp"
-#include "../../vendor/glm/gtc/quaternion.hpp"
-#include "../../vendor/glm/gtx/quaternion.hpp"
-#include "../../vendor/glm/gtc/matrix_transform.hpp"
-#include "../../vendor/glm/gtc/type_ptr.hpp"
+#include "../Vendor/glm/glm/glm.hpp"
+#include "../Vendor/glm/glm/gtx/transform.hpp"
+#include "../Vendor/glm/glm/gtc/quaternion.hpp"
+#include "../Vendor/glm/glm/gtx/quaternion.hpp"
+#include "../Vendor/glm/glm/gtc/matrix_transform.hpp"
+#include "../Vendor/glm/glm/gtc/type_ptr.hpp"
 
 namespace ARK {
     namespace Core {
