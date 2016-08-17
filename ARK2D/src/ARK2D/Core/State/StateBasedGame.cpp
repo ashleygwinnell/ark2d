@@ -248,9 +248,9 @@ namespace ARK {
 
                 // render all states
                 renderChildren();
-                if (ARK2D::getLog()->isVisible()) {
-                    renderBounds();
-                }
+                //if (ARK2D::getLog()->isVisible()) {
+                //    renderBounds();
+                //}
 
                 postRenderTransitions();
 

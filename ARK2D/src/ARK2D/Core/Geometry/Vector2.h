@@ -15,7 +15,7 @@
 #include <string>
 #include "../Cast.h"
 //#include "../Core/String.h"
-//#include "../Util/Log.h"
+//#include "../Core/Log.h"
 //#include "../Util/MathUtil.h"
 
 using namespace std;

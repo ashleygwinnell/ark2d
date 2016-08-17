@@ -11,7 +11,7 @@
 #include "GameContainer.h"
 #include "Strings.h"
 
-#include "../Util/Log.h"
+#include "Log.h"
 #include "../Util/FileUtil.h"
 
 #if defined( ARK2D_MISSING_C99_FUNCTIONS ) && defined( ARK2D_MISSING_C99_FUNCTIONDEFINITIONS )
@@ -20,26 +20,27 @@
 #endif
 
 GameContainer* ARK2D::s_container = 0;
-Game* ARK2D::s_game = 0; 
-Renderer* ARK2D::s_graphics = 0; 
-Input* ARK2D::s_input = 0;  
+Game* ARK2D::s_game = 0;
+Renderer* ARK2D::s_graphics = 0;
+Input* ARK2D::s_input = 0;
 Log* ARK2D::s_log = 0;
 Camera* ARK2D::s_camera = 0;
 Strings* ARK2D::s_strings = 0;
+Scene* ARK2D::s_scene = 0;
 bool ARK2D::s_debug = false;
 bool ARK2D::s_expo = false;
 bool ARK2D::s_steam = false;
 vector<string> ARK2D::s_commandLineParameters;
 
 void ARK2D::main(int args, char** argv) {
-	// add to command line parameters somewhere. 
+	// add to command line parameters somewhere.
 	// do things with these cmd params.
 	string args_str = Cast::toString<int>(args);
-	 
+
 	// no arguments were passed
 	ARK2D::getLog()->i("ARK2D main");
 	ARK2D::getLog()->i(StringUtil::append("Command line parameters: ", args_str));
-	if (args >= 2) 
+	if (args >= 2)
     {
         for (int i = 1; i < args; ++i) {
         	char* param = argv[i];
@@ -68,9 +69,9 @@ void ARK2D::main(int args, char** argv) {
 
 GameContainer* ARK2D::getContainer() {
 	return s_container;
-} 
+}
 
-Game* ARK2D::getGame() {  
+Game* ARK2D::getGame() {
 	return s_game;
 }
 
@@ -85,11 +86,11 @@ Input* ARK2D::getInput() {
 GameTimer* ARK2D::getTimer() {
 	return s_container->getTimer();
 }
- 
+
 Log* ARK2D::getLog() {
-	if (s_log == NULL) { 
+	if (s_log == NULL) {
 		s_log = Log::getInstance();
-	} 
+	}
 	return s_log;
 }
 Strings* ARK2D::getStrings() {
@@ -97,6 +98,15 @@ Strings* ARK2D::getStrings() {
         s_strings = ARK::Core::Strings::getInstance();
 	}
 	return s_strings;
+}
+Scene* ARK2D::getScene() {
+	if (s_scene == NULL) {
+		s_scene = new ARK::Core::SceneGraph::Scene();
+		s_scene->addChild(ARK2D::s_camera);
+		s_scene->addChild(ARK2D::s_game);
+		s_scene->addChild(new LetterboxNode());
+	}
+	return s_scene;
 }
 
 bool ARK2D::isDebug() {
@@ -107,12 +117,12 @@ void ARK2D::setDebug(bool b) {
 }
 
 bool ARK2D::isExpoMode() {
-	return s_expo; 
+	return s_expo;
 }
 void ARK2D::setExpoMode(bool b) {
 	s_expo = b;
 }
-		
+
 bool ARK2D::isSteam() {
 	return s_steam;
 }
@@ -174,9 +184,9 @@ unsigned int ARK2D::getPlatform() {
 		return PLATFORM_XBOXONE;
 	#elif defined(ARK2D_UBUNTU_LINUX)
 		return PLATFORM_LINUX;
-	#endif 
+	#endif
 
-		
+
 }
 std::string ARK2D::getPlatformString() {
 	#if defined(ARK2D_FLASCC)

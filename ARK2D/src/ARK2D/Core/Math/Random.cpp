@@ -1,7 +1,7 @@
 /*
  * Random.cpp
  *
- *  Created on: 22 Nov 2015 
+ *  Created on: 22 Nov 2015
  *      Author: Ashley
  */
 
@@ -9,7 +9,6 @@
 
 #include "../ARK2D.h"
 #include "../GameContainer.h"
-//#include "../Util/Log.h"
 #include "../../vendor/mersennetwister/mt.h"
 
 namespace ARK {
@@ -23,7 +22,7 @@ namespace ARK {
             }
             void RandomImplementation::seed() {
                 seed(ARK2D::getContainer()->getTimer()->millis());
-            } 
+            }
             float RandomImplementation::randBetweenf(float lower, float upper) {
                 if (lower == upper) { return upper; }
                 if (lower > upper) { float teacup = lower; lower = upper; upper = teacup; }
@@ -38,7 +37,7 @@ namespace ARK {
 
 
             // std C/C++ implementation
-            DefaultRandomImplementation::DefaultRandomImplementation(): 
+            DefaultRandomImplementation::DefaultRandomImplementation():
                 RandomImplementation() {
 
             }
@@ -58,7 +57,7 @@ namespace ARK {
 
             // Mersenne Twister implementation.
             MersenneTwisterRandomImplementation::MersenneTwisterRandomImplementation():
-                RandomImplementation(), 
+                RandomImplementation(),
                 m_generator(NULL) {
                     m_generator = new MersenneTwister();
             }
@@ -80,7 +79,7 @@ namespace ARK {
             // Lehmer implementation.
             ParkMillerRandomImplementation::ParkMillerRandomImplementation():
                 RandomImplementation() {
-                
+
             }
             void ParkMillerRandomImplementation::seed(unsigned long seed) {
                 ARK2D::getLog()->i("Setting ParkMillerRandomImplementation seed.");
@@ -98,7 +97,7 @@ namespace ARK {
             ParkMillerRandomImplementation::~ParkMillerRandomImplementation() {
 
             }
-            
+
 
 
             // ---------------------------------------------------
@@ -108,7 +107,7 @@ namespace ARK {
             unsigned int Random::s_implementation = 0;
 
             void Random::init() {
-                if (s_implementations == NULL) { 
+                if (s_implementations == NULL) {
                     s_implementations = new std::vector<RandomImplementation*>();
                     s_implementations->push_back( new DefaultRandomImplementation() );
                     s_implementations->push_back( new MersenneTwisterRandomImplementation() );

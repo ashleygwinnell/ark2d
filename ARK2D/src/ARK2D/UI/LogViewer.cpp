@@ -5,61 +5,40 @@
  *      Author: ashleygwinnell
  */
 
-#include "Log.h"
+#include "LogViewer.h"
 
 #include "../Core/ARK2D.h"
 #include "../Core/String.h"
 #include "../Core/GameContainer.h"
 #include "../Core/Graphics/Renderer.h"
 #include "../Core/Strings.h"
-#include "../UI/Slider.h"
-#include "../UI/CheckBox.h"
-#include "../UI/Label.h"
-#include "../UI/ComboBox.h"
-#include "../UI/ComboBoxItem.h"
-#include "../UI/SplitPane.h"
-#include "../UI/TitledPanel.h"
+#include "Slider.h"
+#include "CheckBox.h"
+#include "Label.h"
+#include "ComboBox.h"
+#include "ComboBoxItem.h"
+#include "SplitPane.h"
+#include "TitledPanel.h"
 
 #include <algorithm>
 #include <ostream>
 #include <fstream>
-
 #ifdef ARK2D_MACINTOSH
     #include <execinfo.h>
 #endif
 
 namespace ARK {
-	namespace Util {
+	namespace UI {
 
-		Log* Log::s_instance = NULL;
-
-		Log* Log::getInstance() {
-			if (s_instance == NULL) {
-				s_instance = new Log();
-			}
-			return s_instance;
-		}
-
-		Log::Log():
+		LogViewer::LogViewer():
 			SceneNode("log"),
-			m_messages(),
-			m_messagesPool(),
-			m_maxMessages(256),
-
-			m_watchedVariables(),
-
-			m_filter(TYPE_ALL),
 			m_enabled(true),
 			m_backgroundColor(NULL),
 			m_gameSpeedSlider(NULL),
 			m_expoCheckbox(NULL),
-			m_addGamepadButton(NULL),
-
-			m_logToFile(false)
+			m_addGamepadButton(NULL)
 			{
 				this->visible = false;
-
-
 		}
 
 		void debugLanguageChanged(ComboBox* box) {
@@ -69,7 +48,7 @@ namespace ARK {
 			//ARK2D::getStrings()->print();
 		}
 
-		void Log::onResize() {
+		void LogViewer::onResize() {
 			GameContainer* container = ARK2D::getContainer();
 			setBounds(container->getWidth(), container->getHeight(), 0);
 
@@ -77,15 +56,9 @@ namespace ARK {
 			node->onResize();
 		}
 
-		void Log::init() {
-			for(unsigned int i = 0; i < m_maxMessages; i++) {
-				LogMessage* item = new LogMessage();
-				m_messagesPool.push_back(item);
-			}
- 			m_backgroundColor = new Color(Color::black_50a);
-
- 			//m_scene = new Scene();
-
+		void LogViewer::init()
+		{
+			m_backgroundColor = new Color(Color::black_50a);
 
  			GameContainer* container = ARK2D::getContainer();
  			setBounds(container->getWidth(), container->getHeight(), 0);
@@ -94,10 +67,7 @@ namespace ARK {
  			splitHorizontal->setName("split_horizontal");
  			splitHorizontal->setSplitLocation(0.2f);
 
-
-
-
- 				SplitPane* splitLeft = new SplitPane(SplitPane::SPLIT_VERTICAL);
+				SplitPane* splitLeft = new SplitPane(SplitPane::SPLIT_VERTICAL);
  				splitLeft->setName("leftpanel_split_vertical");
  				splitLeft->setSplitLocation(0.5f);
 
@@ -194,257 +164,11 @@ namespace ARK {
 			addChild(splitHorizontal);
 		}
 
-		#define  LOGLOGLOG(...)  __android_log_print(ANDROID_LOG_INFO,"ARK2D",__VA_ARGS__)
-
-		#if defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_WINDOWS_VS)
-			void WINPHONELOG(const char* ch, int len) {
-
-				#if NTDDI_PHONE8
-					LPCSTR lps = ch;
-					OutputDebugString(lps);
-					OutputDebugString("\r\n");
-				#elif NTDDI_WINBLUE
-
-
-					#if defined(ARK2D_WINDOWS)
-						LPCSTR lps = ch;
-						OutputDebugString(lps);
-						OutputDebugString("\r\n");
-					#else
-						WCHAR str[1024];
-						MultiByteToWideChar(CP_UTF8, 0, ch, len, str, 1024);
-						str[len] = L'\0';
-						LPCWSTR lps = str;
-						OutputDebugString(lps);
-						OutputDebugString(L"\r\n");
-					#endif
-
-
-
-				#endif
-
-			}
-		#endif
-
-		void Log::setBackgroundColor(float r, float g, float b, float a) {
+		void LogViewer::setBackgroundColor(float r, float g, float b, float a) {
 			m_backgroundColor->set(r, g, b, a);
 		}
 
-		void Log::setFilter(unsigned int level) {
-			m_filter = level;
-		}
-		unsigned int Log::getFilter() {
-			return m_filter;
-		}
-
-		void Log::message(string s, unsigned int type) {
-
-			/*#if !defined(ARK2D_DEBUG)
-				if (type == TYPE_VERBOSE) {
-					return;
-				}
-			#endif*/
-
-			if (type > m_filter) {
-				return;
-			}
-
-			#if defined(ARK2D_ANDROID)
-				if (s.length() < 1000) {
-					LOGLOGLOG("%s: %s", getTypeString(type).c_str(), s.c_str());
-				} else {
-					LOGLOGLOG("%s: %s", getTypeString(type).c_str(), "Long string: ");
-					for (unsigned int i = 0; i < s.length(); i += 1024) {
-						LOGLOGLOG("%s",  s.substr(i, 1024).c_str());
-					}
-				}
-				/*if (s.length() < 1024) {
-					__android_log_print(ANDROID_LOG_INFO, "ARK2D", s.c_str());
-				} else {
-					__android_log_print(ANDROID_LOG_INFO, "ARK2D", "Long string: ");
-					for (unsigned int i = 0; i < s.length(); i += 1024) {
-						__android_log_print(ANDROID_LOG_INFO, "ARK2D", s.substr(i, 1024).c_str());
-					}
-				}*/
-
-			#elif defined(ARK2D_FLASCC)
-				/*string newStr = StringUtil::append(getTypeString(type), s);
-				printf("Log ");
-				printf(getTypeString(type).c_str());
-				printf(": ");
-				printf(s.c_str());
-				printf("\n");*/
-			#elif defined(ARK2D_WINDOWS_PHONE_8)
-
-				if (s.length() < 1023) {
-					WINPHONELOG(s.c_str(), s.length());
-				}
-				else {
-					WINPHONELOG("Long string: ", 13);
-					for (unsigned int i = 0; i < s.length(); i += 1023) {
-						WINPHONELOG(s.substr(i, 1023).c_str(), s.substr(i, 1023).length());
-					}
-				}
-
-			#elif defined(ARK2D_WINDOWS_VS)
-
-				std::cout << "Log " << getTypeString(type) << ": " << s << std::endl;
-				if (s.length() < 1023) {
-					WINPHONELOG(s.c_str(), s.length());
-				}
-				else {
-					WINPHONELOG("Long string: ", 13);
-					for (unsigned int i = 0; i < s.length(); i += 1023) {
-						WINPHONELOG(s.substr(i, 1023).c_str(), s.substr(i, 1023).length());
-					}
-				}
-
-
-
-			#else
-				std::cout << "Log " << getTypeString(type) << ": " << s << std::endl;
-			#endif
-
-			if (type == TYPE_THREAD) { return; }
-
-			if (m_messagesPool.size() == 0) {
-				for(unsigned int i = 0; i < 6; i++) {
-					LogMessage* item = new LogMessage();
-					m_messagesPool.push_back(item);
-
-				}
-			}
-
-			LogMessage* item = m_messagesPool.at(m_messagesPool.size()-1);
-			if (item == NULL) {
-				item = new LogMessage();
-				m_messagesPool.push_back(item);
-			}
-			item->level = type;
-			if (s.length() < 1024) {
-				item->message = s;
-			} else {
-				item->message = s.substr(0, 1024);
-			}
-			m_messages.push_back(item);
-			m_messagesPool.pop_back();
-
-			if (isLoggingToFile()) {
-				std::ofstream log_file("log.txt", std::ios_base::out | std::ios_base::app );
-				log_file << "Log " << getTypeString(type) << ": " << s.c_str() << std::endl;
-			}
-
-
-		}
-		void Log::e(const char* s) {
-			string str(s);
-			message(str, TYPE_ERROR);
-		}
-		void Log::w(const char* s) {
-			string str(s);
-			message(str, TYPE_WARNING);
-		}
-		void Log::i(const char* s) {
-			string str(s);
-			message(str, TYPE_INFORMATION);
-		}
-		void Log::v(const char* s) {
-			string str(s);
-			message(str, TYPE_VERBOSE);
-		}
-		void Log::g(const char* s) {
-			string str(s);
-			message(str, TYPE_GAME);
-		}
-		void Log::t(const char* s) {
-			string str(s);
-			message(str, TYPE_THREAD);
-		}
-
-		void Log::e(string s) {
-			message(s, TYPE_ERROR);
-		}
-		void Log::w(string s) {
-			message(s, TYPE_WARNING);
-		}
-		void Log::i(string s) {
-			message(s, TYPE_INFORMATION);
-		}
-		void Log::v(string s) {
-			message(s, TYPE_VERBOSE);
-		}
-		void Log::g(string s) {
-			message(s, TYPE_GAME);
-		}
-		void Log::t(string s) {
-			message(s, TYPE_THREAD);
-		}
-
-
-		void Log::e(String s) {
-			message(s.get(), TYPE_ERROR);
-		}
-		void Log::w(String s) {
-			message(s.get(), TYPE_WARNING);
-		}
-		void Log::i(String s) {
-			message(s.get(), TYPE_INFORMATION);
-		}
-		void Log::v(String s) {
-			message(s.get(), TYPE_VERBOSE);
-		}
-		void Log::g(String s) {
-			message(s.get(), TYPE_GAME);
-		}
-		void Log::t(String s) {
-			message(s.get(), TYPE_THREAD);
-		}
-
-		void Log::backtrace() {
-			#ifdef ARK2D_MACINTOSH
-				e("--- BACKTRACE ---");
-
-				void* callstack[128];
-                int i, frames = ::backtrace(callstack, 128);
-				char** strs = backtrace_symbols(callstack, frames);
-				for (i = 0; i < frames; ++i) {
-					printf("%s\n", strs[i]);
-				}
-				free(strs);
-
-				//e("--- BACKTRACE SYMBOLS ---");
-				//backtrace_symbols();
-			#endif
-		}
-
-		void Log::watchVariable(string name, unsigned int type, void* data) {
-			// check the memory location/variable is not being watched already!
-			for(unsigned int i = 0; i < m_watchedVariables.size(); i++) {
-				if (m_watchedVariables[i]->data == data) {
-					ARK2D::getLog()->w(StringUtil::append("Variable is already being watched: ", name));
-					return;
-				}
-			}
-
-			WatchedVariable* wv = new WatchedVariable();
-			wv->name = name;
-			wv->type = type;
-			wv->data = data;
-			m_watchedVariables.push_back(wv);
-		}
-		void Log::addWatchedVariable(string name, unsigned int type, void* data) {
-			watchVariable(name, type, data);
-		}
-		void Log::clearWatchedVariables() {
-			for(unsigned int i = 0; i < m_watchedVariables.size(); ++i) {
-				WatchedVariable* wv = m_watchedVariables[i];
-				delete wv;
-				wv = NULL;
-			}
-			m_watchedVariables.clear();
-		}
-
-		void Log::update() {
+		void LogViewer::update() {
 			SceneNode::update();
 
 			//#if defined(ARK2D_DEBUG)
@@ -474,21 +198,9 @@ namespace ARK {
 
 			//m_scene->update();
 		}
-		void Log::render() {
+		void LogViewer::render() {
 			GameContainer* container = ARK2D::getContainer();
 			Renderer* r = ARK2D::getRenderer();
-
-
-
-			// remove old items
-			if (m_messages.size() > m_maxMessages) {
-				int removeCount = m_messages.size() - m_maxMessages;
-				for(; removeCount > 0; removeCount--) {
-					LogMessage* item = m_messages.front();
-					m_messages.pop_front();
-					m_messagesPool.push_back(item);
-				}
-			}
 
 			if (this->visible) {
 				Vector3<float> pos = find("right_panel_split_vertical")->localPositionToGlobalPosition();
@@ -511,21 +223,12 @@ namespace ARK {
 				return;
 			}
 
-			//r->disableMultisampling();
-
-			//GameContainer* container = ARK2D::getContainer();
-			//Renderer* g = ARK2D::getRenderer();
-			//ARK::Font::Font* oldFont = r->getFont();
-			//const Color& oldColor = r->getDrawColor();
 
 			r->setDrawColor(*m_backgroundColor);
-			//r->fillRect(container->getWidth()-150, 0, 150, 150);
-			//r->fillRect(0, 0, 350, 200);
-			//r->fillRect(0, 0, container->getWidth(), container->getHeight());
 
             ARK::Core::Font::Font* defaultFont = r->getDefaultFont();
 			if (defaultFont == NULL) {
-				e("cannot display log. no default font loaded.");
+                ARK2D::getLog()->e("cannot display log. no default font loaded.");
 				return;
 				//defaultFont = oldFont;
 			}
@@ -578,63 +281,20 @@ namespace ARK {
 			//r->setFont(oldFont);
 		}
 
-		bool Log::keyPressed(unsigned int key) {
+		bool LogViewer::keyPressed(unsigned int key) {
 			if (!this->visible) { return false; }
 			return SceneNode::keyPressed(key);
 		}
-		bool Log::keyReleased(unsigned int key) {
+		bool LogViewer::keyReleased(unsigned int key) {
 			if (!this->visible) { return false; }
 			return SceneNode::keyReleased(key);
 		}
-		bool Log::mouseMoved(int x, int y, int oldx, int oldy) {
+		bool LogViewer::mouseMoved(int x, int y, int oldx, int oldy) {
 			if (!this->visible) { return false; }
 			return SceneNode::mouseMoved(x, y, oldx, oldy);
 		}
 
-		bool Log::isLoggingToFile() {
-			return m_logToFile;
-		}
-		void Log::setLoggingToFile(bool b) {
-			m_logToFile = b;
-		}
-
-   		wstring Log::getTypeWString(unsigned int type) {
-            return StringUtil::stringToWstring(getTypeString(type));
-        }
-		string Log::getTypeString(unsigned int type) {
-			#if defined(ARK2D_ANDROID)
-				switch(type) {
-					case ANDROID_LOG_INFO:
-						return "INFO";
-						break;
-				}
-				return "";
-			#else
-				switch(type) {
-					case TYPE_ERROR:
-						return "ERROR";
-						break;
-					case TYPE_WARNING:
-						return "WARNING";
-						break;
-					case TYPE_INFORMATION:
-						return "INFO";
-						break;
-					case TYPE_VERBOSE:
-						return "VERBOSE";
-						break;
-					case TYPE_THREAD:
-						return "THREAD";
-						break;
-					case TYPE_GAME:
-						return "GAME";
-						break;
-				}
-				return "";
-			#endif
-		}
-
-		Log::~Log() {
+		LogViewer::~LogViewer() {
 
 		}
 
@@ -685,9 +345,9 @@ namespace ARK {
 			}
 
 			// Remove the panel from the debug scene
-			SceneNode* panel = ARK2D::getLog()->find(pad->getName());
+            SceneNode* panel = butt->root->find(pad->getName());
 		    if (panel != NULL) {
-		        ARK2D::getLog()->removeChild(panel);
+		        butt->root->removeChild(panel);
 		    }
 
 			delete pad;
@@ -760,8 +420,9 @@ namespace ARK {
 
             unsigned int i = 0;
             float totalH = 0;
-            list<LogMessage*>::reverse_iterator it = l->m_messages.rbegin();
-            while (it != l->m_messages.rend()) {
+
+            list<LogMessage*>::reverse_iterator it = l->getMessages()->rbegin();
+            while (it != l->getMessages()->rend()) {
 				r->drawString((*it)->message, 10.0f, bounds->getHeight() - (i*12.0f), Renderer::ALIGN_LEFT, Renderer::ALIGN_BOTTOM);
                 it++;
                 i++;
@@ -789,8 +450,8 @@ namespace ARK {
 
 			preRenderFromPivot();
 
-            for(unsigned int i = 0; i < l->m_watchedVariables.size(); ++i) {
-				WatchedVariable* wv = l->m_watchedVariables[i];
+            for(unsigned int i = 0; i < l->getWatchedVariables()->size(); ++i) {
+                WatchedVariable* wv = l->getWatchedVariables()->at(i);
 				string displayName = wv->name;
 				displayName += ": ";
 				if (wv->type == WatchedVariable::TYPE_FLOAT) {
@@ -840,7 +501,7 @@ namespace ARK {
 			float rendererTextureMemory = (float(RendererStats::s_textureAllocatedBytes) / 1024.0f) / 1024.0f;
 			r->drawString(StringUtil::append("FPS: ", ARK2D::getTimer()->getFPS()), textX, 0, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
 
-			r->drawString(StringUtil::append("Log Size: ", l->m_messagesPool.size()), textX, 10, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
+			r->drawString(StringUtil::append("Log Size: ", l->getMessages()->size()), textX, 10, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
 
 			r->drawString(StringUtil::append("OpenGL Calls: ", rendererGLCalls), textX, 30, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
 			r->drawString(StringUtil::append("Lines: ", rendererLines), textX, 40, Renderer::ALIGN_LEFT, Renderer::ALIGN_TOP);
@@ -1079,7 +740,7 @@ namespace ARK {
 			float panelX = 500 + ((gamepad->id%3)*300);
 			float panelY = 120 + (floor(double(gamepad->id)/3)*240);
 
-            SceneNode* root = ARK2D::getLog();//->getScene()->getRoot();
+            SceneNode* root = ARK2D::getScene()->find("log");//->getScene()->getRoot();
 
 				Panel* p = new Panel();
 

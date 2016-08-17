@@ -37,6 +37,7 @@ namespace ARK {
 		class ToString;
 		class Resource;
 		class Strings;
+		class Log;
 
 		//! Contains Container classes such as Vector and Pool.
 		//namespace Containers {
@@ -271,14 +272,14 @@ namespace ARK {
 		class Slider;
 		class SplitPane;
         class TitledPanel;
+        class LogViewer;
 	}
 	//! Contains miscellaneous classes for mathematical functions, logging, etc.
 	namespace Util {
 		class AngelScriptUtil;
 		class AnalyticsUtil;
 		class GooglePlayGameServicesUtil;
-		class Log;
-   		class CameraShake;
+		class CameraShake;
 		class FileUtil;
 		class LocalHighscores;
 		class KeyPairFile;

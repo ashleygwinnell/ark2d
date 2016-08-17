@@ -3,15 +3,13 @@
  *
  *  Created on: 30 Nov, 2015
  *      Author: ashleygwinnell
- * 
+ *
  * Original author:
  * https://github.com/libgdx/libgdx/blob/master/gdx/src/com/badlogic/gdx/math/Plane.java
  */
 
 #ifndef ARK_GEOMETRY_PLANE_H_
 #define ARK_GEOMETRY_PLANE_H_
-
-#include "../Util/Log.h"
 
 namespace ARK {
 	namespace Geometry {
@@ -20,7 +18,7 @@ namespace ARK {
 			bool intersects;
 			Vector3<float> intersectsAtPoint;
 			float intersectsDistance;
-			bool inside; // its possible for a line to be entirely inside a plane. check for this! 
+			bool inside; // its possible for a line to be entirely inside a plane. check for this!
 		};
 
 		/*!
@@ -35,7 +33,7 @@ namespace ARK {
 				T d;
 
 			public:
-				
+
                 PlaneTemplate():
                     normal(0,1,0),
                     d(0) {
@@ -73,7 +71,7 @@ namespace ARK {
 				T distance(Vector3<T> point) {
 					return normal.dot(point) + d;
 				}
-				
+
 
 				signed int testPoint (const Vector3<T>& point) {
 					return testPoint(point.getX(), point.getY(), point.getY());
@@ -140,24 +138,24 @@ namespace ARK {
 		};
 
 		class Plane : public PlaneTemplate<float> {
-			public: 
+			public:
 				Plane():
 					PlaneTemplate() {
 
 				}
 				Plane(Vector3<float> norm, float dist):
 					PlaneTemplate(norm, dist) {
-					
+
 				}
 				Plane(Vector3<float> norm, Vector3<float> point):
 					PlaneTemplate(norm, point) {
-					
+
 				}
 				Plane(Vector3<float> p1, Vector3<float> p2, Vector3<float> p3):
 					PlaneTemplate(p1, p2, p3) {
 
 				}
-				
+
 				//virtual ARK2D_API bool collides(Shape<float>* s);
 				virtual ~Plane() {
 

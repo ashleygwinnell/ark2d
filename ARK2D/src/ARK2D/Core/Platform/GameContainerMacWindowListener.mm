@@ -316,7 +316,7 @@ static int darwin_scancode_table[] = {
     thisx /= container->getScale();
     thisy /= container->getScale();
 	
-	ARK2D::getLog()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
+	//ARK2D::getLog()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 	ARK2D::getGame()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 
 	i->mouse_x = (int) thisx;

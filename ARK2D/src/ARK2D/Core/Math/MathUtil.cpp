@@ -12,8 +12,6 @@
 #include "../ARK2D.h"
 #include "../GameContainer.h"
 
-//#include "../../Util/Log.h"
- 
 namespace ARK {
 	namespace Core {
         namespace Math {
@@ -43,7 +41,7 @@ namespace ARK {
             }
             void MathUtil::snap(float& snap, float angle) {
                 signed int divisions = round(snap / angle);
-                snap = divisions * angle; 
+                snap = divisions * angle;
             }
 
             double MathUtil::distance(float x1, float y1, float x2, float y2) {
@@ -133,7 +131,7 @@ namespace ARK {
                 return angle;
             }
 
-            float MathUtil::averageAngle(float a, float b) 
+            float MathUtil::averageAngle(float a, float b)
             {
                 a = fmod(a,360); // a % 360;
                 b = fmod(b,360); // b % 360;
@@ -149,39 +147,39 @@ namespace ARK {
                 return rotateAngleToTarget(angleStart, angleTarget, degrees, false);
             }
             float MathUtil::rotateAngleToTarget(float angleStart, float angleTarget, float degrees, bool restrictOvershoot) {
-                //angleTarget = atan2(newVelocityVector.getY(),newVelocityVector.getX()) * (180/pi);		
+                //angleTarget = atan2(newVelocityVector.getY(),newVelocityVector.getX()) * (180/pi);
 
-     
+
                 float diff = angleTarget - angleStart;
                 if (diff > 180) diff -= 360;
                 if (diff < -180) diff += 360;
-                
+
                 if (diff > -0.05f && diff < 0.05f) { return angleTarget; }
 
 
                 float multiplier = 0.0f;
-                if (diff < 0) { 
+                if (diff < 0) {
                     multiplier = -1.0f;
-                } else if (diff > 0) { 
+                } else if (diff > 0) {
                     multiplier = 1.0f;
-                } 
-     
+                }
+
                 float returnAngle = angleStart + (degrees*multiplier);
 
                 if (restrictOvershoot) {
-                    // make sure we don't go past it. 
-                    if (multiplier == 1.0f && returnAngle > angleTarget) { 
+                    // make sure we don't go past it.
+                    if (multiplier == 1.0f && returnAngle > angleTarget) {
                         returnAngle = angleTarget;
                     } else if (multiplier == -1.0f && returnAngle < angleTarget) {
                         returnAngle = angleTarget;
                     }
                 }
 
-     
+
                 return returnAngle;
             }
             float MathUtil::rotateAngleToTarget2(float angleStart, float angleTarget, float degrees) {
-                
+
                 float antiClockwiseDistance = abs(180 - angleStart) + abs(-180 - angleTarget);
                 float clockwiseDistance = angleTarget - angleStart;
 
@@ -190,18 +188,18 @@ namespace ARK {
 
                 if (clockwiseDistance < antiClockwiseDistance) {
                     angleStart += degrees;
-                    if (angleStart > angleTarget) { 
-                        angleStart = angleTarget; 
+                    if (angleStart > angleTarget) {
+                        angleStart = angleTarget;
                     }
                 } else {
                     angleStart -= degrees;
-                    if (angleStart < angleTarget) { 
-                        angleStart = angleTarget;  
+                    if (angleStart < angleTarget) {
+                        angleStart = angleTarget;
                     }
                 }
                 return angleStart;
             }
-            
+
 
             double MathUtil::toRadians(double degrees) {
                 return degrees * (MY_PI/180);
@@ -223,7 +221,7 @@ namespace ARK {
                 {
                   unsigned int ans = 0 ;
                   while( x>>=1 ) ans++;
-                  return ans ; 
+                  return ans ;
                 }
                 // http://weseetips.com/2008/09/10/how-to-calculate-log2-of-any-number/
                 double Log2AndroidTwo( double n )
@@ -234,7 +232,7 @@ namespace ARK {
             #endif
 
             int MathUtil::nextPowerOfTwo(int val) {
-                #if (defined(ARK2D_ANDROID) || defined(ARK2D_FLASCC) || defined(ARK2D_WINDOWS_VS)) 
+                #if (defined(ARK2D_ANDROID) || defined(ARK2D_FLASCC) || defined(ARK2D_WINDOWS_VS))
                     return (1 << (int) ceil(Log2AndroidTwo((double)val)));
                 #else
                     return (1 << (int) ceil(log2((double)val)));

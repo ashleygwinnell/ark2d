@@ -2,9 +2,10 @@
 #include "GameJolt.h"
 //#include "../Includes.h"
 #include "../Core/Cast.h"
+#include "../Core/Log.h"
 #include "../Util/StringUtil.h"
 #include "../Util/URLRequest.h"
-#include "../Util/Log.h"
+
 
 #define JSON_SAFE
 #ifdef ARK2D_WINDOWS

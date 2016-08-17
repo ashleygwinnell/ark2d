@@ -172,7 +172,8 @@
 				"src/ARK2D/Core/Strings.cpp",
 				"src/ARK2D/Core/Camera.cpp",
 				"src/ARK2D/Core/Pool.cpp",
-				"src/ARK2D/Core/Vector.cpp"
+				"src/ARK2D/Core/Vector.cpp",
+				"src/ARK2D/Core/Log.cpp"
 			],
 			"dependencies": [
 				"Cocoa.framework",
@@ -279,7 +280,8 @@
 				"src/ARK2D/UI/NotificationSystem.cpp",
 				"src/ARK2D/UI/SimpleTextField.cpp",
 				"src/ARK2D/UI/Slider.cpp",
-				"src/ARK2D/UI/TitledPanel.cpp"
+				"src/ARK2D/UI/TitledPanel.cpp",
+				"src/ARK2D/UI/LogViewer.cpp"
 			],
 			"dependencies": []
 		},
@@ -337,6 +339,7 @@
 
 			"src/ARK2D/Core/Pool.cpp",
 			"src/ARK2D/Core/Vector.cpp",
+			"src/ARK2D/Core/Log.cpp",
 
 			"src/ARK2D/Core/Controls/Input.cpp",
 			"src/ARK2D/Core/Controls/Gamepad.cpp",
@@ -490,6 +493,7 @@
 			"src/ARK2D/UI/SimpleTextField.cpp",
 			"src/ARK2D/UI/Slider.cpp",
 			"src/ARK2D/UI/TitledPanel.cpp",
+			"src/ARK2D/UI/LogViewer.cpp",
 
 			"src/ARK2D/Util/AnalyticsUtil.cpp",
 			"src/ARK2D/Util/AngelScriptUtil.cpp",
@@ -504,7 +508,6 @@
 			"src/ARK2D/Util/GameCircleUtil.cpp",
 			"src/ARK2D/Util/KeyPairFile.cpp",
 			"src/ARK2D/Util/LocalHighscores.cpp",
-			"src/ARK2D/Util/Log.cpp",
 			"src/ARK2D/Util/RSSL.cpp",
 			"src/ARK2D/Util/SocialUtil.cpp",
 			"src/ARK2D/Util/StringStore.cpp",

@@ -5,8 +5,8 @@
  *      Author: Ashley
  */
 
-#ifndef GAMECONTAINER_H_
-#define GAMECONTAINER_H_
+#ifndef ARK_CORE_GAMECONTAINER_H_
+#define ARK_CORE_GAMECONTAINER_H_
 
 
 #include "../Namespaces.h"
@@ -25,7 +25,7 @@
 #include "Graphics/Color.h"
 #include "Graphics/Renderer.h"
 #include "Controls/ErrorDialog.h"
-#include "../Util/Log.h"
+#include "Log.h"
 
 //#include "../Audio/Sound.h"
 
@@ -296,4 +296,4 @@ namespace ARK {
 
 
 
-#endif /* GAMECONTAINER_H_ */
+#endif /* ARK_CORE_GAMECONTAINER_H_ */

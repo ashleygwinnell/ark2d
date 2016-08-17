@@ -6,13 +6,13 @@
 // https://github.com/EsotericSoftware/spine-runtimes/blob/master/spine-c/README.md
 #include "../../vendor/spine/includes/spine/spine.h"
 #include "../../vendor/spine/includes/spine/extension.h"
- 
+
 //#include "../../Includes.h"
 #include "../../Core/Resource.h"
 #include "../../Core/Graphics/Image.h"
 #include "../../Core/Graphics/Texture.h"
 #include "../../Core/Graphics/TextureStore.h"
-#include "../../Util/Log.h"
+#include "../../Core/Log.h"
 #include "../../vendor/spine/SpineSkeleton.h"
 
 void _spAtlasPage_createTexture (spAtlasPage* self, const char* path) {
@@ -21,15 +21,15 @@ void _spAtlasPage_createTexture (spAtlasPage* self, const char* path) {
 		self->rendererObject = Image::getDummy();
 		self->width = 0;
 		self->height = 0;
-		return; 
+		return;
 	}
 
 	string oldfname = StringUtil::append("", path);
 	string fname = StringUtil::append("", path);
-	#if defined(ARK2D_WINDOWS) 
+	#if defined(ARK2D_WINDOWS)
 		bool windowsWeirdPath = fname.substr(7).compare("./data/") != 0;
 		if (windowsWeirdPath) {
-			fname = fname.substr(7); 
+			fname = fname.substr(7);
 		}
 	#endif
 
@@ -40,7 +40,7 @@ void _spAtlasPage_createTexture (spAtlasPage* self, const char* path) {
 
 	Image* img = NULL;
 	TextureStore* ts = TextureStore::getInstance();
-	if (ts->hasTexture(oldfname)) { 
+	if (ts->hasTexture(oldfname)) {
 		Texture* tx = ts->getTexture(oldfname);
 		img = tx->m_resource;
 	} else {
@@ -49,14 +49,14 @@ void _spAtlasPage_createTexture (spAtlasPage* self, const char* path) {
 		#if defined(ARK2D_UBUNTU_LINUX)
 		 	bool linuxWeirdPath = fname.substr(5).compare("data/") != 0;
 			if (linuxWeirdPath) {
-				fname = fname.substr(5); 
+				fname = fname.substr(5);
 			}
 		#endif
 
 		img = ARK::Core::Resource::get(fname)->asImage();
 	}
 
-	self->rendererObject = img; 
+	self->rendererObject = img;
 	self->width = img->getWidth();
 	self->height = img->getHeight();
 }

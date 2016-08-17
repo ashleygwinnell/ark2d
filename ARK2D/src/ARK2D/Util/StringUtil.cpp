@@ -9,7 +9,7 @@
 //#include "../Core/ToString.h"
 #include "../Core/String.h"
 #include "../Core/GameContainer.h"
-#include "../Util/Log.h"
+#include "../Core/Log.h"
 //#include "../UI/ErrorDialog.h"
 
 #include <algorithm>

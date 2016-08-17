@@ -11,7 +11,7 @@
 #include "Image.h"
 #include "SpriteSheetDescription.h"
 #include "../ARK2D.h"
-#include "../../Util/Log.h"
+#include "../Log.h"
 
 namespace ARK {
     namespace Core {

@@ -9,10 +9,10 @@
 #include "Socket.h"
 #include "Address.h"
 #include "../Core/ARK2D.h"
-#include "../Util/Log.h"
+#include "../Core/Log.h"
 
 namespace ARK {
-	namespace Net { 
+	namespace Net {
 
 		bool Socket::initializeSockets()
 		{
@@ -52,11 +52,11 @@ namespace ARK {
 		{
 
 		}
-	
+
 		bool Socket::open( unsigned short port )
 		{
 			assert( !isOpen() );
-		
+
 			// create socket
 			m_socket = ::socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
 
@@ -72,7 +72,7 @@ namespace ARK {
 			address.sin_family = AF_INET;
 			address.sin_addr.s_addr = INADDR_ANY;
 			address.sin_port = htons( (unsigned short) port );
-		
+
 			if ( ::bind( (unsigned int) m_socket, (const sockaddr*) &address, sizeof(sockaddr_in) ) < 0 )
 			{
 				ARK2D::getLog()->e( "failed to bind socket" );
@@ -82,7 +82,7 @@ namespace ARK {
 
 			// set non-blocking io
 			#if defined(ARK2D_MACINTOSH) || defined(ARK2D_UBUNTU_LINUX)
-		
+
 				int nonBlocking = 1;
 				if ( fcntl( m_socket, F_SETFL, O_NONBLOCK, nonBlocking ) == -1 )
 				{
@@ -90,9 +90,9 @@ namespace ARK {
 					close();
 					return false;
 				}
-			
+
 			#elif defined(ARK2D_WINDOWS)
-		
+
 				DWORD nonBlocking = 1;
 				if ( ioctlsocket( m_socket, FIONBIO, &nonBlocking ) != 0 )
 				{
@@ -102,10 +102,10 @@ namespace ARK {
 				}
 
 			#endif
-		
+
 			return true;
 		}
-	
+
 		void Socket::close()
 		{
 			if (m_socket != 0)
@@ -118,20 +118,20 @@ namespace ARK {
 				m_socket = 0;
 			}
 		}
-	
+
 		bool Socket::isOpen() const {
 			return m_socket != 0;
 		}
-	
+
 		bool Socket::send( const Address& destination, const void* data, int size )
 		{
 			assert( data );
 			assert( size > 0 );
-		
+
 			if ( m_socket == 0 ) {
 				return false;
 			}
-		
+
 			assert( destination.getAddress() != 0 );
 			assert( destination.getPort() != 0 );
 
@@ -145,10 +145,10 @@ namespace ARK {
 #endif
 					while(1);
 					//exit(1);
-				} 
+				}
 
 			}
-		
+
 			sockaddr_in address;
 			address.sin_family = AF_INET;
 			address.sin_addr.s_addr = htonl( destination.getAddress() );
@@ -158,20 +158,20 @@ namespace ARK {
 
 			return sent_bytes == size;
 		}
-	
+
 		int Socket::receive( Address & sender, void * data, int size )
 		{
 			assert( data );
 			assert( size > 0 );
-		
+
 			if ( m_socket == 0 ) {
 				return false;
 			}
-			
+
 			#if defined(ARK2D_WINDOWS)
                 typedef int socklen_t;
 			#endif
-			
+
 			sockaddr_in from;
 			socklen_t fromLength = sizeof( from );
 
@@ -192,7 +192,7 @@ namespace ARK {
 			return received_bytes;
 		}
 
-		Socket::~Socket() 
+		Socket::~Socket()
 		{
 			close();
 		}

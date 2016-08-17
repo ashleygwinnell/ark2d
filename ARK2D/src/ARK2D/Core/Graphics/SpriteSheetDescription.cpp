@@ -10,7 +10,7 @@
 #include "../Controls/ErrorDialog.h"
 #include "../../Common/Libraries/libjson.h"
 
-#include "../../Util/Log.h"
+#include "../Log.h"
 #include "../../Util/StringUtil.h"
 
 namespace ARK {

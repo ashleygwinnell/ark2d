@@ -7,7 +7,7 @@
 
 #include "ShaderStore.h"
 #include "Shader.h"
-#include "../../Util/Log.h"
+#include "../Log.h"
 
 #include <string>
 using namespace std;

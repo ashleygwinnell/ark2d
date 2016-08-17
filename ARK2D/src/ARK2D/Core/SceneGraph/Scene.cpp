@@ -5,7 +5,7 @@
 #include "../Geometry/Quaternion.h"
 #include "../Geometry/Vector4.h"
 #include "../Graphics/Image.h"
-#include "../../Util/Log.h"
+#include "../Log.h"
 
 #include <algorithm>
 
@@ -56,6 +56,7 @@ namespace ARK {
             }
             void SceneNode::addChild(SceneNode* node) {
                 children.push_back(node);
+                node->root = this->root;
                 node->parent = this;
                 node->onAdded(this);
                 onChildAdded(node);
@@ -485,6 +486,7 @@ namespace ARK {
                 return root;
             }
             void Scene::addChild(SceneNode* node) {
+                node->root = root;
                 root->addChild(node);
             }
             void Scene::removeChild(SceneNode* node) {

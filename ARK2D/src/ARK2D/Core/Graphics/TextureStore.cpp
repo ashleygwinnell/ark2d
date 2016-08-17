@@ -11,7 +11,7 @@
 #include "Renderer.h"
 #include "FBO.h"
 
-#include "../../Util/Log.h"
+#include "../Log.h"
 
 namespace ARK {
     namespace Core {

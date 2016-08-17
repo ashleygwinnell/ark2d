@@ -7,26 +7,23 @@
 
 #include "MidiUtil.h"
 
-#include <stdio.h>
 #include "../Core/ARK2D.h"
-#include "StringUtil.h"
-#include "Log.h"
-//#include "../Core/GameContainer.h"
-
+#include "../Core/Log.h"
 #include "../Core/String.h"
 
+#include "StringUtil.h"
 
+#include <stdio.h>
 #include <iostream>
 #include <fstream>
 #include <string>
- using namespace std;
+using namespace std;
 
 #if defined(ARK2D_MACINTOSH)
 	#import <CoreAudio/CoreAudio.h>
 	#import <CoreAudioKit/CoreAudioKit.h>
 	#import <CoreMIDI/CoreMIDI.h>
 #endif
-
 
 namespace ARK {
 	namespace Util {

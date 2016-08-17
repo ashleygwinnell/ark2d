@@ -2,7 +2,7 @@
 #include "MatrixStack.h"
 #include "../Controls/ErrorDialog.h"
 
-#include "../../Util/Log.h"
+#include "../Log.h"
 
 namespace ARK {
     namespace Core {

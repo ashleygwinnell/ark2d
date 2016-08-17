@@ -3,32 +3,32 @@
  *
  *  Created on: 27 Feb 2011
  *      Author: ashley
- */ 
-  
+ */
+
 #include "GameContainerWindowsPhone8.h"
-#include "../GameContainer.h" 
-#include "../../ARK2D.h"
+#include "../GameContainer.h"
+#include "../ARK2D.h"
 
 #include "../../Namespaces.h"
-#include "../../Includes.h"
+//#include "../../Includes.h"
 
 #include "../../Geometry/Shape.h"
 #include "../../Geometry/Circle.h"
 #include "../../Geometry/Line.h"
 #include "../../Geometry/Rectangle.h"
 
- 
+
 #if defined(ARK2D_WINDOWS_PHONE_8)
 
 	#include "../../Geometry/GigaRectangle.h"
 
 	#include "../../Windres.h"
-	#include "../../Graphics/Image.h" 
-	#include "../../Util/Log.h"
+	#include "../../Graphics/Image.h"
+	#include "../Log.h"
 
 	namespace ARK {
 		namespace Core {
-			
+
 			GameContainer::GameContainer(Game& g, int width, int height, int bpp, bool fullscreen):
 				m_timer(),
 				m_game(g),
@@ -85,11 +85,11 @@
 
 
 			void GameContainer::setSize(int width, int height) {
-				
+
 				if (width == (signed int) m_width && height == (signed int) m_height) { return; }
 
 				m_screenWidth = width;
-				m_screenHeight = height;  
+				m_screenHeight = height;
 
 				resizeBehaviour(width, height);
 
@@ -119,7 +119,7 @@
 			// Enable OpenGL
 		//	void GameContainerPlatform::enableOpenGL(HWND hWnd, HDC* hDC, HGLRC* hRC)
 		//	{
-		//		
+		//
 		//
 		//	}
 
@@ -129,14 +129,14 @@
 
 			void GameContainer::start() {
 
-				
+
 				// Seed the random
 				Random::init();
 
 
 				// populate the gamepads.
 				ARK2D::getLog()->i("Initialising Gamepads... ");
-				initGamepads(); 
+				initGamepads();
 				ARK2D::getLog()->i("done.");
 
 				// Initialise platform...
@@ -154,12 +154,12 @@
 				// Load default Font - relies on Image so must be done after OpenGL is initted.
 				//BMFont* fnt = new BMFont("data/fonts/default.fnt", "data/fonts/default.png");
 				//Image* fntImg = new Image((unsigned int) ARK2D_FONT_PNG, ARK2D_RESOURCE_TYPE_PNG);
-				if (m_willLoadDefaultFont) { 
+				if (m_willLoadDefaultFont) {
 					//ARK::Font::BMFont* fnt = new ARK::Font::BMFont(ARK2D_FONT_FNT, ARK2D_FONT_PNG, ARK2D_RESOURCE_TYPE_PNG);
 					ARK::Font::BMFont* fnt = Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont();
 					fnt->scale(0.5f);
 					m_graphics.m_DefaultFont = fnt;
-					m_graphics.m_Font = fnt; 
+					m_graphics.m_Font = fnt;
 				} else {
 					m_graphics.m_DefaultFont = NULL;
 					m_graphics.m_Font = NULL;
@@ -198,9 +198,9 @@
 
 				m_bRunning = true;
 
-				return; 
+				return;
 
-				
+
 			}
 
 
@@ -208,7 +208,7 @@
 			void GameContainer::close() const {
 				ARK2D::getContainer()->m_bRunning = false;
 				Windows::ApplicationModel::Core::CoreApplication::Exit();
-				
+
 				//Windows::Phone::UI::Input::BackPressedEventArgs^ args = ref new Windows::Phone::UI::Input::BackPressedEventArgs();
 				//m_platformSpecific.m_nativeGame->OnBackButtonPressed(NULL, args);
 			}
@@ -222,14 +222,14 @@
 				// Discard the contents of the render target.
 				// This is a valid operation only when the existing contents will be entirely
 				// overwritten. If dirty or scroll rects are used, this call should be removed.
-				
+
 				//m_deviceContext->DiscardView(m_renderTargetView);
 
 				// Discard the contents of the depth stencil.
-				
+
 				//m_deviceContext->DiscardView(m_depthStencilView);
 
-				// If the device was removed either by a disconnect or a driver upgrade, we 
+				// If the device was removed either by a disconnect or a driver upgrade, we
 				// must recreate all device resources.
 				if (hr == DXGI_ERROR_DEVICE_REMOVED)
 				{
@@ -257,7 +257,7 @@
 			int GameContainer::getGlobalMouseY() const {
 				//DWORD mousepos = GetMessagePos();
 				//POINTS mouseXY = MAKEPOINTS(mousepos);
-				//return mouseXY.y;		
+				//return mouseXY.y;
 				ARK2D::getLog()->w("getGlobalMouseY not implemented");
 				return 0;
 			}
@@ -272,7 +272,7 @@
 
 			void GameContainerPlatform::initialize(
 				Windows::UI::Core::CoreWindow^ window,
-				Windows::ApplicationModel::Core::IFrameworkView^ nativeGame) 
+				Windows::ApplicationModel::Core::IFrameworkView^ nativeGame)
 			{
 				m_window = window;
 				m_nativeGame = m_nativeGame;
@@ -298,7 +298,7 @@
 				// Note the ordering should be preserved.
 				// Don't forget to declare your application's minimum required feature level in its
 				// description.  All applications are assumed to support 9.1 unless otherwise stated.
-				D3D_FEATURE_LEVEL featureLevels[] = 
+				D3D_FEATURE_LEVEL featureLevels[] =
 				{
 					//D3D_FEATURE_LEVEL_11_1,
 					//D3D_FEATURE_LEVEL_11_0,
@@ -338,10 +338,10 @@
 					context.As(&m_deviceContext)
 					);*/
 
-				//m_d3dDevice = d3dDevice.Get();  
+				//m_d3dDevice = d3dDevice.Get();
 				//m_d3dContext = d3dContext.Get();
 
-				
+
 			}
 
 			void GameContainerPlatform::createWindowSizeDependentResources() {
@@ -370,7 +370,7 @@
 					ARK2D::getLog()->e("Could not QueryInterface for IDXGIDevice1...");
 					exit(0);
 				}
-				
+
 				IDXGIAdapter* dxgiAdapter;
 				DX::ThrowIfFailed(
 					dxgiDevice->GetAdapter(&dxgiAdapter)
@@ -379,7 +379,7 @@
 				ComPtr<IDXGIFactory2> dxgiFactory;
 				DX::ThrowIfFailed(
 					dxgiAdapter->GetParent(
-						__uuidof(IDXGIFactory2), 
+						__uuidof(IDXGIFactory2),
 						&dxgiFactory
 						)
 					);
@@ -394,7 +394,7 @@
 						&m_swapChain
 						)
 					);
-					
+
 				// Ensure that DXGI does not queue more than one frame at a time. This both reduces latency and
 				// ensures that the application will only render after each VSync, minimizing power consumption.
 				DX::ThrowIfFailed(
@@ -438,7 +438,7 @@
 						)
 					);
 
-			
+
 				D3D11_DEPTH_STENCIL_DESC actualDepthStencilDesc;
 				ZeroMemory(&actualDepthStencilDesc, sizeof(actualDepthStencilDesc));
 
@@ -482,7 +482,7 @@
 				D3D11_BLEND_DESC blendStateDesc;
 				ZeroMemory(&blendStateDesc, sizeof(D3D11_BLEND_DESC));
 				blendStateDesc.AlphaToCoverageEnable = false;
-				blendStateDesc.IndependentBlendEnable = false; 
+				blendStateDesc.IndependentBlendEnable = false;
 				blendStateDesc.RenderTarget[0].BlendEnable = TRUE;
 				blendStateDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
 				blendStateDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
@@ -504,7 +504,7 @@
 				D3D11_BLEND_DESC blendStateDesc2;
 				ZeroMemory(&blendStateDesc2, sizeof(D3D11_BLEND_DESC));
 				blendStateDesc2.AlphaToCoverageEnable = false;
-				blendStateDesc2.IndependentBlendEnable = false; 
+				blendStateDesc2.IndependentBlendEnable = false;
 				blendStateDesc2.RenderTarget[0].BlendEnable = TRUE;
 				blendStateDesc2.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
 				blendStateDesc2.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
@@ -534,7 +534,7 @@
 
 				DX::ThrowIfFailed(
 					m_device->CreateRasterizerState(
-						&rasterDesc, 
+						&rasterDesc,
 						&m_rasterStateSolid
 					)
 				);
@@ -572,7 +572,7 @@
 
 				m_deviceContext->RSSetViewports(1, &viewport);
 
-				
+
 				//m_device->SetRenderState(D3DRS_LIGHTING, FALSE);    // turn off the 3D lighting
 				//d3ddev->SetRenderState(D3DRS_ZENABLE, TRUE);
 				//m_deviceContext->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
@@ -584,13 +584,13 @@
 
 			void GameContainerPlatform::updateAndRender() {
 
-				ARK2D::getLog()->w("Platform::updateAndRender"); 
-				if (m_container->m_bRunning) {  
-					ARK2D::getLog()->w("Still loading..."); 
-					return; 
+				ARK2D::getLog()->w("Platform::updateAndRender");
+				if (m_container->m_bRunning) {
+					ARK2D::getLog()->w("Still loading...");
+					return;
 				}
 
-				
+
 				m_container->m_timer.tick();
 				m_container->m_game.preUpdate(m_container, &m_container->m_timer);
 				m_container->m_game.update(m_container, &m_container->m_timer);
@@ -611,7 +611,7 @@
 				if (m_container->isShowingFPS()) { m_container->renderFPS(); }
 				ARK2D::getLog()->render(m_container, r);
 
-				ARK2D::getRenderer()->finish(); 
+				ARK2D::getRenderer()->finish();
 			}
 
 			void GameContainerPlatform::beginDXFrame() {
@@ -621,7 +621,7 @@
 					m_renderTargetView,
 					midnightBlue
 				);
-				
+
 
 				m_deviceContext->ClearDepthStencilView(
 					m_depthStencilView,
@@ -679,21 +679,21 @@
 			// Method to convert a length in device-independent pixels (DIPs) to a length in physical pixels.
 			float GameContainerPlatform::convertDipsToPixels(float dips)
 			{
-				static const float dipsPerInch = 96.0f;   
+				static const float dipsPerInch = 96.0f;
 				#ifdef NTDDI_PHONE8
 					return floor(dips * DisplayProperties::LogicalDpi / dipsPerInch + 0.5f); // Round to nearest integer.
-				#elif defined(NTDDI_WINBLUE) 
+				#elif defined(NTDDI_WINBLUE)
 					return floor(dips * DisplayInformation::GetForCurrentView()->LogicalDpi / dipsPerInch + 0.5f); // Round to nearest integer.
 				#endif
 				//return dips;
 			}
- 
+
 			bool GameContainerPlatform::initOpenAL() {
 				//IXAudio2* pXAudio2 = NULL;
 				//HRESULT hr;
 				//if ( FAILED(hr = XAudio2Create( &pXAudio2, 0, XAUDIO2_DEFAULT_PROCESSOR ) ) )
     			//	return hr;
-				//return hr; 
+				//return hr;
 				return false;
 			}
 			bool GameContainerPlatform::deinitOpenAL() {
@@ -706,8 +706,8 @@
 
 			string GameContainerPlatform::getResourcePath() const {
 				//#ifdef ARK2D_WINDOWS_VS
-				//	return "data/"; 
-				//#else 
+				//	return "data/";
+				//#else
 				return "./data/";
 				//#endif
 			}

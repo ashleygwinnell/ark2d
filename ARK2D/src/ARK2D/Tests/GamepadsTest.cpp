@@ -8,7 +8,7 @@
 #include "GamepadsTest.h"
 
 #include "../Core/Controls/Gamepad.h"
-#include "../Util/Log.h"
+#include "../Core/Log.h"
 #include "../UI/CheckBox.h"
 #include "../UI/Button.h"
 
@@ -17,22 +17,22 @@ namespace ARK {
 
 		ARK::Tests::GamepadsTest* gamepadsTest = NULL;
 
-		GamepadConfigureGameState::GamepadConfigureGameState(unsigned int stateId): 
+		GamepadConfigureGameState::GamepadConfigureGameState(unsigned int stateId):
 			GameState(),
 			m_stateId(stateId),
 			m_mappingString(""),
 			m_returnToState(NULL) {
 
 		}
-		void GamepadConfigureGameState::enter(GameContainer* container, StateBasedGame* game, GameState* from) { 
+		void GamepadConfigureGameState::enter(GameContainer* container, StateBasedGame* game, GameState* from) {
 
 			ARK::Core::Controls::Gamepad* gamepad = ARK2D::getInput()->getGamepads()->at(m_gamepadIndex);
 
 			for(signed int i = 0; i < ARK::Core::Controls::Gamepad::s_gamepadMapping->size(); ++i) {
 				GamepadMapping* map = &ARK::Core::Controls::Gamepad::s_gamepadMapping->at(i);
-				if (map->vendorId == gamepad->vendorId && 
-					map->productId == gamepad->productId && 
-					map->name == gamepad->name 
+				if (map->vendorId == gamepad->vendorId &&
+					map->productId == gamepad->productId &&
+					map->name == gamepad->name
 					) {
 					ARK2D::getLog()->e("Erasing configuration of controller before reconfiguring.");
 					ARK::Core::Controls::Gamepad::s_gamepadMapping->erase(ARK::Core::Controls::Gamepad::s_gamepadMapping->begin() + i);
@@ -55,7 +55,7 @@ namespace ARK {
 		void GamepadConfigureGameState::init(GameContainer* container, StateBasedGame* game) {
 			visible = false;
 			m_gamepadIndex = -1;
-			m_state = STATE_A; 
+			m_state = STATE_A;
 
 			m_axisChangedCooldown = 0.0f;
 		}
@@ -69,7 +69,7 @@ namespace ARK {
 
 			Input* in = ARK2D::getInput();
 			if (in->isKeyPressed(Input::KEY_ESCAPE) || in->isKeyPressed(Input::KEY_BACKSPACE)) {
-				//gamepadsTest->enterState((unsigned int) 0); 
+				//gamepadsTest->enterState((unsigned int) 0);
 				returnToStateStatic(this);
 				return;
 			}
@@ -106,7 +106,7 @@ namespace ARK {
 
 			r->drawString("Configuring controller...", 20, 20);
 
-			
+
 
 			float commandX = container->getWidth() * 0.5f;
 			float commandY = container->getHeight() * 0.3f;
@@ -205,7 +205,7 @@ namespace ARK {
 			}
 
 			if (m_returnToState != NULL) {
-				r->drawString("BACKSPACE TO GO BACK", 30, container->getHeight() - 30, Renderer::ALIGN_LEFT, Renderer::ALIGN_BOTTOM, 0.0f, 2.0f);	
+				r->drawString("BACKSPACE TO GO BACK", 30, container->getHeight() - 30, Renderer::ALIGN_LEFT, Renderer::ALIGN_BOTTOM, 0.0f, 2.0f);
 			}
 		}
 		void GamepadConfigureGameState::alertMappingString(GamepadConfigureGameState* gs) {
@@ -232,21 +232,21 @@ namespace ARK {
 				m_mappingString = str;
 				ARK2D::getLog()->i(StringUtil::append("mapping: ", m_mappingString));
 
-				
+
 				//Dialog::openInputDialog(0, "config:", m_mapping.toString());
 				ARK2D::getLog()->i("pushing...");
 				ARK::Core::Controls::Gamepad::s_gamepadMapping->push_back(m_mapping);
 
-				// Alert this on the main thread. 
+				// Alert this on the main thread.
 				//ARK2D::getGame()->getTimeline()->staticEvent( (void*) this, (void*) &GamepadConfigureGameState::alertMappingString, 0.0f);
-				
+
 				//ARK2D::getGame()->getTimeline()->staticEvent( (void*) this, (void*) &GamepadConfigureGameState::returnToStateStatic, 0.0f);
 
 				alertMappingString(this);
 				returnToStateStatic(this);
 				// todo: remove existing mapping or something?
-			
-				
+
+
 			}
 		}
 		void GamepadConfigureGameState::gamepadConnected(ARK::Core::Controls::Gamepad* gamepad) {
@@ -256,19 +256,19 @@ namespace ARK {
 			ARK2D::getLog()->i(StringUtil::append("gamepad disconnected: ", gamepad->getId()));
 		}
 		void GamepadConfigureGameState::buttonPressed(ARK::Core::Controls::Gamepad* gamepad, unsigned int button) {
-			
+
 		}
 		void GamepadConfigureGameState::buttonReleased(ARK::Core::Controls::Gamepad* gamepad, unsigned int button) {
 			bool done = false;
 
 			if (m_axisChangedCooldown > 0.0) { return; }
-			if (gamepad != ARK2D::getInput()->getGamepadByIndex(m_gamepadIndex)) { 
+			if (gamepad != ARK2D::getInput()->getGamepadByIndex(m_gamepadIndex)) {
 				ARK2D::getLog()->w("Got input from wrong gamepad.");
-				return; 
+				return;
 			}
 
 			switch(m_state) {
-				case STATE_A: { 
+				case STATE_A: {
 					m_mapping.buttons[(unsigned int) ARK::Core::Controls::Gamepad::BUTTON_A] = button;
 					done = true;
 					break;
@@ -350,40 +350,40 @@ namespace ARK {
 		void GamepadConfigureGameState::axisMoved(ARK::Core::Controls::Gamepad* gamepad, unsigned int axis, float value) {
 			if (m_axisChangedCooldown > 0.0) { return; }
 
-			if (gamepad != ARK2D::getInput()->getGamepadByIndex(m_gamepadIndex)) { 
+			if (gamepad != ARK2D::getInput()->getGamepadByIndex(m_gamepadIndex)) {
 				ARK2D::getLog()->w("Got input from wrong gamepad.");
-				return; 
+				return;
 			}
 			if (value > -0.2f && value < 0.2f) { return; }
 
 			bool done = false;
 			switch(m_state) {
-				case STATE_LSTICK_X: { 
+				case STATE_LSTICK_X: {
 					m_mapping.axes[(unsigned int) ARK::Core::Controls::Gamepad::ANALOG_STICK_1_X] = axis;
 					done = true;
 					break;
 				}
-				case STATE_LSTICK_Y: { 
+				case STATE_LSTICK_Y: {
 					m_mapping.axes[(unsigned int) ARK::Core::Controls::Gamepad::ANALOG_STICK_1_Y] = axis;
 					done = true;
 					break;
 				}
-				case STATE_RSTICK_X: { 
+				case STATE_RSTICK_X: {
 					m_mapping.axes[(unsigned int) ARK::Core::Controls::Gamepad::ANALOG_STICK_2_X] = axis;
 					done = true;
 					break;
 				}
-				case STATE_RSTICK_Y: { 
+				case STATE_RSTICK_Y: {
 					m_mapping.axes[(unsigned int) ARK::Core::Controls::Gamepad::ANALOG_STICK_2_Y] = axis;
 					done = true;
 					break;
 				}
-				case STATE_LTRIGGER: { 
+				case STATE_LTRIGGER: {
 					m_mapping.axes[(unsigned int) ARK::Core::Controls::Gamepad::TRIGGER_1] = axis;
 					done = true;
 					break;
 				}
-				case STATE_RTRIGGER: { 
+				case STATE_RTRIGGER: {
 					m_mapping.axes[(unsigned int) ARK::Core::Controls::Gamepad::TRIGGER_2] = axis;
 					done = true;
 					break;
@@ -411,7 +411,7 @@ namespace ARK {
 
 
 
-		GamepadsTestGameState::GamepadsTestGameState(): 
+		GamepadsTestGameState::GamepadsTestGameState():
 			GameState(),
 			m_returnToState(NULL) {
 
@@ -456,7 +456,7 @@ namespace ARK {
 			bool removed = false;
 			vector<GamepadMapping>* map = ARK::Core::Controls::Gamepad::s_gamepadMapping;
 			for(unsigned int i = 0; i < map->size(); i++) {
-				if (map->at(i).vendorId == thispad->vendorId && 
+				if (map->at(i).vendorId == thispad->vendorId &&
 					map->at(i).productId == thispad->productId) {
 					map->erase(map->begin() + i);
 					removed = true;
@@ -473,7 +473,7 @@ namespace ARK {
 		void GamepadsTestGameState::init(GameContainer* container, StateBasedGame* game) {
 			visible = false;
 			m_gamepadIndex = 0;
-			
+
 			m_alertButtons = new CheckBox();
 			m_alertButtons->setMargin(10);
 			m_alertButtons->setChecked(false);
@@ -491,15 +491,15 @@ namespace ARK {
 			m_alertAxes->pivot.set(1.0f, 0.0f);
 			addChild(m_alertAxes);
 
-			
 
-			
+
+
 
             m_autoConfig = new ARK::UI::Button();
 			m_autoConfig->setText("Configure");
 			m_autoConfig->setSize(100, 30);
 			m_autoConfig->setEvent((void*) &configureButtonEvent);
-			m_autoConfig->setMargin(10); 
+			m_autoConfig->setMargin(10);
 			m_autoConfig->transform.position.set(container->getWidth() - 85, 150);
 			m_autoConfig->pivot.set(0.5, 0.5f);
 			addChild(m_autoConfig);
@@ -508,11 +508,11 @@ namespace ARK {
 			m_removeConfig->setText("Remove Configuration");
 			m_removeConfig->setSize(100, 30);
 			m_removeConfig->setEvent((void*) &removeConfigurationButtonEvent);
-			m_removeConfig->setMargin(10); 
+			m_removeConfig->setMargin(10);
 			m_removeConfig->transform.position.set(container->getWidth() - 85, 200);
 			m_removeConfig->pivot.set(0.5, 0.5f);
 			addChild(m_removeConfig);
- 
+
 			// scene->addChild(m_alertButtons);
 			// scene->addChild(m_alertAxes);
 			// scene->addChild(m_autoConfig);
@@ -524,12 +524,12 @@ namespace ARK {
 			if (i->isKeyPressed(Input::KEY_BACKSPACE)) {
 				returnToStateStatic(this);
 			}
- 
+
 			if (i->getGamepads()->size() > 0) {
 				ARK::Core::Controls::Gamepad* p1 = i->getGamepads()->at(0);
 				if (p1->isButtonPressed(ARK::Core::Controls::Gamepad::DPAD_UP) || p1->isButtonPressed(ARK::Core::Controls::Gamepad::BUTTON_ACTIVATE)) {
 					//m_sound->play();
-				} 
+				}
 
 				if (p1->isButtonPressed(ARK::Core::Controls::Gamepad::BUTTON_START)) {
 					ARK2D::getLog()->i("START PRESSED");
@@ -541,12 +541,12 @@ namespace ARK {
 					vector<GamepadAxis* >* axes = &p1->axes;
 					for(unsigned int j = 0; j < axes->size(); j++) {
 						GamepadAxis* axis = axes->at(j);
-						
+
 						string str = "Index: ";
 						str += Cast::toString<unsigned int>(j);
 						str += ". Axis Id: ";
 						str += Cast::toString<unsigned int>(axis->id);
-						str += ". Value: "; 
+						str += ". Value: ";
 						str += Cast::toString<float>(axis->value);
 						str += ".";
 
@@ -568,12 +568,12 @@ namespace ARK {
 				}
 
 			}
-			
+
 		}
 
 		void GamepadsTestGameState::renderGamepad(ARK::Core::Controls::Gamepad* p1, float rootX, float rootY)
 		{
-			if (p1 == NULL) { 
+			if (p1 == NULL) {
 			 return; }
 			// rootX/Y is the center C/Y.
 			// make rootX the leftest X;
@@ -584,7 +584,7 @@ namespace ARK {
 			float x = p1->getAxisValue(ARK::Core::Controls::Gamepad::ANALOG_STICK_1_X);
 			float y = p1->getAxisValue(ARK::Core::Controls::Gamepad::ANALOG_STICK_1_Y);// axes.at(1)->value;
 			float cx = rootX + 300.0f;
-			float cy = rootY + 150; 
+			float cy = rootY + 150;
 			float rd = 60.0f;
 			r->setDrawColor(Color::white);
 			r->drawCircle(cx, cy, (int) rd, (int) rd);
@@ -595,21 +595,21 @@ namespace ARK {
 			x = p1->getAxisValue(ARK::Core::Controls::Gamepad::ANALOG_STICK_2_X); //p1->axes.at(2)->value;
 			y = p1->getAxisValue(ARK::Core::Controls::Gamepad::ANALOG_STICK_2_Y); //p1->axes.at(3)->value;
 			cx = rootX + 500.0f;
-			cy = rootY + 150; 
+			cy = rootY + 150;
 			r->setDrawColor(Color::white);
 			r->drawCircle(cx, cy, (int) rd, (int)rd);
 			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::BUTTON_R3)) { r->setDrawColor(Color::red); }
 			r->fillRect(cx + (rd*x) - 10, cy + (rd*y) - 10, 20, 20);
-			
-			// reset color 
-			r->setDrawColor(Color::white);
-	 
-			// left trigger  
-			float trigger1 = p1->getAxisValue(ARK::Core::Controls::Gamepad::TRIGGER_1); //(p1->axes.at(4)->value + 1.0f)/2.0f;
-			r->drawRect(rootX + 200, rootY, 100, 20); 
-			r->fillRect(rootX + 200, rootY, int(100 * trigger1), 20);  
 
-			// right trigger 
+			// reset color
+			r->setDrawColor(Color::white);
+
+			// left trigger
+			float trigger1 = p1->getAxisValue(ARK::Core::Controls::Gamepad::TRIGGER_1); //(p1->axes.at(4)->value + 1.0f)/2.0f;
+			r->drawRect(rootX + 200, rootY, 100, 20);
+			r->fillRect(rootX + 200, rootY, int(100 * trigger1), 20);
+
+			// right trigger
 			float trigger2 = p1->getAxisValue(ARK::Core::Controls::Gamepad::TRIGGER_2);//(p1->axes.at(5)->value + 1.0f)/2.0f;
 			r->drawRect(rootX + 500, rootY, 100, 20);
 			r->fillRect(rootX + 500, rootY, int(100 * trigger2), 20);
@@ -623,7 +623,7 @@ namespace ARK {
 			// right bumper
 			r->setDrawColor(Color::white);
 			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::BUTTON_RBUMPER)) { r->setDrawColor(Color::red); }
-			r->fillRect(rootX + 550, rootY+30, 50, 20); 
+			r->fillRect(rootX + 550, rootY+30, 50, 20);
 
 
 			//r->drawString(StringUtil::append("logical min: ", p1->axes.at(0)->logicalMin), 30, 390);
@@ -635,9 +635,9 @@ namespace ARK {
 			//r->drawString(StringUtil::append("null state?: ", p1->axes.at(4)->isHatSwitch), 30, 90);
 			//r->drawString(StringUtil::append("val: ", p1->axes.at(4)->value), 200, 90);
 
-			
-			
-			
+
+
+
 			// dpad
 			r->setDrawColor(Color::white);
 			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::DPAD_UP)) { r->setDrawColor(Color::red); }
@@ -650,7 +650,7 @@ namespace ARK {
 		 	r->setDrawColor(Color::white);
 			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::DPAD_RIGHT)) { r->setDrawColor(Color::red); }
 			r->fillRect(rootX + 225 - 10, rootY+225, 20, 20); // right
-		
+
 			r->setDrawColor(Color::white);
 			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::DPAD_DOWN)) { r->setDrawColor(Color::red); }
 			r->fillRect(rootX + 200 - 10, rootY+250, 20, 20); // down
@@ -671,41 +671,41 @@ namespace ARK {
 
 			// A button
 			r->setDrawColor(Color::white);
-			r->drawCircle(rootX + 600.0f, rootY+250.0f, 20, 20); 
+			r->drawCircle(rootX + 600.0f, rootY+250.0f, 20, 20);
 			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::BUTTON_A)) { r->setDrawColor(Color::green); }
-			r->drawCircle(rootX + 600.0f, rootY+250.0f, 20, 20); 
-			
+			r->drawCircle(rootX + 600.0f, rootY+250.0f, 20, 20);
+
 			// B button
 			r->setDrawColor(Color::white);
-			r->drawCircle(rootX + 625.0f, rootY+225.0f, 20, 20); 
+			r->drawCircle(rootX + 625.0f, rootY+225.0f, 20, 20);
 			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::BUTTON_B)) { r->setDrawColor(Color::red); }
-			r->drawCircle(rootX + 625.0f, rootY+225.0f, 20, 20); 
+			r->drawCircle(rootX + 625.0f, rootY+225.0f, 20, 20);
 
 			// X button
 			r->setDrawColor(Color::white);
-			r->drawCircle(rootX + 575.0f, rootY+225.0f, 20, 20); 
+			r->drawCircle(rootX + 575.0f, rootY+225.0f, 20, 20);
 			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::BUTTON_X)) { r->setDrawColor(Color::blue); }
-			r->drawCircle(rootX + 575.0f, rootY+225.0f, 20, 20); 
+			r->drawCircle(rootX + 575.0f, rootY+225.0f, 20, 20);
 
 			// Y button
 			r->setDrawColor(Color::white);
-			r->drawCircle(rootX + 600.0f, rootY+200.0f, 20, 20); 
+			r->drawCircle(rootX + 600.0f, rootY+200.0f, 20, 20);
 			if (p1->isButtonDown(ARK::Core::Controls::Gamepad::BUTTON_Y)) { r->setDrawColor(Color::yellow); }
-			r->drawCircle(rootX + 600.0f, rootY+200.0f, 20, 20); 
+			r->drawCircle(rootX + 600.0f, rootY+200.0f, 20, 20);
 		}
 		void GamepadsTestGameState::render(GameContainer* container, StateBasedGame* game, Renderer* r) {
 			r->setDrawColor(Color::white);
 			r->setFont(r->getDefaultFont());
 
-			Input* i = ARK2D::getInput(); 
-			if (i->getGamepads()->size() > 0) {  
+			Input* i = ARK2D::getInput();
+			if (i->getGamepads()->size() > 0) {
 				ARK::Core::Controls::Gamepad* p1 = i->getGamepads()->at(m_gamepadIndex);
 
-				r->setDrawColor(Color::white);  
+				r->setDrawColor(Color::white);
 				r->setFont(r->getDefaultFont());
 				r->drawString(StringUtil::append("gamepads connected: ", i->getGamepads()->size()), 30, 20);
 				r->drawString(StringUtil::append("gamepad: ", m_gamepadIndex), 30, 40);
-				
+
 				string name = p1->getName();
 				if (p1->isPS4Controller()) { name += " -- PS4 Controller!"; }
 				r->drawString(StringUtil::append("name: ", name), 30, 70);
@@ -725,18 +725,18 @@ namespace ARK {
 				//m_alertAxes->render();
 				//m_autoConfig->render();
 
-				r->drawString("Alert Buttons: ", container->getWidth() - 80, 50,  Renderer::ALIGN_RIGHT, Renderer::ALIGN_CENTER);	
-				r->drawString("Alert Axes: ",    container->getWidth() - 80, 100, Renderer::ALIGN_RIGHT, Renderer::ALIGN_CENTER);	
-		 
+				r->drawString("Alert Buttons: ", container->getWidth() - 80, 50,  Renderer::ALIGN_RIGHT, Renderer::ALIGN_CENTER);
+				r->drawString("Alert Axes: ",    container->getWidth() - 80, 100, Renderer::ALIGN_RIGHT, Renderer::ALIGN_CENTER);
+
 			} else {
 				r->setDrawColor(Color::white);
-				r->drawString("nothing gamepads connected...", 30, 120);	
+				r->drawString("nothing gamepads connected...", 30, 120);
 				//r->fillRect(100,100,100,100);
 
 			}
 
 			if (m_returnToState != NULL) {
-				r->drawString("BACKSPACE TO GO BACK", 30, container->getHeight() - 30, Renderer::ALIGN_LEFT, Renderer::ALIGN_BOTTOM, 0.0f, 2.0f);	
+				r->drawString("BACKSPACE TO GO BACK", 30, container->getHeight() - 30, Renderer::ALIGN_LEFT, Renderer::ALIGN_BOTTOM, 0.0f, 2.0f);
 			}
 
             renderChildren();
@@ -770,7 +770,7 @@ namespace ARK {
 
 		}
 		void GamepadsTestGameState::axisMoved(ARK::Core::Controls::Gamepad* gamepad, unsigned int axis, float value) {
-			if (m_alertAxes->isChecked()) { 
+			if (m_alertAxes->isChecked()) {
 				if (value > 0.75f || value < -0.75f) {
 					ErrorDialog::createAndShow(StringUtil::append("axis moved: ", axis));
 				}
@@ -806,7 +806,7 @@ namespace ARK {
 			addState(testState);
 			addState(configureState);
 			enterState(testState);
-		} 
+		}
 		void GamepadsTest::update(GameContainer* container, GameTimer* timer) {
 			StateBasedGame::update(container, timer);
 
@@ -833,7 +833,7 @@ namespace ARK {
 
 		}
 
-		
+
 
 		int GamepadsTest::start() {
 			gamepadsTest = new ARK::Tests::GamepadsTest();

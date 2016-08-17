@@ -11,7 +11,7 @@
 #include "ARK2D.h"
 #include "GameContainer.h"
 #include "Graphics/Renderer.h"
-#include "../Util/Log.h"
+#include "Log.h"
 
 using namespace std;
 

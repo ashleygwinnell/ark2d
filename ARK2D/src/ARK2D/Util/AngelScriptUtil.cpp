@@ -2,7 +2,7 @@
 #include "AngelScriptUtil.h"
 
 #include "../Core/ARK2D.h"
-#include "Log.h"
+#include "../Core/Log.h"
 #include "KeyPairFile.h"
 #include "../Core/GameContainer.h"
 #include "../Core/Font/BMFont.h"

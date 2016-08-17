@@ -7,7 +7,7 @@
 
 #include "../GameContainer.h"
 #include "GameContainerIPhone.h"
-#include "../../Util/Log.h"
+#include "../Log.h"
 
 #ifdef ARK2D_IPHONE
 

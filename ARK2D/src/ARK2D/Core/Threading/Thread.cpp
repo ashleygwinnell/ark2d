@@ -10,9 +10,9 @@
 #include "../ARK2D.h"
 #include "../GameContainer.h"
 #include "../Vector.h"
+#include "../Log.h"
 
 #include "../../Util/StringUtil.h"
-#include "../../Util/Log.h"
 #include "../../Util/Callbacks.h"
 
 namespace ARK {

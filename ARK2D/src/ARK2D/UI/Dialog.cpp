@@ -6,9 +6,9 @@
  */
 
 #include "Dialog.h"
-#include "../Util/Log.h" 
-#include "../Util/Callbacks.h" 
+#include "../Core/Log.h"
 #include "../Core/GameContainer.h"
+#include "../Util/Callbacks.h"
 
 #ifdef ARK2D_WINDOWS_PHONE_8
 
@@ -26,13 +26,13 @@ using namespace Windows::UI::Xaml::Media;
 
 namespace ARK_Internal
 {
-	
+
 	LoginResult::LoginResult() {
 
 	}
 
 	InputDialog::InputDialog(Platform::String^ title):
-		HeaderBrush() 
+		HeaderBrush()
 	{
 		ARK2D::getLog()->w("new InputDialog");
 
@@ -57,10 +57,10 @@ namespace ARK_Internal
 		}
 		UserNameTitle = "Name";
 		LoginMessage = "Enter the information below to connect to your account.";
-		//HeaderBrush = ref new SolidColorBrush(Windows::UI::Colors::Blue); 
+		//HeaderBrush = ref new SolidColorBrush(Windows::UI::Colors::Blue);
 		HeaderBrush.Get()->Color = Windows::UI::Colors::Blue;
 
-		if (!loginMessage->IsEmpty() && loginMessage->Length() > 0) 
+		if (!loginMessage->IsEmpty() && loginMessage->Length() > 0)
 		{
 			LoginMessage = loginMessage;
 		}
@@ -95,7 +95,7 @@ namespace ARK_Internal
 	return _taskCompletionSource.Task;
 	}*/
 
-	Grid^ InputDialog::CreateLogin() 
+	Grid^ InputDialog::CreateLogin()
 	{
 		ARK2D::getLog()->w("InputDialog::CreateLogin");
 		FrameworkElement^ content = (FrameworkElement^)Window::Current->Content;// as FrameworkElement;
@@ -113,8 +113,8 @@ namespace ARK_Internal
 		double width = Window::Current->Bounds.Width;
 		double height = Window::Current->Bounds.Height;
 
-		Grid^ rootPanel = ref new Grid(); 
-		rootPanel->Width = width; 
+		Grid^ rootPanel = ref new Grid();
+		rootPanel->Width = width;
 		rootPanel->Height = height;
 
 		auto overlay = ref new Grid();
@@ -152,7 +152,7 @@ namespace ARK_Internal
 
 		rootPanel->Children->Append(dialog);
 
-		auto titleBorder = ref new Border(); 
+		auto titleBorder = ref new Border();
 		titleBorder->Background = HeaderBrush.Get();
 		titleBorder->Height = 80.0;
 		Grid::SetColumnSpan(titleBorder, 3);
@@ -362,34 +362,34 @@ namespace ARK_Internal
 #endif
 
 namespace ARK {
-	namespace UI { 
+	namespace UI {
 
 		#if defined(ARK2D_WINDOWS)
 
 			char mystaticdialogproc_szItemName[80];
-			INT_PTR CALLBACK MyStaticDialogProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lParam) 
+			INT_PTR CALLBACK MyStaticDialogProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lParam)
 			{
 				//ARK2D::getLog()->t("mystaticdialogproc");
-				switch (message) 
-			    { 
-			        case WM_COMMAND:  
-			            switch (LOWORD(wParam)) 
-			            { 
-			                case IDOK:  
-			                    if (!GetDlgItemText(hwndDlg, ARK2D_DIALOG_INPUT_TEXT_CONTENTS, mystaticdialogproc_szItemName, 80)) 
-			                         *mystaticdialogproc_szItemName=0; 
-			 
-			                    // Fall through. 
-			 
-			                case IDCANCEL:  
-			                    EndDialog(hwndDlg, wParam); 
-			                    return TRUE; 
+				switch (message)
+			    {
+			        case WM_COMMAND:
+			            switch (LOWORD(wParam))
+			            {
+			                case IDOK:
+			                    if (!GetDlgItemText(hwndDlg, ARK2D_DIALOG_INPUT_TEXT_CONTENTS, mystaticdialogproc_szItemName, 80))
+			                         *mystaticdialogproc_szItemName=0;
 
-			                //default: 
+			                    // Fall through.
+
+			                case IDCANCEL:
+			                    EndDialog(hwndDlg, wParam);
+			                    return TRUE;
+
+			                //default:
 			               		//return DefDlgProc(hwndDlg, message, wParam, lParam);
-			            } 
-			    } 
-			    return FALSE; 
+			            }
+			    }
+			    return FALSE;
 
 				//return TRUE;
 			}
@@ -421,11 +421,11 @@ namespace ARK {
 			    hgbl = GlobalAlloc(GMEM_ZEROINIT, 1024);
 			    if (!hgbl)
 			        return -1;
-			 
+
 			    lpdt = (LPDLGTEMPLATE)GlobalLock(hgbl);
-			 
+
 			    // Define a dialog box.
-			 
+
 			    lpdt->style = WS_POPUP | WS_BORDER | WS_SYSMENU | DS_MODALFRAME | WS_CAPTION;
 			    lpdt->cdit = 3;         // Number of controls
 			    lpdt->x  = 10;  lpdt->y  = 10;
@@ -495,26 +495,26 @@ namespace ARK {
 			    lpw = (LPWORD)lpwsz;
 			    *lpw++ = 0;             // No creation data
 
-			    GlobalUnlock(hgbl); 
-			    ret = DialogBoxIndirect(hinst, 
-			                           (LPDLGTEMPLATE)hgbl, 
-			                           hwndOwner, 
-			                           (DLGPROC)MyStaticDialogProc); 
-			    GlobalFree(hgbl); 
-			    return ret; 
+			    GlobalUnlock(hgbl);
+			    ret = DialogBoxIndirect(hinst,
+			                           (LPDLGTEMPLATE)hgbl,
+			                           hwndOwner,
+			                           (DLGPROC)MyStaticDialogProc);
+			    GlobalFree(hgbl);
+			    return ret;
 			}
 
 		#endif
 
 
-		
+
 
 
 		string Dialog::s_inputDialogText = "";
 
 		void Dialog::openInputDialog(unsigned int callbackId, string title, string defaultStr) {
 			#if defined(ARK2D_WINDOWS_PHONE_8)
-			
+
 				/*using namespace Windows::UI::Popups;
 
 				string contents = message;
@@ -528,7 +528,7 @@ namespace ARK {
 
 				delete wideTitle;
 				delete wideContents;*/
-				ARK2D::getLog()->w("open dialog input"); 
+				ARK2D::getLog()->w("open dialog input");
 				GameContainer* container = ARK2D::getContainer();
 
 				auto window = Windows::UI::Core::CoreWindow::GetForCurrentThread();
@@ -547,16 +547,16 @@ namespace ARK {
 					}));
 				//});
 
-				
 
-				
+
+
 				//create_async([]() -> void {
-				//	
+				//
 				//	return;
 				//});
 
-				
-			#elif defined(ARK2D_FLASCC)  
+
+			#elif defined(ARK2D_FLASCC)
 				unsigned int titlelength = title.length();
 				unsigned int defaultStrlength = defaultStr.length();
 
@@ -566,11 +566,11 @@ namespace ARK {
 					: : "r"(callbackId), "r"(title), "r"(titlelength), "r"(defaultStr), "r"(defaultStrlength)
 				); */
 
-				inline_as3( 
+				inline_as3(
 					"import com.adobe.flascc.Console;\n"\
 					"Console.s_console.openInputDialog(%0, CModule.readString(%1, %2), CModule.readString(%3, %4));\n"\
 					: :  "r"(callbackId), "r"(title.c_str()), "r"(titlelength), "r"(defaultStr.c_str()), "r"(defaultStrlength)
-				); 
+				);
 
 			#elif defined(ARK2D_IPHONE)
 
@@ -591,13 +591,13 @@ namespace ARK {
 				alertTextField.text = defaultNSStr;
 				[alert show];
 				[alert release];
- 
 
-			#elif defined(ARK2D_MACINTOSH) 
+
+			#elif defined(ARK2D_MACINTOSH)
 
 				s_inputDialogText = "";
 
-				
+
 
 				NSString* titleNSStr = [NSString stringWithCString:title.c_str() encoding:[NSString defaultCStringEncoding]];
 				NSString* defaultNSStr = [NSString stringWithCString:defaultStr.c_str() encoding:[NSString defaultCStringEncoding]];
@@ -612,8 +612,8 @@ namespace ARK {
 				[input setStringValue:defaultNSStr];
 				[input autorelease];
 				//[alert orderFrontRegardless];
-				[alert setAccessoryView:input]; 
-				 
+				[alert setAccessoryView:input];
+
 				//[[NSRunningApplication currentApplication] activateWithOptions:NSApplicationActivateIgnoringOtherApps];
 
 				NSWindow* topWindow = ARK2D::getContainer()->getPlatformSpecific()->m_window;
@@ -636,7 +636,7 @@ namespace ARK {
 					ARK2D::getInput()->mouse_x = -1;
 					ARK2D::getInput()->mouse_y = -1;
 					return;
-				} else { 
+				} else {
 					ARK2D::getLog()->w("Invalid input dialog button");
 					[topWindow orderFrontRegardless];
 					[topWindow makeKeyWindow];
@@ -646,33 +646,33 @@ namespace ARK {
 				}
 
 
-			#elif defined(ARK2D_WINDOWS) 
+			#elif defined(ARK2D_WINDOWS)
 
 				//ErrorDialog::createAndShow("not implemented");
-				//return; 
+				//return;
 
 				HINSTANCE dllModule = LoadLibrary("libARK2D.dll");
 				if (dllModule == NULL) {
 					ErrorDialog::createAndShow("Could not load Input Dialog");
 				} else {
-					 
-					int ret = DialogBox( 
-						dllModule, //ARK2D::getContainer()->m_platformSpecific.m_hInstance, 	// handle to application instance 
-						MAKEINTRESOURCE(ARK2D_DIALOG_INPUT_TEXT), 				// identifies dialog box template 
-						ARK2D::getContainer()->m_platformSpecific.m_hWindow,	// handle to owner window 
-						(DLGPROC) MyStaticDialogProc 							// pointer to dialog box procedure 
+
+					int ret = DialogBox(
+						dllModule, //ARK2D::getContainer()->m_platformSpecific.m_hInstance, 	// handle to application instance
+						MAKEINTRESOURCE(ARK2D_DIALOG_INPUT_TEXT), 				// identifies dialog box template
+						ARK2D::getContainer()->m_platformSpecific.m_hWindow,	// handle to owner window
+						(DLGPROC) MyStaticDialogProc 							// pointer to dialog box procedure
 					);
 					ARK2D::getLog()->t(StringUtil::append("DialogBox ret: ", ret));
 					if (ret == -1) {
 						ARK2D::getLog()->t(StringUtil::append("DialogBox ret 2: ", GetLastError()));
-					} 
+					}
 
-					if (ret == IDOK) { 
+					if (ret == IDOK) {
 						s_inputDialogText = string(mystaticdialogproc_szItemName);
 						Callbacks::invoke(callbackId);
-					} else { 
-						s_inputDialogText = defaultStr; 
-					} 
+					} else {
+						s_inputDialogText = defaultStr;
+					}
 				}
 				FreeLibrary(dllModule);
 
@@ -683,19 +683,19 @@ namespace ARK {
 				return;
 			#endif
 		}
-		string Dialog::getInputDialogText() { 
+		string Dialog::getInputDialogText() {
 
 
- 
+
 
 			#if defined(ARK2D_FLASCC)
 
 				const char* inputText = NULL;
- 				inline_as3( 
+ 				inline_as3(
 					"import com.adobe.flascc.Console;\n"\
 					"%0 = Console.s_console.getInputDialogText();\n"
-					: "=r"(inputText) : 
-				);  
+					: "=r"(inputText) :
+				);
 
  				string inputTextNew = string(inputText);
  				ARK2D::getLog()->t(inputTextNew);

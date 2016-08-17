@@ -6,12 +6,10 @@
  */
 
 #include "GameTimer.h"
-#include <math.h>
-
 #include "ARK2D.h"
-//#include "../Includes.h"
-#include "../Util/Log.h"
+#include "Log.h"
 
+#include <math.h>
 #ifdef ARK2D_WINDOWS
 	#include <windows.h>
 	#include <mmsystem.h>

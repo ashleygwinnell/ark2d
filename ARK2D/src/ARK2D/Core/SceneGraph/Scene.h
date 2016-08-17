@@ -34,6 +34,7 @@ namespace ARK {
                     static const unsigned int TYPE_IMAGE = 2;
                     static const unsigned int TYPE_CAMERA = 3;
                 public:
+                    SceneNode* root;
                     SceneNode* parent;
                     string name;
                     vector<SceneNode*> children;

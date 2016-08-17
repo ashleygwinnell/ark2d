@@ -6,7 +6,7 @@
  */
 
 #include "TextField.h"
-#include "../Util/Log.h"
+#include "../Core/Log.h"
 #include <algorithm>
 
 namespace ARK {
@@ -169,7 +169,7 @@ namespace ARK {
 
 
 			if (m_multiline == false || (m_multiline == true && !m_text.contains("\n"))) {
-				
+
 				string t = m_text.get();
 				if (m_password) {
 					string newt = "";
@@ -194,11 +194,11 @@ namespace ARK {
 					cur_y += (signed int) g->getFont()->getLineHeight();
 				}
 			}
-		} 
-		
+		}
+
 		void TextField::renderCaret() {
 			int sw = ARK2D::getRenderer()->getFont()->getStringWidth(m_text.substring(0, m_cursorPosition).get());
-			renderCaret(  
+			renderCaret(
 				0 + getPaddingLeft() + sw,
 				0 + getPaddingTop(),
 				0 + getPaddingLeft() + sw,
@@ -339,8 +339,8 @@ namespace ARK {
 					string s = m_text.getc();
 					for(signed int i = m_cursorPosition - 1; i >= 0; i--) {
 						if (s[i] == '\n') {
-							if (how_far_in == -1) { 
-								how_far_in = m_cursorPosition - i - 1; 
+							if (how_far_in == -1) {
+								how_far_in = m_cursorPosition - i - 1;
 								prev_line_at = i;
 							} else {
 								prev_line_length = prev_line_at - i - 1;
@@ -359,21 +359,21 @@ namespace ARK {
 					ARK2D::getLog()->v(StringUtil::append("how_far_in: ", how_far_in));
 					ARK2D::getLog()->v(StringUtil::append("prev_line_at: ", prev_line_at));
 					ARK2D::getLog()->v(StringUtil::append("prev_line_length: ", prev_line_length));
-					
-					// no previous line. must be at the top line. 
+
+					// no previous line. must be at the top line.
 					if (how_far_in == -1 || prev_line_at == -1) {
-						
+
 					} else if (how_far_in != -1 && prev_line_at == 0) { // first line
 						m_cursorPosition = 0;
-					} else { 
+					} else {
 
 						int newpos = m_cursorPosition;
 						newpos -= how_far_in; 									// back to start of current line
 						newpos -= 1; 											// to end of previous line (\n)
-						if (how_far_in < prev_line_length) { 
+						if (how_far_in < prev_line_length) {
 							newpos -= prev_line_length - how_far_in;	// move cursor in, but only if we have to. (i.e. previous line is longer.)
 						}
-						m_cursorPosition = newpos;								// huzzah, end result 
+						m_cursorPosition = newpos;								// huzzah, end result
 					}
 					ARK2D::getLog()->v(StringUtil::append("new m_cursorPosition: ", m_cursorPosition));
                     return true;
@@ -386,7 +386,7 @@ namespace ARK {
 					signed int curr_line_at = -1;
 					for(signed int i = m_cursorPosition - 1; i >= 0; i--) {
 						if (s[i] == '\n' && how_far_in == -1) {
-							how_far_in = m_cursorPosition - i - 1; 
+							how_far_in = m_cursorPosition - i - 1;
 							curr_line_at = i+1;
 							break;
 						} else if (i == 0 && how_far_in == -1) {
@@ -423,13 +423,13 @@ namespace ARK {
 					ARK2D::getLog()->v(StringUtil::append("current_line_length: ", current_line_length));
 					ARK2D::getLog()->v(StringUtil::append("next_line_start: ", next_line_start));
 					ARK2D::getLog()->v(StringUtil::append("next_line_length: ", next_line_length));
-					
+
 					int newpos = m_cursorPosition;
 					newpos -= how_far_in; 									// back to start of current line
 					newpos += current_line_length; 							// end of current line.
 					newpos += 1; 											// start of next line.
 					newpos += std::min(how_far_in, next_line_length);	// move cursor in, but only if we have to. (i.e. previous line is longer.)
-					m_cursorPosition = newpos;	
+					m_cursorPosition = newpos;
 
 
 					ARK2D::getLog()->v(StringUtil::append("new m_cursorPosition: ", m_cursorPosition));
@@ -448,13 +448,13 @@ namespace ARK {
 
 					// do restrictions
 
-					if (m_restrictCharacters == RESTRICT_ALPHANUMERIC || 
-						m_restrictCharacters == RESTRICT_ALPHANUMERIC_SPACES || 
+					if (m_restrictCharacters == RESTRICT_ALPHANUMERIC ||
+						m_restrictCharacters == RESTRICT_ALPHANUMERIC_SPACES ||
 						m_restrictCharacters == RESTRICT_BASIC_PROGRAMMING
 						) {
 
 						string allowedCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-						
+
 						if (m_restrictCharacters == RESTRICT_ALPHANUMERIC_SPACES) {
 							allowedCharacters += " ";
 						} else if (m_restrictCharacters == RESTRICT_BASIC_PROGRAMMING) {
@@ -503,7 +503,7 @@ namespace ARK {
 			} else {
 				Input::setSoftwareKeyboardOpen(false);
 			}
-			
+
 		}
 
 		TextField::~TextField() {

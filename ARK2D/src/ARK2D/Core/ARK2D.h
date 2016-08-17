@@ -34,8 +34,10 @@ class ARK2D_API ARK2D {
 		static GameTimer* getTimer();
 		static Log* getLog();
 		static Strings* getStrings();
+		static Scene* getScene();
 		static unsigned int getPlatform();
 		static std::string getPlatformString();
+
 
 		static bool is64BitArchitecture();
 		static bool isBigEndian();
@@ -75,6 +77,7 @@ class ARK2D_API ARK2D {
 		static Log* s_log;
 		static Camera* s_camera;
 		static Strings* s_strings;
+		static Scene* s_scene;
 		static bool s_debug;
 		static bool s_expo;
 		static bool s_steam;

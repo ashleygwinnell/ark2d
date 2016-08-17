@@ -6,13 +6,12 @@
  */
 
 #include "../Core/ARK2D.h"
-//#include "../Includes.h"
 #include "../Core/GameTimer.h"
 #include "../Core/Graphics/Renderer.h"
 #include "../Core/Graphics/Image.h"
 #include "../Core/Graphics/Color.h"
 #include "../Core/Graphics/Texture.h"
-#include "../Util/Log.h"
+#include "../Core/Log.h"
 
 #include "ParticleSystem.h"
 #include "ParticleEmitter.h"
@@ -166,7 +165,7 @@ namespace ARK {
 					//sprite->bind(); // we need to cancel this out if we're rendering points.
 				}
 
-				//if (!emitter->isOriented() && !emitter->usePoints(this)) { 
+				//if (!emitter->isOriented() && !emitter->usePoints(this)) {
 				//	image->startUse();
 				//}
 

@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include "../Core/ARK2D.h"
 #include "StringUtil.h"
-#include "Log.h"
+#include "../Core/Log.h"
 #include "../Core/GameContainer.h"
 #include "../Core/String.h"
 #include "Callbacks.h"

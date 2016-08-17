@@ -72,9 +72,9 @@ namespace ARK {
 			if (!visible) { return; }
 			render(ARK2D::getContainer(), ARK2D::getRenderer());
 			renderChildren();
-			if (ARK2D::getLog()->isVisible()) {
-				renderBounds();
-			}
+			//if (ARK2D::getLog()->isVisible()) {
+			//	renderBounds();
+			//}
 		}
 		void Game::preRender() {
 			if (!visible) { return; }

@@ -8,8 +8,8 @@
 #include "Discovery.h"
 #include "../Core/ARK2D.h"
 #include "../Core/GameTimer.h"
+#include "../Core/Log.h"
 
-#include "../Util/Log.h"
 #include "../Util/FileUtil.h"
 
 namespace ARK {

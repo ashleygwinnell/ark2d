@@ -13,8 +13,6 @@
 
 #include "Shape.h"
 #include "../Graphics/Renderer.h"
-//#include "../Util/Log.h"
-//#include "../UI/ErrorDialog.h"
 
 namespace ARK {
     namespace Core {
@@ -34,17 +32,17 @@ namespace ARK {
                     bool dirty;
 
                 public:
-                    Line(): 
-                        first(0, 0), 
-                        second(0, 0), 
-                        vec(0, 0) 
+                    Line():
+                        first(0, 0),
+                        second(0, 0),
+                        vec(0, 0)
                     {
                         //ARK2D::getLog()->w("TODO: Line::__construct(), remove dynamic memory allocations");
                     }
-                    Line(T x1, T y1, T x2, T y2): 
-                        first(x1, y1), 
-                        second(x2, y2), 
-                        vec(0, 0) 
+                    Line(T x1, T y1, T x2, T y2):
+                        first(x1, y1),
+                        second(x2, y2),
+                        vec(0, 0)
                     {
                         //ARK2D::getLog()->w("TODO: Line::__construct(), remove dynamic memory allocations");
                         vec.set(&second);

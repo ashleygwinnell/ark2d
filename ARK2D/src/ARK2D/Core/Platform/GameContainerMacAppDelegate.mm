@@ -9,7 +9,7 @@
 #import "GameContainerMacAppDelegate.h"
 
 #import "../ARK2D.h"
-//#import "../../Util/Log.h"
+//#import "../Log.h"
 
 using namespace ARK::Core;
 
@@ -22,7 +22,7 @@ using namespace ARK::Core;
     // Insert code here to initialize your application
     NSLog(@"finished launching \r\n");
 }
- 
+
 - (void)applicationDidHide:(NSNotification *)notification {
   NSLog(@"closed application\r\n");
 }
@@ -48,4 +48,4 @@ using namespace ARK::Core;
 
 
 @end
-		
+

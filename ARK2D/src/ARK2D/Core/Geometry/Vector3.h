@@ -8,9 +8,6 @@
 #ifndef ARK_GEOMETRY_VECTOR3_H_
 #define ARK_GEOMETRY_VECTOR3_H_
 
-//#include "../ARK2D.h"
-//#include "../Util/Log.h"
-//#include "../Core/String.h"
 #include "../Cast.h"
 #include <cmath>
 #include <string>

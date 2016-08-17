@@ -22,7 +22,7 @@
 #include "../Core/GameContainer.h"
 #include "../Core/Graphics/Renderer.h"
 
-#include "../Util/Log.h"
+#include "../Core/Log.h"
 #include "../Util/StringUtil.h"
 
 #include "../vendor/zlib123/zlib.h"
@@ -44,7 +44,7 @@ namespace ARK {
 			m_tilesets(),
 			m_layers(),
 			m_objectgroups(),
-			m_tileWidth(0), 
+			m_tileWidth(0),
 			m_tileHeight(0),
 			m_widthInTiles(0),
 			m_heightInTiles(0),
@@ -74,7 +74,7 @@ namespace ARK {
 			m_tilesets(),
 			m_layers(),
 			m_objectgroups(),
-			m_tileWidth(0), 
+			m_tileWidth(0),
 			m_tileHeight(0),
 			m_widthInTiles(0),
 			m_heightInTiles(0),
@@ -87,13 +87,13 @@ namespace ARK {
 				m_parser = new TiledMapParser_JSON(this);
 			} else {
 				if (ARK2D::getPlatform() == ARK2D::PLATFORM_OSX || ARK2D::getPlatform() == ARK2D::PLATFORM_BROWSER_FLASCC) {
-				//if (ARK2D::getPlatform() == ARK2D::PLATFORM_BROWSER_FLASCC) { 
+				//if (ARK2D::getPlatform() == ARK2D::PLATFORM_BROWSER_FLASCC) {
 					m_parser = new TiledMapParser_RapidXml(this);
 				} else {
 					m_parser = new TiledMapParser_TinyXml(this, file);
 				}
 			}
-			
+
 		}
 
 		void TiledMap::load() {
@@ -103,9 +103,9 @@ namespace ARK {
 			}
 		}
 
-		
 
-	
+
+
 
 		void TiledMap::addProperty(const TiledMapProperty& property) {
 			m_properties.push_back(property);
@@ -273,12 +273,12 @@ namespace ARK {
 		// --------------------------------------------------------------------------------------------------------
 		// parsers
 		// --------------------------------------------------------------------------------------------------------
-		TiledMapParser::TiledMapParser(TiledMap* map): 
+		TiledMapParser::TiledMapParser(TiledMap* map):
 			m_map(map) {
 
 		}
 		TiledMapParser::~TiledMapParser() {
-			
+
 		}
 
 
@@ -299,7 +299,7 @@ namespace ARK {
 			if (m_map->m_data != NULL) {
 				ARK2D::getLog()->i("Parsing TiledMap from passed-in data.");
 				m_root = libJSON::Parse((char*) m_map->m_data);
-			} else { 
+			} else {
 				ARK2D::getLog()->i(StringUtil::append("Parsing TiledMap from new data from file: ", m_map->m_file));
 				string docstr = StringUtil::file_get_contents(m_map->m_file.c_str());
 				m_root = libJSON::Parse(docstr.c_str());
@@ -315,7 +315,7 @@ namespace ARK {
 				ErrorDialog::createAndShow(StringUtil::append("Ark 2D only supports Version 1 TilED/JSON Maps: ", m_map->m_file));
 				exit(0);
 			}
-			
+
 			// check orientation
 			if (m_root->GetNode("orientation")->NodeAsString() != "orthogonal") {
 				ErrorDialog::createAndShow(StringUtil::append("Ark 2D only supports Orthogonal TilED Maps: ", m_map->m_file));
@@ -346,7 +346,7 @@ namespace ARK {
 				JSONNode* tilesetNode = tilesetsNode->NodeAt(i);
 
 				unsigned int firstgid = tilesetNode->GetNode("firstgid")->NodeAsInt();
-				
+
 				TiledMapTileset tileset;
 				tileset.setName( tilesetNode->GetNode("name")->NodeAsString() );
 				tileset.setFirstGID( firstgid );
@@ -358,10 +358,10 @@ namespace ARK {
 				tileset.setSpacing(0);
 				if (tilesetNode->GetNode("margin") != NULL ) {
 					tileset.setMargin( tilesetNode->GetNode("margin")->NodeAsInt() );
-				} 
-				if (tilesetNode->GetNode("spacing") != NULL) { 
+				}
+				if (tilesetNode->GetNode("spacing") != NULL) {
 					tileset.setSpacing( tilesetNode->GetNode("spacing")->NodeAsInt() );
-				} 
+				}
 
 				// Image
 				string image_src = tilesetNode->GetNode("image")->NodeAsString();
@@ -380,7 +380,7 @@ namespace ARK {
 				// Calculate number of tiles going down.
 				unsigned int current_height = tileset.getImage()->getHeight() - (2*tileset.getMargin());
 				current_height -= current_height % (tileset.getTileHeight() + tileset.getSpacing());
-				
+
 				unsigned int tiles_down = current_height / (tileset.getTileHeight() + tileset.getSpacing());
 				tileset.setNumberOfTilesDown(tiles_down);
 
@@ -397,7 +397,7 @@ namespace ARK {
 
 				// tile properties.
 				JSONNode* tilePropertiesNode = tilesetNode->GetNode("tileproperties");
-				if (tilePropertiesNode != NULL) { 
+				if (tilePropertiesNode != NULL) {
 					for(unsigned int j = 0; j < tilePropertiesNode->NodeSize(); ++j) {
 						JSONNode* tilePropertyNode = tilePropertiesNode->NodeAt(j);
 
@@ -421,7 +421,7 @@ namespace ARK {
 
 			}
 
-			
+
 
 			// layers
 			JSONNode* layersNode = m_root->GetNode("layers");
@@ -443,7 +443,7 @@ namespace ARK {
 
 					unsigned int layer_current_x = 0;
 					unsigned int layer_current_y = 0;
-				
+
 					JSONNode* layerData = layerNode->GetNode("data");
 					for(unsigned int j = 0; j < layerData->NodeSize(); j++) {
 						unsigned int gid = layerData->NodeAt(j)->NodeAsInt();
@@ -485,7 +485,7 @@ namespace ARK {
 
 					group.setOpacity( layerNode->GetNode("opacity")->NodeAsFloat() );
 					group.setVisible( layerNode->GetNode("visible")->NodeAsBool() );
-				
+
 					JSONNode* objectsNode = layerNode->GetNode("objects");
 					for(unsigned int j = 0; j < objectsNode->NodeSize(); j++) {
 						JSONNode* objectNode = objectsNode->NodeAt(j);
@@ -502,7 +502,7 @@ namespace ARK {
 						if (objectNode->GetNode("width") != NULL) {
 							obj->setWidth( objectNode->GetNode("width")->NodeAsInt() );
 						}
- 
+
 						if (objectNode->GetNode("height") != NULL) {
 							obj->setHeight( objectNode->GetNode("height")->NodeAsInt() );
 						}
@@ -516,14 +516,14 @@ namespace ARK {
 						// support for polygon lines in new tiled.
 						// <polyline points="127,-96 223,-160 319,-96 415,-160"/>
 						JSONNode* polylinePointsNode = objectNode->GetNode("polyline");
-						if (polylinePointsNode != NULL) { 
+						if (polylinePointsNode != NULL) {
 							ARK2D::getLog()->v(StringUtil::append("We've got ourselves a polyline with # points: ", polylinePointsNode->NodeSize()));
 							for(unsigned int k = 0; k < polylinePointsNode->NodeSize(); k++) {
 								JSONNode* pointNode = polylinePointsNode->NodeAt(k);
 								obj->addPolylinePoint(pointNode->GetNode("x")->NodeAsInt(), pointNode->GetNode("y")->NodeAsInt());
 							}
-						} 
- 
+						}
+
 						for(unsigned int k = 0; k < objectPropertiesNode->NodeSize(); k++) {
 							JSONNode* objectPropertyNode = objectPropertiesNode->NodeAt(k);
 							obj->addProperty(objectPropertyNode->NodeName(), objectPropertyNode->NodeAsString());
@@ -539,7 +539,7 @@ namespace ARK {
 			ARK2D::getLog()->i("Loading TiledMap... done.");
 
 		}
-	
+
 
 
 
@@ -550,8 +550,8 @@ namespace ARK {
 		// --------------------------------------------------------------------------------------------------------
 		// tinyxml parser
 		// --------------------------------------------------------------------------------------------------------
-		TiledMapParser_TinyXml::TiledMapParser_TinyXml(TiledMap* map, string file): 
-			TiledMapParser(map), 
+		TiledMapParser_TinyXml::TiledMapParser_TinyXml(TiledMap* map, string file):
+			TiledMapParser(map),
 			m_xmldocument(file) {
 				ARK2D::getLog()->i("New TiledMapParser_TinyXml");
 		}
@@ -620,7 +620,7 @@ namespace ARK {
 			//std::cout << "image height: " << tileset.getImage()->getHeight() << std::endl;
 			//std::cout << "tileset margin: " << tileset.getMargin() << std::endl;
 			//std::cout << "current height: " << current_height << std::endl;
-			
+
 			current_height -= current_height % (tileset.getTileHeight() + tileset.getSpacing());
 			//std::cout << "current height: " << current_height << std::endl;
 
@@ -686,9 +686,9 @@ namespace ARK {
 
 		}
 		void TiledMapParser_TinyXml::parse() {
-			if (m_map->m_data != NULL) { 
+			if (m_map->m_data != NULL) {
 				m_xmldocument.Parse((const char*)m_map->m_data, 0, TIXML_ENCODING_UTF8);
-			} else { 
+			} else {
 				bool loadOkay = m_xmldocument.LoadFile();
 				if (!loadOkay) {
 					ErrorDialog::createAndShow(StringUtil::append("Could not load Tiled Map: ", m_map->m_file));
@@ -825,18 +825,18 @@ namespace ARK {
 					ARK2D::getLog()->v("Tiled CSV Map");
 
 					const char* data_c_str = data_element->GetText();
- 
+
 					vector<string> lines = StringUtil::split(string(data_c_str), " ");
 					if (lines.size() > layer.getHeight()) {
 						ErrorDialog::createAndShow("Tiled CSV. Layer data height larger than defined height.");
 						exit(0);
 					}
 
-					for (unsigned int thisy = 0; thisy < lines.size(); ++thisy) 
+					for (unsigned int thisy = 0; thisy < lines.size(); ++thisy)
 					{
 						ARK2D::getLog()->v(StringUtil::append("Line: ", lines.at(thisy)));
 						vector<string> lineItems = StringUtil::split(lines.at(thisy), ",");
-						for (unsigned int thisx = 0; thisx < layer.getWidth(); ++thisx) 
+						for (unsigned int thisx = 0; thisx < layer.getWidth(); ++thisx)
 						{
 							unsigned int tile_gid_int = Cast::fromString<unsigned int>(lineItems.at(thisx));
 							if (tile_gid_int != 0) {
@@ -844,7 +844,7 @@ namespace ARK {
 							}
 						}
 					}
-  
+
 					ARK2D::getLog()->i("done.");
 
 					if (layer.getWidth() != layer.m_data.size()
@@ -859,7 +859,7 @@ namespace ARK {
 						exit(0);
 					}
 
-				} else if (encodingStr == NULL) { 
+				} else if (encodingStr == NULL) {
 
 
 					const char* data_c_str = data_element->GetText();
@@ -1006,7 +1006,7 @@ namespace ARK {
 					TiXmlElement* object_properties_root = NULL;
 					object_properties_root = object_element->FirstChildElement("properties");
 
-					if (object_properties_root != NULL) { 
+					if (object_properties_root != NULL) {
 
 						TiXmlElement* object_property = NULL;
 						for (object_property = object_properties_root->FirstChildElement("property");
@@ -1075,13 +1075,13 @@ namespace ARK {
 				ARK2D::getLog()->i("New TiledMapParser_RapidXml");
 
 		}
-		void TiledMapParser_RapidXml::parseTileset(unsigned int& firstgid, string& src, xml_document<>* tileset_d) 
+		void TiledMapParser_RapidXml::parseTileset(unsigned int& firstgid, string& src, xml_document<>* tileset_d)
 		{
 			//xml_node<>* mapnode = m_xmldocument.first_node("map");
 			//xml_attribute<>* attr_version = mapnode->first_attribute("version");
 
 			xml_node<>* external_tileset_e = tileset_d->first_node("tileset");
-			
+
 			TiledMapTileset tileset;
 			tileset.setName(external_tileset_e->first_attribute("name")->value());
 			tileset.setFirstGID(firstgid);
@@ -1138,11 +1138,11 @@ namespace ARK {
 			// Calculate number of tiles going down.
 			unsigned int current_height = tileset.getImage()->getHeight() - (2*tileset.getMargin());
 			current_height -= current_height % (tileset.getTileHeight() + tileset.getSpacing());
-			
+
 
 			unsigned int tiles_down = current_height / (tileset.getTileHeight() + tileset.getSpacing());
 			tileset.setNumberOfTilesDown(tiles_down);
-			
+
 
 			// Calculate number of tiles going across.
 			unsigned int current_width = tileset.getImage()->getWidth() - tileset.getMargin();
@@ -1188,7 +1188,7 @@ namespace ARK {
 					//std::cout << "got here 3" << std::endl;
 				}
 
-			} 
+			}
 
 			//std::cout << "After ready()" << std::endl;
 
@@ -1201,12 +1201,12 @@ namespace ARK {
 			void TiledMapParser_RapidXml::parse() {
 				ARK2D::getLog()->e("Rapid xml not implemented android.");
 			}
-		#else 
+		#else
 			void TiledMapParser_RapidXml::parse() {
 
 				if (m_map->m_data != NULL) {
-					m_xmldocument.parse<0>((char*)m_map->m_data); 
-				} else { 
+					m_xmldocument.parse<0>((char*)m_map->m_data);
+				} else {
 
 					string docstr = StringUtil::file_get_contents(m_map->m_file.c_str());
 					ARK2D::getLog()->i(StringUtil::append("data: ", docstr));
@@ -1218,7 +1218,7 @@ namespace ARK {
 
 				    ARK2D::getLog()->i("document.parse");
 					m_xmldocument.parse<0>((char*) &m_xml_copy[0]);
-					bool loadOkay = true; 
+					bool loadOkay = true;
 
 					if (!loadOkay) {
 						ErrorDialog::createAndShow(StringUtil::append("Could not load Tiled Map: ", m_map->m_file));
@@ -1237,24 +1237,24 @@ namespace ARK {
 				if (strcmp(orientation, "orthogonal") != 0) {
 					ErrorDialog::createAndShow(StringUtil::append("Ark 2D only supports Orthogonal TilED Maps: ", m_map->m_file));
 					exit(0);
-				} 
+				}
 
 				m_map->m_tileWidth = Cast::fromString<unsigned int>(mapnode->first_attribute("tilewidth")->value());
 				m_map->m_tileHeight = Cast::fromString<unsigned int>(mapnode->first_attribute("tileheight")->value());
 				m_map->m_widthInTiles = Cast::fromString<unsigned int>(mapnode->first_attribute("width")->value());
 				m_map->m_heightInTiles = Cast::fromString<unsigned int>(mapnode->first_attribute("height")->value());
-				 
+
 				m_map->m_widthInPixels = m_map->m_tileWidth * m_map->m_widthInTiles;
 				m_map->m_heightInPixels = m_map->m_tileHeight * m_map->m_heightInTiles;
 
 				// Properties
 				xml_node<>* propertiesnode = mapnode->first_node("properties");
-				if (propertiesnode != NULL) 
+				if (propertiesnode != NULL)
 				{
 					xml_node<>* property_e = 0;
-					for (property_e = propertiesnode->first_node("property"); 
+					for (property_e = propertiesnode->first_node("property");
 							property_e;
-							property_e = property_e->next_sibling("property")) 
+							property_e = property_e->next_sibling("property"))
 					{
 						TiledMapProperty property(property_e->first_attribute("name")->value(), property_e->first_attribute("value")->value());
 						m_map->addProperty(property);
@@ -1264,9 +1264,9 @@ namespace ARK {
 
 				// TileSets
 				xml_node<>* tileset_e = 0;
-				for (tileset_e = mapnode->first_node("tileset"); 
+				for (tileset_e = mapnode->first_node("tileset");
 					tileset_e;
-					tileset_e = tileset_e->next_sibling("tileset")) 
+					tileset_e = tileset_e->next_sibling("tileset"))
 				{
 					unsigned int firstgid = Cast::fromString<unsigned int>(tileset_e->first_attribute("firstgid")->value());
 					const char* src_cstr = tileset_e->first_attribute("source")->value();
@@ -1295,7 +1295,7 @@ namespace ARK {
 						tileset_d.parse<0>(&m_tileset_xml_temp[0]);
 
 						parseTileset(firstgid, src, &tileset_d);
-						
+
 					} else {
 						#if !defined(ARK2D_ANDROID)
 							//! @TODO: Read tiledmap from data buffer from non-android.
@@ -1310,7 +1310,7 @@ namespace ARK {
 
 						xml_document<> tileset_d;
 						tileset_d.parse<0>(&m_tileset_xml_temp[0]);
-						
+
 						parseTileset(firstgid, src, &tileset_d);
 					}
 
@@ -1322,7 +1322,7 @@ namespace ARK {
 				xml_node<>* layer_element = 0;
 				for (layer_element = mapnode->first_node("layer");
 					layer_element;
-					layer_element = layer_element->next_sibling("layer")) 
+					layer_element = layer_element->next_sibling("layer"))
 				{
 					TiledMapLayer layer;
 					layer.setMap(m_map);
@@ -1354,8 +1354,8 @@ namespace ARK {
 
 					xml_attribute<>* encodingStr = data_element->first_attribute("encoding");
 					//std::cout << "derp: " << encodingStr << std::endl;
-					
-					if (encodingStr != NULL && string(encodingStr->value()).compare("csv") == 0) 
+
+					if (encodingStr != NULL && string(encodingStr->value()).compare("csv") == 0)
 					{
 						ARK2D::getLog()->v("Tiled CSV Map");
 
@@ -1373,11 +1373,11 @@ namespace ARK {
 							exit(0);
 						}
 
-						for (unsigned int thisy = 0; thisy < lines.size() && thisy < layer.getHeight(); ++thisy) 
+						for (unsigned int thisy = 0; thisy < lines.size() && thisy < layer.getHeight(); ++thisy)
 						{
 							ARK2D::getLog()->v(StringUtil::append("Line: ", lines.at(thisy)));
 							vector<string> lineItems = StringUtil::split(lines.at(thisy), ",");
-							for (unsigned int thisx = 0; thisx < layer.getWidth(); ++thisx) 
+							for (unsigned int thisx = 0; thisx < layer.getWidth(); ++thisx)
 							{
 								unsigned int tile_gid_int = Cast::fromString<unsigned int>(lineItems.at(thisx));
 								if (tile_gid_int != 0) {
@@ -1385,7 +1385,7 @@ namespace ARK {
 								}
 							}
 						}
-	  
+
 						ARK2D::getLog()->i("done.");
 
 						if (layer.getWidth() != layer.m_data.size()
@@ -1400,18 +1400,18 @@ namespace ARK {
 							exit(0);
 						}
 
-					} 
-					else if (encodingStr != NULL && string(encodingStr->value()).compare("base64") == 0) 
-					{ 
+					}
+					else if (encodingStr != NULL && string(encodingStr->value()).compare("base64") == 0)
+					{
 						//std::cout << data_c_str << std::endl;
-							
+
 						const char* data_c_str = data_element->value();
 						string data(data_c_str);
 						data = StringUtil::decodeBase64(data);
-						
+
 						xml_attribute<>* layer_compression = data_element->first_attribute("compression");
-						if (layer_compression != NULL) { 
-							if (strcmp(layer_compression->value(), "gzip") == 0) 
+						if (layer_compression != NULL) {
+							if (strcmp(layer_compression->value(), "gzip") == 0)
 							{
 								ErrorDialog::createAndShow(StringUtil::append("Ark 2D only supports TilED Maps without gzip compression on layers. ", m_map->m_file));
 								exit(0);
@@ -1428,7 +1428,7 @@ namespace ARK {
 								//    output.resize(outputSize);
 								// }
 								// std::cout << ((int) output.at(1)) << std::endl;
-				
+
 								// std::cout << decoded << std::endl;
 								// int err;
 								// unsigned long RawDataLength = decoded.length();
@@ -1447,10 +1447,10 @@ namespace ARK {
 								//std::cout << uncomp << std::endl;
 							}
 						}
-					
-					} 
-					else if (encodingStr == NULL) 
-					{ 
+
+					}
+					else if (encodingStr == NULL)
+					{
 
 
 						const char* data_c_str = data_element->value();
@@ -1515,7 +1515,7 @@ namespace ARK {
 								exit(0);
 							}
 						}
-						
+
 
 						//layer.prepare(); // the array resizes itself after assign()ing stuff, so re set the size! D:
 					}
@@ -1527,7 +1527,7 @@ namespace ARK {
 				xml_node<>* objectgroup_element = 0;
 				for (objectgroup_element = mapnode->first_node("objectgroup");
 						objectgroup_element;
-						objectgroup_element = objectgroup_element->next_sibling("objectgroup")) 
+						objectgroup_element = objectgroup_element->next_sibling("objectgroup"))
 				{
 					TiledMapObjectGroup group;
 					group.setName(objectgroup_element->first_attribute("name")->value());
@@ -1582,19 +1582,19 @@ namespace ARK {
 							obj->setGID(gid);
 						}
 
-						
+
 						//	 <object name="spawn" type="spawn" gid="2" x="448" y="544">
 						//	   <properties>
 						//	    <property name="id" value="1"/>
 						//	   </properties>
 						//	  </object>
-						  
+
 
 						// add object properties
 						xml_node<>* object_properties_root = NULL;
 						object_properties_root = object_element->first_node("properties");
 
-						if (object_properties_root != NULL) { 
+						if (object_properties_root != NULL) {
 
 							xml_node<>* object_property = NULL;
 							for (object_property = object_properties_root->first_node("property");

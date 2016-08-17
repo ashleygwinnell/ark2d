@@ -12,7 +12,7 @@
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
 #include "../Core/Tween/Timeline.h"
-#include "../Util/Log.h"
+#include "../Core/Log.h"
 
 namespace ARK {
 	namespace Util {
@@ -65,7 +65,7 @@ namespace ARK {
 				void start(float magnitude);
 				void setSpeedMultiplier(float f);
 				bool isShaking();
-				void setXOffset(float x); 
+				void setXOffset(float x);
 				void setYOffset(float y);
 				float getXOffset();
 				float getYOffset();
@@ -78,13 +78,13 @@ namespace ARK {
 				CameraShake(Game* game, int layers);
 
 				void reset();
-				void start(); 
+				void start();
 				void start(float magnitude);
 
 				void start(int layer, float magnitude);
 				void setSpeedMultiplier(int layer, float f);
 
-				void setXOffset(float x); 
+				void setXOffset(float x);
 				void setYOffset(float y);
 
 				float getXOffset();
@@ -102,10 +102,10 @@ namespace ARK {
 			private:
 				Game* m_game;
 				vector<CameraShakeLayer*> m_layers;
-				
+
 				//Timeline* m_timeline;
 
-				
+
 
 		};
 
@@ -136,7 +136,7 @@ namespace ARK {
 				CameraShake * m_cameraShake;
 				CameraShakeMagnitude2(CameraShake* shake, float start_val, float end_val, int millis):
 										TweenedEvent(start_val, end_val, millis),
-										m_cameraShake(shake) { 
+										m_cameraShake(shake) {
 					m_easing = Easing::CUBIC_IN_OUT;
 					ARK2D::getLog()->w("New CameraShakeMagnitude2");
 				}
@@ -147,7 +147,7 @@ namespace ARK {
 					ARK2D::getLog()->w("Delete CameraShakeMagnitude2");
 				}
 		};
-		class CameraShakeMagnitude2Y : public TweenedEvent { 
+		class CameraShakeMagnitude2Y : public TweenedEvent {
 			public:
 				CameraShake * m_cameraShake;
 				CameraShakeMagnitude2Y(CameraShake* shake, float start_val, float end_val, int millis):
@@ -158,7 +158,7 @@ namespace ARK {
 				}
 				void invoke(Timeline* t, float current_val) {
 					m_cameraShake->setYOffset(current_val);
-				} 
+				}
 				virtual ~CameraShakeMagnitude2Y() {
 					ARK2D::getLog()->w("Delete CameraShakeMagnitude2Y");
 

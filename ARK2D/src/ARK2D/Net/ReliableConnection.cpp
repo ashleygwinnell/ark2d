@@ -7,7 +7,7 @@
 
 #include "ReliableConnection.h"
 #include "../Core/ARK2D.h"
-#include "../Util/Log.h"
+#include "../Core/Log.h"
 
 namespace ARK {
 	namespace Net { 

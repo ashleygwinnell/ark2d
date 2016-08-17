@@ -304,8 +304,8 @@ namespace ARK {
                 this->keyDownBuffer[key] = true;
                 pressedEvents.insert(key);
 
-                ARK2D::getLog()->keyPressed(key);
-                ARK2D::getGame()->keyPressed(key);
+                //ARK2D::getLog()->keyPressed(key);
+                ARK2D::getScene()->keyPressed(key);
      
                 //#ifdef ARK2D_UBUNTU_LINUX
                 //#ifdef ARK2D_ANDROID
@@ -316,8 +316,8 @@ namespace ARK {
                 this->keyDownBuffer[key] = false;
                 releasedEvents.insert(key);
 
-                ARK2D::getLog()->keyReleased(key);
-                ARK2D::getGame()->keyReleased(key);
+                //ARK2D::getLog()->keyReleased(key);
+                ARK2D::getScene()->keyReleased(key);
             }
 
             const string Input::getKeyName(unsigned int key) {

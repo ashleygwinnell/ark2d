@@ -13,7 +13,7 @@
 #include "../Graphics/TextureStore.h"
 #include "../Graphics/ShaderStore.h"
 
-#include "../../Util/Log.h"
+#include "../Log.h"
 
 namespace ARK {
 	namespace Core {
@@ -132,7 +132,7 @@ namespace ARK {
 			}
 			void ErrorDialog::showAnyGlErrorAndExit(const char* fname, int line) {
 				//#ifdef ARK2D_DEBUG
-				if (ARK2D::getLog()->getFilter() == ARK::Util::Log::TYPE_ALL)
+				if (ARK2D::getLog()->getFilter() == ARK::Core::Log::TYPE_ALL)
 				{
 					#if defined(ARK2D_RENDERER_DIRECTX)
 						/*string s = "dx: ";

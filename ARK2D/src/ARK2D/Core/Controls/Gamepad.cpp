@@ -11,7 +11,7 @@
 #include "../ARK2D.h"
 #include "../../Common/Libraries/libjson.h"
 #include "Gamepad.h"
-#include "../../Util/Log.h"
+#include "../Log.h"
 #include "../GameContainer.h"
 #include "../Game.h"
 
