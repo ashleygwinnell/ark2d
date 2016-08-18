@@ -1203,7 +1203,7 @@ class ARK2DBuildSystem:
 					vcxproj_sourcefiles += "<ClCompile Include=\"../../"+srcfile+"\" /> \n";
 
 
-			ark2d_dir_extra_slashes = sef.str_replace(self.ark2d_dir, [("\\", "\\\\")]);
+			ark2d_dir_extra_slashes = self.str_replace(self.ark2d_dir, [("\\", "\\\\")]);
 
 			vcxproj_contents = self.str_replace(vcxproj_contents, [("%COMPILE_HEADER_FILES%", vcxproj_headerfiles)]);
 			vcxproj_contents = self.str_replace(vcxproj_contents, [("%COMPILE_SOURCE_FILES%", vcxproj_sourcefiles)]);
