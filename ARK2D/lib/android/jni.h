@@ -46,7 +46,7 @@
 			virtual void googleplaybilling_consumePurchase(string id);
 			virtual void googleplaybilling_queryPurchases();
 
-
+			virtual string getISO6391Language();
 
 			//virtual bool googleplaygameservices_isConnected();
 			//virtual bool googleplaygameservices_isConnecting();

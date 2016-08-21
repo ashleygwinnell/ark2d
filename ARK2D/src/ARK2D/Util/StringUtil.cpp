@@ -450,6 +450,9 @@ namespace ARK {
 			//		str[i]-=32;
 			//	}
 			//}
+			for (unsigned int q = 0; q < str.length(); q++) {
+				str[q] = std::toupper(str[q]);
+			}
 		}
 
 		void StringUtil::toLower(string& str) {
@@ -468,13 +471,13 @@ namespace ARK {
 				}
 			}*/
 
-			#if defined(ARK2D_ANDROID)
+			//#if defined(ARK2D_ANDROID)
 				//ErrorDialog::createAndShow("not implemented");
-			#else
+			//#else
 				for (unsigned int q = 0; q < str.length(); q++) {
-					str[q] = tolower(str[q]);
+					str[q] = std::tolower(str[q]);
 				}
-			#endif
+			//#endif
 
 		}
 

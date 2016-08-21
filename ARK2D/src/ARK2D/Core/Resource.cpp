@@ -92,7 +92,7 @@ namespace ARK {
 					RawDataReturns* rt = getRawData(ref);
 
 					Image* imgData = get(pngref)->asImage();
-					resource = new ARK::Font::BMFont(rt->data, imgData);
+					resource = new ARK::Core::Font::BMFont(rt->data, imgData);
 
 					delete rt;
 				#else

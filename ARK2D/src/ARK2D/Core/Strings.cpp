@@ -9,10 +9,12 @@
 //#include "../Includes.h"
 #include "Resource.h"
 #include "String.h"
-#include "StringUtil.h"
+#include "GameContainer.h"
+#include "../Util/StringUtil.h"
 //#include "Log.h"
 #include "../Common/Libraries/rapidxml.h"
 #include "../vendor/rapidxml/ark_rapidxml_util.hpp"
+#include "Log.h"
 
 namespace ARK {
 	namespace Core {
@@ -42,6 +44,38 @@ namespace ARK {
 		void Strings::setLanguageFallbackEnabled(bool on, unsigned int fallback) {
 			m_languageFallbackEnabled = on;
 			m_languageFallback = fallback;
+		}
+		unsigned int Strings::getLanguage() {
+			return m_language;
+		}
+		unsigned int Strings::getSystemLanguage() {
+			string clanguage = "";
+			#if defined( ARK2D_MACINTOSH ) || defined( ARK2D_IPHONE )
+				NSString* language = [[NSLocale preferredLanguages] objectAtIndex:0];
+				clanguage = [language cStringUsingEncoding:[NSString defaultCStringEncoding]];
+			#elif defined( ARK2D_ANDROID )
+				clanguage = ARK2D::getContainer()->getPlatformSpecific()->getPluggable()->getISO6391Language();
+			#else
+				clanguage = "en-GB";
+			#endif
+
+			ARK2D::getLog()->e(clanguage);
+            map<string, unsigned int> langs;
+            langs.insert(std::pair<string, unsigned int>("fr", (unsigned int) LANGUAGE_FRENCH_FR ));
+            langs.insert(std::pair<string, unsigned int>("de", (unsigned int) LANGUAGE_GERMAN ));
+            langs.insert(std::pair<string, unsigned int>("it", (unsigned int) LANGUAGE_ITALIAN ));
+            langs.insert(std::pair<string, unsigned int>("es", (unsigned int) LANGUAGE_SPANISH ));
+            langs.insert(std::pair<string, unsigned int>("pt-PT", (unsigned int) LANGUAGE_PORTUGUESE ));
+            langs.insert(std::pair<string, unsigned int>("pt-BR", (unsigned int) LANGUAGE_PORTUGUESE ));
+            langs.insert(std::pair<string, unsigned int>("en-US", (unsigned int) LANGUAGE_ENGLISH_US ));
+
+
+            map<string, unsigned int>::iterator it = langs.find(clanguage);
+            if (it != langs.end()) {
+                return it->second;
+            }
+
+            return LANGUAGE_ENGLISH_UK;
 		}
 		void Strings::add(string file) {
 			add(file, FORMAT_XML);
@@ -150,6 +184,25 @@ namespace ARK {
 			string str = out.str();
 			//ARK2D::getLog()->i(str);
 			return str;
+		}
+		void Strings::setExclusiveLanguages(const vector<string>& useLangs) {
+
+			map<unsigned int, map<string, string> >::iterator it = m_data.begin(); // for each language
+			while (it != m_data.end()) {
+				bool found = false;
+
+				for(unsigned int i = 0; i < useLangs.size(); ++i) { // see if we can find it in the exclusive list
+					unsigned int lang = textLanguageToConstLanguage( useLangs[i] );
+					if ( lang == it->first ) {
+						found = true;
+						break;
+					}
+				}
+
+				if (!found) {
+					it->second = map<string, string>(); // if it's not there, reset to an empty map.
+				}
+			}
 		}
 
 		bool Strings::isSupportedLanguage(unsigned int lang) {

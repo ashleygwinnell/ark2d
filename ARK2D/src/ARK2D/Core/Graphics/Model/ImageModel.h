@@ -11,46 +11,48 @@
 #include "../../SceneGraph/Scene.h"
 #include "../../Geometry/Cube.h"
 
-namespace ARK { 
-	namespace Graphics { 
-		namespace Model {
+namespace ARK {
+	namespace Core {
+		namespace Graphics {
+				namespace Model {
 
-			struct ImageModelTriangle {
-				int vert1;
-				int vert2;
-				int vert3;
-				int color1;
-				int color2;
-				int color3;
-				int normal;
-			};
+				struct ImageModelTriangle {
+					int vert1;
+					int vert2;
+					int vert3;
+					int color1;
+					int color2;
+					int color3;
+					int normal;
+				};
 
-			class ImageModel : public SceneNode
-			{ 
-				public:
-					string filename;
-					vector<Vector3<float> > vertices;
-					vector<Vector3<float> > normals;
-					vector<Vector4Template<unsigned char> > colors;
-					vector<ImageModelTriangle*> indices;
+				class ImageModel : public SceneNode
+				{
+					public:
+						string filename;
+						vector<Vector3<float> > vertices;
+						vector<Vector3<float> > normals;
+						vector<Vector4Template<unsigned char> > colors;
+						vector<ImageModelTriangle*> indices;
 
-					ARK::Geometry::Cube bounds;
-					
-				public:
-					ImageModel(string fn);  
-					void load();
-					virtual ARK::Geometry::Cube* getBounds() { return &bounds; }
-					virtual void render();
-					virtual ~ImageModel();
+						ARK::Core::Geometry::Cube bounds;
 
-				private:
-					unsigned int addVertex(float x, float y, float z);
-					unsigned int addNormal(float x, float y, float z);
+					public:
+						ImageModel(string fn);
+						void load();
+						virtual ARK::Core::Geometry::Cube* getBounds() { return &bounds; }
+						virtual void render();
+						virtual ~ImageModel();
 
-				private:
-					static bool isFilledAt(PNGImage* png, unsigned int x, unsigned int y);
-					
-			};
+					private:
+						unsigned int addVertex(float x, float y, float z);
+						unsigned int addNormal(float x, float y, float z);
+
+					private:
+						static bool isFilledAt(PNGImage* png, unsigned int x, unsigned int y);
+
+				};
+			}
 		}
 	}
 }

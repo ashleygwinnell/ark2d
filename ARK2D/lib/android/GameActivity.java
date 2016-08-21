@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.crypto.BadPaddingException;
@@ -37,10 +38,10 @@ import javax.microedition.khronos.egl.EGLDisplay;
 import javax.microedition.khronos.opengles.GL10;
 
 %INAPPBILLING_BLOCKSTART%
-import org.ashleygwinnell.nines.iab_util.IabHelper;
-import org.ashleygwinnell.nines.iab_util.IabResult;
-import org.ashleygwinnell.nines.iab_util.Inventory;
-import org.ashleygwinnell.nines.iab_util.Purchase;
+import org.%COMPANY_NAME%.%GAME_SHORT_NAME%.iab_util.IabHelper;
+import org.%COMPANY_NAME%.%GAME_SHORT_NAME%.iab_util.IabResult;
+import org.%COMPANY_NAME%.%GAME_SHORT_NAME%.iab_util.Inventory;
+import org.%COMPANY_NAME%.%GAME_SHORT_NAME%.iab_util.Purchase;
 %INAPPBILLING_BLOCKEND%
 
 import org.json.JSONException;
@@ -1151,6 +1152,12 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
     		return true;
     	}
     	return false;
+    }
+
+    // Localisation
+    public static String getISO6391Language() {
+    	Log.i("game", "get iso language (java code)");
+    	return Locale.getDefault().getLanguage();
     }
 
     // VIBRATOR

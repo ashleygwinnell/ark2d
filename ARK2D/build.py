@@ -3247,6 +3247,7 @@ build:
 
 
 	def generateStrings(self):
+		#print(self.config['resources']);
 		if ("resources" in self.config and "strings" in self.config["resources"]):
 
 			print("Generating Strings files...");
@@ -3369,6 +3370,7 @@ build:
 		f.close();
 		config = json.loads(fcontents);
 
+		self.ark2d_config = config;
 
 
 

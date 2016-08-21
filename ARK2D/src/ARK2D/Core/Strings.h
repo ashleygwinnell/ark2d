@@ -13,6 +13,7 @@
 
 #include <string>
 #include <map>
+#include <vector>
 using namespace std;
 
 namespace ARK {
@@ -56,11 +57,15 @@ namespace ARK {
 
 				void setLanguage(unsigned int lang);
 				void setLanguageFallbackEnabled(bool on, unsigned int fallback);
+				unsigned int getLanguage();
+				unsigned int getSystemLanguage();
 				void add(string file);
 				void add(string file, unsigned int format);
 				void add(string key, string value, signed int overrideLanguage = -1);
 				string get(string key, signed int overrideLanguage = -1);
 				string print();
+				void setExclusiveLanguages(const vector<string>& useLangs);
+
 				virtual ~Strings();
 
 			public:

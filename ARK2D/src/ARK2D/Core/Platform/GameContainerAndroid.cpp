@@ -7,13 +7,14 @@
 
 #include "GameContainerAndroid.h"
 #include "../GameContainer.h"
-#include "../../ARK2D.h"
+#include "../ARK2D.h"
 
 #include "../../Common/Audio.h"
-#include "../../Graphics/Image.h"
 #include "../../Audio/Sound.h"
+#include "../Graphics/Image.h"
+
 #include "../Camera.h"
-#include "../../UI/ErrorDialog.h"
+#include "../Controls/ErrorDialog.h"
 
 namespace ARK {
 	namespace Core {
@@ -66,12 +67,8 @@ namespace ARK {
 			ARK2D::s_camera = new ARK::Core::Camera();
 			ARK2D::s_camera->setViewport(0, 0, m_width, m_height);
 			//ARK2D::s_camera->setClipping(-1, 1);
-			ARK2D::s_log = ARK::Util::Log::getInstance();
-			scene = new Scene();
-			scene->addChild(ARK2D::s_camera);
-			scene->addChild(ARK2D::s_game);
-			scene->addChild(ARK2D::s_log);
-			scene->addChild(new LetterboxNode());
+			ARK2D::s_log = ARK::Core::Log::getInstance();
+			scene = ARK2D::getScene();
 
 
 			ARK2D::getRenderer()->preinit();
@@ -424,6 +421,11 @@ namespace ARK {
 		void AndroidPluggable::container_close() {
 
 		}
+
+		string AndroidPluggable::getISO6391Language() {
+			return "";
+		}
+
 
 		bool AndroidPluggable::ouya_isOuya() {
 			return false;

@@ -121,7 +121,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 
 	arklog->i("init fonts");
 	Renderer::setInterpolation(Renderer::INTERPOLATION_NEAREST);
-	ARK::Font::BMFont* fnt = Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont(); //new BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
+	ARK::Core::Font::BMFont* fnt = Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont(); //new BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
 	fnt->scale(0.5f);
 	r->setDefaultFont(fnt);
 	r->setFont(fnt);
@@ -138,7 +138,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 	arklog->init();
 
 	arklog->i("Initialising Localisations");
-	//container->initLocalisation();
+	container->initLocalisation();
 
 	arklog->i("init game class");
 	game->init(container);
@@ -373,8 +373,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		arklog->i(logstr);*/
 
 		Input* i = ARK2D::getInput();
-		arklog->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
-		game->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
+		ARK2D::getScene()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 		i->mouse_x = (int) thisx;
 		i->mouse_y = (int) thisy;
 	}
@@ -1015,6 +1014,31 @@ string MyAndroidPluggable::getInputDialogText() {
     //env->ReleaseStringUTFChars(str);
 	ARK2D::getLog()->i(returnStr);
     ARK2D::getLog()->i("done opening input dialog");
+    return returnStr;
+}
+
+string MyAndroidPluggable::getISO6391Language() {
+	JNIEnv* env = s_getCurrentEnv();
+	checkExceptions(env);
+
+	ARK2D::getLog()->i("getting ios language");
+	jmethodID messageMe = env->GetStaticMethodID(s_gameClass, "getISO6391Language", "()Ljava/lang/String;"); // Get the method that you want to call
+
+    ARK2D::getLog()->i("got method id. calling method.");
+    jobject result = env->CallStaticObjectMethod(s_gameClass, messageMe);
+
+    ARK2D::getLog()->i("called method. getting response");
+    const char* str = env->GetStringUTFChars((jstring) result, NULL);
+    if (str == NULL) {
+    	ARK2D::getLog()->i("OUT OF MEMORY");
+    	return string("");
+    }
+    checkExceptions(env);
+
+    string returnStr(str);
+    //env->ReleaseStringUTFChars(str);
+	ARK2D::getLog()->i(returnStr);
+
     return returnStr;
 }
 

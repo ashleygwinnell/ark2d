@@ -8,7 +8,7 @@
 #ifndef GAMECONTAINERANDROID_H_
 #define GAMECONTAINERANDROID_H_
 
-#include "../../ARK2D.h"
+#include "../ARK2D.h"
 #include "../../Common/Platform.h"
 
 namespace ARK {
@@ -57,6 +57,8 @@ namespace ARK {
 				virtual void googleplaybilling_startPurchase(string id, int referenceNumber, string extraToken);
 				virtual void googleplaybilling_consumePurchase(string id);
 				virtual void googleplaybilling_queryPurchases();
+
+				virtual string getISO6391Language();
 
 				virtual void container_close();
 				//virtual bool googleplaygameservices_isConnected();
