@@ -190,8 +190,9 @@ namespace ARK {
                     static const unsigned int TYPE_FBO_UNBIND = 25;
                     static const unsigned int TYPE_VIEWPORT = 26;
                     static const unsigned int TYPE_ORTHO2D = 27;
-                    static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 28;
-                    static const unsigned int TYPE_CUSTOM_FUNCTION = 29;
+                    static const unsigned int TYPE_SAVE_PIXELS = 28;
+                    static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 29;
+                    static const unsigned int TYPE_CUSTOM_FUNCTION = 30;
                     static map<unsigned int, string>* s_types;
 
                 public:
@@ -207,6 +208,8 @@ namespace ARK {
                     float m_float2;
                     float m_float3;
                     float m_float4;
+                    char* m_cstr = NULL;
+
 
                 public:
                     RendererBatchItem();
@@ -472,6 +475,7 @@ namespace ARK {
 
                     // this call needs freeing afterwards.
                     void* readPixels(int x, int y, int w, int h);
+                    void savePixels(int x, int y, int w, int h, string filename, bool open);
                     void flush();
                     void finish();
 

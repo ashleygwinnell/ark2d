@@ -30,6 +30,7 @@
 #include "FBO.h"
 
 #include "Shaders/BasicShader.h"
+#include "ImageIO/PNGImage.h"
 
 #include "../../Common/OpenGL.h"
 
@@ -678,6 +679,11 @@ namespace ARK {
                         r->viewport(m_float1, m_float2, m_float3, m_float4);
                     } else if (m_type == TYPE_ORTHO2D) {
                         r->ortho2d(m_textureId, m_shaderId, (int) m_float1, (int) m_float2, m_float3, m_float4);
+                    }
+                    else if (m_type == TYPE_SAVE_PIXELS) {
+                        string s = string(m_cstr);
+                        free(m_cstr);
+                        r->savePixels(m_float1, m_float2, m_float3, m_float4, s, (m_textureId)?true:false);
                     }
                     else if (m_type == TYPE_CUSTOM_OBJECT_FUNCTION) {
                         void (*pt)(void*) = (void(*)(void*)) m_functionPointer;
@@ -1890,6 +1896,38 @@ namespace ARK {
 
                 //delete[] pixels;
                 return pixels;
+            }
+            void Renderer::savePixels(int x, int y, int w, int h, string filename, bool open) {
+
+                if (Renderer::isBatching()) {
+                    RendererBatchItem stateChange;
+                    stateChange.m_type = RendererBatchItem::TYPE_SAVE_PIXELS;
+                    stateChange.m_float1 = x;
+                    stateChange.m_float2 = y;
+                    stateChange.m_float3 = w;
+                    stateChange.m_float4 = h;
+                    stateChange.m_textureId = open;
+
+                    stateChange.m_cstr = (char*) malloc(filename.length()+1);
+                    strncpy(stateChange.m_cstr, filename.c_str(), filename.length());
+                    stateChange.m_cstr[filename.length()] = '\0';
+
+                    s_batch->items.push_back(stateChange);
+                    return;
+                }
+
+                char* pixels = (char*) readPixels((int) x, (int) y, (int) w, (int) h);
+                if (pixels == NULL) {
+                    ARK2D::getLog()->e("Could not save image.");
+                    return;
+                }
+
+                PNGImage::saveFile(filename, (char*) pixels, (int) w, (int) h);
+                delete[] pixels;
+                ARK2D::getLog()->e("Saved image");
+                if (open) {
+                    FileUtil::openGalleryToImageUrl(filename);
+                }
             }
             void Renderer::flush() {
                 #if defined(ARK2D_RENDERER_OPENGL)
