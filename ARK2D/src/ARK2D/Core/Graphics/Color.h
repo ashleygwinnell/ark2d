@@ -12,6 +12,7 @@
 #include "../../Namespaces.h"
 #include "../../Common/DLL.h"
 
+#include <stdint.h>
 #include <string>
 using std::string;
 

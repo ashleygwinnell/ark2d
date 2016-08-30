@@ -5632,6 +5632,15 @@ build:
 				("%!ANDROIDSDK16_LINECOMMENT%", "")
 			];
 
+			# one signal push notifications
+			editsOneSignal = [("%ONESIGNAL_BLOCKSTART%", "/*"), ("%ONESIGNAL_BLOCKEND%", "*/") ];
+			if ( "onesignal" in self.android_config ):
+				editsOneSignal = [
+					("%ONESIGNAL_BLOCKSTART%", "/*"),
+					("%ONESIGNAL_BLOCKEND%", "*/"),
+					("%ONESIGNAL_APP_ID%", self.android_config['onesignal']['onesignal_app_id']),
+					("%ONESIGNAL_GCM_SENDER_ID%", self.android_config['onesignal']['gcm_sender_id'])
+				];
 
 			if (appplatformno >= 16):
 				print("Android sdk version is 16. We can use new Android features.")
@@ -5742,12 +5751,14 @@ build:
 
 				if self.ouya == True or self.firetv == True:
 					androidManifestContents += "		android:icon=\"@drawable/app_icon\" " + nl;
-					androidManifestContents += "		android:label=\"@string/application_name\"> " + nl;
+					androidManifestContents += "		android:label=\"@string/application_name\" " + nl;
 				else:
 					androidManifestContents += "		android:icon=\"@drawable/ic_launcher\" " + nl;
 					androidManifestContents += "		android:label=\"@string/application_name\" " + nl;
-					androidManifestContents += ">" + nl;
-					#androidManifestContents += "		android:debuggable=\"true\"> " + nl;
+
+				androidManifestContents += "		android:name=\"" + self.game_class_name + "Application\" " + nl;
+				androidManifestContents += ">" + nl;
+				#androidManifestContents += "		android:debuggable=\"true\"> " + nl;
 
 				#game services
 				#if "game_services" in self.android_config:
@@ -6031,6 +6042,7 @@ build:
 				f = open(intellij_template_folder + self.ds + "game" + self.ds + "build.gradle", "r");
 				fcontents = f.read(); f.close();
 				fcontents = self.str_replace(fcontents, editsStrReplace);
+				fcontents = self.str_replace(fcontents, editsOneSignal);
 				f = open(intellij_folder + self.ds + self.game_name_safe + self.ds + "build.gradle", "w");
 				f.write(fcontents);
 				f.close();
@@ -6065,6 +6077,7 @@ build:
 			fgamecontents = self.str_replace(fgamecontents, editsInAppBilling);
 			fgamecontents = self.str_replace(fgamecontents, editsOuya);
 			fgamecontents = self.str_replace(fgamecontents, editsFireTV);
+			fgamecontents = self.str_replace(fgamecontents, editsOneSignal);
 			f = open(project_src_dir + self.ds + self.game_class_name + "Activity.java", "w");
 			f.write(fgamecontents);
 			f.close();

@@ -85,9 +85,7 @@ import android.widget.Toast;
 import com.google.android.gms.games.Games;
 
 %OUYA_BLOCKSTART%
-
 import tv.ouya.console.api.*;
-
 %OUYA_BLOCKEND%
 
 
@@ -114,6 +112,26 @@ import com.amazon.ags.api.overlay.PopUpLocation;
 import com.amazon.ags.constants.LeaderboardFilter;
 
 %FIRETV_BLOCKEND%
+
+
+%ONESIGNAL_BLOCKSTART%
+import com.onesignal.OneSignal;
+%ONESIGNAL_BLOCKEND%
+
+
+public class %GAME_CLASS_NAME%Application extends Application {
+
+   @Override
+   public void onCreate() {
+      super.onCreate();
+      %ONESIGNAL_BLOCKSTART%
+      OneSignal.startInit(this).init();
+      %ONESIGNAL_BLOCKEND%
+   }
+}
+
+
+
 
 
 public class %GAME_CLASS_NAME%Activity extends BaseGameActivity

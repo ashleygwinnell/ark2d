@@ -25,7 +25,7 @@
 
 			#include "../../Windres.h"
 			//#include "../../Includes.h"
-			#include "../../Graphics/Image.h"
+			#include "../Graphics/Image.h"
 
  			#include <Winsock2.h>
 			#include <windows.h>

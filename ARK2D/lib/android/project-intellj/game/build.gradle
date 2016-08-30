@@ -8,6 +8,12 @@ android {
         applicationId "%PACKAGE_DOT_NOTATION%"
         minSdkVersion 16
         targetSdkVersion 16
+
+        %ONESIGNAL_BLOCKSTART%
+            manifestPlaceholders = [manifestApplicationId: "${applicationId}",
+                                        onesignal_app_id: "%ONESIGNAL_APP_ID%",
+                                        onesignal_google_project_number: "%ONESIGNAL_GCM_SENDER_ID%"]
+        %ONESIGNAL_BLOCKEND%
     }
 
     buildTypes {
@@ -19,6 +25,13 @@ android {
 }
 
 dependencies {
+
+    %ONESIGNAL_BLOCKSTART%
+        compile 'com.onesignal:OneSignal:3.+@aar'
+        compile 'com.google.android.gms:play-services-gcm:+'
+        compile "com.google.android.gms:play-services-location:+"
+    %ONESIGNAL_BLOCKEND%
+
     compile "com.android.support:appcompat-v7:20.0.+"
     compile 'com.android.support:support-v4:24.0.0'
     compile 'com.google.android.gms:play-services-base:9.0.2'
