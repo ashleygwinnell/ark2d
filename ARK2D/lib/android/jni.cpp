@@ -1403,6 +1403,29 @@ void MyAndroidPluggable::googleplaybilling_queryPurchases() {
 
 }
 
+bool MyAndroidPluggable::ironsource_isRewardedAdAvailable() {
+	JNIEnv* env = s_getCurrentEnv();
+	checkExceptions(env);
+
+	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
+	jmethodID messageMe = env->GetStaticMethodID(clazz, "ironsource_isRewardedAdAvailable", "()Z"); // Get the method that you want to call
+	jboolean ret = env->CallStaticBooleanMethod(clazz, messageMe); // Call the method on the object
+	if (ret ) {
+		return true;
+	}
+	return false;
+}
+void MyAndroidPluggable::ironsource_showRewardedAd(string placement) {
+	JNIEnv* env = s_getCurrentEnv();
+	checkExceptions(env);
+
+	jstring placement_jstr = env->NewStringUTF(placement.c_str());
+
+	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
+	jmethodID messageMe = env->GetStaticMethodID(clazz, "ironsource_showRewardedAd", "(Ljava/lang/String;)V"); // Get the method that you want to call
+	env->CallStaticVoidMethod(clazz, messageMe, placement_jstr); // Call the method on the object
+}
+
 
 
 

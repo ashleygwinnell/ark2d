@@ -46,6 +46,9 @@
 			virtual void googleplaybilling_consumePurchase(string id);
 			virtual void googleplaybilling_queryPurchases();
 
+			virtual bool ironsource_isRewardedAdAvailable();
+			virtual void ironsource_showRewardedAd(string placement);
+
 			virtual string getISO6391Language();
 
 			//virtual bool googleplaygameservices_isConnected();

@@ -66,6 +66,8 @@ namespace ARK {
 				static const unsigned int CALLBACK_GAMEJOLT_OVERLAY_EDITNAME = 80;
 				static const unsigned int CALLBACK_GAMEJOLT_OVERLAY_EDITTOKEN = 81;
 
+				static const unsigned int CALLBACK_IRONSOURCE_REWARDED_AD_COMPLETE = 90;
+
 			public:
 				static vector<ARK::Util::Callback> s_callbacks;
 				static void add(Callback c);

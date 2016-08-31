@@ -49,6 +49,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 %ANDROIDSDK16_LINECOMMENT% import android.app.NativeActivity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -63,6 +64,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Looper;
@@ -82,6 +84,9 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.identifier.AdvertisingIdClient;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.games.Games;
 
 %OUYA_BLOCKSTART%
@@ -114,23 +119,52 @@ import com.amazon.ags.constants.LeaderboardFilter;
 %FIRETV_BLOCKEND%
 
 
-%ONESIGNAL_BLOCKSTART%
-import com.onesignal.OneSignal;
-%ONESIGNAL_BLOCKEND%
+%IRONSOURCE_BLOCKSTART%
 
+	import com.supersonic.mediationsdk.logger.LogListener;
+	import com.supersonic.mediationsdk.logger.SupersonicError;
+	import com.supersonic.mediationsdk.logger.SupersonicLogger;
+	import com.supersonic.mediationsdk.model.Placement;
+	import com.supersonic.mediationsdk.sdk.RewardedVideoListener;
+	import com.supersonic.mediationsdk.sdk.Supersonic;
+	import com.supersonic.mediationsdk.sdk.SupersonicFactory;
 
-public class %GAME_CLASS_NAME%Application extends Application {
+	class GetGAIDTask extends AsyncTask<String, Integer, String> {
 
-   @Override
-   public void onCreate() {
-      super.onCreate();
-      %ONESIGNAL_BLOCKSTART%
-      OneSignal.startInit(this).init();
-      %ONESIGNAL_BLOCKEND%
-   }
-}
+		@Override
+		protected String doInBackground(String... strings) {
+			Log.d("game", "getting ga id ");
 
+		    AdvertisingIdClient.Info adInfo;
+		    adInfo = null;
+		        try {
+		            adInfo = AdvertisingIdClient.getAdvertisingIdInfo(%GAME_CLASS_NAME%Activity.s_activity.getApplicationContext());
+		            if (adInfo.isLimitAdTrackingEnabled()) // check if user has opted out of tracking
+		                return "did not found GAID... sorry";
+		        } catch (IOException e) {
+		            e.printStackTrace();
+		        } catch (GooglePlayServicesNotAvailableException e) {
+		            e.printStackTrace();
+		        } catch (GooglePlayServicesRepairableException e) {
+		            e.printStackTrace();
+		        }
+		    return adInfo.getId();
+		}
 
+		@Override
+		protected void onPostExecute(String s) {
+			  Log.d("game", "Got ga id " + s);
+
+		    %GAME_CLASS_NAME%Activity.sMediationAgent_userId = s;
+		    %GAME_CLASS_NAME%Activity.s_activity.mMediationAgent.initRewardedVideo(
+		    	%GAME_CLASS_NAME%Activity.s_activity,
+		    	%GAME_CLASS_NAME%Activity.s_activity.mMediationAgent_appKey,
+		    	%GAME_CLASS_NAME%Activity.sMediationAgent_userId
+		    ); //Init Rewarded Video
+		}
+	}
+
+%IRONSOURCE_BLOCKEND%
 
 
 
@@ -163,6 +197,9 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	public static final int CALLBACK_GAMECIRCLE_UNLOCKACHIEVEMENT_SUCCESS = 65;
 	public static final int CALLBACK_GAMECIRCLE_UNLOCKACHIEVEMENT_FAIL = 66;
 
+	public static final int CALLBACK_IRONSOURCE_REWARDED_AD_COMPLETE = 90;
+
+
 	%INAPPBILLING_BLOCKSTART%
 
 		public IabHelper mHelper;
@@ -172,6 +209,88 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 		public boolean _iabIsSetup = false;
 
 	%INAPPBILLING_BLOCKEND%
+
+	%IRONSOURCE_BLOCKSTART%
+		public Supersonic mMediationAgent;
+		public String mMediationAgent_appKey;
+		public static String sMediationAgent_userId;
+		RewardedVideoListener mRewardedVideoListener = new RewardedVideoListener()
+		{
+			//Invoked when initialization of RewardedVideo has finished successfully.
+			@Override
+			public void onRewardedVideoInitSuccess() {
+
+			}
+
+			//Invoked when RewardedVideo initialization process has failed.
+			//SupersonicError contains the reason for the failure.
+			@Override
+			public void onRewardedVideoInitFail(SupersonicError se) {
+			   //Retrieve details from a SupersonicError object.
+			    int errorCode =  se.getErrorCode();
+			    String errorMessage = se.getErrorMessage();
+			    if (errorCode == SupersonicError.ERROR_CODE_GENERIC){
+			       //Write a Handler for specific error's.
+			    }
+			}
+
+			//Invoked when RewardedVideo call to show a rewarded video has failed
+			//SupersonicError contains the reason for the failure.
+			@Override
+			public void onRewardedVideoShowFail(SupersonicError se) {
+
+			}
+
+			//Invoked when the RewardedVideo ad view has opened.
+			//Your Activity will lose focus. Please avoid performing heavy
+			//tasks till the video ad will be closed.
+			@Override
+			public void onRewardedVideoAdOpened() {
+
+			}
+
+			//Invoked when the RewardedVideo ad view is about to be closed.
+			//Your activity will now regain its focus.
+			@Override
+			public void onRewardedVideoAdClosed() {
+
+			}
+
+			//Invoked when there is a change in the ad availability status.
+			//@param - available - value will change to true when rewarded videos are available.
+			//You can then show the video by calling showRewardedVideo().
+			//Value will change to false when no videos are available.
+			@Override
+			public void onVideoAvailabilityChanged(boolean available) {
+				//Change the in-app 'Traffic Driver' state according to availability.
+			}
+
+			//Invoked when the video ad starts playing.
+			@Override
+			public void onVideoStart() {
+
+			}
+
+			//Invoked when the video ad finishes playing.
+			@Override
+			public void onVideoEnd() {
+
+			}
+			//Invoked when the user completed the video and should be rewarded.
+			//If using server-to-server callbacks you may ignore this events and wait for
+			//the callback from the Supersonic server.
+			//@param - placement - the Placement the user completed a video from.
+			@Override
+			public void onRewardedVideoAdRewarded(Placement placement) {
+				//TODO - here you can reward the user according to the given amount.
+				String rewardName = placement.getRewardName();
+				int rewardAmount = placement.getRewardAmount();
+
+				%GAME_CLASS_NAME%Renderer.nativeCallbackById(%GAME_CLASS_NAME%Activity.CALLBACK_IRONSOURCE_REWARDED_AD_COMPLETE);
+			}
+		};
+
+	%IRONSOURCE_BLOCKEND%
 
 	public static %GAME_CLASS_NAME%Activity s_activity;
     /** Called when the activity is first created. */
@@ -257,7 +376,34 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 
 
     	%INAPPBILLING_BLOCKEND%
+
+    	%IRONSOURCE_BLOCKSTART%
+    		mMediationAgent = SupersonicFactory.getInstance();
+    		mMediationAgent.setLogListener(new LogListener() {
+			    @Override
+			    public void onLog (SupersonicLogger.SupersonicTag tag, String message, int logLevel) {
+			    	Log.d("game ironsource", "ironsource" + message);
+			 	}
+			});
+    		mMediationAgent.setRewardedVideoListener(mRewardedVideoListener); //Set the Rewarded Video Listener
+
+		    sMediationAgent_userId = "";
+		    mMediationAgent_appKey = "%IRONSOURCE_APP_KEY%"; //Set the Application Key - can be retrieved from Supersonic platform
+		    new GetGAIDTask().execute();
+
+
+
+    	%IRONSOURCE_BLOCKEND%
     }
+
+    %IRONSOURCE_BLOCKSTART%
+		public static boolean ironsource_isRewardedAdAvailable() {
+			return s_activity.mMediationAgent.isRewardedVideoAvailable();
+		}
+		public static void ironsource_showRewardedAd( String placementName ) {
+			s_activity.mMediationAgent.showRewardedVideo( placementName );
+		}
+	%IRONSOURCE_BLOCKEND%
 
     @Override
     protected void onActivityResult(int request, int response, Intent data) {
@@ -315,13 +461,16 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
     %GAME_SERVICES_BLOCKSTART%
 
     	public static void googleplaygameservices_signIn() {
+    		Log.i("playservices", "sign-in");
     		%GAME_CLASS_NAME%Activity.createLooper();
 	        s_activity.beginUserInitiatedSignIn();
 	    }
 	    public static void googleplaygameservices_signOut() {
+	    	Log.i("playservices", "sign-out");
 	        s_activity.signOut();
 	    }
 	    public static boolean googleplaygameservices_isSignedIn() {
+	    	Log.i("playservices", "is signed in?" + s_activity.isSignedIn() );
 	        return s_activity.isSignedIn();
 	    }
 	    //public static boolean googleplaygameservices_isSigningIn() {
@@ -584,6 +733,12 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 				agsClient.release();
 			}
 		%FIRETV_BLOCKEND%
+
+		%IRONSOURCE_BLOCKSTART%
+			if (mMediationAgent != null) {
+				mMediationAgent.onPause (this);
+			}
+		%IRONSOURCE_BLOCKEND%
     }
 
     @Override
@@ -602,6 +757,12 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
     	%FIRETV_BLOCKSTART%
 			firetv_connect();
 		%FIRETV_BLOCKEND%
+
+		%IRONSOURCE_BLOCKSTART%
+			if (mMediationAgent != null) {
+				mMediationAgent.onResume (this);
+			}
+		%IRONSOURCE_BLOCKEND%
     }
 
    	@Override

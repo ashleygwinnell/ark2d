@@ -418,6 +418,13 @@ namespace ARK {
 
 		}
 
+		bool AndroidPluggable::ironsource_isRewardedAdAvailable() {
+			return false;
+		}
+		void AndroidPluggable::ironsource_showRewardedAd(string placement) {
+
+		}
+
 		void AndroidPluggable::container_close() {
 
 		}

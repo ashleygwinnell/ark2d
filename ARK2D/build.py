@@ -5636,10 +5636,19 @@ build:
 			editsOneSignal = [("%ONESIGNAL_BLOCKSTART%", "/*"), ("%ONESIGNAL_BLOCKEND%", "*/") ];
 			if ( "onesignal" in self.android_config ):
 				editsOneSignal = [
-					("%ONESIGNAL_BLOCKSTART%", "/*"),
-					("%ONESIGNAL_BLOCKEND%", "*/"),
+					("%ONESIGNAL_BLOCKSTART%", ""),
+					("%ONESIGNAL_BLOCKEND%", ""),
 					("%ONESIGNAL_APP_ID%", self.android_config['onesignal']['onesignal_app_id']),
 					("%ONESIGNAL_GCM_SENDER_ID%", self.android_config['onesignal']['gcm_sender_id'])
+				];
+
+			# one signal push notifications
+			editsIronsource = [("%IRONSOURCE_BLOCKSTART%", "/*"), ("%IRONSOURCE_BLOCKEND%", "*/") ];
+			if ( "ironsource" in self.android_config ):
+				editsIronsource = [
+					("%IRONSOURCE_BLOCKSTART%", ""),
+					("%IRONSOURCE_BLOCKEND%", ""),
+					("%IRONSOURCE_APP_KEY%", self.android_config['ironsource']['app_key'])
 				];
 
 			if (appplatformno >= 16):
@@ -5810,6 +5819,25 @@ build:
 
 				androidManifestContents += "			</intent-filter>" + nl;
 				androidManifestContents += "		</activity>" + nl;
+
+				if "ironsource" in self.android_config:
+					androidManifestContents += "<meta-data android:name=\"com.google.android.gms.version\" android:value=\"@integer/google_play_services_version\" />" + nl;
+
+					androidManifestContents += "<activity " + nl;
+					androidManifestContents += " 	android:name=\"com.supersonicads.sdk.controller.ControllerActivity\" " + nl
+					androidManifestContents += " 	android:configChanges=\"orientation|screenSize\" " + nl
+					androidManifestContents += " 	android:hardwareAccelerated=\"true\" /> " + nl
+					androidManifestContents += " <activity " + nl
+					androidManifestContents += " 	android:name=\"com.supersonicads.sdk.controller.InterstitialActivity\" " + nl
+					androidManifestContents += " 	android:configChanges=\"orientation|screenSize\" " + nl
+					androidManifestContents += " 	android:hardwareAccelerated=\"true\" " + nl
+					androidManifestContents += " 	android:theme=\"@android:style/Theme.Translucent\" /> " + nl
+					androidManifestContents += " <activity " + nl
+					androidManifestContents += " 	android:name=\"com.supersonicads.sdk.controller.OpenUrlActivity\" " + nl
+					androidManifestContents += " 	android:configChanges=\"orientation|screenSize\" " + nl
+					androidManifestContents += " 	android:hardwareAccelerated=\"true\" " + nl
+					androidManifestContents += " 	android:theme=\"@android:style/Theme.Translucent\" />" + nl
+
 				androidManifestContents += "	</application>" + nl;
 				androidManifestContents += "</manifest>" + nl;
 				f = open( project_manifest_dir + "/AndroidManifest.xml", "w");
@@ -6043,6 +6071,7 @@ build:
 				fcontents = f.read(); f.close();
 				fcontents = self.str_replace(fcontents, editsStrReplace);
 				fcontents = self.str_replace(fcontents, editsOneSignal);
+				fcontents = self.str_replace(fcontents, editsIronsource);
 				f = open(intellij_folder + self.ds + self.game_name_safe + self.ds + "build.gradle", "w");
 				f.write(fcontents);
 				f.close();
@@ -6078,7 +6107,22 @@ build:
 			fgamecontents = self.str_replace(fgamecontents, editsOuya);
 			fgamecontents = self.str_replace(fgamecontents, editsFireTV);
 			fgamecontents = self.str_replace(fgamecontents, editsOneSignal);
+			fgamecontents = self.str_replace(fgamecontents, editsIronsource);
 			f = open(project_src_dir + self.ds + self.game_class_name + "Activity.java", "w");
+			f.write(fgamecontents);
+			f.close();
+
+			f = open(self.ark2d_dir + "/lib/android/GameApplication.java", "r");
+			fgamecontents = f.read(); f.close(); #fgamecontents = fgamecontents.decode("utf8");
+			fgamecontents = self.str_replace(fgamecontents, editsStrReplace);
+			fgamecontents = self.str_replace(fgamecontents, editsOldAndroid23);
+			fgamecontents = self.str_replace(fgamecontents, editsGameServices);
+			fgamecontents = self.str_replace(fgamecontents, editsInAppBilling);
+			fgamecontents = self.str_replace(fgamecontents, editsOuya);
+			fgamecontents = self.str_replace(fgamecontents, editsFireTV);
+			fgamecontents = self.str_replace(fgamecontents, editsOneSignal);
+			fgamecontents = self.str_replace(fgamecontents, editsIronsource);
+			f = open(project_src_dir + self.ds + self.game_class_name + "Application.java", "w");
 			f.write(fgamecontents);
 			f.close();
 
@@ -6113,6 +6157,8 @@ build:
 					fgamecontents = self.str_replace(fgamecontents, editsOldAndroid23);
 					fgamecontents = self.str_replace(fgamecontents, editsGameServices);
 					fgamecontents = self.str_replace(fgamecontents, editsInAppBilling);
+					fgamecontents = self.str_replace(fgamecontents, editsOneSignal);
+					fgamecontents = self.str_replace(fgamecontents, editsIronsource);
 					f = open(project_src_dir + self.ds +  jfile, "w");
 					f.write(fgamecontents);
 					f.close();
