@@ -411,6 +411,9 @@ namespace ARK {
 		void AndroidPluggable::googleplaybilling_startPurchase(string id, int referenceNumber, string extraToken) {
 
 		}
+		bool AndroidPluggable::googleplaybilling_hasPurchase(string sku) {
+			return false;
+		}
 		void AndroidPluggable::googleplaybilling_consumePurchase(string id) {
 
 		}

@@ -240,6 +240,19 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		Callbacks::invoke((unsigned int) id, (unsigned int) para);
 	}
 }
+JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeCallbackByIdStringParam(JNIEnv* env, jclass cls, jint id, jstring javaString) {
+	if (arklog != NULL) {
+
+		arklog->i("native callback by id (string param) pre ");
+		const char* nativeString = env->GetStringUTFChars(javaString, 0);
+		string nativeStringString = string(nativeString);
+		arklog->i("native callback by id (string param) ");
+		Callbacks::invoke((unsigned int) id, nativeStringString);
+
+		env->ReleaseStringUTFChars(javaString, nativeString);
+
+	}
+}
 
 JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeErrorDialog(JNIEnv* env, jclass cls, jstring err) {
 	if (container != NULL && arklog != NULL && s_initted) {
@@ -1396,7 +1409,22 @@ void MyAndroidPluggable::googleplaybilling_startPurchase(string id, int referenc
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "googleplaybilling_startPurchase", "(Ljava/lang/String;ILjava/lang/String;)V"); // Get the method that you want to call
 	env->CallStaticVoidMethod(clazz, messageMe, itemId_jstr, referenceNumber_jint, extraT_jstr); // Call the method on the object
 }
-void MyAndroidPluggable::googleplaybilling_consumePurchase(string id) {
+bool MyAndroidPluggable::googleplaybilling_hasPurchase(string sku) {
+	JNIEnv* env = s_getCurrentEnv();
+	checkExceptions(env);
+
+	jstring itemId_jstr = env->NewStringUTF(sku.c_str());
+
+
+	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
+	jmethodID messageMe = env->GetStaticMethodID(clazz, "googleplaybilling_hasPurchase", "(Ljava/lang/String;)Z"); // Get the method that you want to call
+	jboolean ret = env->CallStaticBooleanMethod(clazz, messageMe, itemId_jstr); // Call the method on the object
+	if (ret) {
+		return true;
+	}
+	return false;
+}
+void MyAndroidPluggable::googleplaybilling_consumePurchase(string sku) {
 
 }
 void MyAndroidPluggable::googleplaybilling_queryPurchases() {

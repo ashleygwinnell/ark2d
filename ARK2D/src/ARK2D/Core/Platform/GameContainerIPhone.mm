@@ -13,8 +13,8 @@
 
 #import "GameContainerIPhoneAppDelegate.h"
 #import "../../Util/ICloudUtil.h"
-#import "../../Math/Random.h"
-#import "../../Graphics/Image.h"
+#import "../Math/Random.h"
+#import "../Graphics/Image.h"
 #import "../../Audio/Sound.h"
 #import "../Camera.h"
 
@@ -69,14 +69,10 @@ namespace ARK {
 			ARK2D::s_game = &m_game;
 			ARK2D::s_graphics = &m_graphics;
 			ARK2D::s_input = &m_input;
-			ARK2D::s_camera = new ARK::Core::Camera();
-			ARK2D::s_camera->setViewport(0, 0, m_width, m_height);
-			ARK2D::s_log = ARK2D::getLog();
-			scene = new Scene();
-			scene->addChild(ARK2D::s_camera);
-			scene->addChild(ARK2D::s_game);
-			scene->addChild(ARK2D::s_log);
-			scene->addChild(new LetterboxNode());
+            ARK2D::s_camera = new ARK::Core::Camera();
+            ARK2D::s_camera->setViewport(0, 0, m_width, m_height);
+            ARK2D::s_log = ARK::Core::Log::getInstance();
+			scene = ARK2D::getScene();
 
 
 			// Get location of current app bundle and make sure there's a resources path.
@@ -96,6 +92,7 @@ namespace ARK {
 
 
 	void ARK::Core::GameContainer::setSizeNoCallback(int width, int height) {
+		setSize(width, height, false);
 		return;
 		//resizeBehaviour(width, height);
 	    /*if (m_resizeBehaviour == RESIZE_BEHAVIOUR_SCALE) {
@@ -191,6 +188,13 @@ namespace ARK {
 
 	void ARK::Core::GameContainer::setSize(int width, int height, bool docallback) {
 		//setSizeNoCallback(width, height);
+
+		ARK2D::getLog()->i("GameContainer::setSize()");
+		ARK2D::getLog()->i(StringUtil::append("width ", width));
+		ARK2D::getLog()->i(StringUtil::append("height ", height));
+		ARK2D::getLog()->i(StringUtil::append("docallback ", docallback));
+		m_screenWidth = width;
+		m_screenHeight = height;
 		resizeBehaviour(width, height, docallback);
         //ARK2D::s_game->resize(this, m_width, m_height);
         //resizeGame();
@@ -453,7 +457,7 @@ namespace ARK {
 
 	    // Load default font.
 	    if (m_container->m_willLoadDefaultFont) {
-	    	ARK::Font::BMFont* fnt = ARK::Core::Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont(); // BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
+            ARK::Core::Font::BMFont* fnt = ARK::Core::Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont(); // BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
 	    	fnt->scale(0.5f);
 			m_container->m_graphics.m_DefaultFont = fnt;
 			m_container->m_graphics.m_Font = fnt;

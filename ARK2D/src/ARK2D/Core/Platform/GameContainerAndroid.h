@@ -57,6 +57,7 @@ namespace ARK {
 				virtual void googleplaybilling_startPurchase(string id, int referenceNumber, string extraToken);
 				virtual void googleplaybilling_consumePurchase(string id);
 				virtual void googleplaybilling_queryPurchases();
+				virtual bool googleplaybilling_hasPurchase(string sku);
 
 				virtual bool ironsource_isRewardedAdAvailable();
 				virtual void ironsource_showRewardedAd(string placement);

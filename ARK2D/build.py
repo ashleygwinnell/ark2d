@@ -4383,7 +4383,7 @@ build:
 			exit(0);
 
 		else:
-			#building game.
+			# building game.
 			if "ios" not in self.target_config:
 				print("no iOS configuration details");
 				return;
@@ -4452,8 +4452,13 @@ build:
 	          	self.ark2d_dir + '/lib/iphone/libfreetype.a',
 	          	self.ark2d_dir + '/lib/iphone/libangelscriptd.a',
 	          	self.ark2d_dir + '/lib/iphone/libGoogleAnalyticsServices.a',
+	          	'libsqlite3.tbd', #requried for GA
 	          	self.ark2d_dir + '/build/ios/DerivedData/ark2d/Build/Products/Default-iphoneos/libark2d-iPhone.a'
 			];
+
+			if "onesignal" in self.ios_config:
+				gypfiletargetcondition['link_settings']['libraries'].extend( [ self.ios_config['onesignal']['sdk_dir'] ] );
+				#gypfiletargetcondition['link_settings']['libraries'].extend( [ "$(SDKROOT)/System/Library/Frameworks/SystemConfiguration.framework" ] );
 
 			print("Add libraries to project ")
 			"""
@@ -4776,6 +4781,17 @@ build:
 			else:
 				info_plist_contents += '		<false/>' + nl;
 
+			if "onesignal" in self.ios_config:
+				info_plist_contents += '	<key>UIBackgroundModes</key>' + nl;
+				info_plist_contents += '	<array>' + nl;
+				info_plist_contents += '		<string>remote-notification</string>' + nl;
+				info_plist_contents += '	</array>' + nl;
+
+			info_plist_contents += '	<key>UIRequiredDeviceCapabilities</key>' + nl;
+			info_plist_contents += '	<array>' + nl;
+			info_plist_contents += '		<string>gamekit</string>' + nl;
+			info_plist_contents += '	</array>' + nl;
+
 			info_plist_contents += '	<key>UIStatusBarHidden</key>' + nl;
 			info_plist_contents += '	<true/>' + nl;
 			info_plist_contents += '	<key>UISupportedInterfaceOrientations</key>' + nl;
@@ -4862,6 +4878,12 @@ build:
 							"height": 58,
 							"interpolation": iconinterpolation
 						},
+						{
+							"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-Small@3x.png",
+							"width" : 87,
+							"height": 87,
+							"interpolation": iconinterpolation
+						},
 						# iPad Icon
 						{
 							"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-72.png",
@@ -4932,6 +4954,18 @@ build:
 							"width" : 152,
 							"height": 152,
 							"interpolation": iconinterpolation
+						},
+						{
+							"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-167.png",
+							"width" : 167,
+							"height": 167,
+							"interpolation": iconinterpolation
+						},
+						{
+							"filename": self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + "Icon-60@3x.png",
+							"width" : 180,
+							"height": 180,
+							"interpolation": iconinterpolation
 						}
 
 
@@ -4966,6 +5000,7 @@ build:
 					icon_small_2x = self.ios_config['icon']['icon_small_2x'];
 					icon = self.ios_config['icon']['icon'];
 					icon_2x = self.ios_config['icon']['icon_2x'];
+					icon_167 = self.ios_config['icon']['icon_167'];
 					itunes_artwork = self.ios_config['icon']['itunes_artwork'];
 					itunes_artwork_2x = self.ios_config['icon']['itunes_artwork_2x'];
 
@@ -4985,6 +5020,7 @@ build:
 					icon_small_2x = self.str_replace(icon_small_2x, [("%PREPRODUCTION_DIR%", self.game_preproduction_dir), ("%ARK2D_DIR%", self.ark2d_dir)]);
 					icon = self.str_replace(icon, [("%PREPRODUCTION_DIR%", self.game_preproduction_dir), ("%ARK2D_DIR%", self.ark2d_dir)]);
 					icon_2x = self.str_replace(icon_2x, [("%PREPRODUCTION_DIR%", self.game_preproduction_dir), ("%ARK2D_DIR%", self.ark2d_dir)]);
+					icon_167 = self.str_replace(icon_167, [("%PREPRODUCTION_DIR%", self.game_preproduction_dir), ("%ARK2D_DIR%", self.ark2d_dir)]);
 					itunes_artwork = self.str_replace(itunes_artwork, [("%PREPRODUCTION_DIR%", self.game_preproduction_dir), ("%ARK2D_DIR%", self.ark2d_dir)]);
 					itunes_artwork_2x = self.str_replace(itunes_artwork_2x, [("%PREPRODUCTION_DIR%", self.game_preproduction_dir), ("%ARK2D_DIR%", self.ark2d_dir)]);
 
@@ -5002,6 +5038,7 @@ build:
 					subprocess.call(["cp -r " + icon_small_2x + " " + iphonedir + "Icon-Small@2x.png"], shell=True);
 					subprocess.call(["cp -r " + icon + " " + iphonedir + "Icon.png"], shell=True);
 					subprocess.call(["cp -r " + icon_2x + " " + iphonedir + "Icon@2x.png"], shell=True);
+					subprocess.call(["cp -r " + icon_167 + " " + iphonedir + "Icon-167.png"], shell=True);
 					subprocess.call(["cp -r " + itunes_artwork + " " + iphonedir + "iTunesArtwork"], shell=True);
 					subprocess.call(["cp -r " + itunes_artwork_2x + " " + iphonedir + "iTunesArtwork@2x"], shell=True);
 
@@ -5064,6 +5101,42 @@ build:
 								"filename": startdir + "Default-Portrait@2x.png",
 								"width" : 1536,
 								"height": 2048,
+								"interpolation": "nearest_neighbour"
+							},
+							{
+								"filename": startdir + "Default-RetinaHD55.png",
+								"width" : 1242,
+								"height": 2208,
+								"interpolation": "nearest_neighbour"
+							},
+							{
+								"filename": startdir + "Default-RetinaHD47.png",
+								"width" : 750,
+								"height": 1334,
+								"interpolation": "nearest_neighbour"
+							},
+							{
+								"filename": startdir + "Default-RetinaHD55-Landscape.png",
+								"width" : 2208,
+								"height": 1242,
+								"interpolation": "nearest_neighbour"
+							},
+							{
+								"filename": startdir + "Default-Portrait-IPhone.png",
+								"width" : 320,
+								"height": 480,
+								"interpolation": "nearest_neighbour"
+							},
+							{
+								"filename": startdir + "Default-Portrait-IPhone@2x.png",
+								"width" : 640,
+								"height": 960,
+								"interpolation": "nearest_neighbour"
+							},
+							{
+								"filename": startdir + "Default-Portrait-IPhone4@2x.png",
+								"width" : 640,
+								"height": 1136,
 								"interpolation": "nearest_neighbour"
 							}
 						];
@@ -5274,6 +5347,7 @@ build:
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "jniLibs" + self.ds + "x86"]);
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res"]);
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res" + self.ds + "raw"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res" + self.ds + "xml"]);
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res" + self.ds + "drawable"]);
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res" + self.ds + "drawable-mdpi"]);
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res" + self.ds + "drawable-hdpi"]);
@@ -5311,6 +5385,7 @@ build:
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "res" + self.ds + "drawable-xhdpi"]);
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "res" + self.ds + "drawable-xxhdpi"]);
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "res" + self.ds + "values"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "res" + self.ds + "xml"]);
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "src" + self.ds + "org"]);
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "src" + self.ds + "org" + self.ds + "" + self.developer_name_safe]);
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "src" + self.ds + "org" + self.ds + "" + self.developer_name_safe + self.ds + self.game_name_safe]);
@@ -5573,11 +5648,14 @@ build:
 				#fromfile = fromfile.replace(" ", "\ ");
 				#tofile = tofile.replace(" ", "\ ");
 
+
+
 				if (not fromfile in assetsJson or assetsJson[fromfile]['date_modified'] < os.stat(fromfile).st_mtime):
 					file_ext = self.get_str_extension(file);
 					if (file_ext == "ogg"): # resample
 						print("resampling audio file from: " + fromfile + " to: " + tofile);
-						subprocess.call(["oggdec "+fromfile+" --quiet --output=- | oggenc --raw --quiet --quality=" + str(audio_quality) + " --output="+tofile+" -"], shell=True);
+						#subprocess.call(["oggdec "+fromfile+" --quiet --output=- | oggenc --raw --quiet --quality=" + str(audio_quality) + " --output="+tofile+" -"], shell=True);
+						subprocess.call([ self.ark2d_dir + "/../Tools/oggdec "+fromfile+" --quiet --output=- | " + self.ark2d_dir +  "/../Tools/oggenc --raw --quiet --quality=" + str(audio_quality) + " --output="+tofile+" -"], shell=True);
 					else:
 						print("copying file from: " + fromfile + " to: " + tofile);
 						#subprocess.call(["cp -r " + fromfile + " " + tofile], shell=True);
@@ -5649,6 +5727,13 @@ build:
 					("%IRONSOURCE_BLOCKSTART%", ""),
 					("%IRONSOURCE_BLOCKEND%", ""),
 					("%IRONSOURCE_APP_KEY%", self.android_config['ironsource']['app_key'])
+				];
+
+			editsGoogleAnalytics = [("%GOOGLEANALYTICS_BLOCKSTART%", "/*"), ("%GOOGLEANALYTICS_BLOCKEND%", "*/") ];
+			if (True):
+				editsGoogleAnalytics = [
+					("%GOOGLEANALYTICS_BLOCKSTART%", ""),
+					("%GOOGLEANALYTICS_BLOCKEND%", "")
 				];
 
 			if (appplatformno >= 16):
@@ -6072,6 +6157,7 @@ build:
 				fcontents = self.str_replace(fcontents, editsStrReplace);
 				fcontents = self.str_replace(fcontents, editsOneSignal);
 				fcontents = self.str_replace(fcontents, editsIronsource);
+				fcontents = self.str_replace(fcontents, editsGoogleAnalytics);
 				f = open(intellij_folder + self.ds + self.game_name_safe + self.ds + "build.gradle", "w");
 				f.write(fcontents);
 				f.close();
@@ -6108,6 +6194,7 @@ build:
 			fgamecontents = self.str_replace(fgamecontents, editsFireTV);
 			fgamecontents = self.str_replace(fgamecontents, editsOneSignal);
 			fgamecontents = self.str_replace(fgamecontents, editsIronsource);
+			fgamecontents = self.str_replace(fgamecontents, editsGoogleAnalytics);
 			f = open(project_src_dir + self.ds + self.game_class_name + "Activity.java", "w");
 			f.write(fgamecontents);
 			f.close();
@@ -6122,9 +6209,24 @@ build:
 			fgamecontents = self.str_replace(fgamecontents, editsFireTV);
 			fgamecontents = self.str_replace(fgamecontents, editsOneSignal);
 			fgamecontents = self.str_replace(fgamecontents, editsIronsource);
+			fgamecontents = self.str_replace(fgamecontents, editsGoogleAnalytics);
 			f = open(project_src_dir + self.ds + self.game_class_name + "Application.java", "w");
 			f.write(fgamecontents);
 			f.close();
+
+			if "googleanalytics" in self.android_config:
+				analyticsContents = "<?xml version=\"1.0\" encoding=\"utf-8\" ?>" + nl;
+				analyticsContents += "<resources>";
+				analyticsContents += "	<!--Replace placeholder ID with your tracking ID-->";
+				analyticsContents += "	<string name=\"ga_trackingId\">" + self.android_config['googleanalytics']['tracking_id'] + "</string>";
+				analyticsContents += "	<!--Enable automatic activity tracking-->";
+				analyticsContents += "	<bool name=\"ga_autoActivityTracking\">true</bool>";
+				analyticsContents += "	<!--Enable automatic exception tracking-->";
+				analyticsContents += "	<bool name=\"ga_reportUncaughtExceptions\">true</bool>";
+				analyticsContents += "</resources>";
+				f = open(intellij_folder + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res" + self.ds + "xml" + self.ds + "analytics.xml", "w");
+				f.write(analyticsContents);
+				f.close();
 
 			# if not overriding
 			if "override_activity" not in self.android_config:
@@ -6159,6 +6261,7 @@ build:
 					fgamecontents = self.str_replace(fgamecontents, editsInAppBilling);
 					fgamecontents = self.str_replace(fgamecontents, editsOneSignal);
 					fgamecontents = self.str_replace(fgamecontents, editsIronsource);
+					fgamecontents = self.str_replace(fgamecontents, editsGoogleAnalytics);
 					f = open(project_src_dir + self.ds +  jfile, "w");
 					f.write(fgamecontents);
 					f.close();

@@ -11,10 +11,10 @@
 #import "GameContainerIPhoneGLView.h"
 #import "GameContainerIPhoneCloudDocument.h"
 
-#include "../../ARK2D.h"
-#include "../../Core/GameContainer.h"
+#include "../ARK2D.h"
+#include "../GameContainer.h"
 
-#include "../../Graphics/TextureStore.h"
+#include "../Graphics/TextureStore.h"
 #include "../../Util/ICloudUtil.h"
 
 
@@ -23,8 +23,8 @@
 
 
 
+iOSListener* iOSListener::s_instance = new iOSListener();
 
- 
 //GameContainerIPhoneGLView* _glView;
 
 @implementation GameContainerIPhoneAppDelegate
@@ -41,14 +41,14 @@
 
     ARK2D::getLog()->v("AppDelegate: loadData.");
 
-    if ([query resultCount] >= 1) { 
+    if ([query resultCount] >= 1) {
 
 
         ARK2D::getLog()->i("Found iCloud files...");
 
         // for each result in the query...
         NSArray* queryResults = [query results];
-        for (NSMetadataItem* result in queryResults) 
+        for (NSMetadataItem* result in queryResults)
         {
             NSURL* fileURL = [result valueForAttribute:NSMetadataItemURLKey];
             //NSNumber* aBool = nil;
@@ -57,7 +57,7 @@
             string thsStrText = [fileUrlStr cStringUsingEncoding:[NSString defaultCStringEncoding]];
 
             ARK2D::getLog()->i(StringUtil::append("Found iCloud file: ", thsStrText));
-     
+
              // found the file in iCloud
             //NSMetadataItem *item = [query resultAtIndex:0];
             //NSURL *url = [item valueForAttribute:NSMetadataItemURLKey];
@@ -69,7 +69,7 @@
 
             vector<ICloudFile>* fiz = ICloudUtil::getFiles();
             for(unsigned int i = 0; i < fiz->size(); ++i) {
-                if (fiz->at(i).filename == thsStrText) { 
+                if (fiz->at(i).filename == thsStrText) {
                     doc.mymeta = &fiz->at(i);
                     break;
                 }
@@ -81,11 +81,11 @@
             [doc openWithCompletionHandler:^(BOOL success) {
                 if (success) {
                     ARK2D::getLog()->i("AppDelegate: existing document opened from iCloud");
-                    
+
                     // add to dictionary
                     if (doc.mymeta->onchangefunction != NULL) {
                         void (*pt)() = (void(*)()) doc.mymeta->onchangefunction;
-                        pt(); 
+                        pt();
                     }
                 } else {
                     ARK2D::getLog()->i("AppDelegate: existing document failed to open from iCloud");
@@ -93,38 +93,38 @@
 
                 ICloudUtil::s_remainingFiles--;
                 if (ICloudUtil::s_remainingFiles == 0) {
-                    ICloudUtil::push();    
+                    ICloudUtil::push();
                 }
             }];
 
-            
+
 
             // Don't include hidden files.
             //[fileURL getResourceValue:&aBool forKey:NSURLIsHiddenKey error:nil];
-            //if (aBool && ![aBool boolValue]) { 
+            //if (aBool && ![aBool boolValue]) {
             //    [discoveredFiles addObject:fileURL];
             //}
         }
 
 
-        
+
     } else {
         // Nothing in iCloud: create a container for file and give it URL
         ARK2D::getLog()->i("AppDelegate: no documents found in iCloud... make them?!");
 
         vector<ICloudFile>* createfiles = ICloudUtil::getFiles();
         for(unsigned int i = 0; i < createfiles->size(); ++i) {
- 
+
         	ICloudFile* icf = &createfiles->at(i);
         	ICloudUtil::_createFile(icf);
         }
-        ICloudUtil::push();  
+        ICloudUtil::push();
 
-       /* 
+       /*
 
-       
+
         //_document = doc;
-       
+
         self.glViewController.document = doc;
 
        */
@@ -133,28 +133,28 @@
 
 /*- (void)processFiles:(NSNotification*)aNotification {
     NSMutableArray* discoveredFiles = [NSMutableArray array];
- 
+
     // Always disable updates while processing results.
     [_query disableUpdates];
- 
+
     // The query reports all files found, every time.
     NSArray* queryResults = [_query results];
     for (NSMetadataItem* result in queryResults) {
         NSURL* fileURL = [result valueForAttribute:NSMetadataItemURLKey];
         NSNumber* aBool = nil;
- 
+
         // Don't include hidden files.
         [fileURL getResourceValue:&aBool forKey:NSURLIsHiddenKey error:nil];
-        if (aBool && ![aBool boolValue]) { 
+        if (aBool && ![aBool boolValue]) {
             [discoveredFiles addObject:fileURL];
         }
     }
- 
+
     // Update the list of documents.
     [documents removeAllObjects];
     [documents addObjectsFromArray:discoveredFiles];
     [self.tableView reloadData];
- 
+
     // Reenable query updates.
     [_query enableUpdates];
 }*/
@@ -184,7 +184,7 @@
         //_query = query;
         //SCOPE
         [query setSearchScopes:[NSArray arrayWithObject:NSMetadataQueryUbiquitousDocumentsScope]];
-        
+
         //PREDICATE
         //NSPredicate *pred = [NSPredicate predicateWithFormat: @"%K == %@", NSMetadataItemFSNameKey, @"text.txt"];
         //[query setPredicate:pred];
@@ -206,14 +206,14 @@
         _iclouddocuments = [[NSMutableDictionary alloc] init];
     }
 
-    if (!_query) { 
+    if (!_query) {
         _query = [self namedDocumentQuery];
     }
-    
-     // Register for the metadata query notifications. 
-   [[NSNotificationCenter defaultCenter] addObserver:self 
+
+     // Register for the metadata query notifications.
+   [[NSNotificationCenter defaultCenter] addObserver:self
         //selector:@selector(processFiles:)
-        selector:@selector(queryDidFinishGathering:) 
+        selector:@selector(queryDidFinishGathering:)
         name:NSMetadataQueryDidFinishGatheringNotification
         object:_query];
         //object:nil];
@@ -223,28 +223,28 @@
         name:NSMetadataQueryDidUpdateNotification
         object:_query];
         //object:nil];
- 
+
    // Start the query and let it run.
    [_query startQuery];
 
-    
+
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     ARK2D::getContainer()->m_platformSpecific.m_appDelegate = self;
-    
-    // Programatticly add GL views. 
+
+    // Programatticly add GL views.
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     //self.glView = [[GameContainerIPhoneGLView alloc] initWithFrame:self.window.bounds];
     self.glViewController = [[GameContainerIPhoneGLViewController alloc] init];
     //[self.window addSubview: self.glView];
-    //self.window.rootViewController = self.glView.viewController; 
+    //self.window.rootViewController = self.glView.viewController;
     //[self.window setRootViewController: [self viewController]];
     [self.window setRootViewController: self.glViewController];
     [self.window makeKeyAndVisible];
 
-  
+    iOSListener::get()->didFinishLaunchingWithOptions(launchOptions);
 
     return YES;
 }
@@ -262,9 +262,9 @@
      Log* arklog = ARK2D::getLog();
     if (arklog != NULL) {
         arklog->i("native pause");
-        if (!GameContainerPlatform::s_gamePaused) { 
+        if (!GameContainerPlatform::s_gamePaused) {
             arklog->i("native pause start");
-            ARK2D::getGame()->pause(); 
+            ARK2D::getGame()->pause();
             GameContainerPlatform::s_gamePaused = true;
             arklog->i("native pause end");
         } else {
@@ -276,7 +276,7 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     /*
-     Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
+     Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
      If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
      */
 }
@@ -300,21 +300,21 @@
     if (arklog != NULL) {
         arklog->i("native resume");
 
-        
 
-        // have we just come from a resume? 
-        if (GameContainerPlatform::s_gamePaused == true) { 
+
+        // have we just come from a resume?
+        if (GameContainerPlatform::s_gamePaused == true) {
             arklog->i("native resume start");
             ARK2D::getGame()->resume();
             arklog->i("native resume end");
             //GameContainerPlatform::s_gamePaused = false;
 
-            // do this after the context is created otherwise it won't work. 
+            // do this after the context is created otherwise it won't work.
             Renderer* r = ARK2D::getRenderer();
             r->init();
             FBOStore::getInstance()->reloadFBOs();
             TextureStore::getInstance()->reloadTextures();
-            GameContainerPlatform::s_gamePaused = false; 
+            GameContainerPlatform::s_gamePaused = false;
 
 			//ARK2D::getContainer()->setSize((int) self.window.bounds.size.width, (int) self.window.bounds.size.height);
 
@@ -369,7 +369,7 @@
 }
 
 - (void) resumePlayback {
-	
+
     UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;  // 1
     AudioSessionSetProperty (                                      // 2
 							 kAudioSessionProperty_AudioCategory,                       // 3
@@ -377,7 +377,7 @@
 							 &sessionCategory                                           // 5
 							 );
     AudioSessionSetActive (true);                                  // 6
-	
+
 //    [audioPlayer resume];                                     // 7
 }
 

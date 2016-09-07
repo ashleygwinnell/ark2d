@@ -43,6 +43,12 @@ namespace ARK {
 				static const unsigned int CALLBACK_ANDROID_SIGNIN_SUCCESSFUL = 11;
 				static const unsigned int CALLBACK_ANDROID_SIGNIN_UNSUCCESSFUL = 12;
 				static const unsigned int CALLBACK_ANDROID_THREAD_START = 21;
+				static const unsigned int CALLBACK_ANDROID_BILLING_INITIALISE_SUCCESS = 22;
+				static const unsigned int CALLBACK_ANDROID_BILLING_INITIALISE_FAIL = 23;
+				static const unsigned int CALLBACK_ANDROID_BILLING_PURCHASE_SUCCESS = 24;
+				static const unsigned int CALLBACK_ANDROID_BILLING_PURCHASE_FAIL = 25;
+				static const unsigned int CALLBACK_ANDROID_BILLING_QUERYINVENTORY_SUCCESS = 26;
+				static const unsigned int CALLBACK_ANDROID_BILLING_QUERYINVENTORY_FAIL = 27;
 
 				static const unsigned int CALLBACK_GAMECENTER_SIGNIN_SUCCESSFUL = 31;
 

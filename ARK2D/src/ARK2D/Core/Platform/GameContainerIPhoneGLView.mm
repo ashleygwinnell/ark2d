@@ -15,9 +15,9 @@
 
 #include "../../Includes.h"
 #include "../../Namespaces.h"
-#include "../../ARK2D.h"
-#include "../../Core/GameContainer.h"
-#include "../../Graphics/Color.h"
+#include "../ARK2D.h"
+#include "../GameContainer.h"
+#include "../Graphics/Color.h"
 #include "../../UI/Dialog.h"
 #include "../../Util/Callbacks.h"
 
@@ -235,16 +235,16 @@ float transformTouchPointY(float y) {
         logstr += Cast::toString<int>((int) thisy);
         ARK2D::getLog()->i(logstr);*/
 
-        Input* i = ARK2D::getInput();
-        i->mouse_x = (int) thisx;
-        i->mouse_y = (int) thisy;
-        i->pressKey(Input::MOUSE_BUTTON_LEFT);
+        Input* in = ARK2D::getInput();
+        in->mouse_x = (int) thisx;
+        in->mouse_y = (int) thisy;
+        in->pressKey(Input::MOUSE_BUTTON_LEFT);
 
         // Multi-touch
         for (UITouch* touch in touches)
         {
              //found a touch.  Is it already on our list?
-			int fingerID = i->getTouchByInternalData(touch);
+			int fingerID = in->getTouchByInternalData(touch);
 
 			if (fingerID == -1) {
 				// add it to our list
@@ -253,7 +253,7 @@ float transformTouchPointY(float y) {
 				p.x = transformTouchPointX(pt.x);
 				p.y = transformTouchPointY(pt.y);
 				p.data = touch;
-				fingerID = i->addTouch(p);
+				fingerID = in->addTouch(p);
 
                 ARK2D::getLog()->v("adding touch point");
 			} else {
@@ -286,17 +286,17 @@ float transformTouchPointY(float y) {
         // TODO: landscape transform coordinates
         // *******
 
-        Input* i = ARK2D::getInput();
-        ARK2D::getLog()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
-        ARK2D::getGame()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
-        i->mouse_x = (int) thisx;
-        i->mouse_y = (int) thisy;
+        Input* in = ARK2D::getInput();
+        //ARK2D::getLog()->mouseMoved((int) thisx, (int) thisy, in->mouse_x, in->mouse_y);
+        ARK2D::getGame()->mouseMoved((int) thisx, (int) thisy, in->mouse_x, in->mouse_y);
+        in->mouse_x = (int) thisx;
+        in->mouse_y = (int) thisy;
 
         // Multi-touch
 		for (UITouch* touch in touches)
 		{
 			// found a touch.  Is it already on our list?
-			int fingerID = i->getTouchByInternalData(touch);
+			int fingerID = in->getTouchByInternalData(touch);
 			if (fingerID != -1) {
 				//found it
 			} else {
@@ -306,9 +306,9 @@ float transformTouchPointY(float y) {
 
             ARK2D::getLog()->v("touch moved");
 			CGPoint pt = [touch locationInView:self];
-			i->m_touchPointers[fingerID].x = transformTouchPointX(pt.x);
-			i->m_touchPointers[fingerID].y = transformTouchPointY(pt.y);
-			i->m_touchPointers[fingerID].data = touch;
+			in->m_touchPointers[fingerID].x = transformTouchPointX(pt.x);
+			in->m_touchPointers[fingerID].y = transformTouchPointY(pt.y);
+			in->m_touchPointers[fingerID].data = touch;
 		}
     }
 }
@@ -335,18 +335,18 @@ float transformTouchPointY(float y) {
         // TODO: landscape transform coordinates
         // *******
 
-        Input* i = ARK2D::getInput();
-        i->mouse_x = (int) thisx;
-        i->mouse_y = (int) thisy;
-        i->releaseKey(Input::MOUSE_BUTTON_LEFT);
+        Input* in = ARK2D::getInput();
+        in->mouse_x = (int) thisx;
+        in->mouse_y = (int) thisy;
+        in->releaseKey(Input::MOUSE_BUTTON_LEFT);
 
         // Multi-touch
 		for (UITouch *touch in touches)
 		{
 			//found a touch.  Is it already on our list?
-			int fingerID = i->getTouchByInternalData(touch);
+			int fingerID = in->getTouchByInternalData(touch);
 			if (fingerID != -1) {
-				i->removeTouch(fingerID);
+				in->removeTouch(fingerID);
                 ARK2D::getLog()->v("remove touch point");
 			} else {
 				//wasn't on our list

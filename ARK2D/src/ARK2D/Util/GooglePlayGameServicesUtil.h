@@ -27,12 +27,27 @@ namespace ARK {
 		};
 		class ARK2D_API GooglePlayBillingListener {
 			public:
-				virtual void onPurchaseSuccessful() = 0;
+				static GooglePlayBillingListener* s_instance;
+
+				static GooglePlayBillingListener* get() { return s_instance; }
+				static void set(GooglePlayBillingListener* instance) { s_instance = instance; }
+
+				GooglePlayBillingListener();
+				virtual void onInitialiseSuccessful() {}
+				virtual void onInitialiseFailed() {}
+				virtual void onPurchaseSuccessful(string sku) {}
+				virtual void onPurchaseFailed(string sku) {}
+				virtual void onQueryInventorySuccessful() {}
+				virtual void onQueryInventoryFailed() {}
+				virtual ~GooglePlayBillingListener() {}
+
 		};
 		class ARK2D_API GooglePlayBillingUtil {
 			public:
 				static bool isSetup();
+				//static void initialise(string commaSeparatedSkus);
 				static void startPurchase(string id, int referenceNumber, string extraToken);
+				static bool hasPurchase(string sku);
 		};
 
 		class ARK2D_API GooglePlayGameServicesUtil {

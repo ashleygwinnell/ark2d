@@ -118,6 +118,12 @@ import com.amazon.ags.constants.LeaderboardFilter;
 
 %FIRETV_BLOCKEND%
 
+%GOOGLEANALYTICS_BLOCKSTART%
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
+import com.google.android.gms.analytics.HitBuilders;
+%GOOGLEANALYTICS_BLOCKEND%
+
 
 %IRONSOURCE_BLOCKSTART%
 
@@ -182,6 +188,13 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	public static final int CALLBACK_ANDROID_SIGNIN_SUCCESSFUL = 11;
 	public static final int CALLBACK_ANDROID_SIGNIN_UNSUCCESSFUL = 12;
 	public static final int CALLBACK_ANDROID_THREAD_START = 21;
+
+	public static final int CALLBACK_ANDROID_BILLING_INITIALISE_SUCCESS = 22;
+	public static final int CALLBACK_ANDROID_BILLING_INITIALISE_FAIL = 23;
+	public static final int CALLBACK_ANDROID_BILLING_PURCHASE_SUCCESS = 24;
+	public static final int CALLBACK_ANDROID_BILLING_PURCHASE_FAIL = 25;
+	public static final int CALLBACK_ANDROID_BILLING_QUERYINVENTORY_SUCCESS = 26;
+	public static final int CALLBACK_ANDROID_BILLING_QUERYINVENTORY_FAIL = 27;
 
 	public static final int CALLBACK_GAMECENTER_SIGNIN_SUCCESSFUL = 31;
 
@@ -292,6 +305,10 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 
 	%IRONSOURCE_BLOCKEND%
 
+	%GOOGLEANALYTICS_BLOCKSTART%
+	public static Tracker s_tracker = null;
+	%GOOGLEANALYTICS_BLOCKEND%
+
 	public static %GAME_CLASS_NAME%Activity s_activity;
     /** Called when the activity is first created. */
     @Override
@@ -331,13 +348,33 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 
 			mHelper = new IabHelper(this, base64EncodedPublicKey);
 
+			mReceivedInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+				public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+					Log.i( "game", "In-app Billing query inventory. " );
+					if (result.isFailure()) {
+						// Handle failure
+						Log.i( "game", "Fail" );
+						Log.i( "game", "reason" + result.getMessage() );
+						%GAME_CLASS_NAME%Renderer.nativeCallbackById(%GAME_CLASS_NAME%Activity.CALLBACK_ANDROID_BILLING_QUERYINVENTORY_FAIL);
+					} else {
+						Log.i( "game", "success" );
+						// mHelper.consumeAsync(inventory.getPurchase("ITEM_SKU"), mConsumeFinishedListener);
+						s_latestInventory = inventory;
+						%GAME_CLASS_NAME%Renderer.nativeCallbackById(%GAME_CLASS_NAME%Activity.CALLBACK_ANDROID_BILLING_QUERYINVENTORY_SUCCESS);
+					}
+				}
+			};
+
 			mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
 				public void onIabSetupFinished(IabResult result) {
 				   if (!result.isSuccess()) {
 					   Log.d("game", "In-app Billing setup failed: " + result);
+					   %GAME_CLASS_NAME%Renderer.nativeCallbackById(%GAME_CLASS_NAME%Activity.CALLBACK_ANDROID_BILLING_INITIALISE_FAIL);
 				   } else {
 					   Log.d("game", "In-app Billing is set up OK");
+					   %GAME_CLASS_NAME%Renderer.nativeCallbackById(%GAME_CLASS_NAME%Activity.CALLBACK_ANDROID_BILLING_INITIALISE_SUCCESS);
 					   _iabIsSetup = true;
+					   mHelper.queryInventoryAsync(mReceivedInventoryListener);
 
 					   //mHelper.launchPurchaseFlow(s_activity, "tipjar.medium", 10001, mPurchaseFinishedListener, "mypurchasetoken");
 
@@ -347,27 +384,30 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 
 			mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
 				public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+					if (purchase != null) {
+						Log.i( "game", "In-app Billing purchase finished: " + purchase.getSku() );
+					}
 					if (result.isFailure()) { // Handle error
+						Log.i( "game", "In-app Billing purchase failed: " + result.getMessage() );
+						%GAME_CLASS_NAME%Renderer.nativeCallbackByIdStringParam(%GAME_CLASS_NAME%Activity.CALLBACK_ANDROID_BILLING_PURCHASE_FAIL, "?");
 						return;
-					} //else if (purchase.getSku().equals("ITEM_SKU")) {
+					}
+					if (purchase == null) {
+						%GAME_CLASS_NAME%Renderer.nativeCallbackByIdStringParam(%GAME_CLASS_NAME%Activity.CALLBACK_ANDROID_BILLING_PURCHASE_SUCCESS, "?");
+					} else {
+						%GAME_CLASS_NAME%Renderer.nativeCallbackByIdStringParam(%GAME_CLASS_NAME%Activity.CALLBACK_ANDROID_BILLING_PURCHASE_SUCCESS, purchase.getSku());
+					}
+					//else if (purchase.getSku().equals("ITEM_SKU")) {
 						//iab_consumeItem(); //buyButton.setEnabled(false);
 					//}
 				}
 			};
 
-			mReceivedInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
-				public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-					if (result.isFailure()) {
-						// Handle failure
-					} else {
-						// mHelper.consumeAsync(inventory.getPurchase("ITEM_SKU"), mConsumeFinishedListener);
-					}
-				}
-			};
+
 			mConsumeFinishedListener = new IabHelper.OnConsumeFinishedListener() {
 				public void onConsumeFinished(Purchase purchase, IabResult result) {
 					if (result.isSuccess()) { //clickButton.setEnabled(true);
-
+						// TODO
 					} else {
 						// handle error
 					}
@@ -391,9 +431,25 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 		    mMediationAgent_appKey = "%IRONSOURCE_APP_KEY%"; //Set the Application Key - can be retrieved from Supersonic platform
 		    new GetGAIDTask().execute();
 
-
-
     	%IRONSOURCE_BLOCKEND%
+
+    	%GOOGLEANALYTICS_BLOCKSTART%
+	    	// Google Analytics Campaign Tracking
+	       /* Intent intent = this.getIntent();
+	        Uri uri = intent.getData();
+	        EasyTracker.getInstance().setContext(this);
+	        if (uri != null) {
+	            if(uri.getQueryParameter("utm_source") != null) {    // Use campaign parameters if avaialble.
+	                EasyTracker.getTracker().setCampaign(uri.getPath());
+	            } else if (uri.getQueryParameter("referrer") != null) {    // Otherwise, try to find a referrer parameter.
+	                EasyTracker.getTracker().setReferrer(uri.getQueryParameter("referrer"));
+	            }
+	        }*/
+	        // Obtain the shared Tracker instance.
+			%GAME_CLASS_NAME%Application application = (%GAME_CLASS_NAME%Application) getApplication();
+			s_tracker = application.getDefaultTracker();
+
+	    %GOOGLEANALYTICS_BLOCKEND%
     }
 
     %IRONSOURCE_BLOCKSTART%
@@ -420,6 +476,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 
     %INAPPBILLING_BLOCKSTART%
 
+    	static Inventory s_latestInventory = null;
 
     	@Override
 		public void onDestroy() {
@@ -439,10 +496,75 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 		public static void googleplaybilling_startPurchase(String item, int referenceNumber, String extraThing) {
 			s_activity.mHelper.launchPurchaseFlow(s_activity, item, referenceNumber, s_activity.mPurchaseFinishedListener, extraThing);
 		}
+		public static boolean googleplaybilling_hasPurchase(String sku) {
+			if (s_latestInventory == null) {
+				return false;
+			}
+			Purchase p = s_latestInventory.getPurchase(sku);
+			if (p != null && _verifyDeveloperPayload(p) ) {
+				return true;
+			}
+			return false;
+		}
 
-
+		public static boolean _verifyDeveloperPayload(Purchase p) {
+			String payload = p.getDeveloperPayload();
+			// TODO: see here: https://github.com/googlesamples/android-play-billing/blob/master/TrivialDrive/app/src/main/java/com/example/android/trivialdrivesample/MainActivity.java
+			// we don't worry about this too much.
+			return true;
+		}
 
 	%INAPPBILLING_BLOCKEND%
+
+
+
+
+	%GOOGLEANALYTICS_BLOCKSTART%
+		 // ANALYTICS
+	    public static void ga_sendSocial(String network, String action, String targeturl) {
+	        //System.out.println("ga_sendSocial (" + network + ", " + action + ", " + targeturl + ")");
+	        //Log.i("game", "ga_sendSocial (" + network + ", " + action + ", " + targeturl + ")");
+
+	        //Tracker tracker = EasyTracker.getTracker();  // Get tracker object.
+	        //tracker.sendSocial(network, action, targeturl);  // Send social interaction.
+
+	        s_tracker.send(new HitBuilders.SocialBuilder()
+    			.setNetwork(network)
+    			.setAction(action)
+    			.setTarget(targeturl)
+    			.build()
+    		);
+	    }
+	    public static void ga_sendEvent(String category, String action, String label, long opt_value) {
+	        //System.out.println("ga_sendEvent (" + category + ", " + action + ", " + label + ", " + opt_value + ")");
+	        //Log.i("game", "ga_sendEvent (" + category + ", " + action + ", " + label + ", " + opt_value + ")");
+
+	        //Tracker tracker = EasyTracker.getTracker();  // Get tracker object.
+	        //tracker.sendEvent(category, action, label, opt_value);
+
+	        s_tracker.send(new HitBuilders.EventBuilder()
+    			.setCategory(category)
+    			.setAction(action)
+    			.setLabel(label)
+    			.setValue(opt_value)
+    			.build()
+    		);
+	    }
+	    public static void ga_sendTiming(long loadTime, String category, String name, String label) {
+	        //System.out.println("ga_sendTiming (" + category + ", " + loadTime + ", " + name + ", " + label + ")");
+	        //Log.i("game", "ga_sendTiming (" + category + ", " + loadTime + ", " + name + ", " + label + ")");
+
+	        //Tracker tracker = s_activity.getApplication(); EasyTracker.getTracker();  // Get tracker object.
+	        //tracker.sendTiming(category, loadTime, name, label);
+	        s_tracker.send(new HitBuilders.TimingBuilder()
+    			.setValue(loadTime)
+    			.setCategory(category)
+    			.setVariable(name)
+    			.setLabel(label)
+    			.build()
+    		);
+	    }
+	%GOOGLEANALYTICS_BLOCKEND%
 
     %OUYA_BLOCKSTART%
 	    @Override
@@ -1902,6 +2024,7 @@ class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
 
 	public static native void nativeCallbackById(int id);
 	public static native void nativeCallbackByIdIntParam(int id, int param);
+	public static native void nativeCallbackByIdStringParam(int id, String param);
 
 	public static native void nativeGamepadAdd(int id, String name);
 	public static native boolean nativeGamepadExists(int id);

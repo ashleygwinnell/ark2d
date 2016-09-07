@@ -43,6 +43,7 @@
 
 			virtual bool googleplaybilling_isSetup();
 			virtual void googleplaybilling_startPurchase(string id, int referenceNumber, string extraToken);
+			virtual bool googleplaybilling_hasPurchase(string sku);
 			virtual void googleplaybilling_consumePurchase(string id);
 			virtual void googleplaybilling_queryPurchases();
 
@@ -136,6 +137,14 @@
 		 */
 		JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeCallbackByIdIntParam
 		  (JNIEnv *, jclass, jint, jint);
+
+		/*
+		 * Class:     org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer
+		 * Method:    nativeCallbackByIdStringParam
+		 * Signature: (II)V
+		 */
+		JNIEXPORT void JNICALL Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer_nativeCallbackByIdStringParam
+		  (JNIEnv *, jclass, jint, jstring);
 
 		/*
 		 * Class:     org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Renderer

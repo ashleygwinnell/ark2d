@@ -202,6 +202,7 @@ namespace ARK {
 				if (!found) {
 					it->second = map<string, string>(); // if it's not there, reset to an empty map.
 				}
+				it++;
 			}
 		}
 

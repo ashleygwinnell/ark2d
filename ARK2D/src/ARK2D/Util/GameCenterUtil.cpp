@@ -58,8 +58,13 @@ bool GameCenterBillingUtil::s_initialised = false;
 	    - (void)addToList:(SKPaymentTransaction*)transaction
 	    {
 	    	 NSString* productID = transaction.originalTransaction.payment.productIdentifier;
-            string thsStrText = [productID cStringUsingEncoding:[NSString defaultCStringEncoding]];
-    		GameCenterBillingUtil::s_purchasedIds->push_back( thsStrText );
+            if (productID == NULL || productID == nil) {
+                productID = transaction.payment.productIdentifier;
+            }
+            if (productID != NULL && productID != nil) {
+                string thsStrText = [productID cStringUsingEncoding:[NSString defaultCStringEncoding]];
+                GameCenterBillingUtil::s_purchasedIds->push_back( thsStrText );
+            }
 		}
 
 	    - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions
@@ -69,15 +74,15 @@ bool GameCenterBillingUtil::s_initialised = false;
 		    	switch (transaction.transactionState) {
 		            // Call the appropriate custom method for the transaction state.
 		            case SKPaymentTransactionStatePurchasing:
-		            	ARK2D::getLog()->v("State - purchasing");
+		            	ARK2D::getLog()->v("GameCenterBillingUtil State - purchasing");
 		                //[self showTransactionAsInProgress:transaction deferred:NO];
 		                break;
 		            case SKPaymentTransactionStateDeferred:
-		            	ARK2D::getLog()->v("State - deferred");
+		            	ARK2D::getLog()->v("GameCenterBillingUtil State - deferred");
 		                //[self showTransactionAsInProgress:transaction deferred:YES];
 		                break;
                     case SKPaymentTransactionStateFailed:{
-                    	ARK2D::getLog()->v("State - failed");
+                    	ARK2D::getLog()->v("GameCenterBillingUtil State - failed");
 		                //[self failedTransaction:transaction];
 		            	NSString* productID = transaction.payment.productIdentifier;
             			string thsStrText = [productID cStringUsingEncoding:[NSString defaultCStringEncoding]];
@@ -86,7 +91,7 @@ bool GameCenterBillingUtil::s_initialised = false;
                         break;
                     }
                     case SKPaymentTransactionStatePurchased: {
-                    	ARK2D::getLog()->v("State - purchased");
+                    	ARK2D::getLog()->v("GameCenterBillingUtil State - purchased");
 		                GameCenterBillingUtil::persistReceipt(transaction);
 		                [self addToList:transaction];
 
@@ -98,8 +103,13 @@ bool GameCenterBillingUtil::s_initialised = false;
 						break;
                     }
                     case SKPaymentTransactionStateRestored: {
-                    	ARK2D::getLog()->v("State - restored");
+                    	ARK2D::getLog()->v("GameCenterBillingUtil State - restored");
 		                [self addToList:transaction.originalTransaction];
+
+		                NSString* productID = transaction.originalTransaction.payment.productIdentifier;
+            			string thsStrText = [productID cStringUsingEncoding:[NSString defaultCStringEncoding]];
+		                GameCenterBillingListener::get()->onGameCenterPurchaseRestored(thsStrText);
+
 		                GameCenterBillingUtil::finishTransaction(transaction.originalTransaction);
 		                GameCenterBillingUtil::finishTransaction(transaction);
 		                break;
@@ -114,10 +124,10 @@ bool GameCenterBillingUtil::s_initialised = false;
 		}
 		- (void) paymentQueueRestoreCompletedTransactionsFinished:(SKPaymentQueue *)queue
 		{
-			NSLog(@"ARK2D_TransactionObserver::paymentQueueRestoreCompletedTransactionsFinished");
+			NSLog(@"GameCenterBillingUtil ARK2D_TransactionObserver::paymentQueueRestoreCompletedTransactionsFinished");
 			//purchasedItemIDs = [[NSMutableArray alloc] init];
 
-			NSLog(@"received restored transactions: %i", (unsigned int) queue.transactions.count);
+			NSLog(@"GameCenterBillingUtil received restored transactions: %i", (unsigned int) queue.transactions.count);
 			for (SKPaymentTransaction* transaction in queue.transactions)
 			{
 			    [self addToList:transaction];

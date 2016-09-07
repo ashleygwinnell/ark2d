@@ -9,6 +9,7 @@
 
 
 #include "../../Includes.h"
+#include "../../Common/DLL.h"
 #import "GameContainerIPhoneGLView.h"
 #import "GameContainerIPhoneCloudDocument.h"
 
@@ -16,7 +17,17 @@
 #import <Foundation/Foundation.h>
 
 
+class ARK2D_API iOSListener {
+	public:
+		static iOSListener* s_instance;
 
+		static iOSListener* get() { return s_instance; }
+		static void set(iOSListener* instance) { s_instance = instance; }
+
+		virtual void didFinishLaunchingWithOptions(NSDictionary* ns) { }
+		// flesh this out with events.
+
+};
 
 
 
@@ -56,7 +67,7 @@
 @end
 
 @class GKLeaderboard, GKAchievement, GKPlayer;
- 
+
 
 
 

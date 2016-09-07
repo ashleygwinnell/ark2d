@@ -4,27 +4,27 @@
  *  Created on: 12-Dec-2009
  *      Author: Ashley
  */
- 
+
 #ifdef __WIN32
 	#include <windows.h>
 #endif
 
 #include "../../Namespaces.h"
 
-#include "Input.h" 
+#include "Input.h"
 #include "Gamepad.h"
 #include "../GameContainer.h"
-  
+
 namespace ARK {
     namespace Core {
         namespace Controls {
-     
+
             #if !defined(ARK2D_WINDOWS_VS) // && !defined(ARK2D_UBUNTU_LINUX)
-                const int Input::MOUSE_BUTTON_LEFT; 
-                const int Input::MOUSE_BUTTON_MIDDLE; 
+                const int Input::MOUSE_BUTTON_LEFT;
+                const int Input::MOUSE_BUTTON_MIDDLE;
                 const int Input::MOUSE_BUTTON_RIGHT;
-                const int Input::KEY_SPACE; 
-                const int Input::KEY_PERIOD; 
+                const int Input::KEY_SPACE;
+                const int Input::KEY_PERIOD;
                 const int Input::KEY_COMMA;
                 const int Input::KEY_EQUALS;
                 const int Input::KEY_HYPHEN;
@@ -79,7 +79,7 @@ namespace ARK {
                 const int Input::KEY_T;
                 const int Input::KEY_U;
                 const int Input::KEY_V;
-                const int Input::KEY_W; 
+                const int Input::KEY_W;
                 const int Input::KEY_X;
                 const int Input::KEY_Y;
                 const int Input::KEY_Z;
@@ -92,13 +92,13 @@ namespace ARK {
             const char* Input::s_keyboardState = new char[256];
 
             Input::Input():
-                keyDownBuffer(), 
+                keyDownBuffer(),
                 m_container(NULL),
-                keyNames(), 
+                keyNames(),
                 keyChars(),
-                mouse_x(0), 
+                mouse_x(0),
                 mouse_y(0),
-                mouse_x_raw(0), 
+                mouse_x_raw(0),
                 mouse_y_raw(0),
                 pressedEvents(),
                 releasedEvents(),
@@ -114,7 +114,7 @@ namespace ARK {
                 keyNames[Input::KEY_PERIOD] = "period/fullstop";
                 keyChars[Input::KEY_PERIOD] = ".";
 
-                keyNames[Input::KEY_COMMA] = "comma"; 
+                keyNames[Input::KEY_COMMA] = "comma";
                 keyChars[Input::KEY_COMMA] = ",";
 
                 keyNames[Input::KEY_EQUALS] = "equals";
@@ -191,8 +191,8 @@ namespace ARK {
             }
             #if defined(ARK2D_IPHONE)
                 signed int Input::getTouchByInternalData(void* d) {
-                    for(signed int i = 0; i < m_touchPointers.size(); ++i) {
-                        if (d == m_touchPointers[i].data) {
+                    for(signed int i = 0; i < m_touchPointers.size(); i++) {
+                        if (d == m_touchPointers.at(i).data) {
                             return i;
                         }
                     }
@@ -232,9 +232,9 @@ namespace ARK {
             }
             Gamepad* Input::getGamepadByIndex(unsigned int index) {
                 vector<Gamepad*>* gamepads = m_container->getGamepads();
-                if (index >= gamepads->size()) { 
+                if (index >= gamepads->size()) {
                     //ARK2D::getLog()->e(StringUtil::append("Could not get gamepad at index: ", id));
-                    return NULL; 
+                    return NULL;
                 }
                 return gamepads->at(index);
             }
@@ -246,7 +246,7 @@ namespace ARK {
                     if (r) {
                         return true;
                     }
-                }  
+                }
                 return false;
             }
 
@@ -256,7 +256,7 @@ namespace ARK {
                     bool r = gamepads->at(i)->isButtonPressed(button);
                     if (r) {
                         return true;
-                    } 
+                    }
                 }
                 return false;
             }
@@ -274,8 +274,8 @@ namespace ARK {
                 for (unsigned int i = 0; i < gamepads->size(); i++) {
                     bool r = gamepads->at(i)->isAnyButtonPressed();
                     if (r) {
-                        return true; 
-                    } 
+                        return true;
+                    }
                 }
                 return false;
             }
@@ -299,14 +299,14 @@ namespace ARK {
                     return false;
                 }
             }
-     
+
             void Input::pressKey(unsigned int key) {
                 this->keyDownBuffer[key] = true;
                 pressedEvents.insert(key);
 
                 //ARK2D::getLog()->keyPressed(key);
                 ARK2D::getScene()->keyPressed(key);
-     
+
                 //#ifdef ARK2D_UBUNTU_LINUX
                 //#ifdef ARK2D_ANDROID
                 //	ARK2D::getLog()->e(StringUtil::append("key press: ", getKeyName(key)));
@@ -346,7 +346,7 @@ namespace ARK {
 
                     if (key == (unsigned int) KEY_ENTER) {
                         return "\n";
-                    }  
+                    }
 
                     return ARK2D::getContainer()->m_platformSpecific.m_pluggable->m_keyChar;
 
@@ -383,10 +383,10 @@ namespace ARK {
 
                     unsigned char* out = new unsigned char[3];
                     out[1] = '\0';
-                    
+
                     GetKeyboardState((BYTE*) s_keyboardState);
                     int didConvert = ToAscii(key, MapVirtualKey(key, MAPVK_VK_TO_VSC), (BYTE*) s_keyboardState, (WORD*) out, 0);
-                    
+
 
                     if (didConvert == 0) {
                         ARK2D::getLog()->e("could not convert key code. returning from map. ");
@@ -417,7 +417,7 @@ namespace ARK {
 
                     delete out;
 
-                    
+
 
                     return returnString;
 
@@ -436,15 +436,15 @@ namespace ARK {
                                 return "\"";
                         }
                     }
-     
+
                     if (key == (unsigned int) KEY_ENTER) {
                         return "\n";
-                    }  
-     
+                    }
+
                     NSEvent* e = ARK2D::getContainer()->m_platformSpecific.m_listener->m_latestKeyUpEvent;
                     if (e != NULL) {
                         NSString* characterNSString = [e charactersIgnoringModifiers];
-                        
+
                         const char* ptr = [characterNSString cStringUsingEncoding:NSUTF8StringEncoding];
                         return string(ptr);
                     } else {
@@ -514,7 +514,7 @@ namespace ARK {
                     }
                     return string(str[0]);*/
 
-                
+
                 #endif
 
                 return "";
@@ -552,7 +552,7 @@ namespace ARK {
             }
             int Input::getMouseYRaw() const {
                 return mouse_y_raw;
-            } 
+            }
             void Input::setGameContainer(ARK::Core::GameContainer* c) {
                 m_container = c;
             }

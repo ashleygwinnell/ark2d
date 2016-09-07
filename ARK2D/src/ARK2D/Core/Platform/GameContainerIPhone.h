@@ -8,9 +8,9 @@
 #ifndef GAMECONTAINERIPHONE_H_
 #define GAMECONTAINERIPHONE_H_
 
-#include "../../Includes.h"
+//#include "../../Includes.h"
 #include "../../Namespaces.h"
-#include "../../ARK2D.h"
+#include "../ARK2D.h"
 
 	#ifdef ARK2D_IPHONE
 

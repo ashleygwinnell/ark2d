@@ -55,6 +55,7 @@ namespace ARK {
 				virtual void onGameCenterInitialiseCompleted() { }
 				virtual void onGameCenterInitialiseFailed() { }
 				virtual void onGameCenterPurchaseFailed(string productId) { }
+				virtual void onGameCenterPurchaseRestored(string productId) { }
 				virtual void onGameCenterPurchaseCompleted(string productId) { }
 
 

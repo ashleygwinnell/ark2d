@@ -25,8 +25,8 @@
 		 	//#include <X11/freetype2/freetype/freetype.h> // mac
 		#endif
 
-		#include "../Includes.h"
-		#include "../UI/ErrorDialog.h"
+		#include "../../Includes.h"
+		#include "../Controls/ErrorDialog.h"
 
 		#include "Font.h"
 
@@ -82,7 +82,7 @@
                      *
                      * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
                      */
-                    class ARK2D_API FTFont : public ARK::Font::Font {
+                    class ARK2D_API FTFont : public ARK::Core::Font::Font {
                         private:
                             FTFontData* m_data;
                         public:
