@@ -14,7 +14,11 @@
 #include "../Geometry/Vector4.h"
 #include "../Geometry/Vector3.h"
 
-#include <cmath>
+//#include <cmath>
+#ifdef ARK2D_ANDROID
+    #define GLM_FORCE_CXX11
+    #define GLM_FORCE_COMPILER_UNKNOWN
+#endif
 #include "../Vendor/glm/glm/glm.hpp"
 #include "../Vendor/glm/glm/gtx/transform.hpp"
 #include "../Vendor/glm/glm/gtc/quaternion.hpp"

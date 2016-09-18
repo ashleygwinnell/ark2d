@@ -8,10 +8,10 @@
 #include "API.h"
 #include "../../Common/Libraries/libjson.h"
 #include "../../Common/Libraries/rapidxml.h"
-#include "../../vendor/rapidxml/ark_rapidxml_util.hpp"	
+#include "../../vendor/rapidxml/ark_rapidxml_util.hpp"
 
  /* template<class Str=std::string, class Ch=char>
-	class rapidxml_myutil { 
+	class rapidxml_myutil {
 		public:
 
 		// Rapid XML util
@@ -44,7 +44,7 @@ namespace ARK {
 			void __internalGameJoltListener(ARK::GJ::Next::API* api, gjCallbackType type, void* data)
 			{
 				switch(type) {
-					case GJ_USERS_AUTH_RESULT: 
+					case GJ_USERS_AUTH_RESULT:
 					{
 						gjUsersAuthResult* result = (gjUsersAuthResult*) data;
 						if (!result->success) {
@@ -53,7 +53,7 @@ namespace ARK {
 						}
 						api->m_userName = result->username;
 						api->m_userToken = result->usertoken;
-						
+
 						/*Overlay* o = Overlay::getInstance();
 						if (o != NULL) {
 
@@ -73,9 +73,9 @@ namespace ARK {
 					break;
 				}
 			}
-			// 
+			//
 
-			
+
 
 			// ------------------------------------------------------------------
 			// Objects (Highscore, Achievement, User)
@@ -100,7 +100,7 @@ namespace ARK {
 				ret->id = ach->id;
 				memcpy(ret->name, ach->name, 255);
 				memcpy(ret->description, ach->description, 1024);
-				ret->difficulty = ach->difficulty; 
+				ret->difficulty = ach->difficulty;
 				memcpy(ret->imageUrl, ach->imageUrl, 1024);
 				ret->achieved = ach->achieved;
 				memcpy(ret->achievedOn, ach->achievedOn, 255);
@@ -120,7 +120,7 @@ namespace ARK {
 				achievement->imageUrl = NULL;
 
 				free((void*)achievement->achievedOn);
-				achievement->achievedOn = NULL;				
+				achievement->achievedOn = NULL;
 
 				free(achievement);
 				achievement = NULL;
@@ -129,7 +129,7 @@ namespace ARK {
 			// ------------------------------------------------------------------
 			// Highscores
 			// ------------------------------------------------------------------
-			gjHighscore* gjHighscore_create() { 
+			gjHighscore* gjHighscore_create() {
 				gjHighscore* highscore = (gjHighscore*) malloc(sizeof(gjHighscore));
 				highscore->userid = 0;
 				highscore->username = (char*) malloc(sizeof(unsigned char) * 255);
@@ -147,7 +147,7 @@ namespace ARK {
 				memcpy((void*) copy->guestname, highscore->guestname, 255);
 				copy->globalRank = highscore->globalRank;
 				copy->score = highscore->score;
-				return copy; 
+				return copy;
 			}
 			const char* gjHighscore_getName(gjHighscore* highscore) {
 				if (highscore->guest) {
@@ -164,7 +164,7 @@ namespace ARK {
 				highscore = NULL;
 			}
 
-			gjHighscoreTable* gjHighscoreTable_create() { 
+			gjHighscoreTable* gjHighscoreTable_create() {
 				gjHighscoreTable* table = (gjHighscoreTable*) malloc(sizeof(gjHighscoreTable));
 				table->id = 0;
 				table->name = (char*) malloc(sizeof(unsigned char) * 255);
@@ -178,7 +178,7 @@ namespace ARK {
 				memcpy((void*)copy->name, table->name, 255);
 				memcpy((void*)copy->description, table->description, 1024);
 				copy->primary = table->primary;
-				return copy; 
+				return copy;
 			}
 			void gjHighscoreTable_dispose(gjHighscoreTable* table) {
 				free((void*) table->name);
@@ -205,7 +205,7 @@ namespace ARK {
 				res = NULL;
 			}
 
-			
+
 			// ------------------------------------------------------------------
 			// Highscores Results
 			// ------------------------------------------------------------------
@@ -270,7 +270,7 @@ namespace ARK {
 				for(unsigned int i = 0; i < res->tablesCount; ++i) {
 					gjHighscoreTable_dispose(res->tables[i]);
 				}
-				if (res->tablesCount > 0) { 
+				if (res->tablesCount > 0) {
 					free(res->tables);
 					res->tables = NULL;
 				}
@@ -285,7 +285,7 @@ namespace ARK {
 			// ------------------------------------------------------------------
 			gjHighscoreRankResult* gjHighscoreRankResult_create() {
 				gjHighscoreRankResult* res = (gjHighscoreRankResult*) malloc(sizeof(gjHighscoreRankResult));
-				res->success = true; 
+				res->success = true;
 				res->message = (char*) malloc(sizeof(unsigned char) * 255);
 				res->rank = 0;
 				return res;
@@ -377,7 +377,7 @@ namespace ARK {
 			// ------------------------------------------------------------------
 			// Callbacks
 			// ------------------------------------------------------------------
-			gjCallback* gjCallback_create(gjCallbackType type, void* data) { 
+			gjCallback* gjCallback_create(gjCallbackType type, void* data) {
 				gjCallback* cb = (gjCallback*) malloc(sizeof(gjCallback));
 				cb->id = API::s_callbackId++;
 				cb->type = type;
@@ -423,7 +423,7 @@ namespace ARK {
 				free(cb);
 				cb = NULL;
 			}
-				
+
 
 			// ------------------------------------------------------------------
 			// Internal requests
@@ -432,7 +432,7 @@ namespace ARK {
 				gjUrlRequest* req = (gjUrlRequest*) malloc(sizeof(gjUrlRequest));
 				req->id = API::s_requestId++;
 				req->request = new URLRequest();
-				return req; 
+				return req;
 			}
 			void gjUrlRequest_setUrl(gjUrlRequest* req, const char* url) {
 				req->request->setUrl(url);
@@ -448,13 +448,13 @@ namespace ARK {
 			}
 
 
-			
+
 
 			unsigned int API::s_requestId = 0;
 			unsigned int API::s_callbackId = 0;
 
 			API::API(int gameId, string gameKey):
-				m_gameId(gameId),	
+				m_gameId(gameId),
 				m_gameKey(gameKey),
 				m_userName(""),
 				m_userToken(""),
@@ -507,7 +507,7 @@ namespace ARK {
 			}
 			void API::authUserInternal(API* gamejolt, string result, gjUrlRequest* req) {
 				// Check for errors
-				if (req->request->hasError()) 
+				if (req->request->hasError())
 				{
 					gjUsersAuthResult* res = gjUsersAuthResult_create();
 					res->success = false;
@@ -523,10 +523,10 @@ namespace ARK {
 
 					return;
 				}
-				
-				if (gamejolt->m_format == GJ_FORMAT_JSON) 
+
+				if (gamejolt->m_format == GJ_FORMAT_JSON)
 				{
-					if (result.substr(0, 1) != "{") 
+					if (result.substr(0, 1) != "{")
 					{
 						gjUsersAuthResult* res = gjUsersAuthResult_create();
 						res->success = false;
@@ -539,12 +539,12 @@ namespace ARK {
 						gjCallback* cb = gjCallback_create(GJ_USERS_AUTH_RESULT, res);
 						gamejolt->m_callbacks.push_back(cb);
 						gamejolt->m_callbackAddMutex->unlock();
-						return;	
+						return;
 					}
 
 					JSONNode* root = libJSON::Parse(result);
 					JSONNode* response = root->GetNode("response");
-					if (response->GetNode("success")->NodeAsString() == "false") 
+					if (response->GetNode("success")->NodeAsString() == "false")
 					{
 						gjUsersAuthResult* res = gjUsersAuthResult_create();
 						res->success = false;
@@ -560,10 +560,10 @@ namespace ARK {
 
 						return;
 					}
-				} 
-				else if (gamejolt->m_format == GJ_FORMAT_XML) 
+				}
+				else if (gamejolt->m_format == GJ_FORMAT_XML)
 				{
-					if (result.substr(0, 1) != "<") 
+					if (result.substr(0, 1) != "<")
 					{
 						gjUsersAuthResult* res = gjUsersAuthResult_create();
 						res->success = false;
@@ -576,12 +576,12 @@ namespace ARK {
 						gjCallback* cb = gjCallback_create(GJ_USERS_AUTH_RESULT, res);
 						gamejolt->m_callbacks.push_back(cb);
 						gamejolt->m_callbackAddMutex->unlock();
-						return;	
+						return;
 					}
- 
+
 					vector<char> xml_copy = vector<char>(result.begin(), result.end());
 					xml_copy.push_back('\0');
-					
+
 					xml_document<> xmldocument;
 					xmldocument.parse<0>((char*) &xml_copy[0]);
 
@@ -591,9 +591,9 @@ namespace ARK {
 					bool success = Cast::boolFromString( successStr );
 					if (!success) {
 						gjUsersAuthResult* res = gjUsersAuthResult_create();
-						res->success = false; 
+						res->success = false;
                         strncpy(res->message, rapidxml_myutil<string,char>::rapidXmlUtil_value(root->first_node("message")).c_str(), 255);
-						
+
 						gamejolt->m_callbackAddMutex->lock();
 						gjCallback* cb = gjCallback_create(GJ_USERS_AUTH_RESULT, res);
 						gamejolt->m_callbacks.push_back(cb);
@@ -602,8 +602,8 @@ namespace ARK {
 						return;
 					}
 
-				} 
-				// We are go! 
+				}
+				// We are go!
 				gjUsersAuthRequestAttachment* attachment = (gjUsersAuthRequestAttachment*) req->attachment;
 				gjUsersAuthResult* res = gjUsersAuthResult_create();
 				res->success = true;
@@ -613,13 +613,13 @@ namespace ARK {
 				gjUsersAuthRequestAttachment_dispose(attachment);
 				gamejolt->removeRequest(req);
 
-				// Add a callback to execute on the main thread. 
+				// Add a callback to execute on the main thread.
 				gamejolt->m_callbackAddMutex->lock();
 				gjCallback* cb = gjCallback_create(GJ_USERS_AUTH_RESULT, res);
 				gamejolt->m_callbacks.push_back(cb);
 				gamejolt->m_callbackAddMutex->unlock();
 			}
-			
+
 			void API::submitHighscore(unsigned int tableid, unsigned int score, string unit, string extradata) {
 				map<string, string> params;
 				params["table_id"] = Cast::toString<unsigned int>(tableid);
@@ -665,7 +665,7 @@ namespace ARK {
 			void API::submitHighscoreInternal(API* gamejolt, string result, gjUrlRequest* req) {
 
 				// Check for errors
-				if (req->request->hasError()) 
+				if (req->request->hasError())
 				{
 					gjHighscoreSubmitResult* res = gjHighscoreSubmitResult_create();
 					res->success = false;
@@ -680,12 +680,12 @@ namespace ARK {
 
 					return;
 				}
-				
+
 				gamejolt->removeRequest(req);
-				
-				if (gamejolt->m_format == GJ_FORMAT_JSON) 
+
+				if (gamejolt->m_format == GJ_FORMAT_JSON)
 				{
-					if (result.substr(0, 1) != "{") 
+					if (result.substr(0, 1) != "{")
 					{
 						gjHighscoreSubmitResult* res = gjHighscoreSubmitResult_create();
 						res->success = false;
@@ -695,13 +695,13 @@ namespace ARK {
 						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_SUBMIT_RESULT, res);
 						gamejolt->m_callbacks.push_back(cb);
 						gamejolt->m_callbackAddMutex->unlock();
-						return;	
+						return;
 					}
 
 					// {"response":{"success":"true","scores":[{"score":"1416","sort":"1416","extra_data":"","user":"","user_id":"","guest":"Ashley","stored":"6 months ago"},{"score":"537","sort":"537","extra_data":"","user":"","user_id":"","guest":"Ted","stored":"1 year ago"},
 					JSONNode* root = libJSON::Parse(result);
 					JSONNode* response = root->GetNode("response");
-					if (response->GetNode("success")->NodeAsString() == "false") 
+					if (response->GetNode("success")->NodeAsString() == "false")
 					{
 						gjHighscoreSubmitResult* res = gjHighscoreSubmitResult_create();
 						res->success = false;
@@ -714,10 +714,10 @@ namespace ARK {
 
 						return;
 					}
-				} 
-				else if (gamejolt->m_format == GJ_FORMAT_XML) 
+				}
+				else if (gamejolt->m_format == GJ_FORMAT_XML)
 				{
-					if (result.substr(0, 1) != "<") 
+					if (result.substr(0, 1) != "<")
 					{
 						gjHighscoreSubmitResult* res = gjHighscoreSubmitResult_create();
 						res->success = false;
@@ -727,12 +727,12 @@ namespace ARK {
 						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_SUBMIT_RESULT, res);
 						gamejolt->m_callbacks.push_back(cb);
 						gamejolt->m_callbackAddMutex->unlock();
-						return;	
+						return;
 					}
- 
+
 					vector<char> xml_copy = vector<char>(result.begin(), result.end());
 					xml_copy.push_back('\0');
-					
+
 					xml_document<> xmldocument;
 					xmldocument.parse<0>((char*) &xml_copy[0]);
 
@@ -742,9 +742,9 @@ namespace ARK {
 					bool success = Cast::boolFromString( successStr );
 					if (!success) {
 						gjHighscoreSubmitResult* res = gjHighscoreSubmitResult_create();
-						res->success = false; 
+						res->success = false;
                         strncpy(res->message, rapidxml_myutil<string,char>::rapidXmlUtil_value(root->first_node("message")).c_str(), 255);
-						
+
 						gamejolt->m_callbackAddMutex->lock();
 						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_SUBMIT_RESULT, res);
 						gamejolt->m_callbacks.push_back(cb);
@@ -755,11 +755,11 @@ namespace ARK {
 
 				}
 
-				// We are go! 
+				// We are go!
 				gjHighscoreSubmitResult* res = gjHighscoreSubmitResult_create();
 				res->success = true;
 
-				// Add a callback to execute on the main thread. 
+				// Add a callback to execute on the main thread.
 				gamejolt->m_callbackAddMutex->lock();
 				gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_SUBMIT_RESULT, res);
 				gamejolt->m_callbacks.push_back(cb);
@@ -787,10 +787,10 @@ namespace ARK {
 				m_requests.push_back(req);
 			}
 			void API::getHighscoresInternal(API* gamejolt, string result, gjUrlRequest* req) { // static.
-				
+
 				ARK2D::getLog()->v("getHighscoresInternal");
 				// Check for errors
-				if (req->request->hasError()) 
+				if (req->request->hasError())
 				{
 					gjHighscoresResult* res = gjHighscoresResult_create(0);
 					res->success = false;
@@ -805,14 +805,14 @@ namespace ARK {
 
 					return;
 				}
-				
+
 				gamejolt->removeRequest(req);
-				
+
 				gjHighscoresResult* res = NULL;
 				if (gamejolt->m_format == GJ_FORMAT_JSON)
 				{
 					// Make sure we have JSON response.
-					if (result.substr(0, 1) != "{") 
+					if (result.substr(0, 1) != "{")
 					{
 						gjHighscoresResult* res = gjHighscoresResult_create(0);
 						res->success = false;
@@ -822,8 +822,8 @@ namespace ARK {
 						gjCallback* cb = gjCallback_create(GJ_HIGHSCORES_RESULT, res);
 						gamejolt->m_callbacks.push_back(cb);
 						gamejolt->m_callbackAddMutex->unlock();
-						return;	
-					} 
+						return;
+					}
 
 					// {"response":{"success":"true","scores":[{"score":"1416","sort":"1416","extra_data":"","user":"","user_id":"","guest":"Ashley","stored":"6 months ago"},{"score":"537","sort":"537","extra_data":"","user":"","user_id":"","guest":"Ted","stored":"1 year ago"},
 					ARK2D::getLog()->v("parse json");
@@ -836,7 +836,7 @@ namespace ARK {
 
 					JSONNode* response = root->GetNode("response");
 					ARK2D::getLog()->v("did");
-					if (response->GetNode("success")->NodeAsString() == "false") 
+					if (response->GetNode("success")->NodeAsString() == "false")
 					{
 						gjHighscoresResult* res = gjHighscoresResult_create(0);
 						res->success = false;
@@ -850,14 +850,14 @@ namespace ARK {
 						return;
 					}
 
-					// We are go! 
+					// We are go!
 					JSONNode* scores = response->GetNode("scores");
 					res = gjHighscoresResult_create(scores->NodeSize());
 					res->success = true;
 
 					for(unsigned int i = 0; i < scores->NodeSize(); i++) {
 						JSONNode* score = scores->Children[i];
-						
+
 						res->scores[i] = gjHighscore_create();
 						res->scores[i]->userid = Cast::fromString<unsigned int>(score->GetNode("user_id")->NodeAsString());
 						memcpy(res->scores[i]->username, score->GetNode("user")->NodeAsString().c_str(), 255);
@@ -866,11 +866,11 @@ namespace ARK {
 						res->scores[i]->globalRank = 1;
 						res->scores[i]->score = Cast::fromString<unsigned int>(score->GetNode("score")->NodeAsString());
 					}
-				} 
-				else if (gamejolt->m_format == GJ_FORMAT_XML) 
+				}
+				else if (gamejolt->m_format == GJ_FORMAT_XML)
 				{
 					// Make sure we have XML
-					if (result.substr(0, 1) != "<") 
+					if (result.substr(0, 1) != "<")
 					{
 						gjHighscoresResult* res = gjHighscoresResult_create(0);
 						res->success = false;
@@ -880,13 +880,13 @@ namespace ARK {
 						gjCallback* cb = gjCallback_create(GJ_HIGHSCORES_RESULT, res);
 						gamejolt->m_callbacks.push_back(cb);
 						gamejolt->m_callbackAddMutex->unlock();
-						return;	
-					} 
-					
+						return;
+					}
+
 					// <?xml version="1.0" encoding="UTF-8"?><response><success><![CDATA[true]]></success><scores><score><score>8</score><sort>8</sort><extra_data></extra_data><user></user><user_id></user_id><guest><![CDATA[Player]]></guest><stored><![CDATA[6 minutes ago]]></stored></score></scores></response>
 					vector<char> xml_copy = vector<char>(result.begin(), result.end());
 					xml_copy.push_back('\0');
-					
+
 					xml_document<> xmldocument;
 					xmldocument.parse<0>((char*) &xml_copy[0]);
 
@@ -896,9 +896,9 @@ namespace ARK {
 					bool success = Cast::boolFromString( successStr );
 					if (!success) {
 						gjHighscoresResult* res = gjHighscoresResult_create(0);
-						res->success = false; 
+						res->success = false;
 
-						if (root->first_node("message") == NULL) { 
+						if (root->first_node("message") == NULL) {
 							strncpy(res->message, "Success was false but error message was empty.", 255);
 						} else {
 							strncpy(res->message, rapidxml_myutil<string,char>::rapidXmlUtil_value(root->first_node("message")).c_str(), 255);
@@ -913,18 +913,18 @@ namespace ARK {
 						return;
 					}
 
-					
+
 					// We are go!
 					unsigned int numScores = rapidxml_myutil<string,char>::rapidXmlUtil_countChildren(root->first_node("scores"), "score");
 					res = gjHighscoresResult_create(numScores);
 					res->success = true;
-					
+
 					unsigned int i = 0;
 					xml_node<>* scores = root->first_node("scores");
 					xml_node<>* score = 0;
 					for (score = scores->first_node("score");
 						score != NULL;
-						score = score->next_sibling("score")) 
+						score = score->next_sibling("score"))
 					{
 						res->scores[i] = gjHighscore_create();
 						res->scores[i]->userid = Cast::fromString<unsigned int>( rapidxml_myutil<string,char>::rapidXmlUtil_value(score->first_node("user_id")) );
@@ -935,10 +935,10 @@ namespace ARK {
 						res->scores[i]->score = Cast::fromString<unsigned int>( rapidxml_myutil<string,char>::rapidXmlUtil_value(score->first_node("score")) );
 						i++;
 					}
-					
+
 				}
- 
-				// Add a callback to execute on the main thread. 
+
+				// Add a callback to execute on the main thread.
 				gamejolt->m_callbackAddMutex->lock();
 				gjCallback* cb = gjCallback_create(GJ_HIGHSCORES_RESULT, res);
 				gamejolt->m_callbacks.push_back(cb);
@@ -949,14 +949,14 @@ namespace ARK {
 				map<string, string> params;
 				params["table_id"] = Cast::toString<unsigned int>(tableId);
 				params["sort"] = Cast::toString<signed int>(score);
-				
+
 				string requestUrl = url("scores/get-rank/", params, false, true);
 
 				params["signature"] = md5(requestUrl);
 				requestUrl = url("scores/get-rank/", params, false, false);
 
 				ARK2D::getLog()->v("-- request url -- ");
-				ARK2D::getLog()->v(requestUrl); 
+				ARK2D::getLog()->v(requestUrl);
 
 				gjUrlRequest* req = gjUrlRequest_create();
 				gjUrlRequest_setUrl(req, requestUrl.c_str());
@@ -966,7 +966,7 @@ namespace ARK {
 			void API::getRankInternal(API* gamejolt, string result, gjUrlRequest* req) {
 
 				// Check for errors
-				if (req->request->hasError()) 
+				if (req->request->hasError())
 				{
 					gjHighscoreRankResult* res = gjHighscoreRankResult_create();
 					res->success = false;
@@ -981,14 +981,14 @@ namespace ARK {
 
 					return;
 				}
-				
+
 				gamejolt->removeRequest(req);
 
 				gjHighscoreRankResult* res = NULL;
-				if (gamejolt->m_format == GJ_FORMAT_JSON) 
+				if (gamejolt->m_format == GJ_FORMAT_JSON)
 				{
-					
-					if (result.substr(0, 1) != "{") 
+
+					if (result.substr(0, 1) != "{")
 					{
 						res = gjHighscoreRankResult_create();
 						res->success = false;
@@ -998,13 +998,13 @@ namespace ARK {
 						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_RANK_RESULT, res);
 						gamejolt->m_callbacks.push_back(cb);
 						gamejolt->m_callbackAddMutex->unlock();
-						return;	
+						return;
 					}
 
 					// {"response":{"success":"true","scores":[{"score":"1416","sort":"1416","extra_data":"","user":"","user_id":"","guest":"Ashley","stored":"6 months ago"},{"score":"537","sort":"537","extra_data":"","user":"","user_id":"","guest":"Ted","stored":"1 year ago"},
 					JSONNode* root = libJSON::Parse(result);
 					JSONNode* response = root->GetNode("response");
-					if (response->GetNode("success")->NodeAsString() == "false") 
+					if (response->GetNode("success")->NodeAsString() == "false")
 					{
 						res = gjHighscoreRankResult_create();
 						res->success = false;
@@ -1018,14 +1018,14 @@ namespace ARK {
 						return;
 					}
 
-					// We are go! 
+					// We are go!
 					res = gjHighscoreRankResult_create();
 					res->success = true;
 					res->rank = response->GetNode("rank")->NodeAsInt();
-				} 
+				}
 				else if (gamejolt->m_format == GJ_FORMAT_XML)
 				{
-					if (result.substr(0, 1) != "<") 
+					if (result.substr(0, 1) != "<")
 					{
 						res = gjHighscoreRankResult_create();
 						res->success = false;
@@ -1035,12 +1035,12 @@ namespace ARK {
 						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_RANK_RESULT, res);
 						gamejolt->m_callbacks.push_back(cb);
 						gamejolt->m_callbackAddMutex->unlock();
-						return;	
+						return;
 					}
 
 					vector<char> xml_copy = vector<char>(result.begin(), result.end());
 					xml_copy.push_back('\0');
-					
+
 					xml_document<> xmldocument;
 					xmldocument.parse<0>((char*) &xml_copy[0]);
 
@@ -1050,9 +1050,9 @@ namespace ARK {
 					bool success = Cast::boolFromString( successStr );
 					if (!success) {
 						gjHighscoreRankResult* res = gjHighscoreRankResult_create();
-						res->success = false; 
+						res->success = false;
 
-						if (root->first_node("message") == NULL) { 
+						if (root->first_node("message") == NULL) {
 							strncpy(res->message, "Success was false but error message was empty.", 255);
 						} else {
 							strncpy(res->message, rapidxml_myutil<string,char>::rapidXmlUtil_value(root->first_node("message")).c_str(), 255);
@@ -1067,15 +1067,15 @@ namespace ARK {
 						return;
 					}
 
-					
+
 					// We are go!
 					res = gjHighscoreRankResult_create();
 					res->success = true;
 					res->rank = Cast::fromString<unsigned int>( rapidxml_myutil<string,char>::rapidXmlUtil_value(root->first_node("rank")) );
-	
+
 				}
 
-				// Add a callback to execute on the main thread. 
+				// Add a callback to execute on the main thread.
 				gamejolt->m_callbackAddMutex->lock();
 				gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_RANK_RESULT, res);
 				gamejolt->m_callbacks.push_back(cb);
@@ -1099,7 +1099,7 @@ namespace ARK {
 			}
 			void API::getHighscoreTablesInternal(API* api, string result, gjUrlRequest* req) {
 				// Check for errors
-				if (req->request->hasError()) 
+				if (req->request->hasError())
 				{
 					gjHighscoreTablesResult* res = gjHighscoreTablesResult_create(0);
 					res->success = false;
@@ -1114,13 +1114,13 @@ namespace ARK {
 
 					return;
 				}
-				
+
 				api->removeRequest(req);
-				
+
 				gjHighscoreTablesResult* res = NULL;
-				if (api->m_format == GJ_FORMAT_JSON) 
+				if (api->m_format == GJ_FORMAT_JSON)
 				{
-					if (result.substr(0, 1) != "{") 
+					if (result.substr(0, 1) != "{")
 					{
 						gjHighscoreTablesResult* res = gjHighscoreTablesResult_create(0);
 						res->success = false;
@@ -1130,12 +1130,12 @@ namespace ARK {
 						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_TABLES_RESULT, res);
 						api->m_callbacks.push_back(cb);
 						api->m_callbackAddMutex->unlock();
-						return;	
+						return;
 					}
 
 					JSONNode* root = libJSON::Parse(result);
 					JSONNode* response = root->GetNode("response");
-					if (response->GetNode("success")->NodeAsString() == "false") 
+					if (response->GetNode("success")->NodeAsString() == "false")
 					{
 						gjHighscoreTablesResult* res = gjHighscoreTablesResult_create(0);
 						res->success = false;
@@ -1149,24 +1149,24 @@ namespace ARK {
 						return;
 					}
 
-					// We are go! 
+					// We are go!
 					JSONNode* tables = response->GetNode("tables");
 					res = gjHighscoreTablesResult_create(tables->NodeSize());
 					res->success = true;
 
 					for(unsigned int i = 0; i < tables->NodeSize(); i++) {
 						JSONNode* table = tables->Children[i];
-						
+
 						res->tables[i] = gjHighscoreTable_create();
 						res->tables[i]->id = Cast::fromString<unsigned int>(table->GetNode("id")->NodeAsString());
 						strncpy(res->tables[i]->name, table->GetNode("name")->NodeAsString().c_str(), 255);
 						strncpy(res->tables[i]->description, table->GetNode("description")->NodeAsString().c_str(), 1024);
 						res->tables[i]->primary = Cast::boolFromString(table->GetNode("primary")->NodeAsString());
 					}
-				} 
+				}
 				else if (api->m_format == GJ_FORMAT_XML)
 				{
-					if (result.substr(0, 1) != "<") 
+					if (result.substr(0, 1) != "<")
 					{
 						res = gjHighscoreTablesResult_create(0);
 						res->success = false;
@@ -1176,12 +1176,12 @@ namespace ARK {
 						gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_TABLES_RESULT, res);
 						api->m_callbacks.push_back(cb);
 						api->m_callbackAddMutex->unlock();
-						return;	
+						return;
 					}
 
 					vector<char> xml_copy = vector<char>(result.begin(), result.end());
 					xml_copy.push_back('\0');
-					
+
 					xml_document<> xmldocument;
 					xmldocument.parse<0>((char*) &xml_copy[0]);
 
@@ -1191,9 +1191,9 @@ namespace ARK {
 					bool success = Cast::boolFromString( successStr );
 					if (!success) {
 						gjHighscoreTablesResult* res = gjHighscoreTablesResult_create(0);
-						res->success = false; 
+						res->success = false;
 
-						if (root->first_node("message") == NULL) { 
+						if (root->first_node("message") == NULL) {
 							strncpy(res->message, "Success was false but error message was empty.", 255);
 						} else {
 							strncpy(res->message, rapidxml_myutil<string,char>::rapidXmlUtil_value(root->first_node("message")).c_str(), 255);
@@ -1208,18 +1208,18 @@ namespace ARK {
 						return;
 					}
 
-					
+
 					// We are go!
 					unsigned int numTables = rapidxml_myutil<string,char>::rapidXmlUtil_countChildren(root->first_node("tables"), "table");
 					res = gjHighscoreTablesResult_create(numTables);
 					res->success = true;
-					
+
 					unsigned int i = 0;
 					xml_node<>* tables = root->first_node("tables");
 					xml_node<>* table = 0;
 					for (table = tables->first_node("table");
 						table != NULL;
-						table = table->next_sibling("table")) 
+						table = table->next_sibling("table"))
 					{
 						res->tables[i] = gjHighscoreTable_create();
 						res->tables[i]->id = Cast::fromString<unsigned int>( rapidxml_myutil<string,char>::rapidXmlUtil_value(table->first_node("id")) );
@@ -1233,7 +1233,7 @@ namespace ARK {
 
 				}
 
-				// Add a callback to execute on the main thread. 
+				// Add a callback to execute on the main thread.
 				api->m_callbackAddMutex->lock();
 				gjCallback* cb = gjCallback_create(GJ_HIGHSCORE_TABLES_RESULT, res);
 				api->m_callbacks.push_back(cb);
@@ -1262,7 +1262,7 @@ namespace ARK {
 				ARK2D::getLog()->e(result);
 
 				/*// Check for errors
-				if (req->request->hasError()) 
+				if (req->request->hasError())
 				{
 					gjSessionOpenResult* res = gjSessionOpenResult_create();
 					res->success = false;
@@ -1277,10 +1277,10 @@ namespace ARK {
 
 					return;
 				}
-				
+
 				gamejolt->removeRequest(req);
-				
-				if (result.substr(0, 1) != "{") 
+
+				if (result.substr(0, 1) != "{")
 				{
 					gjSessionOpenResult* res = gjSessionOpenResult_create();
 					res->success = false;
@@ -1290,12 +1290,12 @@ namespace ARK {
 					gjCallback* cb = gjCallback_create(GJ_SESSION_OPEN_RESULT, res);
 					gamejolt->m_callbacks.push_back(cb);
 					gamejolt->m_callbackAddMutex->unlock();
-					return;	
+					return;
 				}
 
 				JSONNode* root = libJSON::Parse(result);
 				JSONNode* response = root->GetNode("response");
-				if (response->GetNode("success")->NodeAsString() == "false") 
+				if (response->GetNode("success")->NodeAsString() == "false")
 				{
 					gjSessionOpenResult* res = gjSessionOpenResult_create();
 					res->success = false;
@@ -1309,11 +1309,11 @@ namespace ARK {
 					return;
 				}
 
-				// We are go! 
+				// We are go!
 				gjSessionOpenResult* res = gjSessionOpenResult_create();
 				res->success = true;
 
-				// Add a callback to execute on the main thread. 
+				// Add a callback to execute on the main thread.
 				gamejolt->m_callbackAddMutex->lock();
 				gjCallback* cb = gjCallback_create(GJ_SESSION_OPEN_RESULT, res);
 				gamejolt->m_callbacks.push_back(cb);
@@ -1357,7 +1357,7 @@ namespace ARK {
 			}
 			void API::getAchievementsInternal(API* gamejolt, string result, gjUrlRequest* req) {
 				// Check for errors
-				if (req->request->hasError()) 
+				if (req->request->hasError())
 				{
 					gjAchievementsResult* res = gjAchievementsResult_create(0);
 					res->success = false;
@@ -1372,11 +1372,11 @@ namespace ARK {
 
 					return;
 				}
-				
+
 				gamejolt->removeRequest(req);
 				ARK2D::getLog()->e(result);
-				
-				if (result.substr(0, 1) != "{") 
+
+				if (result.substr(0, 1) != "{")
 				{
 					gjAchievementsResult* res = gjAchievementsResult_create(0);
 					res->success = false;
@@ -1386,12 +1386,12 @@ namespace ARK {
 					gjCallback* cb = gjCallback_create(GJ_ACHIEVEMENTS_RESULT, res);
 					gamejolt->m_callbacks.push_back(cb);
 					gamejolt->m_callbackAddMutex->unlock();
-					return;	
+					return;
 				}
 
 				JSONNode* root = libJSON::Parse(result);
 				JSONNode* response = root->GetNode("response");
-				if (response->GetNode("success")->NodeAsString() == "false") 
+				if (response->GetNode("success")->NodeAsString() == "false")
 				{
 					gjAchievementsResult* res = gjAchievementsResult_create(0);
 					res->success = false;
@@ -1405,15 +1405,15 @@ namespace ARK {
 					return;
 				}
 
-				// We are go! 
+				// We are go!
 				JSONNode* trophies = response->GetNode("trophies");
 				gjAchievementsResult* res = gjAchievementsResult_create(trophies->NodeSize());
 				res->success = true;
 
 				for(unsigned int i = 0; i < trophies->NodeSize(); i++) {
 					JSONNode* trophy = trophies->Children[i];
-					
-					
+
+
 					res->achievements[i] = gjAchievement_create();
 					res->achievements[i]->id = Cast::fromString<unsigned int>(trophy->GetNode("id")->NodeAsString());
 //					res->achievements[i]->name = trophy->GetNode("title")->NodeAsString().c_str();
@@ -1421,11 +1421,11 @@ namespace ARK {
 					strncpy(res->achievements[i]->description, trophy->GetNode("description")->NodeAsString().c_str(), 1024);
 
 					string difficultyStr = trophy->GetNode("difficulty")->NodeAsString();
-					if (difficultyStr == "Platinum") { 
+					if (difficultyStr == "Platinum") {
 						res->achievements[i]->difficulty = GJ_DIFFICULTY_PLATINUM;
-					} else if (difficultyStr == "Gold") { 
+					} else if (difficultyStr == "Gold") {
 						res->achievements[i]->difficulty = GJ_DIFFICULTY_GOLD;
-					} else if (difficultyStr == "Silver") { 
+					} else if (difficultyStr == "Silver") {
 						res->achievements[i]->difficulty = GJ_DIFFICULTY_SILVER;
 					} else {
 						res->achievements[i]->difficulty = GJ_DIFFICULTY_BRONZE;
@@ -1433,11 +1433,11 @@ namespace ARK {
 
 					strncpy(res->achievements[i]->imageUrl, trophy->GetNode("image_url")->NodeAsString().c_str(), 1024);
 					// (trophy->GetNode("image_url")->NodeAsString().length() > 0);
-					res->achievements[i]->achieved = true; 
+					res->achievements[i]->achieved = true;
 					//res->achievements[i]->achievedOn = "";
 				}
 
-				// Add a callback to execute on the main thread. 
+				// Add a callback to execute on the main thread.
 				gamejolt->m_callbackAddMutex->lock();
 				gjCallback* cb = gjCallback_create(GJ_ACHIEVEMENTS_RESULT, res);
 				gamejolt->m_callbacks.push_back(cb);
@@ -1497,10 +1497,10 @@ namespace ARK {
 				gjUrlRequest_start(req, (void*) &sessionCloseInternal, this);
 				m_requests.push_back(req);
 			}
-					
+
 			void API::sessionOpenInternal(API* gamejolt, string result, gjUrlRequest* req) {
 				// Check for errors
-				if (req->request->hasError()) 
+				if (req->request->hasError())
 				{
 					gjSessionOpenResult* res = gjSessionOpenResult_create();
 					res->success = false;
@@ -1515,10 +1515,10 @@ namespace ARK {
 
 					return;
 				}
-				
+
 				gamejolt->removeRequest(req);
-				
-				if (result.substr(0, 1) != "{") 
+
+				if (result.substr(0, 1) != "{")
 				{
 					gjSessionOpenResult* res = gjSessionOpenResult_create();
 					res->success = false;
@@ -1528,12 +1528,12 @@ namespace ARK {
 					gjCallback* cb = gjCallback_create(GJ_SESSION_OPEN_RESULT, res);
 					gamejolt->m_callbacks.push_back(cb);
 					gamejolt->m_callbackAddMutex->unlock();
-					return;	
+					return;
 				}
 
 				JSONNode* root = libJSON::Parse(result);
 				JSONNode* response = root->GetNode("response");
-				if (response->GetNode("success")->NodeAsString() == "false") 
+				if (response->GetNode("success")->NodeAsString() == "false")
 				{
 					gjSessionOpenResult* res = gjSessionOpenResult_create();
 					res->success = false;
@@ -1547,11 +1547,11 @@ namespace ARK {
 					return;
 				}
 
-				// We are go! 
+				// We are go!
 				gjSessionOpenResult* res = gjSessionOpenResult_create();
 				res->success = true;
 
-				// Add a callback to execute on the main thread. 
+				// Add a callback to execute on the main thread.
 				gamejolt->m_callbackAddMutex->lock();
 				gjCallback* cb = gjCallback_create(GJ_SESSION_OPEN_RESULT, res);
 				gamejolt->m_callbacks.push_back(cb);
@@ -1559,7 +1559,7 @@ namespace ARK {
 			}
 			void API::sessionPingInternal(API* gamejolt, string result, gjUrlRequest* req) {
 				// Check for errors
-				if (req->request->hasError()) 
+				if (req->request->hasError())
 				{
 					gjSessionPingResult* res = gjSessionPingResult_create();
 					res->success = false;
@@ -1574,10 +1574,10 @@ namespace ARK {
 
 					return;
 				}
-				
+
 				gamejolt->removeRequest(req);
-				
-				if (result.substr(0, 1) != "{") 
+
+				if (result.substr(0, 1) != "{")
 				{
 					gjSessionPingResult* res = gjSessionPingResult_create();
 					res->success = false;
@@ -1587,12 +1587,12 @@ namespace ARK {
 					gjCallback* cb = gjCallback_create(GJ_SESSION_PING_RESULT, res);
 					gamejolt->m_callbacks.push_back(cb);
 					gamejolt->m_callbackAddMutex->unlock();
-					return;	
+					return;
 				}
 
 				JSONNode* root = libJSON::Parse(result);
 				JSONNode* response = root->GetNode("response");
-				if (response->GetNode("success")->NodeAsString() == "false") 
+				if (response->GetNode("success")->NodeAsString() == "false")
 				{
 					gjSessionPingResult* res = gjSessionPingResult_create();
 					res->success = false;
@@ -1606,11 +1606,11 @@ namespace ARK {
 					return;
 				}
 
-				// We are go! 
+				// We are go!
 				gjSessionPingResult* res = gjSessionPingResult_create();
 				res->success = true;
 
-				// Add a callback to execute on the main thread. 
+				// Add a callback to execute on the main thread.
 				gamejolt->m_callbackAddMutex->lock();
 				gjCallback* cb = gjCallback_create(GJ_SESSION_PING_RESULT, res);
 				gamejolt->m_callbacks.push_back(cb);
@@ -1618,7 +1618,7 @@ namespace ARK {
 			}
 			void API::sessionCloseInternal(API* gamejolt, string result, gjUrlRequest* req) {
 				// Check for errors
-				if (req->request->hasError()) 
+				if (req->request->hasError())
 				{
 					gjSessionCloseResult* res = gjSessionCloseResult_create();
 					res->success = false;
@@ -1633,10 +1633,10 @@ namespace ARK {
 
 					return;
 				}
-				
+
 				gamejolt->removeRequest(req);
-				
-				if (result.substr(0, 1) != "{") 
+
+				if (result.substr(0, 1) != "{")
 				{
 					gjSessionCloseResult* res = gjSessionCloseResult_create();
 					res->success = false;
@@ -1646,12 +1646,12 @@ namespace ARK {
 					gjCallback* cb = gjCallback_create(GJ_SESSION_CLOSE_RESULT, res);
 					gamejolt->m_callbacks.push_back(cb);
 					gamejolt->m_callbackAddMutex->unlock();
-					return;	
+					return;
 				}
 
 				JSONNode* root = libJSON::Parse(result);
 				JSONNode* response = root->GetNode("response");
-				if (response->GetNode("success")->NodeAsString() == "false") 
+				if (response->GetNode("success")->NodeAsString() == "false")
 				{
 					gjSessionCloseResult* res = gjSessionCloseResult_create();
 					res->success = false;
@@ -1665,11 +1665,11 @@ namespace ARK {
 					return;
 				}
 
-				// We are go! 
+				// We are go!
 				gjSessionCloseResult* res = gjSessionCloseResult_create();
 				res->success = true;
 
-				// Add a callback to execute on the main thread. 
+				// Add a callback to execute on the main thread.
 				gamejolt->m_callbackAddMutex->lock();
 				gjCallback* cb = gjCallback_create(GJ_SESSION_CLOSE_RESULT, res);
 				gamejolt->m_callbacks.push_back(cb);
@@ -1682,7 +1682,7 @@ namespace ARK {
 
 				if (m_callbacks.size() > 0) {
 					gjCallback* cb = m_callbacks[0];
-					
+
 					m_internalListener(this, cb->type, cb->data);
 					if (m_overlayListener != NULL) {
 						m_overlayListener(this, cb->type, cb->data);
@@ -1690,9 +1690,9 @@ namespace ARK {
 					if (m_listener != NULL) {
 						m_listener(this, cb->type, cb->data);
 					}
-					/*if (cb->data != NULL) { 
-						free(cb->data); 
-						cb->data = NULL; 
+					/*if (cb->data != NULL) {
+						free(cb->data);
+						cb->data = NULL;
 					}*/
 					gjCallback_dispose(cb);
 
@@ -1708,13 +1708,13 @@ namespace ARK {
 			}
 
 			string API::url(string method, map<string, string> params, bool addUserToken, bool addKey) {
-				string protocol("http://"); 
+				string protocol("http://");
 				string apiRoot("api.gamejolt.com/api/game/");
 				string urlString = protocol + apiRoot + string("v1_1/") + method + "?game_id=" + Cast::toString<unsigned int>(m_gameId);
-				
+
 				string user_token("");
 				map<string, string>::iterator it;
-				if (m_format == GJ_FORMAT_JSON) { 
+				if (m_format == GJ_FORMAT_JSON) {
 					params["format"] = "json";
 				} else if (m_format == GJ_FORMAT_XML) {
 					params["format"] = "xml";
@@ -1722,9 +1722,9 @@ namespace ARK {
 				for (it = params.begin(); it != params.end(); it++ ) {
 					string key = it->first;
 					string value = it->second;
-					if (key == "user_token") { 
+					if (key == "user_token") {
 						user_token = value;
-						continue; 
+						continue;
 					}
 					urlString += string("&") + key + string("=") + value;
 				}
@@ -1736,9 +1736,9 @@ namespace ARK {
 				}
 				return urlString;
 			}
-			string API::md5(string input) { 
+			string API::md5(string input) {
 				return ARK::GJ::md5(input);
-			} 
+			}
 
 			void API::removeRequest(gjUrlRequest* req) {
 				// // Remove from m_requests because it's done...
@@ -1765,7 +1765,7 @@ namespace ARK {
 			}
 
 			API::~API() {
-				 
+
 			}
 		}
 	}

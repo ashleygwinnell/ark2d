@@ -2,8 +2,11 @@ package org.%COMPANY_NAME%.%GAME_SHORT_NAME%;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -1489,19 +1492,40 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 
     private %GAME_CLASS_NAME%View mGLView;
 
-    static {
-    	try {
-    		//System.load("data/data/org.%COMPANY_NAME%.%GAME_SHORT_NAME%/lib/libark2d.so");
-    		System.loadLibrary("openal");
-    		System.loadLibrary("zip");
-    		System.loadLibrary("ark2d");
-    		%GAME_SHARED_LIBRARIES%
-    		System.loadLibrary("%GAME_SHORT_NAME%");
-    		Log.i("game", "Loading libraries");
-    	} catch(UnsatisfiedLinkError e) {
-    		throw new RuntimeException("Could not load native libraries");
-    	}
-    }
+	static {
+		Log.i("game", "Loading libraries");
+		try {
+			System.loadLibrary("openal");
+		} catch (UnsatisfiedLinkError e) {
+			throw new RuntimeException("Could not load native library: openal");
+		}
+
+		try {
+			System.loadLibrary("zip");
+		} catch (UnsatisfiedLinkError e) {
+			throw new RuntimeException("Could not load native library: zip");
+		}
+
+		try {
+			//System.load("data/data/org.%COMPANY_NAME%.%GAME_SHORT_NAME%/lib/libark2d.so");
+			System.loadLibrary("ark2d");
+		} catch (UnsatisfiedLinkError e) {
+			throw new RuntimeException("Could not load native library: ark2d");
+		}
+
+		try {
+			%GAME_SHARED_LIBRARIES%
+		} catch (UnsatisfiedLinkError e) {
+			throw new RuntimeException("Could not load native library: game shared libraries");
+		}
+
+		try {
+			System.loadLibrary("%GAME_SHORT_NAME%");
+		} catch (UnsatisfiedLinkError e) {
+			throw new RuntimeException("Could not load native library: %GAME_SHORT_NAME%");
+		}
+		Log.i("game", "Loaded libraries");
+	}
 
 
 	%ANDROIDSDK16_LINECOMMENT% @Override
@@ -1792,7 +1816,9 @@ class %GAME_CLASS_NAME%View extends GLSurfaceView {
 			int thisy = (int) event.getY(); //pointerIndex);
 			//Log.e("jni", "touch-move: " + thisx + "," + thisy);
 			%GAME_CLASS_NAME%Renderer.nativeTouchMove(thisx, thisy);
-		} else if (event.getAction() == MotionEvent.ACTION_UP) {
+		} else if (event.getAction() == MotionEvent.ACTION_UP ||
+				   event.getAction() == MotionEvent.ACTION_CANCEL
+			) {
 			int thisx = (int) event.getX(); //pointerIndex);
 			int thisy = (int) event.getY(); //pointerIndex);
 			//Log.e("jni", "touch-up: " + thisx + "," + thisy);
@@ -1929,14 +1955,94 @@ class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
 		this.context = context;
 	}
 
-	public static void createDir(String path) {
+
+	public static boolean isExternalStorageWritable() {
+		String state = Environment.getExternalStorageState();
+		if (Environment.MEDIA_MOUNTED.equals(state)) {
+			return true;
+		}
+		return false;
+	}
+	public static boolean isExternalStorageReadable() {
+		String state = Environment.getExternalStorageState();
+		if (Environment.MEDIA_MOUNTED.equals(state) ||
+				Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean createDirIfNotExistsTest(String path) {
+		boolean ret = true;
+
+		File file = new File(Environment.getExternalStorageDirectory().getPath(), path);
+		if (!file.exists()) {
+			if (!file.mkdirs()) {
+				Log.e("game :: ", "Problem creating folder: " + path);
+				ret = false;
+			}
+		}
+		return ret;
+	}
+
+	public static boolean createDir(String path) {
 		Log.i("game", "making path; " + path);
 		File extf = new File(path);
 		if (!extf.exists()) {
 	        if (!extf.mkdirs()) {
 	            Log.e("game", "Problem creating folder: " + path);
+	            return false;
 	        }
 	    }
+	    return true;
+	}
+
+	public static boolean dirExists(String path) {
+		File extf = new File(path);
+		return extf.exists();
+	}
+
+	// If targetLocation does not exist, it will be created.
+	public void copyDirectory(File sourceLocation , File targetLocation, boolean overwrite)
+			throws IOException {
+
+		if (sourceLocation.isDirectory()) {
+			if (!targetLocation.exists() && !targetLocation.mkdirs()) {
+				throw new IOException("Cannot create dir " + targetLocation.getAbsolutePath());
+			}
+
+			String[] children = sourceLocation.list();
+			for (int i=0; i<children.length; i++) {
+				copyDirectory(new File(sourceLocation, children[i]),
+						new File(targetLocation, children[i]), overwrite);
+			}
+		} else {
+
+			// make sure the directory we plan to store the recording in exists
+			File directory = targetLocation.getParentFile();
+			if (directory != null && !directory.exists() && !directory.mkdirs()) {
+				throw new IOException("Cannot create dir " + directory.getAbsolutePath());
+			}
+
+			if (!overwrite && targetLocation.exists()) {
+				Log.i("game", "NOT copying as it exists - " + sourceLocation + " to " + targetLocation );
+				return;
+			}
+
+			Log.i("game", "copying - " + sourceLocation + " to " + targetLocation );
+
+			InputStream in = new FileInputStream(sourceLocation);
+			OutputStream out = new FileOutputStream(targetLocation);
+
+			// Copy the bits from instream to outstream
+			byte[] buf = new byte[1024];
+			int len;
+			while ((len = in.read(buf)) > 0) {
+				out.write(buf, 0, len);
+			}
+			in.close();
+			out.close();
+		}
 	}
 
 	@Override
@@ -1967,8 +2073,38 @@ class %GAME_CLASS_NAME%Renderer implements GLSurfaceView.Renderer {
 			Log.i("game", "APK File Path:" + apkFilePath);
 			Log.i("game", "Save File Path:" + externalDataPath);
 
-			createDir(externalDataPath);
-			createDir(externalDataPath+"assets/");
+			boolean createdOne = createDir(externalDataPath);
+			boolean createdTwo = createDir(externalDataPath+"assets/");
+
+			String newerExternalDataPath = context.getExternalCacheDir().getAbsolutePath() +"/files/";
+			boolean createdThree = createDir(newerExternalDataPath);
+			boolean createdFour  = createDir(newerExternalDataPath+"assets/");
+
+			boolean oneExists = dirExists(externalDataPath);
+			boolean twoExists = dirExists(externalDataPath+"assets/");
+			boolean thrExists = dirExists(newerExternalDataPath);
+			boolean fouExists = dirExists(newerExternalDataPath+"assets/");
+			if (oneExists && twoExists && thrExists && fouExists) {
+				// Copy contents of one/two into thr/four.
+				try {
+					Log.e("game :: ", "copying assets from old assets dir into new assets dir...");
+					copyDirectory(new File(externalDataPath), new File(newerExternalDataPath), false);
+					externalDataPath = newerExternalDataPath;
+				} catch (IOException e) {
+					e.printStackTrace();
+					throw new RuntimeException("Unable to locate assets, aborting...");
+				}
+			}
+			else if (thrExists && fouExists && (!oneExists || !twoExists)) {
+				Log.e("game :: ", "old dir not exists. using new dir automatically");
+				externalDataPath = newerExternalDataPath;
+			}
+
+			boolean iswritable = isExternalStorageWritable();
+			boolean isreadable = isExternalStorageReadable();
+
+			Log.e("game :: ", "is external writable: " + iswritable);
+			Log.e("game :: ", "is external readable: " + isreadable);
 
 			// TODO: create other resource directories for project.
 

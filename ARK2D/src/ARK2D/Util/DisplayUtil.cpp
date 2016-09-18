@@ -166,6 +166,23 @@ namespace ARK {
 					container->setSizeNoCallback(width, height);
 				#endif
 			}
+			// Nexus9
+			else if (ratio >= 1.2708f && ratio <= 1.2709f)
+			{
+				/*container->m_originalWidth = 320;
+				container->m_originalHeight = 406; // realsmall
+				#if defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE)
+					container->setSizeNoCallback(width, height);
+				#endif*/
+
+				// treat as ipad for now.
+				container->m_originalWidth = 320;
+				container->m_originalHeight = 427;
+				#if defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE)
+					container->setSizeNoCallback(width, height);
+				#endif
+			}
+
 			// if it's more portrait than landscape!
 			#ifdef ARK2D_WINDOWS
 				else if (ratio > 1.0f) {
@@ -195,6 +212,7 @@ namespace ARK {
 			// 1.48 -- nexus 7
 			// 1.644444444 - galaxy nexus
 			// 1.33125 - iPad
+			// 1.270833333 - nexus 9
 
 			GameContainer* container = ARK2D::getContainer();
 			float ratio = float(container->getHeight()) / float(container->getWidth());
@@ -210,6 +228,9 @@ namespace ARK {
 			} else if (ratio >= 1.66f) {
 				return RES_TALL;
 			} else if ((ratio >= 1.332f && ratio <= 1.334f) || ratio == 1.33125f || ratio == 1.334375f) {
+				return RES_SHORT;
+			} else if (ratio >= 1.2708f && ratio <= 1.2709f) {
+				//return RES_SHORTER;
 				return RES_SHORT;
 			}
 			return RES_ORIGINAL;
@@ -231,6 +252,9 @@ namespace ARK {
 				float sc = float(container->getHeight()) / 480.0f;
 				return (float) (y * sc);
 			} else if (res() == RES_SHORT) {
+				float sc = float(container->getHeight()) / 480.0f;
+				return (float) (y * sc);
+			} else if (res() == RES_SHORTER) {
 				float sc = float(container->getHeight()) / 480.0f;
 				return (float) (y * sc);
 			}
@@ -271,6 +295,9 @@ namespace ARK {
 				float sc = 528.0f / 480.0f;
 				return (float) (y * sc);
 			} else if (res() == RES_SHORT) {
+				float sc = float(container->getHeight()) / 480.0f;
+				return (float) (y * sc);
+			} else if (res() == RES_SHORTER) {
 				float sc = float(container->getHeight()) / 480.0f;
 				return (float) (y * sc);
 			}

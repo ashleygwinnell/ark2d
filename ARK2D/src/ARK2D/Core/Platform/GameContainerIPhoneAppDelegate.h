@@ -25,6 +25,7 @@ class ARK2D_API iOSListener {
 		static void set(iOSListener* instance) { s_instance = instance; }
 
 		virtual void didFinishLaunchingWithOptions(NSDictionary* ns) { }
+		virtual void didReceiveMemoryWarning() { }
 		// flesh this out with events.
 
 };

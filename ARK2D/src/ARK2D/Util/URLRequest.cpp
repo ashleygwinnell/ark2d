@@ -7,7 +7,7 @@
 
 #include "URLRequest.h"
 
-namespace ARK {  
+namespace ARK {
 	namespace Util {
 
 		#if !defined(ARK2D_ANDROID) && !defined(ARK2D_IPHONE) && !defined(ARK2D_WINDOWS_PHONE_8) && !defined(ARK2D_XBOXONE)
@@ -21,7 +21,7 @@ namespace ARK {
 			m_url(""),
 			m_postArgs(),
 			m_cookies(),
-			m_response(""), 
+			m_response(""),
 			m_error(""),
 			m_callback(NULL),
 			m_callbackObj(NULL),
@@ -55,43 +55,43 @@ namespace ARK {
 			m_cookies[key] = value;
 		}
 
-		
+
 		void URLRequest::reset() {
 			m_response = "";
 			m_error = "";
 		}
 
-		
+
 		void URLRequest::start(void* callback) {
 			reset();
-			
+
 			start(callback, NULL);
 		}
-		
+
 		void URLRequest::start(void* callback, void* callbackObj) {
 			reset();
-			
-			m_callback = callback; 
+
+			m_callback = callback;
 			m_callbackObj = callbackObj;
 			m_callbackExtra = NULL;
 			//m_callbackExtras = NULL;
 			//m_callbackExtrasSize = 0;
 
-			m_thread = new Thread(); 
+			m_thread = new Thread();
 			m_thread->init((void*) &s_startThreaded, this);
 			m_thread->start();
 		}
 
 		void URLRequest::start(void* callback, void* callbackObj, void* callbackExtra) { //void** callbackExtra, unsigned int callbackExtrasSize) {
 			reset();
-			
-			m_callback = callback; 
+
+			m_callback = callback;
 			m_callbackObj = callbackObj;
 			m_callbackExtra = callbackExtra;
 			//m_callbackExtras = callbackExtras;
 			//m_callbackExtrasSize = callbackExtrasSize;
- 
-			m_thread = new Thread(); 
+
+			m_thread = new Thread();
 			m_thread->init((void*) &s_startThreaded, this);
 			m_thread->start();
 		}
@@ -99,7 +99,7 @@ namespace ARK {
         Mutex* s_startThreadedMutex = new ARK::Core::Threading::Mutex();
 
 		void URLRequest::s_startThreaded(void* u) {
-			
+
 
 			#if defined(ARK2D_WINDOWS_PHONE_8)
 
@@ -109,17 +109,17 @@ namespace ARK {
 				ARK2D::getLog()->e(r->m_url);
 
 				wchar_t* wideUrl = Cast::charToWideChar(r->m_url.c_str());
-				
+
 				Platform::String^ wideStr = ref new Platform::String(wideUrl);
-				
+
 				Uri^ uri = ref new Uri(wideStr);
 				HttpClient^ httpClient = ref new HttpClient();
 
-				
-				
+
+
 				IAsyncOperationWithProgress<HttpResponseMessage^, HttpProgress>^ progress = httpClient->GetAsync(uri);
 				progress->Completed = ref new AsyncOperationWithProgressCompletedHandler<HttpResponseMessage^, HttpProgress>([r, wideUrl](IAsyncOperationWithProgress<HttpResponseMessage^, HttpProgress>^ asyncOp, AsyncStatus status) {
-				
+
 					HttpResponseMessage^ msg = asyncOp->GetResults();
 					if (msg->StatusCode == HttpStatusCode::Ok) {
 						ARK2D::getLog()->e("OK!");
@@ -134,12 +134,12 @@ namespace ARK {
 							std::wstring fooW(str->Begin());
 							std::string result(fooW.begin(), fooW.end());
 
-							
+
 
 							r->doCallbackWithResult(result);
 							delete wideUrl;
-							
-							
+
+
 						});
 
 					}
@@ -152,26 +152,26 @@ namespace ARK {
 				s_startThreadedMutex->lock();
 
 				URLRequest* r = reinterpret_cast<URLRequest*>(u);
-				r->setThreaded(true);  
+				r->setThreaded(true);
 				string result = r->start();
 
 				r->doCallbackWithResult(result);
 
 				s_startThreadedMutex->unlock();
 				// Not sure if I can delete the thread here?
-				//if (m_thread != NULL) { 
-				//	delete m_thread; 
+				//if (m_thread != NULL) {
+				//	delete m_thread;
 				//	m_thread = NULL;
 				//}
-				
+
 			#endif
 
-		
+
 		}
 		void URLRequest::doCallbackWithResult(string result) {
 			ARK2D::getLog()->v("doCallbackWithResult");
 			if (m_callback != NULL) {
-				if (m_callbackObj == NULL) { 
+				if (m_callbackObj == NULL) {
 					void (*pt)(string) = (void(*)(string)) m_callback;
 					pt(result);
 				} else {
@@ -183,7 +183,7 @@ namespace ARK {
 						pt(m_callbackObj, result, m_callbackExtra);
 					}
 				}
-			}  
+			}
 		}
 
 		bool URLRequest::hasError() {
@@ -192,10 +192,10 @@ namespace ARK {
 		string URLRequest::getError() {
 			return m_error;
 		}
-   
-		string URLRequest::start() { 
+
+		string URLRequest::start() {
 			reset();
-			
+
 			/*#if defined(ARK2D_WINDOWS)
 
 				BOOL ret = FALSE;
@@ -209,18 +209,18 @@ namespace ARK {
 				LPCWSTR urlWide = str3;
 
 				hSession = WinHttpOpen (
-					L"HTTP/1.1", 
+					L"HTTP/1.1",
 					WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
-					WINHTTP_NO_PROXY_NAME, 
-					WINHTTP_NO_PROXY_BYPASS, 
+					WINHTTP_NO_PROXY_NAME,
+					WINHTTP_NO_PROXY_BYPASS,
 					0
 				);
 
 				if ( hSession ) {
-					hConnect = WinHttpConnect( 
-						hSession, 
+					hConnect = WinHttpConnect(
+						hSession,
 						urlWide, //CStdStringW( GJAPI_SERVER ), m_url but split before 3rd forward slash, e.g. "gamejolt.com"
-						INTERNET_DEFAULT_PORT, 
+						INTERNET_DEFAULT_PORT,
 						0
 					);
 				} else {
@@ -229,7 +229,7 @@ namespace ARK {
 				}
 
 				if ( hConnect ) {
-					hRequest = WinHttpOpenRequest ( 
+					hRequest = WinHttpOpenRequest (
 						hConnect,
 						L"GET",
 						urlWide, //CStdStringW( url ),
@@ -266,7 +266,7 @@ namespace ARK {
 				}
 
 				if ( hRequest ) {
-					ret = WinHttpSendRequest ( 
+					ret = WinHttpSendRequest (
 						hRequest,
 						WINHTTP_NO_ADDITIONAL_HEADERS,
 						0,
@@ -348,7 +348,7 @@ namespace ARK {
 					else if (err == ERROR_NOT_ENOUGH_MEMORY) {
 						ARK2D::getLog()->e("ERROR_NOT_ENOUGH_MEMORY");
 					}
-					
+
 					return "";
 				}
 
@@ -359,7 +359,7 @@ namespace ARK {
 				// Keep checking for data until there is nothing left.
 				if ( ret )
 				{
-					do 
+					do
 					{
 						// Check for available data.
 						bufferSize = 0;
@@ -392,36 +392,36 @@ namespace ARK {
 
 				return m_response;
  */
-			//#elif defined (ARK2D_ANDROID) 
-			#if defined (ARK2D_ANDROID)      
-				//! todo: HTTP POST args on Android. 
+			//#elif defined (ARK2D_ANDROID)
+			#if defined (ARK2D_ANDROID)
+				//! todo: HTTP POST args on Android.
 				m_response = "";
-				if (m_threaded) { 
+				if (m_threaded) {
 					m_response += ARK2D::getContainer()->m_platformSpecific.m_pluggable->urlRequestThreaded(m_url);
 				} else {
 					m_response += ARK2D::getContainer()->m_platformSpecific.m_pluggable->urlRequest(NULL, m_url);
 				}
 				return m_response;
-            #elif defined(ARK2D_IPHONE) 
+            #elif defined(ARK2D_IPHONE)
                 //return "Not implemented";
 
 				NSString* urlNSStr = [NSString stringWithCString:m_url.c_str() encoding:[NSString defaultCStringEncoding]];
 				NSString* properlyEscapedURL = [urlNSStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 
 				NSURL* url = [NSURL URLWithString:properlyEscapedURL];
-				NSURLRequest* request = [NSURLRequest requestWithURL:url]; 
+				NSURLRequest* request = [NSURLRequest requestWithURL:url];
 
 				NSURLResponse* response = nil;
 				NSError* requestError = nil;
 
 				//send it synchronous
 				NSData* responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&requestError];
-				
-				
+
+
 				if (responseData == nil) {
 					// Check for problems
 					if (requestError != nil) {
-						ARK2D::getLog()->e(m_url);  
+						ARK2D::getLog()->e(m_url);
 						//NSLog(@"%@", requestError);
 
 						NSString* nserrorStr = [requestError localizedDescription];
@@ -433,16 +433,16 @@ namespace ARK {
 					NSString* responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
 					//NSLog(@"Response from server = %@", responseString);
 					m_response = string([responseString UTF8String]);
-					ARK2D::getLog()->v(m_response);   
+					ARK2D::getLog()->v(m_response);
 				}
-				
+
 				return m_response;
 
            	#elif defined(ARK2D_FLASCC)
 
 				m_error = "Not implemented!";
                 return "Not implemented!";
-                 
+
                 /*
                 inline_as3(
                 	"import com.adobe.flascc.Console;\n"\
@@ -461,17 +461,17 @@ namespace ARK {
 				while(done == 0) {
 					inline_as3(
 						"import com.adobe.flascc.Console;\n"\
-						"%0 = (Console.s_urlResponse == \"\")?0:1;\n" 
-						: "=r"(done) : 
+						"%0 = (Console.s_urlResponse == \"\")?0:1;\n"
+						: "=r"(done) :
 					);
 				}
-				
+
 				char* wordptrs = NULL;
 				inline_as3(
 			        "var stringptr:int = CModule.mallocString(Console.s_urlResponse);\n"
 			        "CModule.write32(%0, stringptr);\n"
 			        : : "r"(&wordptrs)
-			    ); 
+			    );
 				printf(">>> %s\n", wordptrs);
 
 				m_response = string(wordptrs);
@@ -481,27 +481,27 @@ namespace ARK {
 
 			#elif defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE)
 				m_error = "Synchronous API not possible. Do threaded request!";
-				return "Not Implemented!"; 
-
-				
+				return "Not Implemented!";
 
 
-			//#elif defined(ARK2D_WINDOWS) 
+
+
+			//#elif defined(ARK2D_WINDOWS)
 			//	m_error = "Synchronous API not possible. Do threaded request!";
 			//	ARK2D::getLog()->e(m_error);
-			//	return "Not Implemented!"; 
+			//	return "Not Implemented!";
             #else
- 
+
 				//String returnString("");
 				CURLcode res;
- 
+
 				curl_easy_setopt(s_curl, CURLOPT_NOPROGRESS, 1);
-				#ifndef ARK2D_WINDOWS	
+				#ifndef ARK2D_WINDOWS
 					curl_easy_setopt(s_curl, CURLOPT_TIMEOUT, (long) m_timeout);
 				#endif
 				curl_easy_setopt(s_curl, CURLOPT_URL, m_url.c_str());
 				curl_easy_setopt(s_curl, CURLOPT_WRITEFUNCTION, &URLRequest::s_curlWriteDataFunction);
-				curl_easy_setopt(s_curl, CURLOPT_WRITEDATA, this); 
+				curl_easy_setopt(s_curl, CURLOPT_WRITEDATA, this);
 
 				if (m_cookies.size() > 0) {
 					string cookieStr = "";
@@ -519,7 +519,7 @@ namespace ARK {
 						}
 						iter--;
 					}
- 
+
 					curl_easy_setopt(s_curl, CURLOPT_COOKIE, cookieStr.c_str());
 				}
 
@@ -543,20 +543,20 @@ namespace ARK {
 				}
 
 				res = curl_easy_perform(s_curl);
-				
+
 				ARK2D::getLog()->v(StringUtil::append("curl_easy_perform returned: ", res));
 
 				long http_code = 0;
 				curl_easy_getinfo (s_curl, CURLINFO_RESPONSE_CODE, &http_code);
 
 				ARK2D::getLog()->v(StringUtil::append("curl http response code: ", (int) http_code));
-				
+
 
 				if (http_code != 200) {
 					if (http_code == 0) {
 						m_error = "No internet connection. Please try again.";
 						ARK2D::getLog()->e(m_error);
-					} else { 
+					} else {
 						m_error = StringUtil::append("error http code: ", (int) http_code);
 						ARK2D::getLog()->e(m_error);
 					}
@@ -580,7 +580,7 @@ namespace ARK {
 		}
 
 		size_t URLRequest::writeFunction(void *ptr, size_t size, size_t nmemb) {
-			
+
 			#if defined( ARK2D_WINDOWS_PHONE_8 ) || defined(ARK2D_WINDOWS)
 				//string newbuff = string(buf);
 				m_response.append((char*) ptr, size * nmemb);
@@ -590,9 +590,9 @@ namespace ARK {
 			unsigned int bufsize = size*nmemb + 1;
 			#if defined( ARK2D_WINDOWS_PHONE_8 ) || defined(ARK2D_WINDOWS)
 				char* buf = (char*)alloca(bufsize);
-			#else 
+			#else
 				char buf[size*nmemb + 1];
-			#endif 
+			#endif
 
 
 
@@ -619,6 +619,9 @@ namespace ARK {
 		URLRequest::~URLRequest() {
 			// TODO: cleanup
 			//curl_easy_cleanup(s_curl); // always cleanup
+			if (m_thread != NULL) {
+				delete m_thread;
+			}
 		}
 
 		size_t URLRequest::s_curlWriteDataFunction(void *ptr, size_t size, size_t nmemb, void* cls) {

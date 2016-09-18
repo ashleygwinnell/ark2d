@@ -49,7 +49,7 @@ namespace ARK {
 				KeyPairFile(string filename, void* data);
 
 				void read(string data);
-				void save();
+				bool save();
 				void clear();
 				void clearUnsaved();
 

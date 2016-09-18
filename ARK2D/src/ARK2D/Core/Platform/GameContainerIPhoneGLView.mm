@@ -88,7 +88,8 @@
 
     - (void)didReceiveMemoryWarning
     {
-        ErrorDialog::createAndShow("Low memory!");
+        //ErrorDialog::createAndShow("Low memory!");
+        iOSListener::get()->didReceiveMemoryWarning();
     }
 
 @end

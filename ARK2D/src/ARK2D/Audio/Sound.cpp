@@ -608,7 +608,7 @@ namespace ARK {
 				#if defined (ARK2D_ANDROID)
 
 					if (m_preloadedData != NULL) {
-						FILE_INTERFACE* fi = fi_fopen(m_FileName.c_str(), "r", m_preloadedData, m_preloadedDataLength);
+						FILE_INTERFACE* fi = fi_fopen(m_FileName.c_str(), "rb", m_preloadedData, m_preloadedDataLength);
 						ov_callbacks lalala;
 						lalala.read_func = &ark_ov_read;
 						lalala.seek_func = &ark_ov_seek;

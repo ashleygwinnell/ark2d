@@ -5353,6 +5353,7 @@ build:
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res" + self.ds + "drawable-hdpi"]);
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res" + self.ds + "drawable-xhdpi"]);
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res" + self.ds + "drawable-xxhdpi"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res" + self.ds + "drawable-xxxhdpi"]);
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-intellij" + self.ds + self.game_name_safe + self.ds + "src" + self.ds + "main" + self.ds + "res" + self.ds + "values"]);
 
 				if (self.android_billing):
@@ -5384,6 +5385,7 @@ build:
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "res" + self.ds + "drawable-hdpi"]);
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "res" + self.ds + "drawable-xhdpi"]);
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "res" + self.ds + "drawable-xxhdpi"]);
+				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "res" + self.ds + "drawable-xxxhdpi"]);
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "res" + self.ds + "values"]);
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "res" + self.ds + "xml"]);
 				thisCreateDirs.extend([rootPath+self.ds+"build" + self.ds + self.output + self.ds + "project-eclipse" + self.ds + "src" + self.ds + "org"]);
@@ -5816,6 +5818,10 @@ build:
 				#todo: copy this to rootPath+"/build/android/project/AndroidManifest.xml";
 			except:
 
+				versionCodePieces = self.game_version.split('.');
+				versionCode = str(versionCodePieces[0]) + str(versionCodePieces[1]).rjust(2, '0') + str(versionCodePieces[2]).rjust(2, '0');
+				versionCode = "1";
+
 				minSdkVersion = str(appplatformno);
 				targetSdkVersion = str(16);
 
@@ -5832,7 +5838,7 @@ build:
 					androidManifestContents += "	android:installLocation=\"preferExternal\"" + nl;
 				else:
 					androidManifestContents += "	android:installLocation=\"internalOnly\"" + nl;
-				androidManifestContents += "	android:versionCode=\"1\" " + nl;
+				androidManifestContents += "	android:versionCode=\"" + versionCode + "\" " + nl;
 				androidManifestContents += "	android:versionName=\"" + self.game_version + "\"> " + nl;
 				androidManifestContents += "	<uses-sdk android:minSdkVersion=\"" + minSdkVersion + "\" android:targetSdkVersion=\"" + targetSdkVersion + "\"/>" + nl;
 				androidManifestContents += "	<uses-feature android:glEsVersion=\"0x00020000\" android:required=\"true\" />" + nl;
@@ -5938,12 +5944,14 @@ build:
 			print("copying icon in to eclipse project: ");
 			if ("icon" in self.android_config):
 				if not self.android_config['icon']['use_master_icon']:
+					icon_xxxhdpi = self.android_config['icon']['xxxhdpi'];
 					icon_xxhdpi = self.android_config['icon']['xxhdpi'];
 					icon_xhdpi = self.android_config['icon']['xhdpi'];
 					icon_hdpi = self.android_config['icon']['hdpi'];
 					icon_mdpi = self.android_config['icon']['mdpi'];
 					icon_nodpi = self.android_config['icon']['nodpi'];
 
+					icon_xxxhdpi = self.str_replace(icon_xxxhdpi, [("%PREPRODUCTION_DIR%", self.game_preproduction_dir)]);
 					icon_xxhdpi = self.str_replace(icon_xxhdpi, [("%PREPRODUCTION_DIR%", self.game_preproduction_dir)]);
 					icon_xhdpi = self.str_replace(icon_xhdpi, [("%PREPRODUCTION_DIR%", self.game_preproduction_dir)]);
 					icon_hdpi = self.str_replace(icon_hdpi, [("%PREPRODUCTION_DIR%", self.game_preproduction_dir)]);
@@ -5956,6 +5964,7 @@ build:
 					#subprocess.call(['cp ' + icon_mdpi + " " + rootPath+"/build/android/project-eclipse/res/drawable-mdpi/ic_launcher.png"], shell=True);
 					#subprocess.call(['cp ' + icon_nodpi + " " + rootPath+"/build/android/project-eclipse/res/drawable/ic_launcher.png"], shell=True);
 
+					shutil.copy2(icon_xxxhdpi, project_res_dir + self.ds + "drawable-xxxhdpi" + self.ds + ic_launcher_name);
 					shutil.copy2(icon_xxhdpi, project_res_dir + self.ds + "drawable-xxhdpi" + self.ds + ic_launcher_name);
 					shutil.copy2(icon_xhdpi, project_res_dir + self.ds + "drawable-xhdpi" + self.ds + ic_launcher_name);
 					shutil.copy2(icon_hdpi, project_res_dir + self.ds + "drawable-hdpi" + self.ds + ic_launcher_name);
@@ -6596,9 +6605,9 @@ build:
 			if (self.debug):
 				application_make_file += "APP_ABI := armeabi-v7a " + nl; #x86" + nl;
 			else:
-				application_make_file += "APP_ABI := armeabi armeabi-v7a ";
+				application_make_file += "APP_ABI := x86 armeabi armeabi-v7a ";
 				#if (ndkappplatformno >= )
-				application_make_file += "x86 ";
+				#application_make_file += "x86 ";
 				application_make_file += nl; #x86" + nl;
 
 			application_make_file += "APP_CPPFLAGS += -std=c++11 -frtti " + nl;
