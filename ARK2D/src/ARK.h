@@ -137,6 +137,7 @@
 
 // Audio
 #include "ARK2D/Audio/Sound.h"
+#include "ARK2D/Audio/SoundStore.h"
 
 // Tiled
 #include "ARK2D/Tiled/TiledMap.h"

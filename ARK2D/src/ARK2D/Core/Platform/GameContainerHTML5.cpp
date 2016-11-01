@@ -13,11 +13,12 @@
 	#include  <X11/Xatom.h>
 	#include  <X11/Xutil.h>
 
- #include "../../Includes.h"
 #include "../../Namespaces.h"
 #include "../GameContainer.h"
 #include "GameContainerHTML5.h"
 #include "../Log.h"
+#include "../Camera.h"
+#include "../Math/Random.h"
 
 #include <emscripten/emscripten.h>
 #include <emscripten/html5.h>
@@ -102,7 +103,7 @@
 				//if (thisx < 0 || thisx > m_container->getDynamicWidth()) { i->mouse_x = -1; i->mouse_y = -1; return 0; }
 				//if (thisy < 0 || thisy > m_container->getDynamicHeight()) { i->mouse_x = -1; i->mouse_y = -1; return 0; }
 
-				ARK2D::getLog()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
+				//ARK2D::getLog()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 				ARK2D::getGame()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 
 				//string pstr = "mouse moved: ";
@@ -125,18 +126,24 @@
 				EmscriptenFullscreenChangeEvent state;
 				emscripten_get_fullscreen_status(&state);
 
+				ARK2D::getLog()->i("Fullscreen Change Callback");
+
 				GameContainer* container = ARK2D::getContainer();
-				int newWidth = 100;
-				int newHeight = 100;
+				int newWidth;
+				int newHeight;
 				if (state.isFullscreen) {
 					newWidth = state.screenWidth;
 					newHeight = state.screenHeight;
+
+					ARK2D::getLog()->i("is fullscreen");
 				} else {
 					newWidth = container->getWidth();
 					newHeight = container->getHeight();
+
+					ARK2D::getLog()->i("is not fullscreen");
 				}
 
-				container->setSize(newWidth, newHeight);
+				container->setSize(newWidth, newHeight, true);
 				container->getPlatformSpecific()->setFullscreenInternal(e->isFullscreen);
 				//container->resizeBehaviour(newWidth, newHeight);
 				//container->resizeWindowToFitViewport();
@@ -190,11 +197,10 @@
 				ARK2D::s_game = &m_game;
 				ARK2D::s_graphics = &m_graphics;
 				ARK2D::s_input = &m_input;
-				ARK2D::s_log = new ARK::Util::Log();
-				scene = new Scene();
-				scene->addChild(ARK2D::s_game);
-				scene->addChild(ARK2D::s_log);
-
+				ARK2D::s_camera = new ARK::Core::Camera();
+				ARK2D::s_camera->setViewport(0, 0, m_width, m_height);
+				ARK2D::s_log = ARK::Core::Log::getInstance();
+				scene = ARK2D::getScene();
 
 				m_platformSpecific.esContext = new ESContext(); //(ESContext*) malloc(sizeof(ESContext));
 				m_platformSpecific.esContext->userData = NULL; //malloc(sizeof(UserData));
@@ -205,18 +211,15 @@
 
 			}
 
+			void ARK::Core::GameContainer::setSize(int width, int height, bool docallback) {
 
-
-			void ARK::Core::GameContainer::setSize(int width, int height) {
 				if (width == (signed int) m_width && height == (signed int) m_height) { return; }
 
-				resizeBehaviour(width, height);
-				resizeWindowToFitViewport();
+				resizeBehaviour(width, height, docallback);
 
-				//m_screenWidth = width;
-				//m_screenHeight = height;
-				//resizeBehaviour(width, height);
+				resizeWindowToFitViewport();
 			}
+
 
 			void ARK::Core::GameContainer::setFullscreen(bool fullscreen) {
 
@@ -226,10 +229,21 @@
 				if (!state.isFullscreen && fullscreen) {
 					ARK2D::getLog()->i("Go fullscreen mode.");
 					emscripten_request_fullscreen(0, 1);
+
+					//m_width = m_screenWidth;
+					//m_height = m_screenHeight;
+					//resizeBehaviour((int) m_screenWidth, (int) m_screenHeight, true);
+
 				} else if (state.isFullscreen && !fullscreen) {
 					ARK2D::getLog()->i("Go windowed mode.");
 					emscripten_exit_fullscreen();
+
+					//m_width = m_originalWidth;
+					//m_height = m_originalHeight;
+					//resizeBehaviour((int) m_originalWidth, (int) m_originalHeight, true);
 				}
+				///resizeWindowToFitViewport();
+
 
 				/*if (!m_fullscreen && fullscreen) {
 					// go fullscreen
@@ -478,16 +492,16 @@
       			emscripten_set_mousemove_callback( "#document" ,  0, 1, mousemove_callback);
       			emscripten_set_fullscreenchange_callback(0, 0, 1, fullscreenchange_callback);
 
-        SDL_Init(SDL_INIT_VIDEO);
+				SDL_Init(SDL_INIT_VIDEO);
 
-		/*SDL_CreateWindow(
-	        "",                  // window title
-	        SDL_WINDOWPOS_UNDEFINED,           // initial x position
-	        SDL_WINDOWPOS_UNDEFINED,           // initial y position
-	        m_originalWidth,                               // width, in pixels
-	        m_originalHeight,                               // height, in pixels
-	        SDL_WINDOW_OPENGL                  // flags - see below
-	    );
+				/*SDL_CreateWindow(
+			        "",                  // window title
+			        SDL_WINDOWPOS_UNDEFINED,           // initial x position
+			        SDL_WINDOWPOS_UNDEFINED,           // initial y position
+			        m_originalWidth,                               // width, in pixels
+			        m_originalHeight,                               // height, in pixels
+			        SDL_WINDOW_OPENGL                  // flags - see below
+			    );
 */
 
 				unsigned int flags = ES_WINDOW_RGB | ES_WINDOW_ALPHA | ES_WINDOW_STENCIL | ES_WINDOW_MULTISAMPLE;
@@ -561,7 +575,7 @@
 
 				// load default font.
 				if (m_willLoadDefaultFont) {
-					ARK::Font::BMFont* fnt = ARK::Core::Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont(); // BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
+					ARK::Core::Font::BMFont* fnt = ARK::Core::Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont(); // BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
 					fnt->scale(0.5f);
 					m_graphics.m_DefaultFont = fnt;
 					m_graphics.m_Font = fnt;
@@ -775,7 +789,8 @@
 
 				//ARK2D::getLog()->update();
 
-			   	ARK2D::getLog()->update();
+			   	//ARK2D::getLog()->update();
+			   	container->scene->update();
 
 			   //	ARK2D::getLog()->i("Game Pre-update");
 			   	//ARK2D::getLog()->i("timerdelta:");
@@ -783,23 +798,23 @@
 			   	//ARK2D::getLog()->i(deltastr);
 				//int delta = (int) (m_timer->getDelta() * 1000);
 				//ARK2D::getLog()->i("Game Pre-update 2");
-				m_game->preUpdate(container, m_timer);			//ARK2D::getLog()->i("Game Pre-update 3");
-				m_game->update(container, m_timer);				//ARK2D::getLog()->i("Game Pre-update 4");
-				m_game->postUpdate(container, m_timer);
+				//m_game->preUpdate(container, m_timer);			//ARK2D::getLog()->i("Game Pre-update 3");
+				//m_game->update(container, m_timer);				//ARK2D::getLog()->i("Game Pre-update 4");
+				//m_game->postUpdate(container, m_timer);
 
 				//ARK2D::getLog()->i("Clear Input");
 				m_input->clearKeyPressedRecord();
-				//for (unsigned int i = 0; i < m_gamepads.size(); i++) {
-				//	m_gamepads.at(i)->clearButtonPressedRecord();
-				//}
+				// for (unsigned int i = 0; i < m_gamepads.size(); i++) {
+				// 	m_gamepads.at(i)->clearButtonPressedRecord();
+				// }
 
 				//ARK2D::getLog()->i("Game Pre-render");
 				RendererStats::reset();
+				glClearColor(container->m_clearColor.getRedf(), container->m_clearColor.getGreenf(), container->m_clearColor.getBluef(), container->m_clearColor.getAlpha());
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-				m_game->preRender(container, m_graphics);
-				m_game->render(container, m_graphics);
-				ARK2D::getLog()->render(container, m_graphics);
-				m_game->postRender(container, m_graphics);
+				container->preRender();
+				container->scene->render();
+				container->postRender();
 				//if (container->isShowingFPS()) { container->renderFPS(); }
 
 

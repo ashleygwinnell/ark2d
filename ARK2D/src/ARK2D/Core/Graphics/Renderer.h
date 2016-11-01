@@ -108,7 +108,7 @@ namespace ARK {
                     QuadVBO();
                     void setWidth(int w);
                     void setHeight(int h);
-                    void setData(void* data, unsigned int size);
+                    virtual void setData(void* data, unsigned int size);
                     void setData(float* data);
                     void setData(unsigned char* data);
             };

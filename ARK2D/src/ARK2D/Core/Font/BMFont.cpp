@@ -56,8 +56,8 @@ namespace ARK {
                 m_letterImages(),
                 m_kerning(0),
                 m_getLetterColorFunction( (void*)BMFont__drawString_getLetterColor ),
-                m_fontSize(0),
-                m_fontName("")
+                m_fontName(""),
+                m_fontSize(0)
                 {
 
             }
@@ -77,8 +77,8 @@ namespace ARK {
                 m_letterImages(),
                 m_kerning(0),
                 m_getLetterColorFunction( (void*)BMFont__drawString_getLetterColor ),
-                m_fontSize(0),
-                m_fontName("")
+                m_fontName(""),
+                m_fontSize(0)
             {
                 ARK2D::getLog()->i("Loading BMFont from raw data.");
                 m_data = (char*) GameContainerPlatform::getARK2DResource(fntResource, ARK2D_RESOURCE_TYPE_FNT);
@@ -105,8 +105,8 @@ namespace ARK {
                 m_letterImages(),
                 m_kerning(0),
                 m_getLetterColorFunction( (void*)BMFont__drawString_getLetterColor ),
-                m_fontSize(0),
-                m_fontName("")
+                m_fontName(""),
+                m_fontSize(0)
             {
                 ARK2D::getLog()->i("Loading BMFont from raw data.");
                 m_data = (char*) data;
@@ -133,8 +133,8 @@ namespace ARK {
                 m_letterImages(),
                 m_kerning(0),
                 m_getLetterColorFunction( (void*)BMFont__drawString_getLetterColor ),
-                m_fontSize(0),
-                m_fontName("")
+                m_fontName(""),
+                m_fontSize(0)
             {
                 ARK2D::getLog()->i("Loading BMFont: ");
                 ARK2D::getLog()->i(f);
@@ -162,8 +162,8 @@ namespace ARK {
                 m_letterImages(),
                 m_kerning(0),
                 m_getLetterColorFunction( (void*)BMFont__drawString_getLetterColor ),
-                m_fontSize(0),
-                m_fontName("")
+                m_fontName(""),
+                m_fontSize(0)
             {
                 ARK2D::getLog()->i("Loading BMFont: ");
                 ARK2D::getLog()->i(f);

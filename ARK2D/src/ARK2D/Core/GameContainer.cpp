@@ -432,7 +432,7 @@ namespace ARK {
 				}
 
 
-			#elif (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS) || defined(ARK2D_FLASCC) || defined(ARK2D_UBUNTU_LINUX))
+			#elif (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS) || defined(ARK2D_FLASCC) || defined(ARK2D_UBUNTU_LINUX) || defined(ARK2D_EMSCRIPTEN_JS) )
 
 				if (container->isOrientationInverted()) {
 					float scale = container->getScale();

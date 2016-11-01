@@ -38,7 +38,7 @@ class MersenneTwister;
 namespace ARK {
 	namespace Core {
         namespace Math {
-            
+
 		/*!
 		 * \brief Math utility functions (and also random functions).
 		 *
@@ -439,7 +439,7 @@ namespace ARK {
 				   	if (clockwise) {
 				       	Vector3<float>* temp = c;
 				       	c = b;
-				       	b = c;
+				       	b = temp;
 				    }
 					Vector3<float> normal = Vector3<float>::cross(*b - *a, *c - *a).normalise();
 					//	if (!clockwise && normal.x == 0 && normal.y == 0 && normal.z == -1) {

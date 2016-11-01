@@ -73,8 +73,7 @@ namespace ARK {
 	    			const char* messageCStr = message.c_str();
 	    			unsigned int messageLen = message.length();
 
-
-					CFStringRef header_ref    = CFStringCreateWithCString( NULL, "",   strlen("")    );
+					CFStringRef header_ref   = CFStringCreateWithCString( NULL, "",   strlen("")    );
 					CFStringRef message_ref  = CFStringCreateWithCString( NULL, messageCStr,  messageLen );
 
 					CFOptionFlags result;

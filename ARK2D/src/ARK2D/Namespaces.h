@@ -18,6 +18,7 @@ namespace ARK {
 	//! Contains classes for Audio playback.
 	namespace Audio {
 		class Sound;
+        class SoundStore;
 	}
 
 	//! Core framework classes for Windowing, Default Objects, Events, Resources.

@@ -31,7 +31,8 @@
 	},
 	"html5": {
 		"osx": {
-			"emscripten_dir": "/Users/ashleygwinnell/Downloads/emsdk_portable"
+			"emscripten_dir": "~/Projects/emsdk_portable",
+			"emscripten_version": "1.35.0"
 		}
 	},
 	"android": {
@@ -375,7 +376,6 @@
 			"src/ARK2D/Core/Graphics/Skybox.cpp",
 
 			"src/ARK2D/Core/Geometry/GigaRectangle.cpp",
-			"src/ARK2D/Core/Geometry/Vector2.cpp",
 			"src/ARK2D/Core/Geometry/Shape.cpp",
 			"src/ARK2D/Core/Geometry/Rectangle.cpp",
 			"src/ARK2D/Core/Geometry/Cube.cpp",
@@ -384,6 +384,8 @@
 			"src/ARK2D/Core/Geometry/Line.cpp",
 			"src/ARK2D/Core/Geometry/AdvancedPolygon.cpp",
 			"src/ARK2D/Core/Geometry/Transform.cpp",
+			"src/ARK2D/Core/Geometry/Vector2.cpp",
+			"src/ARK2D/Core/Geometry/Vector3.cpp",
 			"src/ARK2D/Core/Geometry/Vector4.cpp",
 
 			"src/ARK2D/Core/Math/Random.cpp",
@@ -415,6 +417,9 @@
 			"src/ARK2D/Core/Tween/Timeline.cpp",
 			"src/ARK2D/Core/Tween/Easing.cpp",
 			"src/ARK2D/Core/Tween/Timer.cpp",
+			"src/ARK2D/Core/Platform/GameContainerMac.mm",
+			"src/ARK2D/Core/Platform/GameContainerMacAppDelegate.mm",
+			"src/ARK2D/Core/Platform/GameContainerMacWindowListener.mm",
 
 			"src/ARK2D/Audio/Sound.cpp",
 			"src/ARK2D/Audio/SoundStore.cpp",

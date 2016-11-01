@@ -11,10 +11,12 @@
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
 
-#ifdef ARK2D_WINDOWS
-#include <time.h>
+#if defined(ARK2D_WINDOWS)
+	#include <time.h>
+#elif defined(ARK2D_EMSCRIPTEN_JS)
+	#include <sys/times.h>
 #else
-#include <sys/time.h>
+	#include <sys/time.h>
 #endif
 
 #include <list>

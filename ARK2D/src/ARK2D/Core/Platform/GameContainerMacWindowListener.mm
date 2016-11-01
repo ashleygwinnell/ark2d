@@ -6,6 +6,8 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
+#ifdef ARK2D_MACINTOSH
+
 #import <Cocoa/Cocoa.h>
 #import "GameContainerMacWindowListener.h"
 #include "../../Namespaces.h"
@@ -16,7 +18,7 @@
 
 //using namespace ARK::Core;
 
- 
+
 
 // see url:
 // http://classicteck.com/rbarticles/mackeyboard.php
@@ -153,13 +155,13 @@ static int darwin_scancode_table[] = {
 	/* 127 */   0, // KEY_UNDEFINED, // KEY_POWER
 };
 
-@implementation GameContainerMacWindowListener 
+@implementation GameContainerMacWindowListener
 
 //@synthesize m_latestKeyUpEvent;
 
 -(void) init:(NSWindow* )window {
    	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-   
+
 	    NSNotificationCenter* center;
 	    // NSView* view = [window contentView];
 	    center = [NSNotificationCenter defaultCenter];
@@ -168,12 +170,12 @@ static int darwin_scancode_table[] = {
 	    } else {
 	        [window setDelegate:self];
 	    }
-	    
+
 	    [window setNextResponder:self];
 	      //  [view setNextResponder:self];
-	    
+
 	    m_window = window;
-	
+
 	[pool release];
 }
 
@@ -191,7 +193,7 @@ static int darwin_scancode_table[] = {
 {
     //Monocle::Game::Quit();
 	//Cocoa_DestroyWindow(_data);
- 
+
 	//printf("closing windowlistener...\r\n");
 	//ARK2D::getContainer()->close();
 
@@ -200,7 +202,7 @@ static int darwin_scancode_table[] = {
 
 	printf("setting gamecontainer as not running...\r\n");
     ARK2D::getContainer()->m_bRunning = false;
-    
+
     //[NSApp close:sender];
    // [NSApp close];
    // [m_window release];
@@ -208,20 +210,20 @@ static int darwin_scancode_table[] = {
 }
 -(void)windowWillClose:(NSNotification *)notification {
     // printf("window delegate window will close now.\r");
-    // [m_window close]; 
+    // [m_window close];
     //  [NSApp terminate];
-}   
+}
 
 - (void)cancelOperation:(id)sender
 {
     //[self exitFullScreen];
-    ARK2D::getLog()->v("escape pressed?"); 
+    ARK2D::getLog()->v("escape pressed?");
 }
- 
+
 -(void)keyDown:(NSEvent *)theEvent {
 	ARK2D::getLog()->v("keyDown");
 	m_latestKeyUpEvent = NULL;
-	
+
 	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 	unsigned short scancode = [theEvent keyCode];
     //std::cout << "key pressed: " << scancode << std::endl;
@@ -231,7 +233,7 @@ static int darwin_scancode_table[] = {
     	ARK2D::getInput()->pressKey(key);
     	m_latestKeyUpEvent = NULL;
     }
-    
+
     [pool release];
 }
 
@@ -239,7 +241,7 @@ static int darwin_scancode_table[] = {
 	ARK2D::getLog()->v("keyUp");
 
 	m_latestKeyUpEvent = NULL;
-	
+
 	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
     unsigned short scancode = [theEvent keyCode];
     //std::cout << "key released: " << scancode << std::endl;
@@ -259,13 +261,13 @@ static int darwin_scancode_table[] = {
 	// opt = (flags & NSAlternateKeyMask) ? YES : NO;
 	// ctrl = (flags & NSControlKeyMask) ? YES : NO;
 	// command = (flags & NSCommandKeyMask) ? YES : NO;
-	
+
 	if (flags & NSShiftKeyMask) {
 		ARK2D::getInput()->pressKey(darwin_scancode_table[56]); // lshift
 	} else {
 		ARK2D::getInput()->releaseKey(darwin_scancode_table[56]); // rshift
 	}
-	
+
 	// shift = ( flags & NSShiftKeyMask ) ? YES : NO;
 }
 
@@ -274,9 +276,9 @@ static int darwin_scancode_table[] = {
     //ARK2D::getInput()->pressKey(Input::MOUSE_BUTTON_RIGHT);
 }
 - (void)rightMouseUp:(NSEvent *) theEvent {
-	//std::cout << "right mouse up" << std::endl; 
+	//std::cout << "right mouse up" << std::endl;
    // ARK2D::getInput()->releaseKey(Input::MOUSE_BUTTON_RIGHT);
-} 
+}
 
 -(void)mouseDown:(NSEvent *)theEvent {
   	//std::cout << "left mouse down" << std::endl;
@@ -288,19 +290,19 @@ static int darwin_scancode_table[] = {
 }
 -(void)mouseMoved:(NSEvent *)theEvent {
 	NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-	
+
 	NSPoint v = [theEvent locationInWindow];
 	//NSPoint v = [NSView convertPoint:[NSEvent mouseLocation] fromView:nil];
-	
+
 	int ch = ARK2D::getContainer()->getDynamicHeight();
-	if (v.y > ch/2) { 
+	if (v.y > ch/2) {
 		int diff = v.y - (ch/2);
-		v.y -= 2 * diff; 
+		v.y -= 2 * diff;
 	} else {
 		int diff = (ch/2) - v.y;
 		v.y += 2 * diff;
 	}
-	
+
 	GameContainer* container = ARK2D::getContainer();
 
 	Input* i = ARK2D::getInput();
@@ -315,13 +317,13 @@ static int darwin_scancode_table[] = {
 
     thisx /= container->getScale();
     thisy /= container->getScale();
-	
+
 	//ARK2D::getLog()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 	ARK2D::getGame()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 
 	i->mouse_x = (int) thisx;
 	i->mouse_y = (int) thisy;
-	
+
 	[pool release];
 }
 -(void)mouseDragged:(NSEvent* )theEvent {
@@ -330,7 +332,7 @@ static int darwin_scancode_table[] = {
 
 
 
-- (BOOL)acceptsFirstResponder 
+- (BOOL)acceptsFirstResponder
 {
   return YES;
 }
@@ -353,3 +355,5 @@ static int darwin_scancode_table[] = {
 
 
 @end
+
+#endif

@@ -8,7 +8,7 @@
 #include "JSON_Strings.h"
 #include "JSONChildren.h"
 
-#if (defined(_MSC_FULL_VER) || defined(_MSC_VER) || defined(ARK2D_MACINTOSH) || defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
+#if (defined(_MSC_FULL_VER) || defined(_MSC_VER) || defined(ARK2D_MACINTOSH) || defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE) || defined(ARK2D_EMSCRIPTEN_JS))
 
 #define foreach(iterator, container)\
     for (auto iterator = container.begin(); iterator != container.end(); ++iterator)

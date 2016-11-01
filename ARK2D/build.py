@@ -80,6 +80,8 @@ class ARK2DGame:
 		self.dir_resources = "";
 		# TODO:
 
+def printPair(l, param1, param2):
+	print(("%-" + str(l) + "s%-" + str(l) + "s") % (param1, param2));
 
 class ARK2DBuildSystem:
 
@@ -222,7 +224,16 @@ class ARK2DBuildSystem:
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Audio",
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Controls",
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Core",
+			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Core" + self.ds + "Controls",
+			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Core" + self.ds + "Font",
+			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Core" + self.ds + "Geometry",
+			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Core" + self.ds + "Math",
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Core" + self.ds + "Platform",
+			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Core" + self.ds + "SceneGraph",
+			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Core" + self.ds + "State",
+			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Core" + self.ds + "Threading",
+			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Core" + self.ds + "Tween",
+			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Core" + self.ds + "Vendor",
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Font",
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "Geometry",
 			self.build_folder + self.ds + self.output + self.ds + "src" + self.ds + "ARK2D" + self.ds + "GJ",
@@ -414,7 +425,7 @@ class ARK2DBuildSystem:
 
 		else:
 		"""
-
+		print("---");
 		print("Generating ARK.h file at " + floc);
 		nl = " \r\n";
 		if (sys.platform == "win32"):
@@ -2943,23 +2954,29 @@ build:
 	def startHTML5(self):
 
 		print("-------------------------");
-		print("HTML5");
-		ark2d_dir = self.config[self.platformOn]['ark2d_dir'];
-		root_dir = self.config[self.platformOn]['ark2d_dir'] if self.building_library else self.config[self.platformOn]['game_dir'];
-		emscripten_dir = self.config['html5'][self.platformOn]['emscripten_dir'];
-		em_gcc = emscripten_dir + self.ds + "emscripten" + self.ds + "1.22.0" + self.ds + "emcc";
-		em_gpp = emscripten_dir + self.ds + "emscripten" + self.ds + "1.22.0" + self.ds + "em++";
+		print("HTML5 " + self.platformOn);
+		ark2d_dir = self.ark_config[self.platformOn]['ark2d_dir'];
+		root_dir = self.ark_config[self.platformOn]['ark2d_dir'] if self.building_library else self.game_dir;
+		emscripten_dir = self.ark_config['html5'][self.platformOn]['emscripten_dir'] if self.building_library else self.target_config['html5'][self.platformOn]['emscripten_dir'];
+		emscripten_version = self.ark_config['html5'][self.platformOn]['emscripten_version'] if self.building_library else self.target_config['html5'][self.platformOn]['emscripten_version'];
+		em_gcc = emscripten_dir + self.ds + "emscripten" + self.ds + emscripten_version + self.ds + "emcc";
+		em_gpp = emscripten_dir + self.ds + "emscripten" + self.ds + emscripten_version + self.ds + "em++";
 
 		print("-------------------------");
 		print("Make directories...")
 		mkdirs = [];
-		mkdirs.extend(self.mkdirs);
+		#mkdirs.extend(self.mkdirs);
 		mkdirs.extend([root_dir + self.ds + self.build_folder + self.ds + self.platform]);
 
 		if self.building_game:
 			mkdirs.extend([root_dir + "/data/ark2d"]);
 			mkdirs.extend([root_dir + "/build/html5/data"]);
 			mkdirs.extend([root_dir + "/build/html5/data/ark2d"]);
+			#mkdirs.extend([root_dir + "/build/html5/src/states"]); # TODO: read src dir and include any dirs here.
+
+		game_src_dirs = self.listDirectories(root_dir+"/src", False);
+		for dir in game_src_dirs:
+			mkdirs.extend([ark2d_dir + "/build/html5/src/" + dir]);
 
 		self.makeDirectories(mkdirs);
 
@@ -2979,8 +2996,10 @@ build:
 			compileStr = "";
 			if srcFileExtension == 'c':
 				compileStr += em_gcc;
-			elif srcFileExtension == 'cpp':
+			elif srcFileExtension == 'cpp' or srcFileExtension == 'mm':
 				compileStr += em_gpp;
+				compileStr += " -std=c++0x ";
+				compileStr += " -stdlib=libc++ ";
 			elif srcFileExtension == 'rc':
 				continue;
 
@@ -2996,9 +3015,14 @@ build:
 				#compileStr += " -fpermissive ";
 				"""
 
+
+			compileStr += " -Wall -g ";
+			#compileStr += " -v ";
+
 			if (self.platformOn == "osx"):
 				compileStr += " -DARK2D_EMSCRIPTEN_JS_ON_MACINTOSH ";
 
+			compileStr += " -Wno-overloaded-virtual "
 			compileStr += " -Wno-literal-conversion "
 			compileStr += " -c ";
 			if ("vendor" not in srcFile):
@@ -3011,14 +3035,15 @@ build:
 			if self.building_game:
 				compileStr += " -ffunction-sections ";
 
-			compileStr += " -I /usr/include ";
+			compileStr += " -I " + self.ark2d_dir + "/src ";
 			compileStr += " -I " + self.ark2d_dir + "/src/ARK2D/vendor/iphone ";
 			compileStr += " -I " + self.ark2d_dir + "/src/ARK2D/vendor/spine/includes ";
-			#compileStr += " -I " + self.ark2d_dir + "/lib/ubuntu-linux/include ";
+			compileStr += " -I " + self.ark2d_dir + "/src/ARK2D/vendor/angelscript ";
+
 			if self.building_game:
-				if "include_dirs" in self.config['html5']:
-					for includedir in self.config['html5']['include_dirs']:
-						includedir_actual = self.str_replace(includedir, [("%PREPRODUCTION_DIR%", config[self.platformOn]['game_preproduction_dir']), ("%ARK2D_DIR%", config[self.platformOn]['ark2d_dir'])]);
+				if "include_dirs" in self.game_config:
+					for includedir in self.game_config['include_dirs']:
+						includedir_actual = self.str_replace(includedir, [("%PREPRODUCTION_DIR%", self.game_preproduction_dir), ("%ARK2D_DIR%", self.ark2d_dir)]);
 						compileStr += " -I " + includedir_actual + " ";
 
 
@@ -3026,12 +3051,17 @@ build:
 			#compileStr += " -lrt ";
 
 			if (not srcFile in cacheJSON or cacheJSON[srcFile]['date_modified'] < os.stat(srcFile).st_mtime):
-				cacheJSON[srcFile] = {"date_modified": os.stat(srcFile).st_mtime };
-				cacheChanged = True;
 
 				print("Compiling " + srcFileNew);
-				#print(compileStr);
-				os.system(compileStr);
+				print(compileStr);
+				returnval = os.system(compileStr);
+				if returnval == 0:
+					cacheJSON[srcFile] = {"date_modified": os.stat(srcFile).st_mtime };
+					cacheChanged = True;
+					self.saveCache("compiled", cacheJSON);
+				else:
+					print("ERROR");
+					exit(0);
 
 		if (cacheChanged == True):
 			self.saveCache("compiled", cacheJSON);
@@ -3041,7 +3071,7 @@ build:
 			print("-------------------------");
 			print("Creating Shared Object");
 			linkStr = "";
-			linkStr += em_gcc + " -s FULL_ES2=1 -shared -o " + self.ark2d_dir + self.ds + "build/html5/libark2d.so ";
+			linkStr += em_gcc + " -s FULL_ES2=1 -o " + self.ark2d_dir + self.ds + "build/html5/libark2d.bc ";
 			for srcFile in self.src_files:
 				srcFileIndex = srcFile.rfind('.');
 				srcFileExtension = srcFile[srcFileIndex+1:len(srcFile)];
@@ -3051,10 +3081,34 @@ build:
 
 			print(linkStr);
 			os.system(linkStr);
+
+			print("-------------------------");
+			print("Creating Shared Object as Modules");
+
+			for index, module in enumerate( self.ark_config['modules'] ):
+
+				moduleName = module;
+				module = self.ark_config['modules'][moduleName];
+				print("-------------------------");
+				print("Module: " + moduleName);
+
+				linkStr = "";
+				linkStr += em_gcc + " -s FULL_ES2=1 -o " + self.ark2d_dir + self.ds + "build/html5/libark2d_"+moduleName+".bc ";
+
+				for srcFile in module['sources']:
+					srcFileIndex = srcFile.rfind('.');
+					srcFileExtension = srcFile[srcFileIndex+1:len(srcFile)];
+					srcFileNew = srcFile[0:srcFileIndex] + ".o";
+
+					linkStr += self.ark2d_dir + "/" + self.build_folder + "/" + self.platform + "/" + srcFileNew + " ";
+
+				print(linkStr);
+				os.system(linkStr);
+
 		elif (self.building_game):
 			print("-------------------------");
 			print("Copying Libraries ");
-			os.system("cp " + self.ark2d_dir + "/build/html5/libark2d.so " + root_dir + "/build/html5/libark2d.so");
+			os.system("cp " + self.ark2d_dir + "/build/html5/libark2d.bc " + root_dir + "/build/html5/libark2d.bc");
 
 			print("-------------------------");
 			print("Copying Game Data Files ");
@@ -3081,17 +3135,21 @@ build:
 
 				executableStr += root_dir + "/" + self.build_folder + "/" + self.platform + "/" + srcFileNew + " ";
 
+			executableStr +=  root_dir + "/build/html5/libark2d.bc ";
+
 			executableStr += " -Wl ";
 			executableStr += " --memory-init-file 1  ";
 
 			executableStr += " -L" + root_dir + "/" + self.build_folder + "/" + self.platform + " ";
-			executableStr += " -lark2d -lstdc++ -lm -lGLESv2 -lEGL "; #-lalut -lcurl -lX11 ";
+			#executableStr += " -lark2d";
+			executableStr += " -lstdc++ -lm "; #-lalut -lcurl -lX11 ";
+			#executableStr += " -lGLESv2 -lEGL ";
 
 
 			#executableStr += " --preload-file ./data/ark2d/fonts/default.fnt "
 			#####
 			filesToBundle = self.listFiles(root_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + "data", False);
-			print(filesToBundle);
+			#print(filesToBundle);
 			for file in filesToBundle:
 				thefile = "./data/" + file;
 				executableStr += " --preload-file " + thefile + " ";
@@ -3101,10 +3159,10 @@ build:
 
 			print("-------------------------");
 			print("Creating index.html ");
-			game_width = config['html5']['game_width'];
-			game_height = config['html5']['game_height'];
+			game_width = self.target_config['html5']['game_width'];
+			game_height = self.target_config['html5']['game_height'];
 			indexpagestr = "";
-			editsStrReplace = [("%GAME_NAME%", config['game_name']), ("%GAME_DESCRIPTION%", config['game_description']), ("%GAME_WIDTH%", str(game_width)), ("%GAME_HEIGHT%", str(game_height)), ("%GAME_HEIGHT_CENTER%", str((game_height/2)-10)), ("%COMPANY_NAME%", self.developer_name) ];
+			editsStrReplace = [("%GAME_NAME%", self.game_config['game']['name']), ("%GAME_DESCRIPTION%", self.game_config['game']['description']), ("%GAME_WIDTH%", str(game_width)), ("%GAME_HEIGHT%", str(game_height)), ("%GAME_HEIGHT_CENTER%", str((game_height/2)-10)), ("%COMPANY_NAME%", self.developer_name) ];
 			f = open(ark2d_dir+"/lib/html5/index.html", "r");
 			indexpagestr = f.read();
 			f.close();
@@ -5658,6 +5716,12 @@ build:
 						print("resampling audio file from: " + fromfile + " to: " + tofile);
 						#subprocess.call(["oggdec "+fromfile+" --quiet --output=- | oggenc --raw --quiet --quality=" + str(audio_quality) + " --output="+tofile+" -"], shell=True);
 						subprocess.call([ self.ark2d_dir + "/../Tools/oggdec "+fromfile+" --quiet --output=- | " + self.ark2d_dir +  "/../Tools/oggenc --raw --quiet --quality=" + str(audio_quality) + " --output="+tofile+" -"], shell=True);
+					elif (file_ext == "wav"): # resample
+						print("resampling audio file from: " + fromfile + " to: " + tofile);
+						#% cat inputfile | lame [options] - - > output
+						subprocess.call(["ffmpeg -i " +fromfile+ " -ac 1 "+tofile], shell=True);
+						#subprocess.call(["lame -V0 --quiet " +fromfile+ " "+tofile+""], shell=True);
+						#subprocess.call(["lame -a --quiet " +fromfile+ " "+tofile+""], shell=True);
 					else:
 						print("copying file from: " + fromfile + " to: " + tofile);
 						#subprocess.call(["cp -r " + fromfile + " " + tofile], shell=True);
@@ -6729,8 +6793,9 @@ build:
 ##
 if __name__ == "__main__":
 
-	print("---");
-	print("---");
+	print("---------------------");
+	print("ARK2D Project Builder");
+	print("---------------------");
 	print("Starting");
 
 	type = "library";
@@ -6745,9 +6810,9 @@ if __name__ == "__main__":
 	newconfig = False;
 
 	count = 0;
-	print("args: " + str(len(sys.argv)));
+	print("Args: " + str(len(sys.argv)));
 	for item in sys.argv:
-		print("lol item: " + item);
+		print("Item: " + item);
 		if count == 0:
 			count += 1;
 			continue;
@@ -6797,14 +6862,14 @@ if __name__ == "__main__":
 		count += 1;
 
 	print("---");
-	print("type: " + type);
-	print("target: " + target);
-	print("dir: " + dir);
-	print("use_dir: " + str(use_dir));
-	print("debug: " + str(debug));
-	print("clean: " + str(clean));
-	print("newconfig: " + str(newconfig));
-	print("onlyspritesheets: " + str(onlyspritesheets));
+	printPair(20, "type:", type);
+	printPair(20, "target:", target);
+	printPair(20, "dir: ", dir);
+	printPair(20, "use_dir: ", str(use_dir));
+	printPair(20, "debug: ", str(debug));
+	printPair(20, "clean: ", str(clean));
+	printPair(20, "newconfig: ", str(newconfig));
+	printPair(20, "onlyspritesheets: ", str(onlyspritesheets));
 
 	if (sys.platform == "win32"):
 		arkPlatform = "windows";
@@ -6824,8 +6889,8 @@ if __name__ == "__main__":
 
 			ark2d_dir = os.path.dirname(os.path.realpath(__file__));
 			print("---");
-			print("current file:" + ark2d_dir);
-			print("current working directory:" + dir);
+			print("Current file: " + ark2d_dir);
+			print("Current working directory: " + dir);
 
 			print("---");
 			print("Opening ark2d config file: ");
@@ -6833,15 +6898,16 @@ if __name__ == "__main__":
 			fcontents = f.read();
 			f.close();
 			ark_config = json.loads(fcontents);
+			print("Done.");
 
 			print("---");
 			print("Opening game config file: ");
 			print(dir + "/configs/game.json");
-
 			f = open(dir + "/configs/game.json");
 			fcontents = f.read();
 			f.close();
 			game_config = json.loads(fcontents);
+			print("Done.");
 
 			print("---");
 			print("Opening target config file: ");
@@ -6851,6 +6917,7 @@ if __name__ == "__main__":
 			fcontents = f.read();
 			f.close();
 			target_config = json.loads(fcontents);
+			print("Done.");
 
 			#print(game_config);
 			#print(target_config);
@@ -7086,6 +7153,7 @@ if __name__ == "__main__":
 
 		try:
 			a.config = json.loads(fcontents);
+			a.ark_config = a.config;
 			a.android_config = a.config['android'];
 			a.android_sdkdir = a.config[a.platformOn]['android']['sdk_dir'];
 			a.android_ndkdir = a.config[a.platformOn]['android']['ndk_dir'];
