@@ -4,6 +4,9 @@
 //  Created by Ashley Gwinnell on 11/08/2011.
 //  Copyright 2011 Ashley Gwinnell. All rights reserved.
 //
+
+#ifdef ARK2D_MACINTOSH
+
 #include "../../Namespaces.h"
 #import <Cocoa/Cocoa.h>
 
@@ -17,3 +20,4 @@ using namespace ARK::Core;
 
 		@end
 
+#endif

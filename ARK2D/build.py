@@ -2965,7 +2965,7 @@ build:
 		print("-------------------------");
 		print("Make directories...")
 		mkdirs = [];
-		#mkdirs.extend(self.mkdirs);
+		mkdirs.extend(self.mkdirs);
 		mkdirs.extend([root_dir + self.ds + self.build_folder + self.ds + self.platform]);
 
 		if self.building_game:
@@ -2975,8 +2975,10 @@ build:
 			#mkdirs.extend([root_dir + "/build/html5/src/states"]); # TODO: read src dir and include any dirs here.
 
 		game_src_dirs = self.listDirectories(root_dir+"/src", False);
+		#print('game_src_dirs ');
+		#print(game_src_dirs);
 		for dir in game_src_dirs:
-			mkdirs.extend([ark2d_dir + "/build/html5/src/" + dir]);
+			mkdirs.extend([root_dir + "/build/html5/src/" + dir]);
 
 		self.makeDirectories(mkdirs);
 
@@ -3005,6 +3007,7 @@ build:
 
 			compileStr += " -DARK2D_EMSCRIPTEN_JS ";
 			compileStr += " -DGL_GLEXT_PROTOTYPES ";
+
 			"""compileStr += " -Wno-trigraphs -Wno-deprecated-declarations -Wreturn-type -fexceptions "; #-fno-builtin-exit ";
 			if self.building_library:
 				compileStr += " -fPIC ";
@@ -3017,6 +3020,10 @@ build:
 
 
 			compileStr += " -Wall -g ";
+
+			#if (not self.debug):
+				#compileStr += " -O2 ";
+
 			#compileStr += " -v ";
 
 			if (self.platformOn == "osx"):
@@ -3025,12 +3032,16 @@ build:
 			compileStr += " -Wno-overloaded-virtual "
 			compileStr += " -Wno-literal-conversion "
 			compileStr += " -c ";
-			if ("vendor" not in srcFile):
-				compileStr += " -O3 ";
+			#if ("vendor" not in srcFile):
+			compileStr += " -s DEMANGLE_SUPPORT=1 ";
 
 			#compileStr += " -s ALLOW_MEMORY_GROWTH=1 "
 			#compileStr += " -s TOTAL_MEMORY=16777216 "
-			compileStr += " -s TOTAL_MEMORY=134217728 "
+			compileStr += " -s TOTAL_MEMORY=134217728 ";
+			compileStr += " -s USE_PTHREADS=0 ";
+			compileStr += " -s EXPORTED_FUNCTIONS=\"['_main','emscripten_run_thread','_emscripten_run_thread']\" ";
+			compileStr += " -s ASSERTIONS=1 ";
+			compileStr += " -O2 ";
 
 			if self.building_game:
 				compileStr += " -ffunction-sections ";
@@ -3071,7 +3082,14 @@ build:
 			print("-------------------------");
 			print("Creating Shared Object");
 			linkStr = "";
-			linkStr += em_gcc + " -s FULL_ES2=1 -o " + self.ark2d_dir + self.ds + "build/html5/libark2d.bc ";
+			linkStr += em_gcc + " -s FULL_ES2=1 ";
+			#if (not self.debug):
+
+			linkStr += " -s DEMANGLE_SUPPORT=1 ";
+			linkStr += " -s EXPORTED_FUNCTIONS=\"['_main','emscripten_run_thread','_emscripten_run_thread']\" ";
+			linkStr += " -s ASSERTIONS=1 ";
+			linkStr += " -O2 ";
+			linkStr += " -o " + self.ark2d_dir + self.ds + "build/html5/libark2d.bc ";
 			for srcFile in self.src_files:
 				srcFileIndex = srcFile.rfind('.');
 				srcFileExtension = srcFile[srcFileIndex+1:len(srcFile)];
@@ -3093,7 +3111,13 @@ build:
 				print("Module: " + moduleName);
 
 				linkStr = "";
-				linkStr += em_gcc + " -s FULL_ES2=1 -o " + self.ark2d_dir + self.ds + "build/html5/libark2d_"+moduleName+".bc ";
+				linkStr += em_gcc + " -s FULL_ES2=1 ";
+				#if (not self.debug):
+				linkStr += " -s DEMANGLE_SUPPORT=1 ";
+				linkStr += " -s EXPORTED_FUNCTIONS=\"['_main','emscripten_run_thread','_emscripten_run_thread']\" ";
+				linkStr += " -s ASSERTIONS=1 ";
+				linkStr += " -O2 ";
+				linkStr += " -o " + self.ark2d_dir + self.ds + "build/html5/libark2d_"+moduleName+".bc ";
 
 				for srcFile in module['sources']:
 					srcFileIndex = srcFile.rfind('.');
@@ -3108,10 +3132,18 @@ build:
 		elif (self.building_game):
 			print("-------------------------");
 			print("Copying Libraries ");
-			os.system("cp " + self.ark2d_dir + "/build/html5/libark2d.bc " + root_dir + "/build/html5/libark2d.bc");
+			if ("modules" not in self.target_config):
+				os.system("cp " + self.ark2d_dir + "/build/html5/libark2d.bc " + root_dir + "/build/html5/libark2d.bc");
+			else:
+				for module in self.target_config['modules']:
+					os.system("cp " + self.ark2d_dir + "/build/html5/libark2d_" + module + ".bc " + root_dir + "/build/html5/libark2d_" + module + ".bc");
 
 			print("-------------------------");
 			print("Copying Game Data Files ");
+			if (os.path.exists( root_dir + self.ds + "build/html5/data") ):
+				os.system("rm -r " + root_dir + self.ds + "build/html5/data");
+				self.makeDirectories([root_dir + "/build/html5/data"]);
+				self.makeDirectories([root_dir + "/build/html5/data/ark2d"]);
 			os.system("cp -r " + root_dir + "/data/* " + root_dir + "/build/html5/data ");
 
 			print("-------------------------");
@@ -3120,10 +3152,21 @@ build:
 
 			print("-------------------------");
 			print("Creating Executable");
+			# remove first if it exists
+			os.system("rm -r " + root_dir + self.ds + "build/html5/game.html");
+			os.system("rm -r " + root_dir + self.ds + "build/html5/game.html.mem");
+			os.system("rm -r " + root_dir + self.ds + "build/html5/game.js");
+			os.system("rm -r " + root_dir + self.ds + "build/html5/game.data");
+			os.system("rm -r " + root_dir + self.ds + "build/html5/index.html");
+
 			executableStr = "";
 			executableStr += em_gcc;
 			executableStr += " -s FULL_ES2=1 ";
+			executableStr += " -s DEMANGLE_SUPPORT=1 ";
 			executableStr += " -s TOTAL_MEMORY=134217728 ";
+			executableStr += " -s EXPORTED_FUNCTIONS=\"['_main','emscripten_run_thread','_emscripten_run_thread']\" ";
+			executableStr += " -s ASSERTIONS=1 ";
+			executableStr += " -O2 ";
 			executableStr += "-o " + root_dir + self.ds + "build/html5/game.html ";
 			for srcFile in self.src_files:
 				srcFileIndex = srcFile.rfind('.');
@@ -3135,7 +3178,12 @@ build:
 
 				executableStr += root_dir + "/" + self.build_folder + "/" + self.platform + "/" + srcFileNew + " ";
 
-			executableStr +=  root_dir + "/build/html5/libark2d.bc ";
+
+			if ("modules" not in self.target_config):
+				executableStr +=  root_dir + "/build/html5/libark2d.bc ";
+			else:
+				for module in self.target_config['modules']:
+					executableStr +=  root_dir + "/build/html5/libark2d_" + module + ".bc ";
 
 			executableStr += " -Wl ";
 			executableStr += " --memory-init-file 1  ";

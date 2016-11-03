@@ -7,7 +7,7 @@
 
 #include "RSSL.h"
 #include "../Core/String.h"
-#include "StringUtil.h"
+#include "../Core/Util/StringUtil.h"
 #include "../Core/Cast.h"
 #include "../Core/Controls/ErrorDialog.h"
 

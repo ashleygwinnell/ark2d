@@ -23,6 +23,7 @@
 #include "ARK2D/Core/Strings.h"
 #include "ARK2D/Core/Math/SAT.h"
 #include "ARK2D/Core/Cast.h"
+#include "ARK2D/Core/KeyPairFile.h"
 
 // Geometry
 #include "ARK2D/Core/Geometry/Vector2.h"
@@ -111,6 +112,11 @@
 // Scenegraph
 #include "ARK2D/Core/SceneGraph/Scene.h"
 
+// Core Utils
+#include "ARK2D/Core/Util/StringUtil.h"
+#include "ARK2D/Core/Util/SystemUtil.h"
+#include "ARK2D/Core/Util/Callbacks.h"
+
 
 // Game Jolt
 #include "ARK2D/GJ/GameJolt.h"
@@ -150,15 +156,11 @@
 #include "ARK2D/Util/GooglePlayGameServicesUtil.h"
 #include "ARK2D/Util/GameCircleUtil.h"
 #include "ARK2D/Util/ArcadeHighscoreInput.h"
-#include "ARK2D/Util/Callbacks.h"
-#include "ARK2D/Util/FileUtil.h"
-#include "ARK2D/Util/StringUtil.h"
 #include "ARK2D/Util/DisplayUtil.h"
 #include "ARK2D/Util/VerticalMenu.h" // can probably be removed?
 #include "ARK2D/Util/VerticalMenuItem.h" // can probably be removed?
 #include "ARK2D/Util/CameraShake.h" // can probably be removed?
 #include "ARK2D/Util/LocalHighscores.h"
-#include "ARK2D/Util/KeyPairFile.h"
 #include "ARK2D/Util/RSSL.h" // basic scripting.
 #include "ARK2D/Util/Range.h"
 #include "ARK2D/Util/StringStore.h"

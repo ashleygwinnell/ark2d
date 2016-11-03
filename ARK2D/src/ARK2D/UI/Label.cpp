@@ -7,7 +7,7 @@
 
 #include "Label.h"
 #include "../Core/Graphics/Renderer.h"
-#include "../Util/StringUtil.h"
+#include "../Core/Util/StringUtil.h"
 
 namespace ARK {
 	namespace UI {
@@ -15,7 +15,7 @@ namespace ARK {
 			AbstractUIComponent(),
 			m_text(""),
 			m_alignX(-1),
-			m_alignY(-1) 
+			m_alignY(-1)
 		{
 
 		}
@@ -24,7 +24,7 @@ namespace ARK {
 			AbstractUIComponent(),
 			m_text(text),
 			m_alignX(-1),
-			m_alignY(-1) 
+			m_alignY(-1)
 		{
             ARK::Core::Font::Font* fnt = ARK2D::getRenderer()->getFont();
 			setSize((fnt) ? fnt->getStringWidth(text) : 0, (fnt) ? fnt->getLineHeight() : 0);
@@ -43,7 +43,7 @@ namespace ARK {
 			AbstractUIComponent(),
 			m_text(text),
 			m_alignX(alignX),
-			m_alignY(alignY) 
+			m_alignY(alignY)
 		{
 			ARK::Core::Font::Font* fnt = ARK2D::getRenderer()->getFont();
 			setSize((fnt) ? fnt->getStringWidth(text) : 0, (fnt) ? fnt->getLineHeight() : 0);
@@ -73,7 +73,7 @@ namespace ARK {
            		if (stringWidth > innerWidth) {
            			innerWidth = stringWidth;
            		}
-           	} 
+           	}
 
            	setBounds(innerWidth, currentY, 0.0f);
 		}

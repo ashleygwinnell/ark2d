@@ -140,6 +140,7 @@
 				"src/ARK2D/Core/Platform/GameContainerMacAppDelegate.mm",
 				"src/ARK2D/Core/Platform/GameContainerMacWindowListener.mm",
 				"src/ARK2D/Core/Platform/GameContainerWindows.cpp",
+				"src/ARK2D/Core/Platform/GameContainerHTML5.cpp",
 				"src/ARK2D/Core/SceneGraph/Scene.cpp",
 				"src/ARK2D/Core/State/GameState.cpp",
 				"src/ARK2D/Core/State/IntelligentGameState.cpp",
@@ -160,6 +161,10 @@
 				"src/ARK2D/Core/Tween/Timeline.cpp",
 				"src/ARK2D/Core/Tween/Easing.cpp",
 				"src/ARK2D/Core/Tween/Timer.cpp",
+				"src/ARK2D/Core/Util/Callbacks.cpp",
+				"src/ARK2D/Core/Util/StringUtil.cpp",
+				"src/ARK2D/Core/Util/SystemUtil.cpp",
+				"src/ARK2D/Core/Vendor/FileInterface.cpp",
 				"src/ARK2D/Core/ARK2D.cpp",
 				"src/ARK2D/Core/Game.cpp",
 				"src/ARK2D/Core/Event.cpp",
@@ -167,6 +172,7 @@
 				"src/ARK2D/Core/GameObject.cpp",
 				"src/ARK2D/Core/GameContainer.cpp",
 				"src/ARK2D/Core/GameTimer.cpp",
+				"src/ARK2D/Core/KeyPairFile.cpp",
 				"src/ARK2D/Core/Resource.cpp",
 				"src/ARK2D/Core/Sort.cpp",
 				"src/ARK2D/Core/String.cpp",
@@ -174,7 +180,71 @@
 				"src/ARK2D/Core/Camera.cpp",
 				"src/ARK2D/Core/Pool.cpp",
 				"src/ARK2D/Core/Vector.cpp",
-				"src/ARK2D/Core/Log.cpp"
+				"src/ARK2D/Core/Log.cpp",
+
+				"src/ARK2D/Audio/Sound.cpp",
+				"src/ARK2D/Audio/SoundStore.cpp",
+
+				"src/ARK2D/vendor/libJSON/JSON_Worker.cpp",
+				"src/ARK2D/vendor/libJSON/jsonmain.cpp",
+				"src/ARK2D/vendor/libJSON/JSONNode.cpp",
+
+				"src/ARK2D/vendor/mersennetwister/mt.cpp",
+
+				"src/ARK2D/vendor/submodules/libpng15/png.c",
+				"src/ARK2D/vendor/submodules/libpng15/pngerror.c",
+				"src/ARK2D/vendor/submodules/libpng15/pngget.c",
+				"src/ARK2D/vendor/submodules/libpng15/pngmem.c",
+				"src/ARK2D/vendor/submodules/libpng15/pngpread.c",
+				"src/ARK2D/vendor/submodules/libpng15/pngread.c",
+				"src/ARK2D/vendor/submodules/libpng15/pngrio.c",
+				"src/ARK2D/vendor/submodules/libpng15/pngrtran.c",
+				"src/ARK2D/vendor/submodules/libpng15/pngrutil.c",
+				"src/ARK2D/vendor/submodules/libpng15/pngset.c",
+				"src/ARK2D/vendor/submodules/libpng15/pngtrans.c",
+				"src/ARK2D/vendor/submodules/libpng15/pngwio.c",
+				"src/ARK2D/vendor/submodules/libpng15/pngwrite.c",
+				"src/ARK2D/vendor/submodules/libpng15/pngwtran.c",
+				"src/ARK2D/vendor/submodules/libpng15/pngwutil.c",
+
+				"src/ARK2D/vendor/ogg130/bitwise.c",
+				"src/ARK2D/vendor/ogg130/framing.c",
+
+				"src/ARK2D/vendor/vorbis132/analysis.c",
+				"src/ARK2D/vendor/vorbis132/bitrate.c",
+				"src/ARK2D/vendor/vorbis132/block.c",
+				"src/ARK2D/vendor/vorbis132/codebook.c",
+				"src/ARK2D/vendor/vorbis132/envelope.c",
+				"src/ARK2D/vendor/vorbis132/floor0.c",
+				"src/ARK2D/vendor/vorbis132/floor1.c",
+				"src/ARK2D/vendor/vorbis132/info.c",
+				"src/ARK2D/vendor/vorbis132/lookup.c",
+				"src/ARK2D/vendor/vorbis132/lpc.c",
+				"src/ARK2D/vendor/vorbis132/lsp.c",
+				"src/ARK2D/vendor/vorbis132/mapping0.c",
+				"src/ARK2D/vendor/vorbis132/mdct.c",
+				"src/ARK2D/vendor/vorbis132/psy.c",
+				"src/ARK2D/vendor/vorbis132/registry.c",
+				"src/ARK2D/vendor/vorbis132/res0.c",
+				"src/ARK2D/vendor/vorbis132/sharedbook.c",
+				"src/ARK2D/vendor/vorbis132/smallft.c",
+				"src/ARK2D/vendor/vorbis132/synthesis.c",
+				"src/ARK2D/vendor/vorbis132/vorbisenc.c",
+				"src/ARK2D/vendor/vorbis132/vorbisfile.c",
+				"src/ARK2D/vendor/vorbis132/window.c",
+
+				"src/ARK2D/vendor/zlib123/adler32.c",
+				"src/ARK2D/vendor/zlib123/compress.c",
+				"src/ARK2D/vendor/zlib123/crc32.c",
+				"src/ARK2D/vendor/zlib123/deflate.c",
+				"src/ARK2D/vendor/zlib123/gzio.c",
+				"src/ARK2D/vendor/zlib123/infback.c",
+				"src/ARK2D/vendor/zlib123/inffast.c",
+				"src/ARK2D/vendor/zlib123/inflate.c",
+				"src/ARK2D/vendor/zlib123/inftrees.c",
+				"src/ARK2D/vendor/zlib123/trees.c",
+				"src/ARK2D/vendor/zlib123/uncompr.c",
+				"src/ARK2D/vendor/zlib123/zutil.c"
 			],
 			"dependencies": [
 				"Cocoa.framework",
@@ -182,7 +252,8 @@
 				"IOKit.framework",
 				"QuartzCore.framework",
 				"OpenGL.framework",
-				"QTKit.framework"
+				"QTKit.framework",
+				"OpenAL.framework"
 			]
 		},
 		"gj": {
@@ -261,6 +332,31 @@
 		},
 		"transitions": {
 			"sources": [],
+			"dependencies": []
+		},
+		"util": {
+			"sources": [
+				"src/ARK2D/Util/AnalyticsUtil.cpp",
+				"src/ARK2D/Util/AngelScriptUtil.cpp",
+				"src/ARK2D/Util/ArcadeHighscoreInput.cpp",
+				"src/ARK2D/Util/CameraShake.cpp",
+				"src/ARK2D/Util/DisplayUtil.cpp",
+				"src/ARK2D/Util/GameCenterUtil.cpp",
+				"src/ARK2D/Util/ICloudUtil.cpp",
+				"src/ARK2D/Util/GooglePlayGameServicesUtil.cpp",
+				"src/ARK2D/Util/GameCircleUtil.cpp",
+				"src/ARK2D/Util/LocalHighscores.cpp",
+				"src/ARK2D/Util/RSSL.cpp",
+				"src/ARK2D/Util/SocialUtil.cpp",
+				"src/ARK2D/Util/StringStore.cpp",
+				"src/ARK2D/Util/URLRequest.cpp",
+				"src/ARK2D/Util/Validation.cpp",
+				"src/ARK2D/Util/VerticalMenu.cpp",
+				"src/ARK2D/Util/VerticalMenuItem.cpp",
+				"src/ARK2D/Util/Vibrator.cpp",
+				"src/ARK2D/Util/Wobble.cpp"
+
+			],
 			"dependencies": []
 		},
 		"ui": {
@@ -421,6 +517,14 @@
 			"src/ARK2D/Core/Platform/GameContainerMacAppDelegate.mm",
 			"src/ARK2D/Core/Platform/GameContainerMacWindowListener.mm",
 
+			"src/ARK2D/Core/Util/Callbacks.cpp",
+			"src/ARK2D/Core/Util/StringUtil.cpp",
+			"src/ARK2D/Core/Util/SystemUtil.cpp",
+
+			"src/ARK2D/Core/Vendor/FileInterface.cpp",
+
+			"src/ARK2D/Core/KeyPairFile.cpp",
+
 			"src/ARK2D/Audio/Sound.cpp",
 			"src/ARK2D/Audio/SoundStore.cpp",
 
@@ -503,20 +607,16 @@
 			"src/ARK2D/Util/AnalyticsUtil.cpp",
 			"src/ARK2D/Util/AngelScriptUtil.cpp",
 			"src/ARK2D/Util/ArcadeHighscoreInput.cpp",
-			"src/ARK2D/Util/Callbacks.cpp",
 			"src/ARK2D/Util/CameraShake.cpp",
-			"src/ARK2D/Util/FileUtil.cpp",
 			"src/ARK2D/Util/DisplayUtil.cpp",
 			"src/ARK2D/Util/GameCenterUtil.cpp",
 			"src/ARK2D/Util/ICloudUtil.cpp",
 			"src/ARK2D/Util/GooglePlayGameServicesUtil.cpp",
 			"src/ARK2D/Util/GameCircleUtil.cpp",
-			"src/ARK2D/Util/KeyPairFile.cpp",
 			"src/ARK2D/Util/LocalHighscores.cpp",
 			"src/ARK2D/Util/RSSL.cpp",
 			"src/ARK2D/Util/SocialUtil.cpp",
 			"src/ARK2D/Util/StringStore.cpp",
-			"src/ARK2D/Util/StringUtil.cpp",
 			"src/ARK2D/Util/URLRequest.cpp",
 			"src/ARK2D/Util/Validation.cpp",
 			"src/ARK2D/Util/VerticalMenu.cpp",
@@ -531,7 +631,6 @@
 
 			"src/ARK2D/vendor/mersennetwister/mt.cpp",
 
-			"src/ARK2D/vendor/FileInterface.cpp",
 			"src/ARK2D/vendor/libJSON/JSON_Worker.cpp",
 			"src/ARK2D/vendor/libJSON/jsonmain.cpp",
 			"src/ARK2D/vendor/libJSON/JSONNode.cpp",
@@ -660,10 +759,7 @@
 			"src/ARK2D/vendor/wp8/gl2dx/VertexBuilder.cpp"
 		],
 		"osx": [
-			"src/ARK2D/Util/MidiUtil.cpp",
-			"src/ARK2D/Core/Platform/GameContainerMac.mm",
-			"src/ARK2D/Core/Platform/GameContainerMacAppDelegate.mm",
-			"src/ARK2D/Core/Platform/GameContainerMacWindowListener.mm"
+			"src/ARK2D/Util/MidiUtil.cpp"
 		],
 		"linux": [
 			"src/ARK2D/Core/Platform/GameContainerLinux.cpp",

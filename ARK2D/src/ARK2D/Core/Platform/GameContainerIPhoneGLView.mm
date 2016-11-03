@@ -19,7 +19,7 @@
 #include "../GameContainer.h"
 #include "../Graphics/Color.h"
 #include "../../UI/Dialog.h"
-#include "../../Util/Callbacks.h"
+#include "../Util/Callbacks.h"
 
 #include "../../Util/ICloudUtil.h"
 

@@ -10,7 +10,7 @@
 #include "Resource.h"
 #include "String.h"
 #include "GameContainer.h"
-#include "../Util/StringUtil.h"
+#include "Util/StringUtil.h"
 //#include "Log.h"
 #include "../Common/Libraries/rapidxml.h"
 #include "../vendor/rapidxml/ark_rapidxml_util.hpp"
@@ -102,7 +102,7 @@ namespace ARK {
 
                 if (grouped) {
 
-                	unsigned int i = 0;
+                	//unsigned int i = 0;
 					xml_node<char>* groupNode = 0;
 					for (groupNode = root->first_node("group");
 						groupNode != NULL;

@@ -10,7 +10,7 @@
 #include "Image.h"
 #include "ShaderStore.h"
 
-#include "../../Util/StringUtil.h"
+#include "../Util/StringUtil.h"
 #include "../Vector.h"
 
 #include <stdlib.h>

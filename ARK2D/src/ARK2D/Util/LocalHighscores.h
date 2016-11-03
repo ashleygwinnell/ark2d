@@ -11,9 +11,9 @@
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
 
-#include "FileUtil.h"
+#include "../Core/Util/SystemUtil.h"
 #include "../Core/Cast.h"
-#include "StringUtil.h"
+#include "../Core/Util/StringUtil.h"
 #include <vector>
 #include <string>
 #include <algorithm>
@@ -47,8 +47,12 @@ namespace ARK {
 				static bool s_isThreadedOverride;
 
 			public:
+				static LocalHighscores* createFromFile(string ref, bool appendPath = true);
+
+			private:
 				LocalHighscores(string filename);
 				LocalHighscores(string filename, void* data);
+			public:
 				void addItem(string name, int score);
 				void save();
 				string saveString();

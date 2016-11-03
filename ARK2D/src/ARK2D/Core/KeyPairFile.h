@@ -5,17 +5,16 @@
  *      Author: Ashley
  */
 
-#ifndef ARK_UTIL_KEYPAIRFILE_H_
-#define ARK_UTIL_KEYPAIRFILE_H_
+#ifndef ARK_CORE_KEYPAIRFILE_H_
+#define ARK_CORE_KEYPAIRFILE_H_
 
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
 
-#include "../Core/Cast.h"
-#include "../Core/Resource.h"
-
-#include "FileUtil.h"
-#include "StringUtil.h"
+#include "Cast.h"
+#include "Resource.h"
+#include "Util/StringUtil.h"
+#include "Util/SystemUtil.h"
 
 #include <map>
 #include <vector>
@@ -25,7 +24,7 @@
 using namespace std;
 
 namespace ARK {
-	namespace Util {
+	namespace Core {
 
 		/*!
 		 * \brief Locally stored highscores. Use Resource class to load and save these.

@@ -21,7 +21,7 @@
 #include "../Geometry/Cube.h"
 
 #include "../Cast.h"
-#include "../../Util/StringUtil.h"
+#include "../Util/StringUtil.h"
 
 #include "Texture.h"
 #include "TextureStore.h"
@@ -35,7 +35,7 @@
 #include "../../Common/OpenGL.h"
 
 //#if defined(ARK2D_WINDOWS_PHONE_8)
-    #include "../../Util/FileUtil.h"
+    #include "../Util/SystemUtil.h"
 //#endif
 
 namespace ARK {
@@ -1762,8 +1762,6 @@ namespace ARK {
                 ARK2D::getLog()->v("Renderer::init");
                 #ifdef SHADER_SUPPORT
 
-                    bool fbosupport = FBO::isSupported();
-
                     #if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
                         glGenVertexArraysOES = NULL;
                         glBindVertexArrayOES = NULL;
@@ -1926,7 +1924,7 @@ namespace ARK {
                 delete[] pixels;
                 ARK2D::getLog()->e("Saved image");
                 if (open) {
-                    FileUtil::openGalleryToImageUrl(filename);
+                    SystemUtil::openGalleryToImageUrl(filename);
                 }
             }
             void Renderer::flush() {
@@ -2735,7 +2733,7 @@ namespace ARK {
                     float eachAngle = diffAngle / float(segs);
                     for(signed int i = 0; i < segs; i++)
                     {
-                        float j = float(i);
+                        //float j = float(i);
                         float rawVertices[9];
                         float rawNormals[9];
                         unsigned char rawColors[12];

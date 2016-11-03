@@ -13,8 +13,8 @@
 #include "../Core/Graphics/Color.h"
 #include "../Core/Controls/ErrorDialog.h"
 #include "../Core/Graphics/Image.h"
-#include "../Util/StringUtil.h"
- 
+#include "../Core/Util/StringUtil.h"
+
 
 namespace ARK {
 	namespace Particles {

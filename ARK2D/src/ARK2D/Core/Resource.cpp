@@ -20,15 +20,15 @@
 #include "Font/Font.h"
 #include "GameContainer.h"
 #include "String.h"
+#include "Util/StringUtil.h"
 
 #include "../Audio/Sound.h"
-#include "../Tiled/TiledMap.h"
-#include "../Path/PathGroup.h"
-#include "../Path/PathIO.h"
-#include "../Util/StringUtil.h"
-#include "../Util/LocalHighscores.h"
-#include "../Util/KeyPairFile.h"
-#include "../Util/FileUtil.h"
+//#include "../Tiled/TiledMap.h"
+//#include "../Path/PathGroup.h"
+//#include "../Path/PathIO.h"
+#include "KeyPairFile.h"
+//#include "../Util/LocalHighscores.h"
+#include "Util/SystemUtil.h"
 
 //#include "../vendor/spine/includes/spine/spine.h"
 //#include "../vendor/spine/SpineSkeleton.h"
@@ -65,6 +65,17 @@ namespace ARK {
 			s_latestName = s;
 		}
 
+		string Resource::fixpath(string ref, bool appendPath) {
+			GameContainer* container = ARK2D::getContainer();
+			if (ref.substr(1,1).compare(":") == 0 || ref.substr(0,1).compare("/") == 0) {
+				appendPath = false;
+			}
+			if (appendPath) {
+				ref = container->getResourcePath() + ref;
+			}
+			return ref;
+		}
+
 		Resource* Resource::get(string ref) {
 			return get(ref, true);
 		}
@@ -72,13 +83,8 @@ namespace ARK {
 		Resource* Resource::get(string ref, bool appendPath) {
 			setLatestName(ref);
 
-			GameContainer* container = ARK2D::getContainer();
 			string oldref = ref;
-
-			if (ref.substr(1,1).compare(":") == 0 || ref.substr(0,1).compare("/") == 0) { appendPath = false; }
-			if (appendPath) {
-				ref = container->getResourcePath() + ref;
-			}
+			ref = fixpath(ref, appendPath);
 
 			ARK2D::getLog()->i(StringUtil::append("Loading Resource: ", ref));
 
@@ -137,23 +143,10 @@ namespace ARK {
 				#endif
 				resource = skeleton;
 			}*/
-			else if (extension == "tmx")
+			/*else if (extension == "tmx")
 			{
-				ARK::Tiled::TiledMap* map = NULL;
-				#if defined(ARK2D_ANDROID)
-					RawDataReturns* rt = getRawData(ref);
-
-					//char* newtextbuffer = (char*) realloc(rt->data, rt->size+1);
-					//newtextbuffer[rt->size] = '\0';
-
-					map = new ARK::Tiled::TiledMap(ref, rt->data);
-					map->load();
-				#else
-					map = new ARK::Tiled::TiledMap(ref);
-					map->load();
-				#endif
-				resource = map;
-			}
+				// Use TiledMap::createFromFile(string ref);
+			}*/
 			else if (extension == "kpf")
 			{
 				KeyPairFile* keypairfile = NULL;
@@ -176,32 +169,10 @@ namespace ARK {
 				resource = keypairfile;
 
 			}
-			else if (extension == "localhighscores")
+			/*else if (extension == "localhighscores")
 			{
-				LocalHighscores* scores = NULL;
-				#if defined(ARK2D_ANDROID)
-					RawDataReturns* rt = getRawData(ref);
 
-					//char* newtextbuffer = (char*) malloc(rt->size+1);
-					//memcpy(newtextbuffer, rt->data, rt->size);
-					//newtextbuffer[rt->size] = '\0';
-
-					char* newtextbuffer = (char*) realloc(rt->data, rt->size+1);
-					newtextbuffer[rt->size] = '\0';
-
-					//scores = new LocalHighscores(ref, rt->data);
-					scores = new LocalHighscores(ref, newtextbuffer);
-
-					ARK2D::getLog()->v("Freeing raw resource data... ");
-
-					rt->data = newtextbuffer;
-					delete rt;
-					//free(newtextbuffer);
-				#else
-					scores = new LocalHighscores(oldref);
-				#endif
-				resource = scores;
-			}
+			}*/
 			else if (extension == "spritesheetdescription")
 			{
 				SpriteSheetDescription* desc = NULL;
@@ -253,7 +224,7 @@ namespace ARK {
 					resource = new Sound(ref);
 				#endif
 			}
-			else if (extension == "path")
+			/*else if (extension == "path")
 			{
 				#if defined(ARK2D_ANDROID)
 					ErrorDialog::createAndShow("Path implementation not on Android.");
@@ -262,7 +233,7 @@ namespace ARK {
 				#else
 					resource = PathIO::createFromFile(ref);
 				#endif
-			}
+			}*/
 			else
 			{ // Assume plain text.
 				String* arkstr = new String();
@@ -397,7 +368,7 @@ namespace ARK {
 
 			//#if defined(ARK2D_ANDROID)
 				RawDataReturns* data = getRawData(ref);
-				FileUtil::file_put_contents(ref2, (const char*) data->data, data->size);
+				SystemUtil::file_put_contents(ref2, (const char*) data->data, data->size);
 				delete data;
 			//#endif
 		}
@@ -548,7 +519,7 @@ namespace ARK {
 					return rt;
 
 
-					/*file_get_contents_binary_result r = FileUtil::file_get_contents_binary(oldref);
+					/*file_get_contents_binary_result r = SystemUtil::file_get_contents_binary(oldref);
 
 					ARK2D::getLog()->v("getting raw data: android platform");
 					ARK2D::getLog()->v(StringUtil::append("len: ", r.len));
@@ -621,7 +592,7 @@ namespace ARK {
 
 					bool localExists = StringUtil::file_exists(localRef.c_str());
 					if (localExists) {
-						file_get_contents_binary_result r = FileUtil::file_get_contents_binary(localRef);
+						file_get_contents_binary_result r = SystemUtil::file_get_contents_binary(localRef);
 
 						RawDataReturns* rt = new RawDataReturns();
 						rt->data = (void*) r.data;
@@ -630,7 +601,7 @@ namespace ARK {
 					}
 				}
 
-				file_get_contents_binary_result r = FileUtil::file_get_contents_binary(ref);
+				file_get_contents_binary_result r = SystemUtil::file_get_contents_binary(ref);
 
 				RawDataReturns* rt = new RawDataReturns();
 				rt->data = (void*) r.data;
@@ -638,7 +609,7 @@ namespace ARK {
 				return rt;
 
 			#else
-				file_get_contents_binary_result r = FileUtil::file_get_contents_binary(ref);
+				file_get_contents_binary_result r = SystemUtil::file_get_contents_binary(ref);
 
 				//ARK2D::getLog()->v("getting raw data: misc platform");
 				//ARK2D::getLog()->v(StringUtil::append("len: ", r.len));
@@ -689,20 +660,20 @@ namespace ARK {
         ARK::Core::Font::Font* Resource::asFont() {
 			return dynamic_cast<ARK::Core::Font::Font*>(this);
 		}
-		LocalHighscores* Resource::asLocalHighscores() {
-			return dynamic_cast<ARK::Util::LocalHighscores*>(this);
-		}
-		PathGroup* Resource::asPathGroup() {
-			return dynamic_cast<ARK::Path::PathGroup*>(this);
-		}
-		TiledMap* Resource::asTiledMap() {
-			return dynamic_cast<ARK::Tiled::TiledMap*>(this);
-		}
+		//LocalHighscores* Resource::asLocalHighscores() {
+		//	return dynamic_cast<ARK::Util::LocalHighscores*>(this);
+		//}
+		//PathGroup* Resource::asPathGroup() {
+		//	return dynamic_cast<ARK::Path::PathGroup*>(this);
+		//}
+		//TiledMap* Resource::asTiledMap() {
+		//	return dynamic_cast<ARK::Tiled::TiledMap*>(this);
+		//}
 		SpriteSheetDescription* Resource::asSpriteSheetDescription() {
 			return dynamic_cast<ARK::Core::Graphics::SpriteSheetDescription*>(this);
 		}
 		KeyPairFile* Resource::asKeyPairFile() {
-			return dynamic_cast<ARK::Util::KeyPairFile*>(this);
+			return dynamic_cast<ARK::Core::KeyPairFile*>(this);
 		}
 		//ARK::Spine::Skeleton* Resource::asSkeleton() {
 		//	return dynamic_cast<ARK::Spine::Skeleton*>(this);

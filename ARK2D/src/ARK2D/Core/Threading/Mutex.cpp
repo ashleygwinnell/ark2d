@@ -8,8 +8,8 @@
 
 #include "Mutex.h"
 #include "../Controls/ErrorDialog.h"
-#include "../../Util/StringUtil.h"
- 
+#include "../Util/StringUtil.h"
+
 namespace ARK {
     namespace Core {
         namespace Threading {

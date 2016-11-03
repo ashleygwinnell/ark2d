@@ -3,7 +3,7 @@
 
 #include "../Core/ARK2D.h"
 #include "../Core/Log.h"
-#include "KeyPairFile.h"
+#include "../Core/KeyPairFile.h"
 #include "../Core/GameContainer.h"
 #include "../Core/Font/BMFont.h"
 #include "../Core/Graphics/Image.h"
@@ -19,12 +19,12 @@ asIScriptEngine* AngelScriptUtil::s_engine = NULL;
 void AngelScriptUtil_MessageCallback(const asSMessageInfo* msg, void *param) {
 	//ARK2D::getLog()->e(msg->message);
 	const char *type = "ERR ";
-	if( msg->type == asMSGTYPE_WARNING ) 
+	if( msg->type == asMSGTYPE_WARNING )
 		type = "WARN";
-	else if( msg->type == asMSGTYPE_INFORMATION ) 
+	else if( msg->type == asMSGTYPE_INFORMATION )
 		type = "INFO";
 
-	 
+
 
 	stringstream text;
 	text << msg->section << "(" << msg->row << ", " << msg->col << " : " << type << " : " << msg->message;
@@ -105,13 +105,13 @@ void AngelScriptUtil::functionCheckInternal(string file, signed int line, asIScr
 		exit(0);
         return;
 	}
-} 
+}
 
 void AngelScriptUtil::exceptionCheckInternal(string file, signed int line, asIScriptContext* ctx, asIScriptFunction* func, signed int r) {
-	if (r != asEXECUTION_FINISHED) 
+	if (r != asEXECUTION_FINISHED)
 	{
 		// The execution didn't complete as expected. Determine what happened.
-		if (r == asEXECUTION_EXCEPTION) 
+		if (r == asEXECUTION_EXCEPTION)
 		{
 			// An exception occurred, let the script writer know what happened so it can be corrected.
 			ErrorDialog::createAndShow(StringUtil::append("An AngelScript exception occurred. Please correct the code and try again: ", ctx->GetExceptionString()));
@@ -121,7 +121,7 @@ void AngelScriptUtil::exceptionCheckInternal(string file, signed int line, asISc
 			ErrorDialog::createAndShow(StringUtil::append("An AngelScript exception occured, but we don't know why.", r));
 		}
 	}
-} 
+}
 
 void AngelScriptUtil::assertInternal(string file, signed int line, signed int r) {
 	if (r < 0) {
@@ -175,32 +175,32 @@ string AngelScriptUtil::getExceptionInfo(asIScriptContext *ctx, bool showStack)
 	return text.str();
 }
 
-void AngelScriptUtil::compileAndRunOnce(string moduleName, string sourceFile, string functionDecl) 
+void AngelScriptUtil::compileAndRunOnce(string moduleName, string sourceFile, string functionDecl)
 {
 	asIScriptEngine* engine = AngelScriptUtil::getEngine();
-   	
+
 	CScriptBuilder builder;
 	int r = builder.StartNewModule(engine, moduleName.c_str());
 	AngelScriptUtil_assert(r);
-    
+
    	builder.SetIncludeCallback(AngelScriptUtil_IncludeCallback, NULL);
 
 	string script = Resource::get(sourceFile)->asString()->getc();
 	r = builder.AddSectionFromMemory(sourceFile.c_str(), script.c_str());
 	AngelScriptUtil_assert(r);
 
-	r = builder.BuildModule(); 
+	r = builder.BuildModule();
 	AngelScriptUtil_assert(r);
 
 	// Now we run it.
-	// Find the function that is to be called. 
+	// Find the function that is to be called.
 	asIScriptModule* mod = engine->GetModule(moduleName.c_str());
 	asIScriptFunction* func = mod->GetFunctionByDecl(functionDecl.c_str());
 	AngelScriptUtil_functionCheck(func, functionDecl);
 
 	// Create our context, prepare it, and then execute
 	asIScriptContext *ctx = engine->CreateContext();
-	ctx->Prepare(func); 
+	ctx->Prepare(func);
 	r = ctx->Execute();
 	AngelScriptUtil_execeptionCheck(ctx, func, r);
 	ctx->Release();
@@ -241,7 +241,7 @@ asIScriptEngine* AngelScriptUtil::getEngine() {
 		r = s_engine->RegisterObjectMethod("Image", "int getHeight()", asMETHOD(Image, getHeight), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Image", "Image@ rotate(double)", asMETHODPR(Image, rotate, (double), SceneNode*), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Image", "Image@ scale(float, float)", asMETHODPR(Image, scale, (float, float), SceneNode*), asCALL_THISCALL); assert( r >= 0 );
-		r = s_engine->RegisterObjectMethod("Image", "Image@ flip(bool, bool)", asMETHODPR(Image, flip, (bool, bool), Image*), asCALL_THISCALL); assert( r >= 0 );		
+		r = s_engine->RegisterObjectMethod("Image", "Image@ flip(bool, bool)", asMETHODPR(Image, flip, (bool, bool), Image*), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Image", "void draw(float, float)", asMETHODPR(Image, draw, (float, float), void), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Image", "void drawCentered(float, float)", asMETHODPR(Image, drawCentered, (float, float), void), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Image", "void drawCenteredScaled(float, float, float, float)", asMETHODPR(Image, drawCenteredScaled, (float, float, float, float), void), asCALL_THISCALL); assert( r >= 0 );
@@ -355,7 +355,7 @@ asIScriptEngine* AngelScriptUtil::getEngine() {
         // Timer
         r = s_engine->RegisterObjectType("Timer", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
         r = s_engine->RegisterObjectMethod("Timer", "float getDelta()", asMETHODPR(GameTimer, getDelta, (void) const, float), asCALL_THISCALL); assert( r >= 0 );
-		
+
 
 		// Renderer
 		r = s_engine->RegisterObjectType("Renderer", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
@@ -441,7 +441,7 @@ asIScriptEngine* AngelScriptUtil::getEngine() {
 		r = s_engine->RegisterGlobalFunction("Resource@ getResource(const string)", asFUNCTIONPR(Resource::get, (string), Resource*), asCALL_CDECL); assert(r >= 0);
 		r = s_engine->RegisterGlobalFunction("Input@ getInput()", asFUNCTIONPR(ARK2D::getInput, (void), Input*), asCALL_CDECL); assert( r >= 0 );
 		r = s_engine->RegisterGlobalFunction("void error(const string)", asFUNCTIONPR(ErrorDialog::createAndShow, (string), void), asCALL_CDECL); assert( r >= 0 );
-		 
+
 	}
 	return s_engine;
 

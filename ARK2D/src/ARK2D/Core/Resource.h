@@ -69,6 +69,7 @@ namespace ARK {
 
 			protected:
 				static void init();
+				static string fixpath(string ref, bool appendPath);
 
 			public:
 
@@ -83,14 +84,16 @@ namespace ARK {
 				Sound* asSound();
 				ARK::Core::Font::Font* asFont();
 				LocalHighscores* asLocalHighscores();
-				TiledMap* asTiledMap();
+				//TiledMap* asTiledMap();
 				ARK::Core::String* asString();
-				PathGroup* asPathGroup();
+				//PathGroup* asPathGroup();
 				SpriteSheetDescription* asSpriteSheetDescription();
 				KeyPairFile* asKeyPairFile();
 				//ARK::Spine::Skeleton* asSkeleton();
 				Resource& operator=(const Resource& r);
 				virtual ~Resource();
+
+
 
 
 		};

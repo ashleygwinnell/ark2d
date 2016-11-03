@@ -32,7 +32,7 @@
 	#include "Platform/GameContainerWindowsPhone8.h"
 #endif
 
-#include "../Util/Callbacks.h"
+#include "Util/Callbacks.h"
 #include "Strings.h"
 #include "Graphics/ImageIO/PNGImage.h"
 

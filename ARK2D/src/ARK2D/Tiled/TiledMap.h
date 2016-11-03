@@ -83,9 +83,14 @@ namespace ARK {
 			friend class TiledMapParser_JSON;
 
 			public:
+				static TiledMap* createFromFile(string ref, bool appendPath=true);
+
+			private:
 				TiledMap(const string& file);
 				TiledMap(const string& file, void* data);
 				void load();
+
+			public:
 				void addProperty(const TiledMapProperty& property);
 				void addTileset(const TiledMapTileset& tileset);
 				void addLayer(const TiledMapLayer& layer);

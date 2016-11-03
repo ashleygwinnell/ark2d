@@ -3,7 +3,7 @@
 //#include "../Includes.h"
 #include "../Core/Cast.h"
 #include "../Core/Log.h"
-#include "../Util/StringUtil.h"
+#include "../Core/Util/StringUtil.h"
 #include "../Util/URLRequest.h"
 
 

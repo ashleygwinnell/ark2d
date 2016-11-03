@@ -10,8 +10,7 @@
 #include "../Core/ARK2D.h"
 #include "../Core/Log.h"
 #include "../Core/String.h"
-
-#include "StringUtil.h"
+#include "../Core/Util/StringUtil.h"
 
 #include <stdio.h>
 #include <iostream>

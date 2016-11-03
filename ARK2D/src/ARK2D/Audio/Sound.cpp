@@ -11,9 +11,9 @@
 #include "../Core/String.h"
 #include "../Core/Controls/ErrorDialog.h"
 #include "../Core/Log.h"
+#include "../Core/Util/StringUtil.h"
 
-#include "../Util/StringUtil.h"
-#include "../vendor/FileInterface.h"
+#include "../Core/Vendor/FileInterface.h"
 
 //#include "../Includes.h"
 #include "../Common/Audio.h"

@@ -23,8 +23,8 @@
 #include "ShaderStore.h"
 
 #include "../../Common/OpenGL.h"
-#include "../../Util/StringUtil.h"
-#include "../../vendor/FileInterface.h"
+#include "../Util/StringUtil.h"
+#include "../Vendor/FileInterface.h"
 
 #define bswap16(x) ((x)>>8 | ((x)&255)<<8)
 

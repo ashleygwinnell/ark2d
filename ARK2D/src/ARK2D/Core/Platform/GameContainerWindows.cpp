@@ -29,7 +29,7 @@
 	#include "../../Windres.h"
 	#include "../Graphics/Image.h"
 	#include "../Log.h"
- 	#include "../../Util/Callbacks.h"
+ 	#include "../Util/Callbacks.h"
 
 	#include <VersionHelpers.h>
 	#include <XInput.h>

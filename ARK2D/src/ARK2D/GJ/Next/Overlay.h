@@ -17,11 +17,11 @@
 #include "../../Core/State/StateBasedGame.h"
 #include "../../Core/Tween/Easing.h"
 #include "../../Core/Tween/Timer.h"
+#include "../../Core/KeyPairFile.h"
 #include "../../Util/DisplayUtil.h"
 #include "../../UI/Dialog.h"
-#include "../../Util/Callbacks.h"
-#include "../../Util/FileUtil.h"
-#include "../../Util/KeyPairFile.h"
+#include "../../Core/Util/Callbacks.h"
+#include "../../Core/Util/SystemUtil.h"
 
 namespace ARK {
 	namespace GJ {

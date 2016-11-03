@@ -615,15 +615,15 @@ namespace ARK {
 
 			}
 			GJLoginState::GJLoginState(): GameState() {
-				ARK::Util::Callback gamejoltNameCallback;
-				gamejoltNameCallback.setId(ARK::Util::Callbacks::CALLBACK_GAMEJOLT_OVERLAY_EDITNAME);
+				ARK::Core::Utils::Callback gamejoltNameCallback;
+				gamejoltNameCallback.setId(ARK::Core::Utils::Callbacks::CALLBACK_GAMEJOLT_OVERLAY_EDITNAME);
 				gamejoltNameCallback.setFunctionPointer((void*) &gjLoginState_editNameCallback);
-				ARK::Util::Callbacks::add(gamejoltNameCallback);
+				ARK::Core::Utils::Callbacks::add(gamejoltNameCallback);
 
-				ARK::Util::Callback gamejoltTokenCallback;
-				gamejoltTokenCallback.setId(ARK::Util::Callbacks::CALLBACK_GAMEJOLT_OVERLAY_EDITTOKEN);
+				ARK::Core::Utils::Callback gamejoltTokenCallback;
+				gamejoltTokenCallback.setId(ARK::Core::Utils::Callbacks::CALLBACK_GAMEJOLT_OVERLAY_EDITTOKEN);
 				gamejoltTokenCallback.setFunctionPointer((void*) &gjLoginState_editTokenCallback);
-				ARK::Util::Callbacks::add(gamejoltTokenCallback);
+				ARK::Core::Utils::Callbacks::add(gamejoltTokenCallback);
 			}
 
 			void GJLoginState::enter(GameContainer* container, StateBasedGame* game, GameState* from) { }
@@ -676,10 +676,10 @@ namespace ARK {
 				ARK::GJ::Next::GameJolt::getInstance()->api->authUser(ls->username->getText().getc(), ls->usertoken->getText().getc());
 			}
 			void GJLoginState::onSignup(GJLoginState* ls) {
-				FileUtil::openBrowserToURL("http://gamejolt.com/auth/sign_up/");
+				SystemUtil::openBrowserToURL("http://gamejolt.com/auth/sign_up/");
 			}
 			void GJLoginState::onHelp(GJLoginState* ls) {
-				FileUtil::openBrowserToURL("http://help.gamejolt.com/tokens");
+				SystemUtil::openBrowserToURL("http://help.gamejolt.com/tokens");
 			}
 			void GJLoginState::onClose(GJLoginState* ls) {
 				ARK::GJ::Next::GameJolt::getInstance()->close();

@@ -9,8 +9,9 @@
 #define ARK_CORE_STRING_H_
 
 //#include "../Includes.h"
+#include "../Namespaces.h"
 #include "Resource.h"
-#include "../Util/StringUtil.h"
+#include "Util/StringUtil.h"
 #include "Cast.h"
 
 

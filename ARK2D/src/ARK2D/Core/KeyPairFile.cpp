@@ -7,11 +7,11 @@
 
 #include "KeyPairFile.h"
 
-#include "../Core/ARK2D.h"
-#include "../Core/GameContainer.h"
+#include "ARK2D.h"
+#include "GameContainer.h"
 
 namespace ARK {
-	namespace Util {
+	namespace Core {
 
 		KeyPairFile::KeyPairFile(string filename):
 			ARK::Core::Resource(),
@@ -179,7 +179,7 @@ namespace ARK {
 				} else {
 
 					bool exists = Resource::get(m_filename);
-					if (!exists) { FileUtil::file_put_contents(m_filename, ""); }
+					if (!exists) { SystemUtil::file_put_contents(m_filename, ""); }
 
 					s = StringUtil::file_get_contents(m_filename.c_str());
 				}
@@ -224,7 +224,7 @@ namespace ARK {
 				bool useoldref = (findit != string::npos);
 				if (useoldref) {
 					string oldref = m_filename.substr(findit+10, string::npos);
-					usefilename = oldref; //FileUtil::prependPlatform(oldref);
+					usefilename = oldref; //SystemUtil::prependPlatform(oldref);
 				}
 				//bool usingGoodRef = (m_filename.substr(0,5).compare("data/") == 0);
 				//if (!usingGoodRef) {
@@ -234,7 +234,7 @@ namespace ARK {
 			#endif
 			ARK2D::getLog()->v(StringUtil::append("filename: ", m_filename));
 
-			bool success = FileUtil::file_put_contents(usefilename, s);
+			bool success = SystemUtil::file_put_contents(usefilename, s);
 			if (success) {
 				ARK2D::getLog()->v("KeyPairFile saved successfully!");
 			} else {

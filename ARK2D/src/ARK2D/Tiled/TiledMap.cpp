@@ -23,7 +23,7 @@
 #include "../Core/Graphics/Renderer.h"
 
 #include "../Core/Log.h"
-#include "../Util/StringUtil.h"
+#include "../Core/Util/StringUtil.h"
 
 #include "../vendor/zlib123/zlib.h"
 
@@ -34,6 +34,23 @@
 
 namespace ARK {
 	namespace Tiled {
+
+		TiledMap* TiledMap::createFromFile(string ref, bool appendPath) {
+			string oldref = ref;
+			ref = Resource::fixpath(ref, appendPath);
+
+			ARK::Tiled::TiledMap* map = NULL;
+
+			#if defined(ARK2D_ANDROID)
+				RawDataReturns* rt = ARK::Core::Resource::getRawData(ref);
+				map = new ARK::Tiled::TiledMap(ref, rt->data);
+				map->load();
+			#else
+				map = new ARK::Tiled::TiledMap(ref);
+				map->load();
+			#endif
+			return map;
+		}
 
 		TiledMap::TiledMap(const string& file, void* data):
 			ARK::Core::Resource(),

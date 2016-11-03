@@ -259,7 +259,7 @@ namespace ARK {
                         return 1;
                     }
 
-                    int tempres = fread(header, 1, 8, fp);
+                    /*int tempres =*/ fread(header, 1, 8, fp);
 
                     if (png_sig_cmp((png_byte*) header, 0, 8)) {
                         string s = string(m_filename.c_str()) + string(" is not recognised as a PNG file.");
@@ -402,7 +402,7 @@ namespace ARK {
 
                 void PNGImage::saveFile(std::string filename, char* data, int w, int h) {
 
-                    // copied from FileUtil::file_put_contents OR FileUtil::prependPlatform
+                    // copied from SystemUtil::file_put_contents OR SystemUtil::prependPlatform
                     {
                         #if defined(ARK2D_ANDROID)
                             filename = ARK2D::getContainer()->m_platformSpecific.m_externalDataStr + filename;

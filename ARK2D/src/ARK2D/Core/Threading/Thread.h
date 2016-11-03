@@ -34,6 +34,7 @@ namespace ARK {
                     Thread();
                     void init(void* functionPointer);
                     void init(void* functionPointer, void* classPointer);
+                    void init(string uniqueKey, void* functionPointer);
                     void start();
                     void* doInternal();
                     void pause();
@@ -50,6 +51,7 @@ namespace ARK {
 
                 #if defined (ARK2D_WINDOWS)
                     private:
+                        string m_functionPointerKey;
                         void* m_functionPointer;
                         void* m_classPointer;
 
@@ -65,6 +67,7 @@ namespace ARK {
 
                 #elif defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE)
 
+                    string m_functionPointerKey;
                     void* m_functionPointer;
                     void* m_classPointer;
                     Windows::Foundation::IAsyncAction^ m_handle;
@@ -72,6 +75,7 @@ namespace ARK {
                 #else
 
                     private:
+                        string m_functionPointerKey;
                         void* m_functionPointer;
                         void* m_classPointer;
                         pthread_t m_thread;

@@ -2,7 +2,7 @@
 #include "SpineSkeleton.h"
 
 #include "../../Core/ARK2D.h"
-#include "../../Util/FileUtil.h"
+#include "../../Core/Util/SystemUtil.h"
 #include "../../Core/GameContainer.h"
 #include "../../Core/GameTimer.h"
 #include "../../Core/Graphics/Texture.h"
@@ -33,7 +33,7 @@ namespace ARK {
 				thisRotation += 90;
 			}
 			thisRotation = MathUtil::absangle<double>(thisRotation);
- 
+
 			node->transform.position.set(thisX, thisY);
 			node->transform.scale.set(bone->scaleY, bone->scaleX);
             node->transform.rotation = Quaternion<float>::angleAxis(thisRotation, 0,0,1);
@@ -57,7 +57,7 @@ namespace ARK {
 			(*rotation) = thisRotation;
 		}
 
-		void spineCallback(spAnimationState* state, int trackIndex, spEventType type, spEvent* event, int loopCount) 
+		void spineCallback(spAnimationState* state, int trackIndex, spEventType type, spEvent* event, int loopCount)
 		{
 			spTrackEntry* entry = spAnimationState_getCurrent(state, trackIndex);
 			const char* animationName = (entry && entry->animation) ? entry->animation->name : 0;
@@ -87,19 +87,19 @@ namespace ARK {
 				case SP_ANIMATION_EVENT: {
 					string s = string(event->data->name);
 					if (Skeleton::s_soundEventCallback != NULL && s.substr(0, 6) == "sound_" && s.length() > 6) {
-						
+
 						string soundEventName = s.substr(6);
-						
+
 						const char* soundEventNameCStr = soundEventName.c_str();
 						map<string, float> params;
 
-						if (event->stringValue != NULL) { 
+						if (event->stringValue != NULL) {
 							string soundEventData = string(event->stringValue);
 							if (soundEventData.length() > 0) {
 								ARK2D::getLog()->e("We have string event data.");
 
 								vector<string> items = StringUtil::split(soundEventData, ",");
-								
+
 								if (items.size() > 0) {
 									for (unsigned int i = 0; i < items.size(); ++i) {
 										vector<string> val = StringUtil::split(items[i], "=");
@@ -119,17 +119,17 @@ namespace ARK {
 									}
 								}
 
-								
-								
+
+
 							} else {
 								ARK2D::getLog()->e("We had string event data but it was empty.");
 							}
 						}
-						
+
 						void (*pt)(const char*, std::map<string, float>) = (void(*)(const char*, std::map<string, float>)) Skeleton::s_soundEventCallback;
 						pt(soundEventNameCStr, params);
 
-					} else { 
+					} else {
 						Skeleton* sk4 = (Skeleton*) state->ark2dskeleton;
 						sk4->doCallback(type, 0, event->data->name);
 						printf("%d event: %s, %s: %d, %f, %s\n", trackIndex, animationName, event->data->name, event->intValue, event->floatValue, event->stringValue);
@@ -151,7 +151,7 @@ namespace ARK {
 			spAnimationStateData_setMixByName(m_stateData, from.c_str(), to.c_str(), mix);
 		}
 		SkeletalAnimationMixer::~SkeletalAnimationMixer() {
-			// delete what? 
+			// delete what?
 			//spAnimationStateData_dispose(m_stateData);
 			//m_stateData = NULL;
 		}
@@ -161,7 +161,7 @@ namespace ARK {
 		void Skeleton::setDefaultScale(float f) {
 			s_defaultScale = f;
 		}
-		 
+
 		Skeleton::Skeleton(string fname):
 			ARK::Core::Resource(),
 
@@ -199,7 +199,7 @@ namespace ARK {
 			m_fdatalen_atlas(atlasLength),
 			m_fdata_json(jsonData),
 			m_fdatalen_json(jsonLength),
-			
+
 			m_atlas(NULL),
 			m_skeleton(NULL),
 			m_data(NULL),
@@ -216,13 +216,13 @@ namespace ARK {
 			m_callbacks(),
 			m_invokingCallbacks(false),
 			m_copy(false)
-		{ 
+		{
 			//load();
 		}
 
 		Skeleton* Skeleton::copy() {
 			Skeleton* sk = new Skeleton(m_fname);
-			
+
 			/*int atlasSz = sizeof(m_atlas);
 			sk->m_atlas = malloc(atlasSz);
 			memcpy(m_atlas, sk->m_atlas, atlasSz);
@@ -235,7 +235,7 @@ namespace ARK {
 			sk->m_data = malloc(dataSz);
 			memcpy(m_data, sk->m_data, dataSz);*/
 
-			// TODO: deep copy. 
+			// TODO: deep copy.
 			sk->m_fdata_atlas = m_fdata_atlas;
 			sk->m_fdatalen_atlas = m_fdatalen_atlas;
 			sk->m_fdata_json = m_fdata_json;
@@ -259,11 +259,11 @@ namespace ARK {
 			sk->m_copy = true;
 
 			return sk;
-			
+
 		}
 
 		void Skeleton::load() {
-			ARK2D::getLog()->v("Skeleton::load()"); 
+			ARK2D::getLog()->v("Skeleton::load()");
 			spBone_setYDown(1);
 
 			string genericName = m_fname.substr(0, m_fname.find_last_of("."));
@@ -273,23 +273,23 @@ namespace ARK {
 
 			string skeletonFile = genericName + string(".json");
 			//ARK2D::getLog()->v(StringUtil::append("skeleton name was: ", skeletonFile.c_str()));
- 
+
 			// read from files.
 			if (m_fdata_atlas == NULL || m_fdata_json == NULL) {
 
 				ARK2D::getLog()->v("Creating Skeleton from file...");
 				m_atlas = spAtlas_createFromFile(atlasFile.c_str(), 0);
-				if (m_atlas == NULL) { 
+				if (m_atlas == NULL) {
 					ARK2D::getLog()->w("spAtlas was null. maybe it's not meant to be?");
 					m_json = spSkeletonJson_create(m_atlas);
-				} else { 
+				} else {
 					m_json = spSkeletonJson_create(m_atlas);
 					m_json->scale = s_defaultScale;
 				}
 
 				m_data = spSkeletonJson_readSkeletonDataFile(m_json, skeletonFile.c_str());
 				if (!m_data) { printf("Error: %s\n", m_json->error); exit(0); }
-			} 
+			}
 			// read from pointers / preloaded files.
 			else {
 				ARK2D::getLog()->i("Creating Skeleton from pointer...");
@@ -316,8 +316,8 @@ namespace ARK {
 
 
 
-			
-			
+
+
 		}
 		void Skeleton::clearCallbacks() {
 			m_callbacks.clear();
@@ -340,14 +340,14 @@ namespace ARK {
 			m_callbacks.push_back(cb);
 		}
 		void Skeleton::doCallback(spEventType type, int trackIndex, const char* animationName) {
-			
-			for(unsigned int i = 0; i < m_callbacks.size(); ++i) 
+
+			for(unsigned int i = 0; i < m_callbacks.size(); ++i)
 			{
 				SpineCallback* cb = m_callbacks[i];
 				if (
-					(type == SP_ANIMATION_START && cb->type == CALLBACK_ANIMATION_START) || 
-					(type == SP_ANIMATION_END && cb->type == CALLBACK_ANIMATION_END) || 
-					(type == SP_ANIMATION_COMPLETE && cb->type == CALLBACK_ANIMATION_COMPLETE) || 
+					(type == SP_ANIMATION_START && cb->type == CALLBACK_ANIMATION_START) ||
+					(type == SP_ANIMATION_END && cb->type == CALLBACK_ANIMATION_END) ||
+					(type == SP_ANIMATION_COMPLETE && cb->type == CALLBACK_ANIMATION_COMPLETE) ||
 					(type == SP_ANIMATION_EVENT && cb->type == CALLBACK_ANIMATION_EVENT)
 				) {
 					cb->animationName = animationName;
@@ -360,7 +360,7 @@ namespace ARK {
 		void Skeleton::doCallbackInternal(SpineCallback* cb) {
 			if (cb->eventFunction != NULL) {
 				if (cb->eventObject == NULL) {
-					
+
 					void (*pt)(SpineCallback*) = (void(*)(SpineCallback*)) cb->eventFunction;
 					//typedef void fnct();
 					//fnct* pt = (fnct*) m_event;
@@ -394,7 +394,7 @@ namespace ARK {
 
 			m_delta += thisDelta;
 		}
-		
+
 		SkeletalAnimationMixer* Skeleton::newAnimation() {
 			return new SkeletalAnimationMixer(this);
 		}
@@ -406,7 +406,7 @@ namespace ARK {
 				as->ark2dskeleton = this;
 				as->listener = spineCallback;
 			}
-			
+
 			m_animationStates[key] = as;
 			delete stateData;
 		}
@@ -422,15 +422,15 @@ namespace ARK {
 		}
 		void Skeleton::queueAnimation(string key, string subkey, bool loop, float delay) {
 			spAnimationState* as = NULL;
-			map<string, spAnimationState*>::iterator it = m_animationStates.find(key); 
+			map<string, spAnimationState*>::iterator it = m_animationStates.find(key);
 			if (it != m_animationStates.end()) { as = it->second; }
 			if (as == NULL) { ErrorDialog::createAndShow("Could not create Spine Skeleton (queueAnimation, spAnimationState)."); exit(0); }
-			
+
 			spAnimationState_addAnimationByName(as, 0, subkey.c_str(), loop, delay);
 		}
 		void Skeleton::clearAnimationQueue(string key) {
 			spAnimationState* as = NULL;
-			map<string, spAnimationState*>::iterator it = m_animationStates.find(key); 
+			map<string, spAnimationState*>::iterator it = m_animationStates.find(key);
 			if (it != m_animationStates.end()) { as = it->second; }
 			if (as == NULL) { ErrorDialog::createAndShow("Could not clear Spine Skeleton animation queue Spine Skeleton."); exit(0); }
 
@@ -444,12 +444,12 @@ namespace ARK {
 			if (as == NULL) { ErrorDialog::createAndShow("Could not create Spine Skeleton (playAnimation, spAnimationState)."); exit(0); }
 
 			spTrackEntry* entry = spAnimationState_getCurrent(as, 0);
-			if (entry != NULL) { 
+			if (entry != NULL) {
 				return entry->animation->name;
 			}
 			return "";
 		}
-		
+
 		bool Skeleton::hasAnimation(string key) {
 			return (m_animationStates.find(key) != m_animationStates.end());
 		}
@@ -479,9 +479,9 @@ namespace ARK {
 		}
 		void Skeleton::setRoot(string name) {
 			m_root = spSkeleton_findBone(m_skeleton, name.c_str());
-			if (m_root == NULL) { 
-				ErrorDialog::createAndShow("Could not set Spine Skeleton root."); 
-				exit(0); 
+			if (m_root == NULL) {
+				ErrorDialog::createAndShow("Could not set Spine Skeleton root.");
+				exit(0);
 			}
 			m_rootName = name;
 		}
@@ -501,7 +501,7 @@ namespace ARK {
 			// get center y of this object.
 			float worldVertices[512];
 			spAttachment* attachment = slot->attachment;
-			if (!attachment) { ARK2D::getLog()->w("Attachment was null."); return; } 
+			if (!attachment) { ARK2D::getLog()->w("Attachment was null."); return; }
 
 			if (attachment->type == SP_ATTACHMENT_REGION) {
 				spRegionAttachment* regionAttachment = (spRegionAttachment*)attachment;
@@ -509,7 +509,7 @@ namespace ARK {
 
 				cx = ((worldVertices[SP_VERTEX_X1] + worldVertices[SP_VERTEX_X2] + worldVertices[SP_VERTEX_X3] + worldVertices[SP_VERTEX_X4]) / 4);
 				cy = ((worldVertices[SP_VERTEX_Y1] + worldVertices[SP_VERTEX_Y2] + worldVertices[SP_VERTEX_Y3] + worldVertices[SP_VERTEX_Y4]) / 4);
-		 
+
 			} /*else if (attachment->type == SP_ATTACHMENT_MESH) {
 				spMeshAttachment* mesh = (spMeshAttachment*) attachment;
 				if (mesh->uvsCount > SPINE_MESH_VERTEX_COUNT_MAX) { continue; }
@@ -525,23 +525,23 @@ namespace ARK {
 
 
 		void Skeleton::setSkin(string name) {
-			
+
 
 			int ret = spSkeleton_setSkinByName(m_skeleton, name.c_str());
 			if (ret == 0) {
 				string errstr1 = StringUtil::append(m_fname, " , ");
 				string errStr = StringUtil::append(errstr1, name);
-				ErrorDialog::createAndShow(StringUtil::append("Could not set Spine Skeleton skin: ", errStr)); 
-				//exit(0); 
+				ErrorDialog::createAndShow(StringUtil::append("Could not set Spine Skeleton skin: ", errStr));
+				//exit(0);
 			}
 
 			//spSkeleton_setToSetupPose(m_skeleton);
 			spSkeleton_setSlotsToSetupPose(m_skeleton);
 			setLocation(m_x, m_y);
-			
+
 		}
-		void Skeleton::setInvokingCallbacks(bool b) { 
-			m_invokingCallbacks = b; 
+		void Skeleton::setInvokingCallbacks(bool b) {
+			m_invokingCallbacks = b;
 		}
 
 		/*void Skeleton::setLocation(float x, float y, string bone) {
@@ -561,11 +561,11 @@ namespace ARK {
 			spSkeleton_updateWorldTransform(m_skeleton);
 		}
 
-		void Skeleton::setLocation(float x, float y) { 
+		void Skeleton::setLocation(float x, float y) {
 			m_x = x;
 			m_y = y;
 
-			/*m_root->x = x; 
+			/*m_root->x = x;
 			m_root->y = y * -1;*/
 			m_skeleton->x = x;
 			m_skeleton->y = y;
@@ -575,12 +575,12 @@ namespace ARK {
 			//m_skeleton->x = x;
 			//m_skeleton->y = y * -1;
 		}
-		void Skeleton::setLocation(float x, float y, float z) { 
+		void Skeleton::setLocation(float x, float y, float z) {
 			m_x = x;
 			m_y = y;
 			m_z = z;
 
-			/*m_root->x = x; 
+			/*m_root->x = x;
 			m_root->y = y * -1;*/
 			m_skeleton->x = x;
 			m_skeleton->y = y;
@@ -591,7 +591,7 @@ namespace ARK {
 			//m_skeleton->x = x;
 			//m_skeleton->y = y * -1;
 		}
-		void Skeleton::setScale(float x, float y) { 
+		void Skeleton::setScale(float x, float y) {
 			m_scaleX = x;
 			m_scaleY = y;
 		}
@@ -627,15 +627,15 @@ namespace ARK {
 				0,0,1
 			};
 
-			//r->setDrawColor(Color::white); 
+			//r->setDrawColor(Color::white);
 			float worldVertices[SPINE_MESH_VERTEX_COUNT_MAX];
 			for (int i = 0; i < m_skeleton->slotsCount; ++i)
 			{
 				spSlot* slot = m_skeleton->drawOrder[i];
 				spSlotData* slotdata = slot->data;
-				
+
 				spAttachment* attachment = slot->attachment;
-				if (!attachment) { continue; } 
+				if (!attachment) { continue; }
 
 				unsigned int blend = slot->data->additiveBlending ? BLEND_ADDITIVE  : BLEND_SPINE;
 				r->setBlendMode(blend);
@@ -650,7 +650,7 @@ namespace ARK {
 					unsigned int texId = img->getTexture()->getId();
 					float sx = img->getTextureW();
 					float sy = img->getTextureH();
-					
+
 					float rawVertices[] = {
 						worldVertices[SP_VERTEX_X1], worldVertices[SP_VERTEX_Y1], m_z,
 						worldVertices[SP_VERTEX_X2], worldVertices[SP_VERTEX_Y2], m_z,
@@ -683,8 +683,8 @@ namespace ARK {
 					};
 
 					r->texturedTriangles(texId, &rawVertices[0], &rawNormals[0], &rawTexCoords[0], &rawColors[0], 2);
-					
-					
+
+
 				} else if (attachment->type == SP_ATTACHMENT_MESH) {
 					//spRegionAttachment* regionAttachment = (spRegionAttachment*)attachment;
 					spMeshAttachment* mesh = (spMeshAttachment*) attachment;
@@ -707,7 +707,7 @@ namespace ARK {
 					unsigned char g =  (unsigned char) (rr_g * g_f  * 255.0f);
 					unsigned char b =  (unsigned char) (rr_b * b_f  * 255.0f);
 					unsigned char a =  (unsigned char) (rr_a * a_f  * 255.0f);
-					
+
 					#ifdef ARK2D_WINDOWS_VS
 						float* rawVertices = (float*)malloc((mesh->trianglesCount * 3) * sizeof(float));
 						float* rawNormalsLocal = (float*)malloc((mesh->trianglesCount * 3) * sizeof(float));
@@ -721,7 +721,7 @@ namespace ARK {
 					#endif
 
 					/*string thisc = string("r: ");
-					thisc += Cast::toString<float>(re_f); 
+					thisc += Cast::toString<float>(re_f);
 					thisc += string(", g: ");
 					thisc += Cast::toString<float>(g_f);
 					thisc += string(", b: ");
@@ -745,7 +745,7 @@ namespace ARK {
 
 						rawTexCoords[m] = mesh->uvs[index] * sx;
 						rawTexCoords[m+1] = mesh->uvs[index + 1] * sy;
-						
+
 						rawColors[l] = re;
 						rawColors[l+1] = g;
 						rawColors[l+2] = b;
@@ -755,7 +755,7 @@ namespace ARK {
 						l += 4;
 					}
 					r->texturedTriangles(texId, &rawVertices[0], &rawTexCoords[0], &rawNormalsLocal[0], &rawColors[0], mesh->trianglesCount/3);
- 
+
 					#ifdef ARK2D_WINDOWS_VS
 						free(rawVertices);
 						free(rawNormalsLocal);
@@ -801,7 +801,7 @@ namespace ARK {
 					int l = 0;
 					for (int j = 0; j < mesh->trianglesCount; ++j) {
 						int index = mesh->triangles[j] << 1;
-						
+
 						rawVertices[k] = worldVertices[index];
 						rawVertices[k+1] = worldVertices[index+1];
 						rawVertices[k+2] = m_z;
@@ -819,7 +819,7 @@ namespace ARK {
 						l += 4;
 
 					}
-					
+
 					r->texturedTriangles(texId, &rawVertices[0], &rawNormalsLocal[0], &rawTexCoords[0], &rawColors[0], mesh->trianglesCount/3);
 
 					#ifdef ARK2D_WINDOWS_VS
@@ -831,7 +831,7 @@ namespace ARK {
 
 				} /*else if (attachment->type == SP_ATTACHMENT_BOUNDING_BOX) {
 
-					
+
 					spBoundingBoxAttachment* boxAttachment = (spBoundingBoxAttachment*) attachment;
 					spBoundingBoxAttachment_computeWorldVertices (boxAttachment, slot->skeleton->x, slot->skeleton->y, slot->bone, worldVertices);
 
@@ -841,16 +841,16 @@ namespace ARK {
 					r->drawLine(worldVertices[SP_VERTEX_X3], worldVertices[SP_VERTEX_Y3], worldVertices[SP_VERTEX_X4], worldVertices[SP_VERTEX_Y4]);
 					r->drawLine(worldVertices[SP_VERTEX_X4], worldVertices[SP_VERTEX_Y4], worldVertices[SP_VERTEX_X1], worldVertices[SP_VERTEX_Y1]);
 					continue;
-					
+
 				}*/
 
 			}
-			
+
 			r->setBlendMode(Renderer::BLEND_NORMAL);
 		}
 
-		Skeleton::~Skeleton() {		
-			if (!m_copy) { 
+		Skeleton::~Skeleton() {
+			if (!m_copy) {
 				spSkeleton_dispose(m_skeleton);
 				spSkeletonData_dispose(m_data);
 				spSkeletonJson_dispose(m_json);

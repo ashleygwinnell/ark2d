@@ -8,7 +8,7 @@
 #include "Dialog.h"
 #include "../Core/Log.h"
 #include "../Core/GameContainer.h"
-#include "../Util/Callbacks.h"
+#include "../Core/Util/Callbacks.h"
 
 #ifdef ARK2D_WINDOWS_PHONE_8
 

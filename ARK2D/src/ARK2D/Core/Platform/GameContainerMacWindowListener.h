@@ -6,6 +6,8 @@
 //
 #include "../../Namespaces.h"
 
+#ifdef ARK2D_MACINTOSH
+
 #import <Cocoa/Cocoa.h>
 
 using namespace ARK::Core;
@@ -13,11 +15,11 @@ using namespace ARK::Core;
 @interface GameContainerMacWindowListener : NSResponder <NSWindowDelegate> {
 	NSWindow* m_window;
 	@public NSEvent* m_latestKeyUpEvent;
-	
+
 }
 
 
--(void)init:(NSWindow* )window; 
+-(void)init:(NSWindow* )window;
 
 -(BOOL)windowShouldClose:(id)sender;
 -(void)windowWillClose:(NSNotification *)notification;
@@ -45,3 +47,5 @@ using namespace ARK::Core;
 
 
 @end
+
+#endif

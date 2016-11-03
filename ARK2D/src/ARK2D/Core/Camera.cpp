@@ -205,7 +205,7 @@ namespace ARK {
 		}
 
 		void Camera::rendererUpdate() {
-			Renderer* r = ARK2D::getRenderer();
+			//Renderer* r = ARK2D::getRenderer();
 			//r->matrixMode(MatrixStack::TYPE_PROJECTION);
 			//r->loadIdentity();
 			//r->multiplyMatrix(&projection.m_stack[projection.m_stackIndex]);

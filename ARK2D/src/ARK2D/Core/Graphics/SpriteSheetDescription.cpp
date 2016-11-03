@@ -11,14 +11,14 @@
 #include "../../Common/Libraries/libjson.h"
 
 #include "../Log.h"
-#include "../../Util/StringUtil.h"
+#include "../Util/StringUtil.h"
 
 namespace ARK {
     namespace Core {
         namespace Graphics {
 
             SpriteSheetDescription::SpriteSheetDescription(string path): ARK::Core::Resource(), m_path(path) {
-                m_data = StringUtil::file_get_contents(path.c_str()); 
+                m_data = StringUtil::file_get_contents(path.c_str());
                 load();
             }
             SpriteSheetDescription::SpriteSheetDescription(string path, void* rawData): ARK::Core::Resource(), m_path(path) {
@@ -26,7 +26,7 @@ namespace ARK {
                 load();
             }
 
-            void SpriteSheetDescription::load() { 
+            void SpriteSheetDescription::load() {
                 std::cout << "Loading Spritesheet Description: " << m_path.c_str() << std::endl;
                 if (m_data.length()==0) {
                     ErrorDialog::createAndShow("Could not open spritesheet description.");
@@ -39,7 +39,7 @@ namespace ARK {
 
                     JSONNode* sheet = root->GetNode("sheet");
                     JSONNode* items = sheet->GetNode("items");
-     
+
                     for (unsigned int i = 0; i < items->NodeSize(); i++) {
                         SpriteSheetDescriptionItem it;
 
@@ -50,10 +50,10 @@ namespace ARK {
                         it.setHeight( (unsigned int) item->GetNode("height")->NodeAsInt() );
                         it.setName( item->GetNode("name")->NodeAsString().c_str() );
 
-                        it.setRotated(false); 
-                        if (item->GetNode("rotated") != NULL) { 
-                            if (item->GetNode("rotated")->NodeAsBool()) { 
-                                it.setRotated(true); 
+                        it.setRotated(false);
+                        if (item->GetNode("rotated") != NULL) {
+                            if (item->GetNode("rotated")->NodeAsBool()) {
+                                it.setRotated(true);
                             }
                         }
 
@@ -69,7 +69,7 @@ namespace ARK {
     /*
                     // get proper file path :|
                     // TODO: Resource handling for spritesheets
-                    m_path = StringUtil::internalOSAppends(m_path); 
+                    m_path = StringUtil::internalOSAppends(m_path);
                     std::cout << "txt spritesheet: " << m_path << std::endl;
 
                     filebuf FileBuffer;
@@ -148,11 +148,11 @@ namespace ARK {
 
             const SpriteSheetDescriptionItem& SpriteSheetDescription::getItemByName(const char* name) const {
                 std::map<string, SpriteSheetDescriptionItem>::const_iterator it;
-     
+
                 it = m_items.find(string(name));
-                if (it != m_items.end()) { 
+                if (it != m_items.end()) {
                     return it->second;
-                } 
+                }
 
                 // find version replaced \\ with /
                 const string fslash("/");
@@ -160,21 +160,21 @@ namespace ARK {
                 string oldname(name);
                 string newname = StringUtil::str_replace(fslash, backslash, oldname);
                 it = m_items.find(newname);
-                if (it != m_items.end()) { 
+                if (it != m_items.end()) {
                     return it->second;
-                } 
+                }
                 ARK2D::getLog()->e(StringUtil::append("Could not find SpriteSheetDescriptionItem with name: ", name));
                 return m_items.begin()->second;
-            } 
+            }
 
-            bool SpriteSheetDescription::hasItemByName(const char* name) const 
+            bool SpriteSheetDescription::hasItemByName(const char* name) const
             {
                 std::map<string, SpriteSheetDescriptionItem>::const_iterator it;
-     
+
                 it = m_items.find(string(name));
-                if (it != m_items.end()) { 
+                if (it != m_items.end()) {
                     return true;
-                } 
+                }
 
                 // find version replaced \\ with /
                 const string fslash("/");
@@ -182,9 +182,9 @@ namespace ARK {
                 string oldname(name);
                 string newname = StringUtil::str_replace(fslash, backslash, oldname);
                 it = m_items.find(newname);
-                if (it != m_items.end()) { 
+                if (it != m_items.end()) {
                     return true;
-                } 
+                }
                 return false;
             }
 

@@ -11,7 +11,7 @@
 #include "PathGroup.h"
 #include "../Core/Controls/ErrorDialog.h"
 #include "../Core/Tween/Easing.h"
-#include "../Util/StringUtil.h"
+#include "../Core/Util/StringUtil.h"
 
 namespace ARK {
 	namespace Path {

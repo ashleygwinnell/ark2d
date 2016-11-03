@@ -34,6 +34,7 @@ namespace ARK {
 		class GameContainer;
 		class GameContainerPlatform;
 		class GameTimer;
+		class KeyPairFile;
 		class String;
 		class ToString;
 		class Resource;
@@ -188,6 +189,14 @@ namespace ARK {
 			class Timeline;
 			class Timer;
 		}
+
+		//! Core utils.
+		namespace Utils {
+			class Callbacks;
+			class Callback;
+			class StringUtil;
+			class SystemUtil;
+		}
 	}
 
 
@@ -281,14 +290,10 @@ namespace ARK {
 		class AnalyticsUtil;
 		class GooglePlayGameServicesUtil;
 		class CameraShake;
-		class FileUtil;
 		class LocalHighscores;
-		class KeyPairFile;
 		class RSSL;
-		class StringUtil;
 		class URLRequest;
 		class Vibrator;
-		class Callback;
 		class DisplayUtil;
 		class Wobble;
 
@@ -319,6 +324,7 @@ using namespace ARK::Core::Math;
 using namespace ARK::Core::SceneGraph;
 using namespace ARK::Core::State;
 using namespace ARK::Core::State::Transition;
+using namespace ARK::Core::Utils;
 
 using namespace ARK::Audio;
 using namespace ARK::GJ;

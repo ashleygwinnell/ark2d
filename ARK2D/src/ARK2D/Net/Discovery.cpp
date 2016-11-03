@@ -10,11 +10,11 @@
 #include "../Core/GameTimer.h"
 #include "../Core/Log.h"
 
-#include "../Util/FileUtil.h"
+#include "../Core/Util/SystemUtil.h"
 
 namespace ARK {
-	namespace Net { 
-		 
+	namespace Net {
+
 		Discovery::Discovery(unsigned int protocolId):
 			m_protocolId(protocolId),
 			m_mode(MODE_NONE),
@@ -23,14 +23,14 @@ namespace ARK {
 			m_running(false)
 		{
 			//clearData();
-		}  
-		
+		}
+
 		bool Discovery::start( int port ) {
 			m_port = port;
 			ARK2D::getLog()->v(StringUtil::append("start connection on port ", port));
-			if (!m_socket.open(port)) { 
-				ARK2D::getLog()->e(StringUtil::append("could not start discovery connection on port ", port)); 
-				return false; 
+			if (!m_socket.open(port)) {
+				ARK2D::getLog()->e(StringUtil::append("could not start discovery connection on port ", port));
+				return false;
 			}
 
 			m_broadcastAddress = Address(255,255,255,255,31000); // 31000 = server, 31001 = client
@@ -40,12 +40,12 @@ namespace ARK {
 
 			return true;
 		}
-		
+
 		void Discovery::stop() {
 			m_socket.close();
 			m_running = false;
 		}
-		
+
 		void Discovery::search() {
 			m_mode = MODE_CLIENT;
 		}
@@ -53,11 +53,11 @@ namespace ARK {
 		void Discovery::listen() {
 			m_mode = MODE_SERVER;
 		}
-		
+
 		unsigned int Discovery::getMode() const {
 			return m_mode;
 		}
-		
+
 		void Discovery::update( float deltaTime )
 		{
 			if (!m_running) {
@@ -66,7 +66,7 @@ namespace ARK {
 			if (m_mode == MODE_CLIENT) {
 				m_searchTimer += deltaTime;
 				if (m_searchTimer >= m_searchDuration) {
-					// do another search. 
+					// do another search.
 					bool b = call();
 					if (!b) {
 						ARK2D::getLog()->e("did not send all 9 bytes? maybe not connected to router/gateway/switch");
@@ -82,13 +82,13 @@ namespace ARK {
 						i = 0;
 					}
 				}
-			} 
+			}
 
 			while(true) {
 				unsigned char packet[128];
 				unsigned int receivedBytes = receive(packet, 128);
 				if (receivedBytes == 0) {
-					break; 
+					break;
 				}
 
 				// Parse packet data.
@@ -103,7 +103,7 @@ namespace ARK {
 					}
 				} else if (packet[0] == EVENT_RESPONSE && m_mode == MODE_CLIENT) {
 					ARK2D::getLog()->i("got address response from server");
-					
+
 					unsigned int namelen = packet[1];
 					char name[255];
 					memcpy(name, &packet[2], namelen);
@@ -112,7 +112,7 @@ namespace ARK {
 					unsigned int addressStart = 2 + namelen;
 					unsigned short port;
 					memcpy(&port, &packet[addressStart+4], 2);
-					Address serverAddress = Address(packet[addressStart], packet[addressStart+1], packet[addressStart+2], packet[addressStart+3], port); 
+					Address serverAddress = Address(packet[addressStart], packet[addressStart+1], packet[addressStart+2], packet[addressStart+3], port);
 
 					bool foundServer = false;
 					signed int foundServerIndex = -1;
@@ -129,16 +129,16 @@ namespace ARK {
 						da.ipv4address = serverAddress;
 						da.lastresponsetime = ARK2D::getTimer()->unixTimestamp();
 						m_servers.push_back(da);
-					} else { 
+					} else {
 						m_servers[foundServerIndex].lastresponsetime = ARK2D::getTimer()->unixTimestamp();
 					}
-					
+
 				} else {
 					ARK2D::getLog()->i("received *something*");
 				}
 			}
 		}
- 
+
 		bool Discovery::call() {
 			ARK2D::getLog()->i("Discovery::call");
 			unsigned int packetLen = 4 + 1;
@@ -152,7 +152,7 @@ namespace ARK {
 		}
 		bool Discovery::respond(Address& a) {
 			ARK2D::getLog()->i("Discovery::respond");
-			string username = FileUtil::getOSUsername();
+			string username = SystemUtil::getOSUsername();
 
 			unsigned int packetLen = 4 + 1 + 1 + username.length();
 			unsigned char* packet = (unsigned char*)alloca(packetLen);
@@ -166,8 +166,8 @@ namespace ARK {
 
 			return m_socket.send( a, packet, packetLen);
 		}
-		
-		
+
+
 		int Discovery::receive(unsigned char data[], int size )
 		{
 			Address sender;
@@ -183,7 +183,7 @@ namespace ARK {
 			}
 			unsigned int startIndex = bytes_read;
 
-			if (m_mode == MODE_SERVER) 
+			if (m_mode == MODE_SERVER)
 			{
 				printf( "server accepts connection from client %d.%d.%d.%d:%d\n", sender.getA(), sender.getB(), sender.getC(), sender.getD(), sender.getPort() );
 				printf( "bytes read: %d\n", bytes_read );
@@ -195,8 +195,8 @@ namespace ARK {
 				unsigned short port = sender.getPort();
 				memcpy(&packet[startIndex+4], &port, sizeof(unsigned short));
 				//packet[10] // used up by unsigned short type
-			} 
-			else if (m_mode == MODE_CLIENT) 
+			}
+			else if (m_mode == MODE_CLIENT)
 			{
 				packet[startIndex] = sender.getA(); // server info
 				packet[startIndex+1] = sender.getB();
@@ -217,7 +217,7 @@ namespace ARK {
 		bool Discovery::isRunning() {
 			return m_running;
 		}
-		
+
 		Discovery::~Discovery() {
 			stop();
 		}

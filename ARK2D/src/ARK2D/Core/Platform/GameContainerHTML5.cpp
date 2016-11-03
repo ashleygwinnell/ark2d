@@ -182,8 +182,8 @@
 				m_screenOrientationPrevious(ORIENTATION_DUMMY),
 				m_orientationInverted(false),
 				m_2in1enabled(false),
-				m_bRunning(false),
 				m_clearColor(Color::black),
+				m_bRunning(false),
 				m_resizeBehaviour(RESIZE_BEHAVIOUR_SCALE),
 				m_showingFPS(false),
 				m_willLoadDefaultFont(true),
@@ -301,8 +301,8 @@
 			    Atom wm_state;
 			    XWMHints hints;
 			    XEvent xev;
-			    EGLConfig ecfg;
-			    EGLint num_config;
+			    //EGLConfig ecfg;
+			    //EGLint num_config;
 			    Window win;
 
 			    /*
@@ -776,9 +776,9 @@
 				}
 
 				GameTimer* m_timer = container->getTimer();
-				Game* m_game = ARK2D::getGame();
+				//Game* m_game = ARK2D::getGame();
 				Input* m_input = ARK2D::getInput();
-				Renderer* m_graphics = ARK2D::getRenderer();
+				//Renderer* m_graphics = ARK2D::getRenderer();
 				//vector<Gamepad*> m_gamepads = container->getGamepads();
 
 				//ARK2D::getLog()->i("Timer Tick");
