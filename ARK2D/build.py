@@ -3817,6 +3817,7 @@ build:
 	          	# self.ark2d_dir + '/build/osx/DerivedData/ark2d/Build/Products/Default/libark2d-OSX.dylib'
 			];
 			gypfiletargetcondition['link_settings']['libraries'] = self.addLibrariesToArray(gypfiletargetcondition['link_settings']['libraries'], self.libs);
+			gypfiletargetcondition['link_settings']['libraries'].extend( self.target_config['libs'] );
 
 
 			if (self.debug):

@@ -1762,6 +1762,9 @@ namespace ARK {
                 ARK2D::getLog()->v("Renderer::init");
                 #ifdef SHADER_SUPPORT
 
+                    // DO NOT REMOVE. REFACTOR.
+                    FBO::isSupported();
+
                     #if (defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
                         glGenVertexArraysOES = NULL;
                         glBindVertexArrayOES = NULL;

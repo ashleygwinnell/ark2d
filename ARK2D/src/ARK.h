@@ -78,6 +78,7 @@
 #include "ARK2D/Core/Graphics/Model/ObjModel.h"
 #include "ARK2D/Core/Graphics/Model/ImageModel.h"
 #include "ARK2D/Core/Graphics/MatrixStack.h"
+#include "ARK2D/Core/Graphics/ImageIO/PNGImage.h"
 
  // Fonts
 #include "ARK2D/Core/Font/Font.h"

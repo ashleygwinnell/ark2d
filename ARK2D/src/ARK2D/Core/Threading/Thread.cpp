@@ -18,7 +18,9 @@
 #ifdef ARK2D_EMSCRIPTEN_JS
     #include <emscripten/emscripten.h>
     #include <emscripten/html5.h>
- #endif
+#else
+    #define EMSCRIPTEN_KEEPALIVE
+#endif
 
 
 std::map<string, const char*> emscripten_functionPointerKeys;
