@@ -25,6 +25,7 @@ using namespace std;
 namespace ARK {
     namespace Core {
         namespace Graphics {
+            class FBO;
 
             class ARK2D_API Image : public ARK::Core::Resource, public ARK::Core::SceneGraph::SceneNode {
                 friend class TextureStore;
@@ -116,6 +117,7 @@ namespace ARK {
                     Image(void* data, unsigned int dataLength, unsigned int resourceType, string file);
                     Image(const std::string& fname);
                     Image(const std::string& fname, const Color& mask);
+                    Image(FBO* fbo);
                     unsigned int getWidth() const;
                     unsigned int getHeight() const;
 

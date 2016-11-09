@@ -229,6 +229,7 @@ namespace ARK {
             }
             void StateBasedGame::render() {
                 if (!visible) { return; }
+                ARK2D::getRenderer()->debugString("StateBasedGame::render");
                 //preRender(container, g);
                 //ARK2D::getLog()->v("sbg::render");
                 preRenderTransitions();
@@ -394,7 +395,7 @@ namespace ARK {
                 }
                 m_states.clear();
             }
-            
+
         }
 	}
 }

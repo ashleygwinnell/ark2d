@@ -193,6 +193,7 @@ namespace ARK {
                     static const unsigned int TYPE_SAVE_PIXELS = 28;
                     static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 29;
                     static const unsigned int TYPE_CUSTOM_FUNCTION = 30;
+                    static const unsigned int TYPE_DEBUG_STRING = 31;
                     static map<unsigned int, string>* s_types;
 
                 public:
@@ -408,6 +409,7 @@ namespace ARK {
                     static MatrixStack* getMatrix(unsigned int type);
                     static void multiplyMatrix(Matrix44* by);
                     static void matrixMode(unsigned int mode);
+                    static unsigned int matrixMode();
                     static Matrix33* getNormalMatrix();
 
                 #if defined (ARK2D_RENDERER_DIRECTX)
@@ -635,6 +637,7 @@ namespace ARK {
                     static void __internalsDXUpdateMatrices();
 
                     string toString();
+                    void debugString(string message);
 
                 private:
                     ARK::Core::Font::Font* m_DefaultFont;

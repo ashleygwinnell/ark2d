@@ -222,6 +222,7 @@ namespace ARK {
 
 			//ARK2D::getLog()->e("camera render");
 			Renderer* r = ARK2D::getRenderer();
+			r->debugString("Camera::render");
 			r->viewport(viewportX, viewportY, viewportWidth, viewportHeight);
 			//r->clear(clearColor);
 
@@ -270,6 +271,8 @@ namespace ARK {
 			//GameContainer* c = ARK2D::getContainer();
 			//viewStack->current()->translate(c->getTranslateX(), c->getTranslateY(), 0.0f);
 
+			unsigned int mode = r->matrixMode();
+
 			r->matrixMode(MatrixStack::TYPE_MODEL);
 			r->loadIdentity();
 
@@ -283,6 +286,8 @@ namespace ARK {
 			}
 
 			SceneNode::render();
+
+			r->matrixMode(mode);
 		}
 
 

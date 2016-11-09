@@ -635,12 +635,7 @@
 				ARK2D::s_camera = new ARK::Core::Camera();
 				ARK2D::s_camera->setViewport(0, 0, m_width, m_height);
 				ARK2D::s_log = ARK::Util::Log::getInstance();
-				scene = new Scene();
-				scene->addChild(ARK2D::s_camera);
-				scene->addChild(ARK2D::s_game);
-				scene->addChild(ARK2D::s_log);
-				scene->addChild(new LetterboxNode());
-
+				scene = ARK2D::getScene();
 
 				m_platformSpecific.m_windowRect.left = (long) 0; 			// Set Left Value To 0
 				m_platformSpecific.m_windowRect.right = (long) width; 		// Set Right Value To Requested Width

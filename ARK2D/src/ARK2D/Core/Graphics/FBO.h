@@ -18,6 +18,7 @@ namespace ARK {
                 public:
                     string name;
                 private:
+                    Image* _image;
                     unsigned int fbo;
                     unsigned int fbo_depth;
                     unsigned int fbo_texture;
@@ -56,11 +57,13 @@ namespace ARK {
                     void unbind_2d();
 
                     inline void setClearScreenOnBind(bool b) { m_clearScreenOnBind = b; }
+                    inline void setClearColor(Color c) { clearColor = c; }
 
                     unsigned int getGLID() { return fbo; }
 
                     void resize(int width, int height);
 
+                    Image* getImage();
                     unsigned int getTextureId();
                     unsigned int getWidth() { return window_width; }
                     unsigned int getHeight() { return window_height; }

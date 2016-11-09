@@ -140,6 +140,7 @@ namespace ARK {
                     void setBatching(bool b);
 
                     void printRendererStack();
+                    bool isPrintingRendererStack();
 
                     virtual bool keyPressed(unsigned int key);
                     virtual bool keyReleased(unsigned int key);

@@ -517,6 +517,7 @@ namespace ARK {
                         r->getBatch()->setEnabled(false, true);
                         if (bPrintRendererStack) {
                             ARK2D::getLog()->w(r->getBatch()->toString());
+                            ARK2D::getLog()->w(root->toListString());
                             bPrintRendererStack = false;
                         }
                         r->getBatch()->render();
@@ -531,6 +532,9 @@ namespace ARK {
             }
             void Scene::printRendererStack() {
                 bPrintRendererStack = true;
+            }
+            bool Scene::isPrintingRendererStack() {
+                return bPrintRendererStack;
             }
             bool Scene::keyPressed(unsigned int key) {
                 return root->keyPressed(key);
@@ -550,7 +554,9 @@ namespace ARK {
 
             }
             void LetterboxNode::render() {
+                if (!visible) { return; }
                 ARK2D::getRenderer()->drawScissorBoxes();
+                renderChildren();
             }
 
         }
