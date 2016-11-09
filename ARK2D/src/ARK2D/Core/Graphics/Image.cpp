@@ -1103,14 +1103,15 @@ namespace ARK {
 
 				texture_offset_x_tl = 0.0f;
 				texture_offset_y_tl = 0.0f;
-				texture_offset_x_tr = m_Width;
+				texture_offset_x_tr = 1.0f;
 				texture_offset_y_tr = 0.0f;
 				texture_offset_x_bl = 0.0f;
-				texture_offset_y_bl = m_Height;
-				texture_offset_x_br = m_Width;
-				texture_offset_y_br = m_Height;
+				texture_offset_y_bl = 1.0f;
+				texture_offset_x_br = 1.0f;
+				texture_offset_y_br = 1.0f;
 				texture_source_w = m_Width;
 				texture_source_h = m_Height;
+				flip(false, true);
 
 				clean();
 			}

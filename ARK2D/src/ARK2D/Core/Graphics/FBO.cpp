@@ -410,8 +410,8 @@ namespace ARK {
 
 
 
-            Image* FBO::getImage() {
-                return _image;
+            Image** FBO::getImage() {
+                return &_image;
             }
 
             unsigned int FBO::getTextureId() {

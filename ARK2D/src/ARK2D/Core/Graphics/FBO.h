@@ -63,7 +63,7 @@ namespace ARK {
 
                     void resize(int width, int height);
 
-                    Image* getImage();
+                    Image** getImage(); // it's a pointer to a pointer as the image can be changed (for example on window resize).
                     unsigned int getTextureId();
                     unsigned int getWidth() { return window_width; }
                     unsigned int getHeight() { return window_height; }
