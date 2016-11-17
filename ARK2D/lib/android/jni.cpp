@@ -1030,6 +1030,25 @@ string MyAndroidPluggable::getInputDialogText() {
     return returnStr;
 }
 
+void MyAndroidPluggable::openAlertDialog(string title, string message) {
+	JNIEnv* env = s_getCurrentEnv();
+	checkExceptions(env);
+
+	ARK2D::getLog()->i("Opening alert dialog");
+	jstring jTitle = env->NewStringUTF(title.c_str());
+	jstring jMessage = env->NewStringUTF(message.c_str());
+
+	ARK2D::getLog()->i("getting method id");
+	jmethodID messageMe = env->GetStaticMethodID(s_gameClass, "openAlertDialog", "(Ljava/lang/String;Ljava/lang/String;)V");
+
+	ARK2D::getLog()->i("got method. calling method.");
+    env->CallStaticVoidMethod(s_gameClass, messageMe, jTitle, jMessage);
+
+	ARK2D::getLog()->i("done opening alert dialog");
+	checkExceptions(env);
+}
+
+
 string MyAndroidPluggable::getISO6391Language() {
 	JNIEnv* env = s_getCurrentEnv();
 	checkExceptions(env);
@@ -1356,6 +1375,40 @@ void MyAndroidPluggable::googleplaygameservices_submitScore(string id, int score
 	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
 	jmethodID messageMe = env->GetStaticMethodID(clazz, "googleplaygameservices_submitScore", "(Ljava/lang/String;I)V"); // Get the method that you want to call
 	env->CallStaticVoidMethod(clazz, messageMe, leaderboardId_jstr, leaderboardScore_jint); // Call the method on the object
+}
+
+void MyAndroidPluggable::googleplaygameservices_savedGamesSelect(bool allowAdd, bool allowDelete) {
+	JNIEnv* env = s_getCurrentEnv();
+	checkExceptions(env);
+
+	jboolean bAllowAdd = (jboolean) allowAdd;
+	jboolean bAllowDelete = (jboolean) allowDelete;
+
+	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
+	jmethodID messageMe = env->GetStaticMethodID(clazz, "googleplaygameservices_savedGamesSelect", "(ZZ)V");
+	env->CallStaticVoidMethod(clazz, messageMe, bAllowAdd, bAllowDelete);
+}
+void MyAndroidPluggable::googleplaygameservices_savedGamesLoad(string name) {
+	JNIEnv* env = s_getCurrentEnv();
+	checkExceptions(env);
+
+	jstring jstrName = env->NewStringUTF(name.c_str());
+
+	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
+	jmethodID messageMe = env->GetStaticMethodID(clazz, "googleplaygameservices_savedGamesLoad", "(Ljava/lang/String;)V");
+	env->CallStaticVoidMethod(clazz, messageMe, jstrName);
+}
+void MyAndroidPluggable::googleplaygameservices_savedGamesUpdate(string name, string data, bool createIfMissing) {
+	JNIEnv* env = s_getCurrentEnv();
+	checkExceptions(env);
+
+	jstring jstrName = env->NewStringUTF(name.c_str());
+	jstring jstrData = env->NewStringUTF(data.c_str());
+	jboolean bCreateIfMissing = (jboolean) createIfMissing;
+
+	jclass clazz = env->FindClass("org/%COMPANY_NAME%/%GAME_SHORT_NAME%/%GAME_CLASS_NAME%Activity");
+	jmethodID messageMe = env->GetStaticMethodID(clazz, "googleplaygameservices_savedGamesUpdate", "(Ljava/lang/String;Ljava/lang/String;Z)V");
+	env->CallStaticVoidMethod(clazz, messageMe, jstrName, jstrData, bCreateIfMissing);
 }
 
 /*bool MyAndroidPluggable::googleplaygameservices_isConnected() {

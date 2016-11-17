@@ -54,8 +54,14 @@ namespace ARK {
 					static const unsigned int CALLBACK_ANDROID_BILLING_PURCHASE_FAIL = 25;
 					static const unsigned int CALLBACK_ANDROID_BILLING_QUERYINVENTORY_SUCCESS = 26;
 					static const unsigned int CALLBACK_ANDROID_BILLING_QUERYINVENTORY_FAIL = 27;
+					static const unsigned int CALLBACK_ANDROID_SAVEDGAME_LOAD_START = 28;
+					static const unsigned int CALLBACK_ANDROID_SAVEDGAME_LOAD_SUCCESS = 29;
+					static const unsigned int CALLBACK_ANDROID_SAVEDGAME_LOAD_FAIL = 30;
+					static const unsigned int CALLBACK_ANDROID_SAVEDGAME_UPDATE_START = 31;
+					static const unsigned int CALLBACK_ANDROID_SAVEDGAME_UPDATE_SUCCESS = 32;
+					static const unsigned int CALLBACK_ANDROID_SAVEDGAME_UPDATE_FAIL = 33;
 
-					static const unsigned int CALLBACK_GAMECENTER_SIGNIN_SUCCESSFUL = 31;
+					static const unsigned int CALLBACK_GAMECENTER_SIGNIN_SUCCESSFUL = 301;
 
 					static const unsigned int CALLBACK_OUYA_LICENSING_ALLOW = 41;
 					static const unsigned int CALLBACK_OUYA_LICENSING_DISALLOW = 42;
@@ -81,6 +87,7 @@ namespace ARK {
 
 				public:
 					static vector<ARK::Core::Utils::Callback> s_callbacks;
+					static void createAndAdd(unsigned int id, void* func);
 					static void add(Callback c);
 					static void invoke(unsigned int id);
 					static void invoke(unsigned int id, unsigned int param);

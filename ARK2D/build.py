@@ -3817,7 +3817,12 @@ build:
 	          	# self.ark2d_dir + '/build/osx/DerivedData/ark2d/Build/Products/Default/libark2d-OSX.dylib'
 			];
 			gypfiletargetcondition['link_settings']['libraries'] = self.addLibrariesToArray(gypfiletargetcondition['link_settings']['libraries'], self.libs);
-			gypfiletargetcondition['link_settings']['libraries'].extend( self.target_config['libs'] );
+			#gypfiletargetcondition['link_settings']['libraries'].extend( self.target_config['libs'] );
+			for lib in self.target_config['libs']:
+				if self.get_str_extension(lib) == "framework":
+					gypfiletargetcondition['link_settings']['libraries'].extend(["$(SDKROOT)/System/Library/Frameworks/" + lib]);
+				else:
+					gypfiletargetcondition['link_settings']['libraries'].extend([lib]);
 
 
 			if (self.debug):
@@ -5649,7 +5654,7 @@ build:
 			# make application.mk
 			print("Creating Application.mk");
 			application_make_file = "";
-			application_make_file += "NDK_TOOLCHAIN_VERSION := 4.8" + nl;
+			application_make_file += "NDK_TOOLCHAIN_VERSION := 4.9" + nl;
 			application_make_file += "APP_PROJECT_PATH := " + ndkprojectpath + nl;
 			application_make_file += "APP_BUILD_SCRIPT := " + appbuildscript + nl;
 			application_make_file += "NDK_APP_OUT=" + appbuilddir + nl;
@@ -5666,7 +5671,7 @@ build:
 
 			application_make_file += "APP_CPPFLAGS += -std=c++11 -frtti " + nl;
 			application_make_file += "APP_STL := gnustl_shared" + nl; #c++_shared" + nl; #stlport_static
-			application_make_file += "LOCAL_C_INCLUDES += " + self.android_ndkdir + "/sources/cxx-stl/gnu-libstdc++/4.8/include" + nl;
+			application_make_file += "LOCAL_C_INCLUDES += " + self.android_ndkdir + "/sources/cxx-stl/gnu-libstdc++/4.9/include" + nl;
 
 			f = open(appbuildscript3, "w");
 			f.write(application_make_file);
@@ -5765,12 +5770,13 @@ build:
 						print("resampling audio file from: " + fromfile + " to: " + tofile);
 						#subprocess.call(["oggdec "+fromfile+" --quiet --output=- | oggenc --raw --quiet --quality=" + str(audio_quality) + " --output="+tofile+" -"], shell=True);
 						subprocess.call([ self.ark2d_dir + "/../Tools/oggdec "+fromfile+" --quiet --output=- | " + self.ark2d_dir +  "/../Tools/oggenc --raw --quiet --quality=" + str(audio_quality) + " --output="+tofile+" -"], shell=True);
-					elif (file_ext == "wav"): # resample
-						print("resampling audio file from: " + fromfile + " to: " + tofile);
+					#elif (file_ext == "wav"): # resample
+					#	print("resampling audio file from: " + fromfile + " to: " + tofile);
 						#% cat inputfile | lame [options] - - > output
-						subprocess.call(["ffmpeg -i " +fromfile+ " -ac 1 "+tofile], shell=True);
-						#subprocess.call(["lame -V0 --quiet " +fromfile+ " "+tofile+""], shell=True);
-						#subprocess.call(["lame -a --quiet " +fromfile+ " "+tofile+""], shell=True);
+						#subprocess.call(["ffmpeg -y -i " +fromfile+ " "+tofile], shell=True);
+						#subprocess.call(["ffmpeg -i " +fromfile+ " -ac 1 "+tofile], shell=True); # mono.
+						#subprocess.call(["lame -V0 --quiet " +fromfile+ " "+tofile+""], shell=True); #variable bit rate, 0 quality
+						#subprocess.call(["lame -a --quiet " +fromfile+ " "+tofile+""], shell=True); #downmix to mono
 					else:
 						print("copying file from: " + fromfile + " to: " + tofile);
 						#subprocess.call(["cp -r " + fromfile + " " + tofile], shell=True);
@@ -5951,8 +5957,10 @@ build:
 					androidManifestContents += "	android:installLocation=\"preferExternal\"" + nl;
 				else:
 					androidManifestContents += "	android:installLocation=\"internalOnly\"" + nl;
+				androidManifestContents += "	android:isGame=\"true\"" + nl;
 				androidManifestContents += "	android:versionCode=\"" + versionCode + "\" " + nl;
 				androidManifestContents += "	android:versionName=\"" + self.game_version + "\"> " + nl;
+
 				androidManifestContents += "	<uses-sdk android:minSdkVersion=\"" + minSdkVersion + "\" android:targetSdkVersion=\"" + targetSdkVersion + "\"/>" + nl;
 				androidManifestContents += "	<uses-feature android:glEsVersion=\"0x00020000\" android:required=\"true\" />" + nl;
 				for permission in self.android_config['permissions']:
@@ -6517,13 +6525,16 @@ build:
 				self.mycopytree(ark2d_built_libs+self.ds+"armeabi", project_nlib_dir+self.ds+"armeabi");
 				self.mycopytree(ark2d_built_libs+self.ds+"x86", project_nlib_dir+self.ds+"x86");
 
-
 			if (android_projectType == 'eclipse'):
 				self.mycopytree(ark2d_built_libs+self.ds+"armeabi-v7a", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project-eclipse"+self.ds+"obj"+self.ds+"local"+self.ds+"armeabi-v7a");
 				if (not self.debug):
 					self.mycopytree(ark2d_built_libs+self.ds+"armeabi", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project-eclipse"+self.ds+"obj"+self.ds+"local"+self.ds+"armeabi");
 					self.mycopytree(ark2d_built_libs+self.ds+"x86", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project-eclipse"+self.ds+"obj"+self.ds+"local"+self.ds+"x86");
-
+			elif (android_projectType == "intellij"):
+				self.mycopytree(ark2d_built_libs+self.ds+"armeabi-v7a", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project-intellij"+self.ds+self.game_name_safe+self.ds+"src"+self.ds+"main"+self.ds+"jniLibs"+self.ds+"armeabi-v7a");
+				if (not self.debug):
+					self.mycopytree(ark2d_built_libs+self.ds+"armeabi", rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project-intellij"+self.ds+self.game_name_safe+self.ds+"src"+self.ds+"main"+self.ds+"jniLibs"+self.ds+"armeabi");
+					self.mycopytree(ark2d_built_libs+self.ds+"x86",     rootPath+self.ds+"build"+self.ds+self.output+self.ds+"project-intellij"+self.ds+self.game_name_safe+self.ds+"src"+self.ds+"main"+self.ds+"jniLibs"+self.ds+"x86");
 
 			#
 			# ark2d (local)
@@ -6706,7 +6717,7 @@ build:
 			#make application.mk
 			print("Creating Application.mk");
 			application_make_file = "";
-			application_make_file += "NDK_TOOLCHAIN_VERSION := 4.8" + nl;
+			application_make_file += "NDK_TOOLCHAIN_VERSION := 4.9" + nl;
 			application_make_file += "APP_PROJECT_PATH := " + ndkprojectpath + nl;
 			application_make_file += "APP_BUILD_SCRIPT := " + appbuildscript + nl;
 			application_make_file += "NDK_APP_OUT=" + appbuilddir + nl;
@@ -6726,7 +6737,7 @@ build:
 			application_make_file += "APP_CPPFLAGS += -std=c++11 -frtti " + nl;
 			application_make_file += "APP_STL := gnustl_shared" + nl;
 			#application_make_file += "APP_STL := c++_shared" + nl;
-			application_make_file += "LOCAL_C_INCLUDES += " + self.android_ndkdir + "/sources/cxx-stl/gnu-libstdc++/4.8/include" + nl;
+			application_make_file += "LOCAL_C_INCLUDES += " + self.android_ndkdir + "/sources/cxx-stl/gnu-libstdc++/4.9/include" + nl;
 
 			f = open(appbuildscript3, "w");
 			f.write(application_make_file);

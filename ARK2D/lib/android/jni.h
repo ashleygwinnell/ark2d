@@ -20,6 +20,7 @@
 			virtual void closeSoftwareKeyboard();
 			virtual void openInputDialog(unsigned int jniCallbackId, string title, string defaultStr);
 			virtual string getInputDialogText();
+			virtual void openAlertDialog(string title, string message);
 
 			virtual bool vibrator_hasVibrator();
 			virtual void vibrator_vibrate(int millis);
@@ -40,6 +41,10 @@
 			virtual void googleplaygameservices_unlockAchievement(string id);
 			virtual void googleplaygameservices_viewScores(string id);
 			virtual void googleplaygameservices_submitScore(string id, int score);
+
+			virtual void googleplaygameservices_savedGamesSelect(bool allowAdd, bool allowDelete);
+			virtual void googleplaygameservices_savedGamesLoad(string name);
+			virtual void googleplaygameservices_savedGamesUpdate(string name, string data, bool createIfMissing);
 
 			virtual bool googleplaybilling_isSetup();
 			virtual void googleplaybilling_startPurchase(string id, int referenceNumber, string extraToken);

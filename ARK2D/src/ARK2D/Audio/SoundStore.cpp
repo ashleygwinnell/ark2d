@@ -83,6 +83,7 @@ namespace ARK {
 					return it->second->getVolume();
 				}
 			}
+			ARK2D::getLog()->e(StringUtil::append("Could not get volumy by group id as no sounds exist in the group. ", groupId));
 			return 0.0f;
 		}
 

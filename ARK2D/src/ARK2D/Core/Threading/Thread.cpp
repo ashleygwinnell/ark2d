@@ -266,8 +266,8 @@ namespace ARK {
                             s_threads = new Vector<Thread*>();
 
                             // pirate version callbacks
-                            ARK::Util::Callback callback;
-                            callback.setId(ARK::Util::Callbacks::CALLBACK_ANDROID_THREAD_START);
+                            ARK::Core::Utils::Callback callback;
+                            callback.setId(ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_THREAD_START);
                             callback.setFunctionPointer((void*) &s_threadStartInternal);
                             Callbacks::add(callback);
                         }

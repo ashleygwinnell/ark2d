@@ -48,6 +48,12 @@ namespace ARK {
 			}
 
             vector<ARK::Core::Utils::Callback> Callbacks::s_callbacks;
+            void Callbacks::createAndAdd(unsigned int id, void* func) {
+				Callback c;
+				c.setId(id);
+				c.setFunctionPointer(func);
+				add(c);
+			}
 			void Callbacks::add(Callback c)
 			{
 				s_callbacks.push_back(c);

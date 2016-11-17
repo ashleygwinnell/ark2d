@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.GeneralSecurityException;
@@ -26,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -54,6 +56,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Application;
 %ANDROIDSDK16_LINECOMMENT% import android.app.NativeActivity;
+import android.app.UiModeManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -61,6 +64,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -72,6 +76,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Looper;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Base64;
 import android.util.Log;
 %ANDROIDSDK16_LINECOMMENT% import android.view.InputDevice;
@@ -88,9 +94,14 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.drive.Drive;
 import com.google.android.gms.games.Games;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 %OUYA_BLOCKSTART%
 import tv.ouya.console.api.*;
@@ -126,6 +137,12 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.analytics.HitBuilders;
 %GOOGLEANALYTICS_BLOCKEND%
+
+import com.google.android.gms.games.GamesStatusCodes;
+import com.google.android.gms.games.snapshot.Snapshot;
+import com.google.android.gms.games.snapshot.Snapshots;
+import com.google.android.gms.games.snapshot.SnapshotMetadata;
+import com.google.android.gms.games.snapshot.SnapshotMetadataChange;
 
 
 %IRONSOURCE_BLOCKSTART%
@@ -183,6 +200,10 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	implements InputDeviceListener
 %FIRETV_BLOCKEND%
 
+// %GAME_SERVICES_BLOCKSTART%
+// 	implements GoogleApiClient.ConnectionCallbacks , GoogleApiClient.OnConnectionFailedListener
+// %GAME_SERVICES_BLOCKEND%
+
 {
 
 	// const variables copied from C++ Util/Callbacks class.
@@ -198,8 +219,14 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	public static final int CALLBACK_ANDROID_BILLING_PURCHASE_FAIL = 25;
 	public static final int CALLBACK_ANDROID_BILLING_QUERYINVENTORY_SUCCESS = 26;
 	public static final int CALLBACK_ANDROID_BILLING_QUERYINVENTORY_FAIL = 27;
+	public static final int CALLBACK_ANDROID_SAVEDGAME_LOAD_START = 28;
+	public static final int CALLBACK_ANDROID_SAVEDGAME_LOAD_SUCCESS = 29;
+	public static final int CALLBACK_ANDROID_SAVEDGAME_LOAD_FAIL = 30;
+	public static final int CALLBACK_ANDROID_SAVEDGAME_UPDATE_START = 31;
+	public static final int CALLBACK_ANDROID_SAVEDGAME_UPDATE_SUCCESS = 32;
+	public static final int CALLBACK_ANDROID_SAVEDGAME_UPDATE_FAIL = 33;
 
-	public static final int CALLBACK_GAMECENTER_SIGNIN_SUCCESSFUL = 31;
+	public static final int CALLBACK_GAMECENTER_SIGNIN_SUCCESSFUL = 301;
 
 	public static final int CALLBACK_OUYA_LICENSING_ALLOW = 41;
 	public static final int CALLBACK_OUYA_LICENSING_DISALLOW = 42;
@@ -312,6 +339,11 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	public static Tracker s_tracker = null;
 	%GOOGLEANALYTICS_BLOCKEND%
 
+
+	public %GAME_CLASS_NAME%Activity() {
+        super(GameHelper.CLIENT_GAMES | GameHelper.CLIENT_SNAPSHOT);
+    }
+
 	public static %GAME_CLASS_NAME%Activity s_activity;
     /** Called when the activity is first created. */
     @Override
@@ -319,6 +351,24 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 
 		super.onCreate(savedInstanceState);
         s_activity = this;
+
+        UiModeManager uiModeManager = (UiModeManager) s_activity.getSystemService(Context.UI_MODE_SERVICE);
+		if (uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION) {
+			Log.d("game", "Running on a TV Device");
+		} else {
+			Log.d("game", "Running on a non-TV Device");
+		}
+
+		%GAME_SERVICES_BLOCKSTART%
+			// Create the Google API Client with access to Plus, Games, and Drive
+			/*mGoogleApiClient = new GoogleApiClient.Builder(this)
+					.addConnectionCallbacks(this)
+					.addOnConnectionFailedListener(this)
+					.addApi(Games.API).addScope(Games.SCOPE_GAMES)
+					.addApi(Drive.API).addScope(Drive.SCOPE_APPFOLDER)
+					.build();*/
+		%GAME_SERVICES_BLOCKEND%
+
 
         String gameOrientation = "%GAME_ORIENTATION%";
         if (gameOrientation.equals("landscape")) {
@@ -333,7 +383,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
         setContentView(mGLView);
 
         %FIRETV_BLOCKSTART%
-        	InputManager im = (InputManager) getSystemService(Context.INPUT_SERVICE);
+        	InputManager im = (InputManager) s_activity.getSystemService(Context.INPUT_SERVICE);
         	im.registerInputDeviceListener(this, null);
         	im.getInputDevice(0);
         %FIRETV_BLOCKEND%
@@ -464,18 +514,123 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 		}
 	%IRONSOURCE_BLOCKEND%
 
+	%GAME_SERVICES_BLOCKSTART%
+	private String mCurrentSaveName = "snapshotTemp";
+	%GAME_SERVICES_BLOCKEND%
+
     @Override
-    protected void onActivityResult(int request, int response, Intent data) {
-        super.onActivityResult(request, response, data);
+    protected void onActivityResult(int request, int response, Intent intent) {
+        super.onActivityResult(request, response, intent);
+
+        %GAME_SERVICES_BLOCKSTART%
+        if (intent != null) {
+	        if (intent.hasExtra(Snapshots.EXTRA_SNAPSHOT_METADATA)) {
+	            // Load a snapshot.
+	            SnapshotMetadata snapshotMetadata = (SnapshotMetadata) intent.getParcelableExtra(Snapshots.EXTRA_SNAPSHOT_METADATA);
+	            mCurrentSaveName = snapshotMetadata.getUniqueName();
+
+	            // Load the game data from the Snapshot
+	            // ...
+	        } else if (intent.hasExtra(Snapshots.EXTRA_SNAPSHOT_NEW)) {
+	            // Create a new snapshot named with a unique string
+	            mCurrentSaveName = makeSnapshotName();
+
+	            // Create the new snapshot
+	            // ...
+	        }
+	    }
+	    %GAME_SERVICES_BLOCKEND%
 
 		%INAPPBILLING_BLOCKSTART%
 		if (mHelper != null) {
-			mHelper.handleActivityResult(request, response, data);
+			mHelper.handleActivityResult(request, response, intent);
 		}
 		%INAPPBILLING_BLOCKEND%
 
 
     }
+
+    %GAME_SERVICES_BLOCKSTART%
+
+	    /**
+	     * Generate a unique Snapshot name from an AppState stateKey.
+	     * @return a unique Snapshot name that maps to the stateKey.
+	     */
+	    private String makeSnapshotName() {
+	    	String unique = new BigInteger(281, new Random()).toString(13);
+	        return "snapshotTemp-" + unique;
+	    }
+
+    	private PendingResult<Snapshots.LoadSnapshotsResult> loadSnapshots() {
+    		return Games.Snapshots.load( s_activity.getGameHelper().getApiClient(), false );
+    	}
+
+    	private PendingResult<Snapshots.CommitSnapshotResult> writeSnapshot(Snapshot snapshot,
+		        String data, String desc) {
+
+		    // Set the data payload for the snapshot
+		    snapshot.getSnapshotContents().writeBytes(data.getBytes());
+
+		    // Create the change operation
+		    SnapshotMetadataChange metadataChange = new SnapshotMetadataChange.Builder()
+		            //.setCoverImage(coverImage)
+		            .setDescription(desc)
+		            .build();
+
+		    // Commit the operation
+		    return Games.Snapshots.commitAndClose(s_activity.getGameHelper().getApiClient(), snapshot, metadataChange);
+		}
+
+
+
+	    private static final int MAX_SNAPSHOT_RESOLVE_RETRIES = 3;
+
+		/**
+		 * Conflict resolution for when Snapshots are opened.  Must be run in an AsyncTask or in a
+		 * background thread,
+		 */
+		Snapshot processSnapshotOpenResult(Snapshots.OpenSnapshotResult result, int retryCount) {
+		    Snapshot mResolvedSnapshot = null;
+		    retryCount++;
+
+		    int status = result.getStatus().getStatusCode();
+		    Log.i("game", "Save Result status: " + status);
+
+		    if (status == GamesStatusCodes.STATUS_OK) {
+		        return result.getSnapshot();
+		    } else if (status == GamesStatusCodes.STATUS_SNAPSHOT_CONTENTS_UNAVAILABLE) {
+		        return result.getSnapshot();
+		    } else if (status == GamesStatusCodes.STATUS_SNAPSHOT_CONFLICT) {
+		        Snapshot snapshot = result.getSnapshot();
+		        Snapshot conflictSnapshot = result.getConflictingSnapshot();
+
+		        // Resolve between conflicts by selecting the newest of the conflicting snapshots.
+		        mResolvedSnapshot = snapshot;
+
+		        if (snapshot.getMetadata().getLastModifiedTimestamp() <
+		                conflictSnapshot.getMetadata().getLastModifiedTimestamp()) {
+		            mResolvedSnapshot = conflictSnapshot;
+		        }
+
+		        Snapshots.OpenSnapshotResult resolveResult = Games.Snapshots.resolveConflict(
+		                s_activity.getGameHelper().getApiClient(), result.getConflictId(), mResolvedSnapshot).await();
+
+		        if (retryCount < MAX_SNAPSHOT_RESOLVE_RETRIES) {
+		            // Recursively attempt again
+		            return processSnapshotOpenResult(resolveResult, retryCount);
+		        } else {
+		            // Failed, log error and show Toast to the user
+		            String message = "Could not resolve snapshot conflicts";
+		            Log.e("game", message);
+		            Toast.makeText(getBaseContext(), message, Toast.LENGTH_LONG).show();
+		        }
+
+		    }
+
+		    // Fail, return null.
+		    return null;
+		}
+	%GAME_SERVICES_BLOCKEND%
 
     %INAPPBILLING_BLOCKSTART%
 
@@ -595,7 +750,7 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	        s_activity.signOut();
 	    }
 	    public static boolean googleplaygameservices_isSignedIn() {
-	    	Log.i("playservices", "is signed in?" + s_activity.isSignedIn() );
+	    	//Log.i("playservices", "is signed in?" + s_activity.isSignedIn() );
 	        return s_activity.isSignedIn();
 	    }
 	    //public static boolean googleplaygameservices_isSigningIn() {
@@ -647,6 +802,156 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	    public void onSignInFailed() {
 	        Log.i("playservices", "sign-in failed");
 	        %GAME_CLASS_NAME%Renderer.nativeCallbackById(%GAME_CLASS_NAME%Activity.CALLBACK_ANDROID_SIGNIN_UNSUCCESSFUL);
+	    }
+
+
+
+    	private static final int RC_SIGN_IN = 9001; // Request code used to invoke sign-in UI.
+    	//private static final int RC_SELECT_SNAPSHOT = 9002; // Request code used to invoke Snapshot selection UI.
+	    private static final int RC_SAVED_GAMES = 9009;
+		public static void googleplaygameservices_savedGamesSelect(boolean allowAddButton, boolean allowDeleteButton) {
+		    final int maxNumberOfSavedGamesToShow = Snapshots.DISPLAY_LIMIT_NONE;//5;
+		    Intent savedGamesIntent = Games.Snapshots.getSelectSnapshotIntent(
+		    	s_activity.getGameHelper().getApiClient(),
+		        "Saved Games", allowAddButton, allowDeleteButton, maxNumberOfSavedGamesToShow);
+		    s_activity.startActivityForResult(savedGamesIntent, RC_SAVED_GAMES);
+		}
+
+		/**
+	     * Load a Snapshot from the Saved Games service based on its unique name.  After load, the UI
+	     * will update to display the Snapshot data and SnapshotMetadata.
+	     * @param snapshotName the unique name of the Snapshot.
+	     */
+	    public static void googleplaygameservices_savedGamesLoad(String snapshotName) {
+	        PendingResult<Snapshots.OpenSnapshotResult> pendingResult = Games.Snapshots.open(
+	                s_activity.getGameHelper().getApiClient(), snapshotName, false);
+
+	        Log.e("game", "Loading Save Game");
+
+	        %GAME_CLASS_NAME%Renderer.nativeCallbackById( %GAME_CLASS_NAME%Activity.CALLBACK_ANDROID_SAVEDGAME_LOAD_START );
+
+	        ResultCallback<Snapshots.OpenSnapshotResult> callback =
+	                new ResultCallback<Snapshots.OpenSnapshotResult>() {
+	            @Override
+	            public void onResult(Snapshots.OpenSnapshotResult openSnapshotResult) {
+	            	Snapshot snapshot = s_activity.processSnapshotOpenResult(openSnapshotResult, 0);
+	            	if (snapshot != null) {
+	            		byte[] data = new byte[0];
+	                    try {
+	                        data = snapshot.getSnapshotContents().readFully();
+	                    } catch (IOException e) {
+	                       // displayMessage("Exception reading snapshot: " + e.getMessage(), true);
+	                    	%GAME_CLASS_NAME%Renderer.nativeCallbackByIdStringParam(
+		                    	%GAME_CLASS_NAME%Activity.CALLBACK_ANDROID_SAVEDGAME_LOAD_FAIL,
+		                    	e.getMessage()
+		                    );
+	                    	return;
+	                    }
+	                    String strdat = new String(data);
+	                    // do something...
+	                    %GAME_CLASS_NAME%Renderer.nativeCallbackByIdStringParam(
+	                    	%GAME_CLASS_NAME%Activity.CALLBACK_ANDROID_SAVEDGAME_LOAD_SUCCESS,
+	                    	strdat
+	                    );
+	            	}
+
+	                /*if (openSnapshotResult.getStatus().isSuccess()) {
+	                    //displayMessage(getString(R.string.saved_games_load_success), false);
+	                    byte[] data = new byte[0];
+	                    try {
+	                        data = openSnapshotResult.getSnapshot().getSnapshotContents().readFully();
+	                    } catch (IOException e) {
+	                       // displayMessage("Exception reading snapshot: " + e.getMessage(), true);
+	                    }
+	                    //setData(new String(data));
+	                    String strdat = new String(data);
+	                    //displaySnapshotMetadata(openSnapshotResult.getSnapshot().getMetadata());
+	                }
+	                else if (openSnapshotResult.getStatus() == GameStatusCodes.STATUS_SNAPSHOT_CONFLICT) {
+						String conflictId = openSnapshotResult.getConflictId();
+						Snapshot snapshotConflicting = openSnapshotResult.getConflictingSnapshot();
+						Snapshot snapshotCurrent = openSnapshotResult.getSnapshot();
+
+						PendingResult<Snapshots.OpenSnapshotResult> cb =
+							Snapshots.resolveConflict(s_activity.getGameHelper().getApiClient(), conflictId, snapshotCurrent);
+	                }
+	                else {
+	                    //displayMessage(getString(R.string.saved_games_load_failure), true);
+	                    //clearDataUI();
+	                }*/
+
+	                //dismissProgressDialog();
+	            }
+	        };
+	        pendingResult.setResultCallback(callback);
+	    }
+
+	    /**
+	     * Update the Snapshot in the Saved Games service with new data.  Metadata is not affected,
+	     * however for your own application you will likely want to update metadata such as cover image,
+	     * played time, and description with each Snapshot update.  After update, the UI will
+	     * be cleared.
+	     */
+	    public static void googleplaygameservices_savedGamesUpdate(final String snapshotName, final String datastr, final boolean createIfMissing) {
+	        //final String snapshotName = mCurrentSaveName;// makeSnapshotName();
+	        //final boolean createIfMissing = false;
+
+	        // Use the data from the EditText as the new Snapshot data.
+	        final byte[] data = datastr.getBytes();
+
+	        AsyncTask<Void, Void, Boolean> updateTask = new AsyncTask<Void, Void, Boolean>() {
+	            @Override
+	            protected void onPreExecute() {
+	                //showProgressDialog("Updating Saved Game");
+	                %GAME_CLASS_NAME%Renderer.nativeCallbackById( %GAME_CLASS_NAME%Activity.CALLBACK_ANDROID_SAVEDGAME_UPDATE_START );
+	            }
+
+	            @Override
+	            protected Boolean doInBackground(Void... params) {
+	                Snapshots.OpenSnapshotResult open = Games.Snapshots.open(
+	                	s_activity.getGameHelper().getApiClient(),
+	                	snapshotName,
+	                	createIfMissing
+	                ).await();
+
+	                if (!open.getStatus().isSuccess()) {
+	                    Log.w("game", "Could not open Snapshot for update.");
+	                    %GAME_CLASS_NAME%Renderer.nativeCallbackById( %GAME_CLASS_NAME%Activity.CALLBACK_ANDROID_SAVEDGAME_UPDATE_FAIL );
+	                    return false;
+	                }
+
+	                // Change data but leave existing metadata
+	                Snapshot snapshot = open.getSnapshot();
+	                snapshot.getSnapshotContents().writeBytes(data);
+
+	                Snapshots.CommitSnapshotResult commit = Games.Snapshots.commitAndClose(
+	                        s_activity.getGameHelper().getApiClient(), snapshot, SnapshotMetadataChange.EMPTY_CHANGE).await();
+
+	                if (!commit.getStatus().isSuccess()) {
+	                    Log.w("game", "Failed to commit Snapshot.");
+	                    %GAME_CLASS_NAME%Renderer.nativeCallbackById( %GAME_CLASS_NAME%Activity.CALLBACK_ANDROID_SAVEDGAME_UPDATE_FAIL );
+	                    return false;
+	                }
+
+	                // No failures
+	                return true;
+	            }
+
+	            @Override
+	            protected void onPostExecute(Boolean result) {
+	                if (result) {
+	                   	Log.i("game", "Successfully comitted Snapshot (post execute)");
+	                	%GAME_CLASS_NAME%Renderer.nativeCallbackById( %GAME_CLASS_NAME%Activity.CALLBACK_ANDROID_SAVEDGAME_UPDATE_SUCCESS );
+	                } else {
+	                    Log.w("game", "Failed to commit Snapshot (post execute).");
+	                    %GAME_CLASS_NAME%Renderer.nativeCallbackById( %GAME_CLASS_NAME%Activity.CALLBACK_ANDROID_SAVEDGAME_UPDATE_FAIL );
+	                }
+
+	                //dismissProgressDialog();
+	                //clearDataUI();
+	            }
+	        };
+	        updateTask.execute();
 	    }
 
 	%GAME_SERVICES_BLOCKEND%
@@ -871,6 +1176,11 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
     	Log.i("game", "Activity Resume");
     	super.onStart();
     	//mGLView.onStart();
+
+    	// This is handled in BaseGameActivity and GameHelper
+    	//%GAME_SERVICES_BLOCKSTART%
+    	//	s_activity.getGameHelper().getApiClient().connect();
+    	//%GAME_SERVICES_BLOCKEND%
     }
 
     @Override
@@ -888,6 +1198,19 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 				mMediationAgent.onResume (this);
 			}
 		%IRONSOURCE_BLOCKEND%
+    }
+
+    @Override
+    protected void onStop() {
+    	Log.i("game", "Activity Stop");
+    	super.onStop();
+
+    	// This is handled in BaseGameActivity and GameHelper
+    	//%GAME_SERVICES_BLOCKSTART%
+    	//if ( s_activity.getGameHelper().getApiClient() != null && s_activity.getGameHelper().getApiClient().isConnected() ) {
+        //    s_activity.getGameHelper().getApiClient().disconnect();
+        //}
+        //%GAME_SERVICES_BLOCKEND%
     }
 
    	@Override
@@ -1035,6 +1358,19 @@ public class %GAME_CLASS_NAME%Activity extends BaseGameActivity
 	}
 	public static String getInputDialogText() {
 		return s_inputDialogText;
+	}
+
+	public static void openAlertDialog(String title, String message) {
+		new AlertDialog.Builder(s_activity)
+		    .setTitle(title)
+		    .setMessage(message)
+		    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) {
+		            dialog.cancel();
+		        }
+		     })
+		    //.setIcon(android.R.drawable.ic_dialog_alert)
+		    .show();
 	}
 
 	public static void container_close() {

@@ -470,7 +470,7 @@ float transformTouchPointY(float y) {
     {
         [[GKLocalPlayer localPlayer] authenticateWithCompletionHandler:^(NSError *error)
         {
-            ARK::Util::Callbacks::invoke(ARK::Util::Callbacks::CALLBACK_GAMECENTER_SIGNIN_SUCCESSFUL);
+            ARK::Core::Utils::Callbacks::invoke(ARK::Core::Utils::Callbacks::CALLBACK_GAMECENTER_SIGNIN_SUCCESSFUL);
             //[self callDelegateOnMainThread: @selector(processGameCenterAuth:) withArg: NULL error: error];
         }];
     }

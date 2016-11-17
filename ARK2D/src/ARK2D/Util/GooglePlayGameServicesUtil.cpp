@@ -23,7 +23,6 @@ namespace ARK {
 
 		GooglePlayBillingListener* GooglePlayBillingListener::s_instance = new GooglePlayBillingListener();
 
-
 		void __callback_androidBilling_initialise_success() {
 			GooglePlayBillingListener::get()->onInitialiseSuccessful();
 		}
@@ -45,35 +44,35 @@ namespace ARK {
 
 
 		GooglePlayBillingListener::GooglePlayBillingListener() {
-			ARK::Core::Utils::Callback callback_initialiseSuccess;
-			callback_initialiseSuccess.setId(ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_BILLING_INITIALISE_SUCCESS);
-			callback_initialiseSuccess.setFunctionPointer((void*) &__callback_androidBilling_initialise_success);
-			Callbacks::add(callback_initialiseSuccess);
+			Callbacks::createAndAdd(
+				ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_BILLING_INITIALISE_SUCCESS,
+				(void*) &__callback_androidBilling_initialise_success
+			);
 
-			ARK::Core::Utils::Callback callback_initialiseFail;
-			callback_initialiseFail.setId(ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_BILLING_INITIALISE_FAIL);
-			callback_initialiseFail.setFunctionPointer((void*) &__callback_androidBilling_initialise_fail);
-			Callbacks::add(callback_initialiseFail);
+			Callbacks::createAndAdd(
+				ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_BILLING_INITIALISE_FAIL,
+				(void*) &__callback_androidBilling_initialise_fail
+			);
 
-			ARK::Core::Utils::Callback callback_purchaseSuccess;
-			callback_purchaseSuccess.setId(ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_BILLING_PURCHASE_SUCCESS);
-			callback_purchaseSuccess.setFunctionPointer((void*) &__callback_androidBilling_purchase_success);
-			Callbacks::add(callback_purchaseSuccess);
+			Callbacks::createAndAdd(
+				ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_BILLING_PURCHASE_SUCCESS,
+				(void*) &__callback_androidBilling_purchase_success
+			);
 
-			ARK::Core::Utils::Callback callback_purchaseFail;
-			callback_purchaseFail.setId(ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_BILLING_PURCHASE_FAIL);
-			callback_purchaseFail.setFunctionPointer((void*) &__callback_androidBilling_purchase_fail);
-			Callbacks::add(callback_purchaseFail);
+			Callbacks::createAndAdd(
+				ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_BILLING_PURCHASE_FAIL,
+				(void*) &__callback_androidBilling_purchase_fail
+			);
 
-			ARK::Core::Utils::Callback callback_queryInventorySuccess;
-			callback_queryInventorySuccess.setId(ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_BILLING_QUERYINVENTORY_SUCCESS);
-			callback_queryInventorySuccess.setFunctionPointer((void*) &__callback_androidBilling_queryInventory_success);
-			Callbacks::add(callback_queryInventorySuccess);
+			Callbacks::createAndAdd(
+				ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_BILLING_QUERYINVENTORY_SUCCESS,
+				(void*) &__callback_androidBilling_queryInventory_success
+			);
 
-			ARK::Core::Utils::Callback callback_queryInventoryFail;
-			callback_queryInventoryFail.setId(ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_BILLING_QUERYINVENTORY_FAIL);
-			callback_queryInventoryFail.setFunctionPointer((void*) &__callback_androidBilling_purchase_fail);
-			Callbacks::add(callback_queryInventoryFail);
+			Callbacks::createAndAdd(
+				ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_BILLING_QUERYINVENTORY_FAIL,
+				(void*) &__callback_androidBilling_purchase_fail
+			);
 		}
 
 
@@ -103,6 +102,78 @@ namespace ARK {
 			#endif
 		}
 
+
+
+
+
+
+
+		GooglePlayGamesListener* GooglePlayGamesListener::s_instance = new GooglePlayGamesListener();
+
+		void __callback_androidServices_signin_success() {
+			GooglePlayGamesListener::get()->onSignInSuccessful();
+		}
+		void __callback_androidServices_signin_fail() {
+			GooglePlayGamesListener::get()->onSignInFailed();
+		}
+		void __callback_androidServices_savedGame_loadStarted() {
+			GooglePlayGamesListener::get()->onSavedGameLoadStarted();
+		}
+		void __callback_androidServices_savedGame_loadSuccessful(string data) {
+			GooglePlayGamesListener::get()->onSavedGameLoadSuccessful(data);
+		}
+		void __callback_androidServices_savedGame_loadFailed(string errmsg) {
+			GooglePlayGamesListener::get()->onSavedGameLoadFailed(errmsg);
+		}
+		void __callback_androidServices_savedGame_updateStarted() {
+			GooglePlayGamesListener::get()->onSavedGameUpdateStarted();
+		}
+		void __callback_androidServices_savedGame_updateSuccessful() {
+			GooglePlayGamesListener::get()->onSavedGameUpdateSuccessful();
+		}
+		void __callback_androidServices_savedGame_updateFailed() {
+			GooglePlayGamesListener::get()->onSavedGameUpdateFailed();
+		}
+
+		GooglePlayGamesListener::GooglePlayGamesListener() {
+			Callbacks::createAndAdd(
+				ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_SIGNIN_SUCCESSFUL,
+				(void*) &__callback_androidServices_signin_success
+			);
+			Callbacks::createAndAdd(
+				ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_SIGNIN_UNSUCCESSFUL,
+				(void*) &__callback_androidServices_signin_fail
+			);
+			Callbacks::createAndAdd(
+				ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_SAVEDGAME_LOAD_START,
+				(void*) &__callback_androidServices_savedGame_loadStarted
+			);
+			Callbacks::createAndAdd(
+				ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_SAVEDGAME_LOAD_SUCCESS,
+				(void*) &__callback_androidServices_savedGame_loadSuccessful
+			);
+			Callbacks::createAndAdd(
+				ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_SAVEDGAME_LOAD_FAIL,
+				(void*) &__callback_androidServices_savedGame_loadFailed
+			);
+			Callbacks::createAndAdd(
+				ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_SAVEDGAME_UPDATE_START,
+				(void*) &__callback_androidServices_savedGame_updateStarted
+			);
+			Callbacks::createAndAdd(
+				ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_SAVEDGAME_UPDATE_SUCCESS,
+				(void*) &__callback_androidServices_savedGame_updateSuccessful
+			);
+			Callbacks::createAndAdd(
+				ARK::Core::Utils::Callbacks::CALLBACK_ANDROID_SAVEDGAME_UPDATE_FAIL,
+				(void*) &__callback_androidServices_savedGame_updateFailed
+			);
+		}
+
+
+
+
+
 		vector<string> GooglePlayGameServicesUtil::s_waitingAchievements;
 
 		void GooglePlayGameServicesUtil::signIn() {
@@ -128,7 +199,7 @@ namespace ARK {
 		bool GooglePlayGameServicesUtil::isSigningIn() {
 			#if defined(ARK2D_ANDROID)
 				//ARK2D::getLog()->v("GooglePlayGameServices - isSigningIn");
-				return ARK2D::getContainer()->m_platformSpecific.m_pluggable->googleplaygameservices_isSigningIn();
+				//return ARK2D::getContainer()->m_platformSpecific.m_pluggable->googleplaygameservices_isSigningIn();
 			#endif
 			return false;
 		}
@@ -154,8 +225,27 @@ namespace ARK {
 		}
 		void GooglePlayGameServicesUtil::submitScore(string id, int score) {
 			#if defined(ARK2D_ANDROID)
-				ARK2D::getLog()->v("GooglePlayGameServices - submitScore");
+				ARK2D::getLog()->v("GooglePlayGameServicesUtil - submitScore");
 				ARK2D::getContainer()->m_platformSpecific.m_pluggable->googleplaygameservices_submitScore(id, score);
+			#endif
+		}
+
+		void GooglePlayGameServicesUtil::selectSavedGame(bool allowAddButton, bool allowDeleteButton) {
+			#if defined(ARK2D_ANDROID)
+				ARK2D::getLog()->v("GooglePlayGameServicesUtil - selectSavedGame");
+				ARK2D::getContainer()->m_platformSpecific.m_pluggable->googleplaygameservices_savedGamesSelect(allowAddButton, allowDeleteButton);
+			#endif
+		}
+		void GooglePlayGameServicesUtil::loadSavedGame(string name) {
+			#if defined(ARK2D_ANDROID)
+				ARK2D::getLog()->v("GooglePlayGameServicesUtil - loadSavedGame");
+				ARK2D::getContainer()->m_platformSpecific.m_pluggable->googleplaygameservices_savedGamesLoad(name);
+			#endif
+		}
+		void GooglePlayGameServicesUtil::saveSavedGame(string name, string data, bool createIfMissing) {
+			#if defined(ARK2D_ANDROID)
+				ARK2D::getLog()->v("GooglePlayGameServicesUtil - saveSavedGame");
+				ARK2D::getContainer()->m_platformSpecific.m_pluggable->googleplaygameservices_savedGamesUpdate(name, data, createIfMissing);
 			#endif
 		}
 

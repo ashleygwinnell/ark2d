@@ -351,6 +351,9 @@ namespace ARK {
 		string AndroidPluggable::getInputDialogText() {
 			return "";
 		}
+		void AndroidPluggable::openAlertDialog(string title, string message) {
+
+		}
 
 
 		bool AndroidPluggable::vibrator_hasVibrator() {
@@ -402,6 +405,16 @@ namespace ARK {
 
 		}
 		void AndroidPluggable::googleplaygameservices_submitScore(string id, int score) {
+
+		}
+
+		void AndroidPluggable::googleplaygameservices_savedGamesSelect(bool allowAdd, bool allowDelete) {
+
+		}
+		void AndroidPluggable::googleplaygameservices_savedGamesLoad(string name) {
+
+		}
+		void AndroidPluggable::googleplaygameservices_savedGamesUpdate(string name, string data, bool createIfMissing) {
 
 		}
 

@@ -17,7 +17,7 @@
 			"ndk_dir_old": "/Users/ashleygwinnell/.android/android-ndk-r9",
 
 			"sdk_dir": "/Users/ashleygwinnell/Library/Android/sdk",
-   			"ndk_dir": "/Users/ashleygwinnell/Projects/android-ndk-r10e"
+   			"ndk_dir": "/Users/ashleygwinnell/Projects/android-ndk-r13b"
 		},
 		"gyp_executable": "/Users/ashleygwinnell/Projects/ark2d/ARK2D/lib/gyp-read-only/gyp"
 	},

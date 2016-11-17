@@ -1672,6 +1672,9 @@ namespace ARK {
 				}
 			#endif
 		}
+		string Sound::getFilename() {
+			return m_FileName;
+		}
 
 		Sound::~Sound() {
 			ARK2D::getLog()->v(StringUtil::append("Deleting Sound: OpenAL bits. ", m_FileName));

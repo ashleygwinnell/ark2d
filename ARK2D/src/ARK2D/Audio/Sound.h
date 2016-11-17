@@ -102,6 +102,7 @@ namespace ARK {
 				void setPanning(float pan);
 				void setGroupId(unsigned int id);
 				unsigned int getGroupId();
+				string getFilename();
 				~Sound();
 			protected:
 				// File Name

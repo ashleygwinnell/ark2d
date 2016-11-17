@@ -22,9 +22,23 @@ namespace ARK {
 
 		class ARK2D_API GooglePlayGamesListener {
 			public:
-				virtual void onSignInSuccessful() = 0;
-				virtual void onSignInUnsuccessful() = 0;
+				static GooglePlayGamesListener* s_instance;
+
+				static GooglePlayGamesListener* get() { return s_instance; }
+				static void set(GooglePlayGamesListener* instance) { s_instance = instance; }
+
+				GooglePlayGamesListener();
+				virtual void onSignInSuccessful() {}
+				virtual void onSignInFailed() {}
+				virtual void onSavedGameLoadStarted() {}
+				virtual void onSavedGameLoadSuccessful(string data) {}
+				virtual void onSavedGameLoadFailed(string errmsg) {}
+				virtual void onSavedGameUpdateStarted() {}
+				virtual void onSavedGameUpdateSuccessful() {}
+				virtual void onSavedGameUpdateFailed() {}
+				virtual ~GooglePlayGamesListener() {}
 		};
+
 		class ARK2D_API GooglePlayBillingListener {
 			public:
 				static GooglePlayBillingListener* s_instance;
@@ -65,6 +79,10 @@ namespace ARK {
 
 				static void viewScores(string id);
 				static void submitScore(string id, int score);
+
+				static void selectSavedGame(bool allowAddButton, bool allowDeleteButton);
+				static void loadSavedGame(string name);
+				static void saveSavedGame(string name, string data, bool createIfMissing);
 
 				//static bool isConnected();
 				//static bool isConnecting();
