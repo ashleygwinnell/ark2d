@@ -145,7 +145,7 @@ namespace ARK {
                 ARK2D::getLog()->v("FBO: Generate Texture Buffer");
                 glGenTextures(1, &fbo_texture);
                 glBindTexture(GL_TEXTURE_2D, fbo_texture); // Bind the texture fbo_texture
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, window_width, window_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL); // Create a standard texture with the width and height of our window
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, window_width, window_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL); // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, window_width, window_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL); // Create a standard texture with the width and height of our window
                 RendererStats::s_glCalls += 3;
 
                 RendererStats::s_textureAllocatedBytes += (window_width * window_height * 8 * 4);

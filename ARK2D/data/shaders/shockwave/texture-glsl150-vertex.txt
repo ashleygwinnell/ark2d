@@ -1,0 +1,37 @@
+/*
+ * Shockwave Shader
+ * From: 		http://www.geeks3d.com/20091116/shader-library-2d-shockwave-post-processing-filter-glsl/
+ * Original: 	http://empire-defense.crystalin.fr/blog/2d_shock_wave_texture_with_shader
+ *
+ * Inputs:
+ * 	center (vec2): 			mouse position (in texture coord space: [0 ; 1]).
+ * 	time (float): 			shockwave elapsed time in second.
+ * 	shockParams (vec3): 	shockwave parameters
+ */
+
+#version 150
+
+// input
+uniform mat4 ark_ModelMatrix;
+uniform mat4 ark_ViewMatrix;
+uniform mat4 ark_ProjectionMatrix;
+
+uniform vec2 center;
+uniform float time;
+uniform vec3 shockParams;
+
+in vec4 ark_VertexPositionIn;
+in vec4 ark_VertexNormalIn;
+in vec2 ark_VertexTexCoordIn;
+in vec4 ark_VertexColorIn;
+
+// output
+out vec4 ark_VertexColorOut;
+out vec2 ark_VertexTexCoordOut;
+
+void main(void)
+{
+	ark_VertexColorOut = ark_VertexColorIn;
+	ark_VertexTexCoordOut = ark_VertexTexCoordIn;
+	gl_Position = ark_ProjectionMatrix * ark_ViewMatrix * ark_ModelMatrix * ark_VertexPositionIn;
+}

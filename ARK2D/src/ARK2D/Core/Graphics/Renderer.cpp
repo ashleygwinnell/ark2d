@@ -417,6 +417,7 @@ namespace ARK {
 					s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_FBO_UNBIND, "TYPE_FBO_UNBIND" ));
 					s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_VIEWPORT, "TYPE_VIEWPORT" ));
 					s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_ORTHO2D, "TYPE_ORTHO2D" ));
+					s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_BLEND_MODE, "TYPE_BLEND_MODE" ));
 					s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_CUSTOM_OBJECT_FUNCTION, "TYPE_CUSTOM_OBJECT_FUNCTION" ));
 					s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_CUSTOM_FUNCTION, "TYPE_CUSTOM_FUNCTION" ));
 					s_types->insert(std::pair<unsigned int, string>((unsigned int) RendererBatchItem::TYPE_DEBUG_STRING, "TYPE_DEBUG_STRING" ));
@@ -680,6 +681,9 @@ namespace ARK {
 						r->viewport(m_float1, m_float2, m_float3, m_float4);
 					} else if (m_type == TYPE_ORTHO2D) {
 						r->ortho2d(m_textureId, m_shaderId, (int) m_float1, (int) m_float2, m_float3, m_float4);
+					}
+					else if (m_type == TYPE_BLEND_MODE) {
+						r->setBlendMode( (int) m_float1 );
 					}
 					else if (m_type == TYPE_SAVE_PIXELS) {
 						string s = string(m_cstr);
@@ -5124,7 +5128,15 @@ namespace ARK {
 			}
 
 			void Renderer::setBlendMode(unsigned int blendMode) {
-				if (m_blendMode == blendMode) { return; }
+				if (isBatching()) {
+					RendererBatchItem stateChange;
+					stateChange.m_type = RendererBatchItem::TYPE_BLEND_MODE;
+					stateChange.m_float1 = blendMode;
+					s_batch->items.push_back(stateChange);
+					return;
+				}
+
+				//if (m_blendMode == blendMode) { return; }
 
 				#ifdef ARK2D_RENDERER_OPENGL
 
@@ -5138,7 +5150,8 @@ namespace ARK {
 						}
 
 						if (blendMode == BLEND_NORMAL) {
-							glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+							//glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+							glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_COLOR);
 						} else if (blendMode == BLEND_ADDITIVE) {
 							glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 						} else if (blendMode == BLEND_SPINE) {

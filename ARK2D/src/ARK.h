@@ -74,6 +74,7 @@
 #include "ARK2D/Core/Graphics/Shaders/StencilShader.h"
 #include "ARK2D/Core/Graphics/Shaders/DirectionalLightingShader.h"
 #include "ARK2D/Core/Graphics/Shaders/PointLightingShader.h"
+#include "ARK2D/Core/Graphics/Shaders/ShockwaveShader.h"
 #include "ARK2D/Core/Graphics/Skybox.h"
 #include "ARK2D/Core/Graphics/Model/ObjModel.h"
 #include "ARK2D/Core/Graphics/Model/ImageModel.h"
@@ -188,6 +189,7 @@
 #include "ARK2D/UI/SimpleTextField.h"
 #include "ARK2D/UI/Slider.h"
 #include "ARK2D/UI/SplitPane.h"
+#include "ARK2D/UI/LogViewer.h"
 
 // Particle Engine
 #include "ARK2D/Particles/Particle.h"

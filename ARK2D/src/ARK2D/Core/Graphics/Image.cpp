@@ -1718,7 +1718,7 @@ namespace ARK {
 					unsigned char red = r->getDrawColor().getRedc();
 					unsigned char g = r->getDrawColor().getGreenc();
 					unsigned char b = r->getDrawColor().getBluec();
-					unsigned char a = (unsigned char) (m_alpha * 255.0f);
+					unsigned char a = (unsigned char) (m_alpha * r->getDrawColor().getAlphaf() * 255.0f);
 					if (m_color != NULL) {
 						red = (unsigned char) (m_color->getRedc() * r->getDrawColor().getRedf());
 						g   = (unsigned char) (m_color->getGreenc() * r->getDrawColor().getGreenf());
@@ -1830,7 +1830,7 @@ namespace ARK {
 					unsigned char red = 255;
 					unsigned char g = 255;
 					unsigned char b = 255;
-					unsigned char a = (unsigned char) (m_alpha * 255.0f);
+					unsigned char a = (unsigned char) (m_alpha * r->getDrawColor().getAlphaf() * 255.0f);
 					if (m_color != NULL) {
 						red = (unsigned char) (m_color->getRedc() * r->getDrawColor().getRedf());
 						g   = (unsigned char) (m_color->getGreenc() * r->getDrawColor().getGreenf());
@@ -1875,7 +1875,7 @@ namespace ARK {
 							float red = 1.0f;
 							float g = 1.0f;
 							float b = 1.0f;
-							float a = m_alpha;
+							float a = m_alpha * r->getDrawColor().getAlphaf();
 							if (m_color != NULL) {
 								red = m_color->getRedf() * r->getDrawColor().getRedf();
 								g   = m_color->getGreenf() * r->getDrawColor().getGreenf();
@@ -2224,7 +2224,7 @@ namespace ARK {
 				unsigned char color_r = r->getDrawColor().getRedc();
 				unsigned char color_g = r->getDrawColor().getGreenc();
 				unsigned char color_b = r->getDrawColor().getBluec();
-				unsigned char color_a = (unsigned char) (r->getDrawColor().getAlphac() * m_alpha);
+				unsigned char color_a = (unsigned char) (r->getDrawColor().getAlphac() * (m_alpha * r->getDrawColor().getAlphaf()));
 
 				if (m_color != NULL) {
 					color_r = (unsigned char) (m_color->getRedc() * r->getDrawColor().getRedf());
@@ -2512,7 +2512,7 @@ namespace ARK {
 				unsigned char red = r->getDrawColor().getRedc();
 				unsigned char g = r->getDrawColor().getGreenc();
 				unsigned char b = r->getDrawColor().getBluec();
-				unsigned char a = (unsigned char) (m_alpha * 255.0f);
+				unsigned char a = (unsigned char) (m_alpha * r->getDrawColor().getAlphaf() * 255.0f);
 				if (m_color != NULL) {
 					red = (unsigned char) (m_color->getRedc() * r->getDrawColor().getRedf());
 					g   = (unsigned char) (m_color->getGreenc() * r->getDrawColor().getGreenf());

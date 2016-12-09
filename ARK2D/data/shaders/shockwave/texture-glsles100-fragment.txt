@@ -1,0 +1,32 @@
+/*
+ * Shockwave Shader
+ * From: 		http://www.geeks3d.com/20091116/shader-library-2d-shockwave-post-processing-filter-glsl/
+ * Original: 	http://empire-defense.crystalin.fr/blog/2d_shock_wave_texture_with_shader
+ *
+ * Inputs:
+ * 	center (vec2): 			mouse position (in texture coord space: [0 ; 1]).
+ * 	time (float): 			shockwave elapsed time in second.
+ * 	shockParams (vec3): 	shockwave parameters
+ *
+ *  shockParams[0]: "depth distance" modifier. larger is flatter, ish. / outer edge of thing
+ *  shockParams[1]: "zoom" depth
+ *  shockParams[2]: "size" / timer to check against.
+ *
+ */
+
+#version 100 
+precision mediump float;
+
+uniform sampler2D ark_TextureId;
+
+/* uniform vec2 center; 			// Mouse position
+uniform mediump float time; 			// effect elapsed time 
+uniform vec3 shockParams; 		// 10.0, 1.0, 0.1 */
+
+// varying lowp vec4 ark_VertexColorOut; 
+varying mediump vec2 ark_VertexTexCoordOut; 
+
+void main(void) 
+{  
+	gl_FragColor = texture2D(ark_TextureId, ark_VertexTexCoordOut); // * ark_VertexColorOut; 
+} 

@@ -48,6 +48,9 @@ namespace ARK {
 
 			private:
 				map<string, Sound*> m_map;
+				map<unsigned int, float> m_volumeMap;
+				map<unsigned int, float> m_panningMap;
+				map<unsigned int, float> m_pitchMap;
 				unsigned int m_currentGroupId;
 		};
 	}

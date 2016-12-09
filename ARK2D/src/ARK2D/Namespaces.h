@@ -119,6 +119,7 @@ namespace ARK {
 	        class MatrixStack;
 
 	        class HSVShader;
+	        class ShockwaveShader;
 
 			//! Classes for loading different images types in to pixel buffers.
 			namespace ImageIO {

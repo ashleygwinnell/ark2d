@@ -1,0 +1,94 @@
+/*
+ * Shockwave Shader
+ * From: 		http://www.geeks3d.com/20091116/shader-library-2d-shockwave-post-processing-filter-glsl/
+ * Original: 	http://empire-defense.crystalin.fr/blog/2d_shock_wave_texture_with_shader
+ *
+ * Inputs:
+ * 	center (vec2): 			mouse position (in texture coord space: [0 ; 1]).
+ * 	time (float): 			shockwave elapsed time in second.
+ * 	shockParams (vec3): 	shockwave parameters
+ */
+ 
+#version 100
+precision mediump float;
+precision mediump int;
+
+uniform mediump mat4 ark_ModelViewMatrix;
+uniform mediump mat4 ark_ProjectionMatrix;
+
+attribute vec4 ark_VertexPosition;  
+
+attribute mediump vec2 ark_VertexTexCoordIn; 
+varying vec2 ark_VertexTexCoordOut; 
+
+uniform mediump vec2 center;
+uniform mediump float time;
+uniform mediump vec3 shockParams;
+
+float anglef(float x1, float y1, float x2, float y2) 
+{
+	if (x1 == x2 && y1 == y2) {
+		return 0.0;
+	} else if (x1 == x2) {
+		if (y1 > y2) {
+			return 270.0;
+		} else {
+			return 90.0;
+		}
+	} else if (y1 == y2) {
+		if (x1 > x2) {
+			return 180.0;
+		} else {
+			return 0.0;
+		}
+	}
+	
+	float xDifference = x2 - x1;
+	float yDifference = y2 - y1;
+
+	return atan(yDifference, xDifference) * (180.0/3.14159265);
+}
+
+float toRadians(float angle) 
+{
+	return angle * (3.14159265/180.0);
+}
+
+void main(void) 
+{
+	ark_VertexTexCoordOut = ark_VertexTexCoordIn;
+
+	vec2 uv = vec2(ark_VertexPosition.x, ark_VertexPosition.y);
+	vec2 pos = uv;
+	
+	float outerCircle = time * 430.0; 
+	float middleCircle = time * 405.0; 
+	float innerCircle = time * 380.0;
+	
+	float dist = distance(center, uv); 
+	if ( (dist <= outerCircle ) && (dist >= middleCircle) ) 
+	{
+		float angle = anglef(center.x, center.y, uv.x, uv.y);
+		float angleRadians = toRadians(angle); 
+		
+		vec2 newpos = vec2(center.x, center.y);
+		newpos.x += (outerCircle * cos(angleRadians)); 
+		newpos.y += (outerCircle * sin(angleRadians));
+		pos.x = newpos.x;
+		pos.y = newpos.y;
+	} 
+	else if ( (dist <= middleCircle ) && (dist >= innerCircle) ) 
+	{
+		float angle = anglef(center.x, center.y, uv.x, uv.y);
+		float angleRadians = toRadians(angle); 
+		
+		vec2 newpos = vec2(center.x, center.y);
+		newpos.x += (innerCircle * cos(angleRadians)); 
+		newpos.y += (innerCircle * sin(angleRadians));
+		pos.x = newpos.x;
+		pos.y = newpos.y;
+	}
+	vec4 finalpos = vec4(pos.x, pos.y, 0.0, 1.0);
+ 
+	gl_Position = ark_ProjectionMatrix * ark_ModelViewMatrix * finalpos;
+}

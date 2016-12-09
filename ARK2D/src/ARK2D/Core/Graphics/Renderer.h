@@ -190,10 +190,11 @@ namespace ARK {
                     static const unsigned int TYPE_FBO_UNBIND = 25;
                     static const unsigned int TYPE_VIEWPORT = 26;
                     static const unsigned int TYPE_ORTHO2D = 27;
-                    static const unsigned int TYPE_SAVE_PIXELS = 28;
-                    static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 29;
-                    static const unsigned int TYPE_CUSTOM_FUNCTION = 30;
-                    static const unsigned int TYPE_DEBUG_STRING = 31;
+                    static const unsigned int TYPE_BLEND_MODE = 28;
+                    static const unsigned int TYPE_SAVE_PIXELS = 29;
+                    static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 30;
+                    static const unsigned int TYPE_CUSTOM_FUNCTION = 31;
+                    static const unsigned int TYPE_DEBUG_STRING = 32;
                     static map<unsigned int, string>* s_types;
 
                 public:

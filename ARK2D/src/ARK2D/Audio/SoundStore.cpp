@@ -24,6 +24,9 @@ namespace ARK {
 
 		SoundStore::SoundStore():
 			m_map(),
+			m_volumeMap(),
+			m_panningMap(),
+			m_pitchMap(),
 			m_currentGroupId(0)
 			{
 
@@ -51,6 +54,12 @@ namespace ARK {
 			return m_map;
 		}
 		void SoundStore::setVolumeByGroupId(unsigned int groupId, float volume) {
+			m_volumeMap[groupId] = volume;
+
+			//string s = StringUtil::append("**** Setting soundstore group ", groupId);
+			//s += StringUtil::appendf(" to ", volume);
+			//ARK2D::getLog()->e(s);
+
 			map<string, Sound*>::iterator it;
 			for(it = m_map.begin(); it != m_map.end(); it++) {
 				if (it->second->getGroupId() == groupId) {
@@ -59,6 +68,8 @@ namespace ARK {
 			}
 		}
 		void SoundStore::setPanningByGroupId(unsigned int groupId, float panning) {
+			m_panningMap[groupId] = panning;
+
 			map<string, Sound*>::iterator it;
 			for(it = m_map.begin(); it != m_map.end(); it++) {
 				if (it->second->getGroupId() == groupId) {
@@ -67,6 +78,8 @@ namespace ARK {
 			}
 		}
 		void SoundStore::setPitchByGroupId(unsigned int groupId, float pitch) {
+			m_pitchMap[groupId] = pitch;
+
 			map<string, Sound*>::iterator it;
 			for(it = m_map.begin(); it != m_map.end(); it++) {
 				if (it->second->getGroupId() == groupId) {
@@ -77,14 +90,26 @@ namespace ARK {
 
 
 		float SoundStore::getVolumeByGroupId(unsigned int groupId) {
-			map<string, Sound*>::iterator it;
-			for(it = m_map.begin(); it != m_map.end(); it++) {
-				if (it->second->getGroupId() == groupId) {
-					return it->second->getVolume();
+			map<unsigned int, float>::iterator itv = m_volumeMap.find(groupId);
+
+			float volume = 0.0f;
+			if (itv != m_volumeMap.end()) {
+				volume = itv->second;
+			} else {
+				map<string, Sound*>::iterator it;
+				for(it = m_map.begin(); it != m_map.end(); it++) {
+					if (it->second->getGroupId() == groupId) {
+						volume = it->second->getVolume();
+						break;
+					}
 				}
+				ARK2D::getLog()->e(StringUtil::append("Could not get volumy by group id as no sounds exist in the group. ", groupId));
 			}
-			ARK2D::getLog()->e(StringUtil::append("Could not get volumy by group id as no sounds exist in the group. ", groupId));
-			return 0.0f;
+
+			//string s = StringUtil::append("**** Getting soundstore group ", groupId);
+			//s += StringUtil::appendf(" as ", volume);
+			//ARK2D::getLog()->e(s);
+			return volume;
 		}
 
 		SoundStore::~SoundStore() {
