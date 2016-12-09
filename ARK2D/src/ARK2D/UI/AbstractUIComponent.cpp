@@ -13,13 +13,13 @@ namespace ARK {
 	namespace UI {
 		AbstractUIComponent::AbstractUIComponent():
 			UIComponent(),
-			SceneNode(), 
+			SceneNode(),
 			m_parent(NULL),
 			m_bounds(),
-			m_width(1), 
+			m_width(1),
 			m_height(1),
 			m_padding(0,0,0,0),
-			m_margin(0,0,0,0), 
+			m_margin(0,0,0,0),
 			m_clipping(false),
 			//m_visible(true),
 			m_enabled(true),
@@ -43,11 +43,11 @@ namespace ARK {
 			return transform.position.x - (pivot.x * m_width);
 		}
 		float AbstractUIComponent::getMinY() {
-			return transform.position.y - (pivot.y * m_width);
+			return transform.position.y - (pivot.y * m_height);
 		}
 		unsigned int AbstractUIComponent::getWidth() {
 			return m_width;
-		} 
+		}
 		unsigned int AbstractUIComponent::getHeight() {
 			return m_height;
 		}
@@ -59,7 +59,7 @@ namespace ARK {
 		}
 		void AbstractUIComponent::setLocation(float x, float y) {
 			transform.position.set(x, y, 0);
-		} 
+		}
 		void AbstractUIComponent::setLocationByCenter(float x, float y) {
 			transform.position.set(x, y, 0);
 			pivot.set(0.5, 0.5);
@@ -67,7 +67,7 @@ namespace ARK {
 		void AbstractUIComponent::setSize(unsigned int w, unsigned int h) {
 			m_width = w;
 			m_height = h;
-		} 
+		}
 
 		void AbstractUIComponent::setWidth(unsigned int w) {
 			m_width = w;
@@ -99,7 +99,7 @@ namespace ARK {
 		AbstractUIComponent* AbstractUIComponent::getParent() { return m_parent; }
 		void AbstractUIComponent::setParent(AbstractUIComponent* p) { m_parent = p; }
 		bool AbstractUIComponent::hasParent() { return (m_parent!=NULL); }
-		
+
 		void AbstractUIComponent::setVisible(bool b) {
 			this->visible = b;
 		}
@@ -112,7 +112,7 @@ namespace ARK {
 		}
 		bool AbstractUIComponent::isEnabled() {
 			return m_enabled;
-		} 
+		}
 
 		void AbstractUIComponent::preRender() {
 			// TODO: clipping does not work beacuse of screen space coordinates and what not.
@@ -136,12 +136,12 @@ namespace ARK {
 
         bool AbstractUIComponent::keyPressed(unsigned int key) { return false; }
         bool AbstractUIComponent::keyReleased(unsigned int key) { return false; }
-        bool AbstractUIComponent::mouseMoved(int x, int y, int oldx, int oldy) { 
+        bool AbstractUIComponent::mouseMoved(int x, int y, int oldx, int oldy) {
 
-        	if (!m_enabled) { return false; } 
-					
+        	if (!m_enabled) { return false; }
+
 			if (m_state != STATE_DOWN) {
-				if (isGlobalPositionInBounds(x, y)) { 
+				if (isGlobalPositionInBounds(x, y)) {
 					m_state = STATE_OVER;
 				} else {
 					m_state = STATE_OFF;
