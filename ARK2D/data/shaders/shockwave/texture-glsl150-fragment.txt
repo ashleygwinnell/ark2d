@@ -21,7 +21,7 @@ precision highp float;
 uniform sampler2D ark_TextureId;
 
 uniform vec2 center; 			// Mouse position
-uniform float time; 			// effect elapsed time 
+uniform float time; 			// effect elapsed time
 uniform vec3 shockParams; 		// 10.0, 1.0, 0.1
 
 // in vec4 ark_VertexColorOut;
@@ -30,19 +30,19 @@ in vec2 ark_VertexTexCoordOut;
 // output
 out vec4 ark_FragColor;
 
-void main(void) 
-{  
+void main(void)
+{
 	vec2 uv = ark_VertexTexCoordOut;
 	vec2 texCoord = uv;
 	float distance = distance(uv, center);
-	if ( (distance <= (time + shockParams.z)) && 
-       (distance >= (time - shockParams.z)) ) 
+	if ( (distance <= (time + shockParams.z)) &&
+       (distance >= (time - shockParams.z)) )
 	{
-		float diff = (distance - time); 
-		float powDiff = 1.0 - pow( abs(diff*shockParams.x), shockParams.y ); 
-		float diffTime = diff  * powDiff; 
-		vec2 diffUV = normalize(uv - center); 
+		float diff = (distance - time);
+		float powDiff = 1.0 - pow( abs(diff*shockParams.x), shockParams.y );
+		float diffTime = diff  * powDiff;
+		vec2 diffUV = normalize(uv - center);
 		texCoord = uv + (diffUV * diffTime);
-	} 
+	}
 	ark_FragColor = texture(ark_TextureId, texCoord); // * ark_VertexColorOut;
 }

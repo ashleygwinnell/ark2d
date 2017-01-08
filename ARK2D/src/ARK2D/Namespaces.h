@@ -297,6 +297,7 @@ namespace ARK {
 		class Vibrator;
 		class DisplayUtil;
 		class Wobble;
+		class ZXRenderer;
 
 
 

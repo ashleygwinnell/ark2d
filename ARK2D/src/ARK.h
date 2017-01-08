@@ -170,6 +170,7 @@
 #include "ARK2D/Util/URLRequest.h"
 #include "ARK2D/Util/Vibrator.h"
 #include "ARK2D/Util/Wobble.h"
+#include "ARK2D/Util/ZXRenderer.h"
 
 
 // JSON Implementation

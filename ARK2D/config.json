@@ -355,7 +355,8 @@
 				"src/ARK2D/Util/VerticalMenu.cpp",
 				"src/ARK2D/Util/VerticalMenuItem.cpp",
 				"src/ARK2D/Util/Vibrator.cpp",
-				"src/ARK2D/Util/Wobble.cpp"
+				"src/ARK2D/Util/Wobble.cpp",
+				"src/ARK2D/Util/ZXRenderer.cpp"
 
 			],
 			"dependencies": []
@@ -625,6 +626,7 @@
 			"src/ARK2D/Util/VerticalMenuItem.cpp",
 			"src/ARK2D/Util/Vibrator.cpp",
 			"src/ARK2D/Util/Wobble.cpp",
+			"src/ARK2D/Util/ZXRenderer.cpp",
 
 			"src/ARK2D/vendor/angelscript/add_on/scriptstdstring/scriptstdstring.cpp",
 			"src/ARK2D/vendor/angelscript/add_on/scriptstdstring/scriptstdstring_utils.cpp",

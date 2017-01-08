@@ -1381,7 +1381,7 @@ namespace ARK {
 					return MatrixStack::TYPE_PROJECTION;
 				} else if (s_matrix == s_matrixView) {
 					return MatrixStack::TYPE_VIEW;
-				} else if (s_matrix = s_matrixModel) {
+				} else if (s_matrix == s_matrixModel) {
 					return MatrixStack::TYPE_MODEL;
 				}
 				return MatrixStack::TYPE_NULL;

@@ -3006,7 +3006,12 @@ build:
 				continue;
 
 			compileStr += " -DARK2D_EMSCRIPTEN_JS ";
+			compileStr += " -DARK2D_DESKTOP ";
 			compileStr += " -DGL_GLEXT_PROTOTYPES ";
+
+			if (self.building_game):
+				for item in self.target_config['defines']:
+					compileStr += " -D" + item + " ";
 
 			"""compileStr += " -Wno-trigraphs -Wno-deprecated-declarations -Wreturn-type -fexceptions "; #-fno-builtin-exit ";
 			if self.building_library:
