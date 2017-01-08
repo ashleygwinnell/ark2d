@@ -37,6 +37,14 @@ namespace ARK {
 			return "";
 		}
 
+		void GameObject::update(GameContainer* container, GameTimer* timer) {
+
+		}
+
+		void GameObject::render(GameContainer* container, Renderer* g) {
+
+		}
+
 		GameObject::~GameObject() {
 
 		}

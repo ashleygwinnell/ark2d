@@ -36,8 +36,8 @@ namespace ARK {
 				virtual int getRenderingLayer();
 				virtual void setRenderingLayer(int i);
 
-				virtual void update(GameContainer* container, GameTimer* timer) = 0;
-				virtual void render(GameContainer* container, Renderer* g) = 0;
+				virtual void update(GameContainer* container, GameTimer* timer);
+				virtual void render(GameContainer* container, Renderer* g);
 
 				virtual string toString();
 
