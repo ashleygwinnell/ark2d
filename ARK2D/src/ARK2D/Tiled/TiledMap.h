@@ -13,7 +13,7 @@
 
 #include "../Common/Libraries/rapidxml.h"
 #include "../Common/Libraries/libjson.h"
-#include "../vendor/tinyxml/tinyxml.h"
+//#include "../vendor/tinyxml/tinyxml.h"
 #include "../Core/ToString.h"
 #include "../Core/Resource.h"
 #include "../Core/Graphics/Image.h"
@@ -37,14 +37,14 @@ namespace ARK {
 				virtual ~TiledMapParser();
 		};
 
-		class ARK2D_API TiledMapParser_TinyXml : public TiledMapParser {
+		/*class ARK2D_API TiledMapParser_TinyXml : public TiledMapParser {
 			public:
 				TiXmlDocument m_xmldocument;
 			public:
 				TiledMapParser_TinyXml(TiledMap* map, string file);
 				virtual void parse();
 				void parseTileset(unsigned int& firstgid, string& src, TiXmlDocument* tileset_d);
-		};
+		};*/
 		class ARK2D_API TiledMapParser_RapidXml : public TiledMapParser {
 			public:
 				xml_document<> m_xmldocument;

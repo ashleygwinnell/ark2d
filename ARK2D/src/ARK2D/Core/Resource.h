@@ -28,7 +28,7 @@ namespace ARK {
 
 		class ARK2D_API RawDataReturns {
 			friend class ARK::Tiled::TiledMap;
-			friend class ARK::Tiled::TiledMapParser_TinyXml;
+			//friend class ARK::Tiled::TiledMapParser_TinyXml;
 			friend class ARK::Tiled::TiledMapParser_RapidXml;
 			friend class ARK::Tiled::TiledMapParser_JSON;
 			public:
@@ -45,7 +45,7 @@ namespace ARK {
 		 */
 		class ARK2D_API Resource {
             friend class ARK::Core::Graphics::TextureStore;
-			friend class ARK::Tiled::TiledMapParser_TinyXml;
+			//friend class ARK::Tiled::TiledMapParser_TinyXml;
 			friend class ARK::Tiled::TiledMapParser_RapidXml;
 			friend class ARK::Tiled::TiledMapParser_JSON;
 

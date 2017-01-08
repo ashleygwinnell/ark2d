@@ -12,7 +12,7 @@
 	void Error(const char* e) {}
 #endif
 
-#include "../vendor/tinyxml/tinyxml.h"
+//#include "../vendor/tinyxml/tinyxml.h"
 #include "../Common/Libraries/libjson.h"
 
 namespace ARK {
@@ -83,7 +83,7 @@ namespace ARK {
 					logError(m_errorMessage);
 					return false;
 				}
-			} else if (m_usingFormat == FORMAT_XML) {
+			} /*else if (m_usingFormat == FORMAT_XML) {
 				TiXmlDocument doc;
 				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
 
@@ -108,7 +108,7 @@ namespace ARK {
 					logError(m_errorMessage);
 					return false;
 				}
-			}
+			}*/
 
 			m_username = username;
     		m_userToken = token;
@@ -458,14 +458,14 @@ namespace ARK {
 					highscores.push_back(highscore);
 				}
 
-				*/
+				
 
-
+*/
 				// ------------------------
 				//	TINYXML
 				// ------------------------
 
-				TiXmlDocument doc;
+				/*TiXmlDocument doc;
 				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
 
 				//if (doc.Error()) {
@@ -535,7 +535,7 @@ namespace ARK {
 					//highscore.addProperty("name", "Boo");
 					highscores.push_back(highscore);
 
-				}
+				}*/
 
 
 
@@ -615,7 +615,10 @@ namespace ARK {
 					</response>
 				*/
 
-				TiXmlDocument doc;
+                // TODO: rapidxml
+                
+				/*
+                 TiXmlDocument doc;
 				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
 
 				//if (doc.Error()) {
@@ -642,7 +645,7 @@ namespace ARK {
 
 				TiXmlNode* rankNode = responseElement->FirstChild("rank");
 				TiXmlElement* rankElement = rankNode->ToElement();
-				return Cast::fromString<signed int>( rankElement->GetText() );
+				return Cast::fromString<signed int>( rankElement->GetText() );*/
 			}
 			m_errorMessage = "Invalid Format";
 			logError(m_errorMessage);
@@ -703,7 +706,7 @@ namespace ARK {
 			}
 			else if (m_usingFormat == FORMAT_XML)
 			{
-				TiXmlDocument doc;
+				/*TiXmlDocument doc;
 				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
 
 				//if (doc.Error()) {
@@ -726,7 +729,7 @@ namespace ARK {
 					m_errorMessage = messageElement->GetText();
 					logError(m_errorMessage);
 					return false;
-				}
+				}*/
 			}
 			return true;
 		}
@@ -804,7 +807,7 @@ namespace ARK {
 			}
 			else if (m_usingFormat == FORMAT_XML)
 			{
-				TiXmlDocument doc;
+			/*	TiXmlDocument doc;
 				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
 
 				//if (doc.Error()) {
@@ -827,7 +830,7 @@ namespace ARK {
 					m_errorMessage = messageElement->GetText();
 					logError(m_errorMessage);
 					return false;
-				}
+				}*/
 			}
 			return true;
 		}
@@ -879,7 +882,7 @@ namespace ARK {
 
 			} else if (m_usingFormat == FORMAT_XML) {
 
-				TiXmlDocument doc;
+			/*	TiXmlDocument doc;
 				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
 
 				//if (doc.Error()) {
@@ -902,7 +905,7 @@ namespace ARK {
 					m_errorMessage = messageElement->GetText();
 					logError(m_errorMessage);
 					return NULL;
-				}
+				}*/
 			}
 			// TODO: cacheing...
 			return new DataStore(key, value, type);
@@ -966,7 +969,7 @@ namespace ARK {
 				libJSON::Delete(root);
 
 			} else if (m_usingFormat == FORMAT_XML) {
-				TiXmlDocument doc;
+			/*	TiXmlDocument doc;
 				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
 
 				if (doc.Error()) {
@@ -994,7 +997,7 @@ namespace ARK {
 				TiXmlNode* dataNode = responseElement->FirstChild("data");
 				TiXmlElement* dataElement = dataNode->ToElement();
 				valueStr += dataElement->GetText();
-
+*/
 			}
 
 			// TODO: cacheing...

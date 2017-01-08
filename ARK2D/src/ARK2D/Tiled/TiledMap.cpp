@@ -74,11 +74,11 @@ namespace ARK {
 			if (StringUtil::str_contains(file, "json") || firstChar == '{') {
 				m_parser = new TiledMapParser_JSON(this);
 			} else {
-				if (ARK2D::getPlatform() == ARK2D::PLATFORM_BROWSER_FLASCC) {
+				//if (ARK2D::getPlatform() == ARK2D::PLATFORM_BROWSER_FLASCC) {
 					m_parser = new TiledMapParser_RapidXml(this);
-				} else {
-					m_parser = new TiledMapParser_TinyXml(this, file);
-				}
+				//} else {
+				//	m_parser = new TiledMapParser_TinyXml(this, file);
+				//}
 			}
 		}
 
@@ -103,12 +103,12 @@ namespace ARK {
 			if (StringUtil::str_contains(file, "json")) {
 				m_parser = new TiledMapParser_JSON(this);
 			} else {
-				if (ARK2D::getPlatform() == ARK2D::PLATFORM_OSX || ARK2D::getPlatform() == ARK2D::PLATFORM_BROWSER_FLASCC) {
+				//if (ARK2D::getPlatform() == ARK2D::PLATFORM_OSX || ARK2D::getPlatform() == ARK2D::PLATFORM_BROWSER_FLASCC) {
 				//if (ARK2D::getPlatform() == ARK2D::PLATFORM_BROWSER_FLASCC) {
 					m_parser = new TiledMapParser_RapidXml(this);
-				} else {
-					m_parser = new TiledMapParser_TinyXml(this, file);
-				}
+				//} else {
+				//	m_parser = new TiledMapParser_TinyXml(this, file);
+				//}
 			}
 
 		}
@@ -567,7 +567,7 @@ namespace ARK {
 		// --------------------------------------------------------------------------------------------------------
 		// tinyxml parser
 		// --------------------------------------------------------------------------------------------------------
-		TiledMapParser_TinyXml::TiledMapParser_TinyXml(TiledMap* map, string file):
+		/*TiledMapParser_TinyXml::TiledMapParser_TinyXml(TiledMap* map, string file):
 			TiledMapParser(map),
 			m_xmldocument(file) {
 				ARK2D::getLog()->i("New TiledMapParser_TinyXml");
@@ -1062,7 +1062,7 @@ namespace ARK {
 			ARK2D::getLog()->i("Loading TiledMap... done.");
 
 		}
-
+		*/
 
 
 

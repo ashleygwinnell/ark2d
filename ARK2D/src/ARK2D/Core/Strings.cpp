@@ -13,7 +13,7 @@
 #include "Util/StringUtil.h"
 //#include "Log.h"
 #include "../Common/Libraries/rapidxml.h"
-#include "../vendor/rapidxml/ark_rapidxml_util.hpp"
+#include "Vendor/rapidxml/ark_rapidxml_util.hpp"
 #include "Log.h"
 
 namespace ARK {

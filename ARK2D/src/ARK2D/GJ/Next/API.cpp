@@ -8,7 +8,7 @@
 #include "API.h"
 #include "../../Common/Libraries/libjson.h"
 #include "../../Common/Libraries/rapidxml.h"
-#include "../../vendor/rapidxml/ark_rapidxml_util.hpp"
+#include "../../Core/Vendor/rapidxml/ark_rapidxml_util.hpp"
 
  /* template<class Str=std::string, class Ch=char>
 	class rapidxml_myutil {

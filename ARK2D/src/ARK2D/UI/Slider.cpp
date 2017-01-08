@@ -61,6 +61,9 @@ namespace ARK {
 		}
 
 		void Slider::setButtonPosition(float percentage) {
+			if (percentage < 0.0f) { percentage = 0.0f; }
+			else if (percentage > 1.0f) { percentage = 1.0f; }
+
 			m_value = percentage;
 			m_actualValue = lowValue + (m_value * highValue);
 
