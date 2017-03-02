@@ -1947,6 +1947,12 @@ class PBXCopyFilesBuildPhase(XCBuildPhase):
   # "DIR", match group 3 is "path" or None.
   path_tree_re = re.compile('^\\$\\((.*)\\)(/(.*)|)$')
 
+  #
+  # AG: TODO need to update gyp version!
+  #
+  # https://codereview.chromium.org/391223002/diff/20001/pylib/gyp/xcodeproj_file.py#skiplinks-2013
+  # https://groups.google.com/forum/#!topic/gyp-developer/N8ZMlQW8bHc
+  #
   # path_tree_to_subfolder maps names of Xcode variables to the associated
   # dstSubfolderSpec property value used in a PBXCopyFilesBuildPhase object.
   path_tree_to_subfolder = {
