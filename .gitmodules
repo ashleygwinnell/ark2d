@@ -14,4 +14,7 @@
 [submodule "ARK2D/src/ARK2D/Core/Vendor/glm"]
 	path = ARK2D/src/ARK2D/Core/Vendor/glm
 	url = https://github.com/g-truc/glm.git
+[submodule "Tools/Project Builder"]
+	path = Tools/Project Builder
+	url = https://github.com/ashleygwinnell/ark2d-builder
 
