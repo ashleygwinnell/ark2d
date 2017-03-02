@@ -1354,7 +1354,7 @@ class ARK2DBuildSystem:
 			vcxproj_AdditionalIncludeDirs = "";
 			#if "include_dirs" in config['windows']:
 			for includedir in self.include_dirs: #config['windows']['include_dirs']:
-				includedir_actual = self.str_replace(includedir, [("%PREPRODUCTION_DIR%", self.game_preproduction_dir), ("%ARK2D_DIR%", self.ark2d_dir)]);
+				includedir_actual = self.str_replace(includedir, [("%PREPRODUCTION_DIR%", self.game_preproduction_dir), ("%ARK2D_DIR%", self.ark2d_dir), ("%GAME_DIR%", self.game_dir)]);
 				vcxproj_AdditionalIncludeDirs += includedir_actual + ";";
 
 			vcxproj_AdditionalPreprocessorDefinitions = "";
@@ -2797,7 +2797,7 @@ build:
 			if self.building_game:
 
 				for includedir in self.include_dirs:
-					includedir_actual = self.str_replace(includedir, [("%PREPRODUCTION_DIR%", self.game_preproduction_dir), ("%ARK2D_DIR%", self.ark2d_dir)]);
+					includedir_actual = self.str_replace(includedir, [("%PREPRODUCTION_DIR%", self.game_preproduction_dir), ("%ARK2D_DIR%", self.ark2d_dir), ("%GAME_DIR%", self.game_dir)]);
 					compileStr += " -I " + includedir_actual + " ";
 
 
@@ -3684,7 +3684,8 @@ build:
 			gypfiletarget['mac_bundle'] = 1;
 			#'mac_bundle': 1,
 			gypfiletarget['include_dirs'] = [];
-			gypfiletarget['include_dirs'].extend(self.include_dirs);
+			for includedir in self.include_dirs:
+				gypfiletarget['include_dirs'].extend([includedir]);
 			gypfiletarget['sources'] = [];
 
 			for srcfile in self.src_files: #config['game_src_files']:
@@ -3798,9 +3799,13 @@ build:
 
 			];
 
-
+			# https://buckbuild.com/javadoc/com/facebook/buck/apple/xcode/xcodeproj/PBXCopyFilesBuildPhase.Destination.html
 			gypfiletargetcondition['sources!'] = [];
 			gypfiletargetcondition['link_settings'] = {};
+			gypfiletargetcondition['copies'] = [{
+				"destination": '$(EXECUTABLE_FOLDER_PATH)',
+				"files": []
+			}];
 			gypfiletargetcondition['link_settings']['libraries'] = [
 				'$(SDKROOT)/System/Library/Frameworks/IOKit.framework',
 				'$(SDKROOT)/System/Library/Frameworks/Cocoa.framework',
@@ -3823,11 +3828,14 @@ build:
 			];
 			gypfiletargetcondition['link_settings']['libraries'] = self.addLibrariesToArray(gypfiletargetcondition['link_settings']['libraries'], self.libs);
 			#gypfiletargetcondition['link_settings']['libraries'].extend( self.target_config['libs'] );
-			for lib in self.target_config['libs']:
+			for lib in self.libs:
 				if self.get_str_extension(lib) == "framework":
 					gypfiletargetcondition['link_settings']['libraries'].extend(["$(SDKROOT)/System/Library/Frameworks/" + lib]);
 				else:
 					gypfiletargetcondition['link_settings']['libraries'].extend([lib]);
+
+					lib = self.str_replace(lib, [(self.game_dir, "../..")]);
+					gypfiletargetcondition['copies'][0]['files'].extend([lib]);
 
 
 			if (self.debug):
@@ -3927,10 +3935,12 @@ build:
 				print("could not delete xcode project");
 
 			# run gyp file.
+			print("run gyp file");
 			os.system("python " + gyp_executable + "_main.py " + gypfilename + " --depth=../../src --debug=all");
 
 			# hack into xcode project to add steam / other libs that need to go next to the executable.
 			#if "libs" in config['osx']:
+			"""
 			if (len(self.libs) > 0):
 
 				f = open(self.game_dir + self.ds + self.build_folder + self.ds + self.output + self.ds + projectname + ".xcodeproj" + self.ds + "project.pbxproj", "r");
@@ -3996,7 +4006,7 @@ build:
 				f = open(self.game_dir + self.ds + self.build_folder + self.ds + self.platform + self.ds + projectname + ".xcodeproj" + self.ds + "project.pbxproj", "w")
 				f.write(newpbxproj);
 				f.close();
-
+			"""
 
 			# add precompiled headers file
 			print("generating pch file");
@@ -7034,13 +7044,14 @@ if __name__ == "__main__":
 				#exit(0);
 
 			a.gamePreInit();
+			a.tag_replacements = [("%PREPRODUCTION_DIR%", a.game_preproduction_dir), ("%ARK2D_DIR%", a.ark2d_dir), ("%GAME_DIR%", a.game_dir)];
 
 			a.mingw_link = "";
 
 			# Add libs to ark2d build system
 			if ("libs" in target_config):
 				for lib in target_config['libs']:
-					lib2 = a.str_replace(lib, [("%PREPRODUCTION_DIR%", a.game_preproduction_dir), ("%ARK2D_DIR%", a.ark2d_dir)]);
+					lib2 = a.str_replace(lib, a.tag_replacements);
 					lib2 = a.fixLocalPath(lib2);
 					a.libs.extend([lib2]);
 
@@ -7049,7 +7060,7 @@ if __name__ == "__main__":
 
 			if ("include_dirs" in target_config):
 				for idir in target_config['include_dirs']:
-					idir = a.str_replace(idir, [("%PREPRODUCTION_DIR%", a.game_preproduction_dir), ("%ARK2D_DIR%", a.ark2d_dir)]);
+					idir = a.str_replace(idir, a.tag_replacements);
 					idir = a.fixLocalPath(idir);
 					a.include_dirs.extend([idir]);
 
@@ -7084,37 +7095,37 @@ if __name__ == "__main__":
 
 				if "src_files" in a.android_config:
 					for src in a.android_config['src_files']:
-						src_actual = a.str_replace(src, [("%PREPRODUCTION_DIR%", a.game_preproduction_dir), ("%ARK2D_DIR%", a.ark2d_dir)]);
+						src_actual = a.str_replace(src, a.tag_replacements);
 						a.android_srcfiles.extend([src_actual]);
 
 				if "libs" in a.android_config:
 					for lib in a.android_config['libs']:
-						lib_actual = a.str_replace(lib, [("%PREPRODUCTION_DIR%", a.game_preproduction_dir), ("%ARK2D_DIR%", a.ark2d_dir)]);
+						lib_actual = a.str_replace(lib, a.tag_replacements);
 						a.android_libs.extend([lib_actual]);
 
 				# library projects
 				if "library_projects" in a.android_config:
 					for libproj in a.android_config['library_projects']:
-						libproj_actual = a.str_replace(libproj, [("%PREPRODUCTION_DIR%", a.game_preproduction_dir), ("%ARK2D_DIR%", a.ark2d_dir)]);
+						libproj_actual = a.str_replace(libproj, a.tag_replacements);
 						a.android_libraryprojects.extend([libproj_actual]);
 
 				if "android" in target_config and "library_projects" in target_config['android']:
 					for libproj in target_config['android']['library_projects']:
 						print("library project: " + libproj);
-						libproj_actual = a.str_replace(libproj, [("%PREPRODUCTION_DIR%", a.game_preproduction_dir), ("%ARK2D_DIR%", a.ark2d_dir)]);
+						libproj_actual = a.str_replace(libproj, a.tag_replacements);
 						a.android_libraryprojects.extend([libproj_actual]);
 
 				if "override_activity" in a.android_config:
-					a.android_config["override_activity"] = a.str_replace(a.android_config["override_activity"], [("%PREPRODUCTION_DIR%", a.game_preproduction_dir), ("%ARK2D_DIR%", a.ark2d_dir)]);
+					a.android_config["override_activity"] = a.str_replace(a.android_config["override_activity"], a.tag_replacements);
 
 				if "override_manifest" in a.android_config:
-					a.android_config["override_manifest"] = a.str_replace(a.android_config["override_manifest"], [("%PREPRODUCTION_DIR%", a.game_preproduction_dir), ("%ARK2D_DIR%", a.ark2d_dir)]);
+					a.android_config["override_manifest"] = a.str_replace(a.android_config["override_manifest"], a.tag_replacements);
 
 				if "override_ids" in a.android_config:
-					a.android_config["override_ids"] = a.str_replace(a.android_config["override_ids"], [("%PREPRODUCTION_DIR%", a.game_preproduction_dir), ("%ARK2D_DIR%", a.ark2d_dir)]);
+					a.android_config["override_ids"] = a.str_replace(a.android_config["override_ids"], a.tag_replacements);
 
 				if "override_strings" in a.android_config:
-					a.android_config["override_strings"] = a.str_replace(a.android_config["override_strings"], [("%PREPRODUCTION_DIR%", a.game_preproduction_dir), ("%ARK2D_DIR%", a.ark2d_dir)]);
+					a.android_config["override_strings"] = a.str_replace(a.android_config["override_strings"], a.tag_replacements);
 
 			# Windows Phone 8 config.
 			if (a.platform == "windows-phone"):

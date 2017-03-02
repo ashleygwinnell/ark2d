@@ -1951,6 +1951,7 @@ class PBXCopyFilesBuildPhase(XCBuildPhase):
   # dstSubfolderSpec property value used in a PBXCopyFilesBuildPhase object.
   path_tree_to_subfolder = {
     'BUILT_PRODUCTS_DIR': 16,  # Products Directory
+    'EXECUTABLE_FOLDER_PATH': 6  # Executables Directory
     # Other types that can be chosen via the Xcode UI.
     # TODO(mark): Map Xcode variable names to these.
     # : 1,  # Wrapper
