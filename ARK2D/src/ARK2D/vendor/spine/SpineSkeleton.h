@@ -43,7 +43,7 @@ namespace ARK {
 				static void setUsingDummyTexture(bool b);
 		};
 
-		class ARK2D_API Skeleton : public ARK::Core::Resource 
+		class ARK2D_API Skeleton : public ARK::Core::Resource
 		{
 			public:
 				static float s_defaultScale;
@@ -89,12 +89,12 @@ namespace ARK {
 			public:
 				Skeleton(string fname);
 				Skeleton(void* atlasData, unsigned int atlasLength, void* jsonData, unsigned int jsonLength);
-				
+
 				void load();
 				void reset();
 				void clearCallbacks();
 				void clearAnimationMixers();
-				
+
 				SkeletalAnimationMixer* newAnimation();
 				void addAnimation(string key, SkeletalAnimationMixer* data);
 				void mixAnimation(string key, string subkey, bool loop);
@@ -113,9 +113,9 @@ namespace ARK {
 				bool removeAttachment(string slot);
 
 				void setSkin(string name);
-				
+
 				void setInvokingCallbacks(bool b);
-				
+
 				spBone* getRoot();
 				void setRoot(string name);
 
@@ -126,7 +126,7 @@ namespace ARK {
 				float getX();
 				float getY();
 				float getZ();
-				
+
 				void setY(float y);
 				void setLocation(float x, float y);
 				void setLocation(float x, float y, float z);
@@ -142,6 +142,8 @@ namespace ARK {
 				void doCallbackInternal(SpineCallback* cb);
 
 				Skeleton* copy();
+
+				static Skeleton* createFromFile(string file, bool appendPath=true);
 
 				virtual ~Skeleton();
 		};

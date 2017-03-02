@@ -119,29 +119,9 @@ namespace ARK {
 			}*/
 			/*else if (extension == "spine")
 			{
-				ARK::Spine::Skeleton* skeleton = NULL;
-				#if defined(ARK2D_ANDROID)
-					string genericName = ref.substr(0, ref.find_last_of("."));
-					string atlasFile = genericName + string(".atlas");
-					string skeletonFile = genericName + string(".json");
+				// moved to spineSkeleton.cpp
+				Skeleton::createFromFile
 
-					RawDataReturns* rt = getRawData(atlasFile);
-					RawDataReturns* rt2 = getRawData(skeletonFile);
-
-					//skeleton = new ARK::Spine::Skeleton(newtextbuffer, rt->size, newtextbuffer2, rt2->size);
-					ARK2D::getLog()->i("New Skeleton object");
-					skeleton = new ARK::Spine::Skeleton(rt->data, rt->size, rt2->data, rt2->size);
-					skeleton->m_fname = ref;
-					skeleton->load();
-
-					//ARK2D::getLog()->e("Spine is currently not supported on Android...");
-					//exit(0);
-
-				#else
-					skeleton = new ARK::Spine::Skeleton(ref);
-					skeleton->load();
-				#endif
-				resource = skeleton;
 			}*/
 			/*else if (extension == "tmx")
 			{
