@@ -1,1 +1,1 @@
-python build.py target=osx
+python builder/main.py target=osx

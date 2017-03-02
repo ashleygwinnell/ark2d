@@ -1,1 +1,1 @@
-python build.py target=linux
+python builder/main.py target=linux

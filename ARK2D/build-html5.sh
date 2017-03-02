@@ -1,1 +1,1 @@
-python build.py clean=false debug=false target=html5
+python builder/main.py clean=false debug=false target=html5

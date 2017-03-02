@@ -1,2 +1,2 @@
-python build.py target=windows-phone
+python builder/main.py target=windows-phone
 pause;

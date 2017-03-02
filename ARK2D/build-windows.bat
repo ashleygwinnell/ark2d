@@ -1,3 +1,3 @@
-python build.py target=windows
+python builder/main.py target=windows
 
 pause;

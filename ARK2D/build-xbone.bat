@@ -1,3 +1,3 @@
-python build.py target=xbox-one
+python builder/build.py target=xbox-one
 
 pause;
