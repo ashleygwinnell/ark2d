@@ -1,9 +1,12 @@
 #include "../../Namespaces.h"
+#include "../../Common/DLL.h"
+#include "../../Common/OpenGL.h"
 #include "../Math/Matrix44.h"
 #include <vector>
 
 #ifndef ARK_CORE_GRAPHICS_MATRIXSTACK_H_
 #define ARK_CORE_GRAPHICS_MATRIXSTACK_H_
+
 
 namespace ARK {
     namespace Core {

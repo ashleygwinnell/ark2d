@@ -433,6 +433,7 @@
 			"src/ARK2D/Core/Sort.cpp",
 			"src/ARK2D/Core/String.cpp",
 			"src/ARK2D/Core/Platform/GameContainerWindows.cpp",
+			"src/ARK2D/Core/Platform/GameContainerXboxOne.cpp",
 			"src/ARK2D/Core/Camera.cpp",
 			"src/ARK2D/Core/Strings.cpp",
 
@@ -725,19 +726,25 @@
 		],
 		"windows": [
 			"src/ARK2D/Windres.rc",
-			"src/ARK2D/Graphics/HLSL/geometry-dx11-pixel.hlsl",
-			"src/ARK2D/Graphics/HLSL/geometry-dx11-vertex.hlsl",
+			"src/ARK2D/Core/Graphics/HLSL/geometry-dx11-pixel.hlsl",
+			"src/ARK2D/Core/Graphics/HLSL/geometry-dx11-vertex.hlsl",
 			"src/ARK2D/vendor/gl3w.c"
 		],
 		"windows_old": [
 			"src\\ARK2D\\vendor\\glew.c"
 		],
+		"windows-store": [
+			"src/ARK2D/Core/Graphics/HLSL/geometry-dx11-pixel.hlsl",
+			"src/ARK2D/Core/Graphics/HLSL/geometry-dx11-vertex.hlsl",
+			"src/ARK2D/Core/Graphics/HLSL/texture-dx11-pixel.hlsl",
+			"src/ARK2D/Core/Graphics/HLSL/texture-dx11-vertex.hlsl"
+		],
 		"windows-phone": [
 			"src/ARK2D/Windres.rc",
-			"src/ARK2D/Graphics/HLSL/geometry-dx11-pixel.hlsl",
-			"src/ARK2D/Graphics/HLSL/geometry-dx11-vertex.hlsl",
-			"src/ARK2D/Graphics/HLSL/texture-dx11-pixel.hlsl",
-			"src/ARK2D/Graphics/HLSL/texture-dx11-vertex.hlsl",
+			"src/ARK2D/Core/Graphics/HLSL/geometry-dx11-pixel.hlsl",
+			"src/ARK2D/Core/Graphics/HLSL/geometry-dx11-vertex.hlsl",
+			"src/ARK2D/Core/Graphics/HLSL/texture-dx11-pixel.hlsl",
+			"src/ARK2D/Core/Graphics/HLSL/texture-dx11-vertex.hlsl",
 			"src/ARK2D/Core/Platform/GameContainerWindowsPhone8.cpp",
 
 			"src/ARK2D/vendor/lpng1251/png.c",

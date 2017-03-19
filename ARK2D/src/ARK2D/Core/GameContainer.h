@@ -59,7 +59,7 @@ using namespace std;
 	#include "Platform/GameContainerMac.h"
 #elif defined(ARK2D_WINDOWS_PHONE_8)
 	#include "Platform/GameContainerWindowsPhone8.h"
-#elif defined(ARK2D_XBOXONE)
+#elif defined(ARK2D_XBOXONE) || defined(ARK2D_WINDOWS_STORE)
 	#include "Platform/GameContainerXboxOne.h"
 #endif
 

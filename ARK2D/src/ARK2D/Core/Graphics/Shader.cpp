@@ -19,6 +19,10 @@ namespace ARK {
     namespace Core {
         namespace Graphics {
 
+            #ifdef ARK2D_RENDERER_DIRECTX
+                unsigned int ShaderInternals::s_d3d_arkShaderIncrement = 0;
+            #endif
+
             ShaderInternals::ShaderInternals():
                 m_name(""),
                 m_programId(0),
@@ -32,7 +36,7 @@ namespace ARK {
                     #if defined(ARK2D_RENDERER_OPENGL)
                         m_programId = glCreateProgram();
                     #elif defined(ARK2D_RENDERER_DIRECTX)
-
+                        m_programId = s_d3d_arkShaderIncrement++;
                     #endif
                     RendererStats::s_glCalls++;
                 #endif
@@ -41,13 +45,13 @@ namespace ARK {
 
             #if defined(ARK2D_RENDERER_DIRECTX)
 
-                ID3D11Device* ShaderInternals::getD3D11Device()
+                ID3D11Device3* ShaderInternals::getD3D11Device()
                 {
-                    return ARK2D::getContainer()->m_platformSpecific.m_device;
+                    return ARK2D::getContainer()->m_platformSpecific.m_device.Get();
                 }
-                ID3D11DeviceContext* ShaderInternals::getD3D11DeviceContext()
+                ID3D11DeviceContext3* ShaderInternals::getD3D11DeviceContext()
                 {
-                    return ARK2D::getContainer()->m_platformSpecific.m_deviceContext;
+                    return ARK2D::getContainer()->m_platformSpecific.m_deviceContext.Get();
                 }
 
             #endif
@@ -650,7 +654,7 @@ namespace ARK {
     //			glEnableVertexAttribArray(loc);
     //		}
             void ShaderInternals::bindFragmentDataLocation(unsigned int loc, string var) {
-                #if defined(ARK2D_OPENGL_3_2)
+                #if (defined(ARK2D_RENDERER_OPENGL) && defined(ARK2D_OPENGL_3_2))
                     glBindFragDataLocation(m_programId, loc, var.c_str());
                     RendererStats::s_glCalls++;
                 #endif
@@ -752,6 +756,7 @@ namespace ARK {
 
                 #elif defined(ARK2D_RENDERER_DIRECTX)
 
+                    //ARK2D::getLog()->v(StringUtil::append("Binding shader: ", m_name));
                     ID3D11DeviceContext* dxcontext = getD3D11DeviceContext();
                     dxcontext->VSSetShader(m_d3d_vertexShader, NULL, 0);
                     dxcontext->PSSetShader(m_d3d_pixelShader, NULL, 0);

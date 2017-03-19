@@ -21,6 +21,7 @@ using namespace std;
 
 #include "../Geometry/Cube.h"
 
+#include "../../Common/OpenGL.h"
 
 namespace ARK {
     namespace Core {

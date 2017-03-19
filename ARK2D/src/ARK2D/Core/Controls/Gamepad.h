@@ -8,7 +8,8 @@
 #ifndef ARK_CORE_CONTROLS_GAMEPAD_H_
 #define ARK_CORE_CONTROLS_GAMEPAD_H_
 
-#if defined(ARK2D_WINDOWS)
+#if (defined(ARK2D_WINDOWS)) //|| defined(ARK2D_WINDOWS_STORE))
+ 	#include <winsock2.h>
 	#include <windows.h>
 	#include <regstr.h>
 	#include <mmsystem.h>
@@ -25,10 +26,10 @@
 #include "Input.h"
 
 
-#ifdef ARK2D_XBOXONE
+//#if defined(ARK2D_XBOXONE) || defined(ARK2D_WINDOWS_STORE)
 	//using namespace Windows::Xbox::Input;
-    using namespace Windows::Foundation;
-#endif
+    //using namespace Windows::Foundation; // this will be redefined twice and that's bad.
+//#endif
 
 // Linux help/examples:
 // http://scaryreasoner.wordpress.com/2008/02/22/programming-joysticks-with-linux/
@@ -190,8 +191,16 @@ namespace ARK {
 					int vendorId; // Same as product ID.
 					string name; // Human readable device name.
 
+					#if defined(ARK2D_XBOXONE)// || defined(ARK2D_WINDOWS_STORE)
 
-					#if defined(ARK2D_WINDOWS)
+						Windows::Xbox::Input::IGamepad^ m_currentGamepad;
+	        			Windows::Xbox::Input::IGamepadReading^ m_currentGamepadReading;
+					#elif defined(ARK2D_WINDOWS_STORE)
+
+						Windows::Gaming::Input::Gamepad^ m_currentGamepad;
+						Windows::Gaming::Input::GamepadReading m_currentGamepadReading;
+
+					#elif defined(ARK2D_WINDOWS) || defined(ARK2D_WINDOWS_STORE)
 
 						JOYINFOEX lastState;
 						int povXAxisIndex;
@@ -214,10 +223,7 @@ namespace ARK {
 						struct input_absinfo axisInfo[ABS_CNT];
 						char* description;
 
-					#elif defined(ARK2D_XBOXONE)
 
-						Windows::Xbox::Input::IGamepad^ m_currentGamepad;
-	        			Windows::Xbox::Input::IGamepadReading^ m_currentGamepadReading;
 
 					#endif
 

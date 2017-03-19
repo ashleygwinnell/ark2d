@@ -11,7 +11,7 @@
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
 
-#if defined(ARK2D_WINDOWS)
+#if defined(ARK2D_WINDOWS) || defined(ARK2D_WINDOWS_STORE)
 	#include <time.h>
 #elif defined(ARK2D_EMSCRIPTEN_JS)
 	#include <sys/times.h>

@@ -276,15 +276,16 @@ namespace ARK {
 			r->matrixMode(MatrixStack::TYPE_MODEL);
 			r->loadIdentity();
 
-			if (type == TYPE_PERSPECTIVE) {
-				glEnable(GL_DEPTH_TEST);
-				glDepthFunc(GL_LEQUAL);
+			#if defined(ARK2D_RENDERER_OPENGL)
+				if (type == TYPE_PERSPECTIVE) {
+					glEnable(GL_DEPTH_TEST);
+					glDepthFunc(GL_LEQUAL);
 
-				glEnable(GL_CULL_FACE); // glDisable(GL_CULL_FACE);
-				glCullFace(GL_BACK);
-				glFrontFace(GL_CCW);
-			}
-
+					glEnable(GL_CULL_FACE); // glDisable(GL_CULL_FACE);
+					glCullFace(GL_BACK);
+					glFrontFace(GL_CCW);
+				}
+			#endif
 			SceneNode::render();
 
 			r->matrixMode(mode);

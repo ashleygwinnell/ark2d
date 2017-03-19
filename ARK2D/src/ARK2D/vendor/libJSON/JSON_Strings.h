@@ -20,7 +20,7 @@
 		#define TEXT(s) s
 	#endif
 
-    #if defined(ARK2D_WINDOWS_PHONE_8)
+    #if defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_WINDOWS_STORE)
 
         #ifdef TEXT
             #undef TEXT

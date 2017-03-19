@@ -27,7 +27,7 @@ namespace ARK {
 			public:
 				static string inttohexcolor(unsigned int i) {
 					char buffer[3]; // eg. FF
-					sprintf(buffer, "%X", i);
+					sprintf_s(buffer, "%X", i);
 					return string(buffer);
 				}
 				static unsigned int hextoint(char* hexChars) {

@@ -15,6 +15,7 @@
 #include <iostream>
 #include <sstream>
 #include <cstdio>
+#include <cctype>
 
 namespace ARK {
 	namespace Core {

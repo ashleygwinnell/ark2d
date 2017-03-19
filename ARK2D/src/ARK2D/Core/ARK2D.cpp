@@ -180,6 +180,8 @@ unsigned int ARK2D::getPlatform() {
 		return PLATFORM_ANDROID;
 	#elif defined(ARK2D_WINDOWS_PHONE_8)
 		return PLATFORM_WINDOWS_PHONE_8;
+	#elif defined(ARK2D_WINDOWS_STORE)
+		return PLATFORM_WINDOWS_STORE;
 	#elif defined(ARK2D_XBOXONE)
 		return PLATFORM_XBOXONE;
 	#elif defined(ARK2D_UBUNTU_LINUX)
@@ -205,6 +207,8 @@ std::string ARK2D::getPlatformString() {
 		return "wp8";
 	#elif defined(ARK2D_XBOXONE)
 		return "xbone";
+	#elif defined(ARK2D_WINDOWS_STORE)
+		return "windows-store";
 	#elif defined(ARK2D_UBUNTU_LINUX)
 		return "linux";
 	#endif

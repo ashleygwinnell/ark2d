@@ -84,10 +84,10 @@
     <PreBuildEvent>
       <Command>
         ECHO "Generating Spritesheets..."
-        python %ARK2D_DIR%\build.py dir=../../ spritesheets=true newconfig=true type=game target=windows.json >0
+        python %ARK2D_DIR%\builder/main.py dir=../../ spritesheets=true newconfig=true type=game target=windows.json >0
 
         ECHO "Generating Localised strings table..."
-        python %ARK2D_DIR%\build.py dir=../../ strings=true newconfig=true type=game target=windows.json >0
+        python %ARK2D_DIR%\builder/main.py dir=../../ strings=true newconfig=true type=game target=windows.json >0
 
         ECHO "Copying Game Assets into project"
         ROBOCOPY  ../../data Debug\data /COPY:DAT /E /njh /njs /ndl /nc /ns /nfl >0

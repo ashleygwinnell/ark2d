@@ -17,6 +17,9 @@
 
 #ifdef ARK2D_ANDROID
 	#include "../Platform/GameContainerAndroid.h"
+#elif defined(ARK2D_WINDOWS)
+	#include <cstdio>
+	#define snprintf _snprintf
 #endif
 
 #include <map>

@@ -320,7 +320,7 @@ namespace ARK {
 
 				#elif defined(ARK2D_RENDERER_DIRECTX)
 
-					ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->getPlatformSpecific()->m_deviceContext;
+					ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->getPlatformSpecific()->GetD3DDeviceContext();
 					Texture* tx = TextureStore::getInstance()->getTexture(textureId);
 					deviceContext->PSSetSamplers(0, 1, &tx->m_dxSampler);
 					deviceContext->PSSetShaderResources(0, 1, &tx->m_dxResourceView);
@@ -451,8 +451,8 @@ namespace ARK {
 
 						RendererState::start(RendererState::GEOMETRY);
 
-						ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
-						ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.m_deviceContext;
+						ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.GetD3DDevice();
+						ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.GetD3DDeviceContext();// .Get();
 
 						Renderer::__internalsDXUpdateMatrices();
 
@@ -468,24 +468,28 @@ namespace ARK {
 						unsigned int count = 0;
 						for (unsigned int i = 0; i < countVerts; i +=3) {
 							RendererBatchItem_GeomTri* tri = &geomtris[count];
-							rawVertices[i].vertex = DirectX::XMFLOAT4(tri->vertexData[0], tri->vertexData[1], 0.0f, 0.0f);
+							rawVertices[i].vertex = DirectX::XMFLOAT4(tri->vertexData[0], tri->vertexData[1], tri->vertexData[2], 0.0f);
 							rawVertices[i].color = DirectX::XMFLOAT4(tri->colorData[0]/255.0f, tri->colorData[1]/255.0f, tri->colorData[2]/255.0f, tri->colorData[3]/255.0f);
 
-							rawVertices[i+1].vertex = DirectX::XMFLOAT4(tri->vertexData[2], tri->vertexData[3], 0.0f, 0.0f);
+							rawVertices[i+1].vertex = DirectX::XMFLOAT4(tri->vertexData[3], tri->vertexData[4], tri->vertexData[5], 0.0f);
 							rawVertices[i+1].color = DirectX::XMFLOAT4(tri->colorData[4]/255.0f, tri->colorData[5]/255.0f, tri->colorData[6]/255.0f, tri->colorData[7]/255.0f);
 
-							rawVertices[i+2].vertex = DirectX::XMFLOAT4(tri->vertexData[4], tri->vertexData[5], 0.0f, 0.0f);
+							rawVertices[i+2].vertex = DirectX::XMFLOAT4(tri->vertexData[6], tri->vertexData[7], tri->vertexData[8], 0.0f);
 							rawVertices[i+2].color = DirectX::XMFLOAT4(tri->colorData[8]/255.0f, tri->colorData[9]/255.0f, tri->colorData[10]/255.0f, tri->colorData[11]/255.0f);
 
 							count++;
 						}
-						Renderer::s_vboQuadVerts->setData((void*)&rawVertices[0], memorySize);
+						Renderer::s_vboQuadVerts->setData((void*)rawVertices, memorySize);
 
 						unsigned int stride = sizeof(Renderer_DX_InterleavingGeometryVertexData);
 						unsigned int offset = 0;
 						deviceContext->IASetVertexBuffers(0, 1, &Renderer::s_vboQuadVerts->m_buffer, &stride, &offset);
 						deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+
 						deviceContext->Draw(countVerts, 0);
+
+						//fillTriangles();
 
 					}
 					else if (m_type == TYPE_TEXTURE_TRIS)
@@ -495,8 +499,8 @@ namespace ARK {
 
 						RendererState::start(RendererState::TEXTURE, m_textureId);
 
-						ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
-						ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.m_deviceContext;
+						ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.GetD3DDevice();
+						ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.GetD3DDeviceContext();
 
 						Renderer::__internalsDXUpdateMatrices();
 
@@ -512,15 +516,15 @@ namespace ARK {
 						unsigned int count = 0;
 						for (unsigned int i = 0; i < countVerts; i +=3) {
 							RendererBatchItem_TexTri* tri = &textris[count];
-							rawVertices[i].vertex = DirectX::XMFLOAT4(tri->vertexData[0], tri->vertexData[1], 0.0f, 0.0f);
+							rawVertices[i].vertex = DirectX::XMFLOAT4(tri->vertexData[0], tri->vertexData[1], tri->vertexData[2], 0.0f);
 							rawVertices[i].texcoord = DirectX::XMFLOAT2(tri->textureData[0], tri->textureData[1]);
 							rawVertices[i].color = DirectX::XMFLOAT4(tri->colorData[0]/255.0f, tri->colorData[1]/255.0f, tri->colorData[2]/255.0f, tri->colorData[3]/255.0f);
 
-							rawVertices[i+1].vertex = DirectX::XMFLOAT4(tri->vertexData[2], tri->vertexData[3], 0.0f, 0.0f);
+							rawVertices[i+1].vertex = DirectX::XMFLOAT4(tri->vertexData[3], tri->vertexData[4], tri->vertexData[5], 0.0f);
 							rawVertices[i+1].texcoord = DirectX::XMFLOAT2(tri->textureData[2], tri->textureData[3]);
 							rawVertices[i+1].color = DirectX::XMFLOAT4(tri->colorData[4]/255.0f, tri->colorData[5]/255.0f, tri->colorData[6]/255.0f, tri->colorData[7]/255.0f);
 
-							rawVertices[i+2].vertex = DirectX::XMFLOAT4(tri->vertexData[4], tri->vertexData[5], 0.0f, 0.0f);
+							rawVertices[i+2].vertex = DirectX::XMFLOAT4(tri->vertexData[6], tri->vertexData[7], tri->vertexData[8], 0.0f);
 							rawVertices[i+2].texcoord = DirectX::XMFLOAT2(tri->textureData[4], tri->textureData[5]);
 							rawVertices[i+2].color = DirectX::XMFLOAT4(tri->colorData[8]/255.0f, tri->colorData[9]/255.0f, tri->colorData[10]/255.0f, tri->colorData[11]/255.0f);
 
@@ -532,16 +536,17 @@ namespace ARK {
 						unsigned int offset = 0;
 						deviceContext->IASetVertexBuffers(0, 1, &Renderer::s_vboQuadVerts->m_buffer, &stride, &offset);
 						deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 						deviceContext->Draw(countVerts, 0);
 					}
 				#endif
-				clear();
+				//clear();
 			}
 			void RendererBatchItem::render() {
+				Renderer* r = ARK2D::getRenderer();
 				#if defined(ARK2D_RENDERER_DIRECTX)
 					renderDX();
 				#else
-					Renderer* r = ARK2D::getRenderer();
 					if (m_type == TYPE_GEOMETRY_TRIS)
 					{
 						// We should separate these into groups of what... 1024?
@@ -624,85 +629,86 @@ namespace ARK {
 						//	free(all_textureData);
 						//	free(all_colorData);
 						//#endif
-					} else if (m_type == TYPE_STENCIL_ENABLE) {
-						r->enableStencil();
-					} else if (m_type == TYPE_STENCIL_START) {
-						r->startStencil();
-					} else if (m_type == TYPE_STENCIL_INVERSE) {
-						r->inverseStencil();
-					} else if (m_type == TYPE_STENCIL_STOP) {
-						r->stopStencil();
-					} else if (m_type == TYPE_STENCIL_DISABLE) {
-						r->disableStencil();
-					} else if (m_type == TYPE_MATRIX_MODE) {
-						r->matrixMode(m_textureId);
-					} else if (m_type == TYPE_MATRIX_IDENTITY) {
-						r->loadIdentity();
-					} else if (m_type == TYPE_MATRIX_PUSH) {
-						r->pushMatrix();
-					} else if (m_type == TYPE_MATRIX_POP) {
-						r->popMatrix();
-					} else if (m_type == TYPE_MATRIX_TRANSLATE) {
-						r->translate(m_float1, m_float2, m_float3);
-					} else if (m_type == TYPE_MATRIX_ROTATE) {
-						r->rotate(m_float1, m_float2, m_float3, m_float4);
-					} else if (m_type == TYPE_MATRIX_SCALE) {
-						r->scale(m_float1, m_float2, m_float3);
-					} else if (m_type == TYPE_MATRIX_MULTIPLY) {
-						r->multiplyMatrix( mats[0] );
-					} else if (m_type == TYPE_MULTISAMPLING_ENABLE) {
-						r->enableMultisampling();
-					} else if (m_type == TYPE_MULTISAMPLING_DISABLE) {
-						r->disableMultisampling();
-					} else if (m_type == TYPE_BACKFACECULLING_ENABLE) {
-						r->enableBackfaceCulling();
-					} else if (m_type == TYPE_BACKFACECULLING_DISABLE) {
-						r->disableBackfaceCulling();
-					} else if (m_type == TYPE_SCISSORTEST_ENABLE) {
-						r->setScissorTestEnabled(true);
-					} else if (m_type == TYPE_SCISSORTEST_DISABLE) {
-						r->setScissorTestEnabled(false);
-					} else if (m_type == TYPE_SCISSOR) {
-						r->scissor(m_float1, m_float2, m_float3, m_float4);
-					} else if (m_type == TYPE_FBO_BIND) {
-						FBO* fbo = (FBO*) m_objectPointer;
-						fbo->bind(m_float1, m_float2);
-					} else if (m_type == TYPE_FBO_UNBIND) {
-						FBO* fbo = (FBO*) m_objectPointer;
-						fbo->unbind();
-					} else if (m_type == TYPE_FBO_BIND2D) {
-						FBO* fbo = (FBO*) m_objectPointer;
-						fbo->bind_2d();
-					} else if (m_type == TYPE_FBO_UNBIND2D) {
-						FBO* fbo = (FBO*) m_objectPointer;
-						fbo->unbind_2d();
 					}
-					else if (m_type == TYPE_VIEWPORT) {
-						r->viewport(m_float1, m_float2, m_float3, m_float4);
-					} else if (m_type == TYPE_ORTHO2D) {
-						r->ortho2d(m_textureId, m_shaderId, (int) m_float1, (int) m_float2, m_float3, m_float4);
-					}
-					else if (m_type == TYPE_BLEND_MODE) {
-						r->setBlendMode( (int) m_float1 );
-					}
-					else if (m_type == TYPE_SAVE_PIXELS) {
-						string s = string(m_cstr);
-						free(m_cstr);
-						r->savePixels(m_float1, m_float2, m_float3, m_float4, s, (m_textureId)?true:false);
-					}
-					else if (m_type == TYPE_DEBUG_STRING) {
-						string s = string(m_cstr);
-						free(m_cstr);
-					}
-					else if (m_type == TYPE_CUSTOM_OBJECT_FUNCTION) {
-						void (*pt)(void*) = (void(*)(void*)) m_functionPointer;
-						pt(m_objectPointer);
-					} else if (m_type == TYPE_CUSTOM_FUNCTION) {
-						void (*pt)() = (void(*)()) m_functionPointer;
-						pt();
-					}
-					clear();
 				#endif
+				if (m_type == TYPE_STENCIL_ENABLE) {
+					r->enableStencil();
+				} else if (m_type == TYPE_STENCIL_START) {
+					r->startStencil();
+				} else if (m_type == TYPE_STENCIL_INVERSE) {
+					r->inverseStencil();
+				} else if (m_type == TYPE_STENCIL_STOP) {
+					r->stopStencil();
+				} else if (m_type == TYPE_STENCIL_DISABLE) {
+					r->disableStencil();
+				} else if (m_type == TYPE_MATRIX_MODE) {
+					r->matrixMode(m_textureId);
+				} else if (m_type == TYPE_MATRIX_IDENTITY) {
+					r->loadIdentity();
+				} else if (m_type == TYPE_MATRIX_PUSH) {
+					r->pushMatrix();
+				} else if (m_type == TYPE_MATRIX_POP) {
+					r->popMatrix();
+				} else if (m_type == TYPE_MATRIX_TRANSLATE) {
+					r->translate(m_float1, m_float2, m_float3);
+				} else if (m_type == TYPE_MATRIX_ROTATE) {
+					r->rotate(m_float1, m_float2, m_float3, m_float4);
+				} else if (m_type == TYPE_MATRIX_SCALE) {
+					r->scale(m_float1, m_float2, m_float3);
+				} else if (m_type == TYPE_MATRIX_MULTIPLY) {
+					r->multiplyMatrix( mats[0] );
+				} else if (m_type == TYPE_MULTISAMPLING_ENABLE) {
+					r->enableMultisampling();
+				} else if (m_type == TYPE_MULTISAMPLING_DISABLE) {
+					r->disableMultisampling();
+				} else if (m_type == TYPE_BACKFACECULLING_ENABLE) {
+					r->enableBackfaceCulling();
+				} else if (m_type == TYPE_BACKFACECULLING_DISABLE) {
+					r->disableBackfaceCulling();
+				} else if (m_type == TYPE_SCISSORTEST_ENABLE) {
+					r->setScissorTestEnabled(true);
+				} else if (m_type == TYPE_SCISSORTEST_DISABLE) {
+					r->setScissorTestEnabled(false);
+				} else if (m_type == TYPE_SCISSOR) {
+					r->scissor(m_float1, m_float2, m_float3, m_float4);
+				} else if (m_type == TYPE_FBO_BIND) {
+					FBO* fbo = (FBO*) m_objectPointer;
+					fbo->bind(m_float1, m_float2);
+				} else if (m_type == TYPE_FBO_UNBIND) {
+					FBO* fbo = (FBO*) m_objectPointer;
+					fbo->unbind();
+				} else if (m_type == TYPE_FBO_BIND2D) {
+					FBO* fbo = (FBO*) m_objectPointer;
+					fbo->bind_2d();
+				} else if (m_type == TYPE_FBO_UNBIND2D) {
+					FBO* fbo = (FBO*) m_objectPointer;
+					fbo->unbind_2d();
+				}
+				else if (m_type == TYPE_VIEWPORT) {
+					r->viewport(m_float1, m_float2, m_float3, m_float4);
+				} else if (m_type == TYPE_ORTHO2D) {
+					r->ortho2d(m_textureId, m_shaderId, (int) m_float1, (int) m_float2, m_float3, m_float4);
+				}
+				else if (m_type == TYPE_BLEND_MODE) {
+					r->setBlendMode( (int) m_float1 );
+				}
+				else if (m_type == TYPE_SAVE_PIXELS) {
+					string s = string(m_cstr);
+					free(m_cstr);
+					r->savePixels(m_float1, m_float2, m_float3, m_float4, s, (m_textureId)?true:false);
+				}
+				else if (m_type == TYPE_DEBUG_STRING) {
+					string s = string(m_cstr);
+					free(m_cstr);
+				}
+				else if (m_type == TYPE_CUSTOM_OBJECT_FUNCTION) {
+					void (*pt)(void*) = (void(*)(void*)) m_functionPointer;
+					pt(m_objectPointer);
+				} else if (m_type == TYPE_CUSTOM_FUNCTION) {
+					void (*pt)() = (void(*)()) m_functionPointer;
+					pt();
+				}
+				clear();
 			}
 			string RendererBatchItem::toString() {
 				string s = string("{");
@@ -1599,6 +1605,10 @@ namespace ARK {
 				#elif defined(ARK2D_RENDERER_DIRECTX)
 
 					ARK2D::getLog()->v(StringUtil::append("Buffer sz: ", m_msize));
+					if (m_indexType == D3D11_BIND_CONSTANT_BUFFER && m_msize % 16 != 0) {
+						m_msize += 16 - (m_msize % 16);
+						ARK2D::getLog()->v(StringUtil::append("D3D11_BIND_CONSTANT_BUFFER. setting size to multipleof16 ", m_msize));
+					}
 
 					void* data = malloc( m_msize );
 
@@ -1618,7 +1628,7 @@ namespace ARK {
 					vertexBufferData.SysMemPitch = 0;
 					vertexBufferData.SysMemSlicePitch = 0;
 
-					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
+					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.GetD3DDevice();
 					m_result = device->CreateBuffer(&vertexBufferDesc, NULL, &m_buffer);
 					if (FAILED(m_result)) {
 						string s = StringUtil::append("Could not set data of VBO.", HRESULT_CODE(m_result));
@@ -1657,7 +1667,7 @@ namespace ARK {
 				#elif defined(ARK2D_RENDERER_DIRECTX)
 
 					//ARK2D::getLog()->v("Updating VBO...");
-					ID3D11DeviceContext* context = ARK2D::getContainer()->m_platformSpecific.m_deviceContext;
+					ID3D11DeviceContext* context = ARK2D::getContainer()->m_platformSpecific.GetD3DDeviceContext();
 
 					if (size > m_msize) {
 
@@ -1783,7 +1793,7 @@ namespace ARK {
 			}
 			Mat33VBO::Mat33VBO(): VBO() {
 				#if defined(ARK2D_RENDERER_DIRECTX)
-					setSize( sizeof(float)*9 );
+					setSize( sizeof(float)*16 ); // Mat, constantbuffers still need to be 4x4. multiples of 16.
 				#endif
 			}
 			void Mat33VBO::setData(float* data) {
@@ -1806,20 +1816,26 @@ namespace ARK {
 				return m_id;
 			}
 			void VAO::init() {
-				if (FBO::isVAOSupported()) {
-					glGenVertexArraysARK( 1, &m_id );
-					RendererStats::s_glCalls++;
-				}
+				#if defined(ARK2D_RENDERER_OPENGL)
+					if (FBO::isVAOSupported()) {
+						glGenVertexArraysARK( 1, &m_id );
+						RendererStats::s_glCalls++;
+					}
+				#endif
 			}
 			bool VAO::bind() {
 				if (s_currentVAO == (signed int) m_id) { return false; }
 
-				if (FBO::isVAOSupported()) {
-					glBindVertexArrayARK(m_id);
-					RendererStats::s_glCalls++;
-				}
-				s_currentVAO = (signed int) m_id;
-				return true;
+				#if defined(ARK2D_RENDERER_OPENGL)
+					if (FBO::isVAOSupported()) {
+						glBindVertexArrayARK(m_id);
+						RendererStats::s_glCalls++;
+					}
+					s_currentVAO = (signed int) m_id;
+					return true;
+				#elif defined(ARK2D_RENDERER_DIRECTX)
+					return false;
+				#endif
 			}
 
 
@@ -1870,7 +1886,7 @@ namespace ARK {
 
 					#if defined (ARK2D_RENDERER_DIRECTX)
 						ARK2D::getLog()->v("Creating Matrix Buffer...");
-						ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
+						ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.GetD3DDevice();
 
 						CD3D11_BUFFER_DESC bufferDesc(sizeof(Renderer_DX_ModelViewProjectionMatrixBuffer), D3D11_BIND_CONSTANT_BUFFER);
 						HRESULT result = device->CreateBuffer(&bufferDesc, NULL, &s_d3d_matrixBuffer);
@@ -1881,15 +1897,19 @@ namespace ARK {
 						s_d3d_matrixBufferDesc = bufferDesc;
 
 						s_d3d_matrixBufferData = new Renderer_DX_ModelViewProjectionMatrixBuffer();
+						ARK2D::getLog()->i( StringUtil::append("Renderer_DX_ModelViewProjectionMatrixBuffer size:", sizeof(Renderer_DX_ModelViewProjectionMatrixBuffer)));
 
+						//m_msize = 32;
 						s_vboMatrixProjection->m_indexType = D3D11_BIND_CONSTANT_BUFFER;
 						s_vboMatrixView->m_indexType = D3D11_BIND_CONSTANT_BUFFER;
 						s_vboMatrixModel->m_indexType = D3D11_BIND_CONSTANT_BUFFER;
 						s_vboMatrixNormal->m_indexType = D3D11_BIND_CONSTANT_BUFFER;
+
 						s_vboQuadVerts->m_indexType = D3D11_BIND_VERTEX_BUFFER;
 						s_vboQuadTexCoords->m_indexType = D3D11_BIND_VERTEX_BUFFER; // not used?
 						s_vboQuadNormals->m_indexType = D3D11_BIND_VERTEX_BUFFER; // not used?
 						s_vboQuadColors->m_indexType = D3D11_BIND_VERTEX_BUFFER; // not used?
+
 						s_vboIndices->m_indexType = D3D11_BIND_INDEX_BUFFER;
 
 						ARK2D::getLog()->v("Created Matrix Buffer.");
@@ -1923,7 +1943,9 @@ namespace ARK {
 
 					showAnyGlErrorAndExitMacro();
 
-					glBindBuffer(GL_ARRAY_BUFFER, 0);
+					#ifdef ARK2D_RENDERER_OPENGL
+						glBindBuffer(GL_ARRAY_BUFFER, 0);
+					#endif
 
 					s_shaderBasicGeometry = new BasicGeometryShader();
 					s_shaderBasicGeometry->load();
@@ -2022,7 +2044,7 @@ namespace ARK {
 				#if defined(ARK2D_RENDERER_OPENGL)
 					glFlush();
 				#elif defined(ARK2D_RENDERER_DIRECTX)
-					ARK2D::getContainer()->m_platformSpecific.m_deviceContext->Flush();
+					ARK2D::getContainer()->m_platformSpecific.GetD3DDeviceContext()->Flush();
 				#endif
 				RendererStats::s_glCalls++;
 			}
@@ -2398,17 +2420,17 @@ namespace ARK {
 					}
 				#elif defined(ARK2D_RENDERER_DIRECTX)
 
-					if (!b) {
+					/*if (!b) {
 						GameContainer* container = ARK2D::getContainer();
 						GameContainerPlatform* platform = container->getPlatformSpecific();
-						ID3D11DeviceContext* deviceContext = platform->m_deviceContext;
+						ID3D11DeviceContext* deviceContext = platform->GetD3DDeviceContext();
 						D3D11_RECT rects[1];
 						rects[0].left = 0;
-						rects[0].right = platform->convertDipsToPixels(container->getDynamicWidth());
+						rects[0].right = platform->ConvertDipsToPixels(container->getDynamicWidth());
 						rects[0].top = 0;
-						rects[0].bottom = platform->convertDipsToPixels(container->getDynamicHeight());
+						rects[0].bottom = platform->ConvertDipsToPixels(container->getDynamicHeight());
 						deviceContext->RSSetScissorRects( 1, rects );
-					}
+					}*/
 
 				#endif
 
@@ -2433,14 +2455,14 @@ namespace ARK {
 					RendererStats::s_glCalls++;
 				#elif defined(ARK2D_RENDERER_DIRECTX)
 
-					GameContainerPlatform* platform = ARK2D::getContainer()->getPlatformSpecific();
-					ID3D11DeviceContext* deviceContext = platform->m_deviceContext;
+					/*GameContainerPlatform* platform = ARK2D::getContainer()->getPlatformSpecific();
+					ID3D11DeviceContext* deviceContext = platform->GetD3DDeviceContext();
 					D3D11_RECT rects[1];
-					rects[0].left = platform->convertDipsToPixels(max(x, 0));
-					rects[0].right = platform->convertDipsToPixels(max(x + w, 0));
-					rects[0].top = platform->convertDipsToPixels(max(y, 0));
-					rects[0].bottom = platform->convertDipsToPixels(max(y + h, 0));
-					deviceContext->RSSetScissorRects( 1, rects );
+					rects[0].left = platform->ConvertDipsToPixels(max(x, 0));
+					rects[0].right = platform->ConvertDipsToPixels(max(x + w, 0));
+					rects[0].top = platform->ConvertDipsToPixels(max(y, 0));
+					rects[0].bottom = platform->ConvertDipsToPixels(max(y + h, 0));
+					deviceContext->RSSetScissorRects( 1, rects );*/
 
 				#endif
 			}
@@ -2458,7 +2480,10 @@ namespace ARK {
 				#if defined(ARK2D_RENDERER_OPENGL)
 					glViewport(x, y, w, h);
 				#elif defined(ARK2D_RENDERER_DIRECTX)
-
+					GameContainerPlatform* platform = ARK2D::getContainer()->getPlatformSpecific();
+					ID3D11DeviceContext* deviceContext = platform->GetD3DDeviceContext();
+					CD3D11_VIEWPORT view = CD3D11_VIEWPORT(x, y, w, h);
+					deviceContext->RSSetViewports(1, &view);
 				#endif
 				RendererStats::s_glCalls++;
 			}
@@ -3265,8 +3290,8 @@ namespace ARK {
 
 				#elif defined(ARK2D_RENDERER_DIRECTX)
 
-					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
-					ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.m_deviceContext;
+					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.GetD3DDevice();
+					ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.GetD3DDeviceContext();
 
 					__internalsDXUpdateMatrices();
 
@@ -3545,13 +3570,16 @@ namespace ARK {
 					shader->drawTriangles();
 
 				#elif defined(ARK2D_RENDERER_DIRECTX)
+					//ARK2D::getLog()->w("Renderer::fillRect not implemented in Direct X (non-batch mode).");
 
-				/*	RendererState::start(RendererState::GEOMETRY);
+					RendererState::start(RendererState::GEOMETRY);
 
-					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
-					ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.m_deviceContext;
+					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.GetD3DDevice();
+					ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.GetD3DDeviceContext();
 
 					__internalsDXUpdateMatrices();
+
+
 
 					Renderer_DX_InterleavingGeometryVertexData rawVertices[] = {
 						{ DirectX::XMFLOAT4(x, y, z, 0.0f), DirectX::XMFLOAT4(m_DrawColor.getRedf(), m_DrawColor.getGreenf(), m_DrawColor.getBluef(), m_DrawColor.getAlphaf()) },
@@ -3577,10 +3605,13 @@ namespace ARK {
 
 					// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
 					deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+					deviceContext->IASetInputLayout(s_shaderBasicGeometryDefault->getD3DInputLayout());
+
+					deviceContext->PSSetShader(s_shaderBasicGeometryDefault->m_d3d_pixelShader,nullptr,0);
 
 					// DRAW!
 					deviceContext->DrawIndexed(6, 0, 0);
-					//deviceContext->Draw(6, 0);//, 0, 0);		*/
+					//deviceContext->Draw(6, 0);//, 0, 0);
 
 				#endif
 
@@ -3921,6 +3952,8 @@ namespace ARK {
 
 				#elif defined(ARK2D_RENDERER_DIRECTX)
 
+					ARK2D::getLog()->w("Renderer::fillQuad not implemented in Direct X (non-batch mode).");
+
 					/*RendererState::start(RendererState::GEOMETRY);
 
 					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
@@ -4006,6 +4039,8 @@ namespace ARK {
 
 				#elif defined(ARK2D_RENDERER_DIRECTX)
 
+					ARK2D::getLog()->w("Renderer::texturedQuads not implemented in Direct X (non-batch mode).");
+
 					/*RendererState::start(RendererState::TEXTURE, texId);
 
 					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
@@ -4070,8 +4105,8 @@ namespace ARK {
 
 			void Renderer::__internalsDXUpdateMatrices() {
 				#ifdef ARK2D_RENDERER_DIRECTX
-					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
-					ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.m_deviceContext;
+					ID3D11Device3* device = ARK2D::getContainer()->m_platformSpecific.GetD3DDevice();
+					ID3D11DeviceContext3* deviceContext = ARK2D::getContainer()->m_platformSpecific.GetD3DDeviceContext();
 
 					MatrixStack* modelMatrix = Renderer::getMatrix(MatrixStack::TYPE_MODEL);
 					MatrixStack* viewMatrix = Renderer::getMatrix(MatrixStack::TYPE_VIEW);
@@ -4081,10 +4116,10 @@ namespace ARK {
 						XMStoreFloat4x4(&Renderer::s_d3d_matrixBufferData->model, XMMatrixTranspose(modelMatrix->d3dpointer()));
 						XMStoreFloat4x4(&Renderer::s_d3d_matrixBufferData->view, XMMatrixTranspose(viewMatrix->d3dpointer()));
 						XMStoreFloat4x4(&Renderer::s_d3d_matrixBufferData->projection, XMMatrixTranspose(projectionMatrix->d3dpointer()));
-						deviceContext->UpdateSubresource(s_d3d_matrixBuffer, 0, NULL, s_d3d_matrixBufferData, 0, 0);
+						deviceContext->UpdateSubresource1(s_d3d_matrixBuffer, 0, NULL, s_d3d_matrixBufferData, 0, 0, 0);
 
 						ID3D11Buffer *const constantBuffers[1] = { Renderer::s_d3d_matrixBuffer };
-						deviceContext->VSSetConstantBuffers(0, 1, constantBuffers);
+						deviceContext->VSSetConstantBuffers1(0, 1, constantBuffers, nullptr, nullptr);
 
 						modelMatrix->setDirty(false);
 						viewMatrix->setDirty(false);
@@ -4114,8 +4149,8 @@ namespace ARK {
 
 					//ARK2D::getLog()->w("Renderer::fillTriangles");
 
-					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
-					ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.m_deviceContext;
+					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.GetD3DDevice();
+					ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.GetD3DDeviceContext();
 
 					__internalsDXUpdateMatrices();
 
@@ -4188,8 +4223,8 @@ namespace ARK {
 
 					//ARK2D::getLog()->w("Renderer::texturedTriangles.");
 
-					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
-					ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.m_deviceContext;
+					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.GetD3DDevice();
+					ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.GetD3DDeviceContext();
 
 					__internalsDXUpdateMatrices();
 
@@ -4325,8 +4360,8 @@ namespace ARK {
 
 				#elif defined(ARK2D_RENDERER_DIRECTX)
 
-					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
-					ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.m_deviceContext;
+					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.GetD3DDevice();
+					ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.GetD3DDeviceContext();
 
 					__internalsDXUpdateMatrices();
 
@@ -4359,7 +4394,6 @@ namespace ARK {
 					unsigned int stride = sizeof(Renderer_DX_InterleavingTextureVertexData);
 					unsigned int offset = 0;
 					deviceContext->IASetVertexBuffers(0, 1, &s_vboQuadVerts->m_buffer, &stride, &offset);
-
 					deviceContext->IASetIndexBuffer(s_vboIndices->m_buffer, DXGI_FORMAT_R32_UINT, 0);
 
 					deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -4456,14 +4490,14 @@ namespace ARK {
 
 				#elif defined(ARK2D_RENDERER_DIRECTX)
 
-					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
-					ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.m_deviceContext;
+					ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.GetD3DDevice();
+					ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.GetD3DDeviceContext();
 
 					__internalsDXUpdateMatrices();
 
 					Renderer_DX_InterleavingGeometryVertexData rawVertices[] = {
-						{ DirectX::XMFLOAT4(x1, y1, z1,, 0.0f), DirectX::XMFLOAT4(m_DrawColor.getRedf(), m_DrawColor.getGreenf(), m_DrawColor.getBluef(), m_DrawColor.getAlphaf()) },
-						{ DirectX::XMFLOAT4(x2, y2, z2,, 0.0f), DirectX::XMFLOAT4(m_DrawColor.getRedf(), m_DrawColor.getGreenf(), m_DrawColor.getBluef(), m_DrawColor.getAlphaf()) },
+						{ DirectX::XMFLOAT4(x1, y1, z1, 0.0f), DirectX::XMFLOAT4(m_DrawColor.getRedf(), m_DrawColor.getGreenf(), m_DrawColor.getBluef(), m_DrawColor.getAlphaf()) },
+						{ DirectX::XMFLOAT4(x2, y2, z2, 0.0f), DirectX::XMFLOAT4(m_DrawColor.getRedf(), m_DrawColor.getGreenf(), m_DrawColor.getBluef(), m_DrawColor.getAlphaf()) },
 						{ DirectX::XMFLOAT4(x3, y3, z3, 0.0f), DirectX::XMFLOAT4(m_DrawColor.getRedf(), m_DrawColor.getGreenf(), m_DrawColor.getBluef(), m_DrawColor.getAlphaf()) }
 					};
 
@@ -5176,10 +5210,10 @@ namespace ARK {
 
 				#elif defined(ARK2D_RENDERER_DIRECTX)
 
-					//ARK2D::getLog()->w("Renderer::setBlendMode not implemented in Direct X.");
-					GameContainerPlatform* platform = ARK2D::getContainer()->getPlatformSpecific();
-					ID3D11Device* device = platform->m_device;
-					ID3D11DeviceContext* deviceContext = platform->m_deviceContext;
+					ARK2D::getLog()->w("Renderer::setBlendMode not implemented in Direct X.");
+					/*GameContainerPlatform* platform = ARK2D::getContainer()->getPlatformSpecific();
+					ID3D11Device* device = platform->GetD3DDevice();;
+					ID3D11DeviceContext* deviceContext = platform->GetD3DDeviceContext();
 
 					if (blendMode == BLEND_NORMAL) {
 						float blendFactor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -5188,7 +5222,7 @@ namespace ARK {
 						float blendFactor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 						deviceContext->OMSetBlendState(platform->m_blendStateAdditive, blendFactor, 0xFFFFFFFF);
 					}
-					RendererStats::s_glCalls++;
+					RendererStats::s_glCalls++;*/
 
 				#endif
 

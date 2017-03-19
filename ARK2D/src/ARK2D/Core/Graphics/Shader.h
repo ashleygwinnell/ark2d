@@ -120,14 +120,16 @@ namespace ARK {
                             ID3D11VertexShader* m_d3d_vertexShader;
                             ID3D11PixelShader* m_d3d_pixelShader;
                             ID3D11InputLayout* m_d3d_inputLayout;
-                            ID3D11Device* getD3D11Device();
-                            ID3D11DeviceContext* getD3D11DeviceContext();
+                            ID3D11Device3* getD3D11Device();
+                            ID3D11DeviceContext3* getD3D11DeviceContext();
 
                             void* m_d3d_vertexCSO;
                             unsigned int m_d3d_vertexCSOLength;
 
                             void* m_d3d_pixelCSO;
                             unsigned m_d3d_pixelCSOLength;
+
+                            static unsigned int s_d3d_arkShaderIncrement;
 
                             ID3D11InputLayout* getD3DInputLayout() { return m_d3d_inputLayout; }
 

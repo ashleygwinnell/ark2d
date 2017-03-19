@@ -29,7 +29,7 @@ namespace ARK {
 
                 #if defined(ARK2D_RENDERER_DIRECTX)
 
-                    #ifdef ARK2D_WINDOWS_PHONE_8
+                    #if defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_WINDOWS_STORE)
 
                         file_get_contents_binary_result geometryVertexShaderStruct = SystemUtil::file_get_contents_binary("ark2d/shaders/basic-geometry/geometry-dx11-vertex.cso");
                         file_get_contents_binary_result geometryFragmentShaderStruct = SystemUtil::file_get_contents_binary("ark2d/shaders/basic-geometry/geometry-dx11-pixel.cso");
@@ -149,7 +149,7 @@ namespace ARK {
 
 
                 #ifdef ARK2D_RENDERER_DIRECTX
-                    s->setName("geometry-dx11");
+                    setName("geometry-dx11");
                 #endif
 
                 ShaderStore::getInstance()->addShader(m_programId, this);
@@ -216,7 +216,7 @@ namespace ARK {
                 #if defined(ARK2D_RENDERER_DIRECTX)
 
                     // TODO: replace with texture shader...
-                    #ifdef ARK2D_WINDOWS_PHONE_8
+                    #if defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_WINDOWS_STORE)
 
                         file_get_contents_binary_result textureVertexShaderStruct = SystemUtil::file_get_contents_binary("ark2d/shaders/basic-texture/texture-dx11-vertex.cso");
                         file_get_contents_binary_result textureFragmentShaderStruct = SystemUtil::file_get_contents_binary("ark2d/shaders/basic-texture/texture-dx11-pixel.cso");
@@ -346,7 +346,7 @@ namespace ARK {
                 bindFragmentDataLocation(0, "ark_FragColor");
 
                 #ifdef ARK2D_RENDERER_DIRECTX
-                    s->setName("texture-dx11");
+                    setName("texture-dx11");
                 #endif
 
                 link();

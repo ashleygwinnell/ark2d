@@ -13,10 +13,10 @@ namespace ARK {
     namespace Core {
         namespace Graphics {
 
-            // 
+            //
             // GEOMETRY
             //
-            DirectionalLightingGeometryShader::DirectionalLightingGeometryShader(): 
+            DirectionalLightingGeometryShader::DirectionalLightingGeometryShader():
                 ARK::Core::Graphics::Shader(),
                 container(NULL),
                 _LightColor(0),
@@ -24,7 +24,7 @@ namespace ARK {
                 _LightAmbientIntensity(0),
                 _LightStrength(0)
             {
-                
+
             }
             void DirectionalLightingGeometryShader::load() {
                 setName("directional-lighting-geometry");
@@ -41,7 +41,7 @@ namespace ARK {
                     //addFragmentShader("ark2d/shaders/directional-lighting/geometry/glsl330-fragment.txt");
                     //bool err2 = hasError();
 
-                    //if (err1 || err2) { 
+                    //if (err1 || err2) {
                         err1 = false;
                         err2 = false;
 
@@ -50,7 +50,7 @@ namespace ARK {
                         addFragmentShader("ark2d/shaders/directional-lighting/geometry/glsl150-fragment.txt");
                         err2 = hasError();
 
-                        if (err1 || err2) { 
+                        if (err1 || err2) {
                             addVertexShader("ark2d/shaders/directional-lighting/geometry/glsl130-vertex.txt");
                             addFragmentShader("ark2d/shaders/directional-lighting/geometry/glsl130-fragment.txt");
                         }
@@ -58,15 +58,15 @@ namespace ARK {
                 }
 
                 showAnyGlErrorAndExitMacro();
-                
+
                 ShaderStore::getInstance()->addShader(m_programId, this);
-                
+
                 bindAttributeLocation(0, "ark_VertexPositionIn");
                 bindAttributeLocation(1, "ark_VertexNormalIn");
                 bindAttributeLocation(2, "ark_VertexColorIn");
                 bindFragmentDataLocation(0, "ark_FragColor");
-                link(); 
-                linkDX(); 
+                link();
+                linkDX();
 
                 RendererState::start(RendererState::SHADER, getId());
 
@@ -79,22 +79,23 @@ namespace ARK {
                 _LightDirection = getUniformVariable("u_sunlight.vDirection");
                 _LightAmbientIntensity = getUniformVariable("u_sunlight.fAmbientIntensity");
                 _LightStrength = getUniformVariable("u_sunlight.fStrength");
-                
+
                 ark_VertexPositionIn = 0;
                 ark_VertexNormalIn = 1;
                 ark_VertexColorIn = 2;
-                
+
                 RendererState::start(RendererState::NONE);
             }
 
             void DirectionalLightingGeometryShader::bind() {
                 Shader::bind();
+            	#ifdef ARK2D_RENDERER_OPENGL
+	                glUniform3f(_LightDirection, container->direction.x, container->direction.y, container->direction.z);
 
-                glUniform3f(_LightDirection, container->direction.x, container->direction.y, container->direction.z);
-
-                glUniform3f(_LightColor, container->color.x, container->color.y, container->color.z);
-                glUniform1f(_LightAmbientIntensity, container->ambientIntensity);
-                glUniform1f(_LightStrength, container->strength);
+	                glUniform3f(_LightColor, container->color.x, container->color.y, container->color.z);
+	                glUniform1f(_LightAmbientIntensity, container->ambientIntensity);
+	                glUniform1f(_LightStrength, container->strength);
+				#endif
             }
 
             void DirectionalLightingGeometryShader::unbind() { Shader::unbind(); }
@@ -106,7 +107,7 @@ namespace ARK {
             // TEXTURE
             //
 
-            DirectionalLightingTextureShader::DirectionalLightingTextureShader(): 
+            DirectionalLightingTextureShader::DirectionalLightingTextureShader():
                 ARK::Core::Graphics::Shader(),
                 container(NULL),
                 _LightColor(0),
@@ -114,7 +115,7 @@ namespace ARK {
                 _LightAmbientIntensity(0),
                 _LightStrength(0)
             {
-                
+
             }
             void DirectionalLightingTextureShader::load() {
                 setName("directional-lighting-texture");
@@ -131,7 +132,7 @@ namespace ARK {
                     //addFragmentShader("ark2d/shaders/directional-lighting/texture/glsl330-fragment.txt");
                     //bool err2 = hasError();
 
-                    //if (err1 || err2) { 
+                    //if (err1 || err2) {
                         err1 = false;
                         err2 = false;
 
@@ -140,23 +141,23 @@ namespace ARK {
                         addFragmentShader("ark2d/shaders/directional-lighting/texture/glsl150-fragment.txt");
                         err2 = hasError();
 
-                        if (err1 || err2) { 
+                        if (err1 || err2) {
                             addVertexShader("ark2d/shaders/directional-lighting/texture/glsl130-vertex.txt");
                             addFragmentShader("ark2d/shaders/directional-lighting/texture/glsl130-fragment.txt");
                         }
                     //}
                 }
                 showAnyGlErrorAndExitMacro();
-                
+
                 ShaderStore::getInstance()->addShader(m_programId, this);
-                
+
                 bindAttributeLocation(1, "ark_VertexPositionIn");
                 bindAttributeLocation(2, "ark_VertexNormalIn");
                 bindAttributeLocation(3, "ark_VertexTexCoordIn");
                 bindAttributeLocation(4, "ark_VertexColorIn");
                 bindFragmentDataLocation(0, "ark_FragColor");
-                link(); 
-                linkDX(); 
+                link();
+                linkDX();
 
                 RendererState::start(RendererState::SHADER, getId());
 
@@ -171,23 +172,24 @@ namespace ARK {
                 _LightDirection = getUniformVariable("u_sunlight.vDirection");
                 _LightAmbientIntensity = getUniformVariable("u_sunlight.fAmbientIntensity");
                 _LightStrength = getUniformVariable("u_sunlight.fStrength");
-                
+
                 ark_VertexPositionIn = 1;
                 ark_VertexNormalIn = 2;
                 ark_VertexTexCoordIn = 3;
                 ark_VertexColorIn = 4;
-                
+
                 RendererState::start(RendererState::NONE);
             }
 
             void DirectionalLightingTextureShader::bind() {
                 Shader::bind();
+				#ifdef ARK2D_RENDERER_OPENGL
+	                glUniform3f(_LightDirection, container->direction.x, container->direction.y, container->direction.z);
 
-                glUniform3f(_LightDirection, container->direction.x, container->direction.y, container->direction.z);
-
-                glUniform3f(_LightColor, container->color.x, container->color.y, container->color.z);
-                glUniform1f(_LightAmbientIntensity, container->ambientIntensity);
-                glUniform1f(_LightStrength, container->strength);
+	                glUniform3f(_LightColor, container->color.x, container->color.y, container->color.z);
+	                glUniform1f(_LightAmbientIntensity, container->ambientIntensity);
+	                glUniform1f(_LightStrength, container->strength);
+				#endif
             }
 
             void DirectionalLightingTextureShader::unbind() { Shader::unbind(); }
@@ -229,7 +231,7 @@ namespace ARK {
                 direction.normalise();
             }
             void DirectionalLightingShader::setLightColor(const Vector3<float>& newColor) {
-                color.set(newColor);		
+                color.set(newColor);
             }
             void DirectionalLightingShader::setLightStrength(float str) {
                 strength = str;

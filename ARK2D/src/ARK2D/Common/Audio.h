@@ -22,10 +22,12 @@
  		// Had to add !defined(_M_ARM) to vorbis/os.h
 		#include <mfmediaengine.h>
 		#include <xaudio2.h>
-	#elif defined(ARK2D_XBOXONE)
+	#elif defined(ARK2D_XBOXONE) || defined(ARK2D_WINDOWS_STORE)
 		#define ARK2D_XAUDIO2
 		#include <xaudio2.h>
-		#include <xma2defs.h>
+		//#if defined(ARK2D_XBOXONE)
+			//#include <xma2defs.h>
+		//#endif
 	#elif defined(_WIN32) || defined(ARK2D_WINDOWS)
 		#include <AL/AL.h>
 		#include <AL/ALc.h>

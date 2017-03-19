@@ -6,7 +6,6 @@
  */
 
 #include "DisplayUtil.h"
-#include "../Includes.h"
 #include "../Core/GameContainer.h"
 
 namespace ARK {

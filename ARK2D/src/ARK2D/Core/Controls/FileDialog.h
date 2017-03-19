@@ -13,8 +13,9 @@
 using namespace std;
 
 #if defined (ARK2D_WINDOWS)
+	#include <winsock2.h>
 	#include <windows.h>
-	#include "../../vendor/FileInterface.h"
+	#include "../Vendor/FileInterface.h"
 #elif defined(ARK2D_MACINTOSH)
 	#import <Cocoa/Cocoa.h>
 #endif

@@ -99,7 +99,10 @@ namespace ARK {
 			#if defined(ARK2D_ANDROID)
 				ARK2D::getLog()->v(StringUtil::append( "GooglePlayBillingUtil - hasPurchase. id: ", sku) );
 				return ARK2D::getContainer()->m_platformSpecific.m_pluggable->googleplaybilling_hasPurchase(sku);
+			#else 
+				return false;
 			#endif
+			
 		}
 
 

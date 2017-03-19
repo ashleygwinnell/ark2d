@@ -49,7 +49,7 @@ namespace ARK {
         namespace Threading {
 
 
-            #if (defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE))
+            #if (defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE) || defined(ARK2D_WINDOWS_STORE))
 
                 using namespace Windows::Foundation;
                 using namespace concurrency;

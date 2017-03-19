@@ -340,7 +340,7 @@
 					          			if (ti.dwFlags & TOUCHEVENTF_DOWN) {
 											int fingerID = in->getTouchByInternalData(ti.dwID);
 											if (fingerID == -1) {
-								          		ARK::Controls::Pointer p;
+								          		ARK::Core::Controls::Pointer p;
 												p.x = thisx;
 												p.y = thisy;
 												p.data = ti.dwID;
@@ -387,7 +387,7 @@
 													//ARK2D::getLog()->e(StringUtil::append("touch moved thisx: ", thisx));
 													//ARK2D::getLog()->e(StringUtil::append("touch moved thisy: ", thisy));
 
-													ARK2D::getLog()->mouseMoved((int)thisx, (int)thisy, in->mouse_x, in->mouse_y);
+													//ARK2D::getLog()->mouseMoved((int)thisx, (int)thisy, in->mouse_x, in->mouse_y);
 													ARK2D::getGame()->mouseMoved((int)thisx, (int)thisy, in->mouse_x, in->mouse_y);
 												}
 												in->m_touchPointers[fingerID].x = thisx;
@@ -496,7 +496,7 @@
 					    thisy /= m_container->getScale();
 
 						Input* i = ARK2D::getInput();
-						ARK2D::getLog()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
+						//ARK2D::getLog()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 						ARK2D::getGame()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 
 						i->mouse_x = (int) thisx;
@@ -634,7 +634,7 @@
 				ARK2D::s_input = &m_input;
 				ARK2D::s_camera = new ARK::Core::Camera();
 				ARK2D::s_camera->setViewport(0, 0, m_width, m_height);
-				ARK2D::s_log = ARK::Util::Log::getInstance();
+				ARK2D::s_log = ARK::Core::Log::getInstance();
 				scene = ARK2D::getScene();
 
 				m_platformSpecific.m_windowRect.left = (long) 0; 			// Set Left Value To 0
@@ -3266,7 +3266,7 @@
 				//BMFont* fnt = new BMFont("data/fonts/default.fnt", "data/fonts/default.png");
 				//Image* fntImg = new Image((unsigned int) ARK2D_FONT_PNG, ARK2D_RESOURCE_TYPE_PNG);
 				if (m_willLoadDefaultFont) {
-					ARK::Font::BMFont* fnt = new ARK::Font::BMFont(ARK2D_FONT_FNT, ARK2D_FONT_PNG, ARK2D_RESOURCE_TYPE_PNG);
+					ARK::Core::Font::BMFont* fnt = new ARK::Core::Font::BMFont(ARK2D_FONT_FNT, ARK2D_FONT_PNG, ARK2D_RESOURCE_TYPE_PNG);
 					//ARK::Font::BMFont* fnt = Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont();
 					fnt->scale(0.5f);
 					m_graphics.m_DefaultFont = fnt;

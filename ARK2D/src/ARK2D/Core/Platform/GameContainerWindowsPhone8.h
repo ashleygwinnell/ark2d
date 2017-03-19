@@ -9,7 +9,7 @@
 #ifndef GAMECONTAINERWINDOWSPHONE8_H_
 #define GAMECONTAINERWINDOWSPHONE8_H_
 
-#include "../../ARK2D.h"
+#include "../ARK2D.h"
 
 	#if defined(ARK2D_WINDOWS_PHONE_8)
 

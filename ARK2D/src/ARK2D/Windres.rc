@@ -5,7 +5,7 @@
 	#define BOOST_PP_STRINGIZE(text) BOOST_PP_STRINGIZE_A((text))
 	#define BOOST_PP_STRINGIZE_A(arg) BOOST_PP_STRINGIZE_I arg
 	#define BOOST_PP_STRINGIZE_I(text) #text
-	
+
 	ARK2D_ICON 		ICON 						BOOST_PP_STRINGIZE(ARK2D_PATH\\data\\icon.ico)
 	ARK2D_FONT_PNG 	ARK2D_RESOURCE_TYPE_PNG 	BOOST_PP_STRINGIZE(ARK2D_PATH\\data\\fonts\\default.png)
 	ARK2D_FONT_FNT 	ARK2D_RESOURCE_TYPE_FNT 	BOOST_PP_STRINGIZE(ARK2D_PATH\\data\\fonts\\default.fnt)
@@ -14,21 +14,21 @@
 		ARK2D_DX11_GEOM_VS 	ARK2D_RESOURCE_TYPE_SHADER 	BOOST_PP_STRINGIZE(ARK2D_PATH\\build\\windows-vs\\Default\\geometry-dx11-vertex.cso)
 		ARK2D_DX11_GEOM_PS 	ARK2D_RESOURCE_TYPE_SHADER 	BOOST_PP_STRINGIZE(ARK2D_PATH\\build\\windows-vs\\Default\\geometry-dx11-pixel.cso)
 	#endif
-#elif defined(ARK2D_XBOXONE)
+#elif defined(ARK2D_XBOXONE) || defined(ARK2D_WINDOWS_STORE)
 	ARK2D_DX11_GEOM_VS 	ARK2D_RESOURCE_TYPE_SHADER 	"D:\\Git\\ark2d\\ARK2D\\build\\xbone\\Default\\geometry-dx11-vertex.cso"
 	ARK2D_DX11_GEOM_PS 	ARK2D_RESOURCE_TYPE_SHADER 	"D:\\Git\\ark2d\\ARK2D\\build\\xbone\\Default\\geometry-dx11-pixel.cso"
 #endif
 
-#ifdef ARK2D_WINDOWS 
+#ifdef ARK2D_WINDOWS
 
-ARK2D_DIALOG_INPUT_TEXT DIALOG 10, 10, 300, 110 
+ARK2D_DIALOG_INPUT_TEXT DIALOG 10, 10, 300, 110
 STYLE WS_POPUP | WS_BORDER
-CAPTION "Enter text:" 
-{ 
+CAPTION "Enter text:"
+{
     CTEXT "Enter text:", 1, 10, 10, 280, 12
     EDITTEXT ARK2D_DIALOG_INPUT_TEXT_CONTENTS, 2, 75, 30, 60, 12
     PUSHBUTTON "&Retry", 3, 75, 50, 60, 12
-}  
+}
 
 #endif
 

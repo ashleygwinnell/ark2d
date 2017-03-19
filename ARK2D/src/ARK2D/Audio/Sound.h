@@ -14,6 +14,7 @@
 
 #include "../Namespaces.h"
 #include "../Common/DLL.h"
+#include "../Common/Audio.h"
 #include "../Core/Resource.h"
 
 #include <string>
@@ -24,47 +25,47 @@ using std::string;
  	//using namespace AS3::ui;
 #endif
 
-#if defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE)
+#if (defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE) || defined(ARK2D_WINDOWS_STORE))
 
-class Xaudio2VoiceCallback : public IXAudio2VoiceCallback
-{
-	public:
-	  //  HANDLE hBufferEndEvent;
-	    Sound* m_ark2dSoundPointer;
+	class Xaudio2VoiceCallback : public IXAudio2VoiceCallback
+	{
+		public:
+		  //  HANDLE hBufferEndEvent;
+			Sound* m_ark2dSoundPointer;
 
-	    Xaudio2VoiceCallback();
-	    ~Xaudio2VoiceCallback();
+			Xaudio2VoiceCallback();
+			~Xaudio2VoiceCallback();
 
-	    //Called when the voice has just finished playing a contiguous audio stream.
-	    //void OnStreamEnd();
-		STDMETHOD_(void, OnStreamEnd) (THIS);
+			//Called when the voice has just finished playing a contiguous audio stream.
+			//void OnStreamEnd();
+			STDMETHOD_(void, OnStreamEnd) (THIS);
 
-		// Called just before this voice's processing pass begins.
-		STDMETHOD_(void, OnVoiceProcessingPassStart) (THIS_ UINT32 BytesRequired);;
+			// Called just before this voice's processing pass begins.
+			STDMETHOD_(void, OnVoiceProcessingPassStart) (THIS_ UINT32 BytesRequired);;
 
-		// Called just after this voice's processing pass ends.
-		STDMETHOD_(void, OnVoiceProcessingPassEnd) (THIS);
+			// Called just after this voice's processing pass ends.
+			STDMETHOD_(void, OnVoiceProcessingPassEnd) (THIS);
 
-	    //Unused methods are stubs
-	   // void OnVoiceProcessingPassEnd();
-	    //void OnVoiceProcessingPassStart(UINT32 SamplesRequired);
-	    //void OnBufferEnd(void * pBufferContext);
-	    //void OnBufferStart(void * pBufferContext);
-	    //void OnLoopEnd(void * pBufferContext);
-		//void OnVoiceError(void * pBufferContext, HRESULT Error);
+			//Unused methods are stubs
+		   // void OnVoiceProcessingPassEnd();
+			//void OnVoiceProcessingPassStart(UINT32 SamplesRequired);
+			//void OnBufferEnd(void * pBufferContext);
+			//void OnBufferStart(void * pBufferContext);
+			//void OnLoopEnd(void * pBufferContext);
+			//void OnVoiceError(void * pBufferContext, HRESULT Error);
 
-		// Called when this voice is about to start processing a new buffer.
-		STDMETHOD_(void, OnBufferStart) (THIS_ void* pBufferContext);
+			// Called when this voice is about to start processing a new buffer.
+			STDMETHOD_(void, OnBufferStart) (THIS_ void* pBufferContext);
 
-		// Called when this voice has just finished processing a buffer.
-		// The buffer can now be reused or destroyed.
-		STDMETHOD_(void, OnBufferEnd) (THIS_ void* pBufferContext);
+			// Called when this voice has just finished processing a buffer.
+			// The buffer can now be reused or destroyed.
+			STDMETHOD_(void, OnBufferEnd) (THIS_ void* pBufferContext);
 
-		// Called when this voice has just reached the end position of a loop.
-		STDMETHOD_(void, OnLoopEnd) (THIS_ void* pBufferContext);
+			// Called when this voice has just reached the end position of a loop.
+			STDMETHOD_(void, OnLoopEnd) (THIS_ void* pBufferContext);
 
-		STDMETHOD_(void, OnVoiceError) (THIS_ void* pBufferContext, HRESULT Error);;
-};
+			STDMETHOD_(void, OnVoiceError) (THIS_ void* pBufferContext, HRESULT Error);;
+	};
 
 #endif
 
@@ -183,7 +184,7 @@ namespace ARK {
 
 			public:
 				// WP8
-				#if defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE)
+				#if (defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE) || defined(ARK2D_WINDOWS_STORE))
 					static IXAudio2* s_engine;
 					static IXAudio2MasteringVoice* s_master;
 					static void initialiseXAudio();
@@ -204,3 +205,4 @@ namespace ARK {
 }
 
 #endif /* SOUND_H_ */
+

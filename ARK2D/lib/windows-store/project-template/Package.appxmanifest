@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  IgnorableNamespaces="uap mp build"
+  xmlns:build="http://schemas.microsoft.com/developer/appx/2015/build">
+
+  <Identity Name="org.%COMPANY_NAME_SAFE%.%GAME_NAME_SAFE%"
+            Publisher="CN=%COMPANY_NAME%"
+            Version="1.0.0.0"/>
+
+  <mp:PhoneIdentity PhoneProductId="1d839193-7dca-4e65-8af5-537f69a12903" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+
+  <Properties>
+    <DisplayName>%GAME_NAME%</DisplayName>
+    <PublisherDisplayName>%COMPANY_NAME%</PublisherDisplayName>
+    <Logo>data\ark2d\uwp\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.10586.0" MaxVersionTested="10.0.14393.0" />
+  </Dependencies>
+  <Resources>
+    <Resource Language="EN-US" />
+  </Resources>
+
+
+  <Applications>
+    <Application Id="%GAME_NAME_SAFE%"
+        Executable="%GAME_NAME_SAFE%.exe"
+        EntryPoint="%GAME_NAME_SAFE%.App"
+        >
+        <uap:VisualElements
+            DisplayName="%GAME_NAME%"
+            Square150x150Logo="data\ark2d\uwp\Square150x150Logo.png"
+            Square44x44Logo="data\ark2d\uwp\Square44x44Logo.png"
+            Description="%GAME_DESCRIPTION%"
+            BackgroundColor="%GAME_CLEAR_COLOR%"
+            >
+            <uap:DefaultTile
+              Wide310x150Logo="data\ark2d\uwp\Wide310x150Logo.png"
+              Square71x71Logo="data\ark2d\uwp\Square71x71Logo.png"
+              />
+            <uap:SplashScreen
+              Image="data\ark2d\uwp\SplashScreen.png"
+              BackgroundColor="%GAME_CLEAR_COLOR%"
+              />
+        </uap:VisualElements>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="internetClient" />
+  </Capabilities>
+
+<!--   <build:Metadata>
+    <build:Item Name="cl.exe" Version="19.10.25017.0 built by: VCTOOLSD15RTM" />
+    <build:Item Name="VisualStudio" Version="15.0" />
+    <build:Item Name="VisualStudioEdition" Value="Microsoft Visual Studio Community 2017" />
+    <build:Item Name="OperatingSystem" Version="10.0.10586.0 (th2_release.151029-1700)" />
+    <build:Item Name="Microsoft.Build.AppxPackage.dll" Version="15.0.26228.0" />
+    <build:Item Name="ProjectGUID" Value="{f62870ed-3187-41e7-ac85-6cb484f2af9c}" />
+    <build:Item Name="OptimizingToolset" Value="None" />
+    <build:Item Name="TargetRuntime" Value="Native" />
+    <build:Item Name="Microsoft.Windows.UI.Xaml.Build.Tasks.dll" Version="15.0.26228.0" />
+    <build:Item Name="MakePri.exe" Version="10.0.14393.795 (rs1_release_sec.170105-1850)" />
+  </build:Metadata> -->
+
+</Package>

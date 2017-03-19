@@ -43,7 +43,7 @@ namespace ARK {
 
             BMFont::BMFont():
                 #ifdef ARK2D_WINDOWS_VS
-                    ARK::Font::Font(),
+                    ARK::Core::Font::Font(),
                 #else
                     Font::Font(),
                 #endif
@@ -64,7 +64,7 @@ namespace ARK {
 
             BMFont::BMFont(unsigned int fntResource, unsigned int imgResource, unsigned int imgResourceType):
                 #ifdef ARK2D_WINDOWS_VS
-                    ARK::Font::Font(),
+                    ARK::Core::Font::Font(),
                 #else
                     Font::Font(),
                 #endif
@@ -92,7 +92,7 @@ namespace ARK {
 
             BMFont::BMFont(void* data, Image* i):
                 #ifdef ARK2D_WINDOWS_VS
-                    ARK::Font::Font(),
+                    ARK::Core::Font::Font(),
                 #else
                     Font::Font(),
                 #endif
@@ -120,7 +120,7 @@ namespace ARK {
 
             BMFont::BMFont(const string& f, const string& i):
                 #ifdef ARK2D_WINDOWS_VS
-                    ARK::Font::Font(),
+                    ARK::Core::Font::Font(),
                 #else
                     Font::Font(),
                 #endif
@@ -149,7 +149,7 @@ namespace ARK {
 
             BMFont::BMFont(const string& f, const string& i, const Color& mask):
                 #ifdef ARK2D_WINDOWS_VS
-                    ARK::Font::Font(),
+                    ARK::Core::Font::Font(),
                 #else
                     Font::Font(),
                 #endif

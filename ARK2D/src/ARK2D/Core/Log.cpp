@@ -88,6 +88,9 @@ namespace ARK {
 		#endif
 
 		void Log::setFilter(unsigned int level) {
+			if (level != m_filter) {
+				message(StringUtil::append("Changing Log filter to ", level), TYPE_ERROR);
+			}
 			m_filter = level;
 		}
 		unsigned int Log::getFilter() {

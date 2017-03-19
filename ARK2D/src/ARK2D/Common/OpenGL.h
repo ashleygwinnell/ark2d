@@ -70,27 +70,33 @@
 		#define NO_FIXED_FUNCTION_PIPELINE true
 		//#define ARK2D_RENDERER_DIRECTX
 
-		#if defined(ARK2D_RENDERER_OPENGL) && defined(ARK2D_OPENGL_3_2)
 
-			#pragma comment(lib, "opengl32.lib")
-			#include <GL/gl3w.h>
+		#if defined(ARK2D_RENDERER_DIRECTX) || defined(ARK2D_WINDOWS_STORE)
+			#undef ARK2D_RENDERER_DIRECTX
+			#undef ARK2D_OPENGL_3_2
+			#undef ARK2D_RENDERER_OPENGL
+			#define ARK2D_RENDERER_DIRECTX
 
-		#elif defined(ARK2D_RENDERER_DIRECTX)
+			//#pragma comment(lib, "d2d1.lib")
+			//#pragma comment(lib, "d3d11.lib")
+			//#pragma comment(lib, "dxgi.lib")
+			//#pragma comment(lib, "dwrite.lib")
 
-			#pragma comment(lib, "d2d1.lib")
-			#pragma comment(lib, "d3d11.lib")
-			#pragma comment(lib, "dxgi.lib")
-			#pragma comment(lib, "dwrite.lib")
+			#if (defined(_DEBUG) || defined(ARK2D_DEBUG))
+				#define D3D_DEBUG_INFO
+			#endif
 
-			#include <dxgi.h>
+			#include <dxgi1_4.h>
 			#include <d3dcommon.h>
-			#include <d3d11_1.h>
-			#include <d2d1.h>
-			#include <d2d1_1.h>
+			//#include <d3d11_1.h>
+			#include <d3d11_3.h>
+			//#include <d2d1.h>
+			#include <d2d1_3.h>
 			#include <d2d1effects_1.h>
 
-			#include <dwrite.h>
-			#include <dwrite_1.h>
+
+			//#include <dwrite.h>
+			#include <dwrite_3.h>
 			#include <wincodec.h>
 			#include <DirectXColors.h>
 			#include <DirectXMath.h>
@@ -98,7 +104,14 @@
 			typedef unsigned char GLubyte;
 			typedef unsigned int GLsizei;
 
+		#elif defined(ARK2D_RENDERER_OPENGL) && defined(ARK2D_OPENGL_3_2)
+
+			#pragma comment(lib, "opengl32.lib")
+			#include <GL/gl3w.h>
 		#endif
+
+
+
 
 	#elif defined(ARK2D_MACINTOSH)
 		#define ARK2D_RENDERER_OPENGL
@@ -155,13 +168,13 @@
 
 		typedef struct {
 			DirectX::XMFLOAT4 vertex;
-			DirectX::XMFLOAT4 normal;
+			//DirectX::XMFLOAT4 normal;
 			DirectX::XMFLOAT4 color;
 		} Renderer_DX_InterleavingGeometryVertexData;
 
 		typedef struct {
 			DirectX::XMFLOAT4 vertex;
-			DirectX::XMFLOAT4 normal;
+			//DirectX::XMFLOAT4 normal;
 			DirectX::XMFLOAT2 texcoord;
 			DirectX::XMFLOAT4 color;
 		} Renderer_DX_InterleavingTextureVertexData;
@@ -170,7 +183,6 @@
 			DirectX::XMFLOAT4X4 model;
 			DirectX::XMFLOAT4X4 view;
 			DirectX::XMFLOAT4X4 projection;
-			DirectX::XMFLOAT3X3 normal;
 		} Renderer_DX_ModelViewProjectionMatrixBuffer;
 
 		#ifndef ARK2D_RENDERER_DIRECTX_BITS
@@ -195,7 +207,7 @@
 		        {
 		            std::cerr << "DX THROW IF FAILED LOG..." << __FILE__ << " : " << __LINE__ << std::endl;
 		            // Set a breakpoint on this line to catch Win32 API errors.
-		            //throw Platform::Exception::CreateException(hr);
+		            throw Platform::Exception::CreateException(hr);
 		        }
 		    }
 		    inline std::string DX_GetError(HRESULT hr)

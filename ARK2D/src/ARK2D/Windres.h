@@ -1,4 +1,4 @@
-#if defined(ARK2D_WINDOWS) || defined (ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE)
+#if defined(ARK2D_WINDOWS) || defined (ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE) || defined(ARK2D_WINDOWS_STORE)
 	#include <winsock2.h>
 	#include <windows.h>
 #endif
@@ -12,7 +12,7 @@
 		#define ARK2D_DX11_GEOM_VS 	1004
 		#define ARK2D_DX11_GEOM_PS 	1005
 	#endif
-#elif defined(ARK2D_XBOXONE)
+#elif defined(ARK2D_XBOXONE) || defined(ARK2D_WINDOWS_STORE)
 	#define ARK2D_DX11_GEOM_VS 	1004
 	#define ARK2D_DX11_GEOM_PS 	1005
 #endif

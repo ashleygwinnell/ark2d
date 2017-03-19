@@ -20,7 +20,9 @@ namespace ARK {
 		namespace Controls {
 
 			void ErrorDialog::createAndShow(string message) {
-				#if defined(ARK2D_WINDOWS_PHONE_8)
+				#if defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_WINDOWS_STORE)
+
+					ARK2D::getLog()->e(message);
 
 					using namespace Windows::UI::Popups;
 

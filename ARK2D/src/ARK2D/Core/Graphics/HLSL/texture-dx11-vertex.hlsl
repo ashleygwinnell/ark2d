@@ -35,23 +35,23 @@ struct PixelInputType
 // Vertex Shader
 ////////////////////////////////////////////////////////////////////////////////
 PixelInputType main(VertexInputType input)
-{ 
-    PixelInputType output; 
-     
+{
+    PixelInputType output;
+
 	float4 pos = float4(input.position);
 
     // Calculate the position of the vertex against the world, view, and projection matrices.
-    pos = mul(pos, model); 
-    pos = mul(pos, view); 
-	pos = mul(pos, projection); 
+    pos = mul(pos, model);
+    pos = mul(pos, view);
+	pos = mul(pos, projection);
 	output.position = pos;
 
     // Store texture coordinate for pixel shader.
     output.tex = input.tex;
-    
+
     // Store the input color for the pixel shader to use.
     output.color = input.color;
-    
+
     return output;
 }
 

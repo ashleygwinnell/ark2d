@@ -22,7 +22,7 @@
 	#include <windows.h>
 	#define GetCurrentDirectoryMacro _getcwd
 	#define DIRECTORY_SEPARATOR "\\"
-#elif defined(ARK2D_XBOXONE)
+#elif defined(ARK2D_XBOXONE) || defined(ARK2D_WINDOWS_STORE)
  	#include <direct.h>
 	#include <windows.h>
 	#define GetCurrentDirectoryMacro GetCurrentDirectory
@@ -262,7 +262,7 @@ namespace ARK {
 			}
 
 			string SystemUtil::getCurrentDirectory() {
-				#if defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE) || ( defined(ARK2D_WINDOWS) && defined(ARK2D_WINDOWS_VS) )
+				#if defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE) || ( defined(ARK2D_WINDOWS) && defined(ARK2D_WINDOWS_VS) ) || defined(ARK2D_WINDOWS_STORE)
 					return "";
 				#else
 					char currentPath[FILENAME_MAX];
@@ -484,6 +484,8 @@ namespace ARK {
 					string c_fullusername = string([fullUserName UTF8String]);
 
 					return c_username;
+				#elif defined(ARK2D_WINDOWS_STORE)
+					return "Unknown";
 				#elif defined(ARK2D_WINDOWS)
 					unsigned int namesz = 255;
 					unsigned char name[255];

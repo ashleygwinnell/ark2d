@@ -39,7 +39,7 @@
 	}
 #endif
 
-#if defined(ARK2D_WINDOWS_PHONE_8)
+#if (defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE) || defined(ARK2D_WINDOWS_STORE))
 	IXAudio2* ARK::Audio::Sound::s_engine = NULL;
 	IXAudio2MasteringVoice* ARK::Audio::Sound::s_master = NULL;
 
@@ -85,7 +85,7 @@ namespace ARK {
 		//	DEFAULT_GROUP_ID = id;
 		//}
 
-		#if defined(ARK2D_WINDOWS_PHONE_8)
+		#if (defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE) || defined(ARK2D_WINDOWS_STORE))
 			void Sound::initialiseXAudio() {
 				if (s_engine == NULL) {
 					ARK2D::getLog()->i("Initialising COM...");
@@ -519,7 +519,7 @@ namespace ARK {
 		void Sound::miscerror(string ss) {
 			#if defined(ARK2D_FLASCC)
 
-			#elif defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE)
+			#elif defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE) || defined(ARK2D_WINDOWS_STORE)
 
 			#else
 				ALenum s = alGetError();

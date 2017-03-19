@@ -168,14 +168,14 @@ namespace ARK {
 				return false;
 			}
 
-			#if defined(ARK2D_WINDOWS)
+			#if defined(ARK2D_WINDOWS) || defined(ARK2D_WINDOWS_VS)
                 typedef int socklen_t;
 			#endif
 
 			sockaddr_in from;
 			socklen_t fromLength = sizeof( from );
 
-			#if defined(ARK2D_WINDOWS) || defined(ARK2D_ANDROID)
+			#if defined(ARK2D_WINDOWS) || defined(ARK2D_WINDOWS_VS) || defined(ARK2D_ANDROID)
 				int received_bytes = recvfrom( m_socket, (char*)data, size, 0, (sockaddr*)&from, (int*) &fromLength );
 			#else
 				int received_bytes = recvfrom( m_socket, (char*)data, size, 0, (sockaddr*)&from, (unsigned int*) &fromLength );

@@ -98,133 +98,134 @@ namespace ARK {
                     return;
                 #endif
 
+				#ifdef ARK2D_RENDERER_OPENGL
+					// enable things
+					ARK2D::getLog()->v("FBO: Enable State");
+					#ifndef NO_FIXED_FUNCTION_PIPELINE
+						glEnable(GL_TEXTURE_2D); // Enable texturing so we can bind our frame buffer texture
+						RendererStats::s_glCalls++;
+					#endif
+					//glEnable(GL_DEPTH_TEST); // Enable depth testing
+					//Image::showAnyGlErrorAndExit();
+					showAnyGlErrorAndExitMacro();
 
-                // enable things
-                ARK2D::getLog()->v("FBO: Enable State");
-                #ifndef NO_FIXED_FUNCTION_PIPELINE
-                    glEnable(GL_TEXTURE_2D); // Enable texturing so we can bind our frame buffer texture
-                    RendererStats::s_glCalls++;
-                #endif
-                //glEnable(GL_DEPTH_TEST); // Enable depth testing
-                //Image::showAnyGlErrorAndExit();
-                showAnyGlErrorAndExitMacro();
+					// FBO
+					ARK2D::getLog()->v("FBO: Generate FBO");
+					glGenFramebuffersARK(1, &fbo); // Generate one frame buffer and store the ID in fbo
+					glBindFramebufferARK(GL_FRAMEBUFFER_ARK, fbo); // Bind our frame buffer
+					//Image::showAnyGlErrorAndExit();
+					showAnyGlErrorAndExitMacro();
+					RendererStats::s_glCalls += 2;
 
-                // FBO
-                ARK2D::getLog()->v("FBO: Generate FBO");
-                glGenFramebuffersARK(1, &fbo); // Generate one frame buffer and store the ID in fbo
-                glBindFramebufferARK(GL_FRAMEBUFFER_ARK, fbo); // Bind our frame buffer
-                //Image::showAnyGlErrorAndExit();
-                showAnyGlErrorAndExitMacro();
-                RendererStats::s_glCalls += 2;
+					// depth buffer
+					/*ARK2D::getLog()->i("FBO: Generate Depth Buffer");
+					glGenRenderbuffersEXT(1, &fbo_depth);
+					glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, fbo_depth);
 
-                // depth buffer
-                /*ARK2D::getLog()->i("FBO: Generate Depth Buffer");
-                glGenRenderbuffersEXT(1, &fbo_depth);
-                glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, fbo_depth);
+					glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, window_width, window_height);
+					glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, fbo_depth); // Set the render buffer of this buffer to the depth buffer
 
-                glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, window_width, window_height);
-                glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, fbo_depth); // Set the render buffer of this buffer to the depth buffer
+					glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, 0);
 
-                glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, 0);
+					Image::showAnyGlErrorAndExit(); */
 
-                Image::showAnyGlErrorAndExit(); */
+					original_width = window_width;
+					original_height = window_height;
 
-                original_width = window_width;
-                original_height = window_height;
-
-                if (!m_supportedNPO2) {
-                    window_width = MathUtil::nextPowerOfTwo(window_width);
-                    window_height = MathUtil::nextPowerOfTwo(window_height);
-                }
-                ARK2D::getLog()->v(StringUtil::append("FBO: Width is ", window_width));
-                ARK2D::getLog()->v(StringUtil::append("FBO: Height is ", window_height));
-                //ARK2D::getLog()->v(StringUtil::append("FBO: Max-texture-size is: ", ARK2D::getRenderer()->getMaxTextureSize()));
-
-
-                // texture buffer
-                ARK2D::getLog()->v("FBO: Generate Texture Buffer");
-                glGenTextures(1, &fbo_texture);
-                glBindTexture(GL_TEXTURE_2D, fbo_texture); // Bind the texture fbo_texture
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, window_width, window_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL); // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, window_width, window_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL); // Create a standard texture with the width and height of our window
-                RendererStats::s_glCalls += 3;
-
-                RendererStats::s_textureAllocatedBytes += (window_width * window_height * 8 * 4);
-
-                //glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-                //glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-                //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-                //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Renderer::getInterpolationGL());
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Renderer::getInterpolationGL());
-
-//					glHint(GL, GL_NICEST);
-                //glGenerateMipmap(GL_TEXTURE_2D);
-                //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-
-                //#ifndef NO_FIXED_FUNCTION_PIPELINE
-                glBindTexture(GL_TEXTURE_2D, 0);
-                //#endif
-                RendererStats::s_glCalls += 3;
+					if (!m_supportedNPO2) {
+						window_width = MathUtil::nextPowerOfTwo(window_width);
+						window_height = MathUtil::nextPowerOfTwo(window_height);
+					}
+					ARK2D::getLog()->v(StringUtil::append("FBO: Width is ", window_width));
+					ARK2D::getLog()->v(StringUtil::append("FBO: Height is ", window_height));
+					//ARK2D::getLog()->v(StringUtil::append("FBO: Max-texture-size is: ", ARK2D::getRenderer()->getMaxTextureSize()));
 
 
-                // add to the texture store. for android reloading purposes, yo.
-                /*ARK2D::getLog()->i("add fbo texture to texture store?");
-                TextureStore* ts = TextureStore::getInstance();
-                if (!ts->hasTexture(filename)) {
-                    ARK2D::getLog()->i("New Texture Object");
-                    Texture* t = new Texture(texture_temp, this);
-                    ts->g(filename, t);
-                    m_texture = t;
-                } else {
-                    ARK2D::getLog()->i("Recyling Texture Object");
-                    m_texture = ts->getTexture(filename);
-                }*/
+					// texture buffer
+					ARK2D::getLog()->v("FBO: Generate Texture Buffer");
+					glGenTextures(1, &fbo_texture);
+					glBindTexture(GL_TEXTURE_2D, fbo_texture); // Bind the texture fbo_texture
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, window_width, window_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL); // glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, window_width, window_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL); // Create a standard texture with the width and height of our window
+					RendererStats::s_glCalls += 3;
 
-                //Image::showAnyGlErrorAndExit();
-                showAnyGlErrorAndExitMacro();
+					RendererStats::s_textureAllocatedBytes += (window_width * window_height * 8 * 4);
 
-                // Bind depth/texture buffers to FBO.
-                ARK2D::getLog()->v("FBO: Bind depth/texture buffers to FBO");
-                glFramebufferTexture2DARK(GL_FRAMEBUFFER_ARK, GL_COLOR_ATTACHMENT0_ARK, GL_TEXTURE_2D, fbo_texture, 0); // Attach the texture fbo_texture to the color buffer in our frame buffer
-                //glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, fbo_depth); // Attach the depth buffer fbo_depth to our frame buffer
-                //Image::showAnyGlErrorAndExit();
-                showAnyGlErrorAndExitMacro();
-                RendererStats::s_glCalls++;
+					//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+					//glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+					//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+					//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, Renderer::getInterpolationGL());
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, Renderer::getInterpolationGL());
 
-                // do add stencil/depth
-                #if defined(ARK2D_OPENGL_3_2)
-                    ARK2D::getLog()->v("FBO: Adding stencil buffer to FBO");
-                    GLuint rboDepthStencil;
-                    glGenRenderbuffers(1, &rboDepthStencil);
-                    ARK2D::getLog()->v("FBO: 1");
-                    glBindRenderbuffer(GL_RENDERBUFFER, rboDepthStencil);
-                    ARK2D::getLog()->v("FBO: 2");
-                    glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, window_width, window_height);
-                    ARK2D::getLog()->v("FBO: 3");
-                    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboDepthStencil);
-                #endif
+	//					glHint(GL, GL_NICEST);
+					//glGenerateMipmap(GL_TEXTURE_2D);
+					//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
-                // FBO error check
-                ARK2D::getLog()->v("FBO: Error Checking");
-                GLenum status = glCheckFramebufferStatusARK(GL_FRAMEBUFFER_ARK); // Check that status of our generated frame buffer
-                ARK2D::getLog()->v("FBO: Error Checking 2");
-                if (status != GL_FRAMEBUFFER_COMPLETE_ARK) // If the frame buffer does not report back as complete
-                {
-                    showAnyGlErrorAndExitMacro();
-                    ErrorDialog::createAndShow("Couldn't create frame buffer");
-                    exit(0);
-                    //std::cout << "Couldn't create frame buffer" << std::endl; // Make sure you include <iostream>
-                    //exit(0); // Exit the application
-                }
+					//#ifndef NO_FIXED_FUNCTION_PIPELINE
+					glBindTexture(GL_TEXTURE_2D, 0);
+					//#endif
+					RendererStats::s_glCalls += 3;
 
-                ARK2D::getLog()->v("FBO: Bind framebuffer");
-                glBindFramebufferARK(GL_FRAMEBUFFER_ARK, 0); // Unbind our frame buffer
-                RendererStats::s_glCalls += 2;
 
-                //Image::showAnyGlErrorAndExit();
-                showAnyGlErrorAndExitMacro();
+					// add to the texture store. for android reloading purposes, yo.
+					/*ARK2D::getLog()->i("add fbo texture to texture store?");
+					TextureStore* ts = TextureStore::getInstance();
+					if (!ts->hasTexture(filename)) {
+						ARK2D::getLog()->i("New Texture Object");
+						Texture* t = new Texture(texture_temp, this);
+						ts->g(filename, t);
+						m_texture = t;
+					} else {
+						ARK2D::getLog()->i("Recyling Texture Object");
+						m_texture = ts->getTexture(filename);
+					}*/
 
-                _image = new Image(this);
+					//Image::showAnyGlErrorAndExit();
+					showAnyGlErrorAndExitMacro();
+
+					// Bind depth/texture buffers to FBO.
+					ARK2D::getLog()->v("FBO: Bind depth/texture buffers to FBO");
+					glFramebufferTexture2DARK(GL_FRAMEBUFFER_ARK, GL_COLOR_ATTACHMENT0_ARK, GL_TEXTURE_2D, fbo_texture, 0); // Attach the texture fbo_texture to the color buffer in our frame buffer
+					//glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, fbo_depth); // Attach the depth buffer fbo_depth to our frame buffer
+					//Image::showAnyGlErrorAndExit();
+					showAnyGlErrorAndExitMacro();
+					RendererStats::s_glCalls++;
+
+					// do add stencil/depth
+					#if defined(ARK2D_OPENGL_3_2)
+						ARK2D::getLog()->v("FBO: Adding stencil buffer to FBO");
+						GLuint rboDepthStencil;
+						glGenRenderbuffers(1, &rboDepthStencil);
+						ARK2D::getLog()->v("FBO: 1");
+						glBindRenderbuffer(GL_RENDERBUFFER, rboDepthStencil);
+						ARK2D::getLog()->v("FBO: 2");
+						glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, window_width, window_height);
+						ARK2D::getLog()->v("FBO: 3");
+						glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rboDepthStencil);
+					#endif
+
+					// FBO error check
+					ARK2D::getLog()->v("FBO: Error Checking");
+					GLenum status = glCheckFramebufferStatusARK(GL_FRAMEBUFFER_ARK); // Check that status of our generated frame buffer
+					ARK2D::getLog()->v("FBO: Error Checking 2");
+					if (status != GL_FRAMEBUFFER_COMPLETE_ARK) // If the frame buffer does not report back as complete
+					{
+						showAnyGlErrorAndExitMacro();
+						ErrorDialog::createAndShow("Couldn't create frame buffer");
+						exit(0);
+						//std::cout << "Couldn't create frame buffer" << std::endl; // Make sure you include <iostream>
+						//exit(0); // Exit the application
+					}
+
+					ARK2D::getLog()->v("FBO: Bind framebuffer");
+					glBindFramebufferARK(GL_FRAMEBUFFER_ARK, 0); // Unbind our frame buffer
+					RendererStats::s_glCalls += 2;
+
+					//Image::showAnyGlErrorAndExit();
+					showAnyGlErrorAndExitMacro();
+
+					_image = new Image(this);
+				#endif
 
             }
 

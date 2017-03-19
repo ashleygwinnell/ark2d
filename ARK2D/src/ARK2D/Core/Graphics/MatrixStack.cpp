@@ -141,7 +141,7 @@ namespace ARK {
                     memcpy(dataPtr, d, sizeof(float) * 16);
                     deviceContext->Unmap(m_d3d_buffer, 0);*/
 
-                    const Matrix44<float>& thismx = m_stack.at(m_stackIndex); 
+                    const Matrix44& thismx = m_stack.at(m_stackIndex); 
                     //ARK2D::getLog()->v("1");
                     
                     using namespace DirectX;

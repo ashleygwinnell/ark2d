@@ -718,7 +718,7 @@ namespace ARK {
 					texdata.SysMemPitch = w * 4; // 0;
 					texdata.SysMemSlicePitch = w * h * 4 * sizeof(unsigned char); // 0;
 
-					ID3D11Device* pd3dDevice = ARK2D::getContainer()->getPlatformSpecific()->m_device;
+					ID3D11Device* pd3dDevice = ARK2D::getContainer()->getPlatformSpecific()->m_device.Get();
 					HRESULT rs = pd3dDevice->CreateTexture2D(&desc, &texdata, &m_dxTexture);
 					if (FAILED(rs)) { ARK2D::getLog()->e("Could not create texture 2d."); exit(0); }
 
@@ -1867,10 +1867,10 @@ namespace ARK {
 
 						#elif defined(ARK2D_RENDERER_DIRECTX)
 
-							ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
-							ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.m_deviceContext;
-							ID3D11RenderTargetView* renderTargetView = ARK2D::getContainer()->m_platformSpecific.m_renderTargetView;
-							ID3D11DepthStencilView* depthStencilView = ARK2D::getContainer()->m_platformSpecific.m_depthStencilView;
+							ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.GetD3DDevice();
+							ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.GetD3DDeviceContext();
+							ID3D11RenderTargetView* renderTargetView = ARK2D::getContainer()->m_platformSpecific.m_renderTargetView.Get();
+							ID3D11DepthStencilView* depthStencilView = ARK2D::getContainer()->m_platformSpecific.m_depthStencilView.Get();
 
 							float red = 1.0f;
 							float g = 1.0f;
@@ -2345,8 +2345,8 @@ namespace ARK {
 
 					#elif defined(ARK2D_RENDERER_DIRECTX)
 
-						ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.m_device;
-						ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.m_deviceContext;
+						ID3D11Device* device = ARK2D::getContainer()->m_platformSpecific.GetD3DDevice();
+						ID3D11DeviceContext* deviceContext = ARK2D::getContainer()->m_platformSpecific.GetD3DDeviceContext();
 						//ID3D11RenderTargetView* renderTargetView = ARK2D::getContainer()->m_platformSpecific.m_renderTargetView;
 						//ID3D11DepthStencilView* depthStencilView = ARK2D::getContainer()->m_platformSpecific.m_depthStencilView;
 
