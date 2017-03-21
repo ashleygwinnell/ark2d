@@ -22,6 +22,10 @@
     #define EMSCRIPTEN_KEEPALIVE
 #endif
 
+#ifdef ARK2D_WINDOWS_STORE
+    #include "../Vendor/8741.ThreadEmulation/ThreadEmulation.h"
+#endif
+
 
 std::map<string, const char*> emscripten_functionPointerKeys;
 
@@ -49,7 +53,7 @@ namespace ARK {
         namespace Threading {
 
 
-            #if (defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE) || defined(ARK2D_WINDOWS_STORE))
+            #if (defined(ARK2D_WINDOWS_PHONE_8))
 
                 using namespace Windows::Foundation;
                 using namespace concurrency;
@@ -74,8 +78,34 @@ namespace ARK {
                 }
 
                 void Thread::start() {
-                    auto workItemDelegate = [this](IAsyncAction^ workItem)
+
+                    // Call the *Async method that starts the operation.
+                    // IAsyncOperation<DeviceInformationCollection^>^ deviceOp = DeviceInformation::FindAllAsync();
+
+                    // // Recommended:
+                    // auto deviceEnumTask = create_task(deviceOp);
+
+                    // // Call the task's .then member function, and provide
+                    // // the lambda to be invoked when the async operation completes.
+                    // deviceEnumTask.then( [this] (DeviceInformationCollection^ devices )
+                    // {
+                    //     for(int i = 0; i < devices->Size; i++)
+                    //     {
+                    //         DeviceInformation^ di = devices->GetAt(i);
+                    //         // Do something with di...
+                    //     }
+                    // }); // end lambda
+
+                    // auto workItemDelegate = [this](IAsyncAction^ workItem)
+                    // {
+
+                    // };
+
+                    // Creates an IAsyncAction object and uses an implicit cancellation token.
+					GameContainer* container = ARK2D::getContainer();
+                    auto op1 = create_async([this, container]
                     {
+                        // Define work here.
                         ARK2D::getLog()->t("doing thread now...");
                         if (m_functionPointer != NULL) {
                             if (m_classPointer == NULL) {
@@ -86,35 +116,35 @@ namespace ARK {
                                 pt(m_classPointer);
                             }
                         }
-                    };
+                    });
 
-                    auto completionDelegate = [this](IAsyncAction^ action, Windows::Foundation::AsyncStatus status)
-                    {
-                        switch (action->Status)
-                        {
-                            case Windows::Foundation::AsyncStatus::Started:
-                                ARK2D::getLog()->t("Thread Started");
-                                break;
-                            case Windows::Foundation::AsyncStatus::Completed:
-                                ARK2D::getLog()->t("Thread Completed");
-                                break;
-                            case Windows::Foundation::AsyncStatus::Canceled:
-                                ARK2D::getLog()->t("Thread Cancelled");
-                                break;
-                            case Windows::Foundation::AsyncStatus::Error:
-                                ARK2D::getLog()->t("Thread Error. ;O; ");
-                                break;
-                        }
-                    };
+                    // auto completionDelegate = [this](IAsyncAction^ action, Windows::Foundation::AsyncStatus status)
+                    // {
+                    //     switch (action->Status)
+                    //     {
+                    //         case Windows::Foundation::AsyncStatus::Started:
+                    //             ARK2D::getLog()->t("Thread Started");
+                    //             break;
+                    //         case Windows::Foundation::AsyncStatus::Completed:
+                    //             ARK2D::getLog()->t("Thread Completed");
+                    //             break;
+                    //         case Windows::Foundation::AsyncStatus::Canceled:
+                    //             ARK2D::getLog()->t("Thread Cancelled");
+                    //             break;
+                    //         case Windows::Foundation::AsyncStatus::Error:
+                    //             ARK2D::getLog()->t("Thread Error. ;O; ");
+                    //             break;
+                    //     }
+                    // };
 
-                    #ifndef ARK2D_XBOXONE
+                   // #ifndef ARK2D_XBOXONE
 
-                        auto workItemHandler = ref new Windows::System::Threading::WorkItemHandler(workItemDelegate);
-                        auto completionHandler = ref new Windows::Foundation::AsyncActionCompletedHandler(completionDelegate, Platform::CallbackContext::Same);
+                       // auto workItemHandler = ref new Windows::System::Threading::WorkItemHandler(workItemDelegate);
+                       // auto completionHandler = ref new Windows::Foundation::AsyncActionCompletedHandler(completionDelegate, Platform::CallbackContext::Same);
 
 
-                        m_handle = Windows::System::Threading::ThreadPool::RunAsync(workItemHandler, Windows::System::Threading::WorkItemPriority::Normal);
-                    #endif
+                        //m_handle = Windows::System::Threading::ThreadPool::RunAsync(workItemHandler, Windows::System::Threading::WorkItemPriority::Normal);
+                   // #endif
                 }
                 void Thread::pause() {
                     //SuspendThread(m_handle);
@@ -145,7 +175,68 @@ namespace ARK {
                 Thread::~Thread() {
 
                 }
+            #elif (defined(ARK2D_WINDOWS_STORE))
+                 Thread::Thread():
+                    m_functionPointerKey(""),
+                    m_functionPointer(NULL),
+                    m_classPointer(NULL),
+                    m_autoDetaching(false),
+                    m_detached(false)
+                    {
 
+                }
+
+                void Thread::init(void* functionPointer, void* classPointer) {
+                    m_functionPointer = functionPointer;
+                    m_classPointer = classPointer;
+					m_handle = ThreadEmulation::CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) initThread, reinterpret_cast<void*>(this), CREATE_SUSPENDED, nullptr);
+                }
+                void Thread::init(void* functionPointer) {
+                    m_functionPointer = functionPointer;
+
+					m_handle = ThreadEmulation::CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)initThread, reinterpret_cast<void*>(this), CREATE_SUSPENDED, nullptr);
+                }
+                void Thread::initThread(void* obj) {
+                    //Thread* t = (Thread*) obj;
+                    Thread* thr = reinterpret_cast<Thread*>(obj);
+                    if (thr->m_functionPointer != NULL) {
+                        if (thr->m_classPointer == NULL) {
+
+                            void (*pt)() = (void(*)()) thr->m_functionPointer;
+                            //typedef void fnct();
+                            //fnct* pt = (fnct*) m_event;
+                            pt();
+                        } else {
+                            void (*pt)(void*) = (void(*)(void*)) thr->m_functionPointer;
+                            pt(thr->m_classPointer);
+                        }
+                    }
+                }
+
+                void Thread::start() {
+					ThreadEmulation::ResumeThread(m_handle);
+                }
+                void Thread::pause() {
+
+                }
+                void Thread::setPriority(int i) {
+					ThreadEmulation::SetThreadPriority(m_handle, 0);
+                }
+                int Thread::getPriority() {
+					return 0;
+                }
+                void Thread::join() {
+
+                }
+                void Thread::end() {
+
+                }
+                void Thread::terminate() {
+
+                }
+                Thread::~Thread() {
+
+                }
             #elif (defined(ARK2D_WINDOWS))
 
                 Thread::Thread():

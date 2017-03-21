@@ -20,7 +20,7 @@
 
 #include "../Core/GameContainer.h"
 #include "../Core/String.h"
-#include "../Core/Controls//ErrorDialog.h"
+#include "../Core/Controls/ErrorDialog.h"
 #include "../Core/Threading/Thread.h"
 #include "../Core/Threading/Mutex.h"
 

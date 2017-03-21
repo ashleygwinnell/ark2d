@@ -31,6 +31,10 @@
     //using namespace Windows::Foundation; // this will be redefined twice and that's bad.
 //#endif
 
+#if defined(ARK2D_WINDOWS_STORE)
+ 	using namespace Windows::UI::Input;
+#endif
+
 // Linux help/examples:
 // http://scaryreasoner.wordpress.com/2008/02/22/programming-joysticks-with-linux/
 // http://ludobloom.com/svn/StemLibProjects/gamepad/tags/1.3.0/source/gamepad/

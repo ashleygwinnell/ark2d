@@ -39,7 +39,8 @@ IFrameworkView^ Direct3DApplicationSource::CreateView()
 
 WindowsUWPGame::WindowsUWPGame() :
 	m_windowClosed(false),
-	m_windowVisible(true)
+	m_windowVisible(true),
+	m_iValidPointerId(-1)
 {
 
 }
@@ -110,6 +111,35 @@ void WindowsUWPGame::SetWindow(CoreWindow^ window)
 	window->KeyDown += ref new TypedEventHandler<CoreWindow^, KeyEventArgs^>(this, &WindowsUWPGame::OnKeyDown);
 	window->KeyUp += ref new TypedEventHandler<CoreWindow^, KeyEventArgs^>(this, &WindowsUWPGame::OnKeyUp);
 
+	// Init Gamepad events.
+	auto gamepads = Windows::Gaming::Input::Gamepad::Gamepads;
+	for (auto gamepad : gamepads) {
+		ARK2D::getLog()->e("A gamepad!");
+	}
+
+	Windows::Gaming::Input::Gamepad::GamepadAdded +=
+		ref new EventHandler<Windows::Gaming::Input::Gamepad^>([=](Platform::Object^, Windows::Gaming::Input::Gamepad^ args) {
+		ARK2D::getLog()->e("Gamepad added");
+
+		Gamepad* gamepad = new Gamepad();
+		gamepad->m_currentGamepad = args;
+		ARK2D::getContainer()->getGamepads()->push_back(gamepad);
+	});
+
+	Windows::Gaming::Input::Gamepad::GamepadRemoved +=
+		ref new EventHandler<Windows::Gaming::Input::Gamepad^>([=](Platform::Object^, Windows::Gaming::Input::Gamepad^ args) {
+		ARK2D::getLog()->e("Gamepad removed");
+
+		vector<Gamepad*>* gamepads = ARK2D::getContainer()->getGamepads();
+		for (unsigned int i = 0; i < gamepads->size(); i++) {
+			if (gamepads->at(i)->m_currentGamepad == args) {
+				delete gamepads->at(i);
+				gamepads->erase(gamepads->begin() + i);
+				break;
+			}
+		}
+	});
+
 	// Key events
 	#if (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
 		HardwareButtons::BackPressed += ref new EventHandler<BackPressedEventArgs^>(this, &WindowsUWPGame::OnBackButtonPressed);
@@ -157,16 +187,41 @@ void WindowsUWPGame::Run()
 
 			// Update ARK2D
 			timer->tick();
-			//container->processGamepadInput();
+			container->processGamepadInput();
+
+			// Poll mouse data as left/middle/right are mutually exclusive...
+			if (m_iValidPointerId != -1) {
+				PointerPoint^ p = PointerPoint::GetCurrentPoint(m_iValidPointerId);
+
+				if (p->Properties->IsLeftButtonPressed && !in->isKeyDown(Input::MOUSE_BUTTON_LEFT)) {
+					in->pressKey(Input::MOUSE_BUTTON_LEFT);
+				}
+				if (p->Properties->IsMiddleButtonPressed && !in->isKeyDown(Input::MOUSE_BUTTON_MIDDLE)) {
+					in->pressKey(Input::MOUSE_BUTTON_MIDDLE);
+				}
+				if (p->Properties->IsRightButtonPressed && !in->isKeyDown(Input::MOUSE_BUTTON_RIGHT)) {
+					in->pressKey(Input::MOUSE_BUTTON_RIGHT);
+				}
+
+				if (!p->Properties->IsLeftButtonPressed && in->isKeyDown(Input::MOUSE_BUTTON_LEFT)) {
+					in->releaseKey(Input::MOUSE_BUTTON_LEFT);
+				}
+				if (!p->Properties->IsMiddleButtonPressed && in->isKeyDown(Input::MOUSE_BUTTON_MIDDLE)) {
+					in->releaseKey(Input::MOUSE_BUTTON_MIDDLE);
+				}
+				if (!p->Properties->IsRightButtonPressed && in->isKeyDown(Input::MOUSE_BUTTON_RIGHT)) {
+					in->releaseKey(Input::MOUSE_BUTTON_RIGHT);
+				}
+			}
 
 			// Update Game
 			scene->update();
 
 			// Update Input
 			in->clearKeyPressedRecord();
-			//for (unsigned int i = 0; i < container->m_gamepads.size(); i++) {
-			//	container->m_gamepads.at(i)->clearButtonPressedRecord();
-			//}
+			for (unsigned int i = 0; i < container->getGamepads()->size(); i++) {
+				container->getGamepads()->at(i)->clearButtonPressedRecord();
+			}
 
 			// Rendering
 			RendererStats::reset();
@@ -175,12 +230,14 @@ void WindowsUWPGame::Run()
 			scene->render();
 
 			container->getPlatformSpecific()->swapBuffers();
+			timer->sleep(1);
 		}
 		else
 		{
 			CoreWindow::GetForCurrentThread()->Dispatcher->ProcessEvents(CoreProcessEventsOption::ProcessOneAndAllPending);
 		}
 	}
+	ARK2D::getContainer()->close();
 }
 
 // Required for IFrameworkView.
@@ -303,8 +360,9 @@ void WindowsUWPGame::OnPointerPressed(CoreWindow^ sender, PointerEventArgs^ args
 	Input* i = ARK2D::getInput();
 	i->mouse_x = (int) thisx;
 	i->mouse_y = (int) thisy;
-	i->pressKey(Input::MOUSE_BUTTON_LEFT);
 
+	// Set a pointer ID so we can poll mouse data.
+	m_iValidPointerId = args->CurrentPoint->PointerId;
 }
 
 void WindowsUWPGame::OnPointerMoved(CoreWindow^ sender, PointerEventArgs^ args)
@@ -322,7 +380,6 @@ void WindowsUWPGame::OnPointerMoved(CoreWindow^ sender, PointerEventArgs^ args)
 	thisy /= container->getScale();
 
 	Input* i = ARK2D::getInput();
-	//ARK2D::getLog()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 	ARK2D::getGame()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 	i->mouse_x = (int) thisx;
 	i->mouse_y = (int) thisy;
@@ -345,7 +402,6 @@ void WindowsUWPGame::OnPointerReleased(CoreWindow^ sender, PointerEventArgs^ arg
 	Input* i = ARK2D::getInput();
 	i->mouse_x = (int) thisx;
 	i->mouse_y = (int) thisy;
-	i->releaseKey(Input::MOUSE_BUTTON_LEFT);
 }
 
 void WindowsUWPGame::OnKeyDown(Windows::UI::Core::CoreWindow^ sender, Windows::UI::Core::KeyEventArgs^ args)

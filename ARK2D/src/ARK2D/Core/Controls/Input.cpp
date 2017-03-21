@@ -231,7 +231,7 @@ namespace ARK {
                 return NULL;
             }
             Gamepad* Input::getGamepadByIndex(unsigned int index) {
-                vector<Gamepad*>* gamepads = m_container->getGamepads();
+                vector<Gamepad*>* gamepads = ARK2D::getContainer()->getGamepads();
                 if (index >= gamepads->size()) {
                     //ARK2D::getLog()->e(StringUtil::append("Could not get gamepad at index: ", id));
                     return NULL;

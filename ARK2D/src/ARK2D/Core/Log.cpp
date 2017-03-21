@@ -43,7 +43,7 @@ namespace ARK {
 		Log::Log():
 			m_messages(),
 			m_messagesPool(),
-			m_maxMessages(256),
+			m_maxMessages(1024),
 
 			m_watchedVariables(),
 
@@ -159,26 +159,30 @@ namespace ARK {
 
 			if (type == TYPE_THREAD) { return; }
 
-			if (m_messagesPool.size() == 0) {
-				for(unsigned int i = 0; i < 6; i++) {
-					LogMessage* item = new LogMessage();
+			#ifndef ARK2D_WINDOWS_STORE
+
+				if (m_messagesPool.size() == 0) {
+					for(unsigned int i = 0; i < 6; i++) {
+						LogMessage* item = new LogMessage();
+						m_messagesPool.push_back(item);
+					}
+				}
+
+				LogMessage* item = m_messagesPool.at(m_messagesPool.size()-1);
+				if (item == NULL) {
+					item = new LogMessage();
 					m_messagesPool.push_back(item);
 				}
-			}
+				item->level = type;
+				if (s.length() < 1024) {
+					item->message = s;
+				} else {
+					item->message = s.substr(0, 1024);
+				}
+				m_messages.push_back(item);
+				m_messagesPool.pop_back();
+			#endif
 
-			LogMessage* item = m_messagesPool.at(m_messagesPool.size()-1);
-			if (item == NULL) {
-				item = new LogMessage();
-				m_messagesPool.push_back(item);
-			}
-			item->level = type;
-			if (s.length() < 1024) {
-				item->message = s;
-			} else {
-				item->message = s.substr(0, 1024);
-			}
-			m_messages.push_back(item);
-			m_messagesPool.pop_back();
 
 			if (isLoggingToFile()) {
 				std::ofstream log_file("log.txt", std::ios_base::out | std::ios_base::app );

@@ -452,7 +452,9 @@
 		#include "Common/OpenGL.h"
 		#include "Common/Audio.h"
 
- 		#include "vendor/libcurl-windows/curl.h"
+		#ifdef ARK2D_WINDOWS
+ 			#include "vendor/libcurl-windows/curl.h"
+		#endif
 
  		using namespace std;
 

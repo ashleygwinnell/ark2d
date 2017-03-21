@@ -54,7 +54,7 @@
 				m_fullscreen(fullscreen),
 				m_resizable(false),
 				m_scaleToWindow(true),
-				m_touchMode(true),
+				m_touchMode(false),
 				m_screenOrientationPrevious(ORIENTATION_DUMMY),
 				m_orientationInverted(false),
 				m_2in1enabled(false),
@@ -127,7 +127,10 @@
 			}
 
 			void GameContainer::processGamepadInput() {
-
+				//ARK2D::getLog()->e("GameContainer::processGamepadInput");
+				for( unsigned int i = 0; i < m_gamepads.size(); ++i) {
+					m_gamepads.at(i)->update();
+				}
 			}
 
 			void GameContainer::start() {

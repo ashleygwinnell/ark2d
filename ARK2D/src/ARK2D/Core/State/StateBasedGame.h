@@ -94,9 +94,11 @@ namespace ARK {
 
                     virtual void orientationChanged(int orientation);
 
+                    string toString();
+
                     virtual ~StateBasedGame();
 
-                private:
+                protected:
                     vector<GameState*> m_states;
                     GameState* m_from_state;
                     GameState* m_current_state;

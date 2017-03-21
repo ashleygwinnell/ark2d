@@ -12,7 +12,7 @@
 
 using namespace std;
 
-#if !defined(ARK2D_WINDOWS_VS) && !defined(ARK2D_EMSCRIPTEN_JS) && !defined(ARK2D_IPHONE)
+#if !defined(ARK2D_WINDOWS_VS) && !defined(ARK2D_EMSCRIPTEN_JS) && !defined(ARK2D_IPHONE) && !defined(ARK2D_WINDOWS_STORE)
 
 	template <typename T>
 	struct remove_const

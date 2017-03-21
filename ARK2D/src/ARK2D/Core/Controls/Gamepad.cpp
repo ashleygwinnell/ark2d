@@ -219,6 +219,39 @@ namespace ARK {
 				m_previousLTriggerValue = currentLBumperValue;
 				m_previousRTriggerValue = currentRBumperValue;
 
+				// Windows 10 / UWP API
+				#if defined(ARK2D_WINDOWS_STORE) || defined(ARK2D_XBOXONE)
+					Windows::Gaming::Input::GamepadReading reading = m_currentGamepad->GetCurrentReading();
+
+					float leftStickX = reading.LeftThumbstickX;
+					float leftStickY = reading.LeftThumbstickY;
+					float rightStickX = reading.RightThumbstickX;
+					float rightStickY = reading.RightThumbstickY;
+
+					float leftTrigger  = reading.LeftTrigger;  // returns a value between 0.0 and 1.0
+					float rightTrigger = reading.RightTrigger; // returns a value between 0.0 and 1.0
+
+					if (Windows::Gaming::Input::GamepadButtons::A == (reading.Buttons & Windows::Gaming::Input::GamepadButtons::A)) {
+    					// button A is pressed
+					}
+					if (Windows::Gaming::Input::GamepadButtons::None == (reading.Buttons & Windows::Gaming::Input::GamepadButtons::A)) {
+    					// button A is not pressed
+					}
+
+					m_currentGamepadReading = reading;
+
+					/*Windows::Gaming::Input::GamepadVibration vibration;
+					vibration.LeftMotor = 0.80;  // sets the intensity of the left motor to 80%
+					vibration.RightMotor = 0.25; // sets the intensity of the right motor to 25%
+					m_currentGamepad->Vibration = vibration;
+
+					Windows::Gaming::Input::GamepadVibration vibrationTriggers;
+					vibrationTriggers.LeftTrigger = 0.75;  // sets the intensity of the left trigger to 75%
+					vibrationTriggers.RightTrigger = 0.50; // sets the intensity of the right trigger to 50%
+					m_currentGamepad->Vibration = vibrationTriggers;*/
+
+				#endif
+
 			}
 
 			void Gamepad::clearButtonPressedRecord() {
@@ -1099,7 +1132,15 @@ namespace ARK {
 
 
 			Gamepad::~Gamepad() {
-
+				#if defined(ARK2D_WINDOWS_STORE)
+					//ARK2D::getLog()->e("Destroying gamepad");
+					Windows::Gaming::Input::GamepadVibration vibration = { 0 };
+					vibration.LeftMotor = 0.0f;  // sets the intensity of the left motor to 80%
+					vibration.RightMotor = 0.0f; // sets the intensity of the right motor to 25%
+					vibration.LeftTrigger = 0.0f;  // sets the intensity of the left trigger to 75%
+					vibration.RightTrigger = 0.0f; // sets the intensity of the right trigger to 50%
+					m_currentGamepad->Vibration = vibration;
+				#endif
 			}
 		}
 	}

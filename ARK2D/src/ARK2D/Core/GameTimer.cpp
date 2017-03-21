@@ -29,12 +29,21 @@ namespace ARK {
 			m_FrameSecondsElapsed( 0.0f ),
 			m_deltaModifier(1.0f)
 		{
-			/*#ifdef ARK2D_WINDOWS_PHONE_8
-				if (!QueryPerformanceFrequency(&m_wp8_frequency)) {
+			#if defined(ARK2D_WINDOWS_STORE)
+				if (!QueryPerformanceFrequency(&m_qpcFrequency)) {
 					ARK2D::getLog()->e("Could not get GameTimer Frequency");
 					exit(0);
 				}
-			#endif*/
+
+				if (!QueryPerformanceCounter(&m_qpcLastTime)) {
+					ARK2D::getLog()->e("Could not get GameTimer Counter");
+					exit(0);
+				}
+
+				// Initialize max delta to 1/10 of a second.
+				m_qpcMaxDelta = m_qpcFrequency.QuadPart / 10;
+
+			#endif
 		}
 
 
@@ -72,7 +81,7 @@ namespace ARK {
 			#endif
 		}
 
-		long GameTimer::millis() {
+		unsigned long GameTimer::millis() {
 			#if defined(ARK2D_IPHONE)
 				timeval now;
 				gettimeofday(&now, NULL);
@@ -107,13 +116,13 @@ namespace ARK {
 			#elif defined(ARK2D_WINDOWS)
 				return clock();
 			#elif defined(ARK2D_WINDOWS_PHONE_8)
-				/*if (!QueryPerformanceCounter(&m_wp8_currentTime)) {
+				return clock();
+			#elif defined(ARK2D_WINDOWS_STORE)
+				LARGE_INTEGER currentTime;
+				if (!QueryPerformanceCounter(&currentTime)) {
 					ARK2D::getLog()->e("Could not get GameTimer millis.");
 				}
-				m_wp8_currentTime.
-				return m_wp8_currentTime.QuadPart;*/
-
-				return clock();
+				return currentTime.QuadPart;
 			#elif defined(ARK2D_MACINTOSH)
 				timeval now;
 				gettimeofday(&now, NULL);
@@ -130,7 +139,7 @@ namespace ARK {
 		}
 
 		void GameTimer::sleep(int millis) {
-			#if defined(ARK2D_WINDOWS)
+			#if defined(ARK2D_WINDOWS) || defined(ARK2D_WINDOWS_STORE)
 				Sleep(millis);
 			#elif defined(ARK2D_MACINTOSH)
 				usleep(millis * 1000);
@@ -178,19 +187,58 @@ namespace ARK {
 			//#endif
 
 			// Get the number of ticks passed since program launch.
+			#ifdef ARK2D_WINDOWS_STORE
+				// Query the current time.
+				LARGE_INTEGER currentTime;
 
+				if (!QueryPerformanceCounter(&currentTime))
+				{
+					throw ref new Platform::FailureException();
+				}
+				uint64 timeDelta = currentTime.QuadPart - m_qpcLastTime.QuadPart;
+
+				m_qpcLastTime = currentTime;
+				//m_qpcSecondCounter += timeDelta;
+
+				// Clamp excessively large time deltas (e.g. after paused in the debugger).
+				if (timeDelta > m_qpcMaxDelta)
+				{
+					timeDelta = m_qpcMaxDelta;
+				}
+
+				// Convert QPC units into a canonical tick format. This cannot overflow due to the previous clamp.
+				timeDelta *= TicksPerSecond;
+				timeDelta /= m_qpcFrequency.QuadPart;
+
+				//uint32 lastFrameCount = m_frameCount;
+
+				// Variable timestep update logic.
+				m_elapsedTicks = timeDelta;
+				//m_totalTicks += timeDelta;
+				//m_leftOverTicks = 0;
+				////m_frameCount++;
+
+				//update();
+
+				// Track the current framerate.
+				// if (m_frameCount != lastFrameCount)
+				// {
+				// 	m_framesThisSecond++;
+				// }
+
+				// if (m_qpcSecondCounter >= static_cast<uint64>(m_qpcFrequency.QuadPart))
+				// {
+				// 	m_framesPerSecond = m_framesThisSecond;
+				// 	m_framesThisSecond = 0;
+				// 	m_qpcSecondCounter %= m_qpcFrequency.QuadPart;
+				// }
+				m_TimeDelta = GetElapsedSeconds();
+				return;
+			#endif
 
 			// Calculate elapsed time in seconds (usually ends up being a fraction of a second).
-			#ifdef ARK2D_WINDOWS_PHONE_8
-				//m_CurrentTicks = (double) millis(); //clock();
-			//	float secondsElapsed = ((double)m_CurrentTicks - (double)m_LastTicks) / static_cast<float>(CLOCKS_PER_SEC);
-				m_CurrentTicks = millis(); //clock();
-				float secondsElapsed = (m_CurrentTicks - m_LastTicks) / static_cast<float>(CLOCKS_PER_SEC);
-				//ARK2D::getLog()->v(StringUtil::appendf("seconds elapsed: ", secondsElapsed));
-			#else
-				m_CurrentTicks = millis(); //clock();
-				float secondsElapsed = (m_CurrentTicks - m_LastTicks) / static_cast<float>(CLOCKS_PER_SEC);
-			#endif
+			m_CurrentTicks = millis(); //clock();
+			float secondsElapsed = (m_CurrentTicks - m_LastTicks) / static_cast<float>(CLOCKS_PER_SEC);
 
 			m_LastTicks = m_CurrentTicks;
 
@@ -248,6 +296,13 @@ namespace ARK {
 		}
 
 		void GameTimer::flush() {
+			#if defined(ARK2D_WINDOWS_STORE)
+				if (!QueryPerformanceCounter(&m_qpcLastTime)) {
+					ARK2D::getLog()->e("Could not get GameTimer Counter");
+					exit(0);
+				}
+			#endif
+
 			m_LastTicks = millis(); // clock();
 			m_CurrentTicks = millis(); //clock();
 			m_TimeDelta = 0.017f;

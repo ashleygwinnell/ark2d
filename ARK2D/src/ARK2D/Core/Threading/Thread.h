@@ -49,7 +49,7 @@ namespace ARK {
 
                     virtual ~Thread();
 
-                #if defined (ARK2D_WINDOWS)
+                #if (defined (ARK2D_WINDOWS) || defined(ARK2D_WINDOWS_STORE))
                     private:
                         string m_functionPointerKey;
                         void* m_functionPointer;
@@ -65,7 +65,7 @@ namespace ARK {
                         HDC m_deviceContext;
                         HGLRC m_renderingContext;
 
-                #elif defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE) || defined(ARK2D_WINDOWS_STORE)
+                #elif defined(ARK2D_WINDOWS_PHONE_8)
 
                     string m_functionPointerKey;
                     void* m_functionPointer;

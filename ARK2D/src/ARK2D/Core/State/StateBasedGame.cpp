@@ -381,6 +381,26 @@ namespace ARK {
                 }
             }
 
+            string StateBasedGame::toString() {
+                string nl = "\n";
+                string s;
+                for(unsigned int i = 0; i < m_states.size(); i++) {
+                    s += m_states[i]->name + nl;
+                }
+                s += "m_from_state "; s += (m_from_state==NULL)?"NULL":m_from_state->name; s += nl;
+                s += "m_current_state "; s += (m_current_state==NULL)?"NULL":m_current_state->name; s += nl;
+                s += "m_next_state "; s += (m_next_state==NULL)?"NULL":m_next_state->name; s += nl;
+                s += "m_loading_state "; s += (m_loading_state==NULL)?"NULL":m_loading_state->name; s += nl;
+
+                s += "m_leaveTransition "; s += (m_leaveTransition==NULL)?"NULL":m_leaveTransition->toString(); s += nl;
+                s += "m_enterTransition "; s += (m_enterTransition==NULL)?"NULL":m_enterTransition->toString(); s += nl;
+
+
+                //ARK::Core::State::Transition::Transition* m_enterTransition;
+                //ARK::Core::State::Transition::Transition* m_leaveTransition;
+                return s;
+            }
+
             StateBasedGame::~StateBasedGame() {
                 for(unsigned int i = 0; i < m_states.size(); i++) {
                     //try {

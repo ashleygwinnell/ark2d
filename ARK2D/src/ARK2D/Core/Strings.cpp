@@ -85,6 +85,11 @@ namespace ARK {
 				String* s = Resource::get(file)->asString();
 				string result = s->getc();
 
+				if (result.length() == 0) {
+					ARK2D::getLog()->e(StringUtil::append("Could not add strings file to localisation database: ", file));
+					return;
+				}
+
 				//wstring result = StringUtil::stringToWstring(ss);
 				// ARK2D::getLog()->e(result);
 

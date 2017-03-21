@@ -25,6 +25,7 @@ namespace ARK {
             class ARK2D_API LoadingState : public GameState {
                 public:
                     LoadingState();
+                    LoadingState(string name);
 
                     static void load();
 

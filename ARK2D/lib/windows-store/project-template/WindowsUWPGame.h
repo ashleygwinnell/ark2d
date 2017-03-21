@@ -56,6 +56,7 @@ ref class WindowsUWPGame sealed : public Windows::ApplicationModel::Core::IFrame
 		bool m_windowClosed;
 		bool m_windowVisible;
 		WindowsUWPGame_DeviceNotifier notifier;
+		signed int m_iValidPointerId;
 };
 
 ref class Direct3DApplicationSource sealed : Windows::ApplicationModel::Core::IFrameworkViewSource

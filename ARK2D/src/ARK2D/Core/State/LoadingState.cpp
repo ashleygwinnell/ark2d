@@ -16,7 +16,17 @@ namespace ARK {
     namespace Core {
         namespace State {
 
-            LoadingState::LoadingState(): GameState(), m_thread(NULL), m_loading(true) {
+            LoadingState::LoadingState():
+                GameState("LoadingState"),
+                m_thread(NULL),
+                m_loading(true) {
+                m_thread = new ARK::Core::Threading::Thread();
+            }
+
+             LoadingState::LoadingState(string name):
+                GameState(name),
+                m_thread(NULL),
+                m_loading(true) {
                 m_thread = new ARK::Core::Threading::Thread();
             }
 

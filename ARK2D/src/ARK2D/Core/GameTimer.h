@@ -45,7 +45,7 @@ namespace ARK {
 
 				unsigned long unixTimestamp() const;
 
-				long millis();
+				unsigned long millis();
 				float millisf();
 				float getLastFrameTime();
 				float getCurrentFrameTime();
@@ -55,8 +55,37 @@ namespace ARK {
 
 			private:
 				unsigned int m_FrameCount;
-				clock_t m_CurrentTicks;
-				clock_t m_LastTicks;
+
+				#if defined(ARK2D_WINDOWS_STORE)
+
+					static const uint64_t TicksPerSecond = 10000000;
+					LARGE_INTEGER m_qpcFrequency;
+					LARGE_INTEGER m_qpcLastTime;
+					uint64 m_qpcMaxDelta;
+
+					// Derived timing data uses a canonical tick format.
+					uint64 m_elapsedTicks;
+					uint64 m_totalTicks;
+					uint64 m_leftOverTicks;
+
+					// Get elapsed time since the previous Update call.
+					uint64 GetElapsedTicks() const	{ return m_elapsedTicks; }
+					double GetElapsedSeconds() const{ return TicksToSeconds(m_elapsedTicks); }
+
+					static float TicksToSeconds(uint64_t ticks){
+						return static_cast<float>(ticks) / TicksPerSecond;
+					}
+					static uint64_t SecondsToTicks(float seconds) {
+						return static_cast<uint64_t>(seconds * TicksPerSecond);
+					}
+
+					unsigned long m_CurrentTicks;
+					unsigned long m_LastTicks;
+				#else
+					clock_t m_CurrentTicks;
+					clock_t m_LastTicks;
+				#endif
+
 				std::list<float> m_FrameTimes;
 				float m_TimeDelta;
 				unsigned int m_FrameRate;
@@ -64,10 +93,7 @@ namespace ARK {
 
 				float m_deltaModifier;
 
-				//#ifdef ARK2D_WINDOWS_PHONE_8
-				//	LARGE_INTEGER m_wp8_frequency;
-				//	LARGE_INTEGER m_wp8_currentTime;
-				//#endif
+
 
 		};
 	}

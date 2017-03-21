@@ -11,6 +11,9 @@
 #include "../../../Namespaces.h"
 #include "../../../Common/DLL.h"
 
+#include <string>
+using namespace std;
+
 namespace ARK {
     namespace Core {
         namespace State {
@@ -36,6 +39,8 @@ namespace ARK {
                         virtual void postLeave(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to);
 
                         virtual void setUpdatingStates(bool fromState, bool toState);
+
+                        virtual string toString();
 
                         virtual ~Transition();
 

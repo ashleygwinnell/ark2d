@@ -21,7 +21,7 @@ namespace ARK {
             namespace Transition {
 
                 Transition::Transition():
-                    m_container(NULL), 
+                    m_container(NULL),
                     m_from(NULL),
                     m_to(NULL),
                     m_easing(Easing::LINEAR),
@@ -38,7 +38,7 @@ namespace ARK {
                     return m_easing;
                 }
 
-                void Transition::postEnter(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to) { 
+                void Transition::postEnter(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to) {
 
                 }
                 void Transition::postLeave(GameContainer* container, StateBasedGame* game, GameState* from, GameState* to) {
@@ -50,7 +50,7 @@ namespace ARK {
                         m_from->update(container, game, timer);
                     }
                     if (m_updatingToState && m_to != NULL) {
-                        m_to->update(container, game, timer);	
+                        m_to->update(container, game, timer);
                     }
                 }
 
@@ -64,6 +64,17 @@ namespace ARK {
                 void Transition::setUpdatingStates(bool fromState, bool toState) {
                     m_updatingFromState = fromState;
                     m_updatingToState = toState;
+                }
+
+                string Transition::toString() {
+                    string s = "{ ";
+                    s += "m_from: " + ((m_from==NULL)?"NULL":m_from->name) + ", ";
+                    s += "m_to: " + ((m_to==NULL)?"NULL":m_to->name) + ", ";
+                    s += "m_easing: " + Easing::getByInt(m_easing) + ", ";
+                    s += "m_updatingFromState: " + Cast::boolToString(m_updatingFromState )+ ", ";
+                    s += "m_updatingToState: " + Cast::boolToString(m_updatingToState) + ", ";
+                    s += " }";
+                    return s;
                 }
 
                 Transition::~Transition() {
