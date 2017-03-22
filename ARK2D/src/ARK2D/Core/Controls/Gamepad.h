@@ -158,6 +158,7 @@ namespace ARK {
 					bool virtualpad; // true if is a fake gamepad from the debug screen.
 
 					Gamepad();
+					void addStandardAxesAndButtons();
 					void update();
 
 					int getDPadPosition();
@@ -255,6 +256,7 @@ namespace ARK {
 					#endif
 
 					bool isAxis(unsigned int axisId);
+					GamepadAxis* getAxis(unsigned int axisId);
 					float getAxisValue(unsigned int axisId);
 
 					static unsigned int convertButtonToId(Gamepad* gamepad, unsigned int button, bool printInfo = true);

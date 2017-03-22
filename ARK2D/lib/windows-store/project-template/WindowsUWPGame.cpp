@@ -122,6 +122,7 @@ void WindowsUWPGame::SetWindow(CoreWindow^ window)
 		ARK2D::getLog()->e("Gamepad added");
 
 		Gamepad* gamepad = new Gamepad();
+		gamepad->addStandardAxesAndButtons();
 		gamepad->m_currentGamepad = args;
 		ARK2D::getContainer()->getGamepads()->push_back(gamepad);
 	});

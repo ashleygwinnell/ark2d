@@ -197,6 +197,126 @@ namespace ARK {
 			{
 
 			}
+
+			void Gamepad::addStandardAxesAndButtons() {
+				// Buttons
+				GamepadButton* face_button = new GamepadButton();
+				face_button->id = Gamepad::BUTTON_A;
+				face_button->down = false;
+				buttons.push_back(face_button);
+
+				face_button = new GamepadButton();
+				face_button->id = Gamepad::BUTTON_B;
+				face_button->down = false;
+				buttons.push_back(face_button);
+
+				face_button = new GamepadButton();
+				face_button->id = Gamepad::BUTTON_X;
+				face_button->down = false;
+				buttons.push_back(face_button);
+
+				face_button = new GamepadButton();
+				face_button->id = Gamepad::BUTTON_Y;
+				face_button->down = false;
+				buttons.push_back(face_button);
+
+				face_button = new GamepadButton();
+				face_button->id = Gamepad::BUTTON_LBUMPER;
+				face_button->down = false;
+				buttons.push_back(face_button);
+
+				face_button = new GamepadButton();
+				face_button->id = Gamepad::BUTTON_RBUMPER;
+				face_button->down = false;
+				buttons.push_back(face_button);
+
+				face_button = new GamepadButton();
+				face_button->id = Gamepad::BUTTON_BACK;
+				face_button->down = false;
+				buttons.push_back(face_button);
+
+				face_button = new GamepadButton();
+				face_button->id = Gamepad::BUTTON_START;
+				face_button->down = false;
+				buttons.push_back(face_button);
+
+				face_button = new GamepadButton();
+				face_button->id = Gamepad::BUTTON_L3;
+				face_button->down = false;
+				buttons.push_back(face_button);
+
+				face_button = new GamepadButton();
+				face_button->id = Gamepad::BUTTON_R3;
+				face_button->down = false;
+				buttons.push_back(face_button);
+
+				face_button = new GamepadButton();
+				face_button->id = Gamepad::BUTTON_ACTIVATE;
+				face_button->down = false;
+				buttons.push_back(face_button);
+
+				face_button = new GamepadButton();
+				face_button->id = Gamepad::BUTTON_LTRIGGER;
+				face_button->down = false;
+				buttons.push_back(face_button);
+
+				face_button = new GamepadButton();
+				face_button->id = Gamepad::BUTTON_RTRIGGER;
+				face_button->down = false;
+				buttons.push_back(face_button);
+
+				// Dpad
+				GamepadButton* dpad_button = new GamepadButton();
+				dpad_button->id = Gamepad::DPAD_UP;
+				dpad_button->down = false;
+				buttons.push_back(dpad_button);
+
+				dpad_button = new GamepadButton();
+				dpad_button->id = Gamepad::DPAD_DOWN;
+				dpad_button->down = false;
+				buttons.push_back(dpad_button);
+
+				dpad_button = new GamepadButton();
+				dpad_button->id = Gamepad::DPAD_LEFT;
+				dpad_button->down = false;
+				buttons.push_back(dpad_button);
+
+				dpad_button = new GamepadButton();
+				dpad_button->id = Gamepad::DPAD_RIGHT;
+				dpad_button->down = false;
+				buttons.push_back(dpad_button);
+
+				numButtons = buttons.size();
+
+				// Axes
+				GamepadAxis* xAxis = new GamepadAxis();
+				xAxis->id = Gamepad::ANALOG_STICK_1_X;
+				axes.push_back(xAxis);
+
+				GamepadAxis* yAxis = new GamepadAxis();
+				yAxis->id = Gamepad::ANALOG_STICK_1_Y;
+				axes.push_back(yAxis);
+
+				GamepadAxis* rAxis = new GamepadAxis();
+				rAxis->id = Gamepad::ANALOG_STICK_2_X;
+				axes.push_back(rAxis);
+
+				GamepadAxis* uAxis = new GamepadAxis();
+				uAxis->id = Gamepad::ANALOG_STICK_2_Y;
+				axes.push_back(uAxis);
+
+				 // ltrigger
+				GamepadAxis* zAxis = new GamepadAxis();
+				zAxis->id = Gamepad::TRIGGER_1;
+				axes.push_back(zAxis);
+
+				GamepadAxis* vAxis = new GamepadAxis(); // rtrigger
+				vAxis->id = Gamepad::TRIGGER_2;
+				axes.push_back(vAxis);
+
+				numAxes = axes.size();
+			}
+
 			int Gamepad::getDPadPosition() {
 				return dpadPosition;
 			}
@@ -223,20 +343,56 @@ namespace ARK {
 				#if defined(ARK2D_WINDOWS_STORE) || defined(ARK2D_XBOXONE)
 					Windows::Gaming::Input::GamepadReading reading = m_currentGamepad->GetCurrentReading();
 
-					float leftStickX = reading.LeftThumbstickX;
-					float leftStickY = reading.LeftThumbstickY;
-					float rightStickX = reading.RightThumbstickX;
-					float rightStickY = reading.RightThumbstickY;
-
-					float leftTrigger  = reading.LeftTrigger;  // returns a value between 0.0 and 1.0
-					float rightTrigger = reading.RightTrigger; // returns a value between 0.0 and 1.0
-
-					if (Windows::Gaming::Input::GamepadButtons::A == (reading.Buttons & Windows::Gaming::Input::GamepadButtons::A)) {
-    					// button A is pressed
+					if ( getAxis(Gamepad::ANALOG_STICK_1_X)->value != reading.LeftThumbstickX ) {
+						moveAxis(Gamepad::ANALOG_STICK_1_X, reading.LeftThumbstickX);
 					}
-					if (Windows::Gaming::Input::GamepadButtons::None == (reading.Buttons & Windows::Gaming::Input::GamepadButtons::A)) {
-    					// button A is not pressed
+					if ( getAxis(Gamepad::ANALOG_STICK_1_Y)->value != reading.LeftThumbstickY ) {
+						moveAxis(Gamepad::ANALOG_STICK_1_Y, reading.LeftThumbstickY*-1);
 					}
+
+					if ( getAxis(Gamepad::ANALOG_STICK_2_X)->value != reading.RightThumbstickX ) {
+						moveAxis(Gamepad::ANALOG_STICK_2_X, reading.RightThumbstickX);
+					}
+					if ( getAxis(Gamepad::ANALOG_STICK_2_Y)->value != reading.RightThumbstickY ) {
+						moveAxis(Gamepad::ANALOG_STICK_2_Y, reading.RightThumbstickY);
+					}
+
+					if ( getAxis(Gamepad::TRIGGER_1)->value != reading.LeftTrigger ) {
+						moveAxis(Gamepad::TRIGGER_1, reading.LeftTrigger);
+					}
+					if ( getAxis(Gamepad::TRIGGER_2)->value != reading.RightTrigger ) {
+						moveAxis(Gamepad::TRIGGER_2, reading.RightTrigger);
+					}
+
+					auto buttonEvents = [this,reading](unsigned int button, Windows::Gaming::Input::GamepadButtons xboxbutton) {
+						uint64_t noneint = (uint64_t)Windows::Gaming::Input::GamepadButtons::None;
+						uint64_t readingint = (uint64_t)reading.Buttons;
+						uint64_t xboxbuttonint = (uint64_t)xboxbutton;
+						if (!isButtonDown(button) && xboxbuttonint == (readingint & xboxbuttonint)) {
+    						pressButton(button);
+						}
+						if (isButtonDown(button) && noneint == (readingint & xboxbuttonint)) {
+	    					releaseButton(button);
+						}
+					};
+					buttonEvents( Gamepad::BUTTON_A, Windows::Gaming::Input::GamepadButtons::A );
+					buttonEvents( Gamepad::BUTTON_B, Windows::Gaming::Input::GamepadButtons::B );
+					buttonEvents( Gamepad::BUTTON_X, Windows::Gaming::Input::GamepadButtons::X );
+					buttonEvents( Gamepad::BUTTON_Y, Windows::Gaming::Input::GamepadButtons::Y );
+
+					buttonEvents(Gamepad::DPAD_UP, Windows::Gaming::Input::GamepadButtons::DPadUp);
+					buttonEvents(Gamepad::DPAD_DOWN, Windows::Gaming::Input::GamepadButtons::DPadDown);
+					buttonEvents(Gamepad::DPAD_LEFT, Windows::Gaming::Input::GamepadButtons::DPadLeft);
+					buttonEvents(Gamepad::DPAD_RIGHT, Windows::Gaming::Input::GamepadButtons::DPadRight);
+
+					buttonEvents(Gamepad::BUTTON_L3, Windows::Gaming::Input::GamepadButtons::LeftThumbstick);
+					buttonEvents(Gamepad::BUTTON_R3, Windows::Gaming::Input::GamepadButtons::RightThumbstick);
+
+					buttonEvents(Gamepad::BUTTON_LBUMPER, Windows::Gaming::Input::GamepadButtons::LeftShoulder);
+					buttonEvents(Gamepad::BUTTON_RBUMPER, Windows::Gaming::Input::GamepadButtons::RightShoulder);
+
+					buttonEvents(Gamepad::BUTTON_BACK, Windows::Gaming::Input::GamepadButtons::View);
+					buttonEvents(Gamepad::BUTTON_START, Windows::Gaming::Input::GamepadButtons::Menu);
 
 					m_currentGamepadReading = reading;
 
@@ -448,13 +604,22 @@ namespace ARK {
 			}
 
 			bool Gamepad::isAxis(unsigned int axisId) {
-				unsigned int newAxisId = convertAxisToId(this, axisId);
+				unsigned int newAxisId = axisId; //convertAxisToId(this, axisId);
 				for(unsigned int i = 0; i < axes.size(); ++i) {
 					if (axes.at(i)->id == newAxisId) {
 						return true;
 					}
 				}
 				return false;
+			}
+			GamepadAxis* Gamepad::getAxis(unsigned int axisId) {
+				unsigned int newAxisId = axisId; //convertAxisToId(this, axisId);
+				for(unsigned int i = 0; i < axes.size(); ++i) {
+					if (axes.at(i)->id == newAxisId) {
+						return axes[i];
+					}
+				}
+				return NULL;
 			}
 			float Gamepad::getAxisValue(unsigned int axisId) {
 
