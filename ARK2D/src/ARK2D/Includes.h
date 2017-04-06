@@ -400,7 +400,9 @@
 			#include <sys/time.h>
  		#elif (defined(_MSC_FULL_VER) || defined(_MSC_VER))
 
- 			#define ARK2D_WINDOWS_VS
+			#ifndef ARK2D_WINDOWS_VS
+				#define ARK2D_WINDOWS_VS
+			#endif
  			#include <time.h>
 
 

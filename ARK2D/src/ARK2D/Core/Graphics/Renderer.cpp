@@ -5210,8 +5210,8 @@ namespace ARK {
 
 				#elif defined(ARK2D_RENDERER_DIRECTX)
 
-					ARK2D::getLog()->w("Renderer::setBlendMode not implemented in Direct X.");
-					/*GameContainerPlatform* platform = ARK2D::getContainer()->getPlatformSpecific();
+					//ARK2D::getLog()->w("Renderer::setBlendMode not implemented in Direct X.");
+					GameContainerPlatform* platform = ARK2D::getContainer()->getPlatformSpecific();
 					ID3D11Device* device = platform->GetD3DDevice();;
 					ID3D11DeviceContext* deviceContext = platform->GetD3DDeviceContext();
 
@@ -5222,7 +5222,7 @@ namespace ARK {
 						float blendFactor[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 						deviceContext->OMSetBlendState(platform->m_blendStateAdditive, blendFactor, 0xFFFFFFFF);
 					}
-					RendererStats::s_glCalls++;*/
+					RendererStats::s_glCalls++;
 
 				#endif
 

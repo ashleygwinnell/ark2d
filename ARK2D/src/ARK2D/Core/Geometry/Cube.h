@@ -242,8 +242,8 @@ namespace ARK {
 					CubeTemplate(x, y, z, w, h, d) {
 
 				}
-				virtual void setLocationByAlignment(float x, float y, signed int alignX, signed int alignY);
-				virtual void setLocationByAlignment(float x, float y, float z, signed int alignX, signed int alignY, signed alignZ);
+				virtual ARK2D_API void setLocationByAlignment(float x, float y, signed int alignX, signed int alignY);
+				virtual ARK2D_API void setLocationByAlignment(float x, float y, float z, signed int alignX, signed int alignY, signed alignZ);
 
 				virtual ARK2D_API bool collides(Shape<float>* s);
 				virtual ~Cube() {

@@ -3354,11 +3354,11 @@
 						DispatchMessage(&msg);
 					}
 
-					m_platformSpecific.m_hotplugGamepadsTimer += m_timer.getDelta();
-					if (m_platformSpecific.m_hotplugGamepadsTimer >= 1.0f) {
-						initGamepads();
-						m_platformSpecific.m_hotplugGamepadsTimer -= 1.0f;
-					}
+					//m_platformSpecific.m_hotplugGamepadsTimer += m_timer.getDelta();
+					//if (m_platformSpecific.m_hotplugGamepadsTimer >= 1.0f) {
+						//initGamepads();
+					//	m_platformSpecific.m_hotplugGamepadsTimer -= 1.0f;
+					//}
 					processGamepadInput();
 
 					// read appropriate counter

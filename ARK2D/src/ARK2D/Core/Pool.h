@@ -15,6 +15,7 @@
 #include "Controls/ErrorDialog.h"
 #include "TypeTraits.h"
 
+#include <functional>
 using namespace std;
 
 namespace ARK {
@@ -144,6 +145,16 @@ namespace ARK {
 					T obj = m_inactive.pop();
 					m_active.add(obj);
 					return obj;
+				}
+				//void each(void (*condition)(T)) {
+				void each(std::function<void(T)> predicate) {
+					VectorIterator<T>* it = m_active.iterator();
+					while (it->hasNext()) {
+						T obj = it->next();
+						if (obj == NULL) { continue; }
+						if (obj->isPendingRemoval()) { continue; }
+						predicate(obj);
+					}
 				}
 				void prune(T obj) {
 					obj->setPendingRemoval(false);
