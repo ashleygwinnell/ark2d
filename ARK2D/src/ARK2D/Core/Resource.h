@@ -69,6 +69,7 @@ namespace ARK {
 
 			protected:
 				static void init();
+			public:
 				static string fixpath(string ref, bool appendPath);
 
 			public:

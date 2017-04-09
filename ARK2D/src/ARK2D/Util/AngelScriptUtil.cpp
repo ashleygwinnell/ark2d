@@ -16,6 +16,39 @@
 
 asIScriptEngine* AngelScriptUtil::s_engine = NULL;
 
+ScriptComponent::ScriptComponent(string path):
+	GameComponent(),
+	m_path(path),
+	m_classname()
+	{
+	init();
+}
+void ScriptComponent::init() {
+	m_classname = m_path.substr(m_path.find_last_of("/")+1, m_path.find_last_of(".") - (m_path.find_last_of("/")+1));
+
+	string funcname = string("void ") + m_classname + string("::init()");
+
+	// Now we run it.
+	// Find the function that is to be called.
+	asIScriptEngine* engine = AngelScriptUtil::getEngine();
+
+	asIScriptModule* mod = engine->GetModule("ark2d");
+	asIScriptFunction* func = mod->GetFunctionByDecl(funcname.c_str());
+	AngelScriptUtil_functionCheck(func, funcname);
+
+	// Create our context, prepare it, and then execute
+	asIScriptContext* ctx = engine->CreateContext();
+	ctx->Prepare(func);
+	//ctx->SetArgObject(0, p);
+	int r = ctx->Execute();
+	AngelScriptUtil_execeptionCheck(ctx, func, r);
+	ctx->Release();
+}
+void ScriptComponent::update() {
+
+}
+
+
 void AngelScriptUtil_MessageCallback(const asSMessageInfo* msg, void *param) {
 	//ARK2D::getLog()->e(msg->message);
 	const char *type = "ERR ";

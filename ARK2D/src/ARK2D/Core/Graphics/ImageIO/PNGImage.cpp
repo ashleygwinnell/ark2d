@@ -530,6 +530,18 @@ namespace ARK {
                     fclose(fp);
                 }
 
+                bool PNGImage::isPixelFilled(int x, int y) {
+                    if (x < 0 || y < 0) { return false; }
+                    if (x >= getWidth()) { return false; }
+                    if (y >= getHeight()) { return false; }
+
+                    unsigned char* pngdata = (unsigned char*) getImageData();
+                    unsigned char* root = pngdata + (((y * getWidth()) + x) * 4);
+                    unsigned char alpha = *(root+3);
+                    unsigned int alpha_i = int(alpha);
+                    return (alpha_i > 0);
+                }
+
                 PNGImage::~PNGImage() {
                     //clean up memory and close stuff
                     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);

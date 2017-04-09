@@ -76,8 +76,6 @@
 #include "ARK2D/Core/Graphics/Shaders/PointLightingShader.h"
 #include "ARK2D/Core/Graphics/Shaders/ShockwaveShader.h"
 #include "ARK2D/Core/Graphics/Skybox.h"
-#include "ARK2D/Core/Graphics/Model/ObjModel.h"
-#include "ARK2D/Core/Graphics/Model/ImageModel.h"
 #include "ARK2D/Core/Graphics/MatrixStack.h"
 #include "ARK2D/Core/Graphics/ImageIO/PNGImage.h"
 

@@ -10,6 +10,7 @@
 #include "../Cast.h"
 #include "../../Common/OpenGL.h"
 #include "Color.h"
+#include "../Geometry/Vector4.h"
 
 #include <string>
 #include <stdio.h>
@@ -244,6 +245,9 @@ namespace ARK {
             }
             uint32_t Color::pack(Color* c) {
                 return pack( c->m_r, c->m_g, c->m_b, c->m_a );
+            }
+            uint32_t Color::pack(Vector4* vec) {
+                return pack( (unsigned char) vec->x, (unsigned char) vec->y, (unsigned char) vec->z, (unsigned char) vec->w );
             }
             uint32_t Color::pack(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
                 uint32_t u = (unsigned char) r;

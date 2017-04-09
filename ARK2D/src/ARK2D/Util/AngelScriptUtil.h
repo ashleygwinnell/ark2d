@@ -12,10 +12,20 @@
 #include "../Common/DLL.h"
 #include "../Common/Libraries/angelscript.h"
 
+#include "../Core/GameObject.h"
 #include "../Core/Controls/ErrorDialog.h"
 
 namespace ARK {
 	namespace Util {
+
+        class ARK2D_API ScriptComponent : public ARK::Core::GameComponent {
+			public:
+				string m_path;
+				string m_classname;
+				ScriptComponent(string path);
+				virtual void init();
+				virtual void update();
+		};
 
 		class ARK2D_API AngelScriptUtil {
 			public:

@@ -98,6 +98,9 @@ namespace ARK {
             class Transform;
 
             class Vector4;
+
+            class Plane;
+            struct PlaneIntersection;
 		}
 
 		//! Contains classes for Rendering and Animation.
@@ -118,6 +121,9 @@ namespace ARK {
 
 	        class MatrixStack;
 
+	        class Mesh;
+	        class MeshRenderer;
+
 	        class HSVShader;
 	        class ShockwaveShader;
 
@@ -128,11 +134,6 @@ namespace ARK {
 				class TargaImage;
 			}
 
-			//! Classes for loading different 3d models as SceneNodes.
-			namespace Model {
-				class ImageModel;
-				class ObjModel;
-			}
 		}
 
 		//! Contains classes for Maths / Random numbers.
@@ -319,7 +320,7 @@ using namespace ARK::Core::Font;
 using namespace ARK::Core::Geometry;
 using namespace ARK::Core::Graphics;
 using namespace ARK::Core::Graphics::ImageIO;
-using namespace ARK::Core::Graphics::Model;
+//using namespace ARK::Core::Graphics::Model;
 using namespace ARK::Core::Tween;
 using namespace ARK::Core::Threading;
 using namespace ARK::Core::Math;

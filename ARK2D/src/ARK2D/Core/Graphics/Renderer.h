@@ -27,6 +27,11 @@ namespace ARK {
     namespace Core {
         namespace Graphics {
 
+            class ARK2D_API Renderable {
+                public:
+                    void render();
+            };
+
             class ARK2D_API RendererStats
             {
                 public:
@@ -99,7 +104,14 @@ namespace ARK {
                     virtual void setSize(unsigned int szbytes);
                     virtual void setData(void* data, unsigned int size);
                     virtual void bind();
-                    void unbind();
+                    virtual void unbind();
+            };
+            class ARK2D_API IBO : public VBO {
+                public:
+                    IBO();
+                    virtual void setData(void* data, unsigned int size);
+                    virtual void bind();
+                    virtual void unbind();
             };
             class ARK2D_API QuadVBO : public VBO {
                 public:
@@ -445,7 +457,7 @@ namespace ARK {
                     static QuadVBO* s_vboQuadTexCoords;
                     static QuadVBO* s_vboQuadNormals;
                     static QuadVBO* s_vboQuadColors;
-                    static VBO* s_vboIndices;
+                    static IBO* s_vboIndices;
                     static VAO* s_vaoQuad;
 
 
@@ -489,6 +501,7 @@ namespace ARK {
 
                     void drawString(const std::string str, int x, int y) const;
                     void drawString(const std::string str, float x, float y, signed int alignX, signed int alignY, float rotation=0.0f, float scale=1.0f);
+                    void drawString(const std::string str, float x, float y, float z, signed int alignX, signed int alignY, float rotationZ=0.0f, float scale=1.0f);
                     void drawStringCenteredAt(const std::string str, int x, int y) const;
                     void drawStringWordWrap(const std::string str, int x, int y, int maxWidth, int ySpacing) const;
                     void drawStringWordWrap(const std::string str, int x, int y, int maxWidth, int ySpacing, int alignX) const;

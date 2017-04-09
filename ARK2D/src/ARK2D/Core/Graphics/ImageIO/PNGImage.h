@@ -36,6 +36,7 @@ namespace ARK {
                         void* getImageData();
                         bool isRGB();
                         bool isRGBA();
+                        bool isPixelFilled(int x, int y);
                         static void saveFile(std::string filename, char* data, int w, int h);
                         ~PNGImage();
                     private:

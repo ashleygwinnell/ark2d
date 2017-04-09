@@ -14,6 +14,9 @@
 #include <stdio.h>
 #include <iostream>
 using namespace std;
+#ifndef ARK2D_WINDOWS
+#define sprintf_s sprintf
+#endif
 
 namespace ARK {
 	namespace Core {

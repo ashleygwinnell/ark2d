@@ -776,6 +776,14 @@ namespace ARK {
                 #endif
             }
 
+            void Shader::setIndices(void* indices, unsigned int length) {
+                #if defined(ARK2D_RENDERER_OPENGL)
+                    Renderer::s_vboIndices->bind();
+                    Renderer::s_vboIndices->setSize(length);
+                    Renderer::s_vboIndices->setData(indices, length);
+                    this->lengthIndices = length;
+                #endif
+            }
             void Shader::setData(float* rawVertices, float* rawNormals, float* rawTexCoords, unsigned char* rawColors, unsigned int length)
             {
                 this->length = length;
@@ -902,6 +910,16 @@ namespace ARK {
 
                     glDrawArrays(GL_TRIANGLES, 0, length);
                     RendererStats::s_tris += length/3;
+                    RendererStats::s_glCalls += 1;
+
+                #endif
+            }
+            void Shader::drawTrianglesIndexed() {
+                #if defined(ARK2D_RENDERER_OPENGL)
+
+                    glDrawElements(GL_TRIANGLES, lengthIndices, GL_UNSIGNED_SHORT, 0);
+
+                    RendererStats::s_tris += lengthIndices/3;
                     RendererStats::s_glCalls += 1;
 
                 #endif

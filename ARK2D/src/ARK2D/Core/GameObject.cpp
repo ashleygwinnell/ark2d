@@ -10,8 +10,29 @@
 namespace ARK {
 	namespace Core {
 
+		GameComponent::GameComponent():
+			dependencies(),
+			gameObject(NULL)
+			{
+
+		}
+		void GameComponent::update() {
+
+		}
+		void GameComponent::render() {
+
+		}
+
+
+
+
+
+
 		GameObject::GameObject():
-			m_pendingRemoval(false), m_renderingLayer(0)
+			SceneNode(),
+			components(),
+			m_pendingRemoval(false),
+			m_renderingLayer(0)
 			{
 
 		}
@@ -43,6 +64,22 @@ namespace ARK {
 
 		void GameObject::render(GameContainer* container, Renderer* g) {
 
+		}
+
+		void GameObject::update() {
+			SceneNode::update();
+			for (auto it : components) {
+    			GameComponent* component = it.second;
+    			component->update();
+    		}
+		}
+		void GameObject::render() {
+			SceneNode::render();
+
+			for (auto it : components) {
+    			GameComponent* component = it.second;
+    			component->render();
+    		}
 		}
 
 		GameObject::~GameObject() {

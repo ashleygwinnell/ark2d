@@ -1578,7 +1578,7 @@ namespace ARK {
 			QuadVBO* Renderer::s_vboQuadTexCoords = new QuadVBO();
 			QuadVBO* Renderer::s_vboQuadNormals = new QuadVBO();
 			QuadVBO* Renderer::s_vboQuadColors = new QuadVBO();
-			VBO* Renderer::s_vboIndices = new VBO();
+			IBO* Renderer::s_vboIndices = new IBO();
 			VAO* Renderer::s_vaoQuad = new VAO();
 
 			VBO::VBO():
@@ -1719,6 +1719,28 @@ namespace ARK {
 				#endif
 				RendererStats::s_glCalls++;
 			}
+
+
+			IBO::IBO():
+				VBO() {
+
+			}
+			void IBO::setData(void* data, unsigned int size) {
+				#if defined(ARK2D_RENDERER_OPENGL)
+					glBufferData(GL_ELEMENT_ARRAY_BUFFER, size * sizeof(unsigned short), data, GL_DYNAMIC_DRAW);
+				#endif
+			}
+			void IBO::bind() {
+				#if defined(ARK2D_RENDERER_OPENGL)
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_id);
+				#endif
+			}
+			void IBO::unbind() {
+				#if defined(ARK2D_RENDERER_OPENGL)
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+				#endif
+			}
+
 
 			QuadVBO::QuadVBO(): VBO(), m_width(2), m_height(4) {
 				#if defined(ARK2D_RENDERER_DIRECTX)
@@ -2564,7 +2586,12 @@ namespace ARK {
 				//m_Font->asBMFont()->getImage()->draw(x, y);
 				m_Font->drawString(str, x, y);
 			}
-			void Renderer::drawString(const string str, float x, float y, signed int alignX, signed int alignY, float rotation, float sc)
+
+			void Renderer::drawString(const string str, float x, float y, signed int alignX, signed int alignY, float rotation, float sc) {
+				drawString(str, x, y, 0, alignX, alignY, rotation, sc);
+			}
+
+			void Renderer::drawString(const std::string str, float x, float y, float z, signed int alignX, signed int alignY, float rotationZ, float sc)
 			{
 				if (m_Font == NULL && m_DefaultFont == NULL) { return; }
 
@@ -2574,6 +2601,7 @@ namespace ARK {
 				}
 				float strWidth = float(thisFont->getStringWidth(str)) * sc;
 				float strHeight = float(thisFont->getLineHeight()) * sc;
+				float strDepth = 0; // depends on rota
 
 				//if (rotation != 0 && alignY == ALIGN_CENTER) // there's gotta be a better way of calculating height of rotated rectangle.
 				//{
@@ -2636,26 +2664,28 @@ namespace ARK {
 					offsetY = strHeight * -1.0f;
 				}
 
+				float offsetZ = 0.0f;
+
 
 				pushMatrix();
 				//if (isBatching()) { getMatrix()->identity(); }
-				translate(x, y);
+				translate(x, y, z);
 
 				bool doRot = false;
-				if (rotation != 0.0f) {
+				if (rotationZ != 0.0f) {
 					doRot = true;
 					pushMatrix();
-					rotate(rotation);
+					rotate(rotationZ);
 				}
 
 				pushMatrix();
 
 				if (sc != 1.0f)
-					scale(sc, sc);
+					scale(sc, sc, sc);
 
 
 
-				thisFont->drawString(str, offsetX * inv_scale, offsetY * inv_scale);
+				thisFont->drawString(str, offsetX * inv_scale, offsetY * inv_scale, offsetZ * inv_scale);
 
 				//if (sc != 1.0f)
 				//	scale(1.0f/sc, 1.0f/sc);
@@ -2672,7 +2702,6 @@ namespace ARK {
 
 
 				popMatrix();
-
 			}
 			void Renderer::drawStringCenteredAt(const std::string str, int x, int y) const {
 				m_Font->drawStringCenteredAt(str, x, y);

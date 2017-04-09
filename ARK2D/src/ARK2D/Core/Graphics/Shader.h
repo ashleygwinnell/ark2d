@@ -156,6 +156,7 @@ namespace ARK {
 
                     // Length of data being used.
                     signed int length;
+                    signed int lengthIndices;
 
                 public:
                     Shader();
@@ -163,9 +164,11 @@ namespace ARK {
                     virtual void bind();
                     virtual void unbind();
                     virtual void setData(float* verts, float* normals, float* texcoords, unsigned char* colors, unsigned int length);
+                    virtual void setIndices(void* indices, unsigned int length);
                     virtual void drawTriangleStrip();
                     virtual void drawTriangleFan();
                     virtual void drawTriangles();
+                    virtual void drawTrianglesIndexed();
                     virtual ~Shader();
             };
         }

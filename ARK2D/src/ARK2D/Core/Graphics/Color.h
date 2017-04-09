@@ -100,6 +100,7 @@ namespace ARK {
                     static uint32_t pack(Color c);
                     static uint32_t pack(Color* c);
                     static uint32_t pack(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+                    static uint32_t pack(Vector4* vec);
                     static unsigned char unpackRed(uint32_t c);
                     static unsigned char unpackGreen(uint32_t c);
                     static unsigned char unpackBlue(uint32_t c);

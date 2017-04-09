@@ -29,7 +29,8 @@ namespace ARK {
 			viewportHeight(1),
 			viewportAspectRatio(1.0f),
 			viewportAutosize(true),
-			viewportOrtho3dScale(1.5f),
+
+			orthographicSize(1.5f),
 
 			fieldOfView(45.0f),
 			nearClip(0.001f),
@@ -58,7 +59,8 @@ namespace ARK {
 			// camera_position_delta = glm::vec3(0, 0, 0);
 			// camera_scale = .5f;
 
-			viewportOrtho3dScale = 1.5f;
+			orthographicSize = 1.5f;
+
 			viewportAutosize = true;
 
 			transform.position.x = 0.0f;
@@ -106,7 +108,7 @@ namespace ARK {
 
 				//projection = glm::ortho((scaleMaybe*-1) * float(viewportAspectRatio), scaleMaybe * float(viewportAspectRatio), scaleMaybe*-1, scaleMaybe, nearClip, farClip);
                 projection.identity();
-                projection.ortho2d((viewportOrtho3dScale*-1) * float(viewportAspectRatio), viewportOrtho3dScale * float(viewportAspectRatio), viewportOrtho3dScale*-1, viewportOrtho3dScale, nearClip, farClip);
+                projection.ortho2d((orthographicSize*-1) * float(viewportAspectRatio), orthographicSize * float(viewportAspectRatio), orthographicSize*-1, orthographicSize, nearClip, farClip);
 
 
 					// http://www.opengl-tutorial.org/beginners-tutorials/tutorial-6-keyboard-and-mouse/
@@ -121,6 +123,17 @@ namespace ARK {
                 lookAt = transform.position + direction;
 
 		    } else if (type == TYPE_ORTHO_2D) {
+
+
+		    	//transform.position.x = 0;
+		    	//transform.position.y = 0;
+		    	//transform.position.z = -1;
+		    	direction.x = 0;
+		    	direction.y = 0;
+		    	direction.z = 1;
+		    	up.x = 0;
+		    	up.y = 1;
+		    	up.z = 0;
 
 				//projection = glm::ortho(float(viewportX), float(viewportWidth), float(viewportHeight), float(viewportY), float(nearClip), float(farClip));
                 projection.identity();
@@ -174,9 +187,9 @@ namespace ARK {
 				GameContainer* container = ARK2D::getContainer();
 				view.identity();
 				view.lookAt(transform.position.x, transform.position.y, transform.position.z, lookAt.x, lookAt.y, lookAt.z, up.x, up.y, up.z);
-                view.translate(container->getTranslateX(), container->getTranslateY(), 0.0f);
+                //view.translate(container->getTranslateX(), container->getTranslateY(), 0.0f);
                 // todo: rotate
-                view.scale(container->getScaleX(), container->getScaleY(), 1.0f);
+                //view.scale(container->getScaleX(), container->getScaleY(), 1.0f);
 
                 model.identity(); // = glm::mat4(1.0f);
 
@@ -448,6 +461,7 @@ namespace ARK {
 				s += "\"viewportHeight\":"; s += Cast::toString<int>(viewportHeight); s += ","; s += nl;
 				s += "\"viewportAspectRatio\":"; s += Cast::toString<float>(viewportAspectRatio); s += ","; s += nl;
 				s += "\"viewportAutosize\":"; s += Cast::toString<int>(viewportAutosize); s += ","; s += nl;
+				s += "\"orthographicSize\":"; s += Cast::toString<float>(orthographicSize); s += ","; s += nl;
 				s += "\"fieldOfView\":"; s += Cast::toString<float>(fieldOfView); s += ","; s += nl;
 				s += "\"nearClip\":"; s += Cast::toString<float>(nearClip); s += ","; s += nl;
 				s += "\"farClip\":"; s += Cast::toString<float>(farClip); s += ","; s += nl;

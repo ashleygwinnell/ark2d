@@ -741,6 +741,25 @@ namespace ARK {
 
                 return m_Charset.LineHeight;
             }
+
+            BMFontRenderer::BMFontRenderer(BMFont* f, string txt, int alignmentX, int alignmentY, const Color& c):
+                GameComponent(),
+                font(f),
+                text(txt),
+                alignment(alignmentX, alignmentY),
+                color(c) {
+                    if (f == NULL) {
+                        font = ARK2D::getRenderer()->getDefaultFont()->asBMFont();
+                    }
+            }
+            void BMFontRenderer::render() {
+                Renderer* r = ARK2D::getRenderer();
+                r->setDrawColor(color);
+                font->drawString(text, 0, 0, alignment.getX(), alignment.getY());
+                // TODO: fit to box / overflow params.
+                //virtual void drawStringFitBox(const std::string str, float x, float y, float w, float h, signed int alignX, signed int alignY, float rotation=0.0f, float defaultScale=1.0f, float minScale=1.0f, float maxScale=1.0f);
+            }
+
         }
     }
 }

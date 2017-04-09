@@ -20,6 +20,8 @@ using namespace std;
 
 #include "../../Namespaces.h"
 #include "../ARK2D.h"
+#include "../GameObject.h"
+#include "../Geometry/Vector2.h"
 
 namespace ARK {
     namespace Core {
@@ -141,6 +143,17 @@ namespace ARK {
                     bool Parse();
 
 
+            };
+
+            class BMFontRenderer  : public GameComponent {
+                public:
+                    BMFont* font;
+                    string text;
+                    Vector2<int> alignment;
+                    const Color& color;
+
+                    BMFontRenderer(BMFont* r, string text, int alignmentX, int alignmentY, const Color& color);
+                    virtual void render();
             };
         }
     }

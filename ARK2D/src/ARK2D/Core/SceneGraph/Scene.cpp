@@ -353,9 +353,7 @@ namespace ARK {
                 if (!visible) { return; }
                 Renderer* r = ARK2D::getRenderer();
                 r->pushMatrix();
-                r->translate(transform.position.getX(), transform.position.getY(), transform.position.getZ());
-                r->rotate(float(transform.rotation.angle()));
-                r->scale(transform.scale.getX(), transform.scale.getY(), transform.scale.getZ());
+                r->multiplyMatrix(transform.toMatrix());
             }
             void SceneNode::render() {
                 if (!visible) { return; }

@@ -23,7 +23,14 @@ namespace ARK {
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
 		template <class T=float>
-		class Vector3 {
+        class Vector3;
+
+        template <class T>
+        class Vector3 {
+			public:
+                static const Vector3<T> FORWARD;
+                static const Vector3<T> UP;
+
 			public:
 				T x;
 				T y;
@@ -274,7 +281,8 @@ namespace ARK {
 					return Vector3<T>(
 						y * lz - z * ly,
 						z * lx - x * lz,
-						x * ly - y * lx);
+						x * ly - y * lx
+					);
 				}
                 static Vector3<T> cross(const Vector3<T>& lhs, const Vector3<T>& rhs) {
                     return Vector3<T>(
@@ -371,6 +379,12 @@ namespace ARK {
 
 				}
             };
+
+            template<typename T>
+			const Vector3<T> Vector3<T>::UP = Vector3<T>(0,1,0);
+
+			template<typename T>
+			const Vector3<T> Vector3<T>::FORWARD = Vector3<T>(0,0,1);
         }
 	}
 }
