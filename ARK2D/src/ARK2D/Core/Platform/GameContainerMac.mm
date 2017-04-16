@@ -872,7 +872,7 @@
 
 			void ARK::Core::GameContainer::start() {
 
-                NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+                //NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 
 				// Get location of current app bundle and make sure there's a resources path.
 					m_platformSpecific.m_resourcePath = [[[NSBundle mainBundle] resourcePath] fileSystemRepresentation];
@@ -990,7 +990,7 @@
 					// enable 2d!
 					enable2D();
 
-					[pool release];
+					//[pool release];
 
 					ARK2D::getRenderer()->init();
 

@@ -208,6 +208,7 @@ namespace ARK {
                     static const unsigned int TYPE_CUSTOM_FUNCTION = 31;
                     static const unsigned int TYPE_DEBUG_STRING = 32;
                     static const unsigned int TYPE_CAMERA_CHANGE = 33;
+                    static const unsigned int TYPE_MESH = 34;
                     static map<unsigned int, string>* s_types;
 
                 public:
@@ -251,6 +252,7 @@ namespace ARK {
                     inline bool isEnabled() { return enabled; }
                     void setEnabled(bool b, bool fromSceneGraph = false);
 
+                    void addMesh(void* obj);
                     void addGeometryTri(float* verts, float* normals, unsigned char* colors);
                     void addGeometryTri(
                         float x1, float y1, float z1,

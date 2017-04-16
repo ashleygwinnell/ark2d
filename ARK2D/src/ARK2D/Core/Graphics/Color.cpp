@@ -244,7 +244,12 @@ namespace ARK {
                 return pack( &c );
             }
             uint32_t Color::pack(Color* c) {
-                return pack( c->m_r, c->m_g, c->m_b, c->m_a );
+                return pack(
+                    (unsigned char) (c->m_r),
+                    (unsigned char) (c->m_g),
+                    (unsigned char) (c->m_b),
+                    (unsigned char) (c->m_a)
+                );
             }
             uint32_t Color::pack(Vector4* vec) {
                 return pack( (unsigned char) vec->x, (unsigned char) vec->y, (unsigned char) vec->z, (unsigned char) vec->w );

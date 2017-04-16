@@ -16,6 +16,7 @@
 using namespace std;
 
 #include "../Resource.h"
+#include "../GameObject.h"
 #include "Color.h"
 #include "../SceneGraph/Scene.h"
 
@@ -218,6 +219,17 @@ namespace ARK {
 
                     // SceneGraph
                         virtual void render();
+            };
+
+            class ARK2D_API ImageRenderer : public GameComponent {
+                public:
+                    Image* image;
+                    Vector2<int> alignment;
+                    const Color& color;
+
+                    ImageRenderer(Image* img);
+                    ImageRenderer(Image* img, int alignmentX, int alignmentY, const Color& color);
+                    virtual void render();
             };
         }
 	}

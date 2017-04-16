@@ -538,7 +538,7 @@ namespace ARK {
                     unsigned char* pngdata = (unsigned char*) getImageData();
                     unsigned char* root = pngdata + (((y * getWidth()) + x) * 4);
                     unsigned char alpha = *(root+3);
-                    unsigned int alpha_i = int(alpha);
+                    unsigned int alpha_i = (unsigned int)(alpha);
                     return (alpha_i > 0);
                 }
 

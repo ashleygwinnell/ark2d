@@ -917,7 +917,7 @@ namespace ARK {
             void Shader::drawTrianglesIndexed() {
                 #if defined(ARK2D_RENDERER_OPENGL)
 
-                    glDrawElements(GL_TRIANGLES, lengthIndices, GL_UNSIGNED_SHORT, 0);
+                    glDrawElements(GL_TRIANGLES, lengthIndices, GL_UNSIGNED_INT, NULL);
 
                     RendererStats::s_tris += lengthIndices/3;
                     RendererStats::s_glCalls += 1;

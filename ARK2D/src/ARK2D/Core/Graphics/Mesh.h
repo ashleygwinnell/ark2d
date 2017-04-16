@@ -25,9 +25,10 @@ namespace ARK {
         			vector<Vector3<float> > vertices;
 					vector<Vector2<float> > uvs;
 					vector<Vector3<float> > normals;
-					vector<uint32_t> colors;
-                    vector<unsigned short> indices;
-
+                    unsigned char* colors;
+                    unsigned int colorsSz;
+                    vector<unsigned int> indices;
+                    Mesh();
 					static Mesh* createFromObjFile(string filename, bool appendPath=true);
 					static Mesh* createFromPNGFile(string filename, bool appendPath=true);
         	};

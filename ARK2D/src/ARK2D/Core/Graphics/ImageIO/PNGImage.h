@@ -21,7 +21,7 @@ namespace ARK {
 
                 class PNGImagestream {
                     public:
-                        void* m_data;
+                        void* m_data = NULL;
                         unsigned int m_pos;
                 };
 
@@ -52,7 +52,7 @@ namespace ARK {
                         png_byte* image_data;
 
 
-                        unsigned char* m_data;
+                        unsigned char* m_data = NULL;
 
                 };
             }

@@ -2573,6 +2573,28 @@ namespace ARK {
 				}
 				return pdst;
 			}
+
+
+			ImageRenderer::ImageRenderer(Image* img):
+                GameComponent(),
+                image(img),
+                alignment(0, 0),
+                color(Color::white) {
+
+            }
+            ImageRenderer::ImageRenderer(Image* img, int alignmentX, int alignmentY, const Color& c):
+                GameComponent(),
+                image(img),
+                alignment(alignmentX, alignmentY),
+                color(c) {
+
+            }
+            void ImageRenderer::render() {
+                Renderer* r = ARK2D::getRenderer();
+                r->setDrawColor(color);
+                image->drawAligned(0, 0, alignment.getX(), alignment.getY(), 1.0f);
+
+            }
 		}
 	}
 }

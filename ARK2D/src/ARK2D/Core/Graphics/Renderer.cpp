@@ -28,6 +28,7 @@
 #include "Shader.h"
 #include "ShaderStore.h"
 #include "FBO.h"
+#include "Mesh.h"
 
 #include "Shaders/BasicShader.h"
 #include "ImageIO/PNGImage.h"
@@ -704,6 +705,10 @@ namespace ARK {
 				else if (m_type == TYPE_CAMERA_CHANGE) {
 					Camera::setCurrent((Camera*) m_objectPointer);
 				}
+				else if (m_type == TYPE_MESH) {
+					MeshRenderer* mr = (MeshRenderer*) m_objectPointer;
+					mr->render();
+				}
 				else if (m_type == TYPE_CUSTOM_OBJECT_FUNCTION) {
 					void (*pt)(void*) = (void(*)(void*)) m_functionPointer;
 					pt(m_objectPointer);
@@ -878,6 +883,18 @@ namespace ARK {
 					enabled = b;
 				}
 
+			}
+			void RendererBatch::addMesh(void* obj) {
+				if (items.size() == 0 ||
+					items.at(items.size()-1).m_type != RendererBatchItem::TYPE_MESH
+					) {
+					items.push_back(RendererBatchItem());
+				}
+				RendererBatchItem* item = &items.at(items.size()-1);
+				item->m_type = RendererBatchItem::TYPE_MESH;
+				item->m_textureId = 0;
+				item->m_shaderId = 0;
+				item->m_objectPointer = obj;
 			}
 			void RendererBatch::addGeometryTri(float* verts, float* normals, unsigned char* colors)
 			{
@@ -1599,7 +1616,7 @@ namespace ARK {
 
 			}
 			void VBO::setSize(unsigned int szbytes) {
-				ARK2D::getLog()->v(StringUtil::append("Setting buffer sz: ", szbytes));
+				//ARK2D::getLog()->v(StringUtil::append("Setting buffer sz: ", szbytes));
 				m_msize = szbytes;
 			}
 			unsigned int VBO::getId() {
@@ -1733,17 +1750,23 @@ namespace ARK {
 			}
 			void IBO::setData(void* data, unsigned int size) {
 				#if defined(ARK2D_RENDERER_OPENGL)
-					glBufferData(GL_ELEMENT_ARRAY_BUFFER, size * sizeof(unsigned short), data, GL_DYNAMIC_DRAW);
+					glBufferData(GL_ELEMENT_ARRAY_BUFFER, size * sizeof(unsigned int), data, GL_DYNAMIC_DRAW);
+				#else
+					VBO::setData(data, size);
 				#endif
 			}
 			void IBO::bind() {
 				#if defined(ARK2D_RENDERER_OPENGL)
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_id);
+				#else
+					VBO::bind();
 				#endif
 			}
 			void IBO::unbind() {
 				#if defined(ARK2D_RENDERER_OPENGL)
 					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+				#else
+					VBO::unbind();
 				#endif
 			}
 
@@ -1966,7 +1989,7 @@ namespace ARK {
 					s_vboQuadColors->setWidth(4);
 					s_vboQuadColors->setHeight(4);
 
-					s_vboIndices->setSize(sizeof(unsigned int) * 6);
+					s_vboIndices->setSize(6);
 					s_vboIndices->init();
 
 					showAnyGlErrorAndExitMacro();

@@ -9,6 +9,15 @@ namespace ARK {
     namespace Core {
         namespace Graphics {
 
+        	Mesh::Mesh():
+        		vertices(),
+				uvs(),
+				normals(),
+				colors(NULL),
+				colorsSz(0),
+				indices() {
+        	}
+
 			Mesh* Mesh::createFromPNGFile(string ref, bool appendPath) {
 
 				string oldref = ref;
@@ -16,9 +25,11 @@ namespace ARK {
 
                 Mesh* mesh = new Mesh();
 
+
+
 				auto addVertex = [mesh](float x, float y, float z, bool shared = false) -> unsigned int {
 					//y *= -1.0f;
-					if (shared) {
+					if (shared && false) {
 						for(unsigned int i = 0; i < mesh->vertices.size(); ++i) {
 							Vector3<float>* one = &mesh->vertices.at(i);
 							if (one->x == x && one->y == y && one->z == z ) {
@@ -31,7 +42,7 @@ namespace ARK {
                 };
 
 				auto addNormal = [mesh](float x, float y, float z, bool shared = false) -> unsigned int  {
-					if (shared) {
+					if (shared && false) {
 						for(unsigned int i = 0; i < mesh->normals.size(); ++i) {
 							Vector3<float>* one = &mesh->normals.at(i);
 							if (one->x == x && one->y == y && one->z == z ) {
@@ -44,78 +55,330 @@ namespace ARK {
                 };
 
                 auto addColor = [mesh](unsigned int r, unsigned int g, unsigned int b, unsigned int a, bool shared = false) -> unsigned int {
-                	if (shared) {
-						for(unsigned int i = 0; i < mesh->colors.size(); ++i) {
-							uint32_t one = mesh->colors.at(i);
-                            if (Color::unpackRed(one) == r && Color::unpackGreen(one) == g && Color::unpackBlue(one) == b && Color::unpackAlpha(one) == a) {
-								return i;
-							}
-						}
-					}
-                    mesh->colors.push_back(Color::pack(r, g, b, a));
-					return mesh->colors.size() - 1;
+                	unsigned char r2 = (unsigned char)(r);
+                	unsigned char g2 = (unsigned char)(g);
+                	unsigned char b2 = (unsigned char)(b);
+                	unsigned char a2 = (unsigned char)(a);
+     //            	if (shared && false) {
+					// 	for(unsigned int i = 0; i < mesh->colors.size(); ++i) {
+					// 		uint32_t one = mesh->colors.at(i);
+     //                        if (Color::unpackRed(one) == r2 && Color::unpackGreen(one) == g2 && Color::unpackBlue(one) == b2 && Color::unpackAlpha(one) == a2) {
+					// 			return i;
+					// 		}
+					// 	}
+					// }
+
+
+                    unsigned char* start = mesh->colors;
+                    int curOffset = mesh->colorsSz;
+                    // *(start + curOffset + 0) = r2;
+                    // *(start + curOffset + 1) = g2;
+                    // *(start + curOffset + 2) = b2;
+                    // *(start + curOffset + 3) = a2;
+                    memcpy((start + curOffset + 0), &r2, 1);
+                    memcpy((start + curOffset + 1), &g2, 1);
+                    memcpy((start + curOffset + 2), &b2, 1);
+                    memcpy((start + curOffset + 3), &a2, 1);
+                    mesh->colorsSz += 4;
+
+                    //mesh->colors.push_back(Color::pack(r2, g2, b2, a2));
+					return 0;//mesh->colors.size() - 1;
                 };
 
+                auto addCube = [mesh,addVertex,addNormal,addColor](float x, float y, float z, int red_i, int green_i, int blue_i, int alpha_i) -> void {
+
+                	// vertex data
+					// front side.
+					{
+						addVertex(x,   y,   0); // tl
+						addVertex(x,   y+1, 0); // bl
+						addVertex(x+1, y,   0); // tr
+						addVertex(x+1, y,   0); // tr
+						addVertex(x,   y+1, 0); // bl
+						addVertex(x+1, y+1, 0); // br
+
+						addNormal(0, 0, 1);
+						addNormal(0, 0, 1);
+						addNormal(0, 0, 1);
+						addNormal(0, 0, 1);
+						addNormal(0, 0, 1);
+						addNormal(0, 0, 1);
+
+						addColor(red_i, green_i, blue_i, alpha_i);
+						addColor(red_i, green_i, blue_i, alpha_i);
+						addColor(red_i, green_i, blue_i, alpha_i);
+						addColor(red_i, green_i, blue_i, alpha_i);
+						addColor(red_i, green_i, blue_i, alpha_i);
+						addColor(red_i, green_i, blue_i, alpha_i);
+
+
+						// mesh->indices.push_back(tl);
+						// mesh->indices.push_back(bl);
+						// mesh->indices.push_back(tr);
+
+						// mesh->indices.push_back(tr);
+						// mesh->indices.push_back(bl);
+						// mesh->indices.push_back(br);
+					}
+
+					// back side
+					{
+						addVertex(x+1, y,   -1); // tr
+						addVertex(x+1, y+1, -1); // br
+						addVertex(x,   y,   -1); // tl
+						addVertex(x,   y,   -1); // tl
+						addVertex(x+1, y+1, -1); // br
+						addVertex(x,   y+1, -1); // bl
+
+
+						addNormal(0, 0, -1);
+						addNormal(0, 0, -1);
+						addNormal(0, 0, -1);
+						addNormal(0, 0, -1);
+						addNormal(0, 0, -1);
+						addNormal(0, 0, -1);
+
+						addColor(red_i, green_i, blue_i, alpha_i);
+						addColor(red_i, green_i, blue_i, alpha_i);
+						addColor(red_i, green_i, blue_i, alpha_i);
+						addColor(red_i, green_i, blue_i, alpha_i);
+						addColor(red_i, green_i, blue_i, alpha_i);
+						addColor(red_i, green_i, blue_i, alpha_i);
+
+						// mesh->indices.push_back(tr);
+						// mesh->indices.push_back(br);
+						// mesh->indices.push_back(tl);
+
+						// mesh->indices.push_back(tl);
+						// mesh->indices.push_back(br);
+						// mesh->indices.push_back(bl);
+					}
+
+					// left side
+					{
+						//if (!png->isPixelFilled(x-1, y)) {
+							addVertex(x,   y,   -1); // tl
+							addVertex(x,   y+1, -1); // bl
+							addVertex(x,   y,    0); // tr
+							addVertex(x,   y,    0); // tr
+							addVertex(x,   y+1, -1); // bl
+							addVertex(x,   y+1,  0); // br
+
+							addNormal(-1, 0, 0);
+							addNormal(-1, 0, 0);
+							addNormal(-1, 0, 0);
+							addNormal(-1, 0, 0);
+							addNormal(-1, 0, 0);
+							addNormal(-1, 0, 0);
+
+							addColor(red_i, green_i, blue_i, alpha_i);
+							addColor(red_i, green_i, blue_i, alpha_i);
+							addColor(red_i, green_i, blue_i, alpha_i);
+							addColor(red_i, green_i, blue_i, alpha_i);
+							addColor(red_i, green_i, blue_i, alpha_i);
+							addColor(red_i, green_i, blue_i, alpha_i);
+
+							// mesh->indices.push_back(tl);
+							// mesh->indices.push_back(bl);
+							// mesh->indices.push_back(tr);
+
+							// mesh->indices.push_back(tr);
+							// mesh->indices.push_back(bl);
+							// mesh->indices.push_back(br);
+						//}
+					}
+
+					// right side
+					{
+						//if (!png->isPixelFilled(x+1, y)) {
+							addVertex(x+1,   y,    0); // tr
+							addVertex(x+1,   y+1,  0); // br
+							addVertex(x+1,   y,   -1); // tl
+							addVertex(x+1,   y,   -1); // tl
+							addVertex(x+1,   y+1,  0); // br
+							addVertex(x+1,   y+1, -1); // bl
+
+
+							addNormal(1, 0, 0);
+							addNormal(1, 0, 0);
+							addNormal(1, 0, 0);
+							addNormal(1, 0, 0);
+							addNormal(1, 0, 0);
+							addNormal(1, 0, 0);
+
+							addColor(red_i, green_i, blue_i, alpha_i);
+							addColor(red_i, green_i, blue_i, alpha_i);
+							addColor(red_i, green_i, blue_i, alpha_i);
+							addColor(red_i, green_i, blue_i, alpha_i);
+							addColor(red_i, green_i, blue_i, alpha_i);
+							addColor(red_i, green_i, blue_i, alpha_i);
+
+							// mesh->indices.push_back(tr);
+							// mesh->indices.push_back(br);
+							// mesh->indices.push_back(tl);
+
+							// mesh->indices.push_back(tl);
+							// mesh->indices.push_back(br);
+							// mesh->indices.push_back(bl);
+						//}
+					}
+
+					// bottom side
+					{
+						//if (!png->isPixelFilled(x, y+1)) {
+							addVertex(x,     y+1, 0); // tl
+							addVertex(x,     y+1, -1); // bl
+							addVertex(x+1,   y+1, 0); // tr
+							addVertex(x+1,   y+1, 0); // tr
+							addVertex(x,     y+1, -1); // bl
+							addVertex(x+1,   y+1, -1); // br
+
+							addNormal(0, -1, 0);
+							addNormal(0, -1, 0);
+							addNormal(0, -1, 0);
+							addNormal(0, -1, 0);
+							addNormal(0, -1, 0);
+							addNormal(0, -1, 0);
+
+							addColor(red_i, green_i, blue_i, alpha_i);
+							addColor(red_i, green_i, blue_i, alpha_i);
+							addColor(red_i, green_i, blue_i, alpha_i);
+							addColor(red_i, green_i, blue_i, alpha_i);
+							addColor(red_i, green_i, blue_i, alpha_i);
+							addColor(red_i, green_i, blue_i, alpha_i);
+
+							// mesh->indices.push_back(tl);
+							// mesh->indices.push_back(bl);
+							// mesh->indices.push_back(tr);
+
+							// mesh->indices.push_back(tr);
+							// mesh->indices.push_back(bl);
+							// mesh->indices.push_back(br);
+						//}
+					}
+
+					// top side
+					{
+						//if (!png->isPixelFilled(x, y-1)) {
+							addVertex(x,     y, -1); // tl
+							addVertex(x,     y,  0); // bl
+							addVertex(x+1,   y, -1); // tr
+							addVertex(x+1,   y, -1); // tr
+							addVertex(x,     y,  0); // bl
+							addVertex(x+1,   y,  0); // br
+
+							addNormal(0, 1, 0);
+							addNormal(0, 1, 0);
+							addNormal(0, 1, 0);
+							addNormal(0, 1, 0);
+							addNormal(0, 1, 0);
+							addNormal(0, 1, 0);
+
+							addColor(red_i, green_i, blue_i, alpha_i);
+							addColor(red_i, green_i, blue_i, alpha_i);
+							addColor(red_i, green_i, blue_i, alpha_i);
+							addColor(red_i, green_i, blue_i, alpha_i);
+							addColor(red_i, green_i, blue_i, alpha_i);
+							addColor(red_i, green_i, blue_i, alpha_i);
+
+							// mesh->indices.push_back(tl);
+							// mesh->indices.push_back(bl);
+							// mesh->indices.push_back(tr);
+
+							// mesh->indices.push_back(tr);
+							// mesh->indices.push_back(bl);
+							// mesh->indices.push_back(br);
+
+						//}
+					}
+
+
+                };
+
+
 				PNGImage* png = new PNGImage(ref.c_str());
-				png->load();
+				int success = png->load();
+				if (success != 0) {
+					string errmsg = StringUtil::append("Error loading png image: ", success);
+					ErrorDialog::createAndShow(errmsg);
+					exit(0);
+				}
+
 				if (!png->isRGBA()) {
 					ARK2D::getLog()->e("png must be rgba.");
 					exit(0);
 				}
 
+
+
+				int colourWidth = (png->isRGBA())
+					? 4
+					: 3;
+
 				//bounds.set(0,0,0, png->getWidth(), png->getHeight(), 1);
 				//pivot.set(0.5f, -1.0f, 0.5f);
+				ARK2D::getLog()->e(StringUtil::append("png w: ", png->getWidth()));
+				ARK2D::getLog()->e(StringUtil::append("png h: ", png->getHeight()));
 
 				unsigned char* pngdata = (unsigned char*) png->getImageData();
+
+				int allocSz = sizeof(unsigned char) * png->getWidth() * png->getHeight() * colourWidth * 6;
+				mesh->colors = (unsigned char*) realloc( mesh->colors, allocSz );
+				mesh->colorsSz = 0;
+				if (mesh->colors == NULL) {
+					ARK2D::getLog()->e(StringUtil::append("Could not allocate ", allocSz));
+					return mesh;
+				}
 
 				for(unsigned int x = 0; x < png->getWidth(); x++)
 				{
 					for(unsigned int y = 0; y < png->getHeight(); y++)
 					{
-						unsigned char* root = pngdata + (((y * png->getWidth()) + x) * 4);
+						unsigned char* root = pngdata + (((y * png->getWidth()) + x) * colourWidth);
 
 						unsigned char red = *root;
 						unsigned char green = *(root+1);
 						unsigned char blue = *(root+2);
-						unsigned char alpha = *(root+3);
+						unsigned char alpha = (png->isRGBA())
+							? (*(root+3))
+							: 255;
 
-						unsigned int red_i = int(red);
-						unsigned int green_i = int(green);
-						unsigned int blue_i = int(blue);
-						unsigned int alpha_i = int(alpha);
+						unsigned int red_i = (unsigned int)(red);
+						unsigned int green_i = (unsigned int)(green);
+						unsigned int blue_i = (unsigned int)(blue);
+						unsigned int alpha_i = (unsigned int)(alpha);
 
-//						String s;
-//						s += "{ x: ";
-//						s += x;
-//						s += ", y: ";
-//						s += y;
-//						s += ", r: ";
-//						s += red_i;
-//						s += ", g: ";
-//						s += green_i;
-//						s += ", b: ";
-//						s += blue_i;
-//						s += ", a: ";
-//						s += alpha_i;
-//						s += " }";
-						//ARK2D::getLog()->w(s.get());
+						// String s;
+						// s += "{ x: ";
+						// s += x;
+						// s += ", y: ";
+						// s += y;
+						// s += ", r: ";
+						// s += red_i;
+						// s += ", g: ";
+						// s += green_i;
+						// s += ", b: ";
+						// s += blue_i;
+						// s += ", a: ";
+						// s += alpha_i;
+						// s += " }";
+						// ARK2D::getLog()->w(s.get());
 
 
 
 						if (alpha_i > 0) {
 
-							// color data
-							//colors.push_back(Vector4<float>(red_i / 255.0f, green_i / 255.0f, blue_i / 255.0f, alpha_i / 255.0f));
-							//mesh->colors.push_back(Vector4(red_i, green_i , blue_i, alpha_i));
-							//int thisColor = addColor(red_i, green_i, blue_i, alpha_i); //mesh->colors.size() - 1;
+							addCube(x, y, 0, red_i, green_i, blue_i, alpha_i);
+
+							continue;
 
 							// vertex data
 							// front side.
 							{
-								unsigned short tl = addVertex(x,   y,   0);
-								unsigned short tr = addVertex(x+1, y,   0);
-								unsigned short bl = addVertex(x,   y+1, 0);
-								unsigned short br = addVertex(x+1, y+1, 0);
+								unsigned int tl = addVertex(x,   y,   0);
+								unsigned int tr = addVertex(x+1, y,   0);
+								unsigned int bl = addVertex(x,   y+1, 0);
+								unsigned int br = addVertex(x+1, y+1, 0);
 
 								addNormal(0, 0, 1);
 								addNormal(0, 0, 1);
@@ -135,35 +398,14 @@ namespace ARK {
 								mesh->indices.push_back(tr);
 								mesh->indices.push_back(bl);
 								mesh->indices.push_back(br);
-
-								// ImageModelTriangle* tri = new ImageModelTriangle();
-								// tri->vert1 = tl;
-								// tri->vert2 = bl;
-								// tri->vert3 = tr;
-								// tri->color1 = thisColor;
-								// tri->color2 = thisColor;
-								// tri->color3 = thisColor;
-								// tri->normal = addNormal(0, 0, 1);
-
-								// ImageModelTriangle* tri2 = new ImageModelTriangle();
-								// tri2->vert1 = tr;
-								// tri2->vert2 = bl;
-								// tri2->vert3 = br;
-								// tri2->color1 = thisColor;
-								// tri2->color2 = thisColor;
-								// tri2->color3 = thisColor;
-								// tri2->normal = addNormal(0, 0, 1);
-
-								// mesh->indices.push_back(tri);
-								// mesh->indices.push_back(tri2);
 							}
 
 							// back side
 							{
-								unsigned short tl = addVertex(x,   y,   -1);
-								unsigned short tr = addVertex(x+1, y,   -1);
-								unsigned short bl = addVertex(x,   y+1, -1);
-								unsigned short br = addVertex(x+1, y+1, -1);
+								unsigned int tl = addVertex(x,   y,   -1);
+								unsigned int tr = addVertex(x+1, y,   -1);
+								unsigned int bl = addVertex(x,   y+1, -1);
+								unsigned int br = addVertex(x+1, y+1, -1);
 
 								addNormal(0, 0, -1);
 								addNormal(0, 0, -1);
@@ -182,36 +424,15 @@ namespace ARK {
 								mesh->indices.push_back(tl);
 								mesh->indices.push_back(br);
 								mesh->indices.push_back(bl);
-
-								// ImageModelTriangle* tri = new ImageModelTriangle();
-								// tri->vert1 = tr;
-								// tri->vert2 = br;
-								// tri->vert3 = tl;
-								// tri->color1 = thisColor;
-								// tri->color2 = thisColor;
-								// tri->color3 = thisColor;
-								// tri->normal = addNormal(0, 0, -1);
-
-								// ImageModelTriangle* tri2 = new ImageModelTriangle();
-								// tri2->vert1 = tl;
-								// tri2->vert2 = br;
-								// tri2->vert3 = bl;
-								// tri2->color1 = thisColor;
-								// tri2->color2 = thisColor;
-								// tri2->color3 = thisColor;
-								// tri2->normal = addNormal(0, 0, -1);
-
-								// indices.push_back(tri);
-								// indices.push_back(tri2);
 							}
 
 							// left side
 							{
 								if (!png->isPixelFilled(x-1, y)) {
-									unsigned short tl = addVertex(x,   y,   -1);
-									unsigned short tr = addVertex(x, 	 y,    0);
-									unsigned short bl = addVertex(x,   y+1, -1);
-									unsigned short br = addVertex(x,   y+1,  0);
+									unsigned int tl = addVertex(x,   y,   -1);
+									unsigned int tr = addVertex(x, 	 y,    0);
+									unsigned int bl = addVertex(x,   y+1, -1);
+									unsigned int br = addVertex(x,   y+1,  0);
 
 									addNormal(-1, 0, 0);
 									addNormal(-1, 0, 0);
@@ -230,37 +451,16 @@ namespace ARK {
 									mesh->indices.push_back(tr);
 									mesh->indices.push_back(bl);
 									mesh->indices.push_back(br);
-
-									/*ImageModelTriangle* tri = new ImageModelTriangle();
-									tri->vert1 = tl;
-									tri->vert2 = bl;
-									tri->vert3 = tr;
-									tri->color1 = thisColor;
-									tri->color2 = thisColor;
-									tri->color3 = thisColor;
-									tri->normal = addNormal(-1, 0, 0);
-
-									ImageModelTriangle* tri2 = new ImageModelTriangle();
-									tri2->vert1 = tr;
-									tri2->vert2 = bl;
-									tri2->vert3 = br;
-									tri2->color1 = thisColor;
-									tri2->color2 = thisColor;
-									tri2->color3 = thisColor;
-									tri2->normal = addNormal(-1, 0, 0);
-
-									indices.push_back(tri);
-                                    indices.push_back(tri2);*/
 								}
 							}
 
 							// right side
 							{
 								if (!png->isPixelFilled(x+1, y)) {
-									unsigned short tl = addVertex(x+1,   y,   -1);
-									unsigned short tr = addVertex(x+1,   y,    0);
-									unsigned short bl = addVertex(x+1,   y+1, -1);
-									unsigned short br = addVertex(x+1,   y+1,  0);
+									unsigned int tl = addVertex(x+1,   y,   -1);
+									unsigned int tr = addVertex(x+1,   y,    0);
+									unsigned int bl = addVertex(x+1,   y+1, -1);
+									unsigned int br = addVertex(x+1,   y+1,  0);
 
 									addNormal(1, 0, 0);
 									addNormal(1, 0, 0);
@@ -279,37 +479,16 @@ namespace ARK {
 									mesh->indices.push_back(tl);
 									mesh->indices.push_back(br);
 									mesh->indices.push_back(bl);
-
-									/*ImageModelTriangle* tri = new ImageModelTriangle();
-									tri->vert1 = tr;
-									tri->vert2 = br;
-									tri->vert3 = tl;
-									tri->color1 = thisColor;
-									tri->color2 = thisColor;
-									tri->color3 = thisColor;
-									tri->normal = addNormal(1, 0, 0);
-
-									ImageModelTriangle* tri2 = new ImageModelTriangle();
-									tri2->vert1 = tl;
-									tri2->vert2 = br;
-									tri2->vert3 = bl;
-									tri2->color1 = thisColor;
-									tri2->color2 = thisColor;
-									tri2->color3 = thisColor;
-									tri2->normal = addNormal(1, 0, 0);
-
-									indices.push_back(tri);
-									indices.push_back(tri2);*/
 								}
 							}
 
 							// bottom side
 							{
 								if (!png->isPixelFilled(x, y+1)) {
-									unsigned short tl = addVertex(x,     y+1, 0);
-									unsigned short tr = addVertex(x+1,   y+1, 0);
-									unsigned short bl = addVertex(x,     y+1, -1);
-									unsigned short br = addVertex(x+1,   y+1, -1);
+									unsigned int tl = addVertex(x,     y+1, 0);
+									unsigned int tr = addVertex(x+1,   y+1, 0);
+									unsigned int bl = addVertex(x,     y+1, -1);
+									unsigned int br = addVertex(x+1,   y+1, -1);
 
 									addNormal(0, -1, 0);
 									addNormal(0, -1, 0);
@@ -328,37 +507,16 @@ namespace ARK {
 									mesh->indices.push_back(tr);
 									mesh->indices.push_back(bl);
 									mesh->indices.push_back(br);
-
-									/*ImageModelTriangle* tri = new ImageModelTriangle();
-									tri->vert1 = tl;
-									tri->vert2 = bl;
-									tri->vert3 = tr;
-									tri->color1 = thisColor;
-									tri->color2 = thisColor;
-									tri->color3 = thisColor;
-									tri->normal = addNormal(0, -1, 0);
-
-									ImageModelTriangle* tri2 = new ImageModelTriangle();
-									tri2->vert1 = tr;
-									tri2->vert2 = bl;
-									tri2->vert3 = br;
-									tri2->color1 = thisColor;
-									tri2->color2 = thisColor;
-									tri2->color3 = thisColor;
-									tri2->normal = addNormal(0, -1, 0);
-
-									indices.push_back(tri);
-									indices.push_back(tri2);*/
 								}
 							}
 
 							// top side
 							{
 								if (!png->isPixelFilled(x, y-1)) {
-									unsigned short tl = addVertex(x,     y, -1);
-									unsigned short tr = addVertex(x+1,   y, -1);
-									unsigned short bl = addVertex(x,     y,  0);
-									unsigned short br = addVertex(x+1,   y,  0);
+									unsigned int tl = addVertex(x,     y, -1);
+									unsigned int tr = addVertex(x+1,   y, -1);
+									unsigned int bl = addVertex(x,     y,  0);
+									unsigned int br = addVertex(x+1,   y,  0);
 
 									addNormal(0, 1, 0);
 									addNormal(0, 1, 0);
@@ -378,37 +536,17 @@ namespace ARK {
 									mesh->indices.push_back(bl);
 									mesh->indices.push_back(br);
 
-									/*ImageModelTriangle* tri = new ImageModelTriangle();
-									tri->vert1 = tl;
-									tri->vert2 = bl;
-									tri->vert3 = tr;
-									tri->color1 = thisColor;
-									tri->color2 = thisColor;
-									tri->color3 = thisColor;
-									tri->normal = addNormal(0, 1, 0);
-
-									ImageModelTriangle* tri2 = new ImageModelTriangle();
-									tri2->vert1 = tr;
-									tri2->vert2 = bl;
-									tri2->vert3 = br;
-									tri2->color1 = thisColor;
-									tri2->color2 = thisColor;
-									tri2->color3 = thisColor;
-									tri2->normal = addNormal(0, 1, 0);
-
-									indices.push_back(tri);
-									indices.push_back(tri2);*/
 								}
 							}
-
-							//colors.push_back(Vector4<float>(red_i/255.0f, green_i/255.0f, blue_i/255.0f, alpha_a/255.0f));
-							//colors.push_back(Vector4<float>(red_i/255.0f, green_i/255.0f, blue_i/255.0f, alpha_a/255.0f));
-							//colors.push_back(Vector4<float>(red_i/255.0f, green_i/255.0f, blue_i/255.0f, alpha_a/255.0f));
-							//colors.push_back(Vector4<float>(red_i/255.0f, green_i/255.0f, blue_i/255.0f, alpha_a/255.0f));
-
 						}
 					}
 				}
+
+				return mesh;
+
+				delete png;
+				png = NULL;
+
 				return mesh;
 
 				// remove duplicate verts
@@ -597,6 +735,14 @@ namespace ARK {
 				}
 
 				// For each vertex of each triangle
+				int allocSz = sizeof(unsigned char) * vertexIndices.size() * 4;
+				mesh->colors = (unsigned char*) realloc( mesh->colors, allocSz );
+				mesh->colorsSz = 0;
+				if (mesh->colors == NULL) {
+					ARK2D::getLog()->e(StringUtil::append("Could not allocate ", allocSz));
+					return mesh;
+				}
+
 				for (unsigned int i = 0; i < vertexIndices.size(); ++i)
 				{
 					// Get the indices of its attributes
@@ -608,13 +754,22 @@ namespace ARK {
 					Vector3<float> vertex = temp_vertices[ vertexIndex-1 ];
 					Vector2<float> uv 	  = temp_uvs[ uvIndex-1 ];
 					Vector3<float> normal = temp_normals[ normalIndex-1 ];
-					Vector4 color = temp_colors[ vertexIndex-1 ];
+					Vector4 color         = temp_colors[ vertexIndex-1 ];
 
 					// Put the attributes in buffers
 					mesh->vertices.push_back(vertex);
 					mesh->uvs     .push_back(uv);
 					mesh->normals .push_back(normal);
-					mesh->colors  .push_back( Color::pack(&color) );
+
+					unsigned char* start = mesh->colors;
+					*(start + mesh->colorsSz + 0) = (unsigned char)(color.x);
+					*(start + mesh->colorsSz + 1) = (unsigned char)(color.y);
+					*(start + mesh->colorsSz + 2) = (unsigned char)(color.z);
+					*(start + mesh->colorsSz + 3) = (unsigned char)(color.w);
+					mesh->colorsSz += 4;
+					if (mesh->colorsSz > allocSz) {
+						ErrorDialog::createAndShow("(mesh->colorsSz > allocSz)");
+					}
 			    }
 
 				fclose(file);
@@ -629,8 +784,22 @@ namespace ARK {
 
 			}
 			void MeshRenderer::render() {
+
+				if (Renderer::isBatching()) {
+                    Renderer::s_batch->addMesh((void*) this);
+					return;
+				}
+
+
+return;
 				Shader* shader = RendererState::start(RendererState::GEOMETRY);
-			    shader->setData((float*) &mesh->vertices[0], (float*)&mesh->normals[0], (float*)&mesh->uvs[0], (unsigned char*)&mesh->colors[0], mesh->vertices.size());
+
+				float* uvs = (mesh->uvs.size() > 0)
+					? (float*) &mesh->uvs[0]
+					: NULL;
+
+			    shader->setData((float*) &mesh->vertices[0], (float*)&mesh->normals[0], uvs, (unsigned char*)mesh->colors, mesh->vertices.size());
+
 			    if (mesh->indices.size() > 0) {
 			    	shader->setIndices( &mesh->indices[0], mesh->indices.size() );
 					shader->drawTrianglesIndexed( );
@@ -638,7 +807,6 @@ namespace ARK {
 				else {
 					shader->drawTriangles();
 				}
-
 
 			}
 
