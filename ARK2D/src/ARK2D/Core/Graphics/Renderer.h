@@ -207,6 +207,7 @@ namespace ARK {
                     static const unsigned int TYPE_CUSTOM_OBJECT_FUNCTION = 30;
                     static const unsigned int TYPE_CUSTOM_FUNCTION = 31;
                     static const unsigned int TYPE_DEBUG_STRING = 32;
+                    static const unsigned int TYPE_CAMERA_CHANGE = 33;
                     static map<unsigned int, string>* s_types;
 
                 public:

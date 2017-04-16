@@ -98,6 +98,8 @@ namespace ARK {
                 keyChars(),
                 mouse_x(0),
                 mouse_y(0),
+                mouse_prev_x(0),
+                mouse_prev_y(0),
                 mouse_x_raw(0),
                 mouse_y_raw(0),
                 pressedEvents(),
@@ -529,9 +531,32 @@ namespace ARK {
                 return false;
             }
 
+            void Input::update() {
+                if (!mouse_fetched_this_frame) {
+                    mouse_fetched_this_x = 0;
+                    mouse_fetched_this_y = 0;
+                    CGGetLastMouseDelta(&mouse_fetched_this_x, &mouse_fetched_this_y);
+                    mouse_fetched_this_frame = true;
+                }
+            }
             void Input::clearKeyPressedRecord() {
                 pressedEvents.clear();
                 releasedEvents.clear();
+            }
+            void Input::endFrame() {
+                mouse_prev_x = mouse_x;
+                mouse_prev_y = mouse_y;
+                mouse_fetched_this_frame = false;
+
+                // Mouse lock.
+                if (m_container->isCursorLocked()) {
+                    #ifdef ARK2D_MACINTOSH
+                        NSWindow* window = m_container->m_platformSpecific.m_window;
+                        NSRect windowFrame = [window frame];
+                        CGPoint centerOfScreen = CGPointMake(windowFrame.origin.x + (m_container->getDynamicWidth() / 2), windowFrame.origin.y + (m_container->getDynamicHeight() / 2));
+                        CGWarpMouseCursorPosition(centerOfScreen);
+                    #endif
+                }
             }
 
             int Input::getGlobalMouseX() {
@@ -546,6 +571,24 @@ namespace ARK {
             }
             int Input::getMouseY() const {
                 return mouse_y;
+            }
+            int Input::getLastMouseX() const {
+                return mouse_prev_x;
+            }
+            int Input::getLastMouseY() const {
+                return mouse_prev_y;
+            }
+            int Input::getMouseChangeX() const {
+                #ifdef ARK2D_MACINTOSH
+                    return mouse_fetched_this_x;
+                #endif
+                return mouse_x - mouse_prev_x;
+            }
+            int Input::getMouseChangeY() const {
+                #ifdef ARK2D_MACINTOSH
+                    return mouse_fetched_this_y;
+                #endif
+                return mouse_y - mouse_prev_y;
             }
             int Input::getMouseXRaw() const {
                 return mouse_x_raw;

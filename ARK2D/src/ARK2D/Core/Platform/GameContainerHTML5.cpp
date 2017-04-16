@@ -112,6 +112,8 @@
 				//pstr += Cast::toString<int>(thisy);
 				//ARK2D::getLog()->e(pstr);
 
+				i->mouse_prev_x = i->mouse_x;
+				i->mouse_prev_y = i->mouse_y;
 				i->mouse_x = (int) thisx;
 				i->mouse_y = (int) thisy;
 
@@ -790,6 +792,7 @@
 				//ARK2D::getLog()->update();
 
 			   	//ARK2D::getLog()->update();
+			   	m_input->update();
 			   	container->scene->update();
 
 			   //	ARK2D::getLog()->i("Game Pre-update");
@@ -807,6 +810,7 @@
 				// for (unsigned int i = 0; i < m_gamepads.size(); i++) {
 				// 	m_gamepads.at(i)->clearButtonPressedRecord();
 				// }
+				m_input->endFrame();
 
 				//ARK2D::getLog()->i("Game Pre-render");
 				RendererStats::reset();

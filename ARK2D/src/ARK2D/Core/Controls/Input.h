@@ -436,13 +436,19 @@ namespace ARK {
                     bool isKeyAlphanumeric(unsigned int key);
                     bool isCapsLockOn();
 
+                    void update();
                     void clearKeyPressedRecord();
+                    void endFrame();
 
                     int getGlobalMouseX();
                     int getGlobalMouseY();
 
                     int getMouseX() const;
                     int getMouseY() const;
+                    int getMouseChangeX() const;
+                    int getMouseChangeY() const;
+                    int getLastMouseX() const;
+                    int getLastMouseY() const;
                     int getMouseXRaw() const;
                     int getMouseYRaw() const;
 
@@ -457,8 +463,13 @@ namespace ARK {
                 public:
                     int mouse_x;
                     int mouse_y;
+                    int mouse_prev_x;
+                    int mouse_prev_y;
                     int mouse_x_raw;
                     int mouse_y_raw;
+                    bool mouse_fetched_this_frame = false;
+                    int mouse_fetched_this_x;
+                    int mouse_fetched_this_y;
                     void setGameContainer(GameContainer* c);
                     set<int> pressedEvents;
                     set<int> releasedEvents;

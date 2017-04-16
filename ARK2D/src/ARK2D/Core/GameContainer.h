@@ -103,7 +103,7 @@ namespace ARK {
 
 				void setSize(int width, int height, bool docallback = true);
 				#if defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE) || defined(ARK2D_DESKTOP)
-					// does the setSize without calling game::resize. 
+					// does the setSize without calling game::resize.
 					// so the game can adjust without infinitely recursively looping.
 					void setSizeNoCallback(int width, int height);
 				#endif
@@ -118,6 +118,9 @@ namespace ARK {
 				void start();
 
 				void setCursorVisible(bool b);
+
+				void setCursorLocked(bool b);
+				bool isCursorLocked();
 
 				void setClearColor(const Color& color);
 				const Color& getClearColor();
@@ -169,13 +172,13 @@ namespace ARK {
 
 				bool isShowingFPS();
 				void setShowingFPS(bool b);
-		
-		
+
+
 				void renderFPS();
 				virtual void preRender();
 				virtual void postRender();
 			public:
-		
+
 
 	//	#if (defined(ARK2D_MACINTOSH) || defined(ARK2D_WINDOWS) || defined(ARK2D_FLASCC) || defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE))
 				void resizeBehaviourNoCallback(int width, int height);
@@ -194,13 +197,13 @@ namespace ARK {
 
 			#ifdef ARK2D_FLASCC
 				public:
-			#else 
+			#else
 				private:
 			#endif
 
 
 				void resize(int w, int h);
-				
+
 				void enableOpenAL();
 				void disableOpenAL();
 			public:
@@ -263,6 +266,8 @@ namespace ARK {
 				unsigned int m_screenOrientationPrevious;
 				bool m_orientationInverted; // portrait game rotated landscape for example. useful in tablet/touch-based games that go fullscreen.
 				bool m_2in1enabled;
+
+				bool m_mouseLock = false;
 
 				Color m_clearColor;
 

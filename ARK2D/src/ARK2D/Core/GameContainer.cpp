@@ -518,6 +518,13 @@ namespace ARK {
 			return &m_gamepads;
 		}
 
+		void GameContainer::setCursorLocked(bool b) {
+			m_mouseLock = b;
+		}
+		bool GameContainer::isCursorLocked() {
+			return m_mouseLock;
+		}
+
 		void GameContainer::setClearColor(const Color& color) {
 			m_clearColor = color;
 			m_graphics.setScissorBoxColors(color, color, color, color);

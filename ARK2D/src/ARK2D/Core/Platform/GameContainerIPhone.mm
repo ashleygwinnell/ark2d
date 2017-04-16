@@ -341,12 +341,14 @@ namespace ARK {
 
 
 		//int delta = (int) (m_timer->getDelta() * 1000);
+		m_input->update();
         m_container->scene->update();
 
 		m_input->clearKeyPressedRecord();
 		for (unsigned int i = 0; i < m_container->m_gamepads.size(); i++) {
 			m_container->m_gamepads.at(i)->clearButtonPressedRecord();
 		}
+		m_input->endFrame();
 
 		RendererStats::reset();
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

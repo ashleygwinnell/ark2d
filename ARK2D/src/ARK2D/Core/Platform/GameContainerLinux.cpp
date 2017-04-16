@@ -15,33 +15,33 @@
 	#include <errno.h>
 	#include <fcntl.h>
 	#include <linux/input.h>
-	
+
 	#include <X11/Xatom.h>
 
 
 	#include <X11/extensions/Xinerama.h>
 
 	// http://www.libsdl.org/tmp/SDL/src/video/x11/SDL_x11window.c  --//--  http://hg.libsdl.org/SDL/file/704a0bfecf75/src/video/x11/SDL_x11window.c
- 
+
 	namespace ARK {
 		namespace Core {
 
 			pthread_mutex_t GameContainerPlatform::devicesMutex;
 			unsigned int GameContainerPlatform::numDevices = 0;
 			unsigned int GameContainerPlatform::nextDeviceID = 0;
-			
+
 			Gamepad_queuedEvent* GameContainerPlatform::eventQueue = NULL;
 			size_t GameContainerPlatform::eventQueueSize = 0;
 			size_t GameContainerPlatform::eventCount = 0;
 			pthread_mutex_t GameContainerPlatform::eventQueueMutex;
 
-			GLint GameContainerPlatform::att[11] = { 
-				GLX_RGBA, 
-				GLX_DEPTH_SIZE, 24, 
-				GLX_DOUBLEBUFFER, 
+			GLint GameContainerPlatform::att[11] = {
+				GLX_RGBA,
+				GLX_DEPTH_SIZE, 24,
+				GLX_DOUBLEBUFFER,
 				GLX_STENCIL_SIZE, 8,
 				GLX_SAMPLE_BUFFERS, 1,
-				GLX_SAMPLES, 4, 
+				GLX_SAMPLES, 4,
 				None
 			};
 
@@ -59,27 +59,27 @@
 				m_screenWidth(0),
 				m_screenHeight(0),
 				m_scaleLock(false),
-				m_scale(1.0f), 
+				m_scale(1.0f),
 				m_scaleX(1.0f),
 				m_scaleY(1.0f),
 				m_translateX(0),
 				m_translateY(0),
 				m_bpp(bpp),
 				m_fullscreen(fullscreen),
-				m_resizable(false), 
+				m_resizable(false),
 				m_scaleToWindow(true),
 				m_touchMode(false),
 				m_screenOrientationPrevious(ORIENTATION_DUMMY),
 				m_orientationInverted(false),
 				m_2in1enabled(false),
-				m_bRunning(false), 
+				m_bRunning(false),
 				m_clearColor(Color::black),
 				m_resizeBehaviour(RESIZE_BEHAVIOUR_SCALE),
 				m_showingFPS(false),
 				m_willLoadDefaultFont(true),
 				m_platformSpecific()
-				{ 
-				
+				{
+
 				m_platformSpecific.m_container = this;
 				m_platformSpecific.m_iconPath = "";
 				m_platformSpecific.m_screens = new vector<GameContainerPlatform_Screens>();
@@ -102,10 +102,10 @@
 				m_platformSpecific.keycodemap->insert(std::make_pair(Input::KEY_L, 46));
 				m_platformSpecific.keycodemap->insert(std::make_pair(Input::KEY_SEMICOLON, 47));
 				m_platformSpecific.keycodemap->insert(std::make_pair(Input::KEY_APOSTROPHE, 48));
-				
+
 				m_platformSpecific.keycodemap->insert(std::make_pair(Input::KEY_Z, 52));
 				m_platformSpecific.keycodemap->insert(std::make_pair(Input::KEY_X, 53));
-				m_platformSpecific.keycodemap->insert(std::make_pair(Input::KEY_C, 54)); 
+				m_platformSpecific.keycodemap->insert(std::make_pair(Input::KEY_C, 54));
 				m_platformSpecific.keycodemap->insert(std::make_pair(Input::KEY_V, 55));
 				m_platformSpecific.keycodemap->insert(std::make_pair(Input::KEY_B, 56));
 				m_platformSpecific.keycodemap->insert(std::make_pair(Input::KEY_N, 57));
@@ -179,23 +179,23 @@
 				m_platformSpecific.keycodemap->insert(std::make_pair(Input::KEY_ENTER, 36));
 
 
-				m_platformSpecific.keycodemap_reverse = new map<int, int>(); 
+				m_platformSpecific.keycodemap_reverse = new map<int, int>();
 				map<int, int>::iterator it = m_platformSpecific.keycodemap->begin();
 				while(it != m_platformSpecific.keycodemap->end() ) {
 					m_platformSpecific.keycodemap_reverse->insert(std::make_pair(it->second, it->first));
 					it++;
 				}
-					
-				
+
+
 				m_strTitle = m_game.getTitle();
-				
+
 				m_input.setGameContainer(this);
 
 				ARK2D::s_container = this;
 				ARK2D::s_game = &m_game;
 				ARK2D::s_graphics = &m_graphics;
 				ARK2D::s_input = &m_input;
-				ARK2D::s_log = ARK::Util::Log::getInstance(); 
+				ARK2D::s_log = ARK::Util::Log::getInstance();
 				scene = new Scene();
 
 				m_graphics.preinit();
@@ -207,7 +207,7 @@
 			}
 
 			void GameContainer::setCursorVisible(bool b) {
- 
+
 			}
 
 			void GameContainerPlatform::initGamepads() {
@@ -221,7 +221,7 @@
 					detectGamepads();
 				}
 			}
-			
+
 			void GameContainerPlatform::detectGamepads() {
 				struct input_id id;
 				DIR * dev_input;
@@ -233,7 +233,7 @@
 				int evKeyBits[(KEY_CNT - 1) / sizeof(int) * 8 + 1];
 				int evAbsBits[(ABS_CNT - 1) / sizeof(int) * 8 + 1];
 				char fileName[PATH_MAX];
-				bool duplicate; 
+				bool duplicate;
 				unsigned int gamepadIndex;
 				struct stat statBuf;
 				Gamepad* gamepad;
@@ -242,14 +242,14 @@
 				int bit;
 				time_t currentTime;
 				static time_t lastInputStatTime;
-				
+
 				if (!m_initialisedGamepads) {
 					return;
 				}
-				
+
 				pthread_mutex_lock(&devicesMutex);
-				 
-				dev_input = opendir("/dev/input"); 
+
+				dev_input = opendir("/dev/input");
 				currentTime = time(NULL);
 				if (dev_input != NULL) {
 					while ((entity = readdir(dev_input)) != NULL) {
@@ -259,20 +259,20 @@
 							if (stat(fileName, &statBuf) || statBuf.st_mtime < lastInputStatTime) {
 								continue;
 							}
-							
+
 							duplicate = false;
 							for (gamepadIndex = 0; gamepadIndex < numDevices; gamepadIndex++) {
 								if (!strcmp(m_container->m_gamepads[gamepadIndex]->path, fileName)) {
 									duplicate = true;
 									break;
 								}
-							} 
-							if (duplicate) {
-								continue; 
 							}
-							  
+							if (duplicate) {
+								continue;
+							}
+
 							fd = open(fileName, O_RDONLY, 0);
-							memset(evCapBits, 0, sizeof(evCapBits)); 
+							memset(evCapBits, 0, sizeof(evCapBits));
 							memset(evKeyBits, 0, sizeof(evKeyBits));
 							memset(evAbsBits, 0, sizeof(evAbsBits));
 							if (ioctl(fd, EVIOCGBIT(0, sizeof(evCapBits)), evCapBits) < 0 ||
@@ -287,7 +287,7 @@
 								close(fd);
 								continue;
 							}
-							
+
 							gamepad = new Gamepad();
 							gamepad->id = nextDeviceID++;
 							m_container->m_gamepads.push_back(gamepad);
@@ -299,7 +299,7 @@
 
 							memset(gamepad->buttonMap, 0xFF, sizeof(gamepad->buttonMap));
 							memset(gamepad->axisMap, 0xFF, sizeof(gamepad->axisMap));
-													
+
 							if (ioctl(fd, EVIOCGNAME(sizeof(name)), name) > 0) {
 								description = (char*) malloc(strlen(name) + 1);
 								strcpy(description, name);
@@ -308,19 +308,19 @@
 								strcpy(description, fileName);
 							}
 							gamepad->description = description;
-							
+
 							if (!ioctl(fd, EVIOCGID, &id)) {
-								gamepad->vendorId = id.vendor; 
+								gamepad->vendorId = id.vendor;
 								gamepad->productId = id.product;
 							} else {
 								gamepad->vendorId = gamepad->productId = 0;
 							}
-							
+
 							memset(evKeyBits, 0, sizeof(evKeyBits));
 							memset(evAbsBits, 0, sizeof(evAbsBits));
 							ioctl(fd, EVIOCGBIT(EV_KEY, sizeof(evKeyBits)), evKeyBits);
 							ioctl(fd, EVIOCGBIT(EV_ABS, sizeof(evAbsBits)), evAbsBits);
-							
+
 							gamepad->numAxes = 0;
 							for (bit = 0; bit < ABS_CNT; bit++) {
 								if (test_bit(bit, evAbsBits)) {
@@ -331,7 +331,7 @@
 
 									GamepadAxis* axis = new GamepadAxis();
 									axis->id = gamepad->numAxes;
-									//axis->axisId = bit; 
+									//axis->axisId = bit;
 									//axis->rangeMin = gamepad->axisInfo[bit].minimum
 									//axis->rangeMax = gamepad->axisInfo[bit].maximum
 									gamepad->axes.push_back(axis);
@@ -339,7 +339,7 @@
 									gamepad->axisMap[bit] = gamepad->numAxes;
 									gamepad->numAxes++;
 
-									
+
 								}
 							}
 
@@ -349,56 +349,56 @@
 
 									GamepadButton* button = new GamepadButton();
 									button->id = gamepad->numButtons;
-									button->down = false;  
+									button->down = false;
 									gamepad->buttons.push_back(button);
 
 									gamepad->buttonMap[bit - BTN_MISC] = gamepad->numButtons;
 									gamepad->numButtons++;
 
-									
+
 								}
 							}
-							  
-							if (strcmp(gamepad->description, "Microsoft X-Box 360 pad") == 0 || 
-								strcmp(gamepad->description, "Xbox Gamepad (userspace driver)") == 0 || 
+
+							if (strcmp(gamepad->description, "Microsoft X-Box 360 pad") == 0 ||
+								strcmp(gamepad->description, "Xbox Gamepad (userspace driver)") == 0 ||
 								strcmp(gamepad->description, "Sony Computer Entertainment Wireless Controller") == 0) {
 								GamepadButton* button = NULL;
 
 								button = new GamepadButton();
 								button->id = Gamepad::DPAD_LEFT;
-								button->down = false;  
+								button->down = false;
 								gamepad->buttons.push_back(button);
 
 								button = new GamepadButton();
 								button->id = Gamepad::DPAD_RIGHT;
-								button->down = false;  
+								button->down = false;
 								gamepad->buttons.push_back(button);
 
 								button = new GamepadButton();
 								button->id = Gamepad::DPAD_UP;
-								button->down = false;  
+								button->down = false;
 								gamepad->buttons.push_back(button);
 
 								button = new GamepadButton();
 								button->id = Gamepad::DPAD_DOWN;
-								button->down = false;  
+								button->down = false;
 								gamepad->buttons.push_back(button);
 							}
 
 							//gamepad->axisStates = calloc(sizeof(float), gamepad->numAxes);
 							//gamepad->buttonStates = calloc(sizeof(bool), gamepad->numButtons);
-							
+
 							//if (Gamepad_deviceAttachCallback != NULL) {
 							//	Gamepad_deviceAttachCallback(gamepad, Gamepad_deviceAttachContext);
 							//}
 							ARK2D::getLog()->i(StringUtil::append("Gamepad attached: ", gamepad->description));
-							
+
 							pthread_create(&gamepad->thread, NULL, &deviceThread, gamepad);
 						}
 					}
-					closedir(dev_input); 
-				} 
-				
+					closedir(dev_input);
+				}
+
 				lastInputStatTime = currentTime;
 				pthread_mutex_unlock(&devicesMutex);
 			}
@@ -406,25 +406,25 @@
 			void* GameContainerPlatform::deviceThread(void* context) {
 				GameContainer* container = ARK2D::getContainer();
 				Gamepad* device;
-				unsigned int gamepadIndex; 
+				unsigned int gamepadIndex;
 				struct input_event event;
-				
-				device = (Gamepad*) context; 
+
+				device = (Gamepad*) context;
 				//devicePrivate = device->privateData;
-				
+
 				while (read(device->fd, &event, sizeof(struct input_event)) > 0) {
 					if (event.type == EV_ABS) {
 					//	ARK2D::getLog()->i(StringUtil::append("axis event 1: ", event.code));
 
 						float value;
-						
+
 						if (event.code > ABS_MAX || device->axisMap[event.code] == -1) {
 							continue;
 						}
-						
+
 						// remap axes
 						unsigned int axis = device->axisMap[event.code];
-						if (strcmp(device->description, "Microsoft X-Box 360 pad") == 0 || 
+						if (strcmp(device->description, "Microsoft X-Box 360 pad") == 0 ||
 							strcmp(device->description, "Xbox Gamepad (userspace driver)") == 0) {
  							if (axis == 2) { axis = Gamepad::TRIGGER_1; }
  							else if (axis == 4) { axis = Gamepad::ANALOG_STICK_2_Y; }
@@ -433,17 +433,17 @@
  							if (axis == 2) {      axis = Gamepad::ANALOG_STICK_2_X; }
  							else if (axis == 3) { axis = Gamepad::TRIGGER_1; }
  							else if (axis == 4) { axis = Gamepad::TRIGGER_2; }
- 							else if (axis == 5) { axis = Gamepad::ANALOG_STICK_2_Y; } 
+ 							else if (axis == 5) { axis = Gamepad::ANALOG_STICK_2_Y; }
  						}
 
  						// dpads are on an axis
- 						if (strcmp(device->description, "Microsoft X-Box 360 pad") == 0 || 
-							strcmp(device->description, "Xbox Gamepad (userspace driver)") == 0 || 
+ 						if (strcmp(device->description, "Microsoft X-Box 360 pad") == 0 ||
+							strcmp(device->description, "Xbox Gamepad (userspace driver)") == 0 ||
 							strcmp(device->description, "Sony Computer Entertainment Wireless Controller") == 0) {
 
  							if (axis == 6 || axis == 7) {
- 								value = (event.value - device->axisInfo[event.code].minimum) / (float) (device->axisInfo[event.code].maximum - device->axisInfo[event.code].minimum) * 2.0f - 1.0f;			
- 								
+ 								value = (event.value - device->axisInfo[event.code].minimum) / (float) (device->axisInfo[event.code].maximum - device->axisInfo[event.code].minimum) * 2.0f - 1.0f;
+
  								ARK2D::getLog()->e(StringUtil::append("axis: ", axis));
 								ARK2D::getLog()->e(StringUtil::appendf("value: ", value));
 
@@ -467,14 +467,14 @@
 									if (value == -1.0f && !device->isButtonDown(Gamepad::DPAD_UP)) {
 										device->pressButton(Gamepad::DPAD_UP);
 									} else if (value == 1.0f && !device->isButtonDown(Gamepad::DPAD_DOWN)) {
-										device->pressButton(Gamepad::DPAD_DOWN); 
+										device->pressButton(Gamepad::DPAD_DOWN);
 									}
 								}
 								continue;
 
  							}
 						}
-						
+
 						value = (event.value - device->axisInfo[event.code].minimum) / (float) (device->axisInfo[event.code].maximum - device->axisInfo[event.code].minimum) * 2.0f - 1.0f;
 						container->m_platformSpecific.queueAxisEvent(device,
 						               event.time.tv_sec + event.time.tv_usec * 0.000001,
@@ -484,25 +484,25 @@
 						               device->axes[axis]->value);
 						//device->axisStates[device->axisMap[event.code]] = value;
 						device->axes[axis]->value = value;
- 
+
 						//ARK2D::getLog()->e(StringUtil::append("axis: ", axis));
 						//ARK2D::getLog()->e(StringUtil::appendf("value: ", value));
-						
+
 					} else if (event.type == EV_KEY) {
 						//ARK2D::getLog()->i(StringUtil::append("button event 1: ", event.code));
 						if (event.code < BTN_MISC || event.code > KEY_MAX || device->buttonMap[event.code - BTN_MISC] == -1) {
 							continue;
 						}
-						 
+
 						container->m_platformSpecific.queueButtonEvent(device,
 						                 event.time.tv_sec + event.time.tv_usec * 0.000001,
 						                 device->buttonMap[event.code - BTN_MISC],
 						                 !!event.value);
-						
+
 						//device->buttonStates[device->buttonMap[event.code - BTN_MISC]] = !!event.value;
 						bool down = !!event.value;
 						unsigned int key = device->buttonMap[event.code - BTN_MISC];
-						if (strcmp(device->description, "Microsoft X-Box 360 pad") == 0 || 
+						if (strcmp(device->description, "Microsoft X-Box 360 pad") == 0 ||
 							strcmp(device->description, "Xbox Gamepad (userspace driver)") == 0) {
 							if (key == 8) { key = Gamepad::BUTTON_ACTIVATE; }
 							else if (key == 9) { key = Gamepad::BUTTON_L3; }
@@ -517,13 +517,13 @@
 							else if (key == 7) { /* right trigger */ key = Gamepad::BUTTON_NULL; }
 							else if (key == 13) { /* touch pad */ key = Gamepad::BUTTON_NULL; }
 							else if (key == 8) { key = Gamepad::BUTTON_BACK; }
-							else if (key == 9) { key = Gamepad::BUTTON_START; } 
+							else if (key == 9) { key = Gamepad::BUTTON_START; }
 							else if (key == 10) { key = Gamepad::BUTTON_L3; }
-							else if (key == 11) { key = Gamepad::BUTTON_R3; } 
+							else if (key == 11) { key = Gamepad::BUTTON_R3; }
 						}
 
 						//ARK2D::getLog()->i(StringUtil::append("button event: ", key));
-						if (key < device->buttons.size()) { 
+						if (key < device->buttons.size()) {
 
 							if (!down && device->buttons[key]->down) {
 								device->releaseButton(key);
@@ -533,18 +533,18 @@
 
 						}
 
-						
+
 					}
-				}  
-				
+				}
+
 				ARK2D::getLog()->i(StringUtil::append("Gamepad detached: ", device->description));
 				container->m_platformSpecific.queueEvent(device->id, GAMEPAD_EVENT_DEVICE_REMOVED, device);
-				
+
 				pthread_mutex_lock(&devicesMutex);
 				for (gamepadIndex = 0; gamepadIndex < numDevices; gamepadIndex++) {
 					if (container->m_gamepads[gamepadIndex] == device) {
 						unsigned int gamepadIndex2;
-						
+
 						numDevices--;
 						for (gamepadIndex2 = gamepadIndex; gamepadIndex2 < numDevices; gamepadIndex2++) {
 							Gamepad* pad2 = container->m_gamepads[gamepadIndex2 + 1];
@@ -554,7 +554,7 @@
 					}
 				}
 				pthread_mutex_unlock(&devicesMutex);
-				
+
 				return NULL;
 			}
 
@@ -562,11 +562,11 @@
 
 			void GameContainerPlatform::queueEvent(unsigned int deviceID, enum Gamepad_eventType eventType, void * eventData) {
 				struct Gamepad_queuedEvent queuedEvent;
-				
-				queuedEvent.deviceID = deviceID; 
+
+				queuedEvent.deviceID = deviceID;
 				queuedEvent.eventType = eventType;
 				queuedEvent.eventData = eventData;
-				 
+
 				pthread_mutex_lock(&eventQueueMutex);
 				if (eventCount >= eventQueueSize) {
 					eventQueueSize = eventQueueSize == 0 ? 1 : eventQueueSize * 2;
@@ -578,27 +578,27 @@
 
 			void GameContainerPlatform::queueAxisEvent(struct Gamepad* device, double timestamp, unsigned int axisID, float value, float lastValue) {
 				struct Gamepad_axisEvent * axisEvent;
-				 
+
 				axisEvent = (Gamepad_axisEvent*) malloc(sizeof(struct Gamepad_axisEvent));
 				axisEvent->device = device;
 				axisEvent->timestamp = timestamp;
-				axisEvent->axisID = axisID; 
+				axisEvent->axisID = axisID;
 				axisEvent->value = value;
 				axisEvent->lastValue = lastValue;
-				
+
 				queueEvent(device->id, GAMEPAD_EVENT_AXIS_MOVED, axisEvent);
 			}
- 
-			
+
+
 			void GameContainerPlatform::queueButtonEvent(struct Gamepad* device, double timestamp, unsigned int buttonID, bool down) {
 				struct Gamepad_buttonEvent * buttonEvent;
-				
+
 				buttonEvent = (Gamepad_buttonEvent*) malloc(sizeof(struct Gamepad_buttonEvent));
 				buttonEvent->device = device;
 				buttonEvent->timestamp = timestamp;
 				buttonEvent->buttonID = buttonID;
 				buttonEvent->down = down;
-				
+
 				queueEvent(device->id, down ? GAMEPAD_EVENT_BUTTON_DOWN : GAMEPAD_EVENT_BUTTON_UP, buttonEvent);
 			}
 
@@ -625,7 +625,7 @@
 				Screen* defaultScreen = XDefaultScreenOfDisplay(m_platformSpecific.dpy);
 				int displayWidth = WidthOfScreen(defaultScreen);
 				int displayHeight = HeightOfScreen(defaultScreen);
-				
+
 				// extra bits for dual-screen setups
 				// http://stackoverflow.com/questions/836086/programmatically-determining-individual-screen-widths-heights-in-linux-w-xinera
 				int xineramaBaseEventCode;
@@ -635,10 +635,10 @@
 				if (hasXinerama) {
 					int heads = 0;
 					XineramaScreenInfo* p = XineramaQueryScreens(m_platformSpecific.dpy, &heads);
-					if (heads > 0) { 
+					if (heads > 0) {
 						for (int x = 0; x < heads; ++x) {
 							cout << "Head " << x+1 << " of " << heads << ": " << p[x].width << "x" << p[x].height << " at " << p[x].x_org << "," << p[x].y_org << endl;
-							
+
 							GameContainerPlatform_Screens thisScreen;
 							thisScreen.id = x;
 							thisScreen.x = p[x].x_org;
@@ -657,19 +657,19 @@
 						ARK2D::getLog()->e("XineramaQueryScreens says there aren't any...");
 					}
 					XFree(p);
-				} 
+				}
 
 				int initialWindowX = initOffsetX + (displayWidth / 2) - (m_originalWidth / 2);
-				int initialWindowY = initOffsetY + (displayHeight / 2) - (m_originalHeight / 2);	
+				int initialWindowY = initOffsetY + (displayHeight / 2) - (m_originalHeight / 2);
 				m_screenWidth = displayWidth;
 				m_screenHeight = displayHeight;
 				ARK2D::getLog()->i(StringUtil::append("Screen Width: ", displayWidth));
 				ARK2D::getLog()->i(StringUtil::append("Screen Height: ", displayHeight));
 				ARK2D::getLog()->i(StringUtil::append("Window X: ", initialWindowX));
-				ARK2D::getLog()->i(StringUtil::append("Window Y: ", initialWindowY)); 
+				ARK2D::getLog()->i(StringUtil::append("Window Y: ", initialWindowY));
 
 
-				
+
 
 				// Pick a display mode: this can fail, so type glxinfo into the command line for detail.
 				m_platformSpecific.vi = glXChooseVisual(m_platformSpecific.dpy, 0, m_platformSpecific.att);
@@ -689,16 +689,16 @@
 				m_platformSpecific.swa.override_redirect = True;
 
 				// create the window
-				m_platformSpecific.win = XCreateWindow( 
+				m_platformSpecific.win = XCreateWindow(
 					m_platformSpecific.dpy,
 					m_platformSpecific.root,
-					initialWindowX, initialWindowY, // initial x,y pos 
+					initialWindowX, initialWindowY, // initial x,y pos
 					m_originalWidth, m_originalHeight, 0, // w, h, border...
 					m_platformSpecific.vi->depth, InputOutput,
 					m_platformSpecific.vi->visual, CWColormap | CWEventMask, &m_platformSpecific.swa
 				);
 				//m_platformSpecific.win.override_redirect = False;
-				
+
 
 				// set not resizable?
 				//XSizeHints* szhints = new XSizeHints();
@@ -709,7 +709,7 @@
 				//szhints->max_height = m_originalHeight;
 				//XSetWMNormalHints(m_platformSpecific.dpy, m_platformSpecific.win, szhints);
 
-				
+
 
 				// set icon
 				if (m_platformSpecific.m_iconPath.length() > 0) {
@@ -723,7 +723,7 @@
 					ARK2D::getLog()->e(StringUtil::append("Setting Window icon: ", thisIcon));
 					PNGImage* png = new PNGImage(thisIcon);
 					png->load();
-					if (!png->isRGBA()) {  
+					if (!png->isRGBA()) {
 						ARK2D::getLog()->e("Could not set window icon");
 					} else {
 
@@ -735,12 +735,12 @@
 						icondata[1] = png->getHeight();
 
 						long* dest = (long*) &icondata[2];
-						unsigned int* source; 
-						for (int y = 0; y < png->getHeight(); ++y) 
+						unsigned int* source;
+						for (int y = 0; y < png->getHeight(); ++y)
 						{
 							//source = (Uint32*)((Uint8*) icon->pixels + y * icon->pitch);
 							source = (unsigned int*) (sourcedata + (y * pitch));
-							for (int x = 0; x < png->getWidth(); ++x) 
+							for (int x = 0; x < png->getWidth(); ++x)
 							{
 								//*dest++ = *source++;
 								//memcpy(dest, source, sizeof(int));
@@ -758,13 +758,13 @@
 								memcpy(thisdest+5, thissource+1, sizeof(unsigned char));
 								memcpy(thisdest+7, thissource+2, sizeof(unsigned char));
 
-								dest++; 
+								dest++;
 								source++;
 							}
 						}
 
 						for(unsigned int k = 2; k < sourcesize; k++) {
-							//long* r = 
+							//long* r =
 							k++;
 						}
 
@@ -773,23 +773,23 @@
 						//Atom cardinal = XInternAtom(m_platformSpecific.dpy, "CARDINAL", False); //
 
 						XChangeProperty(
-							m_platformSpecific.dpy, 
-							m_platformSpecific.win, 
-							net_wm_icon, 
-							XA_CARDINAL, 
-							32, 
-							PropModeReplace, 
-							(const unsigned char*) icondata, 
+							m_platformSpecific.dpy,
+							m_platformSpecific.win,
+							net_wm_icon,
+							XA_CARDINAL,
+							32,
+							PropModeReplace,
+							(const unsigned char*) icondata,
 							sourcesize
 						);
 					}
-					
+
 				}
 
-				// make the window appear... 
+				// make the window appear...
 				XMapWindow(m_platformSpecific.dpy, m_platformSpecific.win);
- 
-				// title bar name  
+
+				// title bar name
 				XStoreName(m_platformSpecific.dpy, m_platformSpecific.win, m_strTitle.c_str());
 
 				resizeWindowToFitViewport();
@@ -806,12 +806,12 @@
 	                	exit(0);
 	                	return;// -1;
 	        		}
-	        		if (!gl3wIsSupported(3, 2)) { 
+	        		if (!gl3wIsSupported(3, 2)) {
 	               		ErrorDialog::createAndShow("OpenGL 3.2 is not supported on your computer. Trying OpenGL 3.1...");
-	        		} else if (!gl3wIsSupported(3, 1)) { 
+	        		} else if (!gl3wIsSupported(3, 1)) {
 	               		ErrorDialog::createAndShow("OpenGL 3.1 is not supported on your computer. Please update your graphics drivers.");
-	                	exit(0); 
-	                	return;// -1; 
+	                	exit(0);
+	                	return;// -1;
 	        		}
 	        		ARK2D::getLog()->i(StringUtil::append("Using OpenGL ", (const char*) glGetString(GL_VERSION)));
 	        		ARK2D::getLog()->i(StringUtil::append("Using GLSL ", (const char*) glGetString(GL_SHADING_LANGUAGE_VERSION)));
@@ -831,12 +831,12 @@
 				enable2D();
 
 				// load default font.
-				if (m_willLoadDefaultFont) { 
+				if (m_willLoadDefaultFont) {
 					ARK::Font::BMFont* fnt = ARK::Core::Resource::get("ark2d/fonts/default.fnt")->asFont()->asBMFont(); // BMFont("ark2d/fonts/default.fnt", "ark2d/fonts/default.png");
 					fnt->scale(0.5f);
 					m_graphics.m_DefaultFont = fnt;
-					m_graphics.m_Font = fnt; 
-				} else { 
+					m_graphics.m_Font = fnt;
+				} else {
 					m_graphics.m_DefaultFont = NULL;
 					m_graphics.m_Font = NULL;
 				}
@@ -872,7 +872,7 @@
 					while (XPending(m_platformSpecific.dpy) > 0) {
 						XNextEvent(m_platformSpecific.dpy, &m_platformSpecific.xev);
 
-						XEvent event = m_platformSpecific.xev; 
+						XEvent event = m_platformSpecific.xev;
 						if (event.type == Expose) {
 							XGetWindowAttributes(m_platformSpecific.dpy, m_platformSpecific.win, &m_platformSpecific.gwa);
 						} else if (event.type == ConfigureNotify) {
@@ -882,20 +882,20 @@
 								/*if (m_resizeBehaviour == RESIZE_BEHAVIOUR_SCALE) {
 									glViewport(0, 0, m_width, m_height);
 								} else {
-									disable2D(); 
+									disable2D();
 									enable2D();
 									glViewport(0, 0, m_width, m_height);
 								}
 								m_game.resize(this, m_width, m_height);*/
                         	//}
 						} else if (event.type == FocusIn) {
-							
+
 							ARK2D::getLog()->v("focus in");
 							if (m_fullscreen) {
 								m_platformSpecific.setAlwaysOnTop(true);
 								XRaiseWindow(m_platformSpecific.dpy, m_platformSpecific.win);
 							}
-								
+
 						} else if (event.type == FocusOut) {
 							ARK2D::getLog()->v("focus out");
 							if (m_fullscreen) {
@@ -909,14 +909,14 @@
 							float thisx = event.xmotion.x;
 							float thisy = event.xmotion.y;
 
-						    thisx -= getTranslateX(); 
+						    thisx -= getTranslateX();
 						    thisy -= getTranslateY();
 
 						    thisx /= getScale();
 						    thisy /= getScale();
 
 							Input* i = ARK2D::getInput();
-							ARK2D::getLog()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
+							//ARK2D::getLog()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 							ARK2D::getGame()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 
 							//string pstr = "mouse moved: ";
@@ -925,6 +925,8 @@
 							//pstr += Cast::toString<int>(thisy);
 							//ARK2D::getLog()->e(pstr);
 
+							i->mouse_prev_x = i->mouse_x;
+							i->mouse_prev_y = i->mouse_y;
 							i->mouse_x = (int) thisx;
 							i->mouse_y = (int) thisy;
 
@@ -932,7 +934,7 @@
 							m_platformSpecific.m_globalMouseY = event.xmotion.y_root;
 
 						} else if (event.type == ButtonPress) {
-							
+
 							// http://stackoverflow.com/questions/16185286/how-to-detect-mouse-click-events-in-all-applications-in-x11
 							if (event.xbutton.button == 1) {
 								ARK2D::getInput()->pressKey(Input::MOUSE_BUTTON_LEFT);
@@ -940,12 +942,12 @@
 								ARK2D::getInput()->pressKey(Input::MOUSE_BUTTON_MIDDLE);
 							} else if (event.xbutton.button == 3) {
 								ARK2D::getInput()->pressKey(Input::MOUSE_BUTTON_RIGHT);
-							} else if (event.xbutton.button == 4) { 
+							} else if (event.xbutton.button == 4) {
 								// scroll up
 							} else if (event.xbutton.button == 5) {
 								// scroll down
 							}
-							
+
 						} else if (event.type == ButtonRelease) {
 							if (event.xbutton.button == 1) {
 								ARK2D::getInput()->releaseKey(Input::MOUSE_BUTTON_LEFT);
@@ -968,19 +970,20 @@
 							if (it != m_platformSpecific.keycodemap_reverse->end()) {
 								ARK2D::getInput()->releaseKey(it->second);
 							}
-						} 
+						}
 					}
 
 					ARK2D::getLog()->v("Tick");
 					m_timer.tick();
 
-					//ARK2D::getLog()->v("Update Gamepads"); 
+					//ARK2D::getLog()->v("Update Gamepads");
 					//processGamepadInput();
 
 					ARK2D::getLog()->v("Update Log");
 					ARK2D::getLog()->update();
 
 					ARK2D::getLog()->v("Update Game");
+					m_input.update();
 					m_game.preUpdate(this, &m_timer);
 					m_game.update(this, &m_timer);
 					m_game.postUpdate(this, &m_timer);
@@ -988,6 +991,7 @@
 					for (unsigned int i = 0; i < m_gamepads.size(); i++) {
 						m_gamepads.at(i)->clearButtonPressedRecord();
 					}
+					m_input.endFrame();
 					Image::showAnyGlErrorAndExit();
 
 					ARK2D::getLog()->v("Render Reset");
@@ -1000,13 +1004,13 @@
 					m_game.render(this, &m_graphics);
 					ARK2D::getLog()->v("Render Log");
 					ARK2D::getLog()->render(this, &m_graphics);
-					ARK2D::getLog()->v("Post-render Game"); 
-					m_game.postRender(this, &m_graphics); 
+					ARK2D::getLog()->v("Post-render Game");
+					m_game.postRender(this, &m_graphics);
 					Image::showAnyGlErrorAndExit();
 
 
 					glXSwapBuffers(m_platformSpecific.dpy, m_platformSpecific.win);
- 
+
 					//m_timer.limit(60);
 				}
 
@@ -1024,11 +1028,11 @@
 				//m_bRunning = false;
  				exit(0);
 
-				
+
 			}
 
 			void GameContainerPlatform::setTitle(std::string title) {
-				
+
 			}
 
 			void GameContainer::resizeWindowToFitViewport() {
@@ -1046,7 +1050,7 @@
 				int displayWidth = m_screenWidth;// WidthOfScreen(defaultScreen);
 				int displayHeight = m_screenHeight; //HeightOfScreen(defaultScreen);
 				int initialWindowX = (displayWidth / 2) - (m_width / 2);
-				int initialWindowY = (displayHeight / 2) - (m_height / 2);	
+				int initialWindowY = (displayHeight / 2) - (m_height / 2);
 
 				int curscr = m_platformSpecific.getScreenForWindow();
 				float xoffset = m_platformSpecific.m_screens->at(curscr).x;
@@ -1066,7 +1070,7 @@
 				if (!m_fullscreen && fullscreen) {
 					ARK2D::getLog()->i("Setting fullscreen.");
 
-					
+
 					/*XSizeHints* szhints = XAllocSizeHints();
 					szhints->flags = PMinSize | PMaxSize | PWinGravity;
 					szhints->min_width = m_width;
@@ -1077,9 +1081,9 @@
 					XSetWMNormalHints(m_platformSpecific.dpy, m_platformSpecific.win, szhints);
 					XFree(szhints);
 					*/
-				  
 
-   					
+
+
 
 
 					//XSetInputFocus(m_platformSpecific.dpy, m_platformSpecific.win, RevertToNone, CurrentTime);
@@ -1116,15 +1120,15 @@
 				    m_platformSpecific.setWindowBordered(false);
 				    m_platformSpecific.setAlwaysOnTop(true);
 				    m_platformSpecific.setFocus(true);
-				    
+
 					XMoveWindow(m_platformSpecific.dpy, m_platformSpecific.win, xoffset, yoffset);
    					XRaiseWindow(m_platformSpecific.dpy, m_platformSpecific.win);
 					XFlush(m_platformSpecific.dpy);
-				    
- 
+
+
 				    m_fullscreen = true;
 
-				}  
+				}
 				else if (m_fullscreen && !fullscreen) {
 					ARK2D::getLog()->i("Setting windowed.");
 
@@ -1145,7 +1149,7 @@
 				}
 			}
 			void GameContainerPlatform::setFocus(bool b) {
-				if (b) { 
+				if (b) {
 					XRaiseWindow(dpy, win);
 					XSetInputFocus(dpy, win, RevertToNone, CurrentTime);
 				} else {
@@ -1160,18 +1164,18 @@
 				XTranslateCoordinates( dpy, win, DefaultRootWindow(dpy), 0, 0, &x, &y, &child );
 				//XTranslateCoordinates( dpy, win, root, m_screens->at(0).x, m_screens->at(0).y, &x, &y, &child );
 				XGetWindowAttributes(dpy, win, &xwa);
-				
+
 				//int cx = (x - xwa.x) + (m_container->getDynamicWidth()/2);
-				//int cy = (y - xwa.y) + (m_container->getDynamicHeight()/2); 
+				//int cy = (y - xwa.y) + (m_container->getDynamicHeight()/2);
 				//int cx = xwa.x + (m_container->getDynamicWidth()/2);
-				//int cy = xwa.y + (m_container->getDynamicHeight()/2); 
+				//int cy = xwa.y + (m_container->getDynamicHeight()/2);
 				int cx = x + (m_container->getDynamicWidth()/2);
-				int cy = y + (m_container->getDynamicHeight()/2); 
+				int cy = y + (m_container->getDynamicHeight()/2);
 				ARK2D::getLog()->e(StringUtil::append("x: ", x));
 				ARK2D::getLog()->e(StringUtil::append("y: ", y));
 				ARK2D::getLog()->e(StringUtil::append("cx: ", cx));
 				ARK2D::getLog()->e(StringUtil::append("cy: ", cy));
-			
+
 				for(unsigned int i = 0; i < m_screens->size(); ++i) {
 					GameContainerPlatform_Screens* scr = &m_screens->at(i);
 					if (Shape<int>::collision_rectangleRectangle(scr->x, scr->y, scr->width, scr->height, cx, cy, 1, 1)) {
@@ -1188,7 +1192,7 @@
 
 			    	static const unsigned long MWM_HINTS_FUNCTIONS   = 1 << 0;
 		            static const unsigned long MWM_HINTS_DECORATIONS = 1 << 1;
-		    
+
 		            //static const unsigned long MWM_DECOR_ALL         = 1 << 0;
 		            static const unsigned long MWM_DECOR_BORDER      = 1 << 1;
 		            static const unsigned long MWM_DECOR_RESIZEH     = 1 << 2;
@@ -1211,20 +1215,20 @@
 			            unsigned long decorations;
 			            long input_mode;
 			            unsigned long status;
-			        }; 
+			        };
 
-			        WMHints hints; 
+			        WMHints hints;
 			       	//hints.flags = MWM_HINTS_FUNCTIONS | MWM_HINTS_DECORATIONS; //(1L << 1);
 			       	hints.flags = MWM_HINTS_DECORATIONS; //(1L << 1);
 			       	hints.functions = 0;
-			       	hints.decorations = 0; 
+			       	hints.decorations = 0;
 			       	hints.input_mode = 0;
 			       	hints.status = 0;
 
 			       	if (border) {
 			       		hints.decorations |= MWM_DECOR_BORDER | MWM_DECOR_TITLE | MWM_DECOR_MINIMIZE | MWM_DECOR_MENU;
-			       	} 
-			        
+			       	}
+
 			        const unsigned char* ptr = reinterpret_cast<const unsigned char*>(&hints);
 			        XChangeProperty(dpy, win, WM_HINTS, WM_HINTS, 32, PropModeReplace, ptr, 5);
 
@@ -1265,20 +1269,20 @@
 				return m_platformSpecific.m_globalMouseY;
 			}
 
-			bool GameContainerPlatform::initOpenAL() { 
+			bool GameContainerPlatform::initOpenAL() {
 				alutInit(0, NULL);
 				alGetError();
-				return true; 
-			} 
+				return true;
+			}
 			bool GameContainerPlatform::deinitOpenAL() {
 				alutExit();
 				return true;
 			}
- 
+
 			void GameContainer::setSize(int width, int height, bool docallback) {
 				if (width == (signed int) m_width && height == (signed int) m_height) { return; }
 
-				resizeBehaviour(width, height, docallback); 
+				resizeBehaviour(width, height, docallback);
 				resizeWindowToFitViewport();
 
 				//ARK2D::getLog()->w(StringUtil::appendf("tx: ", getTranslateX()));

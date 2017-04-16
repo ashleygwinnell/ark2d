@@ -20,6 +20,18 @@ namespace ARK {
 
 		Camera* Camera::current = NULL;
 
+		void Camera::setCurrent(Camera* newCamera) {
+			if (Renderer::isBatching()) {
+				RendererBatchItem stateChange;
+				stateChange.m_type = RendererBatchItem::TYPE_CAMERA_CHANGE;
+				stateChange.m_objectPointer = newCamera;
+				Renderer::s_batch->items.push_back(stateChange);
+				return;
+			}
+
+			Camera::current = newCamera;
+		}
+
 		Camera::Camera():
 			ARK::Core::SceneGraph::SceneNode("camera", SceneNode::TYPE_CAMERA),
 			type(TYPE_ORTHO_2D),
@@ -96,22 +108,52 @@ namespace ARK {
 				setViewport(0, 0, ARK2D::getContainer()->getDynamicWidth(), ARK2D::getContainer()->getDynamicHeight() );
 			}
 
-            direction = (lookAt - transform.position);
-            direction.normalise();
+			// legacy 2d stuff.
+			if (type == TYPE_ORTHO_2D) {
+
+				direction.x = 0;
+				direction.y = 0;
+				direction.z = 1;
+				direction.normalise();
+
+				transform.position.x = 0;
+				transform.position.y = 0;
+				transform.position.z = 1;
+
+				lookAt.x = 0;
+				lookAt.y = 0;
+				lookAt.z = 0;
+
+				direction = (lookAt - transform.position);
+				direction.normalise();
+
+				up.x = 0;
+				up.y = 1;
+				up.z = 0;
+
+				projection.identity();
+				projection.ortho2d(float(viewportX), float(viewportWidth), float(viewportHeight), float(viewportY), float(nearClip), float(farClip));
+
+			}
+
+
+			// 3d bits
+			if (type == TYPE_ORTHO || type == TYPE_PERSPECTIVE) {
+				direction = (lookAt - transform.position);
+				direction.normalise();
+			}
 
 			// need to set the matrix state. this is only important because lighting doesn't work if this isn't done
-
-		    if (type == TYPE_ORTHO) {
-		    	//our projection matrix will be an orthogonal one in this case
+			if (type == TYPE_ORTHO) {
+				//our projection matrix will be an orthogonal one in this case
 				//if the values are not floating point, this command does not work properly
 				//need to multiply by aspect!!! (otherise will not scale properly)
 
 				//projection = glm::ortho((scaleMaybe*-1) * float(viewportAspectRatio), scaleMaybe * float(viewportAspectRatio), scaleMaybe*-1, scaleMaybe, nearClip, farClip);
-                projection.identity();
-                projection.ortho2d((orthographicSize*-1) * float(viewportAspectRatio), orthographicSize * float(viewportAspectRatio), orthographicSize*-1, orthographicSize, nearClip, farClip);
+				projection.identity();
+				projection.ortho2d((orthographicSize*-1) * float(viewportAspectRatio), orthographicSize * float(viewportAspectRatio), orthographicSize*-1, orthographicSize, nearClip, farClip);
 
-
-					// http://www.opengl-tutorial.org/beginners-tutorials/tutorial-6-keyboard-and-mouse/
+				// http://www.opengl-tutorial.org/beginners-tutorials/tutorial-6-keyboard-and-mouse/
 				float verticalAngle = camera_pitch;
 				float horizontalAngle = camera_heading;
 				direction.set(
@@ -120,42 +162,23 @@ namespace ARK {
 					cos(verticalAngle) * cos(horizontalAngle)
 				);
 
-                lookAt = transform.position + direction;
-
-		    } else if (type == TYPE_ORTHO_2D) {
-
-
-		    	//transform.position.x = 0;
-		    	//transform.position.y = 0;
-		    	//transform.position.z = -1;
-		    	direction.x = 0;
-		    	direction.y = 0;
-		    	direction.z = 1;
-		    	up.x = 0;
-		    	up.y = 1;
-		    	up.z = 0;
-
-				//projection = glm::ortho(float(viewportX), float(viewportWidth), float(viewportHeight), float(viewportY), float(nearClip), float(farClip));
-                projection.identity();
-                projection.ortho2d(float(viewportX), float(viewportWidth), float(viewportHeight), float(viewportY), float(nearClip), float(farClip));
-
-                lookAt = transform.position + direction;
+				lookAt = transform.position + direction;
 
 			} else if (type == TYPE_PERSPECTIVE) {
 				//projection = glm::perspective(fieldOfView, viewportAspectRatio, nearClip, farClip);
-                projection.identity();
-                projection.perspective(fieldOfView, viewportAspectRatio, nearClip, farClip);
+				projection.identity();
+				projection.perspective(fieldOfView, viewportAspectRatio, nearClip, farClip);
 				//detmine axis for pitch rotation
-                Vector3<float> axis = direction.cross(up);
+				Vector3<float> axis = direction.cross(up);
 				//compute quaternion for pitch based on the camera pitch angle
-                Quaternion<float> pitch_quat = Quaternion<float>::angleAxis(MathUtil::toDegrees(camera_pitch), axis);
+				Quaternion<float> pitch_quat = Quaternion<float>::angleAxis(MathUtil::toDegrees(camera_pitch), axis);
 				//determine heading quaternion from the camera up vector and the heading angle
-                Quaternion<float> heading_quat = Quaternion<float>::angleAxis(MathUtil::toDegrees(camera_heading), up);
+				Quaternion<float> heading_quat = Quaternion<float>::angleAxis(MathUtil::toDegrees(camera_heading), up);
 				//add the two quaternions
 				Quaternion<float> temp = pitch_quat.cross(heading_quat);
-                temp.normalise();
+				temp.normalise();
 
-                // http://www.opengl-tutorial.org/beginners-tutorials/tutorial-6-keyboard-and-mouse/
+				// http://www.opengl-tutorial.org/beginners-tutorials/tutorial-6-keyboard-and-mouse/
 				float verticalAngle = camera_pitch;
 				float horizontalAngle = camera_heading;
 				direction.set(
@@ -164,8 +187,8 @@ namespace ARK {
 					cos(verticalAngle) * cos(horizontalAngle)
 				);
 
-            	//set the look at to be infront of the camera
-                lookAt = transform.position + direction;
+				//set the look at to be infront of the camera
+				lookAt = transform.position + direction;
 
 
 
@@ -180,18 +203,18 @@ namespace ARK {
 
 			if (type == TYPE_ORTHO_2D) {
 
-                //view.lookAt(transform.position.x, transform.position.y, transform.position.z, lookAt.x, lookAt.y, lookAt.z, up.x, up.y, up.z);
+				//view.lookAt(transform.position.x, transform.position.y, transform.position.z, lookAt.x, lookAt.y, lookAt.z, up.x, up.y, up.z);
 
 				//view = glm::translate(view, glm::vec3(container->getTranslateX(), container->getTranslateY(), 0.0f) );
 				//view = glm::scale(view, glm::vec3(container->getScaleX(), container->getScaleY(), 0.0f) );
 				GameContainer* container = ARK2D::getContainer();
 				view.identity();
 				view.lookAt(transform.position.x, transform.position.y, transform.position.z, lookAt.x, lookAt.y, lookAt.z, up.x, up.y, up.z);
-                //view.translate(container->getTranslateX(), container->getTranslateY(), 0.0f);
-                // todo: rotate
-                //view.scale(container->getScaleX(), container->getScaleY(), 1.0f);
+				view.translate(container->getTranslateX(), container->getTranslateY(), 0.0f);
+				// todo: rotate
+				view.scale(container->getScaleX(), container->getScaleY(), 1.0f);
 
-                model.identity(); // = glm::mat4(1.0f);
+				model.identity(); // = glm::mat4(1.0f);
 
 			} else if (type == TYPE_PERSPECTIVE || type == TYPE_ORTHO) {
 
@@ -207,10 +230,10 @@ namespace ARK {
 				view = glm::translate(view, glm::vec3(1280.0*-0.5, 720.0*-0.5, 0.0) );*/
 
 //				view = glm::lookAt(position, lookAt, up);
-                view.identity();
-                view.lookAt(transform.position.x, transform.position.y, transform.position.z, lookAt.x, lookAt.y, lookAt.z, up.x, up.y, up.z);
+				view.identity();
+				view.lookAt(transform.position.x, transform.position.y, transform.position.z, lookAt.x, lookAt.y, lookAt.z, up.x, up.y, up.z);
 //				model = glm::mat4(1.0f);
-                model.identity();
+				model.identity();
 			}
 
 			//MVP = projection * view * model;
@@ -310,7 +333,7 @@ namespace ARK {
 		void Camera::setType(unsigned int ty) {
 			type = ty;
 			up.set(0, 1, 0);
-            rotation_quaternion.identity();
+			rotation_quaternion.identity();
 		}
 
 		/*void Camera::setPosition(glm::vec3 pos) {
@@ -393,12 +416,12 @@ namespace ARK {
 				camera_pitch += 360.0f;
 			}*/
 			//camera_pitch = fmod(camera_pitch, 360.0f);
-            float pid2 = (glm::pi<float>()/2) - 0.001f;;
-            if (camera_pitch >= pid2) {
-                camera_pitch = pid2;
-            } else if ( camera_pitch <= pid2*-1){
-                camera_pitch = pid2*-1;
-            }
+			float pid2 = (glm::pi<float>()/2) - 0.001f;;
+			if (camera_pitch >= pid2) {
+				camera_pitch = pid2;
+			} else if ( camera_pitch <= pid2*-1){
+				camera_pitch = pid2*-1;
+			}
 		}
 		void Camera::setHeading(float degrees) {
 			camera_heading = degrees;
@@ -519,10 +542,10 @@ namespace ARK {
 			//}
 			//Matrix44<float> viewProjection = *projection.current() * *view.current();
 			Matrix44 viewProjection = projection.m_stack[projection.m_stackIndex] * view.m_stack[view.m_stackIndex];
-            viewProjection.inverse();
+			viewProjection.inverse();
 
-            Vector4 point4d(x, y, 0, 0);
-            point4d = viewProjection * point4d;
+			Vector4 point4d(x, y, 0, 0);
+			point4d = viewProjection * point4d;
 			Vector3<float> ret(point4d.x, point4d.y, 0.0f);
 			if (type == TYPE_ORTHO_2D) {
 				ret.x += viewportWidth * 0.5f;
@@ -563,13 +586,13 @@ namespace ARK {
 		}
 		void CameraMovement::update() {
 			GameTimer* timer = ARK2D::getTimer();
-            Input* in = ARK2D::getInput();
+			Input* in = ARK2D::getInput();
 
 			// movement on wasd
 			float d = moveSpeed * timer->getDelta();
-		 	if (in->isKeyDown(Input::KEY_W)) {
+			if (in->isKeyDown(Input::KEY_W)) {
 				camera->transform.position += camera->direction * d;
-		    }
+			}
 			if (in->isKeyDown(Input::KEY_S)) {
 				camera->transform.position -= camera->direction * d;
 			}
@@ -592,7 +615,7 @@ namespace ARK {
 
 			} else if (in->isKeyDown(Input::KEY_V)) {
 				camera->transform.position -= camera->up * d;
-		        camera->lookAt -= camera->up * d;
+				camera->lookAt -= camera->up * d;
 			}
 
 			// rotation on arrow keys

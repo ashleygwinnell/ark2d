@@ -20,6 +20,7 @@ namespace ARK {
 		class ARK2D_API Camera : public SceneNode {
 			public:
 				static Camera* current;
+				static void setCurrent(Camera* newCamera);
 
 			public:
 				static const unsigned int TYPE_ORTHO = 0;

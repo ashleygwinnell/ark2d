@@ -321,8 +321,31 @@ static int darwin_scancode_table[] = {
 	//ARK2D::getLog()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 	ARK2D::getGame()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 
+	i->mouse_prev_x = i->mouse_x;
+	i->mouse_prev_y = i->mouse_y;
 	i->mouse_x = (int) thisx;
 	i->mouse_y = (int) thisy;
+
+	// if (true) {
+	// 	// keep mouse in middle.
+	// 	// circle. how big?  container height.
+	// 	NSWindow* window = container->m_platformSpecific.m_window;
+	// 	NSRect windowFrame = [window frame];
+	// 	CGPoint centerOfScreen = CGPointMake(windowFrame.origin.x + (container->getDynamicWidth() / 2), windowFrame.origin.y + (container->getDynamicHeight() / 2));
+	// 	centerOfScreen.x += 100;
+	// 	centerOfScreen.y += 100;
+	// 	if (!Shape<float>::collision_circleCircle(centerOfScreen.x, centerOfScreen.y, 100, i->mouse_x, i->mouse_y, 100)) {
+	// 		ARK2D::getLog()->e("moving from ");
+	// 		ARK2D::getLog()->e(StringUtil::append("x: ", i->mouse_x));
+	// 		ARK2D::getLog()->e(StringUtil::append("y: ", i->mouse_y));
+	// 		CGWarpMouseCursorPosition(centerOfScreen);
+	// 		CGAssociateMouseAndMouseCursorPosition(true);
+	// 		i->mouse_x = (int) centerOfScreen.x;
+	// 		i->mouse_y = (int) centerOfScreen.y;
+	// 	}
+
+
+	// }
 
 	[pool release];
 }

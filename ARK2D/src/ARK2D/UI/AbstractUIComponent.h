@@ -101,7 +101,7 @@ namespace ARK {
 				void setState(unsigned int i);
 				unsigned int getState();
 
-                virtual ARK::Core::Geometry::Cube* getBounds();
+                virtual ARK::Core::Geometry::Cube* getAABBBounds();
 				virtual	void setBounds(float w, float h, float z);
 
 				virtual void render() = 0;

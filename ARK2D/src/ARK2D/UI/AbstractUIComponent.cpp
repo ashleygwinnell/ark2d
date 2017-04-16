@@ -163,7 +163,7 @@ namespace ARK {
 			m_height = h;
 		}
 
-        ARK::Core::Geometry::Cube* AbstractUIComponent::getBounds() {
+        ARK::Core::Geometry::Cube* AbstractUIComponent::getAABBBounds() {
 			m_bounds->setWidth(m_width);
 			m_bounds->setHeight(m_height);
 			return m_bounds;

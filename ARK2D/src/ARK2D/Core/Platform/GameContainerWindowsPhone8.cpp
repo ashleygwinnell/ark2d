@@ -592,10 +592,12 @@
 
 
 				m_container->m_timer.tick();
+				m_container->m_input->update();
 				m_container->m_game.preUpdate(m_container, &m_container->m_timer);
 				m_container->m_game.update(m_container, &m_container->m_timer);
 				m_container->m_game.postUpdate(m_container, &m_container->m_timer);
 				ARK2D::getInput()->clearKeyPressedRecord();
+				ARK2D::getInput()->endFrame();
 
 				//arklog->i("native render");
 				//fillRect(100,100,10,10);

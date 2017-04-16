@@ -701,6 +701,9 @@ namespace ARK {
 					string s = string(m_cstr);
 					free(m_cstr);
 				}
+				else if (m_type == TYPE_CAMERA_CHANGE) {
+					Camera::setCurrent((Camera*) m_objectPointer);
+				}
 				else if (m_type == TYPE_CUSTOM_OBJECT_FUNCTION) {
 					void (*pt)(void*) = (void(*)(void*)) m_functionPointer;
 					pt(m_objectPointer);
@@ -760,6 +763,9 @@ namespace ARK {
 						s += string(", ");
 						s += Cast::toString<float>(m_float4),
 						s += string("\"");
+					}
+					else if (m_type == TYPE_CAMERA_CHANGE) {
+
 					}
 					else if (m_type == TYPE_DEBUG_STRING) {
 						s += string(", message: \"");
@@ -2767,7 +2773,7 @@ namespace ARK {
 					MathUtil::moveAngle(bottomLeftX, bottomLeftY, angle - 90, m_LineWidth/2.0f);
 					MathUtil::moveAngle(bottomRightX, bottomRightY, angle + 90, m_LineWidth/2.0f);
 
-					fillQuad(topLeftX, topLeftY, topLeftZ, bottomLeftX, bottomLeftY, bottomLeftZ, topRightX, topRightY, topRightZ, bottomRightX, bottomRightY, bottomRightZ);
+					fillQuad(topLeftX, topLeftY, topLeftZ, topRightX, topRightY, topRightZ, bottomLeftX, bottomLeftY, bottomLeftZ, bottomRightX, bottomRightY, bottomRightZ);
 				#else
 					RendererState::start(RendererState::GEOMETRY);
 					glBegin(GL_LINES);

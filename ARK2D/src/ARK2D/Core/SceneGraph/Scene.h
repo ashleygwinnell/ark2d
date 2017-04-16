@@ -90,7 +90,7 @@ namespace ARK {
                     static void setVisibleStatic(SceneNode* obj, bool b);
 
                     virtual void setBounds(float w, float h, float d);
-                    virtual ARK::Core::Geometry::Cube* getBounds();
+                    virtual ARK::Core::Geometry::Cube* getAABBBounds();
 
                     virtual bool keyPressed(unsigned int key);
                     virtual bool keyReleased(unsigned int key);

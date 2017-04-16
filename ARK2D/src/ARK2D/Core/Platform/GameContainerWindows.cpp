@@ -382,6 +382,8 @@
 												//ARK2D::getLog()->v("touch moved");
 												// mimic mouse
 												if (fingerID == 0) {
+													in->mouse_prev_x = in->mouse_x;
+													in->mouse_prev_y = in->mouse_y;
 													in->mouse_x = (int) thisx;
 													in->mouse_y = (int) thisy;
 													//ARK2D::getLog()->e(StringUtil::append("touch moved thisx: ", thisx));
@@ -499,6 +501,8 @@
 						//ARK2D::getLog()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 						ARK2D::getGame()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
 
+						i->mouse_prev_x = i->mouse_x;
+						i->mouse_prev_y = i->mouse_y;
 						i->mouse_x = (int) thisx;
 						i->mouse_y = (int) thisy;
 
@@ -3435,6 +3439,7 @@
 
 					//int delta = (int) (m_timer.getDelta() * 1000);
 					//ARK2D::getLog()->v("Update Game");
+					m_input.update();
 					scene->update();
 					//m_game.preUpdate(this, &m_timer);
 					//m_game.update(this, &m_timer);
@@ -3443,6 +3448,7 @@
 					for (unsigned int i = 0; i < m_gamepads.size(); i++) {
 						m_gamepads.at(i)->clearButtonPressedRecord();
 					}
+					m_input.endFrame();
 					ErrorDialog::showAnyGlErrorAndExit();
 
 

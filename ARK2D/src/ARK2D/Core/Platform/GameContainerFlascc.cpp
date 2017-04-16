@@ -248,6 +248,7 @@
 			   	//ARK2D::getLog()->i(deltastr);
 				//int delta = (int) (m_timer->getDelta() * 1000);
 				//ARK2D::getLog()->i("Game Pre-update 2");
+				m_input->update();
 				m_game->preUpdate(container, m_timer);			//ARK2D::getLog()->i("Game Pre-update 3");
 				m_game->update(container, m_timer);				//ARK2D::getLog()->i("Game Pre-update 4");
 				m_game->postUpdate(container, m_timer);
@@ -257,6 +258,7 @@
 				//for (unsigned int i = 0; i < m_gamepads.size(); i++) {
 				//	m_gamepads.at(i)->clearButtonPressedRecord();
 				//}
+				m_input->endFrame();
 
 				//ARK2D::getLog()->i("Game Pre-render");
 				RendererStats::reset();

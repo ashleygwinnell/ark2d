@@ -306,12 +306,14 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		//game->preUpdate(container, timer);
 		//game->update(container, timer);
 		//game->postUpdate(container, timer);
+		ARK2D::getInput()->update();
 		scene->update();
 		ARK2D::getInput()->clearKeyPressedRecord();
 
 		for (unsigned int i = 0; i < gamepads->size(); i++) {
 			gamepads->at(i)->clearButtonPressedRecord();
 		}
+		ARK2D::getInput()->endFrame();
 
 		//arklog->i("native render");
 		//fillRect(100,100,10,10);
@@ -375,7 +377,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 
 
 
-		/*string logstr = "touch-move: ";
+		string logstr = "touch-move: ";
 		logstr += Cast::toString<int>((int) x);
 		logstr += ",";
 		logstr += Cast::toString<int>((int) y);
@@ -383,7 +385,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		logstr += Cast::toString<int>((int) thisx);
 		logstr += ",";
 		logstr += Cast::toString<int>((int) thisy);
-		arklog->i(logstr);*/
+		arklog->i(logstr);
 
 		Input* i = ARK2D::getInput();
 		ARK2D::getScene()->mouseMoved((int) thisx, (int) thisy, i->mouse_x, i->mouse_y);
@@ -403,7 +405,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 
 
 
-		/*string logstr = "touch-up: ";
+		string logstr = "touch-up: ";
 		logstr += Cast::toString<int>((int) x);
 		logstr += ",";
 		logstr += Cast::toString<int>((int) y);
@@ -411,7 +413,7 @@ JNIEXPORT void Java_org_%COMPANY_NAME%_%GAME_SHORT_NAME%_%GAME_CLASS_NAME%Render
 		logstr += Cast::toString<int>((int) thisx);
 		logstr += ",";
 		logstr += Cast::toString<int>((int) thisy);
-		arklog->i(logstr);*/
+		arklog->i(logstr);
 
 		Input* i = ARK2D::getInput();
 		i->mouse_x = (int) thisx;

@@ -290,6 +290,8 @@ float transformTouchPointY(float y) {
         Input* in = ARK2D::getInput();
         //ARK2D::getLog()->mouseMoved((int) thisx, (int) thisy, in->mouse_x, in->mouse_y);
         ARK2D::getGame()->mouseMoved((int) thisx, (int) thisy, in->mouse_x, in->mouse_y);
+        in->mouse_prev_x = in->mouse_x;
+        in->mouse_prev_y = in->mouse_y;
         in->mouse_x = (int) thisx;
         in->mouse_y = (int) thisy;
 

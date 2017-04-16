@@ -85,7 +85,7 @@ namespace ARK {
 			m_calculatedHeight = 0;
 
 			for (signed int i = children.size() - 1; i >= 0; i--) {
-                ARK::Core::Geometry::Cube* bounds = children[i]->getBounds();
+                ARK::Core::Geometry::Cube* bounds = children[i]->getAABBBounds();
                 float maxX = children[i]->transform.position.getX() + (bounds->getWidth()*(1.0f - children[i]->pivot.getX()));
                 float maxY = children[i]->transform.position.getY() + (bounds->getHeight()*(1.0f - children[i]->pivot.getY()));
 				if (maxX > m_calculatedWidth) {

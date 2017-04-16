@@ -1056,6 +1056,7 @@
 					//ARK2D::getLog()->update();
 
 					int delta = (int) (m_timer.getDeltaNoModifiers() * 1000);
+					m_input.update();
 					scene->update();
 					//m_game.preUpdate(this, &m_timer);
 					//m_game.update(this, &m_timer);
@@ -1064,6 +1065,8 @@
 					for (unsigned int i = 0; i < m_gamepads.size(); i++) {
 						m_gamepads.at(i)->clearButtonPressedRecord();
 					}
+					m_input.endFrame();
+
 
 					RendererStats::reset();
 					glClearColor(m_clearColor.getRedf(), m_clearColor.getGreenf(), m_clearColor.getBluef(), m_clearColor.getAlpha());

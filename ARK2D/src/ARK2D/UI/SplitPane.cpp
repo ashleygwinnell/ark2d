@@ -79,10 +79,10 @@ namespace ARK {
 
 			// update location/size/ui/layout of children.
             ARK::Core::Geometry::Cube* firstBounds = (m_firstComponent != NULL)
-            	? m_firstComponent->getBounds()
+            	? m_firstComponent->getAABBBounds()
             	: SceneNode::s_dummyCube;
             ARK::Core::Geometry::Cube* secondBounds = (m_secondComponent != NULL)
-            	? m_secondComponent->getBounds()
+            	? m_secondComponent->getAABBBounds()
             	: SceneNode::s_dummyCube;
 			if (m_splitType == SPLIT_HORIZONTAL) {
 				if (m_firstComponent != NULL) {
@@ -169,7 +169,7 @@ namespace ARK {
 
 			SceneNode* p = m_parent;
 			if (p != NULL) {
-				setBounds(p->getBounds()->getWidth(), p->getBounds()->getHeight(), p->getBounds()->getDepth());
+				setBounds(p->getAABBBounds()->getWidth(), p->getAABBBounds()->getHeight(), p->getAABBBounds()->getDepth());
 			}
 
 			SceneNode::onResize();

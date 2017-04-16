@@ -216,6 +216,7 @@ void WindowsUWPGame::Run()
 			}
 
 			// Update Game
+			in->update();
 			scene->update();
 
 			// Update Input
@@ -223,6 +224,7 @@ void WindowsUWPGame::Run()
 			for (unsigned int i = 0; i < container->getGamepads()->size(); i++) {
 				container->getGamepads()->at(i)->clearButtonPressedRecord();
 			}
+			in->endFrame();
 
 			// Rendering
 			RendererStats::reset();
