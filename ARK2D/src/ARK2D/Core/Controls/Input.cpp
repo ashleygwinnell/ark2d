@@ -532,12 +532,14 @@ namespace ARK {
             }
 
             void Input::update() {
-                if (!mouse_fetched_this_frame) {
-                    mouse_fetched_this_x = 0;
-                    mouse_fetched_this_y = 0;
-                    CGGetLastMouseDelta(&mouse_fetched_this_x, &mouse_fetched_this_y);
-                    mouse_fetched_this_frame = true;
-                }
+				#ifdef ARK2D_MACINTOSH
+					if (!mouse_fetched_this_frame) {
+						mouse_fetched_this_x = 0;
+						mouse_fetched_this_y = 0;
+						CGGetLastMouseDelta(&mouse_fetched_this_x, &mouse_fetched_this_y);
+						mouse_fetched_this_frame = true;
+					}
+				#endif
             }
             void Input::clearKeyPressedRecord() {
                 pressedEvents.clear();

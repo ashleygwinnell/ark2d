@@ -145,7 +145,7 @@ namespace ARK {
 
             };
 
-            class BMFontRenderer  : public GameComponent {
+            class ARK2D_API BMFontRenderer  : public GameComponent {
                 public:
                     BMFont* font;
                     string text;
