@@ -29,19 +29,19 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Development|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -85,12 +85,12 @@
       <!-- <AdditionalDependencies>..\..\lib\windows\alut.lib;..\..\lib\windows\OpenAL32.lib;..\..\lib\windows\freetype6.lib;..\..\lib\windows\zlib1.lib;..\..\lib\windows\curl\Debug\curllib.lib;opengl32.lib;msvcrt.lib;winmm.lib</AdditionalDependencies>
       <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile> -->
      <!--  <IgnoreSpecificDefaultLibraries>libc.lib;libcmt.lib;msvcrt.lib;msvcprt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries> -->
-   <!--    <IgnoreSpecificDefaultLibraries>libc.lib;libcmt.lib;libcd.lib;libcmtd.lib;msvcrtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries> 
+   <!--    <IgnoreSpecificDefaultLibraries>libc.lib;libcmt.lib;libcd.lib;libcmtd.lib;msvcrtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
        <GenerateDebugInformation>true</GenerateDebugInformation>
        <AssemblyDebug>true</AssemblyDebug>
        <NoEntryPoint>true</NoEntryPoint>
     </Link>
-    <ResourceCompile> 
+    <ResourceCompile>
       <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>ARK2D_DEBUG;ARK2D_WINDOWS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;_WIN32;_DEBUG;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
@@ -120,14 +120,14 @@
       <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;ARK2D_DEBUG;ARK2D_PATH=%ARK2D_DIR%;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
-  </ItemDefinitionGroup> 
+  </ItemDefinitionGroup>
   <!-- Development Config -->
    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Development|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\src\ARK2D\vendor\angelscript;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <Optimization>Disabled</Optimization> 
+      <Optimization>Disabled</Optimization>
       <!-- <Optimization>Full</Optimization> -->
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <MinimalRebuild>true</MinimalRebuild>
@@ -147,8 +147,8 @@
       <PreprocessorDefinitions>ARK2D_WINDOWS;ARK2D_WINDOWS_VS;ARK2D_DESKTOP;ARK2D_WINDOWS_DLL;ARK2D_PATH=%ARK2D_DIR%;_WIN32;%(PreprocessorDefinitions);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
- 
-  <!-- Release Config --> 
+
+  <!-- Release Config -->
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\src\ARK2D\vendor\windows;..\..\src\ARK2D\vendor\angelscript;..\..\lib\windows\includes;..\..\src\ARK2D\vendor\spine\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -156,7 +156,7 @@
       <DebugInformationFormat>None</DebugInformationFormat>
       <Optimization>Disabled</Optimization> <!-- <Optimization>Full</Optimization> -->
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      
+
     </ClCompile>
     <Link>
       <AdditionalDependencies>..\..\lib\windows\alut.lib;..\..\lib\windows\OpenAL32.lib;..\..\lib\windows\freetype6.lib;..\..\lib\windows\zlib1.lib;..\..\lib\windows\curl\Debug\curllib.lib;..\..\lib\windows\angelscript\angelscript.lib;opengl32.lib;msvcrt.lib;libcmt.lib;winmm.lib;XInput9_1_0.lib</AdditionalDependencies>
@@ -173,7 +173,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
 
-  <!-- 
+  <!--
   <ItemGroup>
     <FxCompile Include="..\..\src\ARK2D\Graphics\HLSL\geometry-dx11-pixel.hlsl">
       <FileType>Document</FileType>
@@ -357,7 +357,7 @@
   <!-- Source Files -->
   <ItemGroup>
     %COMPILE_SOURCE_FILES%
-    <!-- 
+    <!--
     <ClCompile Include="..\..\src\ARK2D\vendor\gl3w.c" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\ARK2D\ARK2D.cpp" />
@@ -584,9 +584,9 @@
   <ItemGroup>
     <ResourceCompile Include="..\..\src\ARK2D\Windres.rc" />
   </ItemGroup>
-  
+
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  
+
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
 </Project>
