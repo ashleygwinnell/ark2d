@@ -32,9 +32,13 @@ std::map<string, const char*> emscripten_functionPointerKeys;
 void Thread::init(string key, void* functionPointer) {
     ARK2D::getLog()->t("Initialising thread with string and function pointer...");
 
-    m_functionPointerKey = key;
-    m_functionPointer = functionPointer;
-    emscripten_functionPointerKeys[key] = (const char*) functionPointer;
+    #ifdef ARK2D_EMSCRIPTEN_JS
+        m_functionPointerKey = key;
+        m_functionPointer = functionPointer;
+        emscripten_functionPointerKeys[key] = (const char*) functionPointer;
+    #else
+        init(functionPointer);
+    #endif
 }
 extern "C" void EMSCRIPTEN_KEEPALIVE emscripten_run_thread(char* key) {
     ARK2D::getLog()->w("emscripten_run_thread c function");
@@ -256,7 +260,7 @@ namespace ARK {
                 }
                 void Thread::init(void* functionPointer) {
                     m_functionPointer = functionPointer;
-                    m_handle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) functionPointer, NULL, CREATE_SUSPENDED, &m_id);
+                    m_handle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE) initThread, (void*) this, CREATE_SUSPENDED, &m_id);
                 }
                 void Thread::initThread(void* obj) {
                     //Thread* t = (Thread*) obj;

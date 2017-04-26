@@ -32,6 +32,7 @@ namespace ARK {
                 init();
 
                 addFBOToStore();
+                ARK2D::getLog()->v("FBO: Done");
             }
             FBO::FBO(bool dummy):
                 _image(NULL),
@@ -47,6 +48,7 @@ namespace ARK {
                 window_height = ARK2D::getContainer()->getHeight();
                 original_width = window_width;
                 original_height = window_height;
+                ARK2D::getLog()->v("FBO: Done");
             }
 
             FBO::FBO(unsigned int w, unsigned int h):
@@ -63,6 +65,7 @@ namespace ARK {
                 init();
 
                 addFBOToStore();
+                ARK2D::getLog()->v("FBO: Done");
             }
 
             void FBO::addFBOToStore() {
@@ -217,7 +220,12 @@ namespace ARK {
 						//exit(0); // Exit the application
 					}
 
-					ARK2D::getLog()->v("FBO: Bind framebuffer");
+                    #if defined(ARK2D_OPENGL_3_2)
+                        ARK2D::getLog()->v("FBO: Unbind renderbuffer");
+                        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+                    #endif
+
+					ARK2D::getLog()->v("FBO: Unbind framebuffer");
 					glBindFramebufferARK(GL_FRAMEBUFFER_ARK, 0); // Unbind our frame buffer
 					RendererStats::s_glCalls += 2;
 

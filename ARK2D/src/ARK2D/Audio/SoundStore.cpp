@@ -54,7 +54,10 @@ namespace ARK {
 			return m_map;
 		}
 		void SoundStore::setVolumeByGroupId(unsigned int groupId, float volume) {
-			m_volumeMap[groupId] = volume;
+			if (m_volumeMap.find(groupId) == m_volumeMap.end()) {
+				m_volumeMap.insert( std::pair<unsigned int, float>(groupId, volume) );
+			}
+
 
 			//string s = StringUtil::append("**** Setting soundstore group ", groupId);
 			//s += StringUtil::appendf(" to ", volume);
