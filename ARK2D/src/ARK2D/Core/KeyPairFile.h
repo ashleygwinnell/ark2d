@@ -75,6 +75,7 @@ namespace ARK {
 
 				string getFilename();
 				string toString();
+				int size();
 
 				virtual ~KeyPairFile();
 

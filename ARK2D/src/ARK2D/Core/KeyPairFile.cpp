@@ -243,6 +243,16 @@ namespace ARK {
 			return success;
 		}
 
+		int KeyPairFile::size() {
+			int count = 0;
+			map<string, string>::const_iterator it = m_map.begin();
+			while ( it != m_map.end() ) {
+				count++;
+				it++;
+			}
+			return count;
+		}
+
 		KeyPairFile::~KeyPairFile() {
 			m_map.clear();
 			ARK2D::getLog()->i("Deleting KeyPairFile");
