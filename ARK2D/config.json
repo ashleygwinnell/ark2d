@@ -88,6 +88,7 @@
 	},
 	"modules": {
 		"core": {
+			"root": "src/ARK2D/Core/",
 			"sources": [
 				"src/ARK2D/Core/Controls/Input.cpp",
 				"src/ARK2D/Core/Controls/Gamepad.cpp",
@@ -259,6 +260,7 @@
 			]
 		},
 		"gj": {
+			"root": "src/ARK2D/GJ/",
 			"sources": [
 				"src/ARK2D/GJ/GameJolt.cpp",
 				"src/ARK2D/GJ/PropertyItem.cpp",
@@ -273,6 +275,7 @@
 			"dependencies": [ "core" ]
 		},
 		"net": {
+			"root": "src/ARK2D/Net/",
 			"sources": [
 				"src/ARK2D/Net/Address.cpp",
 				"src/ARK2D/Net/Connection.cpp",
@@ -287,6 +290,7 @@
 			"dependencies": [ "core" ]
 		},
 		"particles": {
+			"root": "src/ARK2D/Particles/",
 			"sources": [
 				"src/ARK2D/Particles/ConfigurableEmitter.cpp",
 				"src/ARK2D/Particles/Particle.cpp",
@@ -297,6 +301,7 @@
 			"dependencies": [ "core" ]
 		},
 		"paths": {
+			"root": "src/ARK2D/Path/",
 			"sources": [
 				"src/ARK2D/Path/PathGroup.cpp",
 				"src/ARK2D/Path/Path.cpp",
@@ -308,6 +313,7 @@
 		},
 
 		"tests": {
+			"root": "src/ARK2D/Tests/",
 			"sources": [
 				"src/ARK2D/Tests/CollisionTest.cpp",
 				"src/ARK2D/Tests/GamepadsTest.cpp",
@@ -321,6 +327,7 @@
 			"dependencies": [ "core" ]
 		},
 		"tiled": {
+			"root": "src/ARK2D/Tiled/",
 			"sources": [
 				"src/ARK2D/Tiled/TiledMap.cpp",
 				"src/ARK2D/Tiled/TiledMapLayer.cpp",
@@ -333,10 +340,12 @@
 			"dependencies": [ "core" ]
 		},
 		"transitions": {
+			"root": "src/ARK2D/Core/State/Transition/",
 			"sources": [],
 			"dependencies": []
 		},
 		"util": {
+			"root": "src/ARK2D/Util/",
 			"sources": [
 				"src/ARK2D/Util/AnalyticsUtil.cpp",
 				"src/ARK2D/Util/AngelScriptUtil.cpp",
@@ -363,6 +372,7 @@
 			"dependencies": []
 		},
 		"ui": {
+			"root": "src/ARK2D/UI/",
 			"sources": [
 				"src/ARK2D/UI/UIComponent.cpp",
 				"src/ARK2D/UI/AbstractUIComponent.cpp",
@@ -386,6 +396,7 @@
 			"dependencies": []
 		},
 		"spine": {
+			"root": "src/ARK2D/vendor/spine/",
 			"sources": [
 				"src/ARK2D/vendor/spine/spine-ark2d.cpp",
 				"src/ARK2D/vendor/spine/SpineSkeleton.cpp",

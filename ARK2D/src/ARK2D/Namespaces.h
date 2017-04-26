@@ -97,6 +97,9 @@ namespace ARK {
 
             class Transform;
 
+			template <class T>
+			class Vector2;
+
             class Vector4;
 
             class Plane;
@@ -280,6 +283,7 @@ namespace ARK {
 		class Panel;
 		class ScrollPanel;
 		class TextField;
+		class SimpleTextField;
 		class UIComponent;
 		class Slider;
 		class SplitPane;
