@@ -10,7 +10,7 @@
 #include "../Vector.h"
 #include "../Pool.h"
 
-#ifdef ARK2D_MACINTOSH
+#if defined(ARK2D_MACINTOSH) && !defined(MAC_OS_X_VERSION_10_11)
 
 	@implementation QTMovieView (TFOverrideDrag)
 
@@ -57,7 +57,7 @@ namespace ARK {
                 GameState(),
                 m_source(""),
                 m_loaded(false) 
-                #if defined(ARK2D_MACINTOSH)
+                #if defined(ARK2D_MACINTOSH) && !defined(MAC_OS_X_VERSION_10_11)
                     ,
                     m_movie(NULL),
                     m_movieView(NULL)
@@ -77,7 +77,7 @@ namespace ARK {
 
                 //SoundStore::getInstance()->setVolumeByGroupId(0, 0.0f); 
 
-                #if defined(ARK2D_MACINTOSH)
+                #if defined(ARK2D_MACINTOSH) && !defined(MAC_OS_X_VERSION_10_11)
                     [NSOpenGLContext clearCurrentContext];
                     [ARK2D::getContainer()->getPlatformSpecific()->m_window setContentView:m_movieView];
                 #endif
@@ -89,7 +89,7 @@ namespace ARK {
 
                 stop();	
 
-                #if defined(ARK2D_MACINTOSH)
+                #if defined(ARK2D_MACINTOSH) && !defined(MAC_OS_X_VERSION_10_11)
           
                     NSView* view = [ARK2D::getContainer()->getPlatformSpecific()->m_context view];
                     [ARK2D::getContainer()->getPlatformSpecific()->m_window setContentView: view];
@@ -137,7 +137,7 @@ namespace ARK {
 
             void VideoGameState::load() {
 
-                #if defined(ARK2D_MACINTOSH)
+                #if defined(ARK2D_MACINTOSH) && !defined(MAC_OS_X_VERSION_10_11)
 
                     //GameContainerIPhoneGLViewController* glview = ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate.glViewController;
                     //glview.view = m_movieView;
@@ -179,7 +179,7 @@ namespace ARK {
             }
 
             void VideoGameState::play() {
-                #if defined(ARK2D_MACINTOSH)
+                #if defined(ARK2D_MACINTOSH) && !defined(MAC_OS_X_VERSION_10_11)
                     [m_movie play];
                 #endif
             }
@@ -187,13 +187,13 @@ namespace ARK {
                 //[m_movie pause];
             //}
             void VideoGameState::stop() {
-                #if defined(ARK2D_MACINTOSH)
+                #if defined(ARK2D_MACINTOSH) && !defined(MAC_OS_X_VERSION_10_11)
                     [m_movie stop];
                 #endif
             }
 
             float VideoGameState::getCurrentTime() {
-                #if defined(ARK2D_MACINTOSH)
+                #if defined(ARK2D_MACINTOSH) && !defined(MAC_OS_X_VERSION_10_11)
                     return (unsigned int) [m_movie currentTime].timeValue;
                 #else
                     return false;
@@ -201,26 +201,26 @@ namespace ARK {
             }
 
             void VideoGameState::setCurrentTime(float pos) {
-                #if defined(ARK2D_MACINTOSH)
+                #if defined(ARK2D_MACINTOSH) && !defined(MAC_OS_X_VERSION_10_11)
                     QTTime t = QTMakeTime( (long long) pos, [m_movie currentTime].timeScale );
                     [m_movie setCurrentTime:t];
                 #endif
             }
 
             float VideoGameState::getVolume() {
-                #if defined(ARK2D_MACINTOSH)
+                #if defined(ARK2D_MACINTOSH) && !defined(MAC_OS_X_VERSION_10_11)
                     return [m_movie volume];
                 #endif
                 return 0.0f;
             }
             void VideoGameState::setVolume(float f) {
-                #if defined(ARK2D_MACINTOSH)
+                #if defined(ARK2D_MACINTOSH) && !defined(MAC_OS_X_VERSION_10_11)
                     [m_movie setVolume:f];
                 #endif
             }
 
             bool VideoGameState::isCompleted() {
-                #if defined(ARK2D_MACINTOSH)
+                #if defined(ARK2D_MACINTOSH) && !defined(MAC_OS_X_VERSION_10_11)
                     return [m_movie currentTime].timeValue >= [m_movie duration].timeValue;
                 #endif
                 return true;
