@@ -17,6 +17,32 @@ namespace ARK {
         namespace Graphics {
 
             /*!
+             * \brief A container for animation base images. Quick creation into Animations.
+             *
+             * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
+             */
+            class ARK2D_API AnimationFrameList {
+                public:
+                    /*!
+                    * Quick creation.
+                    * @param endNumInclusive of -1 means iterator until an image is not found in the Description.
+                    * @param sheet of NULL means use SpriteSheetStore
+                    * @param desc of NULL means use SpriteSheetStore
+                    *
+                    * All frames must be in the same texture sheet.
+                    */
+                    static AnimationFrameList* create(string ref);
+                    static AnimationFrameList* create(string ref, Image* sheet = NULL, SpriteSheetDescription* desc = NULL);
+                    static AnimationFrameList* create(string ref, int startNum = 0, int endNumInclusive = -1, Image* sheet = NULL, SpriteSheetDescription* desc = NULL);
+
+                    vector<Image*> frames;
+
+                    AnimationFrameList();
+                    vector<Image*>* getFrames();
+                    virtual ~AnimationFrameList();
+            };
+
+            /*!
              * \brief A bunch of Image frames thrown together to produce an animation.
              *
              * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
@@ -27,6 +53,8 @@ namespace ARK {
 
                     void addImage(Image* image);
                     void addFrame(Image* image);
+                    void addFrames(AnimationFrameList* frameList);
+                    void setFrames(AnimationFrameList* frameList);
                     Image* getCurrentFrame();
                     inline unsigned int getCurrentFrameIndex() { return m_currentFrameIndex; }
                     inline void setCurrentFrameIndex(unsigned int i) { m_currentFrameIndex = i; }

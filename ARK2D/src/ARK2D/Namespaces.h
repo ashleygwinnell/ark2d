@@ -112,6 +112,7 @@ namespace ARK {
 			class Shader;
 			class Color;
 			class Animation;
+			class AnimationFrameList;
 			class SpriteSheetDescription;
 			class SpriteSheetDescriptionItem;
 			class SpriteSheetStore;

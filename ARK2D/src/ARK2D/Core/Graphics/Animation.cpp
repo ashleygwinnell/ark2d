@@ -9,149 +9,214 @@
 
 #include "../GameTimer.h"
 #include "Image.h"
+#include "SpriteSheetDescription.h"
+#include "SpriteSheetStore.h"
 
 namespace ARK {
-    namespace Core {
-        namespace Graphics {
+	namespace Core {
+		namespace Graphics {
 
-            Animation::Animation(): 
-                m_frames(),
-                m_currentFrameIndex(0),
-                m_nextFrameModifier(1),
-                m_timer(0.0f),
-                m_frameTime(0.0f),
-                m_pingPong(false) 
-                {
+			AnimationFrameList* AnimationFrameList::create(string ref)
+			{
+				return create(ref, (Image*) NULL, (SpriteSheetDescription*)NULL);
+			}
+            AnimationFrameList* AnimationFrameList::create(string ref, Image* sheet, SpriteSheetDescription* desc)
+            {
+            	return create(ref, 0, -1, sheet, desc);
+            }
+			AnimationFrameList* AnimationFrameList::create(string ref, int startNum, int endNumInclusive, Image* sheet, SpriteSheetDescription* desc)
+			{
+				AnimationFrameList* list = new AnimationFrameList();
+				bool continueLoop = true;
 
-            }
-            void Animation::setNextFrameModifier(signed int mod) {
-                m_nextFrameModifier = mod;
-            }
-            signed int Animation::getNextFrameModifier() {
-                return m_nextFrameModifier;
-            }
+				for(int i = startNum; continueLoop; i++) {
+					if (endNumInclusive == -1) {
+						continueLoop = true;
+					}
+					else {
+						continueLoop = i+1 <= endNumInclusive;
+					}
 
-            void Animation::clear() {
-                m_frames.clear();
-                m_timer = 0.0f;
-                m_currentFrameIndex = 0;
-                m_nextFrameModifier = 1;
-            }
-            void Animation::reset() {
-                m_timer = 0.0f; 
-                m_currentFrameIndex = 0;
-                m_nextFrameModifier = 1;
-            }
+					string thisRef = StringUtil::str_replace_copy("*", Cast::toString<int>(i), ref);
+					bool hasFrame = desc->hasItemByName(thisRef.c_str());
+					if (hasFrame) {
+						Image* frame = NULL;
+						if (sheet == NULL || desc == NULL) {
+							frame = SpriteSheetStore::getImage(thisRef);
+						} else {
+							frame = sheet->getSubImage(desc->getItemByName(thisRef.c_str()));
+						}
+						list->frames.push_back(frame);
+					}
+					else if (endNumInclusive == -1) {
+						continueLoop = false;
+					}
+				}
+				return list;
+			}
 
-            unsigned int Animation::size() {
-                return m_frames.size(); 
-            }
+            AnimationFrameList::AnimationFrameList():
+				frames() {
 
-            void Animation::setTime(float f) {
-                m_timer = f;
-            }
-            float Animation::getTime() {
-                return m_timer;
-            }
+			}
+			vector<Image*>* AnimationFrameList::getFrames() {
+				return &frames;
+			}
+			AnimationFrameList::~AnimationFrameList() {
 
-            void Animation::setAlpha(float f) {
-                for(unsigned int i = 0 ; i < m_frames.size(); i++) {
-                    m_frames.get(i)->setAlpha(f);
-                } 
-            }
+			}
 
-            void Animation::addFrame(Image* image) { 
-                addImage(image); 
-            }
 
-            void Animation::addImage(Image* image) {
-                m_frames.add(image);
-            } 
-            Image* Animation::getCurrentFrame() {
-                return m_frames.get(m_currentFrameIndex);
-            }
-            Image* Animation::getFrame(unsigned int i) {
-                return m_frames.get(i);
-            }
 
-            Image* Animation::getNextFrame(unsigned int i) {
-                i += m_currentFrameIndex;
-                if (!m_pingPong) {
-                    while (i >= m_frames.size()) {
-                        i -= m_frames.size();
-                    }
-                }
-                return m_frames.get(i);
-            }
+			Animation::Animation():
+				m_frames(),
+				m_currentFrameIndex(0),
+				m_nextFrameModifier(1),
+				m_timer(0.0f),
+				m_frameTime(0.0f),
+				m_pingPong(false)
+				{
 
-            void Animation::setFrameTime(unsigned int ft) {
-                m_frameTime = (ft / 1000.0f);
-            }
-            void Animation::setFrameTime(float ft) {
-                m_frameTime = ft;
-            }
-            void Animation::setPingPong(bool b) {
-                m_pingPong = b;
-            }
+			}
+			void Animation::setNextFrameModifier(signed int mod) {
+				m_nextFrameModifier = mod;
+			}
+			signed int Animation::getNextFrameModifier() {
+				return m_nextFrameModifier;
+			}
 
-            bool Animation::isPingPong() {
-                return m_pingPong;
-            }
-            float Animation::getFrameTime() {
-                return m_frameTime;
-            }
+			void Animation::clear() {
+				m_frames.clear();
+				m_timer = 0.0f;
+				m_currentFrameIndex = 0;
+				m_nextFrameModifier = 1;
+			}
+			void Animation::reset() {
+				m_timer = 0.0f;
+				m_currentFrameIndex = 0;
+				m_nextFrameModifier = 1;
+			}
 
-            void Animation::update(GameTimer* timer) {
-                update(timer->getDelta());
-            }
-            void Animation::update(float delta) {
-                if (m_frames.size() == 0) { return; }
-                m_timer += delta;
-                while (m_timer > m_frameTime) {
-                    m_timer -= m_frameTime;
+			unsigned int Animation::size() {
+				return m_frames.size();
+			}
 
-                    // next frame (+1 or -1)
-                    m_currentFrameIndex += m_nextFrameModifier;
+			void Animation::setTime(float f) {
+				m_timer = f;
+			}
+			float Animation::getTime() {
+				return m_timer;
+			}
 
-                    if (m_pingPong) {
-                        if (m_currentFrameIndex >= (signed int) m_frames.size()) {
-                            m_currentFrameIndex = m_frames.size() - 1;
-                            m_nextFrameModifier *= -1;
-                        } else if (m_currentFrameIndex < 0) {
-                            m_currentFrameIndex = 1;
-                            m_nextFrameModifier *= -1;
-                        }
+			void Animation::setAlpha(float f) {
+				for(unsigned int i = 0 ; i < m_frames.size(); i++) {
+					m_frames.get(i)->setAlpha(f);
+				}
+			}
 
-                    } else {
-                        if (m_currentFrameIndex >= (signed int) m_frames.size()) {
-                            m_currentFrameIndex = 0;
-                        } else if (m_currentFrameIndex < 0) {
-                            m_currentFrameIndex = m_frames.size() - 1;
-                        }
-                    }
+			void Animation::addFrame(Image* image) {
+				addImage(image);
+			}
+			void Animation::addFrames(AnimationFrameList* frameList) {
+				for(int i = 0; i < frameList->frames.size(); i++) {
+					addImage(frameList->frames.at(i));
+				}
+			}
+			void Animation::setFrames(AnimationFrameList* frameList) {
+				clear();
+				for(int i = 0; i < frameList->frames.size(); i++) {
+					addImage(frameList->frames.at(i));
+				}
+			}
 
-                    if (m_frameTime == 0.0f) {
-                        break;
-                    }
-                }
-            }
-            void Animation::draw(int x, int y) {
-                m_frames.get(m_currentFrameIndex)->draw(x, y);
-            }
-            void Animation::drawCentered(int x, int y) {
-                m_frames.get(m_currentFrameIndex)->drawCentered(x, y);
-            }
-            void Animation::drawFlipped(int x, int y, bool fx, bool fy) {
-                m_frames.get(m_currentFrameIndex)->drawFlipped(x,y,fx,fy);
-            }
-            void Animation::drawCenteredFlipped(int x, int y, bool fx, bool fy) {
-                Image* img = m_frames.get(m_currentFrameIndex);
-                img->drawFlipped(x - (img->getWidth()/2), y - (img->getHeight()/2), fx, fy);
-            }
+			void Animation::addImage(Image* image) {
+				m_frames.add(image);
+			}
+			Image* Animation::getCurrentFrame() {
+				return m_frames.get(m_currentFrameIndex);
+			}
+			Image* Animation::getFrame(unsigned int i) {
+				return m_frames.get(i);
+			}
 
-            Animation::~Animation() {
+			Image* Animation::getNextFrame(unsigned int i) {
+				i += m_currentFrameIndex;
+				if (!m_pingPong) {
+					while (i >= m_frames.size()) {
+						i -= m_frames.size();
+					}
+				}
+				return m_frames.get(i);
+			}
 
-            }
-        }
+			void Animation::setFrameTime(unsigned int ft) {
+				m_frameTime = (ft / 1000.0f);
+			}
+			void Animation::setFrameTime(float ft) {
+				m_frameTime = ft;
+			}
+			void Animation::setPingPong(bool b) {
+				m_pingPong = b;
+			}
+
+			bool Animation::isPingPong() {
+				return m_pingPong;
+			}
+			float Animation::getFrameTime() {
+				return m_frameTime;
+			}
+
+			void Animation::update(GameTimer* timer) {
+				update(timer->getDelta());
+			}
+			void Animation::update(float delta) {
+				if (m_frames.size() == 0) { return; }
+				m_timer += delta;
+				while (m_timer > m_frameTime) {
+					m_timer -= m_frameTime;
+
+					// next frame (+1 or -1)
+					m_currentFrameIndex += m_nextFrameModifier;
+
+					if (m_pingPong) {
+						if (m_currentFrameIndex >= (signed int) m_frames.size()) {
+							m_currentFrameIndex = m_frames.size() - 1;
+							m_nextFrameModifier *= -1;
+						} else if (m_currentFrameIndex < 0) {
+							m_currentFrameIndex = 1;
+							m_nextFrameModifier *= -1;
+						}
+
+					} else {
+						if (m_currentFrameIndex >= (signed int) m_frames.size()) {
+							m_currentFrameIndex = 0;
+						} else if (m_currentFrameIndex < 0) {
+							m_currentFrameIndex = m_frames.size() - 1;
+						}
+					}
+
+					if (m_frameTime == 0.0f) {
+						break;
+					}
+				}
+			}
+			void Animation::draw(int x, int y) {
+				m_frames.get(m_currentFrameIndex)->draw(x, y);
+			}
+			void Animation::drawCentered(int x, int y) {
+				m_frames.get(m_currentFrameIndex)->drawCentered(x, y);
+			}
+			void Animation::drawFlipped(int x, int y, bool fx, bool fy) {
+				m_frames.get(m_currentFrameIndex)->drawFlipped(x,y,fx,fy);
+			}
+			void Animation::drawCenteredFlipped(int x, int y, bool fx, bool fy) {
+				Image* img = m_frames.get(m_currentFrameIndex);
+				img->drawFlipped(x - (img->getWidth()/2), y - (img->getHeight()/2), fx, fy);
+			}
+
+			Animation::~Animation() {
+
+			}
+		}
 	}
 }
