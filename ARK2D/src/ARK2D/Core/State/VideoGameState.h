@@ -18,18 +18,19 @@
 
 using namespace std;
 
-#ifdef ARK2D_MACINTOSH
-#import <QTKit/QTKit.h>
+#if defined(ARK2D_MACINTOSH) && !defined(MAC_OS_X_VERSION_10_11)
 
-@interface QTMovieView (TFOverrideDrag)
+    #import <QTKit/QTKit.h>
 
-- (void)mouseDown:(NSEvent *)theEvent;
-- (void)mouseDragged:(NSEvent *)theEvent;
-- (void)rightMouseDown:(NSEvent *)theEvent;
-- (void)keyDown:(NSEvent *)theEvent;
-- (void)keyUp:(NSEvent *)theEvent;
+    @interface QTMovieView (TFOverrideDrag)
 
-@end
+    - (void)mouseDown:(NSEvent *)theEvent;
+    - (void)mouseDragged:(NSEvent *)theEvent;
+    - (void)rightMouseDown:(NSEvent *)theEvent;
+    - (void)keyDown:(NSEvent *)theEvent;
+    - (void)keyUp:(NSEvent *)theEvent;
+
+    @end
 
 #endif
 
@@ -49,7 +50,7 @@ namespace ARK {
                     string m_source;
                     bool m_loaded;
 
-                    #ifdef ARK2D_MACINTOSH
+                    #if defined(ARK2D_MACINTOSH) && !defined(MAC_OS_X_VERSION_10_11)
 
                         QTMovie* m_movie;
                         QTMovieView* m_movieView;
