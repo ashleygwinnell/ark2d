@@ -31,7 +31,7 @@
 	},
 	"html5": {
 		"osx": {
-			"emscripten_dir": "~/Projects/emsdk_portable",
+			"emscripten_dir": "~/Projects/emsdk-portable",
 			"emscripten_version": "1.35.0"
 		}
 	},
@@ -212,30 +212,7 @@
 
 				"src/ARK2D/vendor/ogg130/bitwise.c",
 				"src/ARK2D/vendor/ogg130/framing.c",
-
-				"src/ARK2D/vendor/vorbis132/analysis.c",
-				"src/ARK2D/vendor/vorbis132/bitrate.c",
-				"src/ARK2D/vendor/vorbis132/block.c",
-				"src/ARK2D/vendor/vorbis132/codebook.c",
-				"src/ARK2D/vendor/vorbis132/envelope.c",
-				"src/ARK2D/vendor/vorbis132/floor0.c",
-				"src/ARK2D/vendor/vorbis132/floor1.c",
-				"src/ARK2D/vendor/vorbis132/info.c",
-				"src/ARK2D/vendor/vorbis132/lookup.c",
-				"src/ARK2D/vendor/vorbis132/lpc.c",
-				"src/ARK2D/vendor/vorbis132/lsp.c",
-				"src/ARK2D/vendor/vorbis132/mapping0.c",
-				"src/ARK2D/vendor/vorbis132/mdct.c",
-				"src/ARK2D/vendor/vorbis132/psy.c",
-				"src/ARK2D/vendor/vorbis132/registry.c",
-				"src/ARK2D/vendor/vorbis132/res0.c",
-				"src/ARK2D/vendor/vorbis132/sharedbook.c",
-				"src/ARK2D/vendor/vorbis132/smallft.c",
-				"src/ARK2D/vendor/vorbis132/synthesis.c",
-				"src/ARK2D/vendor/vorbis132/vorbisenc.c",
-				"src/ARK2D/vendor/vorbis132/vorbisfile.c",
-				"src/ARK2D/vendor/vorbis132/window.c",
-
+ 
 				"src/ARK2D/vendor/zlib123/adler32.c",
 				"src/ARK2D/vendor/zlib123/compress.c",
 				"src/ARK2D/vendor/zlib123/crc32.c",
@@ -257,6 +234,33 @@
 				"OpenGL.framework",
 				"QTKit.framework",
 				"OpenAL.framework"
+			]
+		},
+		"audio": {
+			"root": "src/ARK2D/Audio",
+			"sources": [
+				"src/ARK2D/vendor/vorbis132/analysis.c",
+				"src/ARK2D/vendor/vorbis132/bitrate.c",
+				"src/ARK2D/vendor/vorbis132/block.c",
+				"src/ARK2D/vendor/vorbis132/codebook.c",
+				"src/ARK2D/vendor/vorbis132/envelope.c",
+				"src/ARK2D/vendor/vorbis132/floor0.c",
+				"src/ARK2D/vendor/vorbis132/floor1.c",
+				"src/ARK2D/vendor/vorbis132/info.c",
+				"src/ARK2D/vendor/vorbis132/lookup.c",
+				"src/ARK2D/vendor/vorbis132/lpc.c",
+				"src/ARK2D/vendor/vorbis132/lsp.c",
+				"src/ARK2D/vendor/vorbis132/mapping0.c",
+				"src/ARK2D/vendor/vorbis132/mdct.c",
+				"src/ARK2D/vendor/vorbis132/psy.c",
+				"src/ARK2D/vendor/vorbis132/registry.c",
+				"src/ARK2D/vendor/vorbis132/res0.c",
+				"src/ARK2D/vendor/vorbis132/sharedbook.c",
+				"src/ARK2D/vendor/vorbis132/smallft.c",
+				"src/ARK2D/vendor/vorbis132/synthesis.c",
+				"src/ARK2D/vendor/vorbis132/vorbisenc.c",
+				"src/ARK2D/vendor/vorbis132/vorbisfile.c",
+				"src/ARK2D/vendor/vorbis132/window.c"
 			]
 		},
 		"gj": {
@@ -673,6 +677,7 @@
 			"src/ARK2D/vendor/tinyxml/tinyxml.cpp",
 			"src/ARK2D/vendor/tinyxml/tinyxmlerror.cpp",
 			"src/ARK2D/vendor/tinyxml/tinyxmlparser.cpp",
+			
 			"src/ARK2D/vendor/vorbis132/analysis.c",
 			"src/ARK2D/vendor/vorbis132/bitrate.c",
 			"src/ARK2D/vendor/vorbis132/block.c",
@@ -695,6 +700,7 @@
 			"src/ARK2D/vendor/vorbis132/vorbisenc.c",
 			"src/ARK2D/vendor/vorbis132/vorbisfile.c",
 			"src/ARK2D/vendor/vorbis132/window.c",
+
 			"src/ARK2D/vendor/zlib123/adler32.c",
 			"src/ARK2D/vendor/zlib123/compress.c",
 			"src/ARK2D/vendor/zlib123/crc32.c",

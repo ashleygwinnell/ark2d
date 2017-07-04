@@ -64,6 +64,9 @@
 	   void (ESCALLBACK *updateFunc) ( struct _escontext *, float deltaTime );
 	} ESContext;
 
+		#include <emscripten.h>
+		extern "C" void EMSCRIPTEN_KEEPALIVE emscripten_containerSetSize(int width, int height, int doCallback);
+
 		namespace ARK {
 			namespace Core {
 

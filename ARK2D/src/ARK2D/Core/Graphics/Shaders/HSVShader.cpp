@@ -207,13 +207,47 @@ namespace ARK {
                 return geometry->v;
             }
             void HSVShader::start() {
-                geometry->start();
-                texture->start();
+                //geometry->start();
+                //texture->start();
+                Renderer* r = ARK2D::getRenderer();
+                if (r->isBatching()) {
+                    RendererBatchItem item;
+                    item.m_type = RendererBatchItem::TYPE_CUSTOM_OBJECT_FUNCTION;
+                    item.m_objectPointer = this;
+                    item.m_functionPointer = (void*) &startStatic;
+                    Renderer::s_batch->items.push_back(item);
+                    return;
+                }
+                startInternal();
             }
             void HSVShader::stop() {
-                geometry->stop();
-                texture->stop();
+               // geometry->stop();
+               // texture->stop();
+                Renderer* r = ARK2D::getRenderer();
+                if (r->isBatching()) {
+                    RendererBatchItem item;
+                    item.m_type = RendererBatchItem::TYPE_CUSTOM_OBJECT_FUNCTION;
+                    item.m_objectPointer = this;
+                    item.m_functionPointer = (void*) &stopStatic;
+                    Renderer::s_batch->items.push_back(item);
+                    return;
+                }
+                stopInternal();
             }
+
+            void HSVShader::startStatic(HSVShader* obj) { obj->startInternal(); }
+            void HSVShader::stopStatic(HSVShader* obj) { obj->stopInternal(); }
+
+            void HSVShader::startInternal() {
+                Renderer* r = ARK2D::getRenderer();
+                r->overrideBasicShaders(geometry, texture);
+            } 
+
+            void HSVShader::stopInternal() {
+                Renderer* r = ARK2D::getRenderer();
+                r->resetBasicShaders();
+            }
+
             HSVShader::~HSVShader() {
                 delete geometry;
                 delete texture;

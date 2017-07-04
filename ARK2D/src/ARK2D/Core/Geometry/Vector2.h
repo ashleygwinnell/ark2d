@@ -222,6 +222,14 @@ namespace ARK {
 						m_y = y * -1;
 					}
 				}
+				void restrictLength(float l) {
+					float len = length();
+					if (len > l) {
+						normalise();
+						m_x *= l;
+						m_y *= l;
+					}
+				}
 
 				T dot(Vector2* v) {
 					return dot(v->getX(), v->getY());

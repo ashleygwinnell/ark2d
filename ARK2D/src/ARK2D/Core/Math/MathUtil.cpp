@@ -43,6 +43,28 @@ namespace ARK {
                 signed int divisions = round(snap / angle);
                 snap = divisions * angle;
             }
+            float MathUtil::snap_return(float snap, float angle) {
+                while(snap < 0) {
+                    snap += 360;
+                }
+                signed int divisions = round(snap / angle);
+                return divisions * angle;
+            }
+            float MathUtil::snap_udlr(float snap) {
+                while(snap < 0) {
+                    snap += 360;
+                }
+                if (snap < 45 || snap > 315) {
+                    return 0;
+                }
+                else if (snap < 135) {
+                    return 90;
+                } else if (snap < 225) {
+                    return 180;
+                } else {
+                    return 270;
+                }
+            }
 
             double MathUtil::distance(float x1, float y1, float x2, float y2) {
                 float diffx = x1 - x2;

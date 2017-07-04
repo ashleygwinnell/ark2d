@@ -29,6 +29,50 @@ namespace ARK {
 	namespace Core {
 		namespace Controls {
 
+			#ifdef ARK2D_EMSCRIPTEN_JS
+
+			extern "C" void EMSCRIPTEN_KEEPALIVE emscripten_gamepadConnected(int index, char* id) {
+			    ARK2D::getLog()->w("emscripten_gamepadConnected");
+
+			    Gamepad* gamepad = new Gamepad();
+				gamepad->id = index; //platform->m_gamepadId++;
+				gamepad->initted = true;
+				gamepad->name = string(id);
+
+				gamepad->numButtons = 0;
+				gamepad->numAxes = 0;
+				gamepad->addStandardAxesAndButtons();
+
+				ARK2D::getLog()->i(gamepad->toString());
+				ARK2D::getContainer()->getGamepads()->push_back(gamepad);
+
+				// Give event to game
+				Game* g = ARK2D::getGame();
+				GamepadListener* gl = NULL;
+				gl = dynamic_cast<GamepadListener*>(g);
+				if (g != NULL && gl != NULL) {
+					gl->gamepadConnected(gamepad);
+				}
+
+			}
+			extern "C" void EMSCRIPTEN_KEEPALIVE emscripten_gamepadDisconnected(int index, char* id) {
+			    ARK2D::getLog()->w("emscripten_gamepadDisconnected");
+
+			    GameContainer* container = ARK2D::getContainer();
+			    Gamepad* pad = container->getGamepads()->at(index);
+			    container->getGamepads()->erase(container->getGamepads()->begin() + index);
+
+				// Give event to game
+				Game* g = ARK2D::getGame();
+				GamepadListener* gl = NULL;
+				gl = dynamic_cast<GamepadListener*>(g);
+				if (g != NULL && gl != NULL) {
+					gl->gamepadDisconnected(pad);
+				}
+			}
+
+			#endif
+
 			vector<GamepadMapping>* Gamepad::s_gamepadMapping = NULL;
 			void Gamepad::initMapping() {
 				if (s_gamepadMapping == NULL) {
@@ -338,6 +382,46 @@ namespace ARK {
 				}
 				m_previousLTriggerValue = currentLBumperValue;
 				m_previousRTriggerValue = currentRBumperValue;
+
+				#if defined(ARK2D_EMSCRIPTEN_JS)
+					float axis1X = (float) EM_ASM_DOUBLE({ return window.myGetGamepads()[$0].axes[0]; }, id);
+					float axis1Y = (float) EM_ASM_DOUBLE({ return window.myGetGamepads()[$0].axes[1]; }, id);
+					float axis2X = (float) EM_ASM_DOUBLE({ return window.myGetGamepads()[$0].axes[2]; }, id);
+					float axis2Y = (float) EM_ASM_DOUBLE({ return window.myGetGamepads()[$0].axes[3]; }, id);
+
+					if ( getAxis(Gamepad::ANALOG_STICK_1_X)->value != axis1X) { moveAxis(Gamepad::ANALOG_STICK_1_X, axis1X); }
+					if ( getAxis(Gamepad::ANALOG_STICK_1_Y)->value != axis1Y) { moveAxis(Gamepad::ANALOG_STICK_1_Y, axis1Y); }
+					if ( getAxis(Gamepad::ANALOG_STICK_2_X)->value != axis2X) { moveAxis(Gamepad::ANALOG_STICK_2_X, axis2X); }
+					if ( getAxis(Gamepad::ANALOG_STICK_2_Y)->value != axis2Y) { moveAxis(Gamepad::ANALOG_STICK_2_Y, axis2Y); }
+
+					auto buttonEvents = [this](unsigned int button, bool down) {
+						if (!isButtonDown(button) && down) {
+    						pressButton(button);
+						}
+						if (isButtonDown(button) && !down) {
+	    					releaseButton(button);
+						}
+					};
+
+					buttonEvents(Gamepad::BUTTON_A, EM_ASM_INT({ return window.myGetGamepads()[$0].buttons[0].pressed }, id));
+					buttonEvents(Gamepad::BUTTON_B, EM_ASM_INT({ return window.myGetGamepads()[$0].buttons[1].pressed }, id));
+					buttonEvents(Gamepad::BUTTON_X, EM_ASM_INT({ return window.myGetGamepads()[$0].buttons[2].pressed }, id));
+					buttonEvents(Gamepad::BUTTON_Y, EM_ASM_INT({ return window.myGetGamepads()[$0].buttons[3].pressed }, id));
+					buttonEvents(Gamepad::BUTTON_LBUMPER, EM_ASM_INT({ return window.myGetGamepads()[$0].buttons[4].pressed }, id));
+					buttonEvents(Gamepad::BUTTON_RBUMPER, EM_ASM_INT({ return window.myGetGamepads()[$0].buttons[5].pressed }, id));
+					buttonEvents(Gamepad::BUTTON_LTRIGGER, EM_ASM_INT({ return window.myGetGamepads()[$0].buttons[6].pressed }, id));
+					buttonEvents(Gamepad::BUTTON_RTRIGGER, EM_ASM_INT({ return window.myGetGamepads()[$0].buttons[7].pressed }, id));
+					buttonEvents(Gamepad::BUTTON_BACK, EM_ASM_INT({ return window.myGetGamepads()[$0].buttons[8].pressed }, id));
+					buttonEvents(Gamepad::BUTTON_START, EM_ASM_INT({ return window.myGetGamepads()[$0].buttons[9].pressed }, id));
+					buttonEvents(Gamepad::BUTTON_L3, EM_ASM_INT({ return window.myGetGamepads()[$0].buttons[10].pressed }, id));
+					buttonEvents(Gamepad::BUTTON_R3, EM_ASM_INT({ return window.myGetGamepads()[$0].buttons[11].pressed }, id));
+					buttonEvents(Gamepad::DPAD_UP, EM_ASM_INT({ return window.myGetGamepads()[$0].buttons[12].pressed }, id));
+					buttonEvents(Gamepad::DPAD_DOWN, EM_ASM_INT({ return window.myGetGamepads()[$0].buttons[13].pressed }, id));
+					buttonEvents(Gamepad::DPAD_LEFT, EM_ASM_INT({ return window.myGetGamepads()[$0].buttons[14].pressed }, id));
+					buttonEvents(Gamepad::DPAD_RIGHT, EM_ASM_INT({ return window.myGetGamepads()[$0].buttons[15].pressed }, id));
+					buttonEvents(Gamepad::BUTTON_ACTIVATE, EM_ASM_INT({ return window.myGetGamepads()[$0].buttons[16].pressed }, id));
+
+				#endif
 
 				// Windows 10 / UWP API
 				#if defined(ARK2D_WINDOWS_STORE) || defined(ARK2D_XBOXONE)
@@ -994,7 +1078,46 @@ namespace ARK {
 								return 107;
 						}
 					}
+				
+				/*#elif defined(ARK2D_EMSCRIPTEN_JS)
+					if (button == Gamepad::BUTTON_LTRIGGER) {
+						return 6;
+					} 
+					else if (button == Gamepad::BUTTON_RTRIGGER) {
+						return 7;
+					}
+					else if (button == Gamepad::BUTTON_BACK) {
+						return 8;
+					}
+					else if (button == Gamepad::BUTTON_START) {
+						return 9;
+					}
+					else if (button == Gamepad::BUTTON_L3) {
+						return 10;
+					}
+					else if (button == Gamepad::BUTTON_R3) {
+						return 11;
+					}
+					else if (button == Gamepad::BUTTON_BACK) {
+						return 8;
+					}
+					else if (button == Gamepad::BUTTON_START) {
+						return 9;
+					}
+					else if (button == Gamepad::DPAD_LEFT) {
+						return 14;
+					} 
+					else if (button ==Gamepad::DPAD_RIGHT) {
+						return 15;
+					} 
+					else if (button == Gamepad::DPAD_UP) {
+						return 12;
+					} 
+					else if (button == Gamepad::DPAD_DOWN) {
+						return 13;
+					}*/
 				#endif
+
 				return button;
 			}
 

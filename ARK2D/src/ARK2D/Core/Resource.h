@@ -55,7 +55,7 @@ namespace ARK {
 				static string latestName();
 				static void setLatestName(string s);
 				static void copy(string ref, string ref2);
-#if defined(ARK2D_ANDROID) || defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_WINDOWS)
+#if defined(ARK2D_ANDROID) || defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_WINDOWS)  || defined(ARK2D_EMSCRIPTEN_JS)
 				public:
 			#else
 				protected:

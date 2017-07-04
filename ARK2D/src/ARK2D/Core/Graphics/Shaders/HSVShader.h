@@ -107,8 +107,16 @@ namespace ARK {
                     float getH();
                     float getS();
                     float getV();
+                    
                     void start();
                     void stop();
+
+                    void startInternal();
+                    void stopInternal();
+                    
+                    static void startStatic(HSVShader* obj);
+                    static void stopStatic(HSVShader* obj);
+
                     virtual ~HSVShader();
             };
         }

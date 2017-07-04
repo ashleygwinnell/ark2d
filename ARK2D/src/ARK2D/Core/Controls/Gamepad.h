@@ -35,7 +35,13 @@
  	using namespace Windows::UI::Input;
 #endif
 
-// Linux help/examples:
+#ifdef ARK2D_EMSCRIPTEN_JS
+ 	#include <emscripten.h>
+	extern "C" void EMSCRIPTEN_KEEPALIVE emscripten_gamepadConnected(int index, char* id);
+	extern "C" void EMSCRIPTEN_KEEPALIVE emscripten_gamepadDisconnected(int index, char* id);
+#endif
+
+// Linux help/examples: 
 // http://scaryreasoner.wordpress.com/2008/02/22/programming-joysticks-with-linux/
 // http://ludobloom.com/svn/StemLibProjects/gamepad/tags/1.3.0/source/gamepad/
 namespace ARK {

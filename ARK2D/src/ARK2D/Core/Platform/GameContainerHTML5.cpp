@@ -7,7 +7,7 @@
 
 
 
-#ifdef ARK2D_EMSCRIPTEN_JS
+#ifdef ARK2D_EMSCRIPTEN_JS 
 
 	#include  <X11/Xlib.h>
 	#include  <X11/Xatom.h>
@@ -19,11 +19,17 @@
 #include "../Log.h"
 #include "../Camera.h"
 #include "../Math/Random.h"
+#include "../Controls/Gamepad.h"
 
 #include <emscripten/emscripten.h>
 #include <emscripten/html5.h>
 
 #include <SDL.h>
+			
+			extern "C" void EMSCRIPTEN_KEEPALIVE emscripten_containerSetSize(int width, int height, int doCallback) {
+				GameContainer* container = ARK2D::getContainer();
+				container->setSize(width, height, (doCallback==1));
+			}
 
 
 			static Display* x_display = NULL;
@@ -266,7 +272,9 @@
 			}
 
 			void ARK::Core::GameContainer::processGamepadInput() {
-
+				for( unsigned int i = 0; i < m_gamepads.size(); ++i) {
+					m_gamepads.at(i)->update();
+				}
 			}
 
 			void ARK::Core::GameContainer::setIcon(const std::string& path) {
@@ -274,7 +282,104 @@
 			}
 
 			void ARK::Core::GameContainer::initGamepads() {
+				 
 
+
+				 EM_ASM({
+				 	var gamepads = {};
+
+				 	function gamepadHandler(event, connecting) {
+					  var pad = event.gamepad;
+					  // Note:
+					  // gamepad === navigator.getGamepads()[gamepad.index]
+
+					  if (connecting) {
+					    gamepads[pad.index] = pad;
+
+					    Module.ccall('emscripten_gamepadConnected', // name of C function
+		                        null, // void return type
+		                        [ 'number', 'string' ], // argument types,
+		                        [ pad.index, cid ] //, // arguments
+		                        //{ async:true } // optional options
+		                    );
+
+					  } else {
+
+					  	Module.ccall('emscripten_gamepadDisconnected', // name of C function
+		                        null, // void return type
+		                        [ 'number', 'string' ], // argument types,
+		                        [ pad.index, cid ] //, // arguments
+		                        //{ async:true } // optional options
+		                    );
+
+					    delete gamepads[pad.index];
+					  }
+					}
+
+					function myGetGamepads() {
+						return navigator.getGamepads 
+							? navigator.getGamepads() 
+							: (navigator.webkitGetGamepads 
+								? navigator.webkitGetGamepads : 
+								[]
+							);
+					}
+					window["myGetGamepads"] = myGetGamepads;
+
+					console.log("Init gamepads js");
+					console.log(myGetGamepads());
+
+                    window.addEventListener("gamepadconnected", function(e) {
+					  console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
+					    e.gamepad.index, e.gamepad.id,
+					    e.gamepad.buttons.length, e.gamepad.axes.length);
+					  gamepadHandler(e, true);
+					});
+
+					window.addEventListener("gamepaddisconnected", function(e) {
+					  console.log("Gamepad disconnected from index %d: %s",
+					    e.gamepad.index, e.gamepad.id);
+					  gamepadHandler(e, false);
+					});
+
+					for(var i = 0; i < myGetGamepads().length; i++) {
+						var pad = myGetGamepads()[i];
+						if (pad != null && pad.connected) {
+							var cid = allocate(intArrayFromString(pad.id), 'i8', ALLOC_NORMAL);
+
+							Module.ccall('emscripten_gamepadConnected', // name of C function
+		                        null, // void return type
+		                        [ 'number', 'string' ], // argument types,
+		                        [ pad.index, cid ] //, // arguments
+		                        //{ async:true } // optional options
+		                    );
+
+		                    _free(cid);
+						}
+						
+						//pad.connected;
+						//pad.mapping == "standard"
+					}
+
+                    //console.log( 'JS code', $0, Pointer_stringify($0) );
+
+
+                    //var data = new Float32Array([1, 2, 3, 4, 5]);
+
+                    //setTimeout(function(){
+                    // Module.ccall('emscripten_run_thread', // name of C function
+                    //     null, // void return type
+                    //     ['string'] // argument types,
+                    //     [ Pointer_stringify($0) ]//, // arguments
+                    //     //{ async:true } // optional options
+                    // );
+
+                    // var runthread = Module.cwrap('emscripten_run_thread', null,  ['string'] );
+                    // runthread(Pointer_stringify($0));
+                    // console.log('Done!');
+                    //},1);
+
+                });
 			}
 
 			void ARK::Core::GameContainer::setCursorVisible(bool b) {
@@ -476,6 +581,8 @@
 
 			void ARK::Core::GameContainer::start() {
 
+
+
 				// seed the random
 				Random::init();
 
@@ -486,6 +593,8 @@
 				m_screenHeight = EM_ASM_INT_V({
 					return screen.height;
 				});
+
+				
 
 				emscripten_set_keydown_callback(0, 0, 1, keydown_callback);
 				emscripten_set_keyup_callback(0, 0, 1, keyup_callback);
@@ -590,7 +699,35 @@
 				//ARK2D::s_graphics->setDefaultFont(fnt);
 				//ARK2D::s_graphics->setFont(fnt);
 
+				EM_ASM({
+				 	window.onresize = function() {
+						var cs = document.getElementById("canvas");
+						var ratio = cs.width / cs.height;
 
+						var oldWidth = cs.width;
+						var oldHeight = cs.height;
+
+						// fit to height.
+						var newHeight = window.innerHeight;
+						var newWidth = cs.height * ratio;
+
+						if (newWidth > window.innerWidth) {
+							newWidth = window.innerWidth;
+							newHeight = newWidth / ratio;
+						}
+						if (newHeight > window.innerHeight) {
+							newHeight = window.innerHeight;
+							newWidth = cs.height * ratio;
+						}
+						
+						 Module.ccall('emscripten_containerSetSize', // name of C function
+		                        null, // void return type
+		                        [ 'number', 'number', 'number' ], // argument types,
+		                        [ newWidth, newHeight, 1 ] //, // arguments
+		                        //{ async:true } // optional options
+		                    );
+					}
+				 });
 
 				// initialise
 				enableOpenAL();
@@ -787,7 +924,7 @@
 				m_timer->tick();
 				container->m_platformSpecific.doEvents();
 
-				//container->processGamepadInput();
+				container->processGamepadInput();
 
 				//ARK2D::getLog()->update();
 
@@ -807,9 +944,9 @@
 
 				//ARK2D::getLog()->i("Clear Input");
 				m_input->clearKeyPressedRecord();
-				// for (unsigned int i = 0; i < m_gamepads.size(); i++) {
-				// 	m_gamepads.at(i)->clearButtonPressedRecord();
-				// }
+				for (unsigned int i = 0; i < container->m_gamepads.size(); i++) {
+				 	container->m_gamepads.at(i)->clearButtonPressedRecord();
+				}
 				m_input->endFrame();
 
 				//ARK2D::getLog()->i("Game Pre-render");
@@ -887,9 +1024,9 @@
 				ALfloat listenerVel[] = {0.0, 0.0, 0.0};
 				ALfloat listenerOri[] = {0.0, 0.0, -1.0, 0.0, 1.0, 0.0};
 
-				alListenerfv(AL_POSITION, listenerPos);
-				alListenerfv(AL_VELOCITY, listenerVel);
-				alListenerfv(AL_ORIENTATION, listenerOri);
+				//alListenerfv(AL_POSITION, listenerPos);
+				//alListenerfv(AL_VELOCITY, listenerVel);
+				//alListenerfv(AL_ORIENTATION, listenerOri);
 
 				return false;
 			}

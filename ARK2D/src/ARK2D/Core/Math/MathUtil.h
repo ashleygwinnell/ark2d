@@ -66,6 +66,8 @@ namespace ARK {
 				static const char* getPercentage_CSTR(int top, int denominator);
 				static void snap(int& snap, int& x, int& y);
 				static void snap(float& snap, float angle);
+				static float snap_return(float snap, float angle);
+				static float snap_udlr(float snap);
 
 				static int nextPowerOfTwo(int val);
 
