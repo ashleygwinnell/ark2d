@@ -24,6 +24,7 @@ namespace ARK {
                 void EmptyTransition::update(GameContainer* container, StateBasedGame* game, GameTimer* delta) {
                     // No operations, durr. That's why it's empty!
                     //ARK2D::getLog()->v("EmptyTransition::update");
+                    Transition::update(container, game, delta);
                 }
                 void EmptyTransition::preRender(GameContainer* container, StateBasedGame* game, Renderer* g) {
                     // No operations, durr. That's why it's empty!
@@ -34,7 +35,7 @@ namespace ARK {
                     //ARK2D::getLog()->v("EmptyTransition::postRender");
                 }
                 bool EmptyTransition::isComplete() {
-                    //ARK2D::getLog()->v("EmptyTransition::isComplete"); 
+                    //ARK2D::getLog()->v("EmptyTransition::isComplete");
                     return true;
                 }
 
