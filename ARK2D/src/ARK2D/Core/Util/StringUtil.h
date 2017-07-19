@@ -46,6 +46,7 @@ namespace ARK {
 
 					static bool file_exists(const char * filename);
 					static string file_get_contents(const char* fileName);
+					static string file_get_contents(const char* fileName, bool appendPath);
 
 					static void toUpper(string& str);
 					static void toLower(string& str);

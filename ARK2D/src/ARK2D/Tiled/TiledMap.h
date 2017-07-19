@@ -104,6 +104,7 @@ namespace ARK {
 
 				TiledMapTileset* getTileset(unsigned int index);
 				TiledMapTileset* getTilesetByGID(unsigned int gid);
+				TiledMapTile* getTileByGID(unsigned int gid);
 
 				TiledMapProperty* getProperty(unsigned int index);
 				TiledMapProperty* getPropertyByName(const char* name);

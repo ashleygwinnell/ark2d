@@ -23,7 +23,7 @@ namespace ARK {
 			public:
 				TiledMapObjectGroup();
 				void addObject(TiledMapObject* object);
-				vector<TiledMapObject*> getObjects();
+				vector<TiledMapObject*>* getObjects();
 				void setName(const string& name);
 				const string& getName() const;
 				void setWidth(unsigned int width);

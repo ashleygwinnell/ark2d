@@ -2,6 +2,7 @@
 #include "TiledMap.h"
 #include "TiledMapTile.h"
 #include "TiledMapLayer.h"
+#include "../Core/Log.h"
 
 namespace ARK {
 	namespace Tiled {
@@ -102,6 +103,8 @@ namespace ARK {
 		{
 			if (!m_visible) { return; }
 			// for each height.
+			float xc = 0;
+			float yc = 0;
 			for (unsigned int y = 0; y < m_height; y++)
 			{
 				// for each width  -- this goes across the map.
@@ -118,12 +121,23 @@ namespace ARK {
 							Image* t = tileset->getTileByGID(gid)->getImage();
 							if (t != NULL) {
 								t->setAlpha(m_opacity);
-								t->draw((int) (x * tileset->getTileWidth()) + xOffset, (int) (y * tileset->getTileHeight()) + yOffset);
+								t->drawCenteredScaled(
+									float(x * t->getWidth()) + (t->getWidth()*0.5f) + xOffset, 
+									float(y * t->getHeight()) + (t->getHeight()*0.5f) + yOffset,  // hax to stop gaps in tiles
+									1.02f,
+									1.02f
+								);
 								t->setAlpha(1.0f);
+							} else {
+								//ARK2D::getLog()->e("tileimage null");
 							}
+						} else {
+							//ARK2D::getLog()->e(StringUtil::append("tileset null", gid));
 						}
 					}
+
 				}
+				xc = 0;
 			}
 		}
 

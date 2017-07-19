@@ -31,18 +31,23 @@ namespace ARK {
 			unsigned int current_y = m_margin;
 			//std::cout << "2" << std::endl;
 
-			m_tiles.reserve(m_total_tiles_across * m_total_tiles_down);
+            
+			//m_tiles.reserve(m_total_tiles_across * m_total_tiles_down);
 
+			int c = 0;
 			for (unsigned int y = 0; y < m_total_tiles_down; y++)
 			{
 				current_x = m_margin;
 				for (unsigned int x = 0; x < m_total_tiles_across; x++)
 				{
 					TiledMapTile* tile = new TiledMapTile();
-					tile->m_image = m_image->getSubImage(current_x, current_y, m_tilewidth, m_tileheight);
-					m_tiles.push_back(tile);
+					if (m_image != NULL) { 
+						tile->m_image = m_image->getSubImage(current_x, current_y, m_tilewidth, m_tileheight);
+					}
+					m_tiles[c] = tile;
 
 					current_x += (m_tilewidth + m_spacing);
+					c++;
 				}
 				current_y += (m_tileheight + m_spacing);
 			}
@@ -150,7 +155,7 @@ namespace ARK {
 		TiledMapTile* TiledMapTileset::getTile(unsigned int x, unsigned int y) const {
 
 			unsigned int gid = (y * m_total_tiles_across) + x;
-			return m_tiles.at(gid);
+			return m_tiles.find(gid)->second;
 
 			//return m_tiles.at(x).at(y);
 		}
@@ -163,7 +168,7 @@ namespace ARK {
 				gid -= 1;
 			}
 
-			return m_tiles.at(gid);
+			return m_tiles.find(gid)->second;
 
 			/*if (gid == 0) { return NULL; }
 

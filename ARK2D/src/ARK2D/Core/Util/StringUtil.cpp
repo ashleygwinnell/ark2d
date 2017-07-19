@@ -368,11 +368,16 @@ namespace ARK {
 			}
 
 			string StringUtil::file_get_contents(const char* fileName) {
+				return file_get_contents(fileName, true);
+			}
+			string StringUtil::file_get_contents(const char* fileName, bool appendPath) {
 				if (fileName != NULL) {
 					string strFileName(fileName);
 
 					// Prepend shit for each OS.
-					strFileName = internalOSAppends(strFileName);
+					if (appendPath) {
+						strFileName = internalOSAppends(strFileName);
+					}
 
 					ARK2D::getLog()->i(StringUtil::append("Opening file: ", strFileName));
 					std::fstream f(strFileName.c_str(), std::ios::in);

@@ -21,6 +21,7 @@
 #include "../Core/Graphics/Image.h"
 #include "../Core/GameContainer.h"
 #include "../Core/Graphics/Renderer.h"
+#include "../Core/Graphics/SpriteSheetStore.h"
 
 #include "../Core/Log.h"
 #include "../Core/Util/StringUtil.h"
@@ -253,13 +254,19 @@ namespace ARK {
 				if (tileset != 0)
 				{
 					// it's in this tileset!!
-					if (gid >= tileset->getFirstGID() && gid <= tileset->getLastGID())
+					if (gid >= tileset->getFirstGID())
 					{
-						return tileset;
+						if (tileset->getLastGID() == 99999 || gid <= tileset->getLastGID()) {
+							return tileset;
+						}
 					}
 				}
 			}
 			return NULL;
+		}
+		TiledMapTile* TiledMap::getTileByGID(unsigned int gid) {
+			TiledMapTileset* set = getTilesetByGID(gid);
+			return set->getTileByGID(gid);
 		}
 
 		unsigned int TiledMap::getTileWidth() {
@@ -367,50 +374,55 @@ namespace ARK {
 				TiledMapTileset tileset;
 				tileset.setName( tilesetNode->GetNode("name")->NodeAsString() );
 				tileset.setFirstGID( firstgid );
-				tileset.setTileWidth( tilesetNode->GetNode("tilewidth")->NodeAsInt() );
-				tileset.setTileHeight( tilesetNode->GetNode("tileheight")->NodeAsInt() );
+				tileset.setLastGID( 99999 );
 
-				// Margin & Spacing
-				tileset.setMargin(0);
-				tileset.setSpacing(0);
-				if (tilesetNode->GetNode("margin") != NULL ) {
-					tileset.setMargin( tilesetNode->GetNode("margin")->NodeAsInt() );
+				if (tilesetNode->GetNode("tilewidth") != NULL) {
+
+					tileset.setTileWidth( tilesetNode->GetNode("tilewidth")->NodeAsInt() );
+					tileset.setTileHeight( tilesetNode->GetNode("tileheight")->NodeAsInt() );
+
+					// Margin & Spacing
+					tileset.setMargin(0);
+					tileset.setSpacing(0);
+					if (tilesetNode->GetNode("margin") != NULL ) {
+						tileset.setMargin( tilesetNode->GetNode("margin")->NodeAsInt() );
+					}
+					if (tilesetNode->GetNode("spacing") != NULL) {
+						tileset.setSpacing( tilesetNode->GetNode("spacing")->NodeAsInt() );
+					}
+
+					// Image
+					string image_src = tilesetNode->GetNode("image")->NodeAsString();
+
+					// make sure the tileset is in the same folder as the map.
+					string image_path = StringUtil::pathToFile(m_map->m_file);
+					if (image_path != image_src) {
+						image_src.insert(0, image_path);
+					}
+
+					//! @TODO: image mask in resource::get(); -- load image file.
+					ARK2D::getLog()->i(StringUtil::append("Loading TiledMap Tileset Image file: ", image_src));
+					Image* img_obj = ARK::Core::Resource::get(image_src, true)->asImage();;
+					tileset.setImage(img_obj);
+
+					// Calculate number of tiles going down.
+					unsigned int current_height = tileset.getImage()->getHeight() - (2*tileset.getMargin());
+					current_height -= current_height % (tileset.getTileHeight() + tileset.getSpacing());
+
+					unsigned int tiles_down = current_height / (tileset.getTileHeight() + tileset.getSpacing());
+					tileset.setNumberOfTilesDown(tiles_down);
+
+					// Calculate number of tiles going across.
+					unsigned int current_width = tileset.getImage()->getWidth() - tileset.getMargin();
+					unsigned int tiles_across = current_width / (tileset.getTileWidth() + tileset.getSpacing());
+					tileset.setNumberOfTilesAcross(tiles_across);
+
+					// set last GID.
+					unsigned int last_gid = firstgid + (tiles_across * tiles_down) - 1;
+					tileset.setLastGID(last_gid);
+
+					tileset.ready();
 				}
-				if (tilesetNode->GetNode("spacing") != NULL) {
-					tileset.setSpacing( tilesetNode->GetNode("spacing")->NodeAsInt() );
-				}
-
-				// Image
-				string image_src = tilesetNode->GetNode("image")->NodeAsString();
-
-				// make sure the tileset is in the same folder as the map.
-				string image_path = StringUtil::pathToFile(m_map->m_file);
-				if (image_path != image_src) {
-					image_src.insert(0, image_path);
-				}
-
-				//! @TODO: image mask in resource::get(); -- load image file.
-				ARK2D::getLog()->i(StringUtil::append("Loading TiledMap Tileset Image file: ", image_src));
-				Image* img_obj = ARK::Core::Resource::get(image_src, true)->asImage();;
-				tileset.setImage(img_obj);
-
-				// Calculate number of tiles going down.
-				unsigned int current_height = tileset.getImage()->getHeight() - (2*tileset.getMargin());
-				current_height -= current_height % (tileset.getTileHeight() + tileset.getSpacing());
-
-				unsigned int tiles_down = current_height / (tileset.getTileHeight() + tileset.getSpacing());
-				tileset.setNumberOfTilesDown(tiles_down);
-
-				// Calculate number of tiles going across.
-				unsigned int current_width = tileset.getImage()->getWidth() - tileset.getMargin();
-				unsigned int tiles_across = current_width / (tileset.getTileWidth() + tileset.getSpacing());
-				tileset.setNumberOfTilesAcross(tiles_across);
-
-				// set last GID.
-				unsigned int last_gid = firstgid + (tiles_across * tiles_down) - 1;
-				tileset.setLastGID(last_gid);
-
-				tileset.ready();
 
 				// tile properties.
 				JSONNode* tilePropertiesNode = tilesetNode->GetNode("tileproperties");
@@ -1097,11 +1109,15 @@ namespace ARK {
 			//xml_node<>* mapnode = m_xmldocument.first_node("map");
 			//xml_attribute<>* attr_version = mapnode->first_attribute("version");
 
+			ARK2D::getLog()->i(StringUtil::append("Parsing tileset ", src));
+
+
 			xml_node<>* external_tileset_e = tileset_d->first_node("tileset");
 
 			TiledMapTileset tileset;
 			tileset.setName(external_tileset_e->first_attribute("name")->value());
 			tileset.setFirstGID(firstgid);
+			tileset.setLastGID(99999);
 			tileset.setTileWidth(Cast::fromString<unsigned int>(external_tileset_e->first_attribute("tilewidth")->value()));
 			tileset.setTileHeight(Cast::fromString<unsigned int>(external_tileset_e->first_attribute("tileheight")->value()));
 
@@ -1123,52 +1139,56 @@ namespace ARK {
 
 			// Image
 			xml_node<>* external_tileset_image_e = external_tileset_e->first_node("image");
-			string image_src = external_tileset_image_e->first_attribute("source")->value();
+			if (external_tileset_image_e != 0) { 
+				string image_src = external_tileset_image_e->first_attribute("source")->value();
 
-			bool hasImageMask = false;
-			string image_mask;
-			if (external_tileset_image_e->first_attribute("trans") != 0) {
-				image_mask = external_tileset_image_e->first_attribute("trans")->value();
-				hasImageMask = true;
+				bool hasImageMask = false;
+				string image_mask;
+				if (external_tileset_image_e->first_attribute("trans") != 0) {
+					image_mask = external_tileset_image_e->first_attribute("trans")->value();
+					hasImageMask = true;
+				}
+
+				// this piece makes sure the tileset is in the same folder as the map.
+				string image_path = StringUtil::pathToFile(src);
+				if (image_path != image_src) {
+					image_src.insert(0, image_path);
+				}
+
+				ARK2D::getLog()->i(StringUtil::append("Loading TiledMap Tileset Image file: ", image_src));
+				Image* img_obj = NULL;
+				if (!hasImageMask) {
+					//img_obj = new Image(image_src);
+					img_obj = ARK::Core::Resource::get(image_src, false)->asImage();
+				} else {
+					//img_obj = new Image(image_src, Color(StringUtil::append("#", image_mask)));
+					img_obj = ARK::Core::Resource::get(image_src, false)->asImage();
+					//! @TODO: image mask in resource::get();
+				}
+				tileset.setImage(img_obj);
+			
+
+
+				// Calculate number of tiles going down.
+				unsigned int current_height = tileset.getImage()->getHeight() - (2*tileset.getMargin());
+				current_height -= current_height % (tileset.getTileHeight() + tileset.getSpacing());
+
+
+				unsigned int tiles_down = current_height / (tileset.getTileHeight() + tileset.getSpacing());
+				tileset.setNumberOfTilesDown(tiles_down);
+
+
+				// Calculate number of tiles going across.
+				unsigned int current_width = tileset.getImage()->getWidth() - tileset.getMargin();
+				unsigned int tiles_across = current_width / (tileset.getTileWidth() + tileset.getSpacing());
+				tileset.setNumberOfTilesAcross(tiles_across);
+                
+                // set last GID.
+                unsigned int last_gid = firstgid + (tiles_across * tiles_down) - 1;
+                tileset.setLastGID(last_gid);
 			}
 
-			// this piece makes sure the tileset is in the same folder as the map.
-			string image_path = StringUtil::pathToFile(src);
-			if (image_path != image_src) {
-				image_src.insert(0, image_path);
-			}
-
-			ARK2D::getLog()->i(StringUtil::append("Loading TiledMap Tileset Image file: ", image_src));
-			Image* img_obj = NULL;
-			if (!hasImageMask) {
-				//img_obj = new Image(image_src);
-				img_obj = ARK::Core::Resource::get(image_src, false)->asImage();
-			} else {
-				//img_obj = new Image(image_src, Color(StringUtil::append("#", image_mask)));
-				img_obj = ARK::Core::Resource::get(image_src, false)->asImage();
-				//! @TODO: image mask in resource::get();
-			}
-			tileset.setImage(img_obj);
-
-
-
-			// Calculate number of tiles going down.
-			unsigned int current_height = tileset.getImage()->getHeight() - (2*tileset.getMargin());
-			current_height -= current_height % (tileset.getTileHeight() + tileset.getSpacing());
-
-
-			unsigned int tiles_down = current_height / (tileset.getTileHeight() + tileset.getSpacing());
-			tileset.setNumberOfTilesDown(tiles_down);
-
-
-			// Calculate number of tiles going across.
-			unsigned int current_width = tileset.getImage()->getWidth() - tileset.getMargin();
-			unsigned int tiles_across = current_width / (tileset.getTileWidth() + tileset.getSpacing());
-			tileset.setNumberOfTilesAcross(tiles_across);
-
-			// set last GID.
-			unsigned int last_gid = firstgid + (tiles_across * tiles_down) - 1;
-			tileset.setLastGID(last_gid);
+			
 
 			//#ifdef ARK2D_VERBOSE
 			ARK2D::getLog()->i("Before ready()");
@@ -1179,6 +1199,8 @@ namespace ARK {
 
 			ARK2D::getLog()->i("After ready()");
 
+			// ......
+
 			// add tile properties O_O
 			xml_node<>* tileset_property_e = 0;
 			for (tileset_property_e = external_tileset_e->first_node("tile");
@@ -1188,21 +1210,37 @@ namespace ARK {
 				unsigned int tid = Cast::fromString<unsigned int>( tileset_property_e->first_attribute("id")->value() );
 				//std::cout << "tid: " << tid << std::endl;
 
+				if (tileset.m_tiles.find(tid) == tileset.m_tiles.end()) {
+					tileset.m_tiles[tid] = new TiledMapTile();
+				}
+
+				// image/source
+				xml_node<>* tileset_image_e = tileset_property_e->first_node("image");
+				if (tileset_image_e != 0) {
+					string imagesrc = tileset_image_e->first_attribute("source")->value();
+					imagesrc = imagesrc.substr(imagesrc.find("__preproduction/")+16);
+
+					tileset.m_tiles[tid]->m_image = SpriteSheetStore::getImage(imagesrc);
+				}
+
+
 				xml_node<>* tileset_property_set_e = tileset_property_e->first_node("properties");
 
-				xml_node<>* tileset_property_single_e = 0;
-				for (tileset_property_single_e = tileset_property_set_e->first_node("property");
-					tileset_property_single_e;
-					tileset_property_single_e = tileset_property_single_e->next_sibling("property"))
-				{
-					//std::cout << "got here" << std::endl;
-					TiledMapProperty* propertyObj = new TiledMapProperty();
-					propertyObj->setName(tileset_property_single_e->first_attribute("name")->value());
-					propertyObj->setValue(tileset_property_single_e->first_attribute("value")->value());
-					//std::cout << "got here 2" << std::endl;
+				if (tileset_property_set_e != 0) { 
+					xml_node<>* tileset_property_single_e = 0;
+					for (tileset_property_single_e = tileset_property_set_e->first_node("property");
+						tileset_property_single_e;
+						tileset_property_single_e = tileset_property_single_e->next_sibling("property"))
+					{
+						//std::cout << "got here" << std::endl;
+						TiledMapProperty* propertyObj = new TiledMapProperty();
+						propertyObj->setName(tileset_property_single_e->first_attribute("name")->value());
+						propertyObj->setValue(tileset_property_single_e->first_attribute("value")->value());
+						//std::cout << "got here 2" << std::endl;
 
-					tileset.m_tiles.at(tid)->m_properties.push_back(propertyObj);
-					//std::cout << "got here 3" << std::endl;
+						tileset.m_tiles[tid]->m_properties.push_back(propertyObj);
+						//std::cout << "got here 3" << std::endl;
+					}
 				}
 
 			}
@@ -1225,7 +1263,13 @@ namespace ARK {
 					m_xmldocument.parse<0>((char*)m_map->m_data);
 				} else {
 
-					string docstr = StringUtil::file_get_contents(m_map->m_file.c_str());
+					string docstr = "";
+					#ifdef ARK2D_EMSCRIPTEN_JS
+						docstr = StringUtil::file_get_contents(m_map->m_file.c_str(), false);
+					#else
+						docstr = StringUtil::file_get_contents(m_map->m_file.c_str());
+					#endif
+
 					ARK2D::getLog()->i(StringUtil::append("data: ", docstr));
 
 				    // make a safe-to-modify copy of input_xml
@@ -1304,7 +1348,15 @@ namespace ARK {
 
 					if (m_map->m_data == NULL) {
 
-						string tilesetStr = StringUtil::file_get_contents(src.c_str());
+						string tilesetStr = "";
+
+						#ifdef ARK2D_EMSCRIPTEN_JS
+							tilesetStr = StringUtil::file_get_contents(src.c_str(), false);
+						#else
+							tilesetStr = StringUtil::file_get_contents(src.c_str());
+						#endif
+
+
 						m_tileset_xml_temp = vector<char>(tilesetStr.begin(), tilesetStr.end());
 			   			m_tileset_xml_temp.push_back('\0');
 
@@ -1312,7 +1364,15 @@ namespace ARK {
 						tileset_d.parse<0>(&m_tileset_xml_temp[0]);
 
 						parseTileset(firstgid, src, &tileset_d);
+						if (m_map->m_tilesets.size() > 1) {
+							m_map->m_tilesets[m_map->m_tilesets.size()-2].setLastGID(
+                               m_map->m_tilesets[m_map->m_tilesets.size()-1].getFirstGID()-1
+                            );
+						}
 
+
+						/*
+						*/
 					} else {
 						#if !defined(ARK2D_ANDROID)
 							//! @TODO: Read tiledmap from data buffer from non-android.
@@ -1541,6 +1601,7 @@ namespace ARK {
 				}
 
 				// read in object groups.
+				ARK2D::getLog()->i("read object groups");
 				xml_node<>* objectgroup_element = 0;
 				for (objectgroup_element = mapnode->first_node("objectgroup");
 						objectgroup_element;
@@ -1548,8 +1609,13 @@ namespace ARK {
 				{
 					TiledMapObjectGroup group;
 					group.setName(objectgroup_element->first_attribute("name")->value());
-					group.setWidth(Cast::fromString<unsigned int>(objectgroup_element->first_attribute("width")->value()));
-					group.setHeight(Cast::fromString<unsigned int>(objectgroup_element->first_attribute("height")->value()));
+
+					if (objectgroup_element->first_attribute("width") != NULL) { 
+						group.setWidth(Cast::fromString<unsigned int>(objectgroup_element->first_attribute("width")->value()));
+					}
+					if (objectgroup_element->first_attribute("height") != NULL) {
+						group.setHeight(Cast::fromString<unsigned int>(objectgroup_element->first_attribute("height")->value()));
+					}
 
 					xml_attribute<>* visible_attr = objectgroup_element->first_attribute("visible");
 					if (visible_attr != NULL) {

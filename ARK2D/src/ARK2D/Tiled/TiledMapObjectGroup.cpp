@@ -18,8 +18,8 @@ namespace ARK {
 		void TiledMapObjectGroup::addObject(TiledMapObject* object) {
 			m_objects.push_back(object);
 		}
-		vector<TiledMapObject*> TiledMapObjectGroup::getObjects() {
-			return m_objects;
+		vector<TiledMapObject*>* TiledMapObjectGroup::getObjects() {
+			return &m_objects;
 		}
 		void TiledMapObjectGroup::setName(const string& name) {
 			m_name = name;

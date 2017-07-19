@@ -8,6 +8,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <map>
 //#include "../Graphics/Image.h"
 
 #include "TiledMapTile.h"
@@ -80,7 +81,7 @@ namespace ARK {
 				unsigned int m_total_tiles_down;
 
 				//vector< vector<TiledMapTile> > m_tiles;
-				vector<TiledMapTile*> m_tiles;
+				map<unsigned int, TiledMapTile*> m_tiles;
 		};
 	}
 }
