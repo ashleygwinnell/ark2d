@@ -2,6 +2,7 @@
  * ARK2D GENERATED FILE. DO NOT OVERWRITE. 
  * Include all 'core' module header files.
  */ 
+#include "Controls/Accelerometer.h"
 #include "Controls/Input.h"
 #include "Controls/Gamepad.h"
 #include "Controls/ErrorDialog.h"

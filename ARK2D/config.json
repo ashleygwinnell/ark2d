@@ -87,9 +87,11 @@
 		]
 	},
 	"modules": {
+	
 		"core": {
 			"root": "src/ARK2D/Core/",
 			"sources": [
+				"src/ARK2D/Core/Controls/Accelerometer.cpp",
 				"src/ARK2D/Core/Controls/Input.cpp",
 				"src/ARK2D/Core/Controls/Gamepad.cpp",
 				"src/ARK2D/Core/Controls/ErrorDialog.cpp",
@@ -457,6 +459,7 @@
 			"src/ARK2D/Core/Vector.cpp",
 			"src/ARK2D/Core/Log.cpp",
 
+			"src/ARK2D/Core/Controls/Accelerometer.cpp",
 			"src/ARK2D/Core/Controls/Input.cpp",
 			"src/ARK2D/Core/Controls/Gamepad.cpp",
 			"src/ARK2D/Core/Controls/FileDialog.cpp",
