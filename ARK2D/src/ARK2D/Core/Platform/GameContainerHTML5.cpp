@@ -41,14 +41,14 @@
 			EM_BOOL keydown_callback(int eventType, const EmscriptenKeyboardEvent *e, void *userData)
 		    {
 		      //ARK2D::getLog()->e("You pressed key %lu\n", e->which);
-		      //ARK2D::getLog()->e(StringUtil::append("You pressed key ", e->which));
+		      ARK2D::getLog()->e(StringUtil::append("You pressed key ", e->which));
 		    	ARK2D::getInput()->pressKey(e->which);
 		      return 1;
 		    }
 		    EM_BOOL keyup_callback(int eventType, const EmscriptenKeyboardEvent *e, void *userData)
 		    {
 		      //ARK2D::getLog()->e("You pressed key %lu\n", e->which);
-		      //ARK2D::getLog()->e(StringUtil::append("You pressed key ", e->which));
+		      ARK2D::getLog()->e(StringUtil::append("You pressed key ", e->which));
 		    	ARK2D::getInput()->releaseKey(e->which);
 		      return 1;
 		    }
@@ -595,13 +595,21 @@
 				});
 
 				
+				int r;
+				r = emscripten_set_keydown_callback("#window", 0, 1, keydown_callback);
+				if (r != EMSCRIPTEN_RESULT_SUCCESS) { ARK2D::getLog()->e(StringUtil::append("could not emscripten_set_keydown_callback", r)); }
+				
+				r = emscripten_set_keyup_callback("#window", 0, 1, keyup_callback);
+				if (r != EMSCRIPTEN_RESULT_SUCCESS) { ARK2D::getLog()->e(StringUtil::append("could not emscripten_set_keyup_callback", r)); }
 
-				emscripten_set_keydown_callback(0, 0, 1, keydown_callback);
-				emscripten_set_keyup_callback(0, 0, 1, keyup_callback);
       			emscripten_set_mousedown_callback( "#document" ,  0, 1, mousedown_callback);
       			emscripten_set_mouseup_callback( "#document" ,  0, 1, mouseup_callback);
       			emscripten_set_mousemove_callback( "#document" ,  0, 1, mousemove_callback);
       			emscripten_set_fullscreenchange_callback(0, 0, 1, fullscreenchange_callback);
+
+      			EM_ASM({
+				 	window.focus();
+				});
 
 				SDL_Init(SDL_INIT_VIDEO);
 
