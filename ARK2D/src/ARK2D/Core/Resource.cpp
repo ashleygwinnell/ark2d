@@ -559,29 +559,14 @@ namespace ARK {
 			#elif defined(ARK2D_IPHONE)
 
 				// check Documents first.
-				int findit = ref.find(".app/data/");
-				bool useoldref = (findit != string::npos);
-				if (useoldref) {
-					string oldref = ref.substr(findit+10, string::npos);
-
-					NSArray* searchPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-					NSString* documentsPath = [searchPaths objectAtIndex:0];
-					string respath( [ documentsPath UTF8String ] );
-					string localRef = respath + string("/") + oldref;
-					ARK2D::getLog()->v(StringUtil::append("Does (Local) Resource Exist: ", localRef));
-
-					bool localExists = StringUtil::file_exists(localRef.c_str());
-					if (localExists) {
-						file_get_contents_binary_result r = SystemUtil::file_get_contents_binary(localRef);
-
-						RawDataReturns* rt = new RawDataReturns();
-						rt->data = (void*) r.data;
-						rt->size = (int) r.len;
-						return rt;
-					}
-				}
-
-				file_get_contents_binary_result r = SystemUtil::file_get_contents_binary(ref);
+				file_get_contents_binary_result r;
+				if (__iPhoneInternal_should_try_local_resource(ref) && 
+					__iPhoneInternal_local_resource_exists(ref)) {
+					string localRef = __iPhoneInternal_get_local_resource_path(ref);
+					r = SystemUtil::file_get_contents_binary(localRef);
+				} else {
+					r = SystemUtil::file_get_contents_binary(ref);
+				}				
 
 				RawDataReturns* rt = new RawDataReturns();
 				rt->data = (void*) r.data;
@@ -602,6 +587,40 @@ namespace ARK {
 			#endif
 			return NULL;
 		}
+
+		#ifdef ARK2D_IPHONE
+			bool Resource::__iPhoneInternal_should_try_local_resource(string ref) {
+
+				int findit = ref.find(".app/data/");
+				bool useoldref = (findit != string::npos);
+				return (useoldref);
+			}
+			string Resource::__iPhoneInternal_get_local_resource_path() {
+				NSArray* searchPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+				NSString* documentsPath = [searchPaths objectAtIndex:0];
+				string respath( [ documentsPath UTF8String ] );
+				string localRef = respath + string("/");
+				return localRef;
+			}
+			string Resource::__iPhoneInternal_get_local_resource_path(string ref) {
+				int findit = ref.find(".app/data/");
+				string oldref = ref.substr(findit+10, string::npos);
+
+				NSArray* searchPaths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+				NSString* documentsPath = [searchPaths objectAtIndex:0];
+				string respath( [ documentsPath UTF8String ] );
+				string localRef = respath + string("/") + oldref;
+				return localRef;
+			}
+			bool Resource::__iPhoneInternal_local_resource_exists(string ref) {
+				string localRef = __iPhoneInternal_get_local_resource_path(ref);
+				ARK2D::getLog()->v(StringUtil::append("Does (Local) Resource Exist: ", localRef));
+
+				bool localExists = StringUtil::file_exists(localRef.c_str());
+				return localExists;
+			}
+		#endif
+			
 		unsigned int Resource::getResourceTypeByExtension(string extension) {
 			if (extension == "tga") {
 				return ARK2D_RESOURCE_TYPE_TGA;

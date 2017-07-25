@@ -67,6 +67,14 @@ namespace ARK {
 				static unsigned int getResourceTypeByExtension(string extension);
 				static string s_latestName;
 
+			#ifdef ARK2D_IPHONE
+				public:
+					static bool __iPhoneInternal_should_try_local_resource(string f);
+					static string __iPhoneInternal_get_local_resource_path(string f);
+					static string __iPhoneInternal_get_local_resource_path();
+					static bool __iPhoneInternal_local_resource_exists(string f);
+			#endif
+
 			protected:
 				static void init();
 			public:

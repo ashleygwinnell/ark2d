@@ -291,6 +291,7 @@ namespace ARK {
 
 		vector<string> GameCenterUtil::s_waitingAchievements;
 
+		
 		GameCenterManager* GameCenterUtil::getManager() {
 			#if defined(ARK2D_IPHONE)
 				GameCenterManager* man = [ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate.glViewController getGameCenter];
@@ -331,6 +332,10 @@ namespace ARK {
 			 	if (manager == NULL) { ARK2D::getLog()->w("GameCenterManager is null."); return; }
 
 				[manager authenticateLocalUser];
+				//[manager authenticateWithCompletionHandler]
+				//[[[UIApplication sharedApplication] keyWindow].rootViewController
+				//	presentViewController:viewController animated:YES completion:nil];
+
 
 			#endif
 		}

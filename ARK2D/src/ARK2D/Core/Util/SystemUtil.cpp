@@ -35,6 +35,7 @@
 	#define DIRECTORY_SEPARATOR "\\"
 #else
 	#include <unistd.h>
+    #include <sys/stat.h>
 	#define GetCurrentDirectoryMacro getcwd
 	#define DIRECTORY_SEPARATOR "/"
 #endif
@@ -260,6 +261,60 @@ namespace ARK {
 				return rt;
 
 			}
+			uint64_t SystemUtil::file_get_modifiedtime(string filename) {
+				filename = StringUtil::internalOSAppends(filename);
+
+				file_get_contents_binary_result r;
+				
+				#ifdef ARK2D_IPHONE
+					if (Resource::__iPhoneInternal_should_try_local_resource(filename) && 
+						Resource::__iPhoneInternal_local_resource_exists(filename)) {
+						filename = Resource::__iPhoneInternal_get_local_resource_path(filename);
+					} 
+				#endif
+
+				
+				struct stat sb;
+				stat(filename.c_str(), &sb);
+				return sb.st_mtime;
+				/*
+                ARK2D::getLog()->e(StringUtil::append("ctimespec: ", Cast::toString<unsigned long>(sb.st_ctimespec.tv_sec)));
+				ARK2D::getLog()->e(StringUtil::append("mtimespec: ", Cast::toString<unsigned long>(sb.st_mtimespec.tv_sec)));
+				ARK2D::getLog()->e(StringUtil::append("atimespec: ", Cast::toString<unsigned long>(sb.st_atimespec.tv_sec)));
+                
+                ARK2D::getLog()->e(StringUtil::append("ctime: ", Cast::toString<unsigned long>(sb.st_ctime)));
+                ARK2D::getLog()->e(StringUtil::append("mtime: ", Cast::toString<unsigned long>(sb.st_mtime)));
+                ARK2D::getLog()->e(StringUtil::append("atime: ", Cast::toString<unsigned long>(sb.st_atime)));
+                
+				ARK2D::getLog()->e(StringUtil::append("size: ", Cast::toString<unsigned long>(sb.st_size)));
+				//return (sb.st_mtimespec.tv_sec * 1000000000 + sb.st_mtimespec.tv_nsec) / 1000;
+                //return sb.st_mtimespec.tv_sec + sb.st_mtimespec.tv_nsec;
+                //return [[NSDate dateWithTimeIntervalSinceReferenceDate:sb.st_mtime] timeIntervalSince1970] + sb.st_mtime;
+                //return [[NSDate dateWithTimeIntervalSinceReferenceDate:sb.st_mtime] timeIntervalSince1970];
+
+                
+                NSString* filePath = [NSString stringWithCString:filename.c_str() encoding:[NSString defaultCStringEncoding]];
+                NSLog(@"filePath %@", filePath);
+                
+                uint64_t modifiedtime = 0;
+                
+                NSFileManager* fileManager = [NSFileManager defaultManager];
+
+                NSDate *creationDate = nil;
+                if ([fileManager fileExistsAtPath:filePath]) {
+                    NSDictionary* attributes = [fileManager attributesOfItemAtPath:filePath error:nil];
+                    
+                    NSDate* createdDate = attributes[NSFileCreationDate];
+                    NSDate* modifiedDate = attributes[NSFileModificationDate];
+                    NSTimeInterval seconds = [modifiedDate timeIntervalSince1970];
+                    modifiedtime = seconds;
+                } else {
+                    NSLog(@"does not exist");
+                }
+                
+                
+                return modifiedtime;*/
+			}
 
 			string SystemUtil::getCurrentDirectory() {
 				#if defined(ARK2D_WINDOWS_PHONE_8) || defined(ARK2D_XBOXONE) || ( defined(ARK2D_WINDOWS) && defined(ARK2D_WINDOWS_VS) ) || defined(ARK2D_WINDOWS_STORE)
@@ -296,6 +351,24 @@ namespace ARK {
 
 				#endif
 				return "whoops?";
+			}
+			bool SystemUtil::createDirectory(string directoryPath) {
+				#ifdef ARK2D_IPHONE
+
+					NSString* filePathAndDirectory = [NSString stringWithCString:directoryPath.c_str() encoding:[NSString defaultCStringEncoding]];
+					NSError* error;
+
+					if (![[NSFileManager defaultManager] createDirectoryAtPath:filePathAndDirectory
+							withIntermediateDirectories:NO
+							attributes:nil
+							error:&error]) {
+						//NSLog(@"Create directory error: %@", error);
+						return false;
+					}
+
+					return true;
+				#endif
+                return false;
 			}
 
 			void SystemUtil::openBrowserToURL(string url_str) {
@@ -404,12 +477,15 @@ namespace ARK {
 					GameContainerIPhoneGLViewController* dele = ARK2D::getContainer()->m_platformSpecific.m_appDelegate.glViewController;
 					//GameContainerIPhoneGLViewController* dele2 = [dele copy];
 
+                [dele previewDocumentWithURL:nsurl];
+
+					/*NSLog(@"%@",dele.navigationController);
 
 					UIDocumentInteractionController* interactionController = [UIDocumentInteractionController interactionControllerWithURL: nsurl];
 					[interactionController setDelegate:dele];
 					[interactionController presentPreviewAnimated:YES ];
 
-	 				[interactionController release];
+	 				[interactionController release];*/
 					//[pool release];
 
 				#elif defined(ARK2D_MACINTOSH)

@@ -62,6 +62,7 @@ namespace ARK {
 					static const unsigned int CALLBACK_ANDROID_SAVEDGAME_UPDATE_FAIL = 33;
 
 					static const unsigned int CALLBACK_GAMECENTER_SIGNIN_SUCCESSFUL = 301;
+					static const unsigned int CALLBACK_GAMECENTER_SIGNIN_UNSUCCESSFUL = 302;
 
 					static const unsigned int CALLBACK_OUYA_LICENSING_ALLOW = 41;
 					static const unsigned int CALLBACK_OUYA_LICENSING_DISALLOW = 42;

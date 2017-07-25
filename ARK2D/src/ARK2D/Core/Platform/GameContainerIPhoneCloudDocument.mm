@@ -23,25 +23,28 @@
 
 - (BOOL)loadFromContents:(id)contents ofType:(NSString *)typeName error:(NSError **)outError
 {
-    NSLog(@"UIDocument: loadFromContents: state = %d, typeName=%@", self.documentState, typeName);
+    NSLog(@"UIDocument: iCloud loadFromContents: state = %lu, typeName=%@", (unsigned long)self.documentState, typeName);
 
-    if ([contents length] > 0) {
+    if (contents && [contents length] > 0) {
         self.documentText = [[NSString alloc] initWithBytes:[contents bytes] length:[contents length] encoding:NSUTF8StringEncoding];
     }
     else {
         self.documentText = self.defaultCreationText;
     }
+ 
+    //NSLog(@"UIDocument: Loaded the following text from iCloud key '%s': %@", self.mymeta->filename.c_str(), self.documentText);
+    //if (self.mymeta != NULL) {
+    NSLog(@"UIDocument: Loaded from iCloud key '%@'.", [self fileURL]);//self.mymeta->filename.c_str());
+    //} 
 
-    NSLog(@"UIDocument: Loaded the following text from the cloud: %@", self.documentText);
+    //if (self.documentText != nil) {
 
-    if (self.documentText != nil) { 
+        //if (self.mymeta != NULL && self.mymeta->onchangefunction != NULL) {
+        //    void (*pt)() = (void(*)()) self.mymeta->onchangefunction;
+        //    pt();
+        //}
 
-        // if (self.mymeta->onchangefunction != NULL) {
-        //     void (*pt)() = (void(*)()) self.mymeta->onchangefunction;
-        //     pt();
-        // }
-
-    }
+    //}
 
     // update textView in delegate...
     //if ([_delegate respondsToSelector:@selector(noteDocumentContentsUpdated:)]) {
@@ -60,7 +63,8 @@
         self.documentText = self.defaultCreationText;
     }
 
-    NSLog(@"UIDocument: Will save the following text in the cloud: %@", self.documentText);
+    //NSLog(@"UIDocument: Will save the following text in the cloud: %@", self.documentText);
+    NSLog(@"UIDocument: Will save key '%s' in the iCloud.", self.mymeta->filename.c_str());
 
     return [NSData dataWithBytes:[self.documentText UTF8String] length:[self.documentText length]];
 }

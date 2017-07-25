@@ -69,6 +69,9 @@
     }
 
     - (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller{
+        if (self.navigationController) {
+            return self.navigationController;
+        }
         return self;
     }
 
@@ -468,13 +471,36 @@ float transformTouchPointY(float y) {
 
 - (void) authenticateLocalUser
 {
+
+
     if([GKLocalPlayer localPlayer].authenticated == NO)
     {
-        [[GKLocalPlayer localPlayer] authenticateWithCompletionHandler:^(NSError *error)
-        {
-            ARK::Core::Utils::Callbacks::invoke(ARK::Core::Utils::Callbacks::CALLBACK_GAMECENTER_SIGNIN_SUCCESSFUL);
+        [[GKLocalPlayer localPlayer] setAuthenticateHandler:(^(UIViewController *viewController, NSError *error) {
+
+            if (GKLocalPlayer.localPlayer.authenticated || GKLocalPlayer.localPlayer.isAuthenticated) {
+                // Already authenticated
+                ARK2D::getLog()->e("authenticateHandler: already authed");
+                ARK::Core::Utils::Callbacks::invoke(ARK::Core::Utils::Callbacks::CALLBACK_GAMECENTER_SIGNIN_SUCCESSFUL);
+            }
+
+            else if (viewController) {
+                ARK2D::getLog()->e("authenticateHandler: viewcontroller set.");
+                UIViewController* cc = ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate.glViewController;
+                [cc presentViewController:viewController animated:YES completion:nil];
+            }
+
+            else {
+                // Problem with authentication, probably bc the user doesn't use Game Center.
+                ARK2D::getLog()->e("authenticateHandler: probably bc the user doesn't use Game Center.");
+                ARK::Core::Utils::Callbacks::invoke(ARK::Core::Utils::Callbacks::CALLBACK_GAMECENTER_SIGNIN_UNSUCCESSFUL);
+            } 
+        })];
+
+        //[[GKLocalPlayer localPlayer] authenticateWithCompletionHandler:^(NSError *error)
+        //{
+           // ARK::Core::Utils::Callbacks::invoke(ARK::Core::Utils::Callbacks::CALLBACK_GAMECENTER_SIGNIN_SUCCESSFUL);
             //[self callDelegateOnMainThread: @selector(processGameCenterAuth:) withArg: NULL error: error];
-        }];
+        //}];
     }
 }
 - (BOOL) isAuthenticatedLocalUser

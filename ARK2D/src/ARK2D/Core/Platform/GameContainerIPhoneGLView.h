@@ -90,6 +90,9 @@
 //@interface GameContainerIPhoneGLViewController : GAITrackedViewController <UIDocumentInteractionControllerDelegate, GameCenterManagerDelegate, GKGameCenterControllerDelegate> {
     GameCenterManager* gameCenterManager;
 	IPhoneCloudDocument* document;
+    
+    
+    
 }
     @property (nonatomic, retain) GameCenterManager* gameCenterManager;
     @property (strong, nonatomic) IPhoneCloudDocument* document;
@@ -99,6 +102,8 @@
     - (void)viewDidLoad;
     - (void)dealloc;
     // - (void)viewDidAppear:(BOOL)animated;
+    - (void)previewDocumentWithURL:(NSURL*)url;
+
 
     - (UIViewController *)documentInteractionControllerViewControllerForPreview:(UIDocumentInteractionController *)controller;
     - (void)gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController;

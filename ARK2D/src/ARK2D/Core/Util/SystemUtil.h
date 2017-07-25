@@ -50,10 +50,12 @@ namespace ARK {
 					static file_get_contents_binary_result file_get_contents_utf8binary(string filename);
 					static file_get_contents_binary_result file_get_contents_binary(string filename);
 					static file_get_contents_text_result file_get_contents_text(string filename);
+					static uint64_t file_get_modifiedtime(string filename);
 
 					static string getCurrentDirectory();
 					static string getSeparator();
 					static string getOSDirectory();
+					static bool createDirectory(string directoryPath);
 
 					static void openBrowserToURL(string url);
 					static void openGalleryToImageUrl(string url);

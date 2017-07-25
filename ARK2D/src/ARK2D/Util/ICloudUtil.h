@@ -45,11 +45,20 @@ namespace ARK {
 				//static void setFile(string fname, string contents);
 				static void init();
 				static void push();
-
+				
 				static void setFileContents(string fname, string contents);
+				static void setFileContentsAndPushAsync(string fname, string contents);
 				static string getFileContents(string fname);
+				static uint64_t getFileModifiedTime(string fname);
 
 				static void _createFile(ICloudFile* icf);
+				static bool _fileExists(string fname);
+
+				static void _setFileContentsInternal(string fname, string contents);
+				static void _pushInternal();
+
+			private: 
+				static IPhoneCloudDocument* _findFile(string filename);
 
 			public:
 				static signed int s_remainingFiles;

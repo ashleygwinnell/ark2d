@@ -34,7 +34,7 @@ class ARK2D_API iOSListener {
 
 //GameContainerIPhoneGLView* glView;
 @interface GameContainerIPhoneAppDelegate : UIResponder <UIApplicationDelegate> {
-	NSMetadataQuery *_query;
+    //NSMetadataQuery* _query;
 
 }
 
@@ -43,6 +43,7 @@ class ARK2D_API iOSListener {
 
 @property (nonatomic, retain) IBOutlet UIWindow* window;
 @property (nonatomic, retain) IBOutlet GameContainerIPhoneGLViewController* glViewController;
+@property (strong) NSMetadataQuery* query;
 //@property (nonatomic, retain) IBOutlet GameContainerIPhoneGLView* glView;
 //@property (strong, nonatomic) IPhoneCloudDocument* document;
 @property (strong, nonatomic) NSMutableDictionary* iclouddocuments; // = [NSDictionary dictionary];
