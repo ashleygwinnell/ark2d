@@ -216,6 +216,9 @@ namespace ARK {
                         dirty = true;
                         clean();
                     }
+                    virtual void setLocationByCenter(Vector2<T> xy) {
+                        setLocationByCenter(xy.getX(), xy.getY());
+                    }
                     virtual void setLocationByAlignment(T x, T y, signed int alignX, signed int alignY) {
                         //ARK2D::getLog()->w("Line::setLocationByAlignment not implemented");
                     }

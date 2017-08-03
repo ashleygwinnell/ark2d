@@ -87,7 +87,7 @@
 		]
 	},
 	"modules": {
-	
+
 		"core": {
 			"root": "src/ARK2D/Core/",
 			"sources": [
@@ -144,6 +144,8 @@
 				"src/ARK2D/Core/Platform/GameContainerMac.mm",
 				"src/ARK2D/Core/Platform/GameContainerMacAppDelegate.mm",
 				"src/ARK2D/Core/Platform/GameContainerMacWindowListener.mm",
+				"src/ARK2D/Core/Platform/GameContainerAppleShared.mm",
+				"src/ARK2D/Core/Platform/GameContainerAppleCloudDocument.mm",
 				"src/ARK2D/Core/Platform/GameContainerWindows.cpp",
 				"src/ARK2D/Core/Platform/GameContainerHTML5.cpp",
 				"src/ARK2D/Core/SceneGraph/Scene.cpp",
@@ -263,7 +265,8 @@
 				"src/ARK2D/vendor/vorbis132/vorbisenc.c",
 				"src/ARK2D/vendor/vorbis132/vorbisfile.c",
 				"src/ARK2D/vendor/vorbis132/window.c"
-			]
+			],
+			"dependencies": []
 		},
 		"gj": {
 			"root": "src/ARK2D/GJ/",
@@ -540,6 +543,8 @@
 			"src/ARK2D/Core/Platform/GameContainerMac.mm",
 			"src/ARK2D/Core/Platform/GameContainerMacAppDelegate.mm",
 			"src/ARK2D/Core/Platform/GameContainerMacWindowListener.mm",
+			"src/ARK2D/Core/Platform/GameContainerAppleShared.mm",
+			"src/ARK2D/Core/Platform/GameContainerAppleCloudDocument.mm",
 
 			"src/ARK2D/Core/Util/Callbacks.cpp",
 			"src/ARK2D/Core/Util/StringUtil.cpp",
@@ -803,7 +808,6 @@
 			"src/ARK2D/Core/Platform/GameContainerAndroid.cpp"
 		],
 		"ios": [
-			"src/ARK2D/Core/Platform/GameContainerIPhoneCloudDocument.mm",
 			"src/ARK2D/Core/Platform/GameContainerIPhoneAppDelegate.mm",
 			"src/ARK2D/Core/Platform/GameContainerIPhoneGLView.mm",
 			"src/ARK2D/Core/Platform/GameContainerIPhone.mm"

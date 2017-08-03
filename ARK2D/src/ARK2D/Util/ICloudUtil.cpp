@@ -13,8 +13,8 @@
 
 #if defined(ARK2D_IPHONE)
 	#include "../Core/Platform/GameContainerIPhone.h"
-    #include "../Core/Util/SystemUtil.h"
 #endif
+#include "../Core/Util/SystemUtil.h"
 
 namespace ARK {
 	namespace Util { 
@@ -22,10 +22,18 @@ namespace ARK {
 		vector<ICloudFile>* ICloudUtil::s_iCloudFiles = new vector<ICloudFile>();
 		signed int ICloudUtil::s_remainingFiles = 0; 
 
+		unsigned int ICloudUtil::countFiles() { 
+			return s_iCloudFiles->size(); 
+		}
+
 		void ICloudUtil::init() {
+            if (!_isEnabledInUserDefaults()) {
+                ARK2D::getLog()->i("iCloud disabled in Settings.");
+                return;
+            }
 			ARK2D::getLog()->i("Initialise iCloud.");
 
-			#if defined(ARK2D_IPHONE)
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
 			    
 			    NSURL* ubiq = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil];
 			    if (ubiq) {
@@ -33,8 +41,13 @@ namespace ARK {
 					string thsStrText = [ubiqStr cStringUsingEncoding:[NSString defaultCStringEncoding]];
 			        ARK2D::getLog()->i(StringUtil::append("iCloud access at ", thsStrText));
 			        
-			        GameContainerIPhoneAppDelegate* delegate = ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate;
-			        [delegate loadDocuments];
+			        GameICloudManager* icloud = ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate.icloud;
+			        if (icloud == NULL) {
+			        	ARK2D::getLog()->w("GameICloudManager instance was null.");
+			        	return;
+			        }
+			        [icloud loadDocuments];
+			        
 			    } else {
 			        ARK2D::getLog()->w("No iCloud access");
 			    }
@@ -55,11 +68,58 @@ namespace ARK {
 			s_iCloudFiles->push_back(f);
 		}
 		
+		void ICloudUtil::purge() {
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
+
+				if (!_isEnabledInUserDefaults()) {
+                    ARK2D::getLog()->i("iCloud (purge) disabled in Settings.");
+                    return;
+                }
+		
+
+		
+
+				ARK2D::getLog()->i("iCloudUtil - purge");
+				GameICloudManager* icloud = ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate.icloud;
+				
+				[icloud->query disableUpdates];
+				//[icloud->query stopQuery];
+				
+				NSURL* ubiquitousURL = [[NSFileManager defaultManager] URLForUbiquityContainerIdentifier:nil];
+				if (ubiquitousURL == NULL || ubiquitousURL == nil) {
+					ARK2D::getLog()->e("Could not purge icloud files. Maybe iCloud is switched off in settings.");
+					return;
+				}
+
+				NSFileManager* fileManager = [NSFileManager defaultManager];
+                NSError* error;
+
+				for(id theKey in icloud->iclouddocuments) {
+					AppleCloudDocument* doc = icloud->iclouddocuments[theKey];
+					ARK2D::getLog()->i(StringUtil::append("Deleting iCloud file: ", doc->mymeta->filename));  
+
+					NSString* filename_pure_nsstr = [NSString stringWithCString:doc->mymeta->filename.c_str() encoding:[NSString defaultCStringEncoding]];
+					NSURL* ubiquitousPackageDestinationURL = [[ubiquitousURL URLByAppendingPathComponent:@"Documents" ] URLByAppendingPathComponent:filename_pure_nsstr];
+
+					bool b = [fileManager removeItemAtPath:[ubiquitousPackageDestinationURL path] error:&error];
+					if (b) {
+						ARK2D::getLog()->i("success");
+					} else {
+						ARK2D::getLog()->i("fail");
+						NSLog(@"%@", error);
+					}
+				}
+				[icloud->iclouddocuments removeAllObjects];
+
+				[icloud->query enableUpdates];
+
+	        #endif
+		}
 		
 		void ICloudUtil::push() {
-			#if defined(ARK2D_IPHONE)
-
-				ARK2D::getLog()->i("iCloudUtil - push start");
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
+                
+                ARK2D::getLog()->i("iCloudUtil - push start");
 
 				dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 					ARK2D::getLog()->i("iCloudUtil - push async start");
@@ -69,9 +129,14 @@ namespace ARK {
 			#endif
 		}
 		void ICloudUtil::_pushInternal() {
-			#if defined(ARK2D_IPHONE) 
-				GameContainerIPhoneAppDelegate* delegate = ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate;
-				NSMutableDictionary* docs = (NSMutableDictionary*) [delegate iclouddocuments];
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
+				if (!_isEnabledInUserDefaults()) {
+                    ARK2D::getLog()->i("iCloud (push) disabled in Settings.");
+                    return;
+                }
+
+                GameICloudManager* icloud = ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate.icloud;
+				NSMutableDictionary* docs = (NSMutableDictionary*) [icloud iclouddocuments];
 
 				for(unsigned int i = 0; i < s_iCloudFiles->size(); i++) {
 
@@ -95,14 +160,41 @@ namespace ARK {
 
 
 						if (keycStr == icf->filename) {
-							ARK2D::getLog()->i(StringUtil::append("iCloudUtil - already in cloud: ", icf->filename));
+							ARK2D::getLog()->i(StringUtil::append("iCloudUtil - already in cloud (try overwrite): ", icf->filename));
 							found = true;
 
-							IPhoneCloudDocument* doc = (IPhoneCloudDocument*) [docs objectForKey:key];
-							//[doc documentText] = 
-							[doc saveToURL: [doc fileURL] forSaveOperation:UIDocumentSaveForOverwriting  
-								completionHandler:^(BOOL success) {
-						      		NSLog(@"Attempt to save (overwrite) to key %@ URL %@ %@", key, [doc fileURL], success ? @"succeeded" : @"failed");
+
+							string thisFilename = _getICloudTempDir() + icf->filename;
+		        			NSString* filename_nsstr = [NSString stringWithCString:thisFilename.c_str() encoding:[NSString defaultCStringEncoding]];
+		        			NSURL* fileSourceURL = [[NSURL alloc] initFileURLWithPath:filename_nsstr];
+
+							AppleCloudDocument* doc = (AppleCloudDocument*) [docs objectForKey:key];
+                            [doc saveToURL: fileSourceURL
+                                #ifdef ARK2D_IPHONE
+                                    forSaveOperation:UIDocumentSaveForOverwriting
+                                    completionHandler:^(BOOL success) 
+                                {
+                                #elif defined(ARK2D_MACINTOSH)
+                                    ofType: NSPlainTextDocumentType
+                                    forSaveOperation: NSSaveOperation //NSAutosaveInPlaceOperation
+                                    completionHandler: ^(NSError* errorOnNil) 
+                                {
+                                        BOOL success = errorOnNil == nil;
+                                #endif
+
+                                    string cfileurl = string([[fileSourceURL path]UTF8String]);
+                                    if (!success) {
+					        			ARK2D::getLog()->e(StringUtil::append("ICloudUtil: Could not save (overwrite) document to iCloud local folder ", cfileurl));
+					        			#if defined(ARK2D_MACINTOSH)
+					        				NSLog(@"Error:%@.", errorOnNil);
+					        			#endif
+					        			return;
+					        		}
+						      		//NSLog(@"Attempt to save (overwrite) to key %@ URL (local folder) %@ %@", key, fileSourceURL, success ? @"succeeded" : @"failed");
+
+						      		ARK2D::getLog()->i(StringUtil::append("ICloudUtil: document successfully saved (overitten) to iCloud local folder ", cfileurl));
+
+						      		[doc moveToICloudSyncDir];
 						    	}
 						    ];   
 
@@ -119,9 +211,9 @@ namespace ARK {
 			#endif
 		}
 		bool ICloudUtil::_fileExists(string fname) {
-			#if defined(ARK2D_IPHONE) 
-				GameContainerIPhoneAppDelegate* delegate = ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate;
-				NSMutableDictionary* docs = (NSMutableDictionary*) [delegate iclouddocuments];
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
+				GameICloudManager* icloud = ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate.icloud;
+				NSMutableDictionary* docs = (NSMutableDictionary*) [icloud iclouddocuments];
 
 				for (NSString* key in docs) {
 					string keycStr = string([key UTF8String]);
@@ -134,10 +226,10 @@ namespace ARK {
 			return false;
 		}
 
-		IPhoneCloudDocument* ICloudUtil::_findFile(string fname) {
-			#if defined(ARK2D_IPHONE) 
-				GameContainerIPhoneAppDelegate* delegate = ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate;
-				NSMutableDictionary* docs = (NSMutableDictionary*) [delegate iclouddocuments];
+		AppleCloudDocument* ICloudUtil::_findFile(string fname) {
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
+				GameICloudManager* icloud = ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate.icloud;
+				NSMutableDictionary* docs = (NSMutableDictionary*) [icloud iclouddocuments];
 
 				for(unsigned int i = 0; i < s_iCloudFiles->size(); i++) {
 					ICloudFile* icf = &s_iCloudFiles->at(i);
@@ -148,7 +240,7 @@ namespace ARK {
 						
 						string keycStr = string([key UTF8String]);
 						if (keycStr == fname) {
-							IPhoneCloudDocument* value = (IPhoneCloudDocument*) [docs objectForKey:key];
+							AppleCloudDocument* value = (AppleCloudDocument*) [docs objectForKey:key];
 							return value;
 						}
 					}
@@ -161,12 +253,12 @@ namespace ARK {
 		}
 
 		void ICloudUtil::setFileContents(string fname, string contents) {
-			#if defined(ARK2D_IPHONE) 
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
 				_setFileContentsInternal(fname, contents);
 			#endif
 		} 
 		void ICloudUtil::setFileContentsAndPushAsync(string fname, string contents) {
-			#if defined(ARK2D_IPHONE) 
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
 				
 				dispatch_async(dispatch_get_global_queue (DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 
@@ -178,8 +270,13 @@ namespace ARK {
 			#endif
 		}
 		void ICloudUtil::_setFileContentsInternal(string fname, string contents) {
-			#if defined(ARK2D_IPHONE)
-				IPhoneCloudDocument* value = _findFile(fname); 
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
+                if (!_isEnabledInUserDefaults()) {
+                    ARK2D::getLog()->i("iCloud (setFileContents) disabled in Settings.");
+                    return;
+                }
+            
+				AppleCloudDocument* value = _findFile(fname);
 				if (value != NULL) {
 					ARK2D::getLog()->i(StringUtil::append("iCloudUtil - updating file contents: ", fname));
 
@@ -195,8 +292,8 @@ namespace ARK {
 	
 
 		string ICloudUtil::getFileContents(string fname) {
-			#if defined(ARK2D_IPHONE) 
-				IPhoneCloudDocument* value = _findFile(fname);
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
+				AppleCloudDocument* value = _findFile(fname);
 				if (value != NULL) {
 					string valuecStr = string([[value documentText] UTF8String]);
 					return valuecStr;
@@ -208,9 +305,9 @@ namespace ARK {
 		}
 		
 		uint64_t ICloudUtil::getFileModifiedTime(string fname) {
-			#if defined(ARK2D_IPHONE) 
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
 
-				IPhoneCloudDocument* value = _findFile(fname);
+				AppleCloudDocument* value = _findFile(fname);
 				if (value != NULL) {
 					return [[value fileModificationDate] timeIntervalSince1970];
 				}
@@ -221,8 +318,26 @@ namespace ARK {
 			return 0;
 		}
 
-		void ICloudUtil::_createFile(ICloudFile* icf) {
+		string ICloudUtil::_getICloudTempDir() {
+			string icloudTempDir;
 			#if defined(ARK2D_IPHONE)
+				icloudTempDir = Resource::__iPhoneInternal_get_local_resource_path() + string("iCloud-temp/");
+				SystemUtil::createDirectory(icloudTempDir);
+			#elif defined(ARK2D_MACINTOSH)
+				bool sandboxed = ARK2D::getContainer()->getPlatformSpecific()->isSandboxed();
+				if (sandboxed) {
+				    icloudTempDir = ARK2D::getContainer()->getPlatformSpecific()->m_resourcePathSandbox;
+				} else {
+				    icloudTempDir = ARK2D::getContainer()->getPlatformSpecific()->m_resourcePath;
+				}
+				icloudTempDir += string("iCloud-temp/");
+				SystemUtil::createDirectory(icloudTempDir);
+			#endif
+				return icloudTempDir;
+		}
+
+		void ICloudUtil::_createFile(ICloudFile* icf) {
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
 
 				ARK2D::getLog()->i(StringUtil::append("iCloudUtil - _createFile: ", icf->filename));
 				
@@ -235,21 +350,10 @@ namespace ARK {
 					ARK2D::getLog()->i(StringUtil::append("iCloudUtil - make file true ", icf->filename));
 
 
-					GameContainerIPhoneAppDelegate* delegate = ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate;
+                    GameICloudManager* icloud = ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate.icloud;
 					
-	        		//ARK2D::getLog()->v(StringUtil::append("make iCloud file: ", icf->filename));
-
-	        		string icloudTempDir = Resource::__iPhoneInternal_get_local_resource_path() + string("iCloud-temp/");
-	        		SystemUtil::createDirectory(icloudTempDir);
-
-
-
-
-	        		string thisFilename = StringUtil::internalOSAppends(icf->filename);
+					string thisFilename = _getICloudTempDir() + icf->filename;
 	        		
-	        		thisFilename = icloudTempDir + icf->filename;
-	        		//thisFilename = ARK2D::getContainer()->getResourcePath() + string("iCloud-temp/") + icf->filename;
-					
 	        		NSString* filename_pure_nsstr = [NSString stringWithCString:icf->filename.c_str() encoding:[NSString defaultCStringEncoding]];
 	        		NSString* filename_nsstr = [NSString stringWithCString:thisFilename.c_str() encoding:[NSString defaultCStringEncoding]];
 	        		NSString* defaultstr_nsstr = [NSString stringWithCString:icf->defaultcontents.c_str() encoding:[NSString defaultCStringEncoding]];
@@ -266,12 +370,33 @@ namespace ARK {
 		        	NSURL* ubiquitousPackageDestinationURL = [[ubiquitousURL URLByAppendingPathComponent:@"Documents" ] URLByAppendingPathComponent:filename_pure_nsstr];
 		        	NSURL* fileSourceURL = [[NSURL alloc] initFileURLWithPath:filename_nsstr];
 
-
-		        	IPhoneCloudDocument* doc = [[IPhoneCloudDocument alloc] initWithFileURL:fileSourceURL];
+		        	#if defined(ARK2D_IPHONE)
+                        AppleCloudDocument* doc = [[AppleCloudDocument alloc] initWithFileURL:fileSourceURL];
+                    #elif defined(ARK2D_MACINTOSH)
+                        NSError* outError;
+                        AppleCloudDocument* doc = [[AppleCloudDocument alloc] initWithContentsOfURL:fileSourceURL ofType:NSRTFTextDocumentType error:&outError];
+                    #endif
 		        	doc.mymeta = icf;
 		        	doc.defaultCreationText = defaultstr_nsstr;
-		        	doc.delegate = [delegate glViewController];
-		        	[doc saveToURL:[doc fileURL] forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
+                    
+                    #if defined(ARK2D_IPHONE)
+                        doc.delegate = [ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate glViewController];
+                    #elif defined(ARK2D_MACINTOSH)
+                        //doc.delegate = [ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate];
+                    #endif
+                    
+                    
+                    
+		        	[doc saveToURL:[doc fileURL]
+                        #if defined(ARK2D_IPHONE)
+                            forSaveOperation:UIDocumentSaveForCreating
+                            completionHandler:^(BOOL success) {
+                        #elif defined(ARK2D_MACINTOSH)
+                            ofType: NSPlainTextDocumentType
+                            forSaveOperation: NSAutosaveInPlaceOperation
+                            completionHandler: ^(NSError* errorOnNil) {
+                            BOOL success = errorOnNil == nil;
+                        #endif
 
 		        		string cfileurl = string([[[doc fileURL] path]UTF8String]);
 		        		if (!success) {
@@ -293,37 +418,29 @@ namespace ARK {
 						//        }
 						// }];
 
-						dispatch_async(dispatch_get_global_queue (DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-               				
-               				NSError * error;
-
-							ARK2D::getLog()->i("Moving to ubiquitous dir");
-							NSLog(@"from %@ to %@.", fileSourceURL, ubiquitousPackageDestinationURL);
-							bool b = [[NSFileManager defaultManager] setUbiquitous:YES
-										itemAtURL:fileSourceURL
-										destinationURL:ubiquitousPackageDestinationURL
-										error:&error];
-							if (b) {
-								ARK2D::getLog()->i("success");
-							} else {
-								ARK2D::getLog()->i("fail");
-								NSLog(@"%@", error);
-							}
-
-			                
-			            }); 
+						[doc moveToICloudSyncDir];
 						
 
 			        }];
 
 			      
-
-		        	[[delegate iclouddocuments] setValue:doc forKey:filename_nsstr];
+                    
+		        	[[icloud iclouddocuments] setValue:doc forKey:filename_nsstr];
 
 		        }
 
 			#endif
 
+		}
+
+		bool ICloudUtil::_isEnabledInUserDefaults() {
+			#if defined(ARK2D_IPHONE)
+				bool enabled = !![[NSUserDefaults standardUserDefaults] boolForKey:@"setting_icloud"];
+                return enabled;
+			#elif defined(ARK2D_MACINTOSH)
+			    return true;
+			#endif
+			return false;
 		}
 
 	}

@@ -11,6 +11,7 @@
 #ifdef ARK2D_MACINTOSH
 
 #import "GameContainerMacAppDelegate.h"
+#import "../GameContainer.h"
 
 	#import "../ARK2D.h"
 	//#import "../Log.h"
@@ -20,11 +21,16 @@
 	@implementation GameContainerMacAppDelegate
 
 	@synthesize window;
+	@synthesize gameCenterManager;
+	@synthesize icloud = _icloud;
 
 	- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 	{
 	    // Insert code here to initialize your application
 	    NSLog(@"finished launching \r\n");
+
+	    self.icloud = [[GameICloudManager alloc] init];
+	    //ARK2D::getContainer()->m_platformSpecific.m_appDelegate = self;
 	}
 
 	- (void)applicationDidHide:(NSNotification *)notification {

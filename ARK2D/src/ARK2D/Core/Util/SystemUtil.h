@@ -56,6 +56,7 @@ namespace ARK {
 					static string getSeparator();
 					static string getOSDirectory();
 					static bool createDirectory(string directoryPath);
+					static bool createDirectoryForFile(string file);
 
 					static void openBrowserToURL(string url);
 					static void openGalleryToImageUrl(string url);

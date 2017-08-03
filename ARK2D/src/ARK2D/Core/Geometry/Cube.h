@@ -141,6 +141,9 @@ namespace ARK {
 					m_y = y - (m_height/2);
 					m_z = z - (m_depth/2);
 				}
+				virtual void setLocationByCenter(Vector2<T> xy) {
+                    setLocationByCenter(xy.getX(), xy.getY());
+                }
                 //virtual void setLocationByAlignment(T x, T y, signed int alignX, signed int alignY);
                 //virtual void setLocationByAlignment(T x, T y, T z, signed int alignX, signed int alignY, signed alignZ);
 				virtual void setXByCenter(T x) {

@@ -14,6 +14,7 @@
 
 //#include "../vendor/tinyxml/tinyxml.h"
 #include "../Common/Libraries/libjson.h"
+#include "../Common/Libraries/rapidxml.h"
 
 namespace ARK {
 	namespace GJ {
@@ -364,6 +365,26 @@ namespace ARK {
 			}
 			else if (m_usingFormat == FORMAT_XML)
 			{
+				/*vector<char> resultCopy = vector<char>(json.begin(), json.end());
+				resultCopy.push_back('\0');
+
+				xml_document<> xmldocument;
+				xmldocument.parse<0>((char*) &resultCopy[0]);
+
+				xml_node<>* responseNode = xmldocument.first_node("response");
+				xml_node<>* successNode = responseNode->first_node("success");
+                bool success = rapidxml_myutil<string, char>::rapidXmlUtil_value(successNode) == "true";
+				if (!success) {
+					xml_node<>* messageNode = xmldocument.first_node("message");
+					m_errorMessage = rapidxml_myutil<string, char>::rapidXmlUtil_value(messageNode);
+					logError(m_errorMessage);
+					return highscores;
+				}
+
+				xml_node<>* dataNode = responseNode->first_node("data");
+				valueStr = rapidxml_myutil<string, char>::rapidXmlUtil_value(dataNode);*/
+
+
 				/*
 
 				<?xml version="1.0" encoding="UTF-8"?>
@@ -387,20 +408,18 @@ namespace ARK {
 				//m_errorMessage = "XML not implemented for getHighscoresInTable";
 				//logError(m_errorMessage);
 
-				/*xml_document<> xmldocument;
+				xml_document<> xmldocument;
 
 				xmldocument.parse<0>((char*)json.c_str());
 
 				xml_node<>* responseNode = xmldocument.first_node("response");
 				xml_node<>* successNode = responseNode->first_node("success");
 
-				const char* successNode_cstr = successNode->value();
-	 			string successNode_str = string(successNode_cstr);
+				string successNode_str = rapidxml_myutil<string, char>::rapidXmlUtil_value(successNode);
 
 	 			if (successNode_str == "false") {
 	 				xml_node<>* messageNode = responseNode->first_node("message");
-	 				const char* messageNode_cstr = messageNode->value();
-	 				m_errorMessage = string(messageNode_cstr);
+	 				m_errorMessage = rapidxml_myutil<string, char>::rapidXmlUtil_value(messageNode);
 
 	 				logError(m_errorMessage);
 					return highscores;
@@ -418,7 +437,7 @@ namespace ARK {
 					Highscore highscore;
 					highscore.addProperty("score", scoreNode->first_node("score")->value() );
 					highscore.addProperty("sort", scoreNode->first_node("sort")->value() );
-					highscore.addProperty("extra_data", scoreNode->first_node("extra_data")->value() );
+					highscore.addProperty("extra_data", rapidxml_myutil<string, char>::rapidXmlUtil_value(scoreNode->first_node("extra_data")) );
 
 					if (scoreNode->first_node("user") != NULL) {
 						highscore.addProperty("user", scoreNode->first_node("user")->value());
@@ -433,25 +452,25 @@ namespace ARK {
 					}
 
 					if (scoreNode->first_node("guest") != NULL) {
-						highscore.addProperty("guest", scoreNode->first_node("guest")->value());
+						highscore.addProperty("guest", rapidxml_myutil<string, char>::rapidXmlUtil_value(scoreNode->first_node("guest")));
 					} else {
 						highscore.addProperty("guest", "");
 					}
 
-					highscore.addProperty("stored", scoreNode->first_node("stored")->value() );
+					highscore.addProperty("stored", rapidxml_myutil<string, char>::rapidXmlUtil_value(scoreNode->first_node("stored")) );
 
 					bool isGuest = scoreNode->first_node("guest") != NULL;
 					if (isGuest) {
-						if (strlen(scoreNode->first_node("guest")->value()) > 0) {
+						if (rapidxml_myutil<string, char>::rapidXmlUtil_value(scoreNode->first_node("guest")).length() > 0) {
 							isGuest = true;
 						} else {
 							isGuest = false;
 						}
 					}
 					if (isGuest) {
-						highscore.addProperty("name", scoreNode->first_node("guest")->value() );
+						highscore.addProperty("name", rapidxml_myutil<string, char>::rapidXmlUtil_value(scoreNode->first_node("guest")) );
 					} else {
-						highscore.addProperty("name", scoreNode->first_node("user")->value() );
+						highscore.addProperty("name", rapidxml_myutil<string, char>::rapidXmlUtil_value(scoreNode->first_node("user")) );
 					}
 					//highscore.addProperty("score", "122");
 					//highscore.addProperty("name", "Boo");
@@ -460,7 +479,7 @@ namespace ARK {
 
 				
 
-*/
+
 				// ------------------------
 				//	TINYXML
 				// ------------------------
@@ -598,7 +617,7 @@ namespace ARK {
 			}
 			else if (m_usingFormat == FORMAT_XML)
 			{
-
+				//#####
 				/*
 					SUCCESS:
 					<?xml version="1.0" encoding="UTF-8"?>
@@ -807,6 +826,7 @@ namespace ARK {
 			}
 			else if (m_usingFormat == FORMAT_XML)
 			{
+				// #####
 			/*	TiXmlDocument doc;
 				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
 
@@ -969,6 +989,27 @@ namespace ARK {
 				libJSON::Delete(root);
 
 			} else if (m_usingFormat == FORMAT_XML) {
+
+				vector<char> resultCopy = vector<char>(json.begin(), json.end());
+				resultCopy.push_back('\0');
+
+				xml_document<> xmldocument;
+				xmldocument.parse<0>((char*) &resultCopy[0]);
+
+				xml_node<>* responseNode = xmldocument.first_node("response");
+				xml_node<>* successNode = responseNode->first_node("success");
+                bool success = rapidxml_myutil<string, char>::rapidXmlUtil_value(successNode) == "true";
+				if (!success) {
+					xml_node<>* messageNode = xmldocument.first_node("message");
+					m_errorMessage = rapidxml_myutil<string, char>::rapidXmlUtil_value(messageNode);
+					logError(m_errorMessage);
+					return NULL;
+				}
+
+				xml_node<>* dataNode = responseNode->first_node("data");
+				valueStr = rapidxml_myutil<string, char>::rapidXmlUtil_value(dataNode);
+
+				//#####
 			/*	TiXmlDocument doc;
 				doc.Parse(json.c_str(), 0, TIXML_ENCODING_UTF8);
 

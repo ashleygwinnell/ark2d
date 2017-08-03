@@ -217,8 +217,13 @@ namespace ARK {
 			else
 			{ // Assume plain text.
 				String* arkstr = new String();
-				#if defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE)
-					RawDataReturns* rt = getRawData(ref);
+				#if defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
+					
+					#if defined(ARK2D_ANDROID) || defined(ARK2D_IPHONE)
+						RawDataReturns* rt = getRawData(ref);
+					#elif defined(ARK2D_MACINTOSH)
+						RawDataReturns* rt = getRawData(oldref);
+					#endif
 
 					//ARK2D::getLog()->v("pre contents: ");
 					//ARK2D::getLog()->v((char*) rt->data);
@@ -389,6 +394,22 @@ namespace ARK {
 
 				return StringUtil::file_exists(ref.c_str());
 
+			#elif defined(ARK2D_MACINTOSH)
+				bool sandbox = ARK2D::getContainer()->getPlatformSpecific()->isSandboxed();
+				if (sandbox) {
+
+					string resPath = ARK2D::getContainer()->getPlatformSpecific()->m_resourcePathSandbox;
+					string localRef = resPath + oldref;
+					ARK2D::getLog()->v(StringUtil::append("Does (Local) Resource Exist: ", localRef));
+
+					bool localExists = StringUtil::file_exists(localRef.c_str());
+					if (localExists) {
+						return true;
+					}
+
+				}
+
+
 			#elif defined(ARK2D_FLASCC)
 
 				// check if it exists in /local/ before anywhere else.
@@ -431,11 +452,8 @@ namespace ARK {
 				}
 
 				return false;
-
-
-			#else
-				return StringUtil::file_exists(oldref.c_str());
 			#endif
+			return StringUtil::file_exists(oldref.c_str());
 		}
 
 		void Resource::init() {
@@ -568,6 +586,23 @@ namespace ARK {
 					r = SystemUtil::file_get_contents_binary(ref);
 				}				
 
+				RawDataReturns* rt = new RawDataReturns();
+				rt->data = (void*) r.data;
+				rt->size = (int) r.len;
+				return rt;
+			#elif defined(ARK2D_MACINTOSH) 
+				// Check app sandbox first
+				bool sandbox = ARK2D::getContainer()->getPlatformSpecific()->isSandboxed();
+
+				file_get_contents_binary_result r;
+
+				string localRef = ARK2D::getContainer()->getPlatformSpecific()->m_resourcePathSandbox + ref;
+				if (sandbox && StringUtil::file_exists(localRef.c_str())) {
+					r = SystemUtil::file_get_contents_binary(localRef); 
+				}
+				else {
+					r = SystemUtil::file_get_contents_binary(ref);
+				}
 				RawDataReturns* rt = new RawDataReturns();
 				rt->data = (void*) r.data;
 				rt->size = (int) r.len;

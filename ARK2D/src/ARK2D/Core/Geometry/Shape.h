@@ -66,6 +66,7 @@ namespace ARK {
 
 					virtual void setLocation(T x, T y) = 0;
 					virtual void setLocationByCenter(T x, T y) = 0;
+					virtual void setLocationByCenter(Vector2<T> xy) = 0;
 					virtual void setLocationByAlignment(T x, T y, signed int alignX, signed int alignY) = 0;
 
 					virtual void setXByCenter(T x) = 0;

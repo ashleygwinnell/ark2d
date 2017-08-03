@@ -171,6 +171,9 @@ namespace ARK {
 							m_points.at(i).add(dx, dy);
 						}
 					}
+					virtual void setLocationByCenter(Vector2<T> xy) {
+                        setLocationByCenter(xy.getX(), xy.getY());
+                    }
 					virtual void setLocationByAlignment(T x, T y, signed int alignX, signed int alignY) {
 						//ARK2D::getLog()->w("Polygon::setLocationByAlignment not implemented");
 					}

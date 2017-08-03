@@ -515,6 +515,7 @@ namespace ARK {
 
                     void setDrawColor(string color);
                     void setDrawColor(string color, float alpha);
+                    void setDrawColor(uint32_t color);
                     void setDrawColor(unsigned int r, unsigned int g, unsigned int b, unsigned int a);
                     void setDrawColorf(float r, float g, float b, float a);
                     void setDrawColor(const Color& c);

@@ -846,6 +846,8 @@ namespace ARK {
 				texture_source_h(256.0f),
 				m_CenterX(0),
 				m_CenterY(0),
+				m_CenterPivotX(0.0f),
+				m_CenterPivotY(0.0f),
 				m_tl_corner_color(),
 				m_tr_corner_color(),
 				m_alpha(1.0f),
@@ -882,6 +884,8 @@ namespace ARK {
 				texture_source_h(256.0f),
 				m_CenterX(0),
 				m_CenterY(0),
+				m_CenterPivotX(0.0f),
+				m_CenterPivotY(0.0f),
 				m_tl_corner_color(),
 				m_tr_corner_color(),
 				m_alpha(1.0f),
@@ -926,6 +930,8 @@ namespace ARK {
 				texture_source_h(256.0f),
 				m_CenterX(0),
 				m_CenterY(0),
+				m_CenterPivotX(0.0f),
+				m_CenterPivotY(0.0f),
 				m_tl_corner_color(),
 				m_tr_corner_color(),
 				m_alpha(1.0f),
@@ -967,6 +973,8 @@ namespace ARK {
 				texture_source_h(256.0f),
 				m_CenterX(0),
 				m_CenterY(0),
+				m_CenterPivotX(0.0f),
+				m_CenterPivotY(0.0f),
 				m_tl_corner_color(),
 				m_tr_corner_color(),
 				m_alpha(1.0f),
@@ -1007,6 +1015,8 @@ namespace ARK {
 				texture_source_h(256.0f),
 				m_CenterX(0),
 				m_CenterY(0),
+				m_CenterPivotX(0.0f),
+				m_CenterPivotY(0.0f),
 				m_tl_corner_color(),
 				m_tr_corner_color(),
 				m_alpha(1.0f),
@@ -1048,6 +1058,8 @@ namespace ARK {
 				texture_source_h(256.0f),
 				m_CenterX(0),
 				m_CenterY(0),
+				m_CenterPivotX(0.0f),
+				m_CenterPivotY(0.0f),
 				m_tl_corner_color(),
 				m_tr_corner_color(),
 				m_alpha(1.0f),
@@ -1085,6 +1097,8 @@ namespace ARK {
 				texture_source_h(256.0f),
 				m_CenterX(0),
 				m_CenterY(0),
+				m_CenterPivotX(0.0f),
+				m_CenterPivotY(0.0f),
 				m_tl_corner_color(),
 				m_tr_corner_color(),
 				m_alpha(1.0f),
@@ -1161,6 +1175,15 @@ namespace ARK {
 			Image* Image::setCenterOfRotation(float x, float y) {
 				m_CenterX = x;
 				m_CenterY = y;
+				m_CenterPivotX = x / m_Width;
+				m_CenterPivotY = y / m_Height;
+				return this;
+			}
+			Image* Image::setCenterOfRotationRelative(float x, float y) {
+				m_CenterPivotX = x;
+				m_CenterPivotY = y;
+				m_CenterX = m_Width * m_CenterPivotX;
+				m_CenterY = m_Height * m_CenterPivotY;
 				return this;
 			}
 			void Image::setWidth(int w) {
@@ -1425,6 +1448,8 @@ namespace ARK {
 				sub->texture_source_h = texture_source_h;
 				sub->m_CenterX = m_CenterX;
 				sub->m_CenterY = m_CenterY;
+				sub->m_CenterPivotX = m_CenterPivotX;
+				sub->m_CenterPivotY = m_CenterPivotY;
 				sub->setWidth((int) m_Width);
 				sub->setHeight((int) m_Height);
 				sub->m_originalWidth = m_Width;
@@ -1727,7 +1752,7 @@ namespace ARK {
 					}
 
 					if (SceneNode::transform.rotation.angle() != 0) {
-						MathUtil::rotate3dQuadAroundPoint<float>(batch_rawVertices, x + m_CenterX, y + m_CenterY, SceneNode::transform.rotation.angle());
+						MathUtil::rotate3dQuadAroundPoint<float>(batch_rawVertices, x + (m_CenterPivotX*m_Width), y + (m_CenterPivotY*m_Height), SceneNode::transform.rotation.angle());
 					}
 
 					Renderer::getBatch()->addTexturedQuad(
@@ -1783,9 +1808,9 @@ namespace ARK {
 				if (SceneNode::transform.rotation.angle() != 0.0f) {
 					float angle = SceneNode::transform.rotation.angle();
 					Vector3<float> axis = SceneNode::transform.rotation.axis();
-					r->translate(x + m_CenterX, y + m_CenterY, z);
+					r->translate(x + (m_CenterPivotX*m_Width), y + (m_CenterPivotY*m_Height), z);
 					r->rotate(angle, axis.x, axis.y, axis.z);
-					r->translate((x + m_CenterX) * -1, (y + m_CenterY) * -1, -z);
+					r->translate((x + (m_CenterPivotX*m_Width)) * -1, (y + (m_CenterPivotY*m_Height)) * -1, -z);
 				}
 
 				//ARK2D::getLog()->v("temp: 3");
@@ -1957,9 +1982,9 @@ namespace ARK {
 				if (SceneNode::transform.rotation.angle() != 0.0f) {
 					float angle = SceneNode::transform.rotation.angle();
 					Vector3<float> axis = SceneNode::transform.rotation.axis();
-					r->translate(x + m_CenterX, y + m_CenterY, z);
+					r->translate(x + (m_CenterPivotX*m_Width), y + (m_CenterPivotY*m_Height), z);
 					r->rotate(angle*-1, axis.x, axis.y, axis.z);
-					r->translate((x + m_CenterX) * -1, (y + m_CenterY) * -1, -z);
+					r->translate((x + (m_CenterPivotX*m_Width)) * -1, (y + (m_CenterPivotY*m_Height)) * -1, -z);
 				}
 
 				RendererStats::s_tris += 2;
@@ -2060,13 +2085,13 @@ namespace ARK {
 				m_Width *= scalex;
 				m_Height *= scaley;
 
-				float oldCenterX = m_CenterX;
-				float oldCenterY = m_CenterY;
+				//float oldCenterX = m_CenterX;
+				//float oldCenterY = m_CenterY;
 
-				float oldCenterXpercentage = m_CenterX / oldw;
-				float oldCenterYpercentage = m_CenterY / oldh;
-				m_CenterX = m_Width * oldCenterXpercentage;
-				m_CenterY = m_Height * oldCenterYpercentage;
+				//float oldCenterXpercentage = m_CenterX / oldw;
+				//float oldCenterYpercentage = m_CenterY / oldh;
+				//m_CenterX = m_Width * oldCenterXpercentage;
+				//m_CenterY = m_Height * oldCenterYpercentage;
 
 				m_dirty = true;
 
@@ -2075,8 +2100,8 @@ namespace ARK {
 				m_Width = oldw;
 				m_Height = oldh;
 
-				m_CenterX = oldCenterX;
-				m_CenterY = oldCenterY;
+				//m_CenterX = oldCenterX;
+				//m_CenterY = oldCenterY;
 
 				clean();
 			}

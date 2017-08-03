@@ -39,6 +39,7 @@ namespace ARK {
 
                     AnimationFrameList();
                     vector<Image*>* getFrames();
+                    Image* getRandomFrame();
                     virtual ~AnimationFrameList();
             };
 

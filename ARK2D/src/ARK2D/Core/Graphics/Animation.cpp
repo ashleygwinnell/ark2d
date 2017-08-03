@@ -62,6 +62,9 @@ namespace ARK {
 			vector<Image*>* AnimationFrameList::getFrames() {
 				return &frames;
 			}
+			Image* AnimationFrameList::getRandomFrame() {
+				return frames.at(MathUtil::randBetween(0, frames.size()));
+			}
 			AnimationFrameList::~AnimationFrameList() {
 
 			}

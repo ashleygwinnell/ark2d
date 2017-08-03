@@ -40,6 +40,12 @@
 	#define DIRECTORY_SEPARATOR "/"
 #endif
 
+#ifdef ARK2D_EMSCRIPTEN_JS
+//#include <emscripten/bind.h>
+#include <emscripten.h>
+
+#endif
+
 
 
 namespace ARK {
@@ -96,7 +102,16 @@ namespace ARK {
 				ARK2D::getLog()->i(StringUtil::append("Making file: ", filename));
 
 				if (doPrependPlatform) {
-					filename = prependPlatform(filename);
+					#ifdef ARK2D_MACINTOSH
+						if (ARK2D::getContainer()->getPlatformSpecific()->isSandboxed()) {
+							filename = ARK2D::getContainer()->getPlatformSpecific()->m_resourcePathSandbox + filename;
+							createDirectoryForFile(filename);
+						} else {
+							filename = prependPlatform(filename);
+						}
+					#else 
+						filename = prependPlatform(filename);
+					#endif
 				}
 
 				ARK2D::getLog()->i(StringUtil::append("Making file: ", filename));
@@ -115,7 +130,17 @@ namespace ARK {
 
 			bool SystemUtil::file_put_contents(string filename, const char* data, unsigned int len)
 			{
-				filename = prependPlatform(filename);
+				#ifdef ARK2D_MACINTOSH
+					if (ARK2D::getContainer()->getPlatformSpecific()->isSandboxed()) {
+						filename = ARK2D::getContainer()->getPlatformSpecific()->m_resourcePathSandbox + filename;
+						createDirectoryForFile(filename);
+					} else {
+						filename = prependPlatform(filename);
+					}
+				#else 
+					filename = prependPlatform(filename);
+				#endif
+				
 
 				ARK2D::getLog()->i(StringUtil::append("Making file: ", filename));
 
@@ -261,8 +286,8 @@ namespace ARK {
 				return rt;
 
 			}
-			uint64_t SystemUtil::file_get_modifiedtime(string filename) {
-				filename = StringUtil::internalOSAppends(filename);
+			uint64_t SystemUtil::file_get_modifiedtime(string passedFilename) {
+				string filename = StringUtil::internalOSAppends(passedFilename);
 
 				file_get_contents_binary_result r;
 				
@@ -270,6 +295,13 @@ namespace ARK {
 					if (Resource::__iPhoneInternal_should_try_local_resource(filename) && 
 						Resource::__iPhoneInternal_local_resource_exists(filename)) {
 						filename = Resource::__iPhoneInternal_get_local_resource_path(filename);
+					} 
+				#elif defined(ARK2D_MACINTOSH)
+					if (ARK2D::getContainer()->getPlatformSpecific()->isSandboxed()) {
+						if (!Resource::exists(passedFilename, false)) {
+							return 0;
+						}
+						filename = ARK2D::getContainer()->getPlatformSpecific()->m_resourcePathSandbox + passedFilename;
 					} 
 				#endif
 
@@ -352,14 +384,19 @@ namespace ARK {
 				#endif
 				return "whoops?";
 			}
+			bool SystemUtil::createDirectoryForFile(string file) {
+				// Extract directory data from file.
+				string newfile = file.substr(0, file.rfind("/"));
+				return createDirectory(newfile);
+			}
 			bool SystemUtil::createDirectory(string directoryPath) {
-				#ifdef ARK2D_IPHONE
+				#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
 
 					NSString* filePathAndDirectory = [NSString stringWithCString:directoryPath.c_str() encoding:[NSString defaultCStringEncoding]];
 					NSError* error;
 
 					if (![[NSFileManager defaultManager] createDirectoryAtPath:filePathAndDirectory
-							withIntermediateDirectories:NO
+							withIntermediateDirectories:YES
 							attributes:nil
 							error:&error]) {
 						//NSLog(@"Create directory error: %@", error);
@@ -370,6 +407,7 @@ namespace ARK {
 				#endif
                 return false;
 			}
+
 
 			void SystemUtil::openBrowserToURL(string url_str) {
 				#if defined(ARK2D_WINDOWS)
@@ -437,6 +475,15 @@ namespace ARK {
 						ARK2D::getContainer()->getPlatformSpecific()->setFocus(false);
 						//#endif
 					}
+				#elif defined(ARK2D_EMSCRIPTEN_JS)
+					// using namespace emscripten;
+
+					 string s = string("window.open(\"");
+					 s += url_str;
+					 s += string("\")");
+
+					 emscripten_run_script(s.c_str());
+					
 
 				#endif
 			}

@@ -115,6 +115,12 @@ namespace ARK {
                 m_a = a;
             }
 
+            void Color::set(uint32_t c) {
+                m_r = unpackRed(c);
+                m_g = unpackGreen(c);
+                m_b = unpackBlue(c);
+                m_a = unpackAlpha(c);
+            }
 
             void Color::set(float r, float g, float b, float a) {
                 m_r = (unsigned int) (r * 255.0f);
@@ -149,6 +155,8 @@ namespace ARK {
                 strncpy(hex, &hexString[0], 1);
                 hex[1] = 0;
 
+                // #ff0077
+                // #ff0077ff
                 //std::cout << hex << " : " << hexString << std::endl;
                 if (strcmp(hex, "#") != 0) {
                     ErrorDialog::createAndShow("Color::Color(string) constructor's hex color must begin with a hash symbol.");
@@ -172,6 +180,14 @@ namespace ARK {
                 m_g = Cast::hextoint(&green[0]);
                 m_b = Cast::hextoint(&blue[0]);
                 m_a = 255;
+
+                if (hexString.length() > 7) {
+                    char alpha[3];
+                    strncpy(alpha, &hexString[7], 2);
+                    alpha[2] = 0;
+
+                    m_a = Cast::hextoint(&alpha[0]);
+                }
             }
 
             unsigned int Color::getRed() const {
@@ -265,6 +281,10 @@ namespace ARK {
                                             // This is how        r        g        b        a
                                             // are packed into one integer u.
                 return u;
+            }
+            uint32_t Color::pack(string hexString) {
+                Color c = Color(hexString);
+                return c.asInt();
             }
             unsigned char Color::unpackRed(uint32_t c) {
                 return (c >> 24) & 0xff;

@@ -875,18 +875,49 @@
                 //NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 
 				// Get location of current app bundle and make sure there's a resources path.
+					
+					
 					m_platformSpecific.m_resourcePath = [[[NSBundle mainBundle] resourcePath] fileSystemRepresentation];
 					m_platformSpecific.m_resourcePath += "/data/";
 					ARK2D::getLog()->i(StringUtil::append("Resource Path: ", m_platformSpecific.m_resourcePath));
+					
+					bool sandboxed = m_platformSpecific.isSandboxed();
+					{ 
+						//Create App directory if not exists:
+						NSFileManager* fileManager = [[NSFileManager alloc] init];
+						NSString* bundleID = [[NSBundle mainBundle] bundleIdentifier];
+						NSArray* urlPaths = [fileManager URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask];
+
+						NSURL* appDirectory = [[urlPaths objectAtIndex:0] URLByAppendingPathComponent:bundleID isDirectory:YES];
+                        NSURL* appDataDirectory = [appDirectory URLByAppendingPathComponent:@"data" isDirectory:YES];
+
+						//TODO: handle the error
+						if (![fileManager fileExistsAtPath:[appDirectory path]]) {
+						    [fileManager createDirectoryAtURL:appDirectory withIntermediateDirectories:NO attributes:nil error:nil];
+						}
+
+						m_platformSpecific.m_resourcePathSandbox = [[appDirectory path] UTF8String];
+						m_platformSpecific.m_resourcePathSandbox += "/data/";
+						ARK2D::getLog()->i(StringUtil::append("(Sandboxed) Resource Path: ", m_platformSpecific.m_resourcePathSandbox));
+
+						// create that dir too.
+                        if (![fileManager fileExistsAtPath:[appDataDirectory path]]) {
+						    [fileManager createDirectoryAtURL:appDataDirectory withIntermediateDirectories:NO attributes:nil error:nil];
+						}
+					}
+					
 
 					if (NSApp == nil) {
 						[NSApplication sharedApplication];
 						[NSApp finishLaunching];
 					}
 					if ([NSApp delegate] == nil) {
-						//[NSApp setDelegate:[[GameContainerMacAppDelegate alloc] init]];
+						m_platformSpecific.m_appDelegate = [[GameContainerMacAppDelegate alloc] init];
+						[NSApp setDelegate:m_platformSpecific.m_appDelegate];
 
 					}
+
+					ARK2D::getLog()->i(StringUtil::append("isSandboxed: ", m_platformSpecific.isSandboxed()));
 
 					NSRect screenRect = [[NSScreen mainScreen] frame];
 					m_screenWidth = screenRect.size.width;
@@ -1339,6 +1370,33 @@
 			bool ARK::Core::GameContainerPlatform::deinitOpenAL() {
 				// discard context and device
 				return true;
+			}
+			bool ARK::Core::GameContainerPlatform::isSandboxed() {
+				NSDictionary* environ = [[NSProcessInfo processInfo] environment];
+				BOOL inSandbox = (nil != [environ objectForKey:@"APP_SANDBOX_CONTAINER_ID"]);
+				return inSandbox;
+
+				/*
+				BOOL isSandboxed = NO;
+
+				SecStaticCodeRef staticCode = NULL;
+				NSURL *bundleURL = [[NSBundle mainBundle] bundleURL];
+
+				if (SecStaticCodeCreateWithPath((__bridge CFURLRef)bundleURL, kSecCSDefaultFlags, &staticCode) == errSecSuccess) {
+				    if (SecStaticCodeCheckValidityWithErrors(staticCode, kSecCSBasicValidateOnly, NULL, NULL) == errSecSuccess) {
+				        SecRequirementRef sandboxRequirement;
+				        if (SecRequirementCreateWithString(CFSTR("entitlement[\"com.apple.security.app-sandbox\"] exists"), kSecCSDefaultFlags,
+				                                       &sandboxRequirement) == errSecSuccess)
+				        {
+				            OSStatus codeCheckResult = SecStaticCodeCheckValidityWithErrors(staticCode, kSecCSBasicValidateOnly, sandboxRequirement, NULL);
+				            if (codeCheckResult == errSecSuccess) {
+				                isSandboxed = YES;
+				            }
+				        }
+				    }
+				    CFRelease(staticCode);
+				}
+				*/
 			}
 
 			int ARK::Core::GameContainer::getGlobalMouseX() const {

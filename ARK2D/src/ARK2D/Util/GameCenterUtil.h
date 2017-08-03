@@ -14,6 +14,8 @@
 #if defined(ARK2D_IPHONE)
 	#include "../Core/Platform/GameContainerIPhone.h"
  	#import <StoreKit/StoreKit.h>
+#elif defined(ARK2D_MACINTOSH)
+	#include "../Core/Platform/GameContainerAppleShared.h"
 #else
 	class GameCenterManager;
 #endif

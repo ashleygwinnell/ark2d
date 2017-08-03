@@ -11,7 +11,8 @@
 #include "../../Includes.h"
 #include "../../Common/DLL.h"
 #import "GameContainerIPhoneGLView.h"
-#import "GameContainerIPhoneCloudDocument.h"
+#import "GameContainerAppleCloudDocument.h"
+#import "GameContainerAppleShared.h"
 
 //#import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
@@ -38,15 +39,11 @@ class ARK2D_API iOSListener {
 
 }
 
--(void)loadData:(NSMetadataQuery *)query;
--(void)loadDocuments;
-
 @property (nonatomic, retain) IBOutlet UIWindow* window;
 @property (nonatomic, retain) IBOutlet GameContainerIPhoneGLViewController* glViewController;
-@property (strong) NSMetadataQuery* query;
+
 //@property (nonatomic, retain) IBOutlet GameContainerIPhoneGLView* glView;
-//@property (strong, nonatomic) IPhoneCloudDocument* document;
-@property (strong, nonatomic) NSMutableDictionary* iclouddocuments; // = [NSDictionary dictionary];
+@property (strong, nonatomic) GameICloudManager* icloud;
 
 @end
 

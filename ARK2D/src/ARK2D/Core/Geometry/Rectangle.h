@@ -93,6 +93,9 @@ namespace ARK {
                         m_x = x - (m_width/2);
                         m_y = y - (m_height/2);
                     }
+                    virtual void setLocationByCenter(Vector2<T> xy) {
+                        setLocationByCenter(xy.getX(), xy.getY());
+                    }
                     virtual void setLocationByAlignment(T x, T y, signed int alignX, signed int alignY) {
 
                         if (alignX == Renderer::ALIGN_CENTER) {

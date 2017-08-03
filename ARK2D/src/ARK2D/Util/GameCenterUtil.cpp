@@ -293,31 +293,42 @@ namespace ARK {
 
 		
 		GameCenterManager* GameCenterUtil::getManager() {
-			#if defined(ARK2D_IPHONE)
-				GameCenterManager* man = [ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate.glViewController getGameCenter];
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
+				#if defined(ARK2D_IPHONE)
+					GameCenterManager* man = [ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate.glViewController getGameCenter];
+				#elif defined(ARK2D_MACINTOSH)
+					GameCenterManager* man = [ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate gameCenterManager];
+				#endif
 
 				if (man == NULL) {
 					if([GameCenterManager isGameCenterAvailable])
 			        {
-			            GameContainerIPhoneGLViewController* glview = ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate.glViewController;
-			            glview.gameCenterManager = [[[GameCenterManager alloc] init] autorelease];
-			            [glview.gameCenterManager setDelegate: glview];
+			            #if defined(ARK2D_IPHONE)
+			            	GameContainerIPhoneGLViewController* glview = ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate.glViewController;
+			            	glview.gameCenterManager = [[[GameCenterManager alloc] init] autorelease];
+			            	[glview.gameCenterManager setDelegate: glview];
 
-			            man = glview.gameCenterManager;
+			            	man = glview.gameCenterManager;
+			            #elif defined(ARK2D_MACINTOSH)
+			            	GameContainerMacAppDelegate* appdelegate = ARK2D::getContainer()->getPlatformSpecific()->m_appDelegate;
+			            	appdelegate.gameCenterManager = [[[GameCenterManager alloc] init] autorelease];
+			            	[appdelegate.gameCenterManager setDelegate: appdelegate];
+
+			            	man = appdelegate.gameCenterManager;
+			            #endif
 			        }
 			        else
 			        {
 						ErrorDialog::createAndShow("Game Center Support Required: The current device does not support Game Center, which this game requires.");
 			        }
 				}
-
 				return man;
 			#endif
 			return NULL;
 
 		}
 		bool GameCenterUtil::isAvailable() {
-			#if defined(ARK2D_IPHONE)
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
 			 	GameCenterManager* manager = getManager();
 			 	if (manager == NULL) { ARK2D::getLog()->w("GameCenterManager is null."); return false; }
 
@@ -327,7 +338,7 @@ namespace ARK {
 			return false;
 		}
 		void GameCenterUtil::signIn() {
-			#if defined(ARK2D_IPHONE)
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
 				GameCenterManager* manager = getManager();
 			 	if (manager == NULL) { ARK2D::getLog()->w("GameCenterManager is null."); return; }
 
@@ -344,7 +355,7 @@ namespace ARK {
 		// }
 
 		bool GameCenterUtil::isSignedIn() {
-			#if defined(ARK2D_IPHONE)
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
 				GameCenterManager* manager = getManager();
 			 	if (manager == NULL) { ARK2D::getLog()->w("GameCenterManager is null."); return false; }
 
@@ -364,7 +375,7 @@ namespace ARK {
 		// }
 
 		void GameCenterUtil::viewAchievements() {
-			#if defined(ARK2D_IPHONE)
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
 				ARK2D::getLog()->v("GameCenter - viewAchievements");
 				GameCenterManager* manager = getManager();
 			 	if (manager == NULL) { ARK2D::getLog()->w("GameCenterManager is null."); return; }
@@ -373,7 +384,7 @@ namespace ARK {
 		}
 
 		void GameCenterUtil::unlockAchievement(string id) {
-			#if defined(ARK2D_IPHONE)
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
 				ARK2D::getLog()->v(StringUtil::append("GameCenter - unlockAchievement - ", id));
 				GameCenterManager* manager = getManager();
 			 	if (manager == NULL) { ARK2D::getLog()->w("GameCenterManager is null."); return; }
@@ -389,7 +400,7 @@ namespace ARK {
 		}
 
 		void GameCenterUtil::challengeAchievement(string id) {
-			#if defined(ARK2D_IPHONE)
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
 				ARK2D::getLog()->v(StringUtil::append("GameCenter - challengeAchievement - ", id));
 				GameCenterManager* manager = getManager();
 			 	if (manager == NULL) { ARK2D::getLog()->w("GameCenterManager is null."); return; }
@@ -405,7 +416,7 @@ namespace ARK {
 	 		viewAchievements();
 	 	}
 		void GameCenterUtil::submitScore(string id, int score) {
-			#if defined(ARK2D_IPHONE)
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
 				ARK2D::getLog()->v(StringUtil::append("GameCenter - submitScore - ", id));
 				GameCenterManager* manager = getManager();
 			 	if (manager == NULL) { ARK2D::getLog()->w("GameCenterManager is null."); return; }
@@ -417,7 +428,7 @@ namespace ARK {
 			#endif
 		}
 		void GameCenterUtil::challengeScore(string id, int score) {
-			#if defined(ARK2D_IPHONE)
+			#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
 				ARK2D::getLog()->v(StringUtil::append("GameCenter - challengeScore - ", id));
 				GameCenterManager* manager = getManager();
 			 	if (manager == NULL) { ARK2D::getLog()->w("GameCenterManager is null."); return; }

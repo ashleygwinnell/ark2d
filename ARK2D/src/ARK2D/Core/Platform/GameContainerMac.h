@@ -37,7 +37,9 @@
 						GameContainer* m_container;
 						NSWindow* m_window;
 						GameContainerMacWindowListener* m_listener;
+						GameContainerMacAppDelegate* m_appDelegate;
 						string m_resourcePath;
+						string m_resourcePathSandbox;
 						NSOpenGLContext* m_context;
 
 						// Gamepad vars
@@ -58,6 +60,8 @@
 						bool deinitOpenAL();
 
 						inline bool isRetina() { return false; } 
+
+						bool isSandboxed();
 
 					public:
 						void setBorderlessWindow(bool b);

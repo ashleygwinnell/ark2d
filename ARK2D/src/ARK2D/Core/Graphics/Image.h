@@ -81,6 +81,8 @@ namespace ARK {
 
                     float m_CenterX; // used for rotation
                     float m_CenterY;
+                    float m_CenterPivotX; // used for Rotation independent of scale
+                    float m_CenterPivotY; // used for Rotation independent of scale
 
                     Color m_tl_corner_color;
                     Color m_tr_corner_color;
@@ -155,6 +157,7 @@ namespace ARK {
                     void clean();
 
                     Image* setCenterOfRotation(float x, float y);
+                    Image* setCenterOfRotationRelative(float x, float y); /* Set anchor/pivot relative to width. e.g. 0,0 is topleft, 1,1 is bottomright. */
                     inline float getCenterOfRotationX() { return (float) m_CenterX; }
                     inline float getCenterOfRotationY() { return (float) m_CenterY; }
 

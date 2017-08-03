@@ -5149,6 +5149,9 @@ namespace ARK {
 					RendererStats::s_glCalls++;
 				#endif
 			}
+			void Renderer::setDrawColor(uint32_t color) {
+				m_DrawColor.set(color);
+			}
 			void Renderer::setDrawColorf(float r, float g, float b, float a) {
 				m_DrawColor.setRed((float) r);
 				m_DrawColor.setGreen((float) g);
@@ -5334,6 +5337,8 @@ namespace ARK {
 			}*/
 			void Renderer::drawScissorBoxes() {
 				GameContainer* container = ARK2D::getContainer();
+
+				//if (!container->isFullscreen()) { return; }
 
 				debugString("Renderer::drawScissorBoxes");
 

@@ -88,6 +88,10 @@ namespace ARK {
                         m_x = x;
                         m_y = y;
                     }
+                    virtual void setLocationByCenter(Vector2<T> xy) {
+                        m_x = xy.getX();
+                        m_y = xy.getY();
+                    }
 
                     virtual void setXByCenter(T x) {
                         m_x = x;

@@ -16,10 +16,10 @@
 using std::string;
 using std::vector;
 
-#if defined(ARK2D_IPHONE)
-	#include "../Core/Platform/GameContainerIPhone.h"
-//#else
-//	class GameCenterManager;
+#if defined(ARK2D_IPHONE) || defined(ARK2D_MACINTOSH)
+    #include "../Core/Platform/GameContainerAppleCloudDocument.h"
+#else
+    class AppleCloudDocument {};
 #endif
 
 namespace ARK {
@@ -39,12 +39,14 @@ namespace ARK {
 
 			public:
 				static vector<ICloudFile>* getFiles() { return s_iCloudFiles; }
+				static unsigned int countFiles();
 
 				static void addFile(string fname, string defaultcontents, bool create);
 				static void addFile(string fname, string defaultcontents, bool create, void* changefunction);
 				//static void setFile(string fname, string contents);
 				static void init();
 				static void push();
+				static void purge();
 				
 				static void setFileContents(string fname, string contents);
 				static void setFileContentsAndPushAsync(string fname, string contents);
@@ -57,8 +59,11 @@ namespace ARK {
 				static void _setFileContentsInternal(string fname, string contents);
 				static void _pushInternal();
 
+				static string _getICloudTempDir();
+
 			private: 
-				static IPhoneCloudDocument* _findFile(string filename);
+				static AppleCloudDocument* _findFile(string filename);
+				static bool _isEnabledInUserDefaults();
 
 			public:
 				static signed int s_remainingFiles;
