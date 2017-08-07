@@ -193,15 +193,17 @@
 float transformTouchPointX(float x) {
     GameContainer* container = ARK2D::getContainer();
     x *= [UIScreen mainScreen].scale;;
-    x /= container->getScale();
     x -= container->getTranslateX();
+    x /= container->getScale();
+    
     return x;
 }
 float transformTouchPointY(float y) {
     GameContainer* container = ARK2D::getContainer();
     y *= [UIScreen mainScreen].scale;
-    y /= container->getScale();
     y -= container->getTranslateY();
+    y /= container->getScale();
+    
     return y;
 }
 
@@ -259,7 +261,7 @@ float transformTouchPointY(float y) {
 				p.data = touch;
 				fingerID = in->addTouch(p);
 
-                ARK2D::getLog()->v("adding touch point");
+                //ARK2D::getLog()->v("adding touch point");
 			} else {
 				//already on the list.  Don't send this
 				ARK2D::getLog()->w(StringUtil::append("Ignoring touch ", fingerID));
@@ -310,7 +312,7 @@ float transformTouchPointY(float y) {
 				continue;
 			}
 
-            ARK2D::getLog()->v("touch moved");
+            //ARK2D::getLog()->v("touch moved");
 			CGPoint pt = [touch locationInView:self];
 			in->m_touchPointers[fingerID].x = transformTouchPointX(pt.x);
 			in->m_touchPointers[fingerID].y = transformTouchPointY(pt.y);
@@ -353,7 +355,7 @@ float transformTouchPointY(float y) {
 			int fingerID = in->getTouchByInternalData(touch);
 			if (fingerID != -1) {
 				in->removeTouch(fingerID);
-                ARK2D::getLog()->v("remove touch point");
+                //ARK2D::getLog()->v("remove touch point");
 			} else {
 				//wasn't on our list
 				continue;

@@ -1,6 +1,7 @@
 
 #include <jni.h>
 #include "ARK.h"
+#include <ARK2D/Core/Platform/GameContainerAndroid.h>
 
 #ifndef INCLUDED_TEST_PROJECT_H
 #define INCLUDED_TEST_PROJECT_H

@@ -19,6 +19,7 @@
   //  using namespace tr1;
 //#else
     #include <unordered_map>
+	#include <typeinfo>
 //#endif
 
 using namespace std;
