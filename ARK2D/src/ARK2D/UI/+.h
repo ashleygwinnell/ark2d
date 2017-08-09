@@ -20,3 +20,5 @@
 #include "Slider.h"
 #include "TitledPanel.h"
 #include "LogViewer.h"
+#include "Util/SwipePageSelector.h"
+#include "Util/VerticalScrollArea.h"

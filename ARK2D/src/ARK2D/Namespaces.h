@@ -290,6 +290,12 @@ namespace ARK {
 		class SplitPane;
         class TitledPanel;
         class LogViewer;
+
+        //! Util UI classes that aren't strictly UI components.
+        namespace Util { 
+        	class SwipePageSelector;
+        	class VerticalScrollArea;
+        }
 	}
 	//! Contains miscellaneous classes for mathematical functions, logging, etc.
 	namespace Util {
@@ -345,6 +351,7 @@ using namespace ARK::Particles;
 using namespace ARK::Spine;
 
 using namespace ARK::UI;
+using namespace ARK::UI::Util;
 using namespace ARK::Util;
 //using namespace ARK::Util::Containers;
 
