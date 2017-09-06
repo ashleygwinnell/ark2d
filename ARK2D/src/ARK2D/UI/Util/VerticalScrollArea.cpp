@@ -40,8 +40,13 @@ namespace ARK {
 			{
 
 			}
+			void VerticalScrollArea::setInnerHeight(float height) {
+				m_actualInnerHeight = height;
+    			m_innerHeight = m_actualInnerHeight - m_height;
+			}
 			void VerticalScrollArea::recalculateHeight() {
 				// do nothing. static height.
+				m_innerHeight = m_actualInnerHeight - m_height;
 			}
 			void VerticalScrollArea::update() {
 				GameTimer* timer = ARK2D::getContainer()->getTimer();
@@ -159,7 +164,7 @@ namespace ARK {
 					m_dragging = false;
 					m_scrollYReleased = -100;
 				}
-				return false;
+				return true;
 			}
 
 			bool VerticalScrollArea::keyReleased(unsigned int key) {

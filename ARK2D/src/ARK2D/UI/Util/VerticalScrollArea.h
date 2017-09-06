@@ -51,6 +51,7 @@ namespace ARK {
 					bool m_scissoring;
 
 					VerticalScrollArea();
+					virtual void setInnerHeight(float height);
 					virtual void recalculateHeight();
 					virtual void update();
 
