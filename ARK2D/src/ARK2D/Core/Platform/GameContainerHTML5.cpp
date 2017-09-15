@@ -7,7 +7,7 @@
 
 
 
-#ifdef ARK2D_EMSCRIPTEN_JS 
+#ifdef ARK2D_EMSCRIPTEN_JS
 
 	#include  <X11/Xlib.h>
 	#include  <X11/Xatom.h>
@@ -25,7 +25,7 @@
 #include <emscripten/html5.h>
 
 #include <SDL.h>
-			
+
 			extern "C" void EMSCRIPTEN_KEEPALIVE emscripten_containerSetSize(int width, int height, int doCallback) {
 				GameContainer* container = ARK2D::getContainer();
 				container->setSize(width, height, (doCallback==1));
@@ -282,7 +282,7 @@
 			}
 
 			void ARK::Core::GameContainer::initGamepads() {
-				 
+
 
 
 				 EM_ASM({
@@ -317,10 +317,10 @@
 					}
 
 					function myGetGamepads() {
-						return navigator.getGamepads 
-							? navigator.getGamepads() 
-							: (navigator.webkitGetGamepads 
-								? navigator.webkitGetGamepads : 
+						return navigator.getGamepads
+							? navigator.getGamepads()
+							: (navigator.webkitGetGamepads
+								? navigator.webkitGetGamepads :
 								[]
 							);
 					}
@@ -356,7 +356,7 @@
 
 		                    _free(cid);
 						}
-						
+
 						//pad.connected;
 						//pad.mapping == "standard"
 					}
@@ -581,7 +581,20 @@
 
 			void ARK::Core::GameContainer::start() {
 
+				// Read get/post vars
+				EM_ASM({
+					var url = window.location;
 
+					var httpGetVars = {},
+					var args = window.location.search.substr(1).split(/&/);
+					for (var i = 0; i < args.length; ++i) {
+					    var tmp = args[i].split(/=/);
+					    if (tmp[0] != "") {
+					        httpGetVars[decodeURIComponent(tmp[0])] = decodeURIComponent(tmp.slice(1).join("").replace("+", " "));
+					    }
+					}
+
+				});
 
 				// seed the random
 				Random::init();
@@ -594,11 +607,11 @@
 					return screen.height;
 				});
 
-				
+
 				int r;
 				r = emscripten_set_keydown_callback("#window", 0, 1, keydown_callback);
 				if (r != EMSCRIPTEN_RESULT_SUCCESS) { ARK2D::getLog()->e(StringUtil::append("could not emscripten_set_keydown_callback", r)); }
-				
+
 				r = emscripten_set_keyup_callback("#window", 0, 1, keyup_callback);
 				if (r != EMSCRIPTEN_RESULT_SUCCESS) { ARK2D::getLog()->e(StringUtil::append("could not emscripten_set_keyup_callback", r)); }
 
@@ -727,7 +740,7 @@
 							newHeight = window.innerHeight;
 							newWidth = cs.height * ratio;
 						}
-						
+
 						 Module.ccall('emscripten_containerSetSize', // name of C function
 		                        null, // void return type
 		                        [ 'number', 'number', 'number' ], // argument types,

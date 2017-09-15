@@ -48,6 +48,112 @@ void ScriptComponent::update() {
 
 }
 
+AngelScriptGame* AngelScriptGame::createFromFile(string scriptFile) {
+	AngelScriptGame* game = new AngelScriptGame();
+	game->m_module = "AngelScriptGame";
+	game->m_file = scriptFile;
+	game->_initFromFile();
+	return game;
+}
+
+AngelScriptGame* AngelScriptGame::createFromFile(string scriptFile, string moduleName) {
+	AngelScriptGame* game = new AngelScriptGame();
+	game->m_module = moduleName;
+	game->m_file = scriptFile;
+	game->_initFromFile();
+	return game;
+}
+
+AngelScriptGame* AngelScriptGame::createFromString(string contents) {
+	AngelScriptGame* game = new AngelScriptGame();
+	game->m_module = "AngelScriptGame";
+	game->m_file = "game.as";
+	game->_initFromMemory(contents);
+	return game;
+}
+
+AngelScriptGame* AngelScriptGame::createFromString(string contents, string moduleName) {
+	AngelScriptGame* game = new AngelScriptGame();
+	game->m_module = moduleName;
+	game->m_file = "game.as";
+	game->_initFromMemory(contents);
+	return game;
+}
+
+
+AngelScriptGame::AngelScriptGame() {
+
+}
+
+void AngelScriptGame::_initFromMemory(string scriptContents)
+{
+	//AngelScriptUtil::restart();
+    asIScriptEngine* engine = AngelScriptUtil::getEngine();
+
+    int r = 0;
+   	CScriptBuilder builder;
+	r = builder.StartNewModule(engine, m_module.c_str());
+	AngelScriptUtil_assert(r);
+
+	builder.SetIncludeCallback(AngelScriptUtil_IncludeCallback, NULL);
+
+	// bindings
+	//r = engine->RegisterObjectType("DefaultGame", 0, asOBJ_REF | asOBJ_NOCOUNT); AngelScriptUtil_assert(r);
+
+	r = builder.AddSectionFromMemory(m_file.c_str(), scriptContents.c_str());
+	AngelScriptUtil_assert(r);
+
+	r = builder.BuildModule();
+	AngelScriptUtil_assert(r);
+}
+
+void AngelScriptGame::_initFromFile()
+{
+	string scriptContents = Resource::get(m_file)->asString()->getc();
+	_initFromMemory(scriptContents);
+}
+void AngelScriptGame::init() {
+	//AngelScriptEngine* e = AngelScriptUtil::getEngine();
+    //AngelScriptUtil::compileAndRunOnce("ark2d", "hi.as", "void init()");
+
+    asIScriptEngine* engine = AngelScriptUtil::getEngine();
+	asIScriptModule* mod = engine->GetModule(m_module.c_str());
+	asIScriptFunction* func = mod->GetFunctionByDecl("void Game::init()");
+	AngelScriptUtil_functionCheck(func, "void Game::init()");
+
+	asIScriptContext *ctx = engine->CreateContext();
+	ctx->Prepare(func);
+	int r = ctx->Execute();
+	AngelScriptUtil_execeptionCheck(ctx, func, r);
+	ctx->Release();
+}
+void AngelScriptGame::update() {
+	asIScriptEngine* engine = AngelScriptUtil::getEngine();
+	asIScriptModule* mod = engine->GetModule(m_module.c_str());
+	asIScriptFunction* func = mod->GetFunctionByDecl("void Game::update(Timer@)");
+	AngelScriptUtil_functionCheck(func, "void Game::update(Timer@)");
+
+	asIScriptContext *ctx = engine->CreateContext();
+	ctx->Prepare(func);
+	ctx->SetArgObject(0, ARK2D::getTimer());
+	int r = ctx->Execute();
+	AngelScriptUtil_execeptionCheck(ctx, func, r);
+	ctx->Release();
+}
+void AngelScriptGame::render() {
+	asIScriptEngine* engine = AngelScriptUtil::getEngine();
+	asIScriptModule* mod = engine->GetModule(m_module.c_str());
+	asIScriptFunction* func = mod->GetFunctionByDecl("void Game::render(Renderer@)");
+	AngelScriptUtil_functionCheck(func, "void Game::render(Renderer@)");
+
+	asIScriptContext *ctx = engine->CreateContext();
+	ctx->Prepare(func);
+	ctx->SetArgObject(0, ARK2D::getRenderer());
+	int r = ctx->Execute();
+	AngelScriptUtil_execeptionCheck(ctx, func, r);
+	ctx->Release();
+}
+
 
 void AngelScriptUtil_MessageCallback(const asSMessageInfo* msg, void *param) {
 	//ARK2D::getLog()->e(msg->message);

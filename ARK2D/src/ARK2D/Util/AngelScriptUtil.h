@@ -27,6 +27,28 @@ namespace ARK {
 				virtual void update();
 		};
 
+
+		class ARK2D_API AngelScriptGame {
+			public:
+				static AngelScriptGame* createFromFile(string scriptFile);
+				static AngelScriptGame* createFromFile(string scriptFile, string moduleName);
+				static AngelScriptGame* createFromString(string contents);
+				static AngelScriptGame* createFromString(string contents, string moduleName);
+
+			public:
+				string m_module;
+				string m_file;
+			public:
+				AngelScriptGame();
+				void init();
+				void update();
+				void render();
+
+			private:
+				void _initFromFile();
+				void _initFromMemory(string s);
+		};
+
 		class ARK2D_API AngelScriptUtil {
 			public:
 		        static asIScriptEngine* s_engine;
