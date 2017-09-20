@@ -590,9 +590,20 @@
 					for (var i = 0; i < args.length; ++i) {
 					    var tmp = args[i].split(/=/);
 					    if (tmp[0] != "") {
-					        httpGetVars[decodeURIComponent(tmp[0])] = decodeURIComponent(tmp.slice(1).join("").replace("+", " "));
+					    	var key = decodeURIComponent(tmp[0]);
+					    	var value = decodeURIComponent(tmp.slice(1).join("").replace("+", " "));;
+					        httpGetVars[key] = value;
+
+					        Module.ccall('emscripten_html5helper_addHttpGetVar', // name of C function
+		                        null, // void return type
+		                        [ 'string', 'string' ], // argument types,
+		                        [ key, value ] //, // arguments
+		                        //{ async:true } // optional options
+		                    );
 					    }
 					}
+
+
 
 				});
 
@@ -741,7 +752,7 @@
 							newWidth = cs.height * ratio;
 						}
 
-						 Module.ccall('emscripten_containerSetSize', // name of C function
+						Module.ccall('emscripten_containerSetSize', // name of C function
 		                        null, // void return type
 		                        [ 'number', 'number', 'number' ], // argument types,
 		                        [ newWidth, newHeight, 1 ] //, // arguments

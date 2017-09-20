@@ -48,6 +48,37 @@ void ScriptComponent::update() {
 
 }
 
+#ifdef ARK2D_EMSCRIPTEN_JS
+	extern "C" void EMSCRIPTEN_KEEPALIVE emscripten_html5helper_addHttpGetVar(char* key, char* value) {
+		ARK2D::getLog()->w("emscripten_html5helper_addHttpGetVar");
+		HTML5Helper::s_vars->insert(std::pair<string,string>(string(key), string(value)));
+	}
+#endif
+
+map<string, string>* HTML5Helper::s_vars = new map<string, string>();
+
+string HTML5Helper::getElementByIdContents(string id)
+{
+	return "";
+}
+void HTML5Helper::setElementByIdContents(string id, string contents)
+{
+
+}
+map<string, string>* HTML5Helper::getHTTPVars()
+{
+	return s_vars;
+}
+bool HTML5Helper::hasHTTPVar(string key)
+{
+	return s_vars->find(key) != s_vars->end();
+}
+string HTML5Helper::getHTTPVar(string key)
+{
+	return s_vars->find(key)->second;
+}
+
+
 AngelScriptGame* AngelScriptGame::createFromFile(string scriptFile) {
 	AngelScriptGame* game = new AngelScriptGame();
 	game->m_module = "AngelScriptGame";
