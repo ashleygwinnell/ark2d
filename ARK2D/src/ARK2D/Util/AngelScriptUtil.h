@@ -15,8 +15,25 @@
 #include "../Core/GameObject.h"
 #include "../Core/Controls/ErrorDialog.h"
 
+#ifdef ARK2D_EMSCRIPTEN_JS
+ 	#include <emscripten.h>
+	extern "C" void EMSCRIPTEN_KEEPALIVE emscripten_html5helper_addHttpGetVar(char* key, char* value);
+#endif
+
 namespace ARK {
 	namespace Util {
+
+		class ARK2D_API HTML5Helper {
+			public:
+				static map<string, string>* s_vars;
+
+				static string getElementByIdContents(string id);
+				static void setElementByIdContents(string id, string contents);
+				static map<string, string>* getHTTPVars();
+
+				static bool hasHTTPVar(string key);
+				static string getHTTPVar(string key);
+		};
 
         class ARK2D_API ScriptComponent : public ARK::Core::GameComponent {
 			public:
