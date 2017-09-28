@@ -18,6 +18,7 @@
 #ifdef ARK2D_EMSCRIPTEN_JS
  	#include <emscripten.h>
 	extern "C" void EMSCRIPTEN_KEEPALIVE emscripten_html5helper_addHttpGetVar(char* key, char* value);
+	extern "C" void EMSCRIPTEN_KEEPALIVE AngelScriptUtil_MessageCallback(const asSMessageInfo* msg, void *param);
 #endif
 
 namespace ARK {

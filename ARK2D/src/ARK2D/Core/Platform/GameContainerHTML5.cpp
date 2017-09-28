@@ -585,7 +585,7 @@
 				EM_ASM({
 					var url = window.location;
 
-					var httpGetVars = {},
+					var httpGetVars = {};
 					var args = window.location.search.substr(1).split(/&/);
 					for (var i = 0; i < args.length; ++i) {
 					    var tmp = args[i].split(/=/);

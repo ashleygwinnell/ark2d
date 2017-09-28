@@ -386,9 +386,21 @@ asIScriptEngine* AngelScriptUtil::getEngine() {
 
 		// Create the script engine
 		s_engine = asCreateScriptEngine(ANGELSCRIPT_VERSION);
+		ARK2D::getLog()->e("1");
 
 		// Set the message callback to receive information on errors in human readable form.
-		int r = s_engine->SetMessageCallback(asFUNCTION(AngelScriptUtil_MessageCallback), 0, asCALL_CDECL); assert( r >= 0 );
+		const asSFuncPtr callback = asFUNCTION(AngelScriptUtil_MessageCallback);
+		//ARK2D::getLog()->e(callback);
+
+		int r = s_engine->SetMessageCallback(callback, 0, asCALL_CDECL); 
+		if (r == asINVALID_ARG) {
+			ARK2D::getLog()->e("asINVALID_ARG");
+		} else if (r == asNOT_SUPPORTED) {
+			ARK2D::getLog()->e("asNOT_SUPPORTED");
+		}
+		assert(r >= 0);
+
+		ARK2D::getLog()->e("2");
 
 		// AngelScript doesn't have a built-in string type, as there is no definite standard
 		// string type for C++ applications. Every developer is free to register it's own string type.
@@ -397,14 +409,17 @@ asIScriptEngine* AngelScriptUtil::getEngine() {
 		RegisterStdString(s_engine);
 
 		// Logging
+		ARK2D::getLog()->e("Registering Logging functions...");
 		r = s_engine->RegisterGlobalFunction("void print(const string &in)", asFUNCTION(AngelScriptUtil_Print), asCALL_CDECL); assert( r >= 0 );
 		r = s_engine->RegisterGlobalFunction("void print(uint val)", asFUNCTION(AngelScriptUtil_Print_UINT), asCALL_CDECL); assert( r >= 0 );
 
 		// Resource loading
+		ARK2D::getLog()->e("Registering Resource functions...");
 		r = s_engine->RegisterObjectType("Resource", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Resource", "Resource@ opAssign(Resource@ &in)", asMETHOD(Resource, operator=), asCALL_THISCALL); assert( r >= 0 );
 
 		// Image resource
+		ARK2D::getLog()->e("Registering Image functions...");
 		r = s_engine->RegisterObjectType("Image", 0, asOBJ_REF | asOBJ_NOCOUNT); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Resource", "Image@ asImage()", asMETHOD(Resource, asImage), asCALL_THISCALL); assert( r >= 0 );
 		r = s_engine->RegisterObjectMethod("Image", "int getWidth()", asMETHOD(Image, getWidth), asCALL_THISCALL); assert( r >= 0 );
@@ -612,6 +627,7 @@ asIScriptEngine* AngelScriptUtil::getEngine() {
 		r = s_engine->RegisterGlobalFunction("Input@ getInput()", asFUNCTIONPR(ARK2D::getInput, (void), Input*), asCALL_CDECL); assert( r >= 0 );
 		r = s_engine->RegisterGlobalFunction("void error(const string)", asFUNCTIONPR(ErrorDialog::createAndShow, (string), void), asCALL_CDECL); assert( r >= 0 );
 
+		ARK2D::getLog()->e("Done!");
 	}
 	return s_engine;
 

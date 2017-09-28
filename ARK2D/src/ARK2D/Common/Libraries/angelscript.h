@@ -8,7 +8,11 @@
 	#endif
 #endif
 
-#include "../../vendor/angelscript/angelscript.h"
+#ifdef ARK2D_EMSCRIPTEN
+	#include "../../vendor/angelscript/angelscript-2.31.2.h"
+#else
+	#include "../../vendor/angelscript/angelscript.h"
+#endif
 #include "../../vendor/angelscript/add_on/scriptstdstring/scriptstdstring.h"
 #include "../../vendor/angelscript/add_on/scriptarray/scriptarray.h"
 #include "../../vendor/angelscript/add_on/scriptbuilder/scriptbuilder.h"
