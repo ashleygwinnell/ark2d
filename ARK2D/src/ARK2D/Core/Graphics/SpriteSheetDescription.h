@@ -12,6 +12,7 @@
 #include "SpriteSheetDescriptionItem.h"
 
 #include <string>
+#include <vector>
 #include <map>
 using namespace std;
 
@@ -31,6 +32,7 @@ namespace ARK {
                     SpriteSheetDescription(string path, void* rawData);
                     const SpriteSheetDescriptionItem& getItemByName(const char* name) const;
                     bool hasItemByName(const char* name) const;
+                    const vector<string>& keys() const;
                     ~SpriteSheetDescription();
 
                 private:
@@ -38,6 +40,9 @@ namespace ARK {
                     string m_data;
                     map<string, SpriteSheetDescriptionItem> m_items;
                     void load();
+
+                    vector<string> m_keys;
+                    
             };
         }
 	}

@@ -17,11 +17,20 @@ namespace ARK {
     namespace Core {
         namespace Graphics {
 
-            SpriteSheetDescription::SpriteSheetDescription(string path): ARK::Core::Resource(), m_path(path) {
+            SpriteSheetDescription::SpriteSheetDescription(string path): 
+                ARK::Core::Resource(), 
+                m_path(path),
+                m_keys() 
+            {
                 m_data = StringUtil::file_get_contents(path.c_str());
                 load();
             }
-            SpriteSheetDescription::SpriteSheetDescription(string path, void* rawData): ARK::Core::Resource(), m_path(path) {
+
+            SpriteSheetDescription::SpriteSheetDescription(string path, void* rawData): 
+                ARK::Core::Resource(), 
+                m_path(path),
+                m_keys() 
+            {
                 m_data = string((const char*) rawData);
                 load();
             }
@@ -56,7 +65,7 @@ namespace ARK {
                                 it.setRotated(true);
                             }
                         }
-
+                        m_keys.push_back(it.getName());
                         m_items[string(it.getName())] = it;
                     }
 
@@ -186,6 +195,10 @@ namespace ARK {
                     return true;
                 }
                 return false;
+            }
+
+            const vector<string>& SpriteSheetDescription::keys() const {
+                return m_keys;
             }
 
             SpriteSheetDescription::~SpriteSheetDescription() {
