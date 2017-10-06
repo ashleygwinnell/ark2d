@@ -1,0 +1,26 @@
+#version 150
+						
+uniform mat4 ark_ModelMatrix;
+uniform mat4 ark_ViewMatrix;
+uniform mat4 ark_ProjectionMatrix;
+
+uniform mat3 ark_NormalMatrix;
+
+uniform vec2 grain_Resolution; // iResolution
+uniform float grain_Time; // iTime
+uniform float grain_Strength; // 0.0 - ~0.2 - 1.0
+						
+in vec4 ark_VertexPositionIn;
+in vec2 ark_VertexTexCoordIn;
+in vec4 ark_VertexNormalIn;
+in vec4 ark_VertexColorIn;
+						
+out vec2 ark_VertexTexCoordOut;
+out vec4 ark_VertexColorOut;
+
+void main(void)
+{
+	ark_VertexTexCoordOut = ark_VertexTexCoordIn;
+	ark_VertexColorOut = ark_VertexColorIn;
+	gl_Position = ark_ProjectionMatrix * ark_ViewMatrix * ark_ModelMatrix * ark_VertexPositionIn;
+}

@@ -133,6 +133,7 @@
 				"src/ARK2D/Core/Graphics/Shaders/DirectionalLightingShader.cpp",
 				"src/ARK2D/Core/Graphics/Shaders/HSVShader.cpp",
 				"src/ARK2D/Core/Graphics/Shaders/ShockwaveShader.cpp",
+				"src/ARK2D/Core/Graphics/Shaders/GrainShader.cpp",
 				"src/ARK2D/Core/Graphics/Shaders/PointLightingShader.cpp",
 				"src/ARK2D/Core/Graphics/Shaders/StencilShader.cpp",
 				"src/ARK2D/Core/Graphics/Skybox.cpp",
@@ -236,12 +237,12 @@
 				"src/ARK2D/vendor/angelscript/add_on/scriptbuilder/scriptbuilder.cpp"
 			],
 			"dependencies": [
+				"GameKit.framework",
 				"Cocoa.framework",
 				"CoreFoundation.framework",
 				"IOKit.framework",
 				"QuartzCore.framework",
 				"OpenGL.framework",
-				"QTKit.framework",
 				"OpenAL.framework"
 			]
 		},
@@ -501,6 +502,7 @@
 			"src/ARK2D/Core/Graphics/Shaders/DirectionalLightingShader.cpp",
 			"src/ARK2D/Core/Graphics/Shaders/HSVShader.cpp",
 			"src/ARK2D/Core/Graphics/Shaders/ShockwaveShader.cpp",
+			"src/ARK2D/Core/Graphics/Shaders/GrainShader.cpp",
 			"src/ARK2D/Core/Graphics/Shaders/PointLightingShader.cpp",
 			"src/ARK2D/Core/Graphics/Shaders/StencilShader.cpp",
 			"src/ARK2D/Core/Graphics/Skybox.cpp",
