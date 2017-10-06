@@ -4,6 +4,7 @@
  *  Created on: 06 Oct 2017
  *      Author: Ashley
  * 
+ * Author:              https://medium.com/@mattdesl/filmic-effects-for-webgl-9dab4bc899dc
  * CC:                  https://github.com/mattdesl/filmic-gl
  * Shadertoy version:   https://www.shadertoy.com/view/Mly3Rw
  */
