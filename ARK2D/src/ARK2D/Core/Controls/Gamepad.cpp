@@ -715,6 +715,24 @@ namespace ARK {
 				}
 				return 0.0f;
 			}
+			float Gamepad::getStickDistance(unsigned int stickId) {
+				float x = (stickId == ANALOG_STICK_LEFT)
+					? getAxisValue(ANALOG_STICK_1_X)
+					: getAxisValue(ANALOG_STICK_2_X);
+				float y = (stickId == ANALOG_STICK_LEFT)
+					? getAxisValue(ANALOG_STICK_1_Y)
+					: getAxisValue(ANALOG_STICK_2_Y);
+				return MathUtil::distance(0.0f, 0.0f, x, y);
+			}
+			float Gamepad::getStickAngle(unsigned int stickId) {
+				float x = (stickId == ANALOG_STICK_LEFT)
+					? getAxisValue(ANALOG_STICK_1_X)
+					: getAxisValue(ANALOG_STICK_2_X);
+				float y = (stickId == ANALOG_STICK_LEFT)
+					? getAxisValue(ANALOG_STICK_1_Y)
+					: getAxisValue(ANALOG_STICK_2_Y);
+				return MathUtil::anglef(0.0f, 0.0f, x, y);
+			}
 
 			GamepadMapping* Gamepad::getMapping() {
 				unsigned int len = s_gamepadMapping->size();

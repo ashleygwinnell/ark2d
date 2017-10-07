@@ -739,6 +739,13 @@ namespace ARK {
 				r->drawString("BACKSPACE TO GO BACK", 30, container->getHeight() - 30, Renderer::ALIGN_LEFT, Renderer::ALIGN_BOTTOM, 0.0f, 2.0f);
 			}
 
+			#ifdef ARK2D_MACINTOSH
+				if (container->getPlatformSpecific()->isSandboxed()) {
+					r->drawString("GAMEPADS DO NOT WORK IN MACOS SANDBOX", container->getWidth()*0.5f, container->getHeight() * 0.5f, Renderer::ALIGN_CENTER, Renderer::ALIGN_BOTTOM, 0.0f, 3.0f);
+					r->drawString(":(", container->getWidth()*0.5f, container->getHeight() * 0.6f, Renderer::ALIGN_CENTER, Renderer::ALIGN_CENTER, 90.0f, 7.0f);
+				}
+			#endif
+
             renderChildren();
 		}
 

@@ -122,6 +122,9 @@ namespace ARK {
 					static const unsigned int TRIGGER_1 = 4;
 					static const unsigned int TRIGGER_2 = 5;
 
+					static const unsigned int ANALOG_STICK_LEFT = 0;
+					static const unsigned int ANALOG_STICK_RIGHT = 1;
+
 
 					static const unsigned int BUTTON_A = 0;
 					static const unsigned int BUTTON_B = 1;
@@ -264,6 +267,9 @@ namespace ARK {
 					bool isAxis(unsigned int axisId);
 					GamepadAxis* getAxis(unsigned int axisId);
 					float getAxisValue(unsigned int axisId);
+
+					float getStickDistance(unsigned int stickId);
+					float getStickAngle(unsigned int stickId);
 
 					static unsigned int convertButtonToId(Gamepad* gamepad, unsigned int button, bool printInfo = true);
 					//static unsigned int convertIdToButton(Gamepad* gamepad, unsigned int id);
