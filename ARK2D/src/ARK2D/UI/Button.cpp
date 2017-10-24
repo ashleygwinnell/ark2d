@@ -60,6 +60,10 @@ namespace ARK {
 
 					//ARK2D::getLog()->e("set state to down");
 			}
+			if (key == Input::KEY_ENTER && m_focussed) {
+				doEvent(); 
+				return true;
+			}
             return false;
 		}
 

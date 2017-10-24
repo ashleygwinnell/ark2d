@@ -362,6 +362,7 @@
 		"util": {
 			"root": "src/ARK2D/Util/",
 			"sources": [
+				"src/ARK2D/Util/LocalMultiplayer/Scoreboard.cpp",
 				"src/ARK2D/Util/AnalyticsUtil.cpp",
 				"src/ARK2D/Util/AngelScriptUtil.cpp",
 				"src/ARK2D/Util/ArcadeHighscoreInput.cpp",
@@ -644,6 +645,7 @@
 			"src/ARK2D/UI/Util/SwipePageSelector.cpp",
 			"src/ARK2D/UI/Util/VerticalScrollArea.cpp",
 
+			"src/ARK2D/Util/LocalMultiplayer/Scoreboard.cpp",
 			"src/ARK2D/Util/AnalyticsUtil.cpp",
 			"src/ARK2D/Util/AngelScriptUtil.cpp",
 			"src/ARK2D/Util/ArcadeHighscoreInput.cpp",

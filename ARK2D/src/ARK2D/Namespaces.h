@@ -299,6 +299,11 @@ namespace ARK {
 	}
 	//! Contains miscellaneous classes for mathematical functions, logging, etc.
 	namespace Util {
+		namespace LocalMultiplayer {
+			class Scoreboard;
+			class ScoreboardScoreChange;
+		}
+		
 		class AngelScriptUtil;
 		class AnalyticsUtil;
 		class GooglePlayGameServicesUtil;
@@ -353,6 +358,7 @@ using namespace ARK::Spine;
 using namespace ARK::UI;
 using namespace ARK::UI::Util;
 using namespace ARK::Util;
+using namespace ARK::Util::LocalMultiplayer;
 //using namespace ARK::Util::Containers;
 
 #endif /* ARK2D_NAMESPACES_H_ */

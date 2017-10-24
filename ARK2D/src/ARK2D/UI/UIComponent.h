@@ -23,7 +23,7 @@ namespace ARK {
 		class ARK2D_API UIComponent {
 			public:
 				static UIComponent* s_currentFocus;
-			private:
+			protected:
 				bool m_focussed;
 
 			public:

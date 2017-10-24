@@ -64,12 +64,13 @@ namespace ARK {
 				void start();
 				void start(float magnitude);
 				void setSpeedMultiplier(float f);
-				bool isShaking();
+				bool isShaking(); 
 				void setXOffset(float x);
 				void setYOffset(float y);
 				float getXOffset();
 				float getYOffset();
 				void update(GameContainer* container, GameTimer* timer);
+				void update(GameContainer* container, GameTimer* timer, float deltaModifier);
 				virtual ~CameraShakeLayer();
 		};
 		class ARK2D_API CameraShake {
@@ -92,6 +93,7 @@ namespace ARK {
 
 				bool isShaking();
 				void update(GameContainer* container, GameTimer* timer);
+				void update(GameContainer* container, GameTimer* timer, float deltaModifier);
 
 				void preRender(GameContainer* container, Renderer* g);
 				void render(GameContainer* container, Renderer* g);

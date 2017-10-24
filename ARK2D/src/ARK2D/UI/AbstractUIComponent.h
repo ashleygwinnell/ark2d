@@ -16,6 +16,7 @@
 
 //#include "../Geometry/GigaRectangle.h"
 #include "../Core/SceneGraph/Scene.h"
+#include "../Core/GameObject.h"
 
 namespace ARK {
 	namespace UI {
@@ -24,7 +25,7 @@ namespace ARK {
 		 *
 		 * @author Ashley Gwinnell <info@ashleygwinnell.co.uk>
 		 */
-		class ARK2D_API AbstractUIComponent : public UIComponent, public SceneNode {
+		class ARK2D_API AbstractUIComponent : public UIComponent, public GameObject {
 			public:
 				AbstractUIComponent* m_parent;
                 ARK::Core::Geometry::Cube* m_bounds;

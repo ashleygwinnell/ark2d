@@ -142,13 +142,17 @@ namespace ARK {
 			return true;
 		}
 		void CameraShakeLayer::update(GameContainer* container, GameTimer* timer) {
+			update(container, timer, timer->getDeltaModifier());
+		}
+		void CameraShakeLayer::update(GameContainer* container, GameTimer* timer, float deltaModifier) {
 			// m_timeline->update(timer);
 
 			// X SHAKE
+			float delta = timer->getDeltaNoModifiers() * deltaModifier;
 			{
 				bool xComplete = false;
 				if (m_xState == STATE_1) {
-					m_x1Timer += timer->getDelta() * m_speedMultiplier;
+					m_x1Timer += delta * m_speedMultiplier;
 					if (m_x1Timer >= m_x1Duration) {
 						m_xState = STATE_2;
 						m_x2Timer = (m_x1Timer - m_x1Duration);
@@ -158,7 +162,7 @@ namespace ARK {
 					m_offset_x = Easing::ease(Easing::QUADRATIC_OUT, m_x1Timer, 0.0f, m_xMagnitude, m_x1Duration);
 
 				} else if (m_xState == STATE_2) {
-					m_x2Timer += timer->getDelta() * m_speedMultiplier; 
+					m_x2Timer += delta * m_speedMultiplier; 
 					if (m_x2Timer >= m_x2Duration) {
 						m_xState = STATE_3;
 						m_x3Timer = (m_x2Timer - m_x2Duration);
@@ -168,7 +172,7 @@ namespace ARK {
 					m_offset_x = Easing::ease(Easing::QUADRATIC_IN, m_x2Timer, m_xMagnitude, m_xMagnitude * -1.0f, m_x2Duration);
 
 				} else if (m_xState == STATE_3) {
-					m_x3Timer += timer->getDelta() * m_speedMultiplier;
+					m_x3Timer += delta * m_speedMultiplier;
 					if (m_x3Timer >= m_x3Duration) {
 						m_xState = STATE_4;
 						m_x4Timer = (m_x3Timer - m_x3Duration);
@@ -178,7 +182,7 @@ namespace ARK {
 					m_offset_x = Easing::ease(Easing::QUADRATIC_OUT, m_x3Timer, 0.0f, m_xMagnitude * -1.0f, m_x3Duration);
 
 				} else if (m_xState == STATE_4) {
-					m_x4Timer += timer->getDelta() * m_speedMultiplier;
+					m_x4Timer += delta * m_speedMultiplier;
 					if (m_x4Timer >= m_x4Duration) {
 						m_xState = STATE_OFF;
 						m_x4Timer = m_x4Duration;
@@ -202,7 +206,7 @@ namespace ARK {
 			{
 				bool yComplete = false;
 				if (m_yState == STATE_1) {
-					m_y1Timer += timer->getDelta() * m_speedMultiplier;
+					m_y1Timer += delta * m_speedMultiplier;
 					if (m_y1Timer >= m_y1Duration) {
 						m_yState = STATE_2;
 						m_y2Timer = (m_y1Timer - m_y1Duration);
@@ -212,7 +216,7 @@ namespace ARK {
 					m_offset_y = Easing::ease(Easing::QUADRATIC_OUT, m_y1Timer, 0.0f, m_yMagnitude, m_y1Duration);
 
 				} else if (m_yState == STATE_2) {
-					m_y2Timer += timer->getDelta() * m_speedMultiplier; 
+					m_y2Timer += delta * m_speedMultiplier; 
 					if (m_y2Timer >= m_y2Duration) {
 						m_yState = STATE_3;
 						m_y3Timer = (m_y2Timer - m_y2Duration);
@@ -222,7 +226,7 @@ namespace ARK {
 					m_offset_y = Easing::ease(Easing::QUADRATIC_IN, m_y2Timer, m_yMagnitude, m_yMagnitude * -1.0f, m_y2Duration);
 
 				} else if (m_yState == STATE_3) {
-					m_y3Timer += timer->getDelta() * m_speedMultiplier;
+					m_y3Timer += delta * m_speedMultiplier;
 					if (m_y3Timer >= m_y3Duration) {
 						m_yState = STATE_4;
 						m_y4Timer = (m_y3Timer - m_y3Duration);
@@ -232,7 +236,7 @@ namespace ARK {
 					m_offset_y = Easing::ease(Easing::QUADRATIC_OUT, m_y3Timer, 0.0f, m_yMagnitude * -1.0f, m_y3Duration);
 
 				} else if (m_yState == STATE_4) {
-					m_y4Timer += timer->getDelta() * m_speedMultiplier;
+					m_y4Timer += delta * m_speedMultiplier;
 					if (m_y4Timer >= m_y4Duration) {
 						m_yState = STATE_OFF;
 						m_y4Timer = m_y4Duration;
@@ -343,8 +347,11 @@ namespace ARK {
 			return false;
 		}
 		void CameraShake::update(GameContainer* container, GameTimer* timer) {
+			update(container, timer, timer->getDeltaModifier());
+		}
+		void CameraShake::update(GameContainer* container, GameTimer* timer, float deltaModifier) {
 			for(unsigned int i = 0; i < m_layers.size(); ++i) {
-				m_layers[i]->update(container, timer);
+				m_layers[i]->update(container, timer, deltaModifier);
 			}
 		}
 

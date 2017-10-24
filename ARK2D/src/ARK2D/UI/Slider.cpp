@@ -141,41 +141,51 @@ namespace ARK {
 
 		bool Slider::keyPressed(unsigned int key)
 		{
-			if (key != (unsigned int) Input::MOUSE_BUTTON_LEFT) { return false; }
+			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT) {
 
-			Input* i = ARK2D::getInput();
-			if (!m_dragging)
-			{
-				Vector3<float> worldpos = localPositionToGlobalPosition();
-				float mx = i->getMouseX();
-				float my = i->getMouseY();
-				if ( parent == NULL ) {
-					mx -= transform.position.getX();
-					my -= transform.position.getY();
-				}
+				Input* i = ARK2D::getInput();
+				if (!m_dragging)
+				{
+					Vector3<float> worldpos = localPositionToGlobalPosition();
+					float mx = i->getMouseX();
+					float my = i->getMouseY();
+					if ( parent == NULL ) {
+						mx -= transform.position.getX();
+						my -= transform.position.getY();
+					}
 
 
-				bool collides = Shape<float>::collision_circleCircle(mx, my, 15.0f, worldpos.x + m_buttonLocation.getX(), worldpos.y + m_buttonLocation.getY(), 15.0f);
-				if (collides) {
-					m_dragging = true;
-					mouseMoved(i->getMouseX(), i->getMouseY(), i->getMouseX(), i->getMouseY());
-					updateValue();
-                    return true;
+					bool collides = Shape<float>::collision_circleCircle(mx, my, 15.0f, worldpos.x + m_buttonLocation.getX(), worldpos.y + m_buttonLocation.getY(), 15.0f);
+					if (collides) {
+						m_dragging = true;
+						mouseMoved(i->getMouseX(), i->getMouseY(), i->getMouseX(), i->getMouseY());
+						updateValue();
+	                    return true;
+					}
 				}
 			}
-            return false;
+			return false;
 		}
 
 		bool Slider::keyReleased(unsigned int key)
 		{
-			if (key != (unsigned int) Input::MOUSE_BUTTON_LEFT) { return false; }
-
-			if (m_dragging) {
-				Input* i = ARK2D::getInput();
-				mouseMoved(i->getMouseX(), i->getMouseY(), i->getMouseX(), i->getMouseY());
+			if (key == (unsigned int) Input::MOUSE_BUTTON_LEFT) { 
+				if (m_dragging) {
+					Input* i = ARK2D::getInput();
+					mouseMoved(i->getMouseX(), i->getMouseY(), i->getMouseX(), i->getMouseY());
+				}
+				m_dragging = false;
 			}
-
-			m_dragging = false;
+			else if (m_focussed && key == Input::KEY_LEFT) {
+				setButtonPosition(m_value - 0.1f);
+				updateValue();
+				return true;
+			}
+			else if (m_focussed && key == Input::KEY_RIGHT) {
+				setButtonPosition(m_value + 0.1f);
+				updateValue();
+				return true;
+			}
 
             return false;
 		}

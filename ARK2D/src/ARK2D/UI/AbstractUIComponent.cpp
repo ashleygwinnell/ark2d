@@ -13,7 +13,7 @@ namespace ARK {
 	namespace UI {
 		AbstractUIComponent::AbstractUIComponent():
 			UIComponent(),
-			SceneNode(),
+			GameObject(),
 			m_parent(NULL),
 			m_bounds(),
 			m_width(1),
